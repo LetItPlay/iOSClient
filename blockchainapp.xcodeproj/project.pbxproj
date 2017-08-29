@@ -13,6 +13,8 @@
 		CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4453321F54139900660474 /* LaunchScreen.storyboard */; };
 		CF44533F1F54139900660474 /* blockchainappTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44533E1F54139900660474 /* blockchainappTests.swift */; };
 		CF44534A1F54139900660474 /* blockchainappUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453491F54139900660474 /* blockchainappUITests.swift */; };
+		CF4453591F55400F00660474 /* MainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453581F55400F00660474 /* MainModels.swift */; };
+		CF44535B1F55406B00660474 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535A1F55406B00660474 /* Managers.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +50,8 @@
 		CF4453451F54139900660474 /* blockchainappUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockchainappUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453491F54139900660474 /* blockchainappUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockchainappUITests.swift; sourceTree = "<group>"; };
 		CF44534B1F54139900660474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF4453581F55400F00660474 /* MainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainModels.swift; path = models/MainModels.swift; sourceTree = "<group>"; };
+		CF44535A1F55406B00660474 /* Managers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managers.swift; path = models/Managers.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +106,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
+				CF4453571F553FE400660474 /* models */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
 				CF4453301F54139900660474 /* Assets.xcassets */,
@@ -127,6 +132,15 @@
 				CF44534B1F54139900660474 /* Info.plist */,
 			);
 			path = blockchainappUITests;
+			sourceTree = "<group>";
+		};
+		CF4453571F553FE400660474 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453581F55400F00660474 /* MainModels.swift */,
+				CF44535A1F55406B00660474 /* Managers.swift */,
+			);
+			name = models;
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -334,7 +348,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
+				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -589,6 +605,7 @@
 				CF4453501F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF4453511F54139900660474 /* Build configuration list for PBXNativeTarget "blockchainappTests" */ = {
 			isa = XCConfigurationList;
@@ -597,6 +614,7 @@
 				CF4453531F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF4453541F54139900660474 /* Build configuration list for PBXNativeTarget "blockchainappUITests" */ = {
 			isa = XCConfigurationList;
@@ -605,6 +623,7 @@
 				CF4453561F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

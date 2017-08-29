@@ -28,13 +28,13 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8ol-hn-xby" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-380" y="977"/>
+            <point key="canvasLocation" x="-380" y="976"/>
         </scene>
-        <!--Item-->
+        <!--Channels-->
         <scene sceneID="Tod-iI-nRD">
             <objects>
                 <navigationController id="TMe-kZ-sBW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="fKA-cK-0Y7"/>
+                    <tabBarItem key="tabBarItem" title="Channels" id="fKA-cK-0Y7"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="F2e-s2-8nq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -44,11 +44,11 @@
             </objects>
             <point key="canvasLocation" x="-380" y="2535"/>
         </scene>
-        <!--Item-->
+        <!--Trends-->
         <scene sceneID="7QJ-NQ-ZSo">
             <objects>
                 <navigationController id="fqW-ar-4Bt" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="nu4-wt-bZg"/>
+                    <tabBarItem key="tabBarItem" title="Trends" id="nu4-wt-bZg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pvT-OY-C5y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -58,11 +58,11 @@
             </objects>
             <point key="canvasLocation" x="721" y="1739"/>
         </scene>
-        <!--Item-->
+        <!--Feed-->
         <scene sceneID="7gE-pp-RTz">
             <objects>
                 <navigationController id="AkF-oS-lct" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="vSH-4j-wf9"/>
+                    <tabBarItem key="tabBarItem" title="Feed" id="vSH-4j-wf9"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZuL-qj-8SI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -72,11 +72,11 @@
             </objects>
             <point key="canvasLocation" x="814" y="976"/>
         </scene>
-        <!--Item-->
+        <!--Recommend-->
         <scene sceneID="km6-Ql-nFW">
             <objects>
                 <navigationController id="JhG-I1-ePd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="gLC-f4-nmD"/>
+                    <tabBarItem key="tabBarItem" title="Recommend" id="gLC-f4-nmD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ic7-3R-P4k">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -86,11 +86,11 @@
             </objects>
             <point key="canvasLocation" x="814" y="331"/>
         </scene>
-        <!--Item-->
+        <!--Profile-->
         <scene sceneID="4UV-9r-gtS">
             <objects>
                 <navigationController id="jCs-Am-Lc7" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="Td6-MK-Y2J"/>
+                    <tabBarItem key="tabBarItem" title="Profile" id="Td6-MK-Y2J"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vwa-yx-Eq9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

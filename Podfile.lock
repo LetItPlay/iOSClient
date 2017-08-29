@@ -1,8 +1,10 @@
 PODS:
   - SwiftyAudioManager (0.1.0)
+  - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - SwiftyAudioManager (from `git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git`)
+  - SwiftyJSON
 
 EXTERNAL SOURCES:
   SwiftyAudioManager:
@@ -15,7 +17,8 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   SwiftyAudioManager: 085c5bb43718c74cfac9f5fb926b32d4a17bca02
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: c2f7135368c6806ccb19c47e5b3f2adabef65522
+PODFILE CHECKSUM: 39e29d4aa220c22c0c80d600f0e56bc90a2351e5
 
 COCOAPODS: 1.2.1
