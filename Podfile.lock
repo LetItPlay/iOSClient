@@ -1,0 +1,21 @@
+PODS:
+  - SwiftyAudioManager (0.1.0)
+
+DEPENDENCIES:
+  - SwiftyAudioManager (from `git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git`)
+
+EXTERNAL SOURCES:
+  SwiftyAudioManager:
+    :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
+
+CHECKOUT OPTIONS:
+  SwiftyAudioManager:
+    :commit: 0302839bfece043ed95593b7d3e97eac46d72d50
+    :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
+
+SPEC CHECKSUMS:
+  SwiftyAudioManager: 085c5bb43718c74cfac9f5fb926b32d4a17bca02
+
+PODFILE CHECKSUM: c2f7135368c6806ccb19c47e5b3f2adabef65522
+
+COCOAPODS: 1.2.1
