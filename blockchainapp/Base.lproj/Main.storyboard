@@ -30,11 +30,11 @@
             </objects>
             <point key="canvasLocation" x="-380" y="976"/>
         </scene>
-        <!--Channels-->
+        <!--Feed-->
         <scene sceneID="Tod-iI-nRD">
             <objects>
                 <navigationController id="TMe-kZ-sBW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Channels" id="fKA-cK-0Y7"/>
+                    <tabBarItem key="tabBarItem" title="Feed" id="fKA-cK-0Y7"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="F2e-s2-8nq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -58,11 +58,11 @@
             </objects>
             <point key="canvasLocation" x="721" y="1739"/>
         </scene>
-        <!--Feed-->
+        <!--Channels-->
         <scene sceneID="7gE-pp-RTz">
             <objects>
                 <navigationController id="AkF-oS-lct" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Feed" id="vSH-4j-wf9"/>
+                    <tabBarItem key="tabBarItem" title="Channels" id="vSH-4j-wf9"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZuL-qj-8SI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
