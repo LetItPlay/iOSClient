@@ -34,21 +34,55 @@
         <scene sceneID="Tod-iI-nRD">
             <objects>
                 <navigationController id="TMe-kZ-sBW" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Feed" id="fKA-cK-0Y7"/>
+                    <tabBarItem key="tabBarItem" title="Feed" image="tb_feed" id="fKA-cK-0Y7"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="F2e-s2-8nq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="qMf-11-186" kind="relationship" relationship="rootViewController" id="YRu-Ct-pjx"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7es-W9-3Ir" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-380" y="2535"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="wle-EU-V7U">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="qMf-11-186" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="0ny-gQ-K2R"/>
+                        <viewControllerLayoutGuide type="bottom" id="ptl-9s-NOt"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="KSE-tQ-snj">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="aiJ-nm-KC1">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ptl-9s-NOt" firstAttribute="top" secondItem="aiJ-nm-KC1" secondAttribute="bottom" id="9II-uQ-F0t"/>
+                            <constraint firstAttribute="trailing" secondItem="aiJ-nm-KC1" secondAttribute="trailing" id="EEd-uV-Ibw"/>
+                            <constraint firstItem="aiJ-nm-KC1" firstAttribute="leading" secondItem="KSE-tQ-snj" secondAttribute="leading" id="Ks4-rI-lc0"/>
+                            <constraint firstItem="aiJ-nm-KC1" firstAttribute="top" secondItem="0ny-gQ-K2R" secondAttribute="bottom" id="usZ-tA-W2f"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Ucd-uR-lor"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="IOH-8i-vRA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="350" y="2534"/>
+        </scene>
         <!--Trends-->
         <scene sceneID="7QJ-NQ-ZSo">
             <objects>
                 <navigationController id="fqW-ar-4Bt" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Trends" id="nu4-wt-bZg"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Trends" image="tb_trends" id="nu4-wt-bZg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pvT-OY-C5y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -62,21 +96,55 @@
         <scene sceneID="7gE-pp-RTz">
             <objects>
                 <navigationController id="AkF-oS-lct" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Channels" id="vSH-4j-wf9"/>
+                    <tabBarItem key="tabBarItem" title="Channels" image="tb_channels" id="vSH-4j-wf9"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ZuL-qj-8SI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="kMv-GG-nMF" kind="relationship" relationship="rootViewController" id="Y3y-Yg-UNw"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yjM-Tt-VcB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="814" y="976"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="oq4-N0-FVq">
+            <objects>
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="kMv-GG-nMF" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="haN-Hw-La0"/>
+                        <viewControllerLayoutGuide type="bottom" id="v1y-c1-mWn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cU8-r5-HJz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YXd-hc-OFG">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="YXd-hc-OFG" firstAttribute="leading" secondItem="cU8-r5-HJz" secondAttribute="leading" id="7kP-72-Gtm"/>
+                            <constraint firstAttribute="trailing" secondItem="YXd-hc-OFG" secondAttribute="trailing" id="MfP-If-Eav"/>
+                            <constraint firstItem="YXd-hc-OFG" firstAttribute="top" secondItem="haN-Hw-La0" secondAttribute="bottom" id="O84-3S-WhD"/>
+                            <constraint firstItem="v1y-c1-mWn" firstAttribute="top" secondItem="YXd-hc-OFG" secondAttribute="bottom" id="ys3-DN-4Al"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Itl-hl-jhe"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BFM-Fh-2eZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1570" y="976"/>
+        </scene>
         <!--Recommend-->
         <scene sceneID="km6-Ql-nFW">
             <objects>
                 <navigationController id="JhG-I1-ePd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Recommend" id="gLC-f4-nmD"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Recommend" image="tb_recommend" id="gLC-f4-nmD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ic7-3R-P4k">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -90,7 +158,7 @@
         <scene sceneID="4UV-9r-gtS">
             <objects>
                 <navigationController id="jCs-Am-Lc7" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" id="Td6-MK-Y2J"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Profile" image="tb_profile" id="Td6-MK-Y2J"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vwa-yx-Eq9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -101,4 +169,11 @@
             <point key="canvasLocation" x="814" y="-315"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tb_channels" width="24" height="24"/>
+        <image name="tb_feed" width="24" height="24"/>
+        <image name="tb_profile" width="24" height="24"/>
+        <image name="tb_recommend" width="24" height="24"/>
+        <image name="tb_trends" width="24" height="24"/>
+    </resources>
 </document>

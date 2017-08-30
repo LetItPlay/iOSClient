@@ -15,6 +15,7 @@
 		CF44534A1F54139900660474 /* blockchainappUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453491F54139900660474 /* blockchainappUITests.swift */; };
 		CF4453591F55400F00660474 /* MainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453581F55400F00660474 /* MainModels.swift */; };
 		CF44535B1F55406B00660474 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535A1F55406B00660474 /* Managers.swift */; };
+		CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535D1F569D4E00660474 /* StyleExtension.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +53,7 @@
 		CF44534B1F54139900660474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF4453581F55400F00660474 /* MainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainModels.swift; path = models/MainModels.swift; sourceTree = "<group>"; };
 		CF44535A1F55406B00660474 /* Managers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managers.swift; path = models/Managers.swift; sourceTree = "<group>"; };
+		CF44535D1F569D4E00660474 /* StyleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleExtension.swift; path = extension/StyleExtension.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
+				CF44535C1F569D1E00660474 /* extensions */,
 				CF4453571F553FE400660474 /* models */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
@@ -141,6 +144,14 @@
 				CF44535A1F55406B00660474 /* Managers.swift */,
 			);
 			name = models;
+			sourceTree = "<group>";
+		};
+		CF44535C1F569D1E00660474 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
+			);
+			name = extensions;
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -349,6 +360,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
+				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 			);
