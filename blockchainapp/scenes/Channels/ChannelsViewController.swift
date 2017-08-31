@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ChannelsCell: UITableViewCell {
     
@@ -35,17 +36,46 @@ class ChannelsCell: UITableViewCell {
         return 80
     }
     
+    var channel: Station? = nil {
+        didSet {
+            nameLabel.text = channel?.name
+            infoLabel.text = "\(channel?.subscriptionCount ?? 0) subscribers"
+            
+            if let urlString = channel?.image.buildImageURL() {
+                iconImageView.sd_setImage(with: urlString)
+            } else {
+                iconImageView.image = nil
+            }
+        }
+    }
+    
 }
 
-class ChannelsViewController: UIViewController {
+class ChannelsViewController: UIViewController, ChannelsViewProtocol {
     
     @IBOutlet weak var tableView: UITableView!
+    
+    var presenter: ChannelsPresenter!
+    var source = [Station]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter = ChannelsPresenter(view: self)
+        
+        navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = UIColor.vaWhite
 
         tableView.dataSource = self
         tableView.delegate   = self
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        presenter.getData { [weak self] (channels) in
+            self?.display(channels: channels)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -54,6 +84,11 @@ class ChannelsViewController: UIViewController {
     }
     
 
+    func display(channels: [Station]) {
+        source = channels
+        tableView.reloadData()
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -73,11 +108,12 @@ extension ChannelsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return source.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ChannelsCell
+        cell.channel = source[indexPath.row]
         return cell
     }
     

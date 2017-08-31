@@ -56,6 +56,7 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
         
         navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = UIColor.vaWhite
 
         tableView.dataSource = self
         tableView.delegate   = self

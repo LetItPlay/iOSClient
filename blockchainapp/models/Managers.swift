@@ -7,6 +7,10 @@
 //
 
 import Foundation
+import SwiftyJSON
+
+typealias ChannelsLoaderSuccess = ([Station]) -> Void
+typealias ChannelsLoaderFail = (Error?) -> Void
 
 class DownloadManager {
     
@@ -18,8 +22,36 @@ class DownloadManager {
     
     static let shared = DownloadManager()
     
-    func requestChannels() {
-        
+    func requestChannels(success: @escaping ChannelsLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
+        if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) {
+            
+            let request = URLRequest(url: url)
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                
+                guard error == nil else {
+                    fail(error)
+                    return
+                }
+                
+                guard let data = data else {
+                    fail(error)
+                    return
+                }
+                
+                let json = JSON(data: data)
+                var result = [Station]()
+                for jStation in json.array ?? [] {
+                    let station = Station(name: jStation["name"].string ?? "",
+                                          image: jStation["image"].string ?? "",
+                                          subscriptionCount: jStation["subscription_count"].int ?? 0)
+                    result.append(station)
+                }
+                
+                success(result)
+            })
+            task.resume()
+        }
     }
     
 }

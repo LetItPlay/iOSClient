@@ -7,3 +7,23 @@
 //
 
 import Foundation
+
+class ChannelsPresenter: ChannelsPresenterProtocol {
+    
+    weak var view: ChannelsViewProtocol?
+    
+    init(view: ChannelsViewProtocol) {
+        self.view = view
+    }
+    
+    //
+    func getData(onComplete: @escaping StationResult) {
+        DownloadManager.shared.requestChannels(success: { (channels) in
+            DispatchQueue.main.async {
+                onComplete(channels)
+            }
+        }) { (err) in
+            
+        }
+    }
+}

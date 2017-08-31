@@ -5,5 +5,6 @@ use_frameworks!
 target 'blockchainapp' do
   pod "SwiftyAudioManager", :git => 'git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git'
   pod "SwiftyJSON"
+  pod "SDWebImage"
 
 end

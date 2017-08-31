@@ -1,8 +1,12 @@
 PODS:
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
   - SwiftyAudioManager (0.1.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - SDWebImage
   - SwiftyAudioManager (from `git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git`)
   - SwiftyJSON
 
@@ -16,9 +20,10 @@ CHECKOUT OPTIONS:
     :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
 
 SPEC CHECKSUMS:
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   SwiftyAudioManager: 085c5bb43718c74cfac9f5fb926b32d4a17bca02
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 39e29d4aa220c22c0c80d600f0e56bc90a2351e5
+PODFILE CHECKSUM: 7ae4c25204bfa467bdaf9d043a8c895d05c2e0a6
 
 COCOAPODS: 1.2.1

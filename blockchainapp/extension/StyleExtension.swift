@@ -33,3 +33,11 @@ extension UIFont {
         return UIFont.systemFont(ofSize: 24.0, weight: UIFontWeightRegular)
     }
 }
+
+// string
+
+extension String {
+    func buildImageURL() -> URL? {
+        return URL(string: "http://176.31.100.18:8182/" + self)
+    }
+}

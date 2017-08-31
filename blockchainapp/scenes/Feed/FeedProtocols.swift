@@ -8,10 +8,10 @@
 
 import Foundation
 
-typealias StationResult = ([Station]) -> Void
+typealias TrackResult = ([Track]) -> Void
 
 protocol FeedPresenterProtocol: class {
-    func getData(onComplete: @escaping StationResult)
+    func getData(onComplete: @escaping TrackResult)
 }
 
 protocol FeedViewProtocol: class {

@@ -7,3 +7,13 @@
 //
 
 import Foundation
+
+typealias StationResult = ([Station]) -> Void
+
+protocol ChannelsViewProtocol: class {
+    func display(channels: [Station])
+}
+
+protocol ChannelsPresenterProtocol: class {
+    func getData(onComplete: @escaping StationResult)
+}
