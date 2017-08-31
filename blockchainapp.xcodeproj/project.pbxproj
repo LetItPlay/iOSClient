@@ -16,6 +16,9 @@
 		CF4453591F55400F00660474 /* MainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453581F55400F00660474 /* MainModels.swift */; };
 		CF44535B1F55406B00660474 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535A1F55406B00660474 /* Managers.swift */; };
 		CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535D1F569D4E00660474 /* StyleExtension.swift */; };
+		CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453611F56CA2E00660474 /* FeedViewController.swift */; };
+		CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453631F56CA5800660474 /* FeedPresenter.swift */; };
+		CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453651F56CB4600660474 /* FeedProtocols.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +57,9 @@
 		CF4453581F55400F00660474 /* MainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainModels.swift; path = models/MainModels.swift; sourceTree = "<group>"; };
 		CF44535A1F55406B00660474 /* Managers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managers.swift; path = models/Managers.swift; sourceTree = "<group>"; };
 		CF44535D1F569D4E00660474 /* StyleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleExtension.swift; path = extension/StyleExtension.swift; sourceTree = "<group>"; };
+		CF4453611F56CA2E00660474 /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedViewController.swift; path = scenes/Feed/FeedViewController.swift; sourceTree = "<group>"; };
+		CF4453631F56CA5800660474 /* FeedPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedPresenter.swift; path = scenes/Feed/FeedPresenter.swift; sourceTree = "<group>"; };
+		CF4453651F56CB4600660474 /* FeedProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedProtocols.swift; path = scenes/Feed/FeedProtocols.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,6 +114,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
+				CF44535F1F56C9D700660474 /* scenes */,
 				CF44535C1F569D1E00660474 /* extensions */,
 				CF4453571F553FE400660474 /* models */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
@@ -152,6 +159,24 @@
 				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
 			);
 			name = extensions;
+			sourceTree = "<group>";
+		};
+		CF44535F1F56C9D700660474 /* scenes */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453601F56C9E600660474 /* Feed */,
+			);
+			name = scenes;
+			sourceTree = "<group>";
+		};
+		CF4453601F56C9E600660474 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
+				CF4453631F56CA5800660474 /* FeedPresenter.swift */,
+				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
+			);
+			name = Feed;
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -361,7 +386,10 @@
 			files = (
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
+				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
+				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
