@@ -39,21 +39,54 @@ class FeedCell: UITableViewCell {
         contentView.layer.shadowOpacity = 0.2
         contentView.layer.shadowOffset  = CGSize(width: 0, height: 2)
         
+        iconImageView.clipsToBounds = true
+        iconImageView.layer.cornerRadius = 20
+        
+        nameLabel.font = UIFont(name: ".SFUIText-Bold", size: 14)
+        nameLabel.textColor = UIColor.vaCharcoalGrey
+        
+        likesLabel.font     = UIFont(name: ".SFUIText-Medium", size: 12)
+        listeningLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)
+        commentLabel.font   = UIFont(name: ".SFUIText-Medium", size: 12)
+        
+        likesLabel.textColor     = UIColor.vaCharcoalGrey
+        listeningLabel.textColor = UIColor.vaCharcoalGrey
+        commentLabel.textColor   = UIColor.vaCharcoalGrey
+        
     }
     
     class func recommendedHeight() -> CGFloat {
         return 192
     }
+    
+    var track: Track? = nil {
+        didSet {
+            nameLabel.text = track?.name
+            
+            if let iconUrl = track?.image.buildImageURL() {
+                iconImageView.sd_setImage(with: iconUrl)
+            } else {
+                iconImageView.image = nil
+            }
+            
+            likesLabel.text = "\(track?.linkCount ?? 0) likes"
+            listeningLabel.text = "0 listening"
+            commentLabel.text = "0 comments"
+        }
+    }
 }
 
-class FeedViewController: UIViewController {
+class FeedViewController: UIViewController, FeedViewProtocol {
     
     @IBOutlet weak var tableView: UITableView!
     
+    var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        presenter = FeedPresenter(view: self)
         
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
@@ -61,10 +94,23 @@ class FeedViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate   = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        presenter.getData { [weak self] (tracks) in
+            self?.display(tracks: tracks)
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func display(tracks: [Track]) {
+        source = tracks
+        tableView.reloadData()
     }
 
     /*
@@ -86,12 +132,12 @@ extension FeedViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return source.count + 2
+        return source.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! FeedCell
-        
+        cell.track = source[indexPath.row]
         return cell
     }
     

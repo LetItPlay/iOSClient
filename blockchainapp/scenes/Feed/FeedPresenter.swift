@@ -8,6 +8,21 @@
 
 import Foundation
 
-class FeedPresenter {
+class FeedPresenter: FeedPresenterProtocol {
     
+    weak var view: FeedViewProtocol?
+    
+    init(view: FeedViewProtocol) {
+        self.view = view
+    }
+    
+    func getData(onComplete: @escaping TrackResult) {
+        DownloadManager.shared.requestTracks(success: { (feed) in
+            DispatchQueue.main.async {
+                onComplete(feed)
+            }
+        }) { (err) in
+            
+        }
+    }
 }

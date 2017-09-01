@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
+typealias TracksLoaderSuccess = ([Track]) -> Void
 typealias ChannelsLoaderFail = (Error?) -> Void
 
 class DownloadManager {
@@ -46,6 +47,48 @@ class DownloadManager {
                                           image: jStation["image"].string ?? "",
                                           subscriptionCount: jStation["subscription_count"].int ?? 0)
                     result.append(station)
+                }
+                
+                success(result)
+            })
+            task.resume()
+        }
+    }
+    
+    func requestTracks(success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
+        if let str = urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) {
+            
+            let request = URLRequest(url: url)
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                
+                guard error == nil else {
+                    fail(error)
+                    return
+                }
+                
+                guard let data = data else {
+                    fail(error)
+                    return
+                }
+                
+                let json = JSON(data: data)
+                var result = [Track]()
+                for jTrack in json.array ?? [] {
+                    
+                    let file = Audiofile(file: jTrack["audio_file"]["file"].string ?? "",
+                                         lengthSeconds: jTrack["audio_file"]["length_seconds"].int64 ?? 0,
+                                         sizeBytes: jTrack["audio_file"]["size_bytes"].int64 ?? 0)
+                    
+                    let t = Track(station: jTrack["station"].int ?? 0,
+                                  audiofile: file,
+                                  name: jTrack["name"].string ?? "",
+                                  url: jTrack["url"].string ?? "",
+                                  description: jTrack["description"].string ?? "",
+                                  image: jTrack["image"].string ?? "",
+                                  linkCount: jTrack["like_count"].int ?? 0,
+                                  reportCount: jTrack["report_count"].int ?? 0)
+                    result.append(t)
                 }
                 
                 success(result)
