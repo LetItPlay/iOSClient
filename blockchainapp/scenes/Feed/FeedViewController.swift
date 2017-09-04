@@ -29,6 +29,11 @@ class FeedCell: UITableViewCell {
     
     @IBOutlet weak var menuButton: UIButton!
     
+    public var onPlay: ((Track) -> Void)?
+    public var onLike: ((Track) -> Void)?
+    public var onComment: ((Track) -> Void)?
+    public var onMenu: ((Track) -> Void)?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -74,6 +79,31 @@ class FeedCell: UITableViewCell {
             commentLabel.text = "0 comments"
         }
     }
+    
+    // MARK: - buttons
+    @IBAction func commentPressed(_ sender: Any) {
+        if track != nil {
+            onComment?(track!)
+        }
+    }
+    
+    @IBAction func playPressed(_ sender: Any) {
+        if track != nil {
+            onPlay?(track!)
+        }
+    }
+    
+    @IBAction func likePressed(_ sender: Any) {
+        if track != nil {
+            onLike?(track!)
+        }
+    }
+    
+    @IBAction func menuPressed(_ sender: Any) {
+        if track != nil {
+            onMenu?(track!)
+        }
+    }
 }
 
 class FeedViewController: UIViewController, FeedViewProtocol {
@@ -93,10 +123,6 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 
         tableView.dataSource = self
         tableView.delegate   = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
         presenter.getData { [weak self] (tracks) in
             self?.display(tracks: tracks)
@@ -138,6 +164,11 @@ extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! FeedCell
         cell.track = source[indexPath.row]
+        
+        cell.onPlay = { [weak self] track in
+            self?.presenter.play(track: track)
+        }
+        
         return cell
     }
     

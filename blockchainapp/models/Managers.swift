@@ -8,10 +8,22 @@
 
 import Foundation
 import SwiftyJSON
+import SwiftyAudioManager
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
 typealias TracksLoaderSuccess = ([Track]) -> Void
 typealias ChannelsLoaderFail = (Error?) -> Void
+
+class AppManager {
+    static let shared = AppManager()
+    
+    public let audioManager = AudioManager()
+    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "player") as? PlayerViewController
+    
+    init() {
+        audioManager.isPlayingSpeakerMode = true
+    }
+}
 
 class DownloadManager {
     

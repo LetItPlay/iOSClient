@@ -38,6 +38,10 @@ extension UIFont {
 
 extension String {
     func buildImageURL() -> URL? {
-        return URL(string: "http://176.31.100.18:8182/" + self)
+        var result = "http://176.31.100.18:8182/"
+        if !self.contains("uploads") {
+            result += "uploads/"
+        }
+        return URL(string: result + self)
     }
 }
