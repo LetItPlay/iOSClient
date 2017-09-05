@@ -20,6 +20,15 @@ class AppManager {
     public let audioManager = AudioManager()
     public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "player") as? PlayerViewController
     
+    private let tabDelegate = MainTabBarDelegate()
+    public var rootTabBarController: MainTabViewController? {
+        didSet {
+            if rootTabBarController != nil {
+                rootTabBarController?.delegate = tabDelegate
+            }
+        }
+    }
+    
     init() {
         audioManager.isPlayingSpeakerMode = true
     }

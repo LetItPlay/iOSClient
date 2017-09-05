@@ -23,7 +23,11 @@ class MainTabViewController: UITabBarController {
             playerVC.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
             playerVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -49).isActive = true
             playerVC.view.heightAnchor.constraint(equalToConstant: 72).isActive = true
+            
+            playerVC.hidePlayer()
         }
+        
+        AppManager.shared.rootTabBarController = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,4 +46,25 @@ class MainTabViewController: UITabBarController {
     }
     */
 
+}
+
+class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        return true
+    }
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let nc = viewController as? UINavigationController,
+            let root = nc.viewControllers.first {
+            if root is FeedViewController {
+                AppManager.shared.audioPlayer?.showPlayer()
+            }
+            
+            if root is ChannelsViewController && !AppManager.shared.audioManager.isPlaying {
+                AppManager.shared.audioPlayer?.hidePlayer()
+            }
+        }
+    }
+    
 }

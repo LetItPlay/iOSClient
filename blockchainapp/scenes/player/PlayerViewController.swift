@@ -94,6 +94,7 @@ class PlayerViewController: UIViewController {
             return
         }
         
+        showPlayer()
     }
     
     func audioManagerPaused(_ notification: Notification) {
@@ -214,6 +215,21 @@ class PlayerViewController: UIViewController {
         }
     }
     
+    // MARK: - Public UI manipulation
+    
+    public func showPlayer() {
+        UIView.animate(withDuration: 0.4) {
+            self.view.transform = .identity
+            self.view.alpha = 1
+        }
+    }
+    
+    public func hidePlayer() {
+        UIView.animate(withDuration: 0.4) { 
+            self.view.transform = CGAffineTransform(translationX: 0, y: 49)
+            self.view.alpha = 0
+        }
+    }
     
     /*
     // MARK: - Navigation
