@@ -14,23 +14,30 @@ class FeedPresenter: FeedPresenterProtocol {
     weak var view: FeedViewProtocol?
     let audioManager = AppManager.shared.audioManager
     
+    var playList = [PlayerItem]()
+    
     init(view: FeedViewProtocol) {
         self.view = view
     }
     
     func getData(onComplete: @escaping TrackResult) {
         DownloadManager.shared.requestTracks(success: { [weak self] (feed) in
-            var playList = [PlayerItem]()
+            
+            guard self != nil else {
+                return
+            }
+            
+            self?.playList = [PlayerItem]()
             
             for f in feed {
                 let playerItem = PlayerItem(itemId: f.name,
                                             url: f.audiofile.file.buildImageURL()?.absoluteString ?? "")
                 playerItem.autoLoadNext = true
                 
-                playList.append(playerItem)
+                self?.playList.append(playerItem)
             }
             
-            let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
+            let group = PlayerItemsGroup(id: "120", name: "main", playerItems: self!.playList)
             self?.audioManager.add(playlist: [group])
             
             DispatchQueue.main.async {
@@ -42,6 +49,19 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func play(track: Track) {
-        audioManager.playItem(with: track.name)
+        if audioManager.playlist == nil {
+            let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
+            audioManager.add(playlist: [group])
+        } else
+        if audioManager.currentItemId == track.name {
+            if audioManager.isPlaying {
+                audioManager.pause()
+            } else {
+                audioManager.resume()
+            }
+        } else {
+            audioManager.playItem(with: track.name)
+        }
+        
     }
 }

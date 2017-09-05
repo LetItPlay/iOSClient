@@ -215,6 +215,22 @@ class PlayerViewController: UIViewController {
         }
     }
     
+    @IBAction func remoteLeftButtonPressed(_ sender: Any) {
+        
+    }
+    
+    @IBAction func remoteRightButtonPressed(_ sender: Any) {
+        
+    }
+    
+    @IBAction func prevTrackButtonPressed(_ sender: Any) {
+        audioManager.playPrevious()
+    }
+    
+    @IBAction func nextTrackButtonPressed(_ sender: Any) {
+        audioManager.playNext()
+    }
+    
     // MARK: - Public UI manipulation
     
     public func showPlayer() {
@@ -229,6 +245,10 @@ class PlayerViewController: UIViewController {
             self.view.transform = CGAffineTransform(translationX: 0, y: 49)
             self.view.alpha = 0
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     /*

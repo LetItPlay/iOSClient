@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyAudioManager
 
 class FeedCell: UITableViewCell {
     
@@ -28,6 +29,8 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var commentLabel: UILabel!
     
     @IBOutlet weak var menuButton: UIButton!
+    
+    let audioManager = AppManager.shared.audioManager
     
     public var onPlay: ((Track) -> Void)?
     public var onLike: ((Track) -> Void)?
@@ -58,6 +61,32 @@ class FeedCell: UITableViewCell {
         listeningLabel.textColor = UIColor.vaCharcoalGrey
         commentLabel.textColor   = UIColor.vaCharcoalGrey
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerPaused(_:)),
+                                               name: AudioManagerNotificationName.paused.notification,
+                                               object: audioManager)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlaying(_:)),
+                                               name: AudioManagerNotificationName.startPlaying.notification,
+                                               object: audioManager)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerPaused(_:)),
+                                               name: AudioManagerNotificationName.endPlaying.notification,
+                                               object: audioManager)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlaying(_:)),
+                                               name: AudioManagerNotificationName.resumed.notification,
+                                               object: audioManager)
+        
+    }
+    
+    // MARK: - AudioManager events
+    func audioManagerStartPlaying(_ notification: Notification) {
+        playButton.isSelected = audioManager.currentItemId == track?.name
+    }
+    
+    func audioManagerPaused(_ notification: Notification) {
+        playButton.isSelected = false
     }
     
     class func recommendedHeight() -> CGFloat {
@@ -104,6 +133,10 @@ class FeedCell: UITableViewCell {
             onMenu?(track!)
         }
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }
 
 class FeedViewController: UIViewController, FeedViewProtocol {
@@ -123,6 +156,11 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 
         tableView.dataSource = self
         tableView.delegate   = self
+        
+        tableView.contentInset = UIEdgeInsets(top: 0,
+                                              left: 0,
+                                              bottom: 72,
+                                              right: 0)
         
         presenter.getData { [weak self] (tracks) in
             self?.display(tracks: tracks)
