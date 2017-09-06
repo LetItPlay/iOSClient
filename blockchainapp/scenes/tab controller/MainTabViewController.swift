@@ -51,7 +51,19 @@ class MainTabViewController: UITabBarController {
 class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        return true
+        if let nc = viewController as? UINavigationController,
+            let _ = nc.viewControllers.first {
+            return true
+        }
+        
+        let alertVC = UIAlertController(title: "Currently in development",
+                                        message: "",
+                                        preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        tabBarController.present(alertVC, animated: true, completion: nil)
+        
+        return false
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {

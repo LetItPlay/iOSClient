@@ -296,7 +296,7 @@
         <scene sceneID="7QJ-NQ-ZSo">
             <objects>
                 <navigationController id="fqW-ar-4Bt" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Trends" image="tb_trends" id="nu4-wt-bZg"/>
+                    <tabBarItem key="tabBarItem" title="Trends" image="tb_trends" id="nu4-wt-bZg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pvT-OY-C5y">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -522,7 +522,7 @@
         <scene sceneID="km6-Ql-nFW">
             <objects>
                 <navigationController id="JhG-I1-ePd" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Recommend" image="tb_recommend" id="gLC-f4-nmD"/>
+                    <tabBarItem key="tabBarItem" title="Recommend" image="tb_recommend" id="gLC-f4-nmD"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ic7-3R-P4k">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -536,7 +536,7 @@
         <scene sceneID="4UV-9r-gtS">
             <objects>
                 <navigationController id="jCs-Am-Lc7" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Profile" image="tb_profile" id="Td6-MK-Y2J"/>
+                    <tabBarItem key="tabBarItem" title="Profile" image="tb_profile" id="Td6-MK-Y2J"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="Vwa-yx-Eq9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
