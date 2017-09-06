@@ -13,6 +13,8 @@ class PlayerViewController: UIViewController {
     
     let audioManager = AppManager.shared.audioManager
     
+    private var movePercent = 0.05
+    
     @IBOutlet weak var btnRemoteBack: UIButton!
     @IBOutlet weak var btnPrevTrack: UIButton!
     
@@ -128,6 +130,7 @@ class PlayerViewController: UIViewController {
          */
         if let currentTime = notification.userInfo?["currentTime"] as? Double,
             let maxTime = notification.userInfo?["maxTime"] as? Double {
+            movePercent = 15 / maxTime
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.01, animations: {
                     self.progressViewWidthConstraint.constant = self.backProgressView.frame.width * CGFloat(currentTime / maxTime)
@@ -216,11 +219,11 @@ class PlayerViewController: UIViewController {
     }
     
     @IBAction func remoteLeftButtonPressed(_ sender: Any) {
-        
+        audioManager.itemProgressPercent -= movePercent
     }
     
     @IBAction func remoteRightButtonPressed(_ sender: Any) {
-        
+        audioManager.itemProgressPercent += movePercent
     }
     
     @IBAction func prevTrackButtonPressed(_ sender: Any) {
