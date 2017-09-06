@@ -30,6 +30,8 @@ class PlayerViewController: UIViewController {
     @IBOutlet weak var faceProgressView: UIView!
     
     @IBOutlet weak var progressViewWidthConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +86,7 @@ class PlayerViewController: UIViewController {
     // MARK: - Private
     private func updatePlayButtonState() {
         DispatchQueue.main.async {
-//            self.activityIndicator.stopAnimating()
+            self.activityIndicator.stopAnimating()
             self.btnPlay.isHidden = false
             self.btnPlay.isSelected = self.audioManager.isPlaying
         }
@@ -203,7 +205,7 @@ class PlayerViewController: UIViewController {
     
     private func startAnimateVaiting() {
         DispatchQueue.main.async {
-//            self.activityIndicator.startAnimating()
+            self.activityIndicator.startAnimating()
             self.btnPlay.isHidden = true
         }
     }

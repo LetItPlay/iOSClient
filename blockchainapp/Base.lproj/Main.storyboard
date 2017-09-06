@@ -141,6 +141,10 @@
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="kqN-r4-Ef4">
+                                <rect key="frame" x="169" y="12" width="37" height="37"/>
+                                <color key="color" red="0.95294117649999999" green="0.2784313725" blue="0.14117647059999999" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.96078431372549022" green="0.96078431372549022" blue="0.96078431372549022" alpha="0.95438249143835618" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -151,6 +155,7 @@
                             <constraint firstItem="Axd-3n-B9W" firstAttribute="centerY" secondItem="TOF-Zf-PbP" secondAttribute="centerY" id="Ejy-g6-K6K"/>
                             <constraint firstItem="Xfi-QO-KPk" firstAttribute="centerY" secondItem="PBz-5p-lBu" secondAttribute="centerY" id="Gtx-n0-NI3"/>
                             <constraint firstAttribute="trailing" secondItem="sWZ-ho-kP9" secondAttribute="trailing" constant="16" id="Hb8-kU-cYY"/>
+                            <constraint firstItem="kqN-r4-Ef4" firstAttribute="centerX" secondItem="TtE-XP-Iro" secondAttribute="centerX" id="Hms-Pq-hFd"/>
                             <constraint firstItem="sWZ-ho-kP9" firstAttribute="top" secondItem="1fq-Ci-bC0" secondAttribute="bottom" constant="3" id="Iqk-sV-LLm"/>
                             <constraint firstItem="1fq-Ci-bC0" firstAttribute="leading" secondItem="sWZ-ho-kP9" secondAttribute="leading" id="J74-GV-QFD"/>
                             <constraint firstItem="PBz-5p-lBu" firstAttribute="leading" secondItem="TOF-Zf-PbP" secondAttribute="trailing" constant="8" id="Kp8-Ga-auj"/>
@@ -161,6 +166,7 @@
                             <constraint firstItem="TOF-Zf-PbP" firstAttribute="leading" secondItem="Axd-3n-B9W" secondAttribute="trailing" constant="8" id="kom-vP-d4B"/>
                             <constraint firstItem="aGR-Ke-tbX" firstAttribute="centerY" secondItem="Axd-3n-B9W" secondAttribute="centerY" id="nMR-ge-0EX"/>
                             <constraint firstItem="3fu-Jg-Rr5" firstAttribute="top" secondItem="sWZ-ho-kP9" secondAttribute="bottom" constant="6" id="pSF-dk-TVM"/>
+                            <constraint firstItem="kqN-r4-Ef4" firstAttribute="centerY" secondItem="TOF-Zf-PbP" secondAttribute="centerY" id="rFQ-zs-Okb"/>
                             <constraint firstItem="TOF-Zf-PbP" firstAttribute="centerX" secondItem="TtE-XP-Iro" secondAttribute="centerX" id="sqh-gV-0Dp"/>
                             <constraint firstItem="sWZ-ho-kP9" firstAttribute="top" secondItem="AQG-r5-vKZ" secondAttribute="bottom" constant="3" id="uek-F5-Iwu"/>
                             <constraint firstItem="q7C-N2-YAu" firstAttribute="height" secondItem="sWZ-ho-kP9" secondAttribute="height" id="vdf-iZ-9wp"/>
@@ -169,6 +175,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="375" height="72"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="kqN-r4-Ef4" id="E8D-Ti-Gf1"/>
                         <outlet property="backProgressView" destination="sWZ-ho-kP9" id="xm0-zF-P9R"/>
                         <outlet property="btnNextTrack" destination="PBz-5p-lBu" id="LzO-Pa-Uqr"/>
                         <outlet property="btnPlay" destination="TOF-Zf-PbP" id="2GY-wp-fd3"/>
