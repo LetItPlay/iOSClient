@@ -82,7 +82,7 @@ class FeedCell: UITableViewCell {
     
     // MARK: - AudioManager events
     func audioManagerStartPlaying(_ notification: Notification) {
-        playButton.isSelected = audioManager.currentItemId == track?.name
+        playButton.isSelected = audioManager.currentItemId == track?.uniqString()
     }
     
     func audioManagerPaused(_ notification: Notification) {

@@ -64,10 +64,15 @@ class DownloadManager {
                 let json = JSON(data: data)
                 var result = [Station]()
                 for jStation in json.array ?? [] {
-                    let station = Station(name: jStation["name"].string ?? "",
-                                          image: jStation["image"].string ?? "",
-                                          subscriptionCount: jStation["subscription_count"].int ?? 0)
-                    result.append(station)
+                    if let idInt = jStation["id"].int {
+                        let station = Station(id: idInt,
+                                              name: jStation["name"].string ?? "",
+                                              image: jStation["image"].string ?? "",
+                                              subscriptionCount: jStation["subscription_count"].int ?? 0)
+                        result.append(station)
+                    } else {
+                        print("ERROR: no id in \(jStation)")
+                    }
                 }
                 
                 success(result)
@@ -96,20 +101,22 @@ class DownloadManager {
                 let json = JSON(data: data)
                 var result = [Track]()
                 for jTrack in json.array ?? [] {
-                    
-                    let file = Audiofile(file: jTrack["audio_file"]["file"].string ?? "",
-                                         lengthSeconds: jTrack["audio_file"]["length_seconds"].int64 ?? 0,
-                                         sizeBytes: jTrack["audio_file"]["size_bytes"].int64 ?? 0)
-                    
-                    let t = Track(station: jTrack["station"].int ?? 0,
-                                  audiofile: file,
-                                  name: jTrack["name"].string ?? "",
-                                  url: jTrack["url"].string ?? "",
-                                  description: jTrack["description"].string ?? "",
-                                  image: jTrack["image"].string ?? "",
-                                  linkCount: jTrack["like_count"].int ?? 0,
-                                  reportCount: jTrack["report_count"].int ?? 0)
-                    result.append(t)
+                    if let idInt = jTrack["id"].int {
+                        let file = Audiofile(file: jTrack["audio_file"]["file"].string ?? "",
+                                             lengthSeconds: jTrack["audio_file"]["length_seconds"].int64 ?? 0,
+                                             sizeBytes: jTrack["audio_file"]["size_bytes"].int64 ?? 0)
+                        
+                        let t = Track(id: idInt,
+                                      station: jTrack["station"].int ?? 0,
+                                      audiofile: file,
+                                      name: jTrack["name"].string ?? "",
+                                      url: jTrack["url"].string ?? "",
+                                      description: jTrack["description"].string ?? "",
+                                      image: jTrack["image"].string ?? "",
+                                      linkCount: jTrack["like_count"].int ?? 0,
+                                      reportCount: jTrack["report_count"].int ?? 0)
+                        result.append(t)
+                    }
                 }
                 
                 success(result)

@@ -9,12 +9,18 @@
 import Foundation
 
 struct Station {
+    let id: Int
     let name: String
     let image: String
     let subscriptionCount: Int
+    
+    func uniqString() -> String {
+        return "\(id)"
+    }
 }
 
 struct Track {
+    let id: Int
     let station: Int
     let audiofile: Audiofile
     let name: String
@@ -23,6 +29,10 @@ struct Track {
     let image: String
     let linkCount: Int
     let reportCount: Int
+    
+    func uniqString() -> String {
+        return "\(id)"
+    }
 }
 
 struct Audiofile {

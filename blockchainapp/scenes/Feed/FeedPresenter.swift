@@ -30,7 +30,7 @@ class FeedPresenter: FeedPresenterProtocol {
             self?.playList = [PlayerItem]()
             
             for f in feed {
-                let playerItem = PlayerItem(itemId: f.name,
+                let playerItem = PlayerItem(itemId: f.uniqString(),
                                             url: f.audiofile.file.buildImageURL()?.absoluteString ?? "")
                 playerItem.autoLoadNext = true
                 
@@ -53,14 +53,14 @@ class FeedPresenter: FeedPresenterProtocol {
             let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
             audioManager.add(playlist: [group])
         } else
-        if audioManager.currentItemId == track.name {
+        if audioManager.currentItemId == track.uniqString() {
             if audioManager.isPlaying {
                 audioManager.pause()
             } else {
                 audioManager.resume()
             }
         } else {
-            audioManager.playItem(with: track.name)
+            audioManager.playItem(with: track.uniqString())
         }
         
     }
