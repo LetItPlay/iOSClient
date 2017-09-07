@@ -23,11 +23,15 @@ class MainTabViewController: UITabBarController {
             playerVC.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
             playerVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -49).isActive = true
             playerVC.view.heightAnchor.constraint(equalToConstant: 72).isActive = true
-            
-            playerVC.hidePlayer()
         }
         
         AppManager.shared.rootTabBarController = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        selectedIndex = 2
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,6 +71,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
         if let nc = viewController as? UINavigationController,
             let root = nc.viewControllers.first {
             if root is FeedViewController {

@@ -35,33 +35,8 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     @objc func subscriptionChanged(notification: Notification) {
-        DownloadManager.shared.requestTracks(success: { [weak self] (feed) in
-            
-            guard self != nil else {
-                return
-            }
-            
-            self?.playList = [PlayerItem]()
-            
-            for f in feed {
-                let playerItem = PlayerItem(itemId: f.uniqString(),
-                                            url: f.audiofile.file.buildImageURL()?.absoluteString ?? "")
-                playerItem.autoLoadNext = true
-                
-                self?.playList.append(playerItem)
-            }
-            
-            if !self!.playList.isEmpty {
-                self?.audioManager.resetPlaylistAndStop()
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: self!.playList)
-                self?.audioManager.add(playlist: [group])
-            }
-            
-            DispatchQueue.main.async {
-                self?.view?.display(tracks: feed)
-            }
-        }) { (err) in
-            
+        getData { [weak self] (result) in
+            self?.view?.display(tracks: result)
         }
     }
     
@@ -90,6 +65,10 @@ class FeedPresenter: FeedPresenterProtocol {
             
             DispatchQueue.main.async {
                 onComplete(feed)
+                
+                if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
+                    AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = feed.isEmpty ? nil : "New"
+                }
             }
         }) { (err) in
             
