@@ -40,6 +40,7 @@ class DownloadManager {
         case audiofiles = "http://176.31.100.18:8182/audiofiles/"
         case stations = "http://176.31.100.18:8182/stations/"
         case tracks = "http://176.31.100.18:8182/tracks/"
+        case tracksForStations = "http://176.31.100.18:8182/api/tracks/stations/"
     }
     
     static let shared = DownloadManager()
@@ -82,7 +83,7 @@ class DownloadManager {
     }
     
     func requestTracks(success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
-        if let str = urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+        if let str = urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
             
             let request = URLRequest(url: url)
@@ -123,6 +124,65 @@ class DownloadManager {
             })
             task.resume()
         }
+    }
+    
+}
+
+class SubscribeManager {
+    
+    public enum NotificationName: String {
+        
+        case added   = "SubscribeManager_recivedNewStation"
+        case deleted = "SubscribeManager_deletedStation"
+        
+        public var notification: Notification.Name  {
+            return Notification.Name(rawValue: self.rawValue)
+        }
+        
+    }
+    
+    static let shared = SubscribeManager()
+    
+    private var stations = [Int]()
+    
+    public func requestString() -> String {
+        return stations.map{ "\($0)" }.joined(separator: ",")
+    }
+    
+    public func addOrDelete(station: Int) {
+        if hasStation(id: station) {
+            removeStation(id: station)
+        } else {
+            addStation(id: station)
+        }
+    }
+    
+    public func hasStation(id: Int) -> Bool {
+        return stations.contains(id)
+    }
+    
+    private func addStation(id: Int) {
+        objc_sync_enter(stations)
+        stations.append(id)
+        objc_sync_exit(stations)
+        
+        debugPrint("user subscribed on \(id)")
+        NotificationCenter.default.post(name: NotificationName.added.notification,
+                                        object: nil,
+                                        userInfo: ["id": id])
+    }
+    
+    private func removeStation(id: Int) {
+        objc_sync_enter(stations)
+        if let index = stations.index(of: id) {
+            stations.remove(at: index)
+        }
+        objc_sync_exit(stations)
+        
+        debugPrint("user unsubscribed on \(id)")
+        NotificationCenter.default.post(name: NotificationName.deleted.notification,
+                                        object: nil,
+                                        userInfo: ["id": id])
     }
     
 }

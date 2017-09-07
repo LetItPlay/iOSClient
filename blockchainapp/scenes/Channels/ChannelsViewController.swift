@@ -49,6 +49,11 @@ class ChannelsCell: UITableViewCell {
         }
     }
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        subscribeButton.isHidden = !selected
+    }
+    
 }
 
 class ChannelsViewController: UIViewController, ChannelsViewProtocol {
@@ -68,10 +73,7 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
 
         tableView.dataSource = self
         tableView.delegate   = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        tableView.allowsMultipleSelection = true
         
         presenter.getData { [weak self] (channels) in
             self?.display(channels: channels)
@@ -124,5 +126,14 @@ extension ChannelsViewController: UITableViewDataSource {
 
 extension ChannelsViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let channel = source[indexPath.row]
+        presenter.select(station: channel)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let channel = source[indexPath.row]
+        presenter.select(station: channel)
+    }
     
 }

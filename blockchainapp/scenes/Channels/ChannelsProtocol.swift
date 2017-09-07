@@ -16,4 +16,6 @@ protocol ChannelsViewProtocol: class {
 
 protocol ChannelsPresenterProtocol: class {
     func getData(onComplete: @escaping StationResult)
+    
+    func select(station: Station)
 }

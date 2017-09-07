@@ -12,6 +12,8 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
     
     weak var view: ChannelsViewProtocol?
     
+    var subManager = SubscribeManager.shared
+    
     init(view: ChannelsViewProtocol) {
         self.view = view
     }
@@ -25,5 +27,9 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
         }) { (err) in
             
         }
+    }
+    
+    func select(station: Station) {
+        subManager.addOrDelete(station: station.id)
     }
 }
