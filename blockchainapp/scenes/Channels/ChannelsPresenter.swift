@@ -20,9 +20,21 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
     
     //
     func getData(onComplete: @escaping StationResult) {
-        DownloadManager.shared.requestChannels(success: { (channels) in
+        DownloadManager.shared.requestChannels(success: { [weak self] (channels) in
+            
+            guard self != nil else {
+                return
+            }
+            
             DispatchQueue.main.async {
                 onComplete(channels)
+            }
+            
+            let indexes = channels.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
+            if !indexes.isEmpty {
+                DispatchQueue.main.async {
+                    self!.view?.select(rows: indexes)
+                }
             }
         }) { (err) in
             

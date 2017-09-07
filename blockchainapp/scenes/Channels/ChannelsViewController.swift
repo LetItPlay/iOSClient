@@ -60,11 +60,16 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
     
     @IBOutlet weak var tableView: UITableView!
     
+    var refreshControl: UIRefreshControl!
+    
     var presenter: ChannelsPresenter!
     var source = [Station]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         presenter = ChannelsPresenter(view: self)
         
@@ -74,7 +79,15 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
         tableView.dataSource = self
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
+        tableView.refreshControl = refreshControl
         
+        
+        presenter.getData { [weak self] (channels) in
+            self?.display(channels: channels)
+        }
+    }
+    
+    func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { [weak self] (channels) in
             self?.display(channels: channels)
         }
@@ -89,6 +102,16 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
     func display(channels: [Station]) {
         source = channels
         tableView.reloadData()
+        
+        refreshControl.endRefreshing()
+    }
+    
+    func select(rows: [Int]) {
+        for r in rows {
+            tableView.selectRow(at: IndexPath(row: r, section: 0),
+                                animated: false,
+                                scrollPosition: .none)
+        }
     }
     
     /*

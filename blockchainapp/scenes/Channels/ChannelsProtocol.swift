@@ -12,6 +12,7 @@ typealias StationResult = ([Station]) -> Void
 
 protocol ChannelsViewProtocol: class {
     func display(channels: [Station])
+    func select(rows: [Int])
 }
 
 protocol ChannelsPresenterProtocol: class {
