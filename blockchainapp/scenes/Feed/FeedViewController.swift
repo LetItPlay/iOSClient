@@ -142,12 +142,16 @@ class FeedCell: UITableViewCell {
 class FeedViewController: UIViewController, FeedViewProtocol {
     
     @IBOutlet weak var tableView: UITableView!
+    var refreshControl: UIRefreshControl!
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         presenter = FeedPresenter(view: self)
         
@@ -156,12 +160,19 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 
         tableView.dataSource = self
         tableView.delegate   = self
+        tableView.refreshControl = refreshControl
         
         tableView.contentInset = UIEdgeInsets(top: 0,
                                               left: 0,
                                               bottom: 72,
                                               right: 0)
         
+        presenter.getData { [weak self] (tracks) in
+            self?.display(tracks: tracks)
+        }
+    }
+    
+    func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { [weak self] (tracks) in
             self?.display(tracks: tracks)
         }
@@ -175,6 +186,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     func display(tracks: [Track]) {
         source = tracks
         tableView.reloadData()
+        
+        refreshControl.endRefreshing()
     }
 
     /*

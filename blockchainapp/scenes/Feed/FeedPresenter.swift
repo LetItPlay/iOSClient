@@ -52,6 +52,7 @@ class FeedPresenter: FeedPresenterProtocol {
             }
             
             if !self!.playList.isEmpty {
+                self?.audioManager.resetPlaylistAndStop()
                 let group = PlayerItemsGroup(id: "120", name: "main", playerItems: self!.playList)
                 self?.audioManager.add(playlist: [group])
             }
@@ -82,6 +83,7 @@ class FeedPresenter: FeedPresenterProtocol {
             }
             
             if !self!.playList.isEmpty {
+                self?.audioManager.resetPlaylistAndStop()
                 let group = PlayerItemsGroup(id: "120", name: "main", playerItems: self!.playList)
                 self?.audioManager.add(playlist: [group])
             }
