@@ -53,6 +53,7 @@ class FeedPresenter: FeedPresenterProtocol {
                 let playerItem = PlayerItem(itemId: f.uniqString(),
                                             url: f.audiofile.file.buildImageURL()?.absoluteString ?? "")
                 playerItem.autoLoadNext = true
+                playerItem.autoPlay = true
                 
                 self?.playList.append(playerItem)
             }
