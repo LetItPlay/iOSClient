@@ -41,6 +41,7 @@ class DownloadManager {
         case stations = "http://176.31.100.18:8182/stations/"
         case tracks = "http://176.31.100.18:8182/tracks/"
         case tracksForStations = "http://176.31.100.18:8182/api/tracks/stations/"
+        case subForStations = "http://176.31.100.18:8182/stations/%d/counts/"
     }
     
     static let shared = DownloadManager()
@@ -126,6 +127,33 @@ class DownloadManager {
         }
     }
     
+    func subscribe(onStation: Int, withCount: Int = 1) {
+        if let str = String(format: urlServices.subForStations.rawValue, onStation).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) {
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try? JSONSerialization.data(withJSONObject: ["subscription_count": withCount], options: .prettyPrinted)
+            
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                
+                guard error == nil else {
+                    
+                    return
+                }
+                
+                guard let data = data else {
+                    
+                    return
+                }
+                
+                
+            })
+            task.resume()
+        }
+    }
+    
 }
 
 class SubscribeManager {
@@ -170,6 +198,8 @@ class SubscribeManager {
         NotificationCenter.default.post(name: NotificationName.added.notification,
                                         object: nil,
                                         userInfo: ["id": id])
+        
+        DownloadManager.shared.subscribe(onStation: id)
     }
     
     private func removeStation(id: Int) {
@@ -183,6 +213,8 @@ class SubscribeManager {
         NotificationCenter.default.post(name: NotificationName.deleted.notification,
                                         object: nil,
                                         userInfo: ["id": id])
+        
+        DownloadManager.shared.subscribe(onStation: id, withCount: -1)
     }
     
 }
