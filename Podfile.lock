@@ -1,4 +1,9 @@
 PODS:
+  - Realm (2.8.3):
+    - Realm/Headers (= 2.8.3)
+  - Realm/Headers (2.8.3)
+  - RealmSwift (2.8.3):
+    - Realm (= 2.8.3)
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
@@ -6,6 +11,7 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
+  - RealmSwift
   - SDWebImage
   - SwiftyAudioManager (from `git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git`)
   - SwiftyJSON
@@ -20,10 +26,12 @@ CHECKOUT OPTIONS:
     :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
 
 SPEC CHECKSUMS:
+  Realm: 3601ef091c8c499a31101d8563b991e75546cdce
+  RealmSwift: 8183818515471b01a99abdd2970f8e4fd52b6f4a
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   SwiftyAudioManager: 085c5bb43718c74cfac9f5fb926b32d4a17bca02
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 7ae4c25204bfa467bdaf9d043a8c895d05c2e0a6
+PODFILE CHECKSUM: 25a7f96e7eba38a5ec9c43addcecef29b571e43c
 
 COCOAPODS: 1.2.1

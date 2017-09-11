@@ -106,6 +106,8 @@ class FeedCell: UITableViewCell {
             likesLabel.text = "\(track?.linkCount ?? 0) likes"
             listeningLabel.text = "0 listening"
             commentLabel.text = "0 comments"
+            
+            likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
         }
     }
     
@@ -123,6 +125,7 @@ class FeedCell: UITableViewCell {
     }
     
     @IBAction func likePressed(_ sender: Any) {
+        likeButton.isSelected = !likeButton.isSelected
         if track != nil {
             onLike?(track!)
         }
@@ -218,6 +221,10 @@ extension FeedViewController: UITableViewDataSource {
         
         cell.onPlay = { [weak self] track in
             self?.presenter.play(track: track)
+        }
+        
+        cell.onLike = { [weak self] track in
+            self?.presenter.like(track: track)
         }
         
         return cell

@@ -96,4 +96,8 @@ class FeedPresenter: FeedPresenterProtocol {
         }
         
     }
+    
+    func like(track: Track) {
+        LikeManager.shared.addOrDelete(id: track.id)
+    }
 }

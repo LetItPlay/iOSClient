@@ -6,5 +6,6 @@ target 'blockchainapp' do
   pod "SwiftyAudioManager", :git => 'git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git'
   pod "SwiftyJSON"
   pod "SDWebImage"
+  pod "RealmSwift"
 
 end

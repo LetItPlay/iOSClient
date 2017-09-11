@@ -14,6 +14,7 @@ protocol FeedPresenterProtocol: class {
     func getData(onComplete: @escaping TrackResult)
     
     func play(track: Track)
+    func like(track: Track)
 }
 
 protocol FeedViewProtocol: class {

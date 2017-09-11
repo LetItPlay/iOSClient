@@ -24,6 +24,7 @@
 		CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536C1F57F53100660474 /* ChannelsProtocol.swift */; };
 		CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536F1F5D78C000660474 /* PlayerViewController.swift */; };
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
+		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		CF44536C1F57F53100660474 /* ChannelsProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsProtocol.swift; path = scenes/Channels/ChannelsProtocol.swift; sourceTree = "<group>"; };
 		CF44536F1F5D78C000660474 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = scenes/player/PlayerViewController.swift; sourceTree = "<group>"; };
 		CF4453721F5D8EBE00660474 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabViewController.swift; path = "scenes/tab controller/MainTabViewController.swift"; sourceTree = "<group>"; };
+		CF4453741F666BB800660474 /* DBModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBModels.swift; path = models/DBModels.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 			children = (
 				CF4453581F55400F00660474 /* MainModels.swift */,
 				CF44535A1F55406B00660474 /* Managers.swift */,
+				CF4453741F666BB800660474 /* DBModels.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -429,6 +432,7 @@
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
+				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,

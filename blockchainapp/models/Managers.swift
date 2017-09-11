@@ -42,6 +42,7 @@ class DownloadManager {
         case tracks = "http://176.31.100.18:8182/tracks/"
         case tracksForStations = "http://176.31.100.18:8182/api/tracks/stations/"
         case subForStations = "http://176.31.100.18:8182/stations/%d/counts/"
+        case forTracks = "http://176.31.100.18:8182/tracks/%d/counts/"
     }
     
     static let shared = DownloadManager()
@@ -143,7 +144,39 @@ class DownloadManager {
                     return
                 }
                 
-                guard let data = data else {
+                guard let _ = data else {
+                    
+                    return
+                }
+                
+                
+            })
+            task.resume()
+        }
+    }
+    
+    func track(id: Int, report: Int = 0, like: Int = 0) {
+        if let str = String(format: urlServices.forTracks.rawValue, id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) {
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            var elements: [String: Int] = [:]
+            elements["report_count"] = report
+            elements["like_count"]   = like
+            
+            request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
+            
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                
+                guard error == nil else {
+                    
+                    return
+                }
+                
+                guard let _ = data else {
                     
                     return
                 }
@@ -169,6 +202,10 @@ class SubscribeManager {
         
     }
     
+    init() {
+        stations = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+    }
+    
     static let shared = SubscribeManager()
     
     private var stations = [Int]()
@@ -183,6 +220,8 @@ class SubscribeManager {
         } else {
             addStation(id: station)
         }
+        
+        UserDefaults.standard.set(stations, forKey: "array_sub")
     }
     
     public func hasStation(id: Int) -> Bool {
@@ -217,5 +256,51 @@ class SubscribeManager {
         DownloadManager.shared.subscribe(onStation: id, withCount: -1)
     }
     
+}
+
+class LikeManager {
+    static let shared = LikeManager()
+    
+    private var stations = [Int]()
+    
+    init() {
+        stations = (UserDefaults.standard.array(forKey: "array_like") as? [Int]) ?? []
+    }
+    
+    public func addOrDelete(id: Int) {
+        if hasObject(id: id) {
+            dislike(id: id)
+        } else {
+            like(id: id)
+        }
+        
+        UserDefaults.standard.set(stations, forKey: "array_like")
+    }
+    
+    public func hasObject(id: Int) -> Bool {
+        return stations.contains(id)
+    }
+    
+    private func like(id: Int) {
+        objc_sync_enter(stations)
+        stations.append(id)
+        objc_sync_exit(stations)
+        
+        debugPrint("user like on \(id)")
+        
+        DownloadManager.shared.track(id: id, like: 1)
+    }
+    
+    private func dislike(id: Int) {
+        objc_sync_enter(stations)
+        if let index = stations.index(of: id) {
+            stations.remove(at: index)
+        }
+        objc_sync_exit(stations)
+        
+        debugPrint("user dislike on \(id)")
+        
+        DownloadManager.shared.track(id: id, like: -1)
+    }
 }
 
