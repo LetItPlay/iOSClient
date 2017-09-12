@@ -28,6 +28,8 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var listeningLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     
+    @IBOutlet weak var timeLabel: UILabel!
+    
     @IBOutlet weak var menuButton: UIButton!
     
     let audioManager = AppManager.shared.audioManager
@@ -56,6 +58,7 @@ class FeedCell: UITableViewCell {
         likesLabel.font     = UIFont(name: ".SFUIText-Medium", size: 12)
         listeningLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)
         commentLabel.font   = UIFont(name: ".SFUIText-Medium", size: 12)
+        timeLabel.font      = UIFont(name: ".SFUIText-Bold", size: 12)
         
         likesLabel.textColor     = UIColor.vaCharcoalGrey
         listeningLabel.textColor = UIColor.vaCharcoalGrey
