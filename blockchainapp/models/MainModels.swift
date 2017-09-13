@@ -27,7 +27,7 @@ struct Track {
     let url: String
     let description: String
     let image: String
-    let linkCount: Int
+    let likeCount: Int
     let reportCount: Int
     
     func uniqString() -> String {

@@ -106,11 +106,14 @@ class FeedCell: UITableViewCell {
                 iconImageView.image = nil
             }
             
-            likesLabel.text = "\(track?.linkCount ?? 0) likes"
+            likesLabel.text = "\(track?.likeCount ?? 0) likes"
             listeningLabel.text = "0 listening"
             commentLabel.text = "0 comments"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
+            
+            let maxTime = track?.audiofile.lengthSeconds ?? 0
+            timeLabel.text = String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
         }
     }
     

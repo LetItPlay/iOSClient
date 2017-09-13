@@ -116,7 +116,7 @@ class DownloadManager {
                                       url: jTrack["url"].string ?? "",
                                       description: jTrack["description"].string ?? "",
                                       image: jTrack["image"].string ?? "",
-                                      linkCount: jTrack["like_count"].int ?? 0,
+                                      likeCount: jTrack["like_count"].int ?? 0,
                                       reportCount: jTrack["report_count"].int ?? 0)
                         result.append(t)
                     }
