@@ -13,6 +13,18 @@
 		CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4453321F54139900660474 /* LaunchScreen.storyboard */; };
 		CF44533F1F54139900660474 /* blockchainappTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44533E1F54139900660474 /* blockchainappTests.swift */; };
 		CF44534A1F54139900660474 /* blockchainappUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453491F54139900660474 /* blockchainappUITests.swift */; };
+		CF4453591F55400F00660474 /* MainModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453581F55400F00660474 /* MainModels.swift */; };
+		CF44535B1F55406B00660474 /* Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535A1F55406B00660474 /* Managers.swift */; };
+		CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44535D1F569D4E00660474 /* StyleExtension.swift */; };
+		CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453611F56CA2E00660474 /* FeedViewController.swift */; };
+		CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453631F56CA5800660474 /* FeedPresenter.swift */; };
+		CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453651F56CB4600660474 /* FeedProtocols.swift */; };
+		CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453681F57F4D200660474 /* ChannelsViewController.swift */; };
+		CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536A1F57F50300660474 /* ChannelsPresenter.swift */; };
+		CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536C1F57F53100660474 /* ChannelsProtocol.swift */; };
+		CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536F1F5D78C000660474 /* PlayerViewController.swift */; };
+		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
+		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +60,18 @@
 		CF4453451F54139900660474 /* blockchainappUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockchainappUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453491F54139900660474 /* blockchainappUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockchainappUITests.swift; sourceTree = "<group>"; };
 		CF44534B1F54139900660474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CF4453581F55400F00660474 /* MainModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainModels.swift; path = models/MainModels.swift; sourceTree = "<group>"; };
+		CF44535A1F55406B00660474 /* Managers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Managers.swift; path = models/Managers.swift; sourceTree = "<group>"; };
+		CF44535D1F569D4E00660474 /* StyleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StyleExtension.swift; path = extension/StyleExtension.swift; sourceTree = "<group>"; };
+		CF4453611F56CA2E00660474 /* FeedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedViewController.swift; path = scenes/Feed/FeedViewController.swift; sourceTree = "<group>"; };
+		CF4453631F56CA5800660474 /* FeedPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedPresenter.swift; path = scenes/Feed/FeedPresenter.swift; sourceTree = "<group>"; };
+		CF4453651F56CB4600660474 /* FeedProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FeedProtocols.swift; path = scenes/Feed/FeedProtocols.swift; sourceTree = "<group>"; };
+		CF4453681F57F4D200660474 /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsViewController.swift; path = scenes/Channels/ChannelsViewController.swift; sourceTree = "<group>"; };
+		CF44536A1F57F50300660474 /* ChannelsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsPresenter.swift; path = scenes/Channels/ChannelsPresenter.swift; sourceTree = "<group>"; };
+		CF44536C1F57F53100660474 /* ChannelsProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsProtocol.swift; path = scenes/Channels/ChannelsProtocol.swift; sourceTree = "<group>"; };
+		CF44536F1F5D78C000660474 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = scenes/player/PlayerViewController.swift; sourceTree = "<group>"; };
+		CF4453721F5D8EBE00660474 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabViewController.swift; path = "scenes/tab controller/MainTabViewController.swift"; sourceTree = "<group>"; };
+		CF4453741F666BB800660474 /* DBModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBModels.swift; path = models/DBModels.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -102,6 +126,9 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
+				CF44535F1F56C9D700660474 /* scenes */,
+				CF44535C1F569D1E00660474 /* extensions */,
+				CF4453571F553FE400660474 /* models */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
 				CF4453301F54139900660474 /* Assets.xcassets */,
@@ -127,6 +154,71 @@
 				CF44534B1F54139900660474 /* Info.plist */,
 			);
 			path = blockchainappUITests;
+			sourceTree = "<group>";
+		};
+		CF4453571F553FE400660474 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453581F55400F00660474 /* MainModels.swift */,
+				CF44535A1F55406B00660474 /* Managers.swift */,
+				CF4453741F666BB800660474 /* DBModels.swift */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
+		CF44535C1F569D1E00660474 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
+			);
+			name = extensions;
+			sourceTree = "<group>";
+		};
+		CF44535F1F56C9D700660474 /* scenes */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453711F5D8E8600660474 /* tab controller */,
+				CF44536E1F5D787A00660474 /* player */,
+				CF4453671F57F42800660474 /* Channels */,
+				CF4453601F56C9E600660474 /* Feed */,
+			);
+			name = scenes;
+			sourceTree = "<group>";
+		};
+		CF4453601F56C9E600660474 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
+				CF4453631F56CA5800660474 /* FeedPresenter.swift */,
+				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
+			);
+			name = Feed;
+			sourceTree = "<group>";
+		};
+		CF4453671F57F42800660474 /* Channels */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453681F57F4D200660474 /* ChannelsViewController.swift */,
+				CF44536A1F57F50300660474 /* ChannelsPresenter.swift */,
+				CF44536C1F57F53100660474 /* ChannelsProtocol.swift */,
+			);
+			name = Channels;
+			sourceTree = "<group>";
+		};
+		CF44536E1F5D787A00660474 /* player */ = {
+			isa = PBXGroup;
+			children = (
+				CF44536F1F5D78C000660474 /* PlayerViewController.swift */,
+			);
+			name = player;
+			sourceTree = "<group>";
+		};
+		CF4453711F5D8E8600660474 /* tab controller */ = {
+			isa = PBXGroup;
+			children = (
+				CF4453721F5D8EBE00660474 /* MainTabViewController.swift */,
+			);
+			name = "tab controller";
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -334,7 +426,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
+				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
+				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
+				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
+				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
+				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
+				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
+				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
+				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
+				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
+				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -487,12 +591,15 @@
 			baseConfigurationReference = C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				INFOPLIST_FILE = blockchainapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.msl.blockchainapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -502,12 +609,15 @@
 			baseConfigurationReference = D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				INFOPLIST_FILE = blockchainapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.msl.blockchainapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -589,6 +699,7 @@
 				CF4453501F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF4453511F54139900660474 /* Build configuration list for PBXNativeTarget "blockchainappTests" */ = {
 			isa = XCConfigurationList;
@@ -597,6 +708,7 @@
 				CF4453531F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CF4453541F54139900660474 /* Build configuration list for PBXNativeTarget "blockchainappUITests" */ = {
 			isa = XCConfigurationList;
@@ -605,6 +717,7 @@
 				CF4453561F54139900660474 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
