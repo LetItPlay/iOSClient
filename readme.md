@@ -12,7 +12,7 @@ Architecture - MVP
 
 ### Description
 
-LeItPlay - is a audio-based platform for sharing content. 
+LeItPlay - audio-based platform for sharing content. 
 
 Availabel features:
 * channels list
