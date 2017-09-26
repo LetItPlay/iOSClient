@@ -1,9 +1,9 @@
-###LET IT PLAY
+### LET IT PLAY
 
 Language - Swift 3
 Architecture - MVP
 
-#Libraries
+# Libraries
 
 * SwiftyAudioManager
 * SwiftyJSON
