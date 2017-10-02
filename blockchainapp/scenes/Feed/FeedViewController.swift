@@ -111,6 +111,7 @@ class FeedCell: UITableViewCell {
             commentLabel.text = "0 comments"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
+            playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
             
             let maxTime = track?.audiofile.lengthSeconds ?? 0
             timeLabel.text = String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
