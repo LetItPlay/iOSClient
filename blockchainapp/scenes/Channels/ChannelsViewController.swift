@@ -36,7 +36,7 @@ class ChannelsCell: UITableViewCell {
         return 80
     }
     
-    var channel: Station? = nil {
+    weak var channel: Station? = nil {
         didSet {
             nameLabel.text = channel?.name
             infoLabel.text = "\(channel?.subscriptionCount ?? 0) subscribers"

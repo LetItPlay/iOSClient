@@ -18,5 +18,5 @@ protocol FeedPresenterProtocol: class {
 }
 
 protocol FeedViewProtocol: class {
-    func display(tracks: [Track])
+    func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int])
 }

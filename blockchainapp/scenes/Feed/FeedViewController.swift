@@ -177,14 +177,14 @@ class FeedViewController: UIViewController, FeedViewProtocol {
                                               bottom: 72,
                                               right: 0)
         
-        presenter.getData { [weak self] (tracks) in
-            self?.display(tracks: tracks)
+        presenter.getData { (tracks) in
+            
         }
     }
     
     func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { [weak self] (tracks) in
-            self?.display(tracks: tracks)
+        presenter.getData { (tracks) in
+            
         }
     }
 
@@ -193,10 +193,9 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         // Dispose of any resources that can be recreated.
     }
     
-    func display(tracks: [Track]) {
+    func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
         source = tracks
         tableView.reloadData()
-        
         refreshControl.endRefreshing()
     }
 

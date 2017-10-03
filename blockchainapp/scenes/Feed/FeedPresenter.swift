@@ -30,14 +30,26 @@ class FeedPresenter: FeedPresenterProtocol {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 let items = Array(results)
-                self?.view?.display(tracks:  items)
-                self?.updatePlayList(feed: items)
+                self?.view?.display(tracks:  items,
+                                    deletions: [],
+                                    insertions: [],
+                                    modifications: [])
+                self?.updatePlayList(feed: items,
+                                     deletions: [],
+                                     insertions: [],
+                                     modifications: [])
                 
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
                 let items = Array(results)
-                self?.view?.display(tracks: items)
-                self?.updatePlayList(feed: items)
+                self?.view?.display(tracks: items,
+                                    deletions: deletions,
+                                    insertions: insertions,
+                                    modifications: modifications)
+                self?.updatePlayList(feed: items,
+                                     deletions: deletions,
+                                     insertions: insertions,
+                                     modifications: modifications)
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
@@ -67,27 +79,31 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     @objc func subscriptionChanged(notification: Notification) {
-        getData { [weak self] (result) in
-            self?.view?.display(tracks: result)
+        getData { (result) in
+            
         }
     }
     
-    private func updatePlayList(feed: [Track]) {
-        playList = [PlayerItem]()
-        
-        for f in feed {
-            let playerItem = PlayerItem(itemId: f.uniqString(),
-                                        url: f.audiofile?.file.buildImageURL()?.absoluteString ?? "")
-            playerItem.autoLoadNext = true
-            playerItem.autoPlay = true
+    private func updatePlayList(feed: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
+        if deletions.isEmpty && insertions.isEmpty && modifications.isEmpty ||
+            !deletions.isEmpty ||
+            !insertions.isEmpty {
+            playList = [PlayerItem]()
             
-            playList.append(playerItem)
-        }
-        
-        if !playList.isEmpty {
-            audioManager.resetPlaylistAndStop()
-            let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
-            audioManager.add(playlist: [group])
+            for f in feed {
+                let playerItem = PlayerItem(itemId: f.uniqString(),
+                                            url: f.audiofile?.file.buildImageURL()?.absoluteString ?? "")
+                playerItem.autoLoadNext = true
+                playerItem.autoPlay = true
+                
+                playList.append(playerItem)
+            }
+            
+            if !playList.isEmpty {
+                audioManager.resetPlaylistAndStop()
+                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
+                audioManager.add(playlist: [group])
+            }
         }
     }
     

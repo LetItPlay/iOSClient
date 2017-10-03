@@ -114,26 +114,7 @@ class DownloadManager {
                 do {
                     try realm.write {
                         for jTrack in json.array ?? [] {
-                            if let idInt = jTrack["id"].int {
-                                var audioFile: Audiofile? = nil
-                                if let file = jTrack["audio_file"]["file"].string {
-                                    audioFile = Audiofile()
-                                    audioFile?.file = file
-                                    audioFile?.lengthSeconds = jTrack["audio_file"]["length_seconds"].int64 ?? 0
-                                    audioFile?.sizeBytes = jTrack["audio_file"]["size_bytes"].int64 ?? 0
-                                }
-                                
-                                DBManager.shared.addOrUpdateTrack(inRealm: realm,
-                                                                  id: idInt,
-                                                                  station: jTrack["station"].int ?? 0,
-                                                                  audiofile: audioFile,
-                                                                  name: jTrack["name"].string ?? "",
-                                                                  url: jTrack["url"].string ?? "",
-                                                                  description: jTrack["description"].string ?? "",
-                                                                  image: jTrack["image"].string ?? "",
-                                                                  likeCount: jTrack["like_count"].int ?? 0,
-                                                                  reportCount: jTrack["report_count"].int ?? 0)
-                            }
+                            DBManager.shared.track(fromJSON: jTrack, realm: realm)
                         }
                     }
                 } catch(let error) {
@@ -189,16 +170,19 @@ class DownloadManager {
             
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
                 
-                guard error == nil else {
-                    
-                    return
-                }
+                guard error == nil else { return }
+                guard let data = data else { return }
                 
-                guard let _ = data else {
-                    
-                    return
-                }
+                let json  = JSON(data: data)
+                let realm = try! Realm()
                 
+                do {
+                    try realm.write {
+                        DBManager.shared.track(fromJSON: json, realm: realm)
+                    }
+                } catch(let error) {
+                    print(error)
+                }
                 
             })
             task.resume()
