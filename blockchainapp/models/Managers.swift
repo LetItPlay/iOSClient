@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import SwiftyAudioManager
+import RealmSwift
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
 typealias TracksLoaderSuccess = ([Track]) -> Void
@@ -64,21 +65,27 @@ class DownloadManager {
                     return
                 }
                 
-                let json = JSON(data: data)
-                var result = [Station]()
-                for jStation in json.array ?? [] {
-                    if let idInt = jStation["id"].int {
-                        let station = Station(id: idInt,
-                                              name: jStation["name"].string ?? "",
-                                              image: jStation["image"].string ?? "",
-                                              subscriptionCount: jStation["subscription_count"].int ?? 0)
-                        result.append(station)
-                    } else {
-                        print("ERROR: no id in \(jStation)")
-                    }
-                }
+                let json  = JSON(data: data)
+                let realm = try! Realm()
                 
-                success(result)
+                do {
+                    try realm.write {
+                        for jStation in json.array ?? [] {
+                            if let idInt = jStation["id"].int {
+                                DBManager.shared.addOrUpdateStation(inRealm: realm,
+                                                                    id: idInt,
+                                                                    name: jStation["name"].string ?? "",
+                                                                    image: jStation["image"].string ?? "",
+                                                                    subscriptionCount: jStation["subscription_count"].int ?? 0)
+                            } else {
+                                print("ERROR: no id in \(jStation)")
+                            }
+                        }
+                    }
+                } catch(let error) {
+                    print(error)
+                }
+//                success(result)
             })
             task.resume()
         }
@@ -101,28 +108,39 @@ class DownloadManager {
                     return
                 }
                 
-                let json = JSON(data: data)
-                var result = [Track]()
-                for jTrack in json.array ?? [] {
-                    if let idInt = jTrack["id"].int {
-                        let file = Audiofile(file: jTrack["audio_file"]["file"].string ?? "",
-                                             lengthSeconds: jTrack["audio_file"]["length_seconds"].int64 ?? 0,
-                                             sizeBytes: jTrack["audio_file"]["size_bytes"].int64 ?? 0)
-                        
-                        let t = Track(id: idInt,
-                                      station: jTrack["station"].int ?? 0,
-                                      audiofile: file,
-                                      name: jTrack["name"].string ?? "",
-                                      url: jTrack["url"].string ?? "",
-                                      description: jTrack["description"].string ?? "",
-                                      image: jTrack["image"].string ?? "",
-                                      likeCount: jTrack["like_count"].int ?? 0,
-                                      reportCount: jTrack["report_count"].int ?? 0)
-                        result.append(t)
+                let json  = JSON(data: data)
+                let realm = try! Realm()
+                
+                do {
+                    try realm.write {
+                        for jTrack in json.array ?? [] {
+                            if let idInt = jTrack["id"].int {
+                                var audioFile: Audiofile? = nil
+                                if let file = jTrack["audio_file"]["file"].string {
+                                    audioFile = Audiofile()
+                                    audioFile?.file = file
+                                    audioFile?.lengthSeconds = jTrack["audio_file"]["length_seconds"].int64 ?? 0
+                                    audioFile?.sizeBytes = jTrack["audio_file"]["size_bytes"].int64 ?? 0
+                                }
+                                
+                                DBManager.shared.addOrUpdateTrack(inRealm: realm,
+                                                                  id: idInt,
+                                                                  station: jTrack["station"].int ?? 0,
+                                                                  audiofile: audioFile,
+                                                                  name: jTrack["name"].string ?? "",
+                                                                  url: jTrack["url"].string ?? "",
+                                                                  description: jTrack["description"].string ?? "",
+                                                                  image: jTrack["image"].string ?? "",
+                                                                  likeCount: jTrack["like_count"].int ?? 0,
+                                                                  reportCount: jTrack["report_count"].int ?? 0)
+                            }
+                        }
                     }
+                } catch(let error) {
+                    print(error)
                 }
                 
-                success(result)
+//                success(result)
             })
             task.resume()
         }
@@ -247,6 +265,11 @@ class SubscribeManager {
             stations.remove(at: index)
         }
         objc_sync_exit(stations)
+        
+        let realm = try! Realm()
+        try? realm.write {
+            realm.delete(realm.objects(Track.self).filter("station = %@", id))
+        }
         
         debugPrint("user unsubscribed on \(id)")
         NotificationCenter.default.post(name: NotificationName.deleted.notification,

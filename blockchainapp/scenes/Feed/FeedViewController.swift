@@ -34,8 +34,8 @@ class FeedCell: UITableViewCell {
     
     let audioManager = AppManager.shared.audioManager
     
-    public var onPlay: ((Track) -> Void)?
-    public var onLike: ((Track) -> Void)?
+    public var onPlay: ((String) -> Void)?
+    public var onLike: ((Int) -> Void)?
     public var onComment: ((Track) -> Void)?
     public var onMenu: ((Track) -> Void)?
     
@@ -96,7 +96,7 @@ class FeedCell: UITableViewCell {
         return 192
     }
     
-    var track: Track? = nil {
+    weak var track: Track? = nil {
         didSet {
             nameLabel.text = track?.name
             
@@ -113,7 +113,7 @@ class FeedCell: UITableViewCell {
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
             
-            let maxTime = track?.audiofile.lengthSeconds ?? 0
+            let maxTime = track?.audiofile?.lengthSeconds ?? 0
             timeLabel.text = String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
         }
     }
@@ -127,14 +127,14 @@ class FeedCell: UITableViewCell {
     
     @IBAction func playPressed(_ sender: Any) {
         if track != nil {
-            onPlay?(track!)
+            onPlay?(track!.uniqString())
         }
     }
     
     @IBAction func likePressed(_ sender: Any) {
         likeButton.isSelected = !likeButton.isSelected
         if track != nil {
-            onLike?(track!)
+            onLike?(track!.id)
         }
     }
     
@@ -227,11 +227,11 @@ extension FeedViewController: UITableViewDataSource {
         cell.track = source[indexPath.row]
         
         cell.onPlay = { [weak self] track in
-            self?.presenter.play(track: track)
+            self?.presenter.play(trackUID: track)
         }
         
         cell.onLike = { [weak self] track in
-            self?.presenter.like(track: track)
+            self?.presenter.like(trackUID: track)
         }
         
         return cell

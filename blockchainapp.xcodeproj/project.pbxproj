@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
 		CF44532F1F54139900660474 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF44532D1F54139900660474 /* Main.storyboard */; };
 		CF4453311F54139900660474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4453301F54139900660474 /* Assets.xcassets */; };
@@ -48,6 +49,7 @@
 /* Begin PBXFileReference section */
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
+		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
 		CF4453261F54139900660474 /* blockchainapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockchainapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453291F54139900660474 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF44532E1F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				CF4453581F55400F00660474 /* MainModels.swift */,
 				CF44535A1F55406B00660474 /* Managers.swift */,
 				CF4453741F666BB800660474 /* DBModels.swift */,
+				CF1E04821F82273D00D8812F /* DBHelpers.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
+				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 			);
