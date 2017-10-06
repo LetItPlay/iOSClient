@@ -19,6 +19,8 @@ class FeedPresenter: FeedPresenterProtocol {
     
     var playList = [PlayerItem]()
     
+    private var startTime: Double = 0
+    
     init(view: FeedViewProtocol) {
         self.view = view
         
@@ -71,6 +73,11 @@ class FeedPresenter: FeedPresenterProtocol {
                                                selector: #selector(subscriptionChanged(notification:)),
                                                name: SubscribeManager.NotificationName.deleted.notification,
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlay(notification:)),
+                                               name: AudioManagerNotificationName.startPlaying.notification,
+                                               object: audioManager)
     }
     
     deinit {
@@ -81,6 +88,13 @@ class FeedPresenter: FeedPresenterProtocol {
     @objc func subscriptionChanged(notification: Notification) {
         getData { (result) in
             
+        }
+    }
+    
+    @objc func audioManagerStartPlay(notification: Notification) {
+        if startTime != 0 {
+            audioManager.itemProgressPercent = startTime
+            startTime = 0
         }
     }
     
@@ -99,10 +113,24 @@ class FeedPresenter: FeedPresenterProtocol {
                 playList.append(playerItem)
             }
             
+            startTime = 0
+            
             if !playList.isEmpty {
+                
+                var currentId: String? = nil
+                
+                if audioManager.isPlaying {
+                    currentId = audioManager.currentItemId
+                    startTime = audioManager.itemProgressPercent
+                }
+                
                 audioManager.resetPlaylistAndStop()
                 let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
                 audioManager.add(playlist: [group])
+                
+                if currentId != nil {
+                    audioManager.playItem(with: currentId!)
+                }
             }
         }
     }
