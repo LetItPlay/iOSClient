@@ -19,7 +19,7 @@ class AppManager {
     static let shared = AppManager()
     
     public let audioManager = AudioManager()
-    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "player") as? PlayerViewController
+    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
     
     private let tabDelegate = MainTabBarDelegate()
     public var rootTabBarController: MainTabViewController? {

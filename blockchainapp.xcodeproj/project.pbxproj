@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
+		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
 		CF44532F1F54139900660474 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF44532D1F54139900660474 /* Main.storyboard */; };
 		CF4453311F54139900660474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4453301F54139900660474 /* Assets.xcassets */; };
@@ -50,6 +51,7 @@
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
+		CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioCoreViewController.swift; path = scenes/player/AudioCoreViewController.swift; sourceTree = "<group>"; };
 		CF4453261F54139900660474 /* blockchainapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockchainapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453291F54139900660474 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF44532E1F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -212,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				CF44536F1F5D78C000660474 /* PlayerViewController.swift */,
+				CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,

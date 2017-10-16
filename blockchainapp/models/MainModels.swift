@@ -43,6 +43,11 @@ class Track: Object {
         return "\(id)"
     }
 }
+extension Track {
+    public func findStationName() -> String? {
+        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+    }
+}
 
 class Audiofile: Object {
     @objc dynamic var file: String = ""
