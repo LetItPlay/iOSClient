@@ -100,10 +100,16 @@ class FeedCell: UITableViewCell {
         didSet {
             nameLabel.text = track?.name
             
-            if let iconUrl = track?.image.buildImageURL() {
+            if let iconUrl = track?.findChannelImage() {
                 iconImageView.sd_setImage(with: iconUrl)
             } else {
                 iconImageView.image = nil
+            }
+            
+            if let iconUrl = track?.image.buildImageURL() {
+                mainImageView.sd_setImage(with: iconUrl)
+            } else {
+                mainImageView.image = nil
             }
             
             likesLabel.text = "\(track?.likeCount ?? 0) likes"

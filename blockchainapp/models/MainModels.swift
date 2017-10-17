@@ -47,6 +47,10 @@ extension Track {
     public func findStationName() -> String? {
         return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
     }
+    
+    public func findChannelImage() -> URL? {
+        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name.buildImageURL()
+    }
 }
 
 class Audiofile: Object {
