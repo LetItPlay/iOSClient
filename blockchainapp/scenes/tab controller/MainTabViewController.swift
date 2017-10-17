@@ -12,6 +12,8 @@ class MainTabViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tabBar.tintColor = UIColor.vaActive
 
         if let playerVC = AppManager.shared.audioPlayer {
             addChildViewController(playerVC)

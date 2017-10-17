@@ -24,6 +24,14 @@ extension UIColor {
     @nonobjc class var vaCharcoalGrey: UIColor {
         return UIColor(white: 74.0 / 255.0, alpha: 1.0)
     }
+    
+    @nonobjc class var vaRed: UIColor {
+        return UIColor(red: 255.0 / 255.0, green: 0.0, blue: 0.0, alpha: 1.0)
+    }
+    
+    @nonobjc class var vaActive: UIColor {
+        return vaRed
+    }
 }
 
 // Sample text styles
