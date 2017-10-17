@@ -113,11 +113,13 @@ class AudioCoreViewController: UIViewController {
 
 }
 
-extension AudioCoreViewController: UICollectionViewDelegate {
+extension AudioCoreViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return collectionView.bounds.size
     }
-    
+}
+
+extension AudioCoreViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard let cell = collectionView.visibleCells.first,
             let indexPath = collectionView.indexPath(for: cell) else {
