@@ -16,7 +16,6 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
     
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     
     @IBOutlet weak var bottomContainerView: UIView!
@@ -26,7 +25,6 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
     @IBOutlet weak var listeningLabel: UILabel!
-    @IBOutlet weak var commentLabel: UILabel!
     
     @IBOutlet weak var timeLabel: UILabel!
     
@@ -57,12 +55,10 @@ class FeedCell: UITableViewCell {
         
         likesLabel.font     = UIFont(name: ".SFUIText-Medium", size: 12)
         listeningLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)
-        commentLabel.font   = UIFont(name: ".SFUIText-Medium", size: 12)
         timeLabel.font      = UIFont(name: ".SFUIText-Bold", size: 12)
         
         likesLabel.textColor     = UIColor.vaCharcoalGrey
         listeningLabel.textColor = UIColor.vaCharcoalGrey
-        commentLabel.textColor   = UIColor.vaCharcoalGrey
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(audioManagerPaused(_:)),
@@ -114,7 +110,6 @@ class FeedCell: UITableViewCell {
             
             likesLabel.text = "\(track?.likeCount ?? 0) \(NSLocalizedString("likes", comment: ""))"
             listeningLabel.text = "0 \(NSLocalizedString("listening", comment: ""))"
-            commentLabel.text = "0 \(NSLocalizedString("comments", comment: ""))"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
@@ -125,11 +120,6 @@ class FeedCell: UITableViewCell {
     }
     
     // MARK: - buttons
-    @IBAction func commentPressed(_ sender: Any) {
-        if track != nil {
-            onComment?(track!)
-        }
-    }
     
     @IBAction func playPressed(_ sender: Any) {
         if track != nil {
