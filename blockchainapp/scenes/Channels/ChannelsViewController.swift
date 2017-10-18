@@ -66,10 +66,6 @@ class ChannelsCell: UITableViewCell {
 
 class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
     
-//    @IBOutlet weak var tableView: UITableView!
-//
-//    var refreshControl: UIRefreshControl!
-    
     var presenter: ChannelsPresenter!
     var source = [Station]()
 
@@ -122,16 +118,6 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
                                 scrollPosition: .none)
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
