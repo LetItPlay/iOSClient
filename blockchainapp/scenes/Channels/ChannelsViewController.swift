@@ -30,6 +30,8 @@ class ChannelsCell: UITableViewCell {
         subscribeButton.layer.borderWidth  = 1
         subscribeButton.layer.borderColor  = UIColor.vaRed.cgColor
         subscribeButton.titleLabel?.font = UIFont(name: ".SFUIText-Medium", size: 16)
+        subscribeButton.titleLabel?.minimumScaleFactor = 0.1
+        subscribeButton.titleLabel?.adjustsFontSizeToFitWidth = true
         
         nameLabel.font = UIFont(name: ".SFUIText-Medium", size: 18)!
         subscribersLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!

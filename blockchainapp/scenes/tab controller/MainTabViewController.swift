@@ -14,9 +14,7 @@ class MainTabViewController: UITabBarController {
         super.viewDidLoad()
 
         if let playerVC = AppManager.shared.audioPlayer {
-            addChildViewController(playerVC)
             view.addSubview(playerVC.view)
-            playerVC.didMove(toParentViewController: self)
             
             playerVC.view.translatesAutoresizingMaskIntoConstraints = false
             playerVC.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
+		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
 		CF44532F1F54139900660474 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF44532D1F54139900660474 /* Main.storyboard */; };
 		CF4453311F54139900660474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4453301F54139900660474 /* Assets.xcassets */; };
@@ -52,6 +53,10 @@
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
 		CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioCoreViewController.swift; path = scenes/player/AudioCoreViewController.swift; sourceTree = "<group>"; };
+		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		CF27152A1F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CF27152E1F97C79A0038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CF2715301F97C79F0038C81C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CF4453261F54139900660474 /* blockchainapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockchainapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453291F54139900660474 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF44532E1F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -138,6 +143,7 @@
 				CF4453301F54139900660474 /* Assets.xcassets */,
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
 				CF4453351F54139900660474 /* Info.plist */,
+				CF27152F1F97C79A0038C81C /* Localizable.strings */,
 			);
 			path = blockchainapp;
 			sourceTree = "<group>";
@@ -358,6 +364,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */,
+				CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */,
 				CF4453311F54139900660474 /* Assets.xcassets in Resources */,
 				CF44532F1F54139900660474 /* Main.storyboard in Resources */,
 			);
@@ -482,10 +489,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		CF27152F1F97C79A0038C81C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CF27152E1F97C79A0038C81C /* ru */,
+				CF2715301F97C79F0038C81C /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		CF44532D1F54139900660474 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				CF44532E1F54139900660474 /* Base */,
+				CF2715291F97BA370038C81C /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -494,6 +511,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				CF4453331F54139900660474 /* Base */,
+				CF27152A1F97BA370038C81C /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -505,6 +523,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -555,6 +574,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";

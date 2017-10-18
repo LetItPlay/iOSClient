@@ -112,9 +112,9 @@ class FeedCell: UITableViewCell {
                 mainImageView.image = nil
             }
             
-            likesLabel.text = "\(track?.likeCount ?? 0) likes"
-            listeningLabel.text = "0 listening"
-            commentLabel.text = "0 comments"
+            likesLabel.text = "\(track?.likeCount ?? 0) \(NSLocalizedString("likes", comment: ""))"
+            listeningLabel.text = "0 \(NSLocalizedString("listening", comment: ""))"
+            commentLabel.text = "0 \(NSLocalizedString("comments", comment: ""))"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
