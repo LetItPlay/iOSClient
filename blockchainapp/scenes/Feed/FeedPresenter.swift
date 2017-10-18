@@ -17,15 +17,16 @@ class FeedPresenter: FeedPresenterProtocol {
     
     var token: NotificationToken?
     
-    var playList = [PlayerItem]()
+//    var playList = [PlayerItem]()
     
-    private var startTime: Double = 0
     
-    init(view: FeedViewProtocol) {
+    
+    init(view: FeedViewProtocol, orderByListens: Bool) {
         self.view = view
         
         let realm = try! Realm()
-        let results = realm.objects(Track.self)
+        let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "reportCount", ascending: false) : realm.objects(Track.self)
+
         token = results.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
             
             switch changes {
@@ -36,10 +37,6 @@ class FeedPresenter: FeedPresenterProtocol {
                                     deletions: [],
                                     insertions: [],
                                     modifications: [])
-                self?.updatePlayList(feed: items,
-                                     deletions: [],
-                                     insertions: [],
-                                     modifications: [])
                 
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
@@ -48,10 +45,6 @@ class FeedPresenter: FeedPresenterProtocol {
                                     deletions: deletions,
                                     insertions: insertions,
                                     modifications: modifications)
-                self?.updatePlayList(feed: items,
-                                     deletions: deletions,
-                                     insertions: insertions,
-                                     modifications: modifications)
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
@@ -73,11 +66,6 @@ class FeedPresenter: FeedPresenterProtocol {
                                                selector: #selector(subscriptionChanged(notification:)),
                                                name: SubscribeManager.NotificationName.deleted.notification,
                                                object: nil)
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(audioManagerStartPlay(notification:)),
-                                               name: AudioManagerNotificationName.startPlaying.notification,
-                                               object: audioManager)
     }
     
     deinit {
@@ -91,50 +79,6 @@ class FeedPresenter: FeedPresenterProtocol {
         }
     }
     
-    @objc func audioManagerStartPlay(notification: Notification) {
-        if startTime != 0 {
-            audioManager.itemProgressPercent = startTime
-            startTime = 0
-        }
-    }
-    
-    private func updatePlayList(feed: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
-        if deletions.isEmpty && insertions.isEmpty && modifications.isEmpty ||
-            !deletions.isEmpty ||
-            !insertions.isEmpty {
-            playList = [PlayerItem]()
-            
-            for f in feed {
-                let playerItem = PlayerItem(itemId: f.uniqString(),
-                                            url: f.audiofile?.file.buildImageURL()?.absoluteString ?? "")
-                playerItem.autoLoadNext = true
-                playerItem.autoPlay = true
-                
-                playList.append(playerItem)
-            }
-            
-            startTime = 0
-            
-            if !playList.isEmpty {
-                
-                var currentId: String? = nil
-                
-                if audioManager.isPlaying {
-                    currentId = audioManager.currentItemId
-                    startTime = audioManager.itemProgressPercent
-                }
-                
-                audioManager.resetPlaylistAndStop()
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
-                audioManager.add(playlist: [group])
-                
-                if currentId != nil {
-                    audioManager.playItem(with: currentId!)
-                }
-            }
-        }
-    }
-    
     func getData(onComplete: @escaping TrackResult) {
         
         DownloadManager.shared.requestTracks(success: { (feed) in
@@ -145,14 +89,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
     
     func play(trackUID: String) {
-        if audioManager.playlist == nil {
-            if playList.isEmpty {
-                
-            } else {
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
-                audioManager.add(playlist: [group])
-            }
-        } else
+        //TODO: fix this shet
         if audioManager.currentItemId == trackUID {
             if audioManager.isPlaying {
                 audioManager.pause()

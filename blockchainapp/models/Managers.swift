@@ -32,6 +32,26 @@ class AppManager {
     
     init() {
         audioManager.isPlayingSpeakerMode = true
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlaying(_:)),
+                                               name: AudioManagerNotificationName.startPlaying.notification,
+                                               object: audioManager)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // MARK: - AudioManager events
+    @objc func audioManagerStartPlaying(_ notification: Notification) {
+        DispatchQueue.global().async { [unowned self] in
+            if let id = self.audioManager.currentItemId,
+                let idstring = id.split(separator: "_").last,
+                let trackId = Int(idstring) {
+                DownloadManager.shared.track(id: trackId, report: 1)
+            }
+        }
     }
 }
 

@@ -12,6 +12,7 @@ import RealmSwift
 
 protocol AudioCore {
     func play()
+    func play(track: Int, station: Int)
     func pause()
 }
 
@@ -23,6 +24,9 @@ class AudioCoreViewController: UIViewController {
     private var feedToken: NotificationToken? = nil
     var tracks: Results<Track>? = nil
     var currentTrackIndex: Int = -1
+    
+    private var playList = [PlayerItem]()
+    private var startTime: Double = 0
     
     deinit {
         feedToken?.stop()
@@ -43,10 +47,17 @@ class AudioCoreViewController: UIViewController {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 self?.collectionView.reloadData()
+                self?.updatePlayList(feed: Array(self!.tracks!),
+                                     deletions: [],
+                                     insertions: [],
+                                     modifications: [])
                 
             case .update(_, let deletions, let insertions, let modifications):
-                // Query results have changed, so apply them to the UITableView
                 self?.collectionView.reloadData()
+                self?.updatePlayList(feed: Array(self!.tracks!),
+                                     deletions: deletions,
+                                     insertions: insertions,
+                                     modifications: modifications)
                 
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
@@ -59,6 +70,43 @@ class AudioCoreViewController: UIViewController {
                                                selector: #selector(audioManagerStartPlaying(_:)),
                                                name: AudioManagerNotificationName.startPlaying.notification,
                                                object: audioManager)
+    }
+    
+    private func updatePlayList(feed: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
+        if deletions.isEmpty && insertions.isEmpty && modifications.isEmpty ||
+            !deletions.isEmpty ||
+            !insertions.isEmpty {
+            playList = [PlayerItem]()
+            
+            for f in feed {
+                let playerItem = PlayerItem(itemId: f.uniqString(),
+                                            url: f.audiofile?.file.buildImageURL()?.absoluteString ?? "")
+                playerItem.autoLoadNext = true
+                playerItem.autoPlay = true
+                
+                playList.append(playerItem)
+            }
+            
+            startTime = 0
+            
+            if !playList.isEmpty {
+                
+                var currentId: String? = nil
+                
+                if audioManager.isPlaying {
+                    currentId = audioManager.currentItemId
+                    startTime = audioManager.itemProgressPercent
+                }
+                
+                audioManager.resetPlaylistAndStop()
+                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
+                audioManager.add(playlist: [group])
+                
+                if currentId != nil {
+                    audioManager.playItem(with: currentId!)
+                }
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,6 +135,11 @@ class AudioCoreViewController: UIViewController {
     func audioManagerStartPlaying(_ notification: Notification) {
         guard (notification.object as? AudioManager) === audioManager else {
             return
+        }
+        
+        if startTime != 0 {
+            audioManager.itemProgressPercent = startTime
+            startTime = 0
         }
         
         if audioManager.currentIndex != currentTrackIndex {

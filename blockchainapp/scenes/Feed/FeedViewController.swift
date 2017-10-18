@@ -109,7 +109,7 @@ class FeedCell: UITableViewCell {
             }
             
             likesLabel.text = "\(track?.likeCount ?? 0) \(NSLocalizedString("likes", comment: ""))"
-            listeningLabel.text = "0 \(NSLocalizedString("listening", comment: ""))"
+            listeningLabel.text = "\(track?.reportCount ?? 0) \(NSLocalizedString("listening", comment: ""))"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
@@ -159,7 +159,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        presenter = FeedPresenter(view: self)
+        presenter = FeedPresenter(view: self, orderByListens: navigationController?.title == "42")
         
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite

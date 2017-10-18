@@ -305,15 +305,18 @@
             </objects>
             <point key="canvasLocation" x="1634" y="976"/>
         </scene>
-        <!--Trends-->
+        <!--42-->
         <scene sceneID="7QJ-NQ-ZSo">
             <objects>
-                <navigationController id="fqW-ar-4Bt" sceneMemberID="viewController">
+                <navigationController title="42" id="fqW-ar-4Bt" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Trends" image="tb_trends" id="nu4-wt-bZg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="pvT-OY-C5y">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="kMv-GG-nMF" kind="relationship" relationship="rootViewController" id="i5H-xP-VZ1"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OMW-oc-9ge" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -532,7 +535,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BFM-Fh-2eZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="381.60000000000002" y="2533.5832083958021"/>
+            <point key="canvasLocation" x="814" y="2534"/>
         </scene>
         <!--Profile-->
         <scene sceneID="4UV-9r-gtS">
@@ -569,4 +572,7 @@
             <color red="0.28999999170000001" green="0.28999999170000001" blue="0.28999999170000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="i5H-xP-VZ1"/>
+    </inferredMetricsTieBreakers>
 </document>
