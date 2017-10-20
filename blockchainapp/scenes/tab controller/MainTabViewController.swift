@@ -59,7 +59,8 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
                 AppManager.shared.audioPlayer?.showPlayer()
             }
             
-            if root is ChannelsViewController && !AppManager.shared.audioManager.isPlaying {
+            if (root is ChannelsViewController || root is AboutViewController)
+                && !AppManager.shared.audioManager.isPlaying {
                 AppManager.shared.audioPlayer?.hidePlayer()
             }
         }

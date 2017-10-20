@@ -26,8 +26,8 @@
 /* Class = "UIButton"; normalTitle = "Button"; ObjectID = "PBz-5p-lBu"; */
 "PBz-5p-lBu.normalTitle" = "Button";
 
-/* Class = "UITabBarItem"; title = "Profile"; ObjectID = "Td6-MK-Y2J"; */
-"Td6-MK-Y2J.title" = "Profile";
+/* Class = "UITabBarItem"; title = "About"; ObjectID = "Td6-MK-Y2J"; */
+"Td6-MK-Y2J.title" = "О приложении";
 
 /* Class = "UILabel"; text = "0"; ObjectID = "Ufv-2r-J0o"; */
 "Ufv-2r-J0o.text" = "0";
