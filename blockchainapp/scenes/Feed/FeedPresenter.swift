@@ -27,7 +27,7 @@ class FeedPresenter: FeedPresenterProtocol {
         let realm = try! Realm()
         let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "reportCount", ascending: false) : realm.objects(Track.self)
 
-        token = results.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+        token = results.observe({ [weak self] (changes: RealmCollectionChange) in
             
             switch changes {
             case .initial:
@@ -70,7 +70,7 @@ class FeedPresenter: FeedPresenterProtocol {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        token?.stop()
+        token?.invalidate()
     }
     
     @objc func subscriptionChanged(notification: Notification) {

@@ -22,7 +22,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
         
         let realm = try! Realm()
         let results = realm.objects(Station.self)
-        token = results.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+        token = results.observe({ [weak self] (changes: RealmCollectionChange) in
             
             switch changes {
             case .initial:

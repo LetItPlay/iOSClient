@@ -10,10 +10,8 @@ import UIKit
 import SwiftyAudioManager
 import RealmSwift
 
-protocol AudioCore {
-    func play()
-    func play(track: Int, station: Int)
-    func pause()
+protocol AudioCore: AudioManagerProtocol {
+    
 }
 
 class AudioCoreViewController: UIViewController {
@@ -29,7 +27,7 @@ class AudioCoreViewController: UIViewController {
     private var startTime: Double = 0
     
     deinit {
-        feedToken?.stop()
+        feedToken?.invalidate()
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -41,7 +39,7 @@ class AudioCoreViewController: UIViewController {
         
         let realm = try! Realm()
         tracks = realm.objects(Track.self)
-        feedToken = tracks?.addNotificationBlock({ [weak self] (changes: RealmCollectionChange) in
+        feedToken = tracks?.observe({ [weak self] (changes: RealmCollectionChange) in
             
             switch changes {
             case .initial:
@@ -133,9 +131,9 @@ class AudioCoreViewController: UIViewController {
     //MARK: - Notifications
     
     func audioManagerStartPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         if startTime != 0 {
             audioManager.itemProgressPercent = startTime
@@ -153,6 +151,109 @@ class AudioCoreViewController: UIViewController {
         
         showPlayer()
     }
+}
+
+extension AudioCoreViewController: AudioCore {
+    var currentGroupIndex: Int {
+        get {
+            return audioManager.currentGroupIndex
+        }
+        set(newValue) {
+            audioManager.currentGroupIndex = currentGroupIndex
+        }
+    }
+    
+    var playlist: [PlayerItemsGroup]? {
+        return audioManager.playlist
+    }
+    
+    var playlistGroupCount: Int {
+        return audioManager.playlistGroupCount
+    }
+    
+    func itemsCount(in group: Int) -> Int {
+        return audioManager.itemsCount(in: group)
+    }
+    
+    var currentIndex: Int {
+        return audioManager.currentIndex
+    }
+    
+    var currentItem: PlayerItem? {
+        return audioManager.currentItem
+    }
+    
+    var currentItemId: String? {
+        return audioManager.currentItemId
+    }
+    
+    var isPlaying: Bool {
+        return audioManager.isPlaying
+    }
+    
+    var isOnPause: Bool {
+        return audioManager.isOnPause
+    }
+    
+    var itemProgressPercent: Double {
+        get {
+            return audioManager.itemProgressPercent
+        }
+        set(newValue) {
+            audioManager.itemProgressPercent = newValue
+        }
+    }
+    
+    var isPlayingSpeakerMode: Bool {
+        get {
+            return audioManager.isPlayingSpeakerMode
+        }
+        set(newValue) {
+            audioManager.isPlayingSpeakerMode = newValue
+        }
+    }
+    
+    func add(playlist: [PlayerItemsGroup]) {
+        audioManager.add(playlist: playlist)
+    }
+    
+    func play(playlist: [PlayerItemsGroup]) {
+        audioManager.play(playlist: playlist)
+    }
+    
+    func pause() {
+        audioManager.pause()
+    }
+    
+    func resume() {
+        audioManager.pause()
+    }
+    
+    func stop() {
+        audioManager.stop()
+    }
+    
+    func playNext() {
+        audioManager.playNext()
+    }
+    
+    func playPrevious() {
+        audioManager.playPrevious()
+    }
+    
+    func resetPlaylistAndStop() {
+        audioManager.resetPlaylistAndStop()
+    }
+    
+    public func playItem(at index: Int) {
+        audioManager.playItem(at: index)
+    }
+    
+    public func playItem(with id: String) {
+        audioManager.playItem(with: id)
+    }
+    
+    
 }
 
 extension AudioCoreViewController: UICollectionViewDelegateFlowLayout {
@@ -290,9 +391,9 @@ class AudioCoreCell: UICollectionViewCell {
     // MARK: - AudioManager events
     
     func audioManagerPaused(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         if audioManager.isOnPause {
             updatePlayButtonState()
@@ -300,17 +401,17 @@ class AudioCoreCell: UICollectionViewCell {
     }
     
     func audioManagerEndPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
     }
     
     func audioManagerPlaySoundOnSecond(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
         /*
@@ -330,23 +431,23 @@ class AudioCoreCell: UICollectionViewCell {
     }
     
     func audioManagerFailed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerResume(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerReadyToPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.01, animations: {
@@ -356,25 +457,25 @@ class AudioCoreCell: UICollectionViewCell {
     }
     
     func audioManagerNextPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }
     
     func audioManagerPreviousPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }
     
     func audioManagerRecievedPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }

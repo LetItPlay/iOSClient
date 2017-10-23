@@ -9,6 +9,7 @@
 import UIKit
 import MediaPlayer
 import SwiftyAudioManager
+import ShadowView
 
 class FullPlayerViewController: UIViewController {
     
@@ -28,6 +29,7 @@ class FullPlayerViewController: UIViewController {
     @IBOutlet weak var leftLabel: UILabel!
     @IBOutlet weak var rightLabel: UILabel!
     
+    @IBOutlet weak var shadowView: ShadowView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,6 +101,11 @@ class FullPlayerViewController: UIViewController {
                                                object: audioManager)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        shadowView.updateShadow()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -147,15 +154,15 @@ extension FullPlayerViewController {
     
     // MARK: - AudioManager events
     func audioManagerStartPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
     }
     
     func audioManagerPaused(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         if audioManager.isOnPause {
             updatePlayButtonState()
@@ -163,17 +170,17 @@ extension FullPlayerViewController {
     }
     
     func audioManagerEndPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
     }
     
     func audioManagerPlaySoundOnSecond(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
         /*
@@ -203,23 +210,23 @@ extension FullPlayerViewController {
     }
     
     func audioManagerFailed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerResume(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerReadyToPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         DispatchQueue.main.async {
             self.presenter.fetch()
             UIView.animate(withDuration: 0.01, animations: {
@@ -232,23 +239,23 @@ extension FullPlayerViewController {
     }
     
     func audioManagerNextPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
     }
     
     func audioManagerPreviousPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
     }
     
     func audioManagerRecievedPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
     }
     
@@ -264,6 +271,8 @@ extension FullPlayerViewController: FullPlayerViewProtocol {
     func display(name: String, station: String, image: URL?) {
         nameLabel.text = name
         stationLabel.text = station
-        photoImageView.sd_setImage(with: image)
+        photoImageView.sd_setImage(with: image) { [weak self] (image, error, cacheType, url) in
+            self?.shadowView.updateShadow()
+        }
     }
 }
