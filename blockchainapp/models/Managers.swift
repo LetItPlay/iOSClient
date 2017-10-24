@@ -59,12 +59,12 @@ class AppManager {
 class DownloadManager {
     
     enum urlServices: String {
-        case audiofiles = "http://176.31.100.18:8182/audiofiles/"
-        case stations = "http://176.31.100.18:8182/stations/"
-        case tracks = "http://176.31.100.18:8182/tracks/"
-        case tracksForStations = "http://176.31.100.18:8182/api/tracks/stations/"
-        case subForStations = "http://176.31.100.18:8182/stations/%d/counts/"
-        case forTracks = "http://176.31.100.18:8182/tracks/%d/counts/"
+        case audiofiles = "https://manage.letitplay.io/audiofiles/"
+        case stations = "https://manage.letitplay.io/stations/"
+        case tracks = "https://manage.letitplay.io/tracks/"
+        case tracksForStations = "https://manage.letitplay.io/api/tracks/stations/"
+        case subForStations = "https://manage.letitplay.io/stations/%d/counts/"
+        case forTracks = "https://manage.letitplay.io/tracks/%d/counts/"
     }
     
     static let shared = DownloadManager()
