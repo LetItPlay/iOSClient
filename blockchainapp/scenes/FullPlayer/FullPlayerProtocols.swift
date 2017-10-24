@@ -9,9 +9,10 @@
 import Foundation
 
 protocol FullPlayerViewProtocol: class {
-    func display(name: String, station: String, image: URL?)
+    func display(name: String, station: String, image: URL?, isLiked: Bool)
 }
 
 protocol FullPlayerPresenterProtocol: class {
     func fetch()
+    func like()
 }

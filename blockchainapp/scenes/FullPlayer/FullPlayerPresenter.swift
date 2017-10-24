@@ -15,6 +15,7 @@ class FullPlayerPresenter: FullPlayerPresenterProtocol {
     var subManager = SubscribeManager.shared
     
     var token: NotificationToken?
+    var trackId: Int? = nil
     
     init(view: FullPlayerViewProtocol) {
         self.view = view
@@ -26,12 +27,22 @@ class FullPlayerPresenter: FullPlayerPresenterProtocol {
             let stringId = trackStat.split(separator: "_").first,
             let id = Int(stringId) {
             
+            trackId = id
+            
             let realm = try! Realm()
             if let ob = realm.object(ofType: Track.self, forPrimaryKey: id) {
                 view?.display(name: ob.name,
                               station: ob.findStationName() ?? "",
-                              image: ob.image.buildImageURL())
+                              image: ob.image.buildImageURL(),
+                              isLiked: LikeManager.shared.hasObject(id: id))
             }
         }
+    }
+    
+    func like() {
+        guard let id = trackId else {
+            return
+        }
+        LikeManager.shared.addOrDelete(id: id)
     }
 }

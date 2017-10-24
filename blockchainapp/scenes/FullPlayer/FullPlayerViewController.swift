@@ -31,6 +31,9 @@ class FullPlayerViewController: UIViewController {
     
     @IBOutlet weak var shadowView: ShadowView!
     
+    @IBOutlet weak var likeButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -159,6 +162,12 @@ class FullPlayerViewController: UIViewController {
     @IBAction func progressValueChanged(_ sender: UISlider) {
         audioManager.itemProgressPercent = Double(sender.value)
     }
+    
+    @IBAction func likeButtonPressed(_ sender: Any) {
+        likeButton.isSelected = !likeButton.isSelected
+        presenter.like()
+    }
+    
     
 }
 
@@ -289,9 +298,10 @@ extension FullPlayerViewController {
 }
 
 extension FullPlayerViewController: FullPlayerViewProtocol {
-    func display(name: String, station: String, image: URL?) {
+    func display(name: String, station: String, image: URL?, isLiked: Bool) {
         nameLabel.text = name
         stationLabel.text = station
+        likeButton.isSelected = isLiked
         photoImageView.sd_setImage(with: image) { [weak self] (image, error, cacheType, url) in
             self?.shadowView.updateShadow()
         }

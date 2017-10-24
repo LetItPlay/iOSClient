@@ -203,18 +203,43 @@
                                     <action selector="progressValueChanged:" destination="zzw-cO-c2q" eventType="valueChanged" id="yXb-CS-Xmv"/>
                                 </connections>
                             </slider>
+                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezT-lc-IX4">
+                                <rect key="frame" x="0.0" y="617" width="60" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="3Wz-hu-0Ro"/>
+                                    <constraint firstAttribute="width" constant="60" id="kn3-OV-uYR"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="13" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" image="lsubscribeInactive"/>
+                                <state key="selected" image="heartActive"/>
+                                <connections>
+                                    <action selector="likeButtonPressed:" destination="zzw-cO-c2q" eventType="touchUpInside" id="Gv9-1Q-ebP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PeZ-u9-jvD">
+                                <rect key="frame" x="315" y="617" width="60" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="YsC-oH-sDX"/>
+                                    <constraint firstAttribute="height" constant="50" id="glk-pM-5kU"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="17" maxY="0.0"/>
+                                <state key="normal" image="otherInactive"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="1EU-uK-8sd" firstAttribute="width" secondItem="a8H-En-EXQ" secondAttribute="width" id="0rZ-Wc-mF7"/>
+                            <constraint firstItem="3Gv-un-CZb" firstAttribute="top" secondItem="ezT-lc-IX4" secondAttribute="bottom" id="4BD-Oo-2mh"/>
                             <constraint firstAttribute="trailing" secondItem="8ty-Nl-7Bq" secondAttribute="trailing" id="6h5-Nv-Re4"/>
                             <constraint firstItem="GSo-Vo-l4i" firstAttribute="centerX" secondItem="7oa-Gs-NYa" secondAttribute="centerX" id="7Vz-fi-st8"/>
                             <constraint firstItem="1EU-uK-8sd" firstAttribute="centerX" secondItem="7oa-Gs-NYa" secondAttribute="centerX" id="Bos-Yn-L4X"/>
                             <constraint firstItem="GSo-Vo-l4i" firstAttribute="top" secondItem="8ty-Nl-7Bq" secondAttribute="bottom" constant="14" id="CSu-OD-AEm"/>
                             <constraint firstItem="Z8i-j3-JZ4" firstAttribute="leading" secondItem="7oa-Gs-NYa" secondAttribute="leading" id="Fc1-A8-Hsz"/>
                             <constraint firstItem="rk8-IM-CfT" firstAttribute="top" secondItem="1EU-uK-8sd" secondAttribute="bottom" constant="5" id="Fj8-fM-3Lw"/>
+                            <constraint firstItem="3Gv-un-CZb" firstAttribute="top" secondItem="PeZ-u9-jvD" secondAttribute="bottom" id="GOh-Lz-iaI"/>
                             <constraint firstItem="bke-4Q-fic" firstAttribute="top" secondItem="1EU-uK-8sd" secondAttribute="bottom" constant="25" id="HoY-m3-dBN"/>
                             <constraint firstAttribute="trailing" secondItem="bke-4Q-fic" secondAttribute="trailing" id="IXr-Lr-sRf"/>
+                            <constraint firstAttribute="trailing" secondItem="PeZ-u9-jvD" secondAttribute="trailing" id="KiJ-c4-pdd"/>
                             <constraint firstItem="56I-rk-KdL" firstAttribute="leading" secondItem="Ai2-tS-pmz" secondAttribute="trailing" constant="30" id="LnZ-yf-hbM"/>
                             <constraint firstItem="4LY-yC-LqS" firstAttribute="centerY" secondItem="56I-rk-KdL" secondAttribute="centerY" id="Oh7-1x-Jyb"/>
                             <constraint firstItem="8ty-Nl-7Bq" firstAttribute="leading" secondItem="7oa-Gs-NYa" secondAttribute="leading" id="PKx-WO-iKq"/>
@@ -237,6 +262,7 @@
                             <constraint firstItem="eca-m0-B0u" firstAttribute="centerY" secondItem="rUa-aT-ops" secondAttribute="centerY" id="mgZ-TB-l2o"/>
                             <constraint firstItem="4fM-FZ-OCG" firstAttribute="leading" secondItem="56I-rk-KdL" secondAttribute="trailing" constant="30" id="oyM-ED-kWr"/>
                             <constraint firstItem="56I-rk-KdL" firstAttribute="centerX" secondItem="7oa-Gs-NYa" secondAttribute="centerX" id="p4G-3p-gA0"/>
+                            <constraint firstItem="ezT-lc-IX4" firstAttribute="leading" secondItem="7oa-Gs-NYa" secondAttribute="leading" id="pGr-Zc-Pyf"/>
                             <constraint firstItem="rUa-aT-ops" firstAttribute="leading" secondItem="1Fu-H7-gaK" secondAttribute="trailing" constant="8" id="qcq-ia-c8g"/>
                             <constraint firstItem="56I-rk-KdL" firstAttribute="top" secondItem="Z8i-j3-JZ4" secondAttribute="bottom" constant="22" id="wJj-gB-qjd"/>
                             <constraint firstItem="dqG-Sd-gQx" firstAttribute="top" secondItem="1EU-uK-8sd" secondAttribute="bottom" constant="5" id="ysG-LA-yhy"/>
@@ -245,6 +271,7 @@
                     <connections>
                         <outlet property="activityIndicator" destination="4LY-yC-LqS" id="QtQ-fS-Iv1"/>
                         <outlet property="leftLabel" destination="dqG-Sd-gQx" id="PeS-Fn-ATm"/>
+                        <outlet property="likeButton" destination="ezT-lc-IX4" id="eY3-GX-jzI"/>
                         <outlet property="nameLabel" destination="25o-HJ-VvR" id="GVw-sv-tiH"/>
                         <outlet property="photoImageView" destination="a8H-En-EXQ" id="kUZ-q5-kOG"/>
                         <outlet property="playButton" destination="56I-rk-KdL" id="zbv-da-swu"/>
@@ -818,7 +845,9 @@
         <image name="heartActive" width="24" height="24"/>
         <image name="like_active" width="36" height="36"/>
         <image name="like_inactive" width="38" height="38"/>
+        <image name="lsubscribeInactive" width="24" height="24"/>
         <image name="nextInacteive" width="24" height="24"/>
+        <image name="otherInactive" width="24" height="24"/>
         <image name="pause" width="46" height="46"/>
         <image name="pauseInacteive" width="24" height="24"/>
         <image name="play" width="48" height="48"/>
