@@ -14,6 +14,7 @@ class Station: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var image: String = ""
     @objc dynamic var subscriptionCount: Int = 0
+    @objc dynamic var tagString: String = ""
     
     override static func primaryKey() -> String? {
         return "id"
@@ -21,6 +22,10 @@ class Station: Object {
     
     func uniqString() -> String {
         return "\(id)"
+    }
+    
+    func getTags() -> [String] {
+        return tagString.split(separator: ",").map{ String($0) }
     }
 }
 
@@ -35,6 +40,12 @@ class Track: Object {
     @objc dynamic var likeCount: Int        = 0
     @objc dynamic var reportCount: Int      = 0
     @objc dynamic var listenCount: Int      = 0
+    @objc dynamic var tagString: String     = ""
+    
+    /**
+     * yyyy-mm-ddThh:mm:ss[.mmm]
+     */
+    @objc dynamic var publishedAt: Date = Date()
     
     override static func primaryKey() -> String? {
         return "id"
@@ -42,6 +53,10 @@ class Track: Object {
     
     func uniqString() -> String {
         return "\(id)"
+    }
+    
+    func getTags() -> [String] {
+        return tagString.split(separator: ",").map{ String($0) }
     }
 }
 extension Track {

@@ -77,7 +77,8 @@ class DownloadManager {
                                                                     id: idInt,
                                                                     name: jStation["name"].string ?? "",
                                                                     image: jStation["image"].string ?? "",
-                                                                    subscriptionCount: jStation["subscription_count"].int ?? 0)
+                                                                    subscriptionCount: jStation["subscription_count"].int ?? 0,
+                                                                    tags: jStation["tags"].string)
                             } else {
                                 print("ERROR: no id in \(jStation)")
                             }

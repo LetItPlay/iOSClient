@@ -19,24 +19,26 @@ class DBManager {
         return realm.object(ofType: Track.self, forPrimaryKey: byId)
     }
     
-    func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int) {
+    func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: String?) {
         if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &station.name, new: name)
             _ = updateIfNeeded(property: &station.image, new: image)
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
+            _ = updateIfNeeded(property: &station.tagString, new: tags ?? "")
         } else {
             let newStat = Station()
             newStat.id = id
             newStat.name = name
             newStat.image = image
             newStat.subscriptionCount = subscriptionCount
+            newStat.tagString = tags ?? ""
             
             inRealm.add(newStat)
         }
         
     }
     
-    func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int) {
+    func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: String?, publishDate: String) {
         if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
             var changeCounter = 0
             changeCounter += updateIfNeeded(property: &track.station, new: station)
@@ -46,6 +48,12 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.likeCount, new: likeCount)
             changeCounter += updateIfNeeded(property: &track.reportCount, new: reportCount)
             changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
+            changeCounter += updateIfNeeded(property: &track.tagString, new: tags ?? "")
+            
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+            
+            changeCounter += updateIfNeeded(property: &track.publishedAt, new: formatter.date(from: publishDate) ?? Date())
             
             if track.audiofile?.file != audiofile?.file {
                 track.audiofile = audiofile
@@ -65,6 +73,7 @@ class DBManager {
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
+            newTrack.tagString   = tags ?? ""
             
             inRealm.add(newTrack)
         }
@@ -104,7 +113,9 @@ extension DBManager {
                              image: fromJSON["image"].string ?? "",
                              likeCount: fromJSON["like_count"].int ?? 0,
                              reportCount: fromJSON["report_count"].int ?? 0,
-                             listenCount: fromJSON["listen_count"].int ?? 0)
+                             listenCount: fromJSON["listen_count"].int ?? 0,
+                             tags: fromJSON["tags"].string,
+                             publishDate: fromJSON["published_at"].string ?? "")
         }
     }
 }
