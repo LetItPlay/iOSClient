@@ -34,6 +34,7 @@ class Track: Object {
     @objc dynamic var image: String         = ""
     @objc dynamic var likeCount: Int        = 0
     @objc dynamic var reportCount: Int      = 0
+    @objc dynamic var listenCount: Int      = 0
     
     override static func primaryKey() -> String? {
         return "id"

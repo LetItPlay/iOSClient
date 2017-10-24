@@ -109,7 +109,7 @@ class FeedCell: UITableViewCell {
             }
             
             likesLabel.text = "\(track?.likeCount ?? 0) \(NSLocalizedString("likes", comment: ""))"
-            listeningLabel.text = "\(track?.reportCount ?? 0) \(NSLocalizedString("listening", comment: ""))"
+            listeningLabel.text = "\(track?.listenCount ?? 0) \(NSLocalizedString("listening", comment: ""))"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()

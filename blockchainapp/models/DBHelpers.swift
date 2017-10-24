@@ -36,7 +36,7 @@ class DBManager {
         
     }
     
-    func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int) {
+    func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int) {
         if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
             var changeCounter = 0
             changeCounter += updateIfNeeded(property: &track.station, new: station)
@@ -45,6 +45,7 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.image, new: image)
             changeCounter += updateIfNeeded(property: &track.likeCount, new: likeCount)
             changeCounter += updateIfNeeded(property: &track.reportCount, new: reportCount)
+            changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
             
             if track.audiofile?.file != audiofile?.file {
                 track.audiofile = audiofile
@@ -63,6 +64,7 @@ class DBManager {
             newTrack.image = image
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
+            newTrack.listenCount = listenCount
             
             inRealm.add(newTrack)
         }
@@ -101,7 +103,8 @@ extension DBManager {
                              description: fromJSON["description"].string ?? "",
                              image: fromJSON["image"].string ?? "",
                              likeCount: fromJSON["like_count"].int ?? 0,
-                             reportCount: fromJSON["report_count"].int ?? 0)
+                             reportCount: fromJSON["report_count"].int ?? 0,
+                             listenCount: fromJSON["listen_count"].int ?? 0)
         }
     }
 }

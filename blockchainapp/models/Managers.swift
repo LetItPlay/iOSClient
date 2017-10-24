@@ -33,26 +33,6 @@ class AppManager {
     init() {
         audioManager.isPlayingSpeakerMode = true
         audioManager.resetOnLast = false
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(audioManagerStartPlaying(_:)),
-                                               name: AudioManagerNotificationName.startPlaying.notification,
-                                               object: audioManager)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    // MARK: - AudioManager events
-    @objc func audioManagerStartPlaying(_ notification: Notification) {
-        DispatchQueue.global().async { [unowned self] in
-            if let id = self.audioManager.currentItemId,
-                let idstring = id.split(separator: "_").last,
-                let trackId = Int(idstring) {
-                DownloadManager.shared.track(id: trackId, report: 1)
-            }
-        }
     }
 }
 
@@ -175,7 +155,7 @@ class DownloadManager {
         }
     }
     
-    func track(id: Int, report: Int = 0, like: Int = 0) {
+    func track(id: Int, report: Int = 0, like: Int = 0, listen: Int = 0) {
         if let str = String(format: urlServices.forTracks.rawValue, id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
             
@@ -186,6 +166,7 @@ class DownloadManager {
             var elements: [String: Int] = [:]
             elements["report_count"] = report
             elements["like_count"]   = like
+            elements["listen_count"] = listen
             
             request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
             
@@ -227,11 +208,40 @@ class SubscribeManager {
     
     init() {
         stations = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        listenedTracks = (UserDefaults.standard.array(forKey: "listen_tracks") as? [Int]) ?? []
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlaying(_:)),
+                                               name: AudioManagerNotificationName.startPlaying.notification,
+                                               object: nil)
+
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func audioManagerStartPlaying(_ notification: Notification) {
+        DispatchQueue.global().async { [unowned self] in
+            if let id = AppManager.shared.audioManager.currentItemId,
+                let idstring = id.split(separator: "_").last,
+                let trackId = Int(idstring) {
+                if !self.listenedTracks.contains(trackId) {
+                    objc_sync_enter(self.listenedTracks)
+                    self.listenedTracks.append(trackId)
+                    UserDefaults.standard.set(self.listenedTracks, forKey: "listen_tracks")
+                    objc_sync_exit(self.listenedTracks)
+                    DownloadManager.shared.track(id: trackId, listen: 1)
+                }
+            }
+        }
+    }
+
     
     static let shared = SubscribeManager()
     
     private var stations = [Int]()
+    private var listenedTracks = [Int]()
     
     public func requestString() -> String {
         return stations.map{ "\($0)" }.joined(separator: ",")

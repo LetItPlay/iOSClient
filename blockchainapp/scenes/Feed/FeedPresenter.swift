@@ -25,7 +25,7 @@ class FeedPresenter: FeedPresenterProtocol {
         self.view = view
         
         let realm = try! Realm()
-        let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "reportCount", ascending: false) : realm.objects(Track.self)
+        let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "listenCount", ascending: false) : realm.objects(Track.self)
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
             
