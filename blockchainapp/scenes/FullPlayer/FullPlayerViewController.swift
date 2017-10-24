@@ -104,6 +104,25 @@ class FullPlayerViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         shadowView.updateShadow()
+        startRunnigRow()
+    }
+    
+    func startRunnigRow() {
+        nameLabel.setNeedsLayout()
+        nameLabel.layoutIfNeeded()
+        nameLabel.layer.removeAllAnimations()
+        nameLabel.transform = .identity
+        if nameLabel.frame.width > nameLabel.superview!.frame.width {
+            let diff = nameLabel.superview!.frame.width - nameLabel.frame.width
+            nameLabel.transform = CGAffineTransform(translationX: -diff, y: 0)
+            UIView.animate(withDuration: 5,
+                           delay: 3,
+                           options: [.autoreverse, .repeat], animations: { [weak self] in
+                            self?.nameLabel.transform = CGAffineTransform(translationX: diff, y: 0)
+                }, completion: { (finished) in
+                    
+            })
+        }
     }
     
     deinit {
@@ -276,5 +295,7 @@ extension FullPlayerViewController: FullPlayerViewProtocol {
         photoImageView.sd_setImage(with: image) { [weak self] (image, error, cacheType, url) in
             self?.shadowView.updateShadow()
         }
+        
+        startRunnigRow()
     }
 }
