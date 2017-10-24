@@ -38,7 +38,7 @@ class AudioCoreViewController: UIViewController {
         collectionView.delegate   = self
         
         let realm = try! Realm()
-        tracks = realm.objects(Track.self)
+        tracks = realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
         feedToken = tracks?.observe({ [weak self] (changes: RealmCollectionChange) in
             
             switch changes {
