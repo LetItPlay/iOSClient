@@ -24,7 +24,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyAudioManager:
-    :commit: 0302839bfece043ed95593b7d3e97eac46d72d50
+    :commit: 2cf68865cf3fa21056ae5ad96c9b73ae8fb0e80d
     :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
 
 SPEC CHECKSUMS:

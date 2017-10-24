@@ -154,6 +154,15 @@ class AudioCoreViewController: UIViewController {
 }
 
 extension AudioCoreViewController: AudioCore {
+    var resetOnLast: Bool {
+        get {
+            return audioManager.resetOnLast
+        }
+        set(newValue) {
+            audioManager.resetOnLast = resetOnLast
+        }
+    }
+    
     var currentGroupIndex: Int {
         get {
             return audioManager.currentGroupIndex

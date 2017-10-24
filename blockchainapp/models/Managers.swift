@@ -32,6 +32,7 @@ class AppManager {
     
     init() {
         audioManager.isPlayingSpeakerMode = true
+        audioManager.resetOnLast = false
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(audioManagerStartPlaying(_:)),

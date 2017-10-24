@@ -145,10 +145,7 @@ class FeedCell: UITableViewCell {
     }
 }
 
-class FeedViewController: UIViewController, FeedViewProtocol {
-    
-    @IBOutlet weak var tableView: UITableView!
-    var refreshControl: UIRefreshControl!
+class FeedViewController: UITableViewController, FeedViewProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
@@ -157,7 +154,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         super.viewDidLoad()
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         presenter = FeedPresenter(view: self, orderByListens: navigationController?.title == "42")
         
@@ -192,32 +189,22 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
         source = tracks
         tableView.reloadData()
-        refreshControl.endRefreshing()
+        refreshControl?.endRefreshing()
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
-extension FeedViewController: UITableViewDataSource {
+extension FeedViewController {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! FeedCell
         cell.track = source[indexPath.row]
         
@@ -232,12 +219,9 @@ extension FeedViewController: UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return FeedCell.recommendedHeight()
     }
     
 }
 
-extension FeedViewController: UITableViewDelegate {
-    
-}
