@@ -138,7 +138,7 @@ class FullPlayerViewController: UIViewController {
     }
     
     @IBAction func progressValueChanged(_ sender: UISlider) {
-        
+        audioManager.itemProgressPercent = Double(sender.value)
     }
     
 }
@@ -188,23 +188,25 @@ extension FullPlayerViewController {
          "currentTime" : currentTime,
          "maxTime": maxTime]
          */
-        if let currentTime = notification.userInfo?["currentTime"] as? Double,
-            let maxTime = notification.userInfo?["maxTime"] as? Double {
-            
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.01, animations: {
-                    self.progressSliderView.value = Float(currentTime / maxTime)
-                    
-                    var minutes = Int(currentTime) / 60 % 60
-                    var seconds = Int(currentTime) % 60
-                    
-                    self.leftLabel.text = String(format:"%02i:%02i", minutes, seconds)
-                    
-                    minutes = Int(maxTime - currentTime) / 60 % 60
-                    seconds = Int(maxTime - currentTime) % 60
-                    
-                    self.rightLabel.text = String(format:"-%02i:%02i", minutes, seconds)
-                })
+        if !progressSliderView.isTouchInside {
+            if let currentTime = notification.userInfo?["currentTime"] as? Double,
+                let maxTime = notification.userInfo?["maxTime"] as? Double {
+                
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.01, animations: {
+                        self.progressSliderView.value = Float(currentTime / maxTime)
+                        
+                        var minutes = Int(currentTime) / 60 % 60
+                        var seconds = Int(currentTime) % 60
+                        
+                        self.leftLabel.text = String(format:"%02i:%02i", minutes, seconds)
+                        
+                        minutes = Int(maxTime - currentTime) / 60 % 60
+                        seconds = Int(maxTime - currentTime) % 60
+                        
+                        self.rightLabel.text = String(format:"-%02i:%02i", minutes, seconds)
+                    })
+                }
             }
         }
     }
