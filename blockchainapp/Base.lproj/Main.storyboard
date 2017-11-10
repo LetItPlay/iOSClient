@@ -815,16 +815,47 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SFe-A9-RGI">
-                                <rect key="frame" x="163.5" y="321.5" width="48" height="24"/>
+                                <rect key="frame" x="163.5" y="381.5" width="48" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" name="vaCharcollaGray"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Ln-R8-MUG">
+                                <rect key="frame" x="67" y="333.5" width="240" height="32"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="0Tq-4W-ecd"/>
+                                    <constraint firstAttribute="height" constant="32" id="SL5-D6-oKb"/>
+                                </constraints>
+                                <attributedString key="attributedText">
+                                    <fragment content="mail@letitplay.io">
+                                        <attributes>
+                                            <color key="NSBackgroundColor" red="0.2901606559753418" green="0.29021644592285156" blue="0.29015710949897766" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="NSColor" red="0.2901606559753418" green="0.29021644592285156" blue="0.29015710949897766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="16" name=".SFNSText"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" textContentType="email"/>
+                                <dataDetectorType key="dataDetectorTypes" link="YES"/>
+                            </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="VoC-ko-0N2">
+                                <rect key="frame" x="40" y="257" width="294" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="294" id="aFz-TA-Epl"/>
+                                    <constraint firstAttribute="height" constant="60" id="fiV-Hg-tZ0"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="SFe-A9-RGI" firstAttribute="centerX" secondItem="1qp-FP-Hzf" secondAttribute="centerX" id="Af3-TR-7S0"/>
-                            <constraint firstItem="SFe-A9-RGI" firstAttribute="centerY" secondItem="1qp-FP-Hzf" secondAttribute="centerY" id="qbg-AZ-Sih"/>
+                            <constraint firstItem="4Ln-R8-MUG" firstAttribute="top" secondItem="VoC-ko-0N2" secondAttribute="bottom" constant="16" id="PzC-13-Q5d"/>
+                            <constraint firstItem="SFe-A9-RGI" firstAttribute="centerY" secondItem="1qp-FP-Hzf" secondAttribute="centerY" constant="60" id="has-cD-zVw"/>
+                            <constraint firstItem="4Ln-R8-MUG" firstAttribute="centerX" secondItem="1qp-FP-Hzf" secondAttribute="centerX" id="jm6-BI-tdt"/>
+                            <constraint firstItem="SFe-A9-RGI" firstAttribute="top" secondItem="4Ln-R8-MUG" secondAttribute="bottom" constant="16" id="pUW-sL-S6V"/>
+                            <constraint firstItem="VoC-ko-0N2" firstAttribute="centerX" secondItem="1qp-FP-Hzf" secondAttribute="centerX" id="uUl-ge-kDJ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="C63-7b-D5o"/>
@@ -834,7 +865,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y4k-7N-Is1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1633" y="278"/>
+            <point key="canvasLocation" x="1632.8" y="277.51124437781112"/>
         </scene>
     </scenes>
     <resources>
@@ -845,6 +876,7 @@
         <image name="heartActive" width="24" height="24"/>
         <image name="like_active" width="36" height="36"/>
         <image name="like_inactive" width="38" height="38"/>
+        <image name="logo" width="147" height="30"/>
         <image name="lsubscribeInactive" width="24" height="24"/>
         <image name="nextInacteive" width="24" height="24"/>
         <image name="otherInactive" width="24" height="24"/>
