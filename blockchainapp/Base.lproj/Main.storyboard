@@ -154,13 +154,13 @@
                                 <color key="color" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dqG-Sd-gQx">
-                                <rect key="frame" x="49.5" y="404" width="46" height="21"/>
+                                <rect key="frame" x="50.5" y="404" width="46" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rk8-IM-CfT">
-                                <rect key="frame" x="280.5" y="404" width="46" height="21"/>
+                                <rect key="frame" x="279.5" y="404" width="46" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.60784313725490191" green="0.60784313725490191" blue="0.60784313725490191" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -195,7 +195,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <slider opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="1EU-uK-8sd">
-                                <rect key="frame" x="47" y="369" width="281" height="31"/>
+                                <rect key="frame" x="48" y="369" width="279" height="31"/>
                                 <color key="minimumTrackTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="maximumTrackTintColor" red="1" green="0.0" blue="0.0" alpha="0.19640946061643835" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="thumbTintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -228,7 +228,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="1EU-uK-8sd" firstAttribute="width" secondItem="a8H-En-EXQ" secondAttribute="width" id="0rZ-Wc-mF7"/>
+                            <constraint firstItem="1EU-uK-8sd" firstAttribute="width" secondItem="rUa-aT-ops" secondAttribute="width" id="0rZ-Wc-mF7"/>
                             <constraint firstItem="3Gv-un-CZb" firstAttribute="top" secondItem="ezT-lc-IX4" secondAttribute="bottom" id="4BD-Oo-2mh"/>
                             <constraint firstAttribute="trailing" secondItem="8ty-Nl-7Bq" secondAttribute="trailing" id="6h5-Nv-Re4"/>
                             <constraint firstItem="GSo-Vo-l4i" firstAttribute="centerX" secondItem="7oa-Gs-NYa" secondAttribute="centerX" id="7Vz-fi-st8"/>
