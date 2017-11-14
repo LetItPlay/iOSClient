@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import TagListView
 
 class ChannelsCell: UITableViewCell {
     
@@ -18,7 +19,8 @@ class ChannelsCell: UITableViewCell {
     @IBOutlet weak var listensLabel: UILabel!
     @IBOutlet weak var heartImageView: UIImageView!
     
-    @IBOutlet weak var subscribeButton: UIButton!
+	@IBOutlet weak var tagsView: TagListView!
+	@IBOutlet weak var subscribeButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,6 +40,9 @@ class ChannelsCell: UITableViewCell {
         listensLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
         
         nameLabel.textColor = UIColor.vaCharcoalGrey
+		
+		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+		tagsView.tagLineBreakMode = .byTruncatingTail
     }
     
     class func recommendedHeight() -> CGFloat {
@@ -48,7 +53,19 @@ class ChannelsCell: UITableViewCell {
         didSet {
             nameLabel.text = channel?.name
             subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
-            
+			if let tags = channel?.getTags() {
+				if tags.count != 0 {
+					for tag in tags {
+						self.tagsView.addTag(tag)
+					}
+				} else {
+					["internet","future","technology","news"].map({$0.uppercased()}).enumerated().forEach({ (tuple) in
+						self.tagsView.addTag(tuple.1)
+					})
+				}
+			} else {
+				self.tagsView.removeAllTags()
+			}
             if let urlString = channel?.image.buildImageURL() {
                 iconImageView.sd_setImage(with: urlString)
             } else {
