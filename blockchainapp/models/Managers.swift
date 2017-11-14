@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import SwiftyAudioManager
+import RealmSwift
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
 typealias TracksLoaderSuccess = ([Track]) -> Void
@@ -18,7 +19,7 @@ class AppManager {
     static let shared = AppManager()
     
     public let audioManager = AudioManager()
-    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "player") as? PlayerViewController
+    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
     
     private let tabDelegate = MainTabBarDelegate()
     public var rootTabBarController: MainTabViewController? {
@@ -31,18 +32,19 @@ class AppManager {
     
     init() {
         audioManager.isPlayingSpeakerMode = true
+        audioManager.resetOnLast = false
     }
 }
 
 class DownloadManager {
     
     enum urlServices: String {
-        case audiofiles = "http://176.31.100.18:8182/audiofiles/"
-        case stations = "http://176.31.100.18:8182/stations/"
-        case tracks = "http://176.31.100.18:8182/tracks/"
-        case tracksForStations = "http://176.31.100.18:8182/api/tracks/stations/"
-        case subForStations = "http://176.31.100.18:8182/stations/%d/counts/"
-        case forTracks = "http://176.31.100.18:8182/tracks/%d/counts/"
+        case audiofiles = "https://manage.letitplay.io/audiofiles/"
+        case stations = "https://manage.letitplay.io/stations/"
+        case tracks = "https://manage.letitplay.io/tracks/"
+        case tracksForStations = "https://manage.letitplay.io/api/tracks/stations/"
+        case subForStations = "https://manage.letitplay.io/stations/%d/counts/"
+        case forTracks = "https://manage.letitplay.io/tracks/%d/counts/"
     }
     
     static let shared = DownloadManager()
@@ -64,21 +66,28 @@ class DownloadManager {
                     return
                 }
                 
-                let json = JSON(data: data)
-                var result = [Station]()
-                for jStation in json.array ?? [] {
-                    if let idInt = jStation["id"].int {
-                        let station = Station(id: idInt,
-                                              name: jStation["name"].string ?? "",
-                                              image: jStation["image"].string ?? "",
-                                              subscriptionCount: jStation["subscription_count"].int ?? 0)
-                        result.append(station)
-                    } else {
-                        print("ERROR: no id in \(jStation)")
-                    }
-                }
+                let json  = JSON(data: data)
+                let realm = try! Realm()
                 
-                success(result)
+                do {
+                    try realm.write {
+                        for jStation in json.array ?? [] {
+                            if let idInt = jStation["id"].int {
+                                DBManager.shared.addOrUpdateStation(inRealm: realm,
+                                                                    id: idInt,
+                                                                    name: jStation["name"].string ?? "",
+                                                                    image: jStation["image"].string ?? "",
+                                                                    subscriptionCount: jStation["subscription_count"].int ?? 0,
+                                                                    tags: jStation["tags"].string)
+                            } else {
+                                print("ERROR: no id in \(jStation)")
+                            }
+                        }
+                    }
+                } catch(let error) {
+                    print(error)
+                }
+//                success(result)
             })
             task.resume()
         }
@@ -101,28 +110,20 @@ class DownloadManager {
                     return
                 }
                 
-                let json = JSON(data: data)
-                var result = [Track]()
-                for jTrack in json.array ?? [] {
-                    if let idInt = jTrack["id"].int {
-                        let file = Audiofile(file: jTrack["audio_file"]["file"].string ?? "",
-                                             lengthSeconds: jTrack["audio_file"]["length_seconds"].int64 ?? 0,
-                                             sizeBytes: jTrack["audio_file"]["size_bytes"].int64 ?? 0)
-                        
-                        let t = Track(id: idInt,
-                                      station: jTrack["station"].int ?? 0,
-                                      audiofile: file,
-                                      name: jTrack["name"].string ?? "",
-                                      url: jTrack["url"].string ?? "",
-                                      description: jTrack["description"].string ?? "",
-                                      image: jTrack["image"].string ?? "",
-                                      likeCount: jTrack["like_count"].int ?? 0,
-                                      reportCount: jTrack["report_count"].int ?? 0)
-                        result.append(t)
+                let json  = JSON(data: data)
+                let realm = try! Realm()
+                
+                do {
+                    try realm.write {
+                        for jTrack in json.array ?? [] {
+                            DBManager.shared.track(fromJSON: jTrack, realm: realm)
+                        }
                     }
+                } catch(let error) {
+                    print(error)
                 }
                 
-                success(result)
+//                success(result)
             })
             task.resume()
         }
@@ -155,7 +156,7 @@ class DownloadManager {
         }
     }
     
-    func track(id: Int, report: Int = 0, like: Int = 0) {
+    func track(id: Int, report: Int = 0, like: Int = 0, listen: Int = 0) {
         if let str = String(format: urlServices.forTracks.rawValue, id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
             
@@ -166,21 +167,25 @@ class DownloadManager {
             var elements: [String: Int] = [:]
             elements["report_count"] = report
             elements["like_count"]   = like
+            elements["listen_count"] = listen
             
             request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
             
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
                 
-                guard error == nil else {
-                    
-                    return
-                }
+                guard error == nil else { return }
+                guard let data = data else { return }
                 
-                guard let _ = data else {
-                    
-                    return
-                }
+                let json  = JSON(data: data)
+                let realm = try! Realm()
                 
+                do {
+                    try realm.write {
+                        DBManager.shared.track(fromJSON: json, realm: realm)
+                    }
+                } catch(let error) {
+                    print(error)
+                }
                 
             })
             task.resume()
@@ -204,11 +209,40 @@ class SubscribeManager {
     
     init() {
         stations = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        listenedTracks = (UserDefaults.standard.array(forKey: "listen_tracks") as? [Int]) ?? []
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(audioManagerStartPlaying(_:)),
+                                               name: AudioManagerNotificationName.startPlaying.notification,
+                                               object: nil)
+
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func audioManagerStartPlaying(_ notification: Notification) {
+        DispatchQueue.global().async { [unowned self] in
+            if let id = AppManager.shared.audioManager.currentItemId,
+                let idstring = id.split(separator: "_").last,
+                let trackId = Int(idstring) {
+                if !self.listenedTracks.contains(trackId) {
+                    objc_sync_enter(self.listenedTracks)
+                    self.listenedTracks.append(trackId)
+                    UserDefaults.standard.set(self.listenedTracks, forKey: "listen_tracks")
+                    objc_sync_exit(self.listenedTracks)
+                    DownloadManager.shared.track(id: trackId, listen: 1)
+                }
+            }
+        }
+    }
+
     
     static let shared = SubscribeManager()
     
     private var stations = [Int]()
+    private var listenedTracks = [Int]()
     
     public func requestString() -> String {
         return stations.map{ "\($0)" }.joined(separator: ",")
@@ -247,6 +281,11 @@ class SubscribeManager {
             stations.remove(at: index)
         }
         objc_sync_exit(stations)
+        
+        let realm = try! Realm()
+        try? realm.write {
+            realm.delete(realm.objects(Track.self).filter("station = %@", id))
+        }
         
         debugPrint("user unsubscribed on \(id)")
         NotificationCenter.default.post(name: NotificationName.deleted.notification,

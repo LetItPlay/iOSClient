@@ -8,16 +8,55 @@
 
 import Foundation
 import SwiftyAudioManager
+import RealmSwift
 
 class FeedPresenter: FeedPresenterProtocol {
     
     weak var view: FeedViewProtocol?
     let audioManager = AppManager.shared.audioManager
     
-    var playList = [PlayerItem]()
+    var token: NotificationToken?
     
-    init(view: FeedViewProtocol) {
+//    var playList = [PlayerItem]()
+    
+    
+    
+    init(view: FeedViewProtocol, orderByListens: Bool) {
         self.view = view
+        
+        let realm = try! Realm()
+        let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "listenCount", ascending: false)
+            : realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
+
+        token = results.observe({ [weak self] (changes: RealmCollectionChange) in
+            
+            switch changes {
+            case .initial:
+                // Results are now populated and can be accessed without blocking the UI
+                let items = Array(results)
+                self?.view?.display(tracks:  items,
+                                    deletions: [],
+                                    insertions: [],
+                                    modifications: [])
+                
+            case .update(_, let deletions, let insertions, let modifications):
+                // Query results have changed, so apply them to the UITableView
+                let items = Array(results)
+                self?.view?.display(tracks: items,
+                                    deletions: deletions,
+                                    insertions: insertions,
+                                    modifications: modifications)
+                
+                if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
+                    AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
+                }
+                
+            case .error(let error):
+                // An error occurred while opening the Realm file on the background worker thread
+                fatalError("\(error)")
+            }
+            
+        })
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(subscriptionChanged(notification:)),
@@ -32,72 +71,39 @@ class FeedPresenter: FeedPresenterProtocol {
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+        token?.invalidate()
     }
     
     @objc func subscriptionChanged(notification: Notification) {
-        getData { [weak self] (result) in
-            self?.view?.display(tracks: result)
+        getData { (result) in
+            
         }
     }
     
     func getData(onComplete: @escaping TrackResult) {
-        DownloadManager.shared.requestTracks(success: { [weak self] (feed) in
+        
+        DownloadManager.shared.requestTracks(success: { (feed) in
             
-            guard self != nil else {
-                return
-            }
-            
-            self?.playList = [PlayerItem]()
-            
-            for f in feed {
-                let playerItem = PlayerItem(itemId: f.uniqString(),
-                                            url: f.audiofile.file.buildImageURL()?.absoluteString ?? "")
-                playerItem.autoLoadNext = true
-                playerItem.autoPlay = true
-                
-                self?.playList.append(playerItem)
-            }
-            
-            if !self!.playList.isEmpty {
-                self?.audioManager.resetPlaylistAndStop()
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: self!.playList)
-                self?.audioManager.add(playlist: [group])
-            }
-            
-            DispatchQueue.main.async {
-                onComplete(feed)
-                
-                if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
-                    AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = feed.isEmpty ? nil : "New"
-                }
-            }
         }) { (err) in
             
         }
     }
     
-    func play(track: Track) {
-        if audioManager.playlist == nil {
-            if playList.isEmpty {
-                
-            } else {
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
-                audioManager.add(playlist: [group])
-            }
-        } else
-        if audioManager.currentItemId == track.uniqString() {
+    func play(trackUID: String) {
+        //TODO: fix this shet
+        if audioManager.currentItemId == trackUID {
             if audioManager.isPlaying {
                 audioManager.pause()
             } else {
                 audioManager.resume()
             }
         } else {
-            audioManager.playItem(with: track.uniqString())
+            audioManager.playItem(with: trackUID)
         }
         
     }
     
-    func like(track: Track) {
-        LikeManager.shared.addOrDelete(id: track.id)
+    func like(trackUID: Int) {
+        LikeManager.shared.addOrDelete(id: trackUID)
     }
 }

@@ -94,17 +94,17 @@ class PlayerViewController: UIViewController {
 
     // MARK: - AudioManager events
     func audioManagerStartPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         showPlayer()
     }
     
     func audioManagerPaused(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         if audioManager.isOnPause {
             updatePlayButtonState()
@@ -112,17 +112,17 @@ class PlayerViewController: UIViewController {
     }
     
     func audioManagerEndPlaying(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
     }
     
     func audioManagerPlaySoundOnSecond(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         
         updatePlayButtonState()
         /*
@@ -152,23 +152,23 @@ class PlayerViewController: UIViewController {
     }
     
     func audioManagerFailed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerResume(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         updatePlayButtonState()
     }
     
     func audioManagerReadyToPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.01, animations: {
                 self.progressViewWidthConstraint.constant = 0
@@ -180,25 +180,25 @@ class PlayerViewController: UIViewController {
     }
     
     func audioManagerNextPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }
     
     func audioManagerPreviousPlayed(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }
     
     func audioManagerRecievedPlay(_ notification: Notification) {
-        guard (notification.object as? AudioManager) === audioManager else {
-            return
-        }
+//        guard (notification.object as? AudioManager) === audioManager else {
+//            return
+//        }
         startAnimateVaiting()
 //        delegateChangingItem()
     }
@@ -255,15 +255,5 @@ class PlayerViewController: UIViewController {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

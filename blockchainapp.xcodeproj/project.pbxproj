@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
+		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
+		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
+		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
 		CF44532F1F54139900660474 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF44532D1F54139900660474 /* Main.storyboard */; };
 		CF4453311F54139900660474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4453301F54139900660474 /* Assets.xcassets */; };
@@ -25,6 +29,9 @@
 		CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536F1F5D78C000660474 /* PlayerViewController.swift */; };
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
+		CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */; };
+		CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */; };
+		CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */; };
 		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +55,13 @@
 /* Begin PBXFileReference section */
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
+		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
+		CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioCoreViewController.swift; path = scenes/player/AudioCoreViewController.swift; sourceTree = "<group>"; };
+		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		CF27152A1F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		CF27152E1F97C79A0038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CF2715301F97C79F0038C81C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		CF2715321F97EA810038C81C /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AboutViewController.swift; path = scenes/About/AboutViewController.swift; sourceTree = "<group>"; };
 		CF4453261F54139900660474 /* blockchainapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockchainapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453291F54139900660474 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF44532E1F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -72,6 +86,9 @@
 		CF44536F1F5D78C000660474 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = scenes/player/PlayerViewController.swift; sourceTree = "<group>"; };
 		CF4453721F5D8EBE00660474 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabViewController.swift; path = "scenes/tab controller/MainTabViewController.swift"; sourceTree = "<group>"; };
 		CF4453741F666BB800660474 /* DBModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBModels.swift; path = models/DBModels.swift; sourceTree = "<group>"; };
+		CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerViewController.swift; path = scenes/FullPlayer/FullPlayerViewController.swift; sourceTree = "<group>"; };
+		CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerPresenter.swift; path = scenes/FullPlayer/FullPlayerPresenter.swift; sourceTree = "<group>"; };
+		CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerProtocols.swift; path = scenes/FullPlayer/FullPlayerProtocols.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +118,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CF2715311F97EA560038C81C /* about */ = {
+			isa = PBXGroup;
+			children = (
+				CF2715321F97EA810038C81C /* AboutViewController.swift */,
+			);
+			name = about;
+			sourceTree = "<group>";
+		};
 		CF44531D1F54139900660474 = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +159,7 @@
 				CF4453301F54139900660474 /* Assets.xcassets */,
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
 				CF4453351F54139900660474 /* Info.plist */,
+				CF27152F1F97C79A0038C81C /* Localizable.strings */,
 			);
 			path = blockchainapp;
 			sourceTree = "<group>";
@@ -162,6 +188,7 @@
 				CF4453581F55400F00660474 /* MainModels.swift */,
 				CF44535A1F55406B00660474 /* Managers.swift */,
 				CF4453741F666BB800660474 /* DBModels.swift */,
+				CF1E04821F82273D00D8812F /* DBHelpers.swift */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -177,6 +204,8 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				CFCEA3201F98AD4700DFAE70 /* FullPlayer */,
+				CF2715311F97EA560038C81C /* about */,
 				CF4453711F5D8E8600660474 /* tab controller */,
 				CF44536E1F5D787A00660474 /* player */,
 				CF4453671F57F42800660474 /* Channels */,
@@ -209,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				CF44536F1F5D78C000660474 /* PlayerViewController.swift */,
+				CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -219,6 +249,16 @@
 				CF4453721F5D8EBE00660474 /* MainTabViewController.swift */,
 			);
 			name = "tab controller";
+			sourceTree = "<group>";
+		};
+		CFCEA3201F98AD4700DFAE70 /* FullPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */,
+				CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */,
+				CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */,
+			);
+			name = FullPlayer;
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -352,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */,
+				CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */,
 				CF4453311F54139900660474 /* Assets.xcassets in Resources */,
 				CF44532F1F54139900660474 /* Main.storyboard in Resources */,
 			);
@@ -430,14 +471,20 @@
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
+				CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
+				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
+				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
+				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
+				CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -474,10 +521,20 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		CF27152F1F97C79A0038C81C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CF27152E1F97C79A0038C81C /* ru */,
+				CF2715301F97C79F0038C81C /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		CF44532D1F54139900660474 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				CF44532E1F54139900660474 /* Base */,
+				CF2715291F97BA370038C81C /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -486,6 +543,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				CF4453331F54139900660474 /* Base */,
+				CF27152A1F97BA370038C81C /* ru */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -497,6 +555,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -547,6 +606,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -594,7 +654,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				INFOPLIST_FILE = blockchainapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.msl.blockchainapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -612,7 +672,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				INFOPLIST_FILE = blockchainapp/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.msl.blockchainapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";

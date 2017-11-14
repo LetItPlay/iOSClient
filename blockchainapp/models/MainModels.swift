@@ -7,36 +7,70 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct Station {
-    let id: Int
-    let name: String
-    let image: String
-    let subscriptionCount: Int
+class Station: Object {
+    @objc dynamic var id: Int = 0
+    @objc dynamic var name: String = ""
+    @objc dynamic var image: String = ""
+    @objc dynamic var subscriptionCount: Int = 0
+    @objc dynamic var tagString: String = ""
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
     
     func uniqString() -> String {
         return "\(id)"
     }
+    
+    func getTags() -> [String] {
+        return tagString.split(separator: ",").map{ String($0) }
+    }
 }
 
-struct Track {
-    let id: Int
-    let station: Int
-    let audiofile: Audiofile
-    let name: String
-    let url: String
-    let description: String
-    let image: String
-    let likeCount: Int
-    let reportCount: Int
+class Track: Object {
+    @objc dynamic var id: Int               = 0
+    @objc dynamic var station: Int          = 0
+    @objc dynamic var audiofile: Audiofile? = nil
+    @objc dynamic var name: String          = ""
+    @objc dynamic var url: String           = ""
+    @objc dynamic var desc: String          = ""
+    @objc dynamic var image: String         = ""
+    @objc dynamic var likeCount: Int        = 0
+    @objc dynamic var reportCount: Int      = 0
+    @objc dynamic var listenCount: Int      = 0
+    @objc dynamic var tagString: String     = ""
+    
+    /**
+     * yyyy-mm-ddThh:mm:ss[.mmm]
+     */
+    @objc dynamic var publishedAt: Date = Date()
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
     
     func uniqString() -> String {
         return "\(id)"
     }
+    
+    func getTags() -> [String] {
+        return tagString.split(separator: ",").map{ String($0) }
+    }
+}
+extension Track {
+    public func findStationName() -> String? {
+        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+    }
+    
+    public func findChannelImage() -> URL? {
+        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+    }
 }
 
-struct Audiofile {
-    let file: String
-    let lengthSeconds: Int64
-    let sizeBytes: Int64
+class Audiofile: Object {
+    @objc dynamic var file: String = ""
+    @objc dynamic var lengthSeconds: Int64 = 0
+    @objc dynamic var sizeBytes: Int64 = 0
 }

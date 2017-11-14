@@ -8,39 +8,64 @@
 
 import UIKit
 import SDWebImage
+import TagListView
 
 class ChannelsCell: UITableViewCell {
     
     @IBOutlet weak var iconImageView: UIImageView!
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var infoLabel: UILabel!
+    @IBOutlet weak var subscribersLabel: UILabel!
+    @IBOutlet weak var listensLabel: UILabel!
+    @IBOutlet weak var heartImageView: UIImageView!
     
-    @IBOutlet weak var subscribeButton: UIButton!
+	@IBOutlet weak var tagsView: TagListView!
+	@IBOutlet weak var subscribeButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         iconImageView.clipsToBounds = true
-        iconImageView.layer.cornerRadius = 20
+        iconImageView.layer.cornerRadius = 9
         
-        nameLabel.font = UIFont(name: ".SFUIText-Bold", size: 12)!
-        infoLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
+        subscribeButton.layer.cornerRadius = 6
+        subscribeButton.layer.borderWidth  = 1
+        subscribeButton.layer.borderColor  = UIColor.vaRed.cgColor
+        subscribeButton.titleLabel?.font = UIFont(name: ".SFUIText-Medium", size: 16)
+        subscribeButton.titleLabel?.minimumScaleFactor = 0.1
+        subscribeButton.titleLabel?.adjustsFontSizeToFitWidth = true
+        
+        nameLabel.font = UIFont(name: ".SFUIText-Medium", size: 18)!
+        subscribersLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
+        listensLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
         
         nameLabel.textColor = UIColor.vaCharcoalGrey
-        infoLabel.textColor = UIColor.vaCharcoalGrey
-        infoLabel.alpha = 0.8
+		
+		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+		tagsView.tagLineBreakMode = .byTruncatingTail
     }
     
     class func recommendedHeight() -> CGFloat {
-        return 80
+        return 164/* image */ + 13/* pad */ + 13/* pad */
     }
     
-    var channel: Station? = nil {
+    weak var channel: Station? = nil {
         didSet {
             nameLabel.text = channel?.name
-            infoLabel.text = "\(channel?.subscriptionCount ?? 0) subscribers"
-            
+            subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
+			if let tags = channel?.getTags() {
+				if tags.count != 0 {
+					for tag in tags {
+						self.tagsView.addTag(tag)
+					}
+				} else {
+					["internet","future","technology","news"].map({$0.uppercased()}).enumerated().forEach({ (tuple) in
+						self.tagsView.addTag(tuple.1)
+					})
+				}
+			} else {
+				self.tagsView.removeAllTags()
+			}
             if let urlString = channel?.image.buildImageURL() {
                 iconImageView.sd_setImage(with: urlString)
             } else {
@@ -51,16 +76,14 @@ class ChannelsCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        subscribeButton.isHidden = !selected
+        subscribeButton.isSelected = selected
+        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
+        subscribeButton.backgroundColor = selected ? UIColor.clear : UIColor.vaActive
     }
     
 }
 
-class ChannelsViewController: UIViewController, ChannelsViewProtocol {
-    
-    @IBOutlet weak var tableView: UITableView!
-    
-    var refreshControl: UIRefreshControl!
+class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
     
     var presenter: ChannelsPresenter!
     var source = [Station]()
@@ -68,12 +91,13 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         presenter = ChannelsPresenter(view: self)
         
-        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
 
         tableView.dataSource = self
@@ -103,7 +127,7 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
         source = channels
         tableView.reloadData()
         
-        refreshControl.endRefreshing()
+        refreshControl?.endRefreshing()
     }
     
     func select(rows: [Int]) {
@@ -113,48 +137,38 @@ class ChannelsViewController: UIViewController, ChannelsViewProtocol {
                                 scrollPosition: .none)
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
-extension ChannelsViewController: UITableViewDataSource {
+extension ChannelsViewController {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ChannelsCell
         cell.channel = source[indexPath.row]
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ChannelsCell.recommendedHeight()
     }
 }
 
-extension ChannelsViewController: UITableViewDelegate {
+extension ChannelsViewController {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let channel = source[indexPath.row]
         presenter.select(station: channel)
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let channel = source[indexPath.row]
         presenter.select(station: channel)
     }

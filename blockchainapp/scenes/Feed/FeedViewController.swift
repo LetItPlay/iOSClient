@@ -16,7 +16,6 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var mainImageView: UIImageView!
     
     @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     
     @IBOutlet weak var bottomContainerView: UIView!
@@ -26,7 +25,6 @@ class FeedCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
     @IBOutlet weak var listeningLabel: UILabel!
-    @IBOutlet weak var commentLabel: UILabel!
     
     @IBOutlet weak var timeLabel: UILabel!
     
@@ -34,8 +32,8 @@ class FeedCell: UITableViewCell {
     
     let audioManager = AppManager.shared.audioManager
     
-    public var onPlay: ((Track) -> Void)?
-    public var onLike: ((Track) -> Void)?
+    public var onPlay: ((String) -> Void)?
+    public var onLike: ((Int) -> Void)?
     public var onComment: ((Track) -> Void)?
     public var onMenu: ((Track) -> Void)?
     
@@ -57,12 +55,10 @@ class FeedCell: UITableViewCell {
         
         likesLabel.font     = UIFont(name: ".SFUIText-Medium", size: 12)
         listeningLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)
-        commentLabel.font   = UIFont(name: ".SFUIText-Medium", size: 12)
         timeLabel.font      = UIFont(name: ".SFUIText-Bold", size: 12)
         
         likesLabel.textColor     = UIColor.vaCharcoalGrey
         listeningLabel.textColor = UIColor.vaCharcoalGrey
-        commentLabel.textColor   = UIColor.vaCharcoalGrey
         
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(audioManagerPaused(_:)),
@@ -96,44 +92,45 @@ class FeedCell: UITableViewCell {
         return 192
     }
     
-    var track: Track? = nil {
+    weak var track: Track? = nil {
         didSet {
             nameLabel.text = track?.name
             
-            if let iconUrl = track?.image.buildImageURL() {
+            if let iconUrl = track?.findChannelImage() {
                 iconImageView.sd_setImage(with: iconUrl)
             } else {
                 iconImageView.image = nil
             }
             
-            likesLabel.text = "\(track?.likeCount ?? 0) likes"
-            listeningLabel.text = "0 listening"
-            commentLabel.text = "0 comments"
+            if let iconUrl = track?.image.buildImageURL() {
+                mainImageView.sd_setImage(with: iconUrl)
+            } else {
+                mainImageView.image = nil
+            }
+            
+            likesLabel.text = "\(track?.likeCount ?? 0) \(NSLocalizedString("likes", comment: ""))"
+            listeningLabel.text = "\(track?.listenCount ?? 0) \(NSLocalizedString("listening", comment: ""))"
             
             likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
+            playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
             
-            let maxTime = track?.audiofile.lengthSeconds ?? 0
+            let maxTime = track?.audiofile?.lengthSeconds ?? 0
             timeLabel.text = String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
         }
     }
     
     // MARK: - buttons
-    @IBAction func commentPressed(_ sender: Any) {
-        if track != nil {
-            onComment?(track!)
-        }
-    }
     
     @IBAction func playPressed(_ sender: Any) {
         if track != nil {
-            onPlay?(track!)
+            onPlay?(track!.uniqString())
         }
     }
     
     @IBAction func likePressed(_ sender: Any) {
         likeButton.isSelected = !likeButton.isSelected
         if track != nil {
-            onLike?(track!)
+            onLike?(track!.id)
         }
     }
     
@@ -148,10 +145,7 @@ class FeedCell: UITableViewCell {
     }
 }
 
-class FeedViewController: UIViewController, FeedViewProtocol {
-    
-    @IBOutlet weak var tableView: UITableView!
-    var refreshControl: UIRefreshControl!
+class FeedViewController: UITableViewController, FeedViewProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
@@ -160,9 +154,9 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         super.viewDidLoad()
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        presenter = FeedPresenter(view: self)
+        presenter = FeedPresenter(view: self, orderByListens: navigationController?.title == "42")
         
         navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
@@ -176,14 +170,14 @@ class FeedViewController: UIViewController, FeedViewProtocol {
                                               bottom: 72,
                                               right: 0)
         
-        presenter.getData { [weak self] (tracks) in
-            self?.display(tracks: tracks)
+        presenter.getData { (tracks) in
+            
         }
     }
     
     func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { [weak self] (tracks) in
-            self?.display(tracks: tracks)
+        presenter.getData { (tracks) in
+            
         }
     }
 
@@ -192,56 +186,42 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         // Dispose of any resources that can be recreated.
     }
     
-    func display(tracks: [Track]) {
+    func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
         source = tracks
         tableView.reloadData()
-        
-        refreshControl.endRefreshing()
+        refreshControl?.endRefreshing()
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
-extension FeedViewController: UITableViewDataSource {
+extension FeedViewController {
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! FeedCell
         cell.track = source[indexPath.row]
         
         cell.onPlay = { [weak self] track in
-            self?.presenter.play(track: track)
+            self?.presenter.play(trackUID: track)
         }
         
         cell.onLike = { [weak self] track in
-            self?.presenter.like(track: track)
+            self?.presenter.like(trackUID: track)
         }
         
         return cell
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return FeedCell.recommendedHeight()
     }
     
 }
 
-extension FeedViewController: UITableViewDelegate {
-    
-}

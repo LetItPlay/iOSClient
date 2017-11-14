@@ -14,9 +14,7 @@ class MainTabViewController: UITabBarController {
         super.viewDidLoad()
 
         if let playerVC = AppManager.shared.audioPlayer {
-            addChildViewController(playerVC)
             view.addSubview(playerVC.view)
-            playerVC.didMove(toParentViewController: self)
             
             playerVC.view.translatesAutoresizingMaskIntoConstraints = false
             playerVC.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -33,23 +31,6 @@ class MainTabViewController: UITabBarController {
         
         selectedIndex = 2
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
@@ -78,7 +59,8 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
                 AppManager.shared.audioPlayer?.showPlayer()
             }
             
-            if root is ChannelsViewController && !AppManager.shared.audioManager.isPlaying {
+            if (root is ChannelsViewController || root is AboutViewController)
+                && !AppManager.shared.audioManager.isPlaying {
                 AppManager.shared.audioPlayer?.hidePlayer()
             }
         }
