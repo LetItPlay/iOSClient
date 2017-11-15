@@ -66,10 +66,9 @@ class DownloadManager {
                     return
                 }
                 
-                let json  = JSON(data: data)
-                let realm = try! Realm()
-                
                 do {
+					let json  = try JSON(data: data)
+					let realm = try Realm()
                     try realm.write {
                         for jStation in json.array ?? [] {
                             if let idInt = jStation["id"].int {
@@ -110,10 +109,9 @@ class DownloadManager {
                     return
                 }
                 
-                let json  = JSON(data: data)
-                let realm = try! Realm()
-                
                 do {
+					let json  = try JSON(data: data)
+					let realm = try Realm()
                     try realm.write {
                         for jTrack in json.array ?? [] {
                             DBManager.shared.track(fromJSON: jTrack, realm: realm)
@@ -175,11 +173,10 @@ class DownloadManager {
                 
                 guard error == nil else { return }
                 guard let data = data else { return }
-                
-                let json  = JSON(data: data)
-                let realm = try! Realm()
-                
+
                 do {
+					let json  = try JSON(data: data)
+					let realm = try Realm()
                     try realm.write {
                         DBManager.shared.track(fromJSON: json, realm: realm)
                     }

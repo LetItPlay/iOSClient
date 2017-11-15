@@ -516,8 +516,11 @@
                                             </constraints>
                                         </imageView>
                                         <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3u-aF-ufl" customClass="TagListView" customModule="TagListView">
-                                            <rect key="frame" x="166" y="73" width="193" height="49"/>
+                                            <rect key="frame" x="166" y="78" width="193" height="44"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="tgv-t1-EaN"/>
+                                            </constraints>
                                             <userDefinedRuntimeAttributes>
                                                 <userDefinedRuntimeAttribute type="color" keyPath="textColor">
                                                     <color key="value" red="0.12156862745098039" green="0.23529411764705882" blue="0.29019607843137252" alpha="1" colorSpace="calibratedRGB"/>
@@ -532,7 +535,7 @@
                                                     <color key="value" red="0.1215686275" green="0.23529411759999999" blue="0.2901960784" alpha="1" colorSpace="calibratedRGB"/>
                                                 </userDefinedRuntimeAttribute>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="paddingY">
-                                                    <real key="value" value="3"/>
+                                                    <real key="value" value="4"/>
                                                 </userDefinedRuntimeAttribute>
                                                 <userDefinedRuntimeAttribute type="number" keyPath="paddingX">
                                                     <real key="value" value="6"/>
@@ -555,7 +558,6 @@
                                         <constraint firstItem="rMz-TV-enp" firstAttribute="top" secondItem="gwW-hz-9hz" secondAttribute="bottom" constant="2" id="0Hz-va-e4B"/>
                                         <constraint firstItem="qNw-M2-0rF" firstAttribute="bottom" secondItem="rMz-TV-enp" secondAttribute="bottom" id="1fR-e7-uGP"/>
                                         <constraint firstItem="nDg-lT-CEr" firstAttribute="leading" secondItem="QOp-OK-22P" secondAttribute="trailing" constant="14" id="2er-Ew-oFR"/>
-                                        <constraint firstItem="T3u-aF-ufl" firstAttribute="top" secondItem="rMz-TV-enp" secondAttribute="bottom" constant="7" id="9cq-KM-oJL"/>
                                         <constraint firstItem="rMz-TV-enp" firstAttribute="leading" secondItem="gwW-hz-9hz" secondAttribute="leading" id="DM7-gx-ObL"/>
                                         <constraint firstItem="QOp-OK-22P" firstAttribute="top" secondItem="ZXb-fJ-IIa" secondAttribute="top" constant="13" id="JbP-fh-RAY"/>
                                         <constraint firstItem="FjP-aK-an3" firstAttribute="leading" secondItem="nDg-lT-CEr" secondAttribute="trailing" constant="2" id="K4P-fW-0SL"/>

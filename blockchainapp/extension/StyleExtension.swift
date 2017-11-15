@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TagListView
 
 extension UIColor {
     @nonobjc class var vaBlack: UIColor {
@@ -46,7 +47,7 @@ extension UIFont {
 
 extension String {
     func buildImageURL() -> URL? {
-        var result = "http://176.31.100.18:8182/"
+        var result = "https://manage.letitplay.io/"
         if !self.contains("uploads") {
             result += "uploads/"
         }

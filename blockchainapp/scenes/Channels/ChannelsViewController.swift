@@ -43,6 +43,10 @@ class ChannelsCell: UITableViewCell {
 		
 		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
 		tagsView.tagLineBreakMode = .byTruncatingTail
+		
+		for _ in 0..<4 {
+			self.tagsView.addTag(" ")
+		}
     }
     
     class func recommendedHeight() -> CGFloat {
@@ -53,18 +57,21 @@ class ChannelsCell: UITableViewCell {
         didSet {
             nameLabel.text = channel?.name
             subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
-			if let tags = channel?.getTags() {
+			self.tagsView.removeAllTags()
+			if let tags = channel?.getTags().prefix(4) {
 				if tags.count != 0 {
-					for tag in tags {
-						self.tagsView.addTag(tag)
-					}
+					self.tagsView.addTags(tags.map({$0.uppercased()}))
+//					tags.map({$0.uppercased()}).enumerated().forEach({ (tuple) in
+//						self.tagsView.setTitle(tuple.element, at: tuple.offset)
+//					})
 				} else {
-					["internet","future","technology","news"].map({$0.uppercased()}).enumerated().forEach({ (tuple) in
-						self.tagsView.addTag(tuple.1)
-					})
+					self.tagsView.addTags(["internet","future","technology","news"].map({$0.uppercased()}))
+//					["internet","future","technology","news"].map({$0.uppercased()}).enumerated().forEach({ (tuple) in
+//						self.tagsView.setTitle(tuple.element, at: tuple.offset)
+//					})
 				}
 			} else {
-				self.tagsView.removeAllTags()
+				
 			}
             if let urlString = channel?.image.buildImageURL() {
                 iconImageView.sd_setImage(with: urlString)
