@@ -55,6 +55,20 @@ extension String {
     }
 }
 
+extension Int64 {
+	func formatTime() -> String {
+		let hours = self / 60 / 60
+		let min = self / 60 % 60
+		let sec = self % 60
+		var res = "\(min):\(sec)"
+		if hours != 0 {
+			res = "\(hours):" + res
+		}
+		return res
+//		return String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
+	}
+}
+
 // UIImage
 
 extension UIImage {

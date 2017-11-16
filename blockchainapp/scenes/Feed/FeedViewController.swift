@@ -115,7 +115,7 @@ class FeedCell: UITableViewCell {
             playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
             
             let maxTime = track?.audiofile?.lengthSeconds ?? 0
-            timeLabel.text = String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
+            timeLabel.text = maxTime.formatTime()//String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
         }
     }
     

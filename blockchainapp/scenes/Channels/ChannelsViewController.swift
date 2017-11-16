@@ -19,6 +19,7 @@ class ChannelsCell: UITableViewCell {
     @IBOutlet weak var listensLabel: UILabel!
     @IBOutlet weak var heartImageView: UIImageView!
     
+	@IBOutlet weak var noTagsView: UILabel!
 	@IBOutlet weak var tagsView: TagListView!
 	@IBOutlet weak var subscribeButton: UIButton!
     
@@ -61,17 +62,15 @@ class ChannelsCell: UITableViewCell {
 			if let tags = channel?.getTags().prefix(4) {
 				if tags.count != 0 {
 					self.tagsView.addTags(tags.map({$0.uppercased()}))
-//					tags.map({$0.uppercased()}).enumerated().forEach({ (tuple) in
-//						self.tagsView.setTitle(tuple.element, at: tuple.offset)
-//					})
+					self.noTagsView.isHidden = true
+					tagsView.isHidden = false
 				} else {
-					self.tagsView.addTags(["internet","future","technology","news"].map({$0.uppercased()}))
-//					["internet","future","technology","news"].map({$0.uppercased()}).enumerated().forEach({ (tuple) in
-//						self.tagsView.setTitle(tuple.element, at: tuple.offset)
-//					})
+					self.noTagsView.isHidden = false
+					self.tagsView.isHidden = true
 				}
 			} else {
-				
+				self.noTagsView.isHidden = false
+				self.tagsView.isHidden = true
 			}
             if let urlString = channel?.image.buildImageURL() {
                 iconImageView.sd_setImage(with: urlString)
