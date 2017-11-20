@@ -92,9 +92,10 @@ class DownloadManager {
         }
     }
     
-    func requestTracks(success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
-        if let str = urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-            let url = URL(string: str) {
+	func requestTracks(all: Bool = false, success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
+		let path = all ? urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) :
+			urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+		if let path = path, let url = URL(string: path) {
             
             let request = URLRequest(url: url)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
@@ -238,7 +239,7 @@ class SubscribeManager {
     
     static let shared = SubscribeManager()
     
-    private var stations = [Int]()
+	private (set) internal var stations = [Int]()
     private var listenedTracks = [Int]()
     
     public func requestString() -> String {

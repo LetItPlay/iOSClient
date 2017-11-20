@@ -19,21 +19,23 @@ class FeedPresenter: FeedPresenterProtocol {
     
 //    var playList = [PlayerItem]()
     
-    
+	var isFeed: Bool = false
     
     init(view: FeedViewProtocol, orderByListens: Bool) {
         self.view = view
+		
+		self.isFeed = !orderByListens
         
         let realm = try! Realm()
         let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "listenCount", ascending: false)
             : realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-            
+			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station)} : {(_) -> Bool in return true }
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
-                let items = Array(results)
+                let items = Array(results).filter(filter)
                 self?.view?.display(tracks:  items,
                                     deletions: [],
                                     insertions: [],
@@ -41,7 +43,7 @@ class FeedPresenter: FeedPresenterProtocol {
                 
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                let items = Array(results)
+                let items = Array(results).filter(filter)
                 self?.view?.display(tracks: items,
                                     deletions: deletions,
                                     insertions: insertions,
@@ -76,13 +78,13 @@ class FeedPresenter: FeedPresenterProtocol {
     
     @objc func subscriptionChanged(notification: Notification) {
         getData { (result) in
-            
+			
         }
     }
     
     func getData(onComplete: @escaping TrackResult) {
         
-        DownloadManager.shared.requestTracks(success: { (feed) in
+		DownloadManager.shared.requestTracks(all: !isFeed, success: { (feed) in
             
         }) { (err) in
             

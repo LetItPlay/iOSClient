@@ -42,7 +42,7 @@ class ChannelsCell: UITableViewCell {
         
         nameLabel.textColor = UIColor.vaCharcoalGrey
 		
-		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
 		tagsView.tagLineBreakMode = .byTruncatingTail
 		
 		for _ in 0..<4 {
@@ -117,7 +117,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         }
     }
     
-    func onRefreshAction(refreshControl: UIRefreshControl) {
+    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { [weak self] (channels) in
             self?.display(channels: channels)
         }

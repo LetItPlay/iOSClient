@@ -27,7 +27,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
-                let items = Array(results.sorted(by: {$0.0.subscriptionCount > $0.1.subscriptionCount}))
+                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount}))
                 self?.view?.display(channels: items)
                 
 				let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
@@ -39,7 +39,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
                 
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                let items = Array(results.sorted(by: {$0.0.subscriptionCount > $0.1.subscriptionCount}))
+                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount}))
                 self?.view?.display(channels: items)
                 
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })

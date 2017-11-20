@@ -39,7 +39,7 @@ extension UIColor {
 
 extension UIFont {
     class func vaHeaderFont() -> UIFont {
-        return UIFont.systemFont(ofSize: 24.0, weight: UIFontWeightRegular)
+        return UIFont.systemFont(ofSize: 24.0, weight: UIFont.Weight.regular)
     }
 }
 
@@ -60,13 +60,29 @@ extension Int64 {
 		let hours = self / 60 / 60
 		let min = self / 60 % 60
 		let sec = self % 60
-		var res = "\(min):\(sec)"
-		if hours != 0 {
-			res = "\(hours):" + res
-		}
-		return res
+		let res = hours == 0 ? "" : "\(hours):"
+		let minString = hours == 0 ? "\(min)" : String.init(format: "%02i", min)
+		let secString = String.init(format: "%02i", sec)
+		return res + "\(minString):\(secString)"
 //		return String(format:"%02i:%02i", Int(maxTime) / 60 % 60, Int(maxTime) % 60)
 	}
+
+    func formatAmount() -> String {
+        var res: Float?
+        var text = ""
+        if self >= 1000 * 1000 {
+            res = Float(self) / 1000000.0
+            text = "KK"
+        }
+        if self >= 1000 {
+            res = Float(self) / 1000.0
+            text = "K"
+        }
+        if let res = res {
+            return String.init(format: "%.01f" + text, res)
+        }
+        return "\(self)"
+    }
 }
 
 // UIImage

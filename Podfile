@@ -10,5 +10,6 @@ target 'blockchainapp' do
   
   pod "SDWebImage"
   pod "ShadowView"
+  pod "SnapKit", '~> 3.0.0'
   pod "TagListView", '~> 1.0'
 end

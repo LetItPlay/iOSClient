@@ -80,11 +80,11 @@ class FeedCell: UITableViewCell {
     }
     
     // MARK: - AudioManager events
-    func audioManagerStartPlaying(_ notification: Notification) {
+    @objc func audioManagerStartPlaying(_ notification: Notification) {
         playButton.isSelected = audioManager.currentItemId == track?.uniqString()
     }
     
-    func audioManagerPaused(_ notification: Notification) {
+    @objc func audioManagerPaused(_ notification: Notification) {
         playButton.isSelected = false
     }
     
@@ -169,15 +169,18 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
                                               left: 0,
                                               bottom: 72,
                                               right: 0)
-        
+		
+		refreshControl?.beginRefreshing()
         presenter.getData { (tracks) in
-            
+
         }
     }
-    
-    func onRefreshAction(refreshControl: UIRefreshControl) {
+	
+	var contentOffset: CGFloat = 0.0
+	
+    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { (tracks) in
-            
+			
         }
     }
 
@@ -189,9 +192,14 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
     func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
         source = tracks
         tableView.reloadData()
+//		tableView.contentOffset.y = self.contentOffset
         refreshControl?.endRefreshing()
     }
 
+	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		self.contentOffset = scrollView.contentOffset.y
+	}
+	
 }
 
 extension FeedViewController {

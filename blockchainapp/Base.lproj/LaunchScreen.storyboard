@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -24,23 +22,25 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lfq-B2-DLg">
-                                <rect key="frame" x="82" y="235" width="211" height="157"/>
+                                <rect key="frame" x="77.5" y="233.5" width="220" height="160"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="redTriangle" translatesAutoresizingMaskIntoConstraints="NO" id="oEK-fu-u8t">
-                                        <rect key="frame" x="60" y="0.0" width="91" height="91"/>
+                                        <rect key="frame" x="60" y="0.0" width="100" height="100"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="oEK-fu-u8t" secondAttribute="height" id="bdp-vN-r0u"/>
                                         </constraints>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" image="textLogo" translatesAutoresizingMaskIntoConstraints="NO" id="WXt-Gj-ZkI">
-                                        <rect key="frame" x="0.0" y="121" width="211" height="36"/>
+                                        <rect key="frame" x="0.0" y="130" width="220" height="30"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="oEK-fu-u8t" secondAttribute="trailing" constant="60" id="4Y4-0h-96x"/>
                                     <constraint firstItem="oEK-fu-u8t" firstAttribute="top" secondItem="lfq-B2-DLg" secondAttribute="top" id="Cjz-kx-50y"/>
+                                    <constraint firstAttribute="width" constant="220" id="cp6-3H-TpH"/>
                                     <constraint firstItem="oEK-fu-u8t" firstAttribute="leading" secondItem="lfq-B2-DLg" secondAttribute="leading" constant="60" id="f71-nO-XEp"/>
+                                    <constraint firstAttribute="height" constant="160" id="fA8-Xf-PRD"/>
                                     <constraint firstItem="WXt-Gj-ZkI" firstAttribute="leading" secondItem="lfq-B2-DLg" secondAttribute="leading" id="gIY-Kk-Ig5"/>
                                     <constraint firstAttribute="trailing" secondItem="WXt-Gj-ZkI" secondAttribute="trailing" id="lft-U5-aBO"/>
                                     <constraint firstItem="WXt-Gj-ZkI" firstAttribute="top" secondItem="oEK-fu-u8t" secondAttribute="bottom" constant="30" id="nrv-wn-Jzl"/>
@@ -50,9 +50,8 @@
                         </subviews>
                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="lfq-B2-DLg" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="66" id="8Zl-bM-2Ee"/>
+                            <constraint firstItem="lfq-B2-DLg" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="csh-bp-Xmh"/>
                             <constraint firstItem="lfq-B2-DLg" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-20" id="xO9-Lu-UTc"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="lfq-B2-DLg" secondAttribute="trailing" constant="66" id="yVY-2n-feG"/>
                         </constraints>
                     </view>
                 </viewController>

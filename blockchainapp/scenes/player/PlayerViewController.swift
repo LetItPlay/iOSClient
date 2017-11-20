@@ -93,7 +93,7 @@ class PlayerViewController: UIViewController {
     }
 
     // MARK: - AudioManager events
-    func audioManagerStartPlaying(_ notification: Notification) {
+    @objc func audioManagerStartPlaying(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -101,7 +101,7 @@ class PlayerViewController: UIViewController {
         showPlayer()
     }
     
-    func audioManagerPaused(_ notification: Notification) {
+    @objc func audioManagerPaused(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -111,7 +111,7 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    func audioManagerEndPlaying(_ notification: Notification) {
+    @objc func audioManagerEndPlaying(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -119,7 +119,7 @@ class PlayerViewController: UIViewController {
         updatePlayButtonState()
     }
     
-    func audioManagerPlaySoundOnSecond(_ notification: Notification) {
+    @objc func audioManagerPlaySoundOnSecond(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -151,21 +151,21 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    func audioManagerFailed(_ notification: Notification) {
+    @objc func audioManagerFailed(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
         updatePlayButtonState()
     }
     
-    func audioManagerResume(_ notification: Notification) {
+    @objc func audioManagerResume(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
         updatePlayButtonState()
     }
     
-    func audioManagerReadyToPlay(_ notification: Notification) {
+    @objc func audioManagerReadyToPlay(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -179,7 +179,7 @@ class PlayerViewController: UIViewController {
         }
     }
     
-    func audioManagerNextPlayed(_ notification: Notification) {
+    @objc func audioManagerNextPlayed(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -187,7 +187,7 @@ class PlayerViewController: UIViewController {
 //        delegateChangingItem()
     }
     
-    func audioManagerPreviousPlayed(_ notification: Notification) {
+    @objc func audioManagerPreviousPlayed(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
@@ -195,7 +195,7 @@ class PlayerViewController: UIViewController {
 //        delegateChangingItem()
     }
     
-    func audioManagerRecievedPlay(_ notification: Notification) {
+    @objc func audioManagerRecievedPlay(_ notification: Notification) {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
