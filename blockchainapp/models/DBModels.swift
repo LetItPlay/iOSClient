@@ -16,7 +16,7 @@ enum ObjectAbsorbedType: Int32 {
 }
 
 class AbsorbedInfo: Object {
-    var objectId: Int   = 0
-    var objectType: Int = 0 //0 - Station, 1 - Track
-    var absorbed: Int32 = 0
+    @objc var objectId: Int   = 0
+    @objc var objectType: Int = 0 //0 - Station, 1 - Track
+    @objc var absorbed: Int32 = 0
 }

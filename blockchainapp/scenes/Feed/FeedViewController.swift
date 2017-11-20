@@ -76,7 +76,6 @@ class FeedCell: UITableViewCell {
                                                selector: #selector(audioManagerStartPlaying(_:)),
                                                name: AudioManagerNotificationName.resumed.notification,
                                                object: audioManager)
-        
     }
     
     // MARK: - AudioManager events
@@ -149,6 +148,7 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
+	var cellHeight: CGFloat = 343.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,15 +165,22 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         tableView.delegate   = self
         tableView.refreshControl = refreshControl
         
-        tableView.contentInset = UIEdgeInsets(top: 0,
+        tableView.contentInset = UIEdgeInsets(top: 18,
                                               left: 0,
                                               bottom: 72,
                                               right: 0)
+		
+		tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
+		tableView.backgroundColor = .white
+		tableView.backgroundView?.backgroundColor = .white
+		tableView.sectionIndexBackgroundColor = .white
 		
 		refreshControl?.beginRefreshing()
         presenter.getData { (tracks) in
 
         }
+		
+		self.cellHeight = self.tableView.frame.width - 16 * 2 // side margins
     }
 	
 	var contentOffset: CGFloat = 0.0
@@ -205,29 +212,48 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 extension FeedViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source.count
     }
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! FeedCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
         cell.track = source[indexPath.row]
-        
+
         cell.onPlay = { [weak self] track in
             self?.presenter.play(trackUID: track)
         }
-        
+
         cell.onLike = { [weak self] track in
             self?.presenter.like(trackUID: track)
         }
-        
-        return cell
+		
+        return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
+	
+	override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 24
+	}
+	
+	override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 0.01
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		return nil
+	}
+	
+	override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .white
+		return view
+	}
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return self.cellHeight
         return FeedCell.recommendedHeight()
     }
     
