@@ -102,7 +102,6 @@ class FeedPresenter: FeedPresenterProtocol {
         } else {
             audioManager.playItem(with: trackUID)
         }
-        
     }
     
     func like(trackUID: Int) {

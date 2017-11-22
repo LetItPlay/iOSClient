@@ -7,80 +7,39 @@ class NewFeedTableViewCell: UITableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
-	let iconImageView: UIImageView = {
-		let imageView: UIImageView = UIImageView()
-		imageView.layer.masksToBounds = true
-		imageView.layer.cornerRadius = 10
-		imageView.backgroundColor = .red
-		imageView.snp.makeConstraints({ (maker) in
-			maker.width.equalTo(20)
-			maker.height.equalTo(20)
-		})
-		return imageView
-	}()
+	let audioManager = AppManager.shared.audioManager
+	public var onPlay: ((String) -> Void)?
+	public var onLike: ((Int) -> Void)?
 	
-	let channelLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
-		label.textColor = UIColor.init(white: 2/255.0, alpha: 1)
-		label.textAlignment = .left
-		label.lineBreakMode = .byTruncatingTail
-		label.numberOfLines = 1
-		label.text = "123 123 123"
-		return label
-	}()
-
-	let timeAgoLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
-		label.textColor = UIColor.init(white: 74/255.0, alpha: 1)
-		label.textAlignment = .right
-		label.text = "9 days ago"
-		return label
-	}()
-
-	let mainPictureImageView: UIImageView = {
-		let imageView = UIImageView()
-		imageView.image = UIImage.init(named: "channelPrevievImg")
-		imageView.contentMode = .scaleAspectFill
-		imageView.layer.masksToBounds = true
-		imageView.layer.cornerRadius = 9.0
-		imageView.layer.borderWidth = 1.0
-		imageView.layer.borderColor = UIColor.init(red: 1, green: 102.0/255, blue: 102.0/255, alpha: 0.06).cgColor
-		return imageView
-	}()
-
-	let titleLabel: UILabel = {
-		let label = UILabel()
-		label.numberOfLines = 5
-		label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-		label.textColor = .white
-		label.lineBreakMode = .byTruncatingTail
-		label.textAlignment = .left
-		return label
-	}()
-	
-	var dataLabels: [IconLabelType: IconedLabel] = [:]
-	
-	let likeButton: UIButton = {
-		let button = UIButton()
-		button.setImage(UIImage.init(named: "likeActiveFeed") , for: .selected)
-		button.setImage(UIImage.init(named: "likeInactiveFeed"), for: .normal)
-		return button
-	}()
-	
-	let playButton: UIButton = {
-		let button = UIButton()
-		button.setImage(UIImage.init(named: "playFeed"), for: .normal)
-		button.setImage(UIImage.init(named: "pauseFeed"), for: .selected)
-		button.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
-		return button
-	}()
+	weak var track: Track? = nil {
+		didSet {
+			if let iconUrl = track?.findChannelImage() {
+				iconImageView.sd_setImage(with: iconUrl)
+			} else {
+				iconImageView.image = nil
+			}
+			
+			if let iconUrl = track?.image.buildImageURL() {
+				mainPictureImageView.sd_setImage(with: iconUrl)
+			} else {
+				mainPictureImageView.image = nil
+			}
+			let maxTime = track?.audiofile?.lengthSeconds ?? 0
+			
+			trackTitleLabel.setTitle(title: track?.name ?? "")
+			channelLabel.text = track?.findStationName()
+			
+			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
+			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
+			dataLabels[.time]?.setData(data: maxTime)
+			
+			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
+			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
+		}
+	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-		self.selectionStyle = .none
 		
 		viewInitialize()
 		
@@ -131,37 +90,77 @@ class NewFeedTableViewCell: UITableViewCell {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	let audioManager = AppManager.shared.audioManager
-	public var onPlay: ((String) -> Void)?
-	public var onLike: ((Int) -> Void)?
+	let iconImageView: UIImageView = {
+		let imageView: UIImageView = UIImageView()
+		imageView.layer.masksToBounds = true
+		imageView.layer.cornerRadius = 10
+		imageView.backgroundColor = .red
+		imageView.snp.makeConstraints({ (maker) in
+			maker.width.equalTo(20)
+			maker.height.equalTo(20)
+		})
+		return imageView
+	}()
 	
+	let channelLabel: UILabel = {
+		let label = UILabel()
+		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.medium)
+		label.textColor = UIColor.init(white: 2/255.0, alpha: 1)
+		label.textAlignment = .left
+		label.lineBreakMode = .byTruncatingTail
+		label.numberOfLines = 1
+		label.text = "123 123 123"
+		return label
+	}()
 	
-	weak var track: Track? = nil {
-		didSet {
-			titleLabel.text = track?.name
-			channelLabel.text = track?.findStationName()
-			
-			if let iconUrl = track?.findChannelImage() {
-				iconImageView.sd_setImage(with: iconUrl)
-			} else {
-				iconImageView.image = nil
-			}
-			
-			if let iconUrl = track?.image.buildImageURL() {
-				mainPictureImageView.sd_setImage(with: iconUrl)
-			} else {
-				mainPictureImageView.image = nil
-			}
-			let maxTime = track?.audiofile?.lengthSeconds ?? 0
-
-			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
-			dataLabels[.listens]?.setData(data: Int64(track?.likeCount ?? 0))
-			dataLabels[.time]?.setData(data: maxTime)
-			
-			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
-			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
-		}
-	}
+	let timeAgoLabel: UILabel = {
+		let label = UILabel()
+		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
+		label.textColor = UIColor.init(white: 74/255.0, alpha: 1)
+		label.textAlignment = .right
+		label.text = "9 days ago"
+		return label
+	}()
+	
+	let mainPictureImageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.image = UIImage.init(named: "channelPrevievImg")
+		imageView.contentMode = .scaleAspectFill
+		imageView.layer.masksToBounds = true
+		imageView.layer.cornerRadius = 9.0
+		imageView.layer.borderWidth = 1.0
+		imageView.layer.borderColor = UIColor.init(red: 1, green: 102.0/255, blue: 102.0/255, alpha: 0.06).cgColor
+		return imageView
+	}()
+	
+	let titleLabel: UILabel = {
+		let label = UILabel()
+		label.numberOfLines = 5
+		label.font = UIFont.systemFont(ofSize: 24, weight: .regular)
+		label.textColor = .white
+		label.lineBreakMode = .byTruncatingTail
+		label.textAlignment = .left
+		return label
+	}()
+	
+	var dataLabels: [IconLabelType: IconedLabel] = [:]
+	
+	let likeButton: UIButton = {
+		let button = UIButton()
+		button.setImage(UIImage.init(named: "likeActiveFeed") , for: .selected)
+		button.setImage(UIImage.init(named: "likeInactiveFeed"), for: .normal)
+		return button
+	}()
+	
+	let playButton: UIButton = {
+		let button = UIButton()
+		button.setImage(UIImage.init(named: "playFeed"), for: .normal)
+		button.setImage(UIImage.init(named: "pauseFeed"), for: .selected)
+		button.imageEdgeInsets = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
+		return button
+	}()
+	
+	let trackTitleLabel: UndBlurLabel = UndBlurLabel()
 	
 	func viewInitialize() {
 		self.contentView.addSubview(mainPictureImageView)
@@ -264,10 +263,29 @@ class NewFeedTableViewCell: UITableViewCell {
 		}
 		likeBlurView.layer.masksToBounds = true
 		likeBlurView.layer.cornerRadius = 18
+		
+		mainPictureImageView.addSubview(trackTitleLabel)
+		trackTitleLabel.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(8)
+			make.bottom.equalTo(bottomBlur.snp.top).inset(-8)
+			make.right.equalTo(playBlurView.snp.left).inset(-22)
+		}
 	}
 
 	required init?(coder aDecoder: NSCoder) {
 		return nil
+	}
+	
+	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+		let likePoint = self.convert(point, to: likeButton)
+		let playPoint = self.convert(point, to: playButton)
+		if likeButton.frame.contains(likePoint) {
+			return likeButton
+		}
+		if playButton.frame.contains(playPoint) {
+			return playButton
+		}
+		return super.hitTest(point, with: event)
 	}
 
 }

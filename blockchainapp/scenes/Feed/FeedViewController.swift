@@ -174,7 +174,7 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 		tableView.backgroundColor = .white
 		tableView.backgroundView?.backgroundColor = .white
 		tableView.sectionIndexBackgroundColor = .white
-		
+		tableView.allowsSelection = false
 		refreshControl?.beginRefreshing()
         presenter.getData { (tracks) in
 
@@ -182,8 +182,6 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 		
 		self.cellHeight = self.tableView.frame.width - 16 * 2 // side margins
     }
-	
-	var contentOffset: CGFloat = 0.0
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { (tracks) in
@@ -199,14 +197,9 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
     func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
         source = tracks
         tableView.reloadData()
-//		tableView.contentOffset.y = self.contentOffset
         refreshControl?.endRefreshing()
     }
 
-	override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		self.contentOffset = scrollView.contentOffset.y
-	}
-	
 }
 
 extension FeedViewController {
@@ -220,19 +213,23 @@ extension FeedViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
-        cell.track = source[indexPath.row]
-
-        cell.onPlay = { [weak self] track in
-            self?.presenter.play(trackUID: track)
-        }
-
-        cell.onLike = { [weak self] track in
-            self?.presenter.like(trackUID: track)
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
 		
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
+	
+	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+		let cell = cell as? NewFeedTableViewCell
+		cell?.track = source[indexPath.section]
+		
+		cell?.onPlay = { [weak self] track in
+			self?.presenter.play(trackUID: track)
+		}
+		
+		cell?.onLike = { [weak self] track in
+			self?.presenter.like(trackUID: track)
+		}
+	}
 	
 	override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 24
