@@ -10,6 +10,8 @@
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
+		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
+		01AA89231FC5989E00D50C13 /* LikedTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
@@ -60,6 +62,8 @@
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
+		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedTrackTableViewCell.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -126,6 +130,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01AA891F1FC5610500D50C13 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
+				01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		CF2715311F97EA560038C81C /* about */ = {
 			isa = PBXGroup;
 			children = (
@@ -214,6 +227,7 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				01AA891F1FC5610500D50C13 /* Profile */,
 				CFCEA3201F98AD4700DFAE70 /* FullPlayer */,
 				CF2715311F97EA560038C81C /* about */,
 				CF4453711F5D8E8600660474 /* tab controller */,
@@ -508,6 +522,8 @@
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
 				CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				01AA89231FC5989E00D50C13 /* LikedTrackTableViewCell.swift in Sources */,
+				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,

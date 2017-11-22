@@ -20,6 +20,8 @@ class FullPlayerViewController: UIViewController {
     @IBOutlet weak var volumeBackView: UIView!
     
     @IBOutlet weak var photoImageView: UIImageView!
+	@IBOutlet weak var bluredPhotoImageView: UIImageView!
+	
     
     @IBOutlet weak var stationLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!

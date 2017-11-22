@@ -30,6 +30,9 @@ class MainTabViewController: UITabBarController {
         super.viewDidAppear(animated)
         
         selectedIndex = 2
+		
+		let nvc = UINavigationController(rootViewController: ProfileViewController.init())
+		self.viewControllers?.append(nvc)
     }
 }
 

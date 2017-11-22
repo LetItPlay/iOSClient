@@ -35,7 +35,6 @@ class DBManager {
             
             inRealm.add(newStat)
         }
-        
     }
     
     func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: String?, publishDate: String) {
