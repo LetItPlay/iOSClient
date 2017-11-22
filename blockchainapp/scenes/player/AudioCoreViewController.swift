@@ -36,6 +36,7 @@ class AudioCoreViewController: UIViewController {
 
         collectionView.dataSource = self
         collectionView.delegate   = self
+		collectionView.register(NewPlayCollectionViewCell.self, forCellWithReuseIdentifier: NewPlayCollectionViewCell.cellID)
         
         let realm = try! Realm()
         tracks = realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
@@ -145,7 +146,7 @@ class AudioCoreViewController: UIViewController {
                 let ip = IndexPath(item: self.audioManager.currentIndex, section: 0)
                 self.collectionView.scrollToItem(at: ip,
                                                  at: UICollectionViewScrollPosition.right,
-                                                 animated: true)
+                                                 animated: false)
             }
         }
         
@@ -296,7 +297,7 @@ extension AudioCoreViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! AudioCoreCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewPlayCollectionViewCell.cellID, for: indexPath) as! NewPlayCollectionViewCell //AudioCoreCell
         cell.track = tracks?[indexPath.row]
         return cell
     }
