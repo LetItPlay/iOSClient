@@ -245,7 +245,7 @@ extension FeedViewController {
 	
 	override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 		let view = UIView()
-		view.backgroundColor = .white
+		view.backgroundColor = .clear
 		return view
 	}
     

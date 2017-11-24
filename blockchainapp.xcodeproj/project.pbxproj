@@ -11,8 +11,14 @@
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
 		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
-		01AA89231FC5989E00D50C13 /* LikedTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */; };
+		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
 		01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */; };
+		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
+		01E52E3E1FC7FA6600CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
+		01E52E3F1FC7FA6F00CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
+		01E52E401FC7FA6F00CCFCC2 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01E52E431FC7FEAF00CCFCC2 /* NewPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */; };
+		01E52E461FC82EF300CCFCC2 /* NewPlayerPopupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
@@ -59,13 +65,31 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		01E52E411FC7FA6F00CCFCC2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				01E52E401FC7FA6F00CCFCC2 /* LNPopupController.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
 		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedTrackTableViewCell.swift; sourceTree = "<group>"; };
+		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
 		01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewPlayCollectionViewCell.swift; path = scenes/FullPlayer/NewPlayCollectionViewCell.swift; sourceTree = "<group>"; };
+		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
+		01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LNPopupController.framework; path = Carthage/Build/iOS/LNPopupController.framework; sourceTree = "<group>"; };
+		01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerViewController.swift; sourceTree = "<group>"; };
+		01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerPopupItem.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -112,6 +136,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */,
+				01E52E3E1FC7FA6600CCFCC2 /* LNPopupController.framework in Frameworks */,
+				01E52E3F1FC7FA6F00CCFCC2 /* LNPopupController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,9 +162,18 @@
 			isa = PBXGroup;
 			children = (
 				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
-				01AA89221FC5989E00D50C13 /* LikedTrackTableViewCell.swift */,
+				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		01E52E3A1FC7E33900CCFCC2 /* UI Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
+				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
+			);
+			name = "UI Extensions";
 			sourceTree = "<group>";
 		};
 		CF2715311F97EA560038C81C /* about */ = {
@@ -174,6 +209,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
+				01E52E3A1FC7E33900CCFCC2 /* UI Extensions */,
 				CF44535F1F56C9D700660474 /* scenes */,
 				CF44535C1F569D1E00660474 /* extensions */,
 				CF4453571F553FE400660474 /* models */,
@@ -247,7 +283,6 @@
 				CF4453631F56CA5800660474 /* FeedPresenter.swift */,
 				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
 				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
-				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
 			);
 			name = Feed;
 			sourceTree = "<group>";
@@ -286,6 +321,8 @@
 				CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */,
 				CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */,
 				CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */,
+				01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */,
+				01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */,
 			);
 			name = FullPlayer;
 			sourceTree = "<group>";
@@ -302,6 +339,7 @@
 		FA0295970B9760974875F641 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */,
 				68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */,
 			);
 			name = Frameworks;
@@ -320,6 +358,7 @@
 				CF4453241F54139900660474 /* Resources */,
 				85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */,
 				CE6A97D7F56884174CDDB3E3 /* [CP] Copy Pods Resources */,
+				01E52E411FC7FA6F00CCFCC2 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -475,6 +514,7 @@
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/ShadowView/ShadowView.framework",
+				"${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyAudioManager/SwiftyAudioManager.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -487,6 +527,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ShadowView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkeletonView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyAudioManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
@@ -523,18 +564,21 @@
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
+				01E52E431FC7FEAF00CCFCC2 /* NewPlayerViewController.swift in Sources */,
 				CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
-				01AA89231FC5989E00D50C13 /* LikedTrackTableViewCell.swift in Sources */,
+				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,
+				01E52E461FC82EF300CCFCC2 /* NewPlayerPopupItem.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
 				01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
+				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
@@ -712,6 +756,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = blockchainapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -731,6 +779,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = UW85D37HPT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = blockchainapp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

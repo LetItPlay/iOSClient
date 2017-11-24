@@ -33,7 +33,7 @@ class ProfileViewController: UIViewController {
 		
 		self.navigationController?.setNavigationBarHidden(true, animated: false)
 		
-		self.tableView.register(LikedTrackTableViewCell.self, forCellReuseIdentifier: LikedTrackTableViewCell.cellID)
+		self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
@@ -74,7 +74,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: LikedTrackTableViewCell.cellID)
+		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID)
 		
 		return cell ?? UITableViewCell.init()
 	}
@@ -102,7 +102,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return LikedTrackTableViewCell.cellHeight
+		return SmallTrackTableViewCell.height(text: " ", width: tableView.frame.width)
 	}
 }
 

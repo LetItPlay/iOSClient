@@ -8,11 +8,10 @@
 
 import UIKit
 import SnapKit
-import DynamicBlurView
 
 class UndBlurLabel: UIView {
 	
-	let blurView = UIVisualEffectView.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.regular))//: DynamicBlurView = DynamicBlurView.init(frame: CGRect.zero)
+	let blurView = UIVisualEffectView.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.regular))
 	let label: UILabel = UILabel.init(frame: CGRect.zero)
 	let shapeLayer: CAShapeLayer = CAShapeLayer()
 	
@@ -51,7 +50,7 @@ class UndBlurLabel: UIView {
 	func updateShape(text: String) {
 		let widths = self.calcLinesWidths(text: formatString(text: text, calc: true), frame: self.label.frame).map({$0 + 8 + 4})
 		if widths.count > 0 {
-			var tooBig = widths.count > 3
+			let tooBig = widths.count > 3
 			let path = UIBezierPath.init()
 			path.move(to: CGPoint.zero)
 			path.addLine(to: CGPoint.init(x: min(widths[0], self.frame.width), y: 0))
