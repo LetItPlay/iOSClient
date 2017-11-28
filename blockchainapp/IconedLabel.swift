@@ -1,7 +1,13 @@
 import UIKit
 
 enum IconLabelType: String {
-	case playingIndicator = "playingIcon", time = "timeCount", comments = "commentCount", likes = "likesCount", listens = "listensCount"
+	case
+	playingIndicator = "playingIcon",
+	time = "timeCount",
+	comments = "commentCount",
+	likes = "likesCount",
+	listens = "listensCount",
+	subs = "subscriberIcon"
 }
 
 class IconedLabel: UIView {
