@@ -18,7 +18,7 @@ class UndBlurLabel: UIView {
 	init() {
 		super.init(frame: CGRect.zero)
 		
-		self.backgroundColor = UIColor.red.withAlphaComponent(0.3)
+		self.backgroundColor = AppColor.Element.redBlur
 		
 		self.addSubview(blurView)
 		blurView.snp.makeConstraints { (make) in
