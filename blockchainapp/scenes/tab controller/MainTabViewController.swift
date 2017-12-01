@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import LNPopupController
 
 class MainTabViewController: UITabBarController {
 
@@ -14,15 +15,40 @@ class MainTabViewController: UITabBarController {
         super.viewDidLoad()
 
         if let playerVC = AppManager.shared.audioPlayer {
-            view.addSubview(playerVC.view)
-            
-            playerVC.view.translatesAutoresizingMaskIntoConstraints = false
-            playerVC.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-            playerVC.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-            playerVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -49).isActive = true
-            playerVC.view.heightAnchor.constraint(equalToConstant: 72).isActive = true
+//            view.addSubview(playerVC.view)
+//
+//            playerVC.view.translatesAutoresizingMaskIntoConstraints = false
+//            playerVC.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//            playerVC.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//            playerVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -49).isActive = true
+//            playerVC.view.heightAnchor.constraint(equalToConstant: 72).isActive = true
+			
+//			DemoPopupContentViewController* demoVC = [DemoPopupContentViewController new];
+//			demoVC.view.backgroundColor = [UIColor redColor];
+//			demoVC.popupItem.title = @"Hello World";
+//			demoVC.popupItem.subtitle = @"And a subtitle!";
+//			demoVC.popupItem.progress = 0.34;
+//
+//			[self.tabBarController presentPopupBarWithContentViewController:demoVC animated:YES completion:nil];
+			
+			let vc = PopupController()
+			
+			vc.popupItem.title = "Hello world! Hello world! "
+			vc.popupItem.subtitle = "I love Swift! I love Swift!"
+			
+			vc.popupItem.progress = 0.34
+			vc.popupBar.progressViewStyle = .bottom
+			vc.popupItem.image = UIImage.init(named: "channelPrevievImg")
+			self.presentPopupBar(withContentViewController: vc, animated: true, completion: nil)
+			
+			let player = PlayerView.init(frame: CGRect.zero)
+			self.popupContentView.addSubview(player)
+			
+			player.snp.makeConstraints({ (make) in
+				make.edges.equalToSuperview()
+			})
         }
-        
+		
         AppManager.shared.rootTabBarController = self
     }
     

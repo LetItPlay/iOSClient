@@ -13,4 +13,5 @@ target 'blockchainapp' do
   pod "SnapKit"#, '~> 3.0.0'
   pod "TagListView"#, '~> 1.0'
   pod "DynamicBlurView"
+  pod "MarqueeLabel/Swift"
 end

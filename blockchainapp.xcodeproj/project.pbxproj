@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */; };
+		01321B661FCDADFF009BFE62 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; };
+		01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
@@ -14,18 +18,15 @@
 		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
 		01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
-		01E52E3E1FC7FA6600CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
-		01E52E3F1FC7FA6F00CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
-		01E52E401FC7FA6F00CCFCC2 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		01E52E431FC7FEAF00CCFCC2 /* NewPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */; };
-		01E52E461FC82EF300CCFCC2 /* NewPlayerPopupItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */; };
+		01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31641FD1596400FB2B9E /* PlayerView.swift */; };
+		01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FF31661FD16FBA00FB2B9E /* Assets.xcassets */; };
+		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
 		CF44532F1F54139900660474 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF44532D1F54139900660474 /* Main.storyboard */; };
-		CF4453311F54139900660474 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CF4453301F54139900660474 /* Assets.xcassets */; };
 		CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF4453321F54139900660474 /* LaunchScreen.storyboard */; };
 		CF44533F1F54139900660474 /* blockchainappTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44533E1F54139900660474 /* blockchainappTests.swift */; };
 		CF44534A1F54139900660474 /* blockchainappUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453491F54139900660474 /* blockchainappUITests.swift */; };
@@ -44,7 +45,6 @@
 		CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */; };
 		CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */; };
 		CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */; };
-		E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,13 +66,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		01E52E411FC7FA6F00CCFCC2 /* Embed Frameworks */ = {
+		01321B681FCDADFF009BFE62 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				01E52E401FC7FA6F00CCFCC2 /* LNPopupController.framework in Embed Frameworks */,
+				01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -80,6 +80,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		01321B601FCDADEB009BFE62 /* LNPopupController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LNPopupController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
@@ -87,9 +90,9 @@
 		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
 		01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewPlayCollectionViewCell.swift; path = scenes/FullPlayer/NewPlayCollectionViewCell.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
-		01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LNPopupController.framework; path = Carthage/Build/iOS/LNPopupController.framework; sourceTree = "<group>"; };
-		01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerViewController.swift; sourceTree = "<group>"; };
-		01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPlayerPopupItem.swift; sourceTree = "<group>"; };
+		01FF31641FD1596400FB2B9E /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		01FF31661FD16FBA00FB2B9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -102,7 +105,6 @@
 		CF4453261F54139900660474 /* blockchainapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockchainapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF4453291F54139900660474 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CF44532E1F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		CF4453301F54139900660474 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CF4453331F54139900660474 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CF4453351F54139900660474 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF44533A1F54139900660474 /* blockchainappTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockchainappTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,9 +137,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7A2305896192C36F09A3E5C /* Pods_blockchainapp.framework in Frameworks */,
-				01E52E3E1FC7FA6600CCFCC2 /* LNPopupController.framework in Frameworks */,
-				01E52E3F1FC7FA6F00CCFCC2 /* LNPopupController.framework in Frameworks */,
+				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
+				01321B661FCDADFF009BFE62 /* LNPopupController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +173,7 @@
 			children = (
 				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
 				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
+				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
 			);
 			name = "UI Extensions";
 			sourceTree = "<group>";
@@ -215,10 +217,10 @@
 				CF4453571F553FE400660474 /* models */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
-				CF4453301F54139900660474 /* Assets.xcassets */,
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
 				CF4453351F54139900660474 /* Info.plist */,
 				CF27152F1F97C79A0038C81C /* Localizable.strings */,
+				01FF31661FD16FBA00FB2B9E /* Assets.xcassets */,
 			);
 			path = blockchainapp;
 			sourceTree = "<group>";
@@ -303,6 +305,8 @@
 				CF44536F1F5D78C000660474 /* PlayerViewController.swift */,
 				CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */,
 				01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */,
+				01321B691FCDB89C009BFE62 /* PopupController.swift */,
+				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -321,8 +325,6 @@
 				CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */,
 				CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */,
 				CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */,
-				01E52E421FC7FEAF00CCFCC2 /* NewPlayerViewController.swift */,
-				01E52E451FC82EF300CCFCC2 /* NewPlayerPopupItem.swift */,
 			);
 			name = FullPlayer;
 			sourceTree = "<group>";
@@ -339,7 +341,8 @@
 		FA0295970B9760974875F641 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */,
+				01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */,
+				01321B601FCDADEB009BFE62 /* LNPopupController.framework */,
 				68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */,
 			);
 			name = Frameworks;
@@ -358,7 +361,7 @@
 				CF4453241F54139900660474 /* Resources */,
 				85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */,
 				CE6A97D7F56884174CDDB3E3 /* [CP] Copy Pods Resources */,
-				01E52E411FC7FA6F00CCFCC2 /* Embed Frameworks */,
+				01321B681FCDADFF009BFE62 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -462,7 +465,7 @@
 			files = (
 				CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */,
 				CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */,
-				CF4453311F54139900660474 /* Assets.xcassets in Resources */,
+				01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */,
 				CF44532F1F54139900660474 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -510,11 +513,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/ShadowView/ShadowView.framework",
-				"${BUILT_PRODUCTS_DIR}/SkeletonView/SkeletonView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyAudioManager/SwiftyAudioManager.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -523,11 +526,11 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ShadowView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SkeletonView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyAudioManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
@@ -564,15 +567,15 @@
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
-				01E52E431FC7FEAF00CCFCC2 /* NewPlayerViewController.swift in Sources */,
 				CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
+				01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */,
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
+				01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,
-				01E52E461FC82EF300CCFCC2 /* NewPlayerPopupItem.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
 				01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */,
@@ -580,6 +583,7 @@
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
+				01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,

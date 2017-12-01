@@ -45,7 +45,7 @@ class FullPlayerViewController: UIViewController {
         nameLabel.font = UIFont(name: ".SFUIText-Bold", size: 18)
         stationLabel.font = UIFont(name: ".SFUIText-Medium", size: 18)
 
-        progressSliderView.setThumbImage(UIImage.circle(diameter: 14, color: UIColor.vaRed), for: UIControlState.normal)
+        progressSliderView.setThumbImage(UIColor.vaRed.circle(diameter: 14), for: UIControlState.normal)
         
         photoImageView.clipsToBounds = true
         photoImageView.layer.cornerRadius = 7
@@ -55,7 +55,7 @@ class FullPlayerViewController: UIViewController {
         volumeBackView.addSubview(myVolumeView)
         myVolumeView.translatesAutoresizingMaskIntoConstraints = false
         myVolumeView.tintColor = UIColor.vaRed
-        myVolumeView.setVolumeThumbImage(UIImage.circle(diameter: 14, color: UIColor.white), for: UIControlState.normal)
+        myVolumeView.setVolumeThumbImage(UIColor.white.circle(diameter: 14), for: UIControlState.normal)
         myVolumeView.topAnchor.constraint(equalTo: volumeBackView.topAnchor).isActive = true
         myVolumeView.bottomAnchor.constraint(equalTo: volumeBackView.bottomAnchor).isActive = true
         myVolumeView.leftAnchor.constraint(equalTo: volumeBackView.leftAnchor).isActive = true

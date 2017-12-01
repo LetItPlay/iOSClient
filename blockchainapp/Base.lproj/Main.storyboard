@@ -51,7 +51,7 @@
         <!--Full Player View Controller-->
         <scene sceneID="VDZ-hA-Bbr">
             <objects>
-                <viewController id="zzw-cO-c2q" customClass="FullPlayerViewController" customModule="blockchainapp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="playerSB" id="zzw-cO-c2q" customClass="FullPlayerViewController" customModule="blockchainapp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="U9j-HW-3Ta"/>
                         <viewControllerLayoutGuide type="bottom" id="3Gv-un-CZb"/>
