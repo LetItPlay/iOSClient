@@ -32,21 +32,8 @@ class MainTabViewController: UITabBarController {
 //			[self.tabBarController presentPopupBarWithContentViewController:demoVC animated:YES completion:nil];
 			
 			let vc = PopupController()
-			
-			vc.popupItem.title = "Hello world! Hello world! "
-			vc.popupItem.subtitle = "I love Swift! I love Swift!"
-			
-			vc.popupItem.progress = 0.34
-			vc.popupBar.progressViewStyle = .bottom
-			vc.popupItem.image = UIImage.init(named: "channelPrevievImg")
 			self.presentPopupBar(withContentViewController: vc, animated: true, completion: nil)
 			
-			let player = PlayerView.init(frame: CGRect.zero)
-			self.popupContentView.addSubview(player)
-			
-			player.snp.makeConstraints({ (make) in
-				make.edges.equalToSuperview()
-			})
         }
 		
         AppManager.shared.rootTabBarController = self

@@ -97,8 +97,7 @@ class PlayerViewController: UIViewController {
 //        guard (notification.object as? AudioManager) === audioManager else {
 //            return
 //        }
-        
-        showPlayer()
+        self.showPlayer()
     }
     
     @objc func audioManagerPaused(_ notification: Notification) {

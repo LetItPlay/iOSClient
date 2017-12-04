@@ -12,20 +12,34 @@ import MarqueeLabel
 
 class PlayerView: UIView {
 	
-	let underblurimageView = UIImageView()
+	let underblurimageView: UIImageView = {
+		let imageView = UIImageView()
+		imageView.contentMode = .scaleAspectFill
+		imageView.layer.masksToBounds = true
+		imageView.isUserInteractionEnabled = false
+		
+		return imageView
+	}()
 	let coverImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 7
-		
-		imageView.layer.shadowColor = UIColor.black.cgColor
-		imageView.layer.shadowOffset = CGSize.zero
-		imageView.layer.shadowRadius = 10.0
-		imageView.layer.shadowOpacity = 0.1
-		imageView.layer.shouldRasterize = true
+		imageView.contentMode = .scaleAspectFill
+		imageView.layer.masksToBounds = true
 		
 		imageView.isUserInteractionEnabled = false
 		
 		return imageView
+	}()
+	let shadowLayer: CALayer = {
+		let layer = CALayer()
+		
+		layer.shadowColor = UIColor.black.cgColor
+		layer.shadowOffset = CGSize.zero
+		layer.shadowRadius = 5.0
+		layer.shadowOpacity = 0.3
+		layer.shouldRasterize = true
+		
+		return layer
 	}()
 	
 	let trackProgressView: TimedSlider = TimedSlider(frame: CGRect.zero)
@@ -33,19 +47,23 @@ class PlayerView: UIView {
 		let label = MarqueeLabel(frame: CGRect.zero, duration: 16.0, fadeLength: 16)
 		label.font = AppFont.Title.mid
 		label.textColor = AppColor.Title.dark
+		label.textAlignment = .center
 		return label
 	}()
 	let trackNameLabel: MarqueeLabel = {
 		let label = MarqueeLabel(frame: CGRect.zero, duration: 16.0, fadeLength: 16)
 		label.font = AppFont.Title.midBold
 		label.textColor = AppColor.Title.dark
+		label.textAlignment = .center
 		return label
 	}()
 	let playButton: UIButton = {
 		let button = UIButton()
 		button.setBackgroundImage(UIColor.red.img(), for: .normal)
+		button.setBackgroundImage(UIColor.red.withAlphaComponent(0.7).img(), for: .highlighted)
 		button.setImage(UIImage(named: "playerPlay"), for: .normal)
 		button.setImage(UIImage(named: "playerPause"), for: .selected)
+		button.adjustsImageWhenHighlighted = false
 		button.layer.cornerRadius = 35
 		button.layer.masksToBounds = true
 		button.snp.makeConstraints({ (make) in
@@ -57,14 +75,17 @@ class PlayerView: UIView {
 	let trackChangeButtons: (next: UIButton, prev: UIButton) = {
 		let arr = [UIButton(), UIButton()]
 		arr.forEach({ (button) in
+			button.layer.cornerRadius = 30
+			button.layer.masksToBounds = true
+			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
 			button.snp.makeConstraints({ (make) in
 				make.width.equalTo(60)
 				make.height.equalTo(60)
 			})
 		})
 		
-		arr.first!.setImage(UIImage(named: "nextInacteive"), for: .normal)
-		arr.last!.setImage(UIImage(named: "backInacteive"), for: .normal)
+		arr.first!.setImage(UIImage(named: "nextInactive"), for: .normal)
+		arr.last!.setImage(UIImage(named: "prevInactive"), for: .normal)
 		
 		return (next: arr.first!, prev: arr.last!)
 	}()
@@ -72,7 +93,13 @@ class PlayerView: UIView {
 	let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
 		let arr = [UIButton(), UIButton()]
 		arr.forEach({ (button) in
-			
+			button.layer.cornerRadius = 30
+			button.layer.masksToBounds = true
+			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
+			button.snp.makeConstraints({ (make) in
+				make.width.equalTo(60)
+				make.height.equalTo(60)
+			})
 		})
 		
 		arr.first!.setImage(UIImage(named: "playerForw"), for: .normal)
@@ -81,7 +108,7 @@ class PlayerView: UIView {
 		return (forw: arr.first!, backw: arr.last!)
 	}()
 	
-	let volumeSlider: UISlider = {
+	let volumeSlider: CustomSlider = {
 		let slider = CustomSlider(frame: CGRect.zero)
 		slider.minimumTrackTintColor = AppColor.Element.subscribe
 		slider.maximumTrackTintColor = AppColor.Element.subscribe.withAlphaComponent(0.2)
@@ -98,24 +125,28 @@ class PlayerView: UIView {
 	
 	func viewInitialize() {
 		
-		underblurimageView.backgroundColor = .red
-		coverImageView.backgroundColor = UIColor.yellow
+		self.backgroundColor = UIColor.white
+		
+		underblurimageView.image = UIImage(named: "channelPrevievImg")
+		coverImageView.image = UIImage(named: "channelPrevievImg")
 		
 		underblurimageView.isUserInteractionEnabled = false
 		
 		addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(60)
-			make.left.equalToSuperview().inset(25)
-			make.right.equalToSuperview().inset(25)
+			make.top.equalToSuperview().inset(70)
+			make.left.equalToSuperview().inset(30)
+			make.right.equalToSuperview().inset(30)
 			make.width.equalTo(underblurimageView.snp.height)
 		}
 		
-		let blur = UIVisualEffectView.init(effect: UIBlurEffect.init(style: .prominent))
+		let blur = UIVisualEffectView.init(effect: UIBlurEffect.init(style: .light))
 		addSubview(blur)
 		blur.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview()
 		}
+		
+		blur.layer.addSublayer(shadowLayer)
 		
 		blur.contentView.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
@@ -157,25 +188,25 @@ class PlayerView: UIView {
 		blur.contentView.addSubview(trackSeekButtons.backw)
 		trackSeekButtons.backw.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.right.equalTo(playButton.snp.left).inset(-20)
+			make.right.equalTo(playButton.snp.left).inset(-12)
 		}
 		
 		blur.contentView.addSubview(trackSeekButtons.forw)
 		trackSeekButtons.forw.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.left.equalTo(playButton.snp.right).inset(-20)
+			make.left.equalTo(playButton.snp.right).inset(-12)
 		}
 		
 		blur.contentView.addSubview(trackChangeButtons.next)
 		trackChangeButtons.next.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-20)
+			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-2)
 		}
 		
 		blur.contentView.addSubview(trackChangeButtons.prev)
 		trackChangeButtons.prev.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-20)
+			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-2)
 		}
 		
 		let minVol = UIImageView(image: UIImage(named: "volMin"))
@@ -205,7 +236,8 @@ class PlayerView: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		
-		coverImageView.layer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: -10, y: -10), size: CGSize.init(width: coverImageView.frame.width, height: coverImageView.frame.height)), cornerRadius: 130).cgPath
+		self.shadowLayer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: underblurimageView.frame.width, height: underblurimageView.frame.height)), cornerRadius: 7).cgPath
+		self.shadowLayer.frame = self.underblurimageView.frame
 		self.channelNameLabel.fadeLength = 16
 		self.trackNameLabel.fadeLength = 16
 	}

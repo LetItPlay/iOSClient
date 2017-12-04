@@ -13,7 +13,7 @@ class CustomSlider: UISlider {
 	override func trackRect(forBounds bounds: CGRect) -> CGRect {
 		var frame = bounds
 		frame.size.height = 4
-		frame.origin.y = self.frame.height / 2 - frame.size.height
+		frame.origin.y = self.frame.height / 2 - frame.size.height / 2
 		return frame
 	}
 }

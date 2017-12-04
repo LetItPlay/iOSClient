@@ -1,6 +1,6 @@
 PODS:
   - DynamicBlurView (2.0.0)
-  - MarqueeLabel/Swift (3.1.3)
+  - MarqueeLabel/Swift (3.1.4)
   - Realm (3.0.2):
     - Realm/Headers (= 3.0.2)
   - Realm/Headers (3.0.2)
@@ -37,7 +37,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   DynamicBlurView: 7b1bfbc1e7a0606b8a1855ff809ccaccfbda6b30
-  MarqueeLabel: baa5753dcbd36dca080e1f5c589a665aa5c906f1
+  MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
   RealmSwift: 695393add1b8f9d5fa75dd16e6355cf3935f71e2
   SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
