@@ -196,16 +196,8 @@ class PopupController: LNPopupCustomBarViewController {
 					if !self.playerView.trackProgressView.slider.isHighlighted {
 						self.playerView.trackProgressView.slider.value = Float(currentTime / maxTime)
 					}
-					
-					var minutes = Int(currentTime) / 60 % 60
-					var seconds = Int(currentTime) % 60
-					
-					self.playerView.trackProgressView.trackProgressLabels.start.text = String(format:"%02i:%02i", minutes, seconds)
-					
-					minutes = Int(maxTime - currentTime) / 60 % 60
-					seconds = Int(maxTime - currentTime) % 60
-					
-					self.playerView.trackProgressView.trackProgressLabels.fin.text = String(format:"-%02i:%02i", minutes, seconds)
+					self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(currentTime).formatTime()
+					self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(maxTime - currentTime)).formatTime()
 				})
 			}
 		}
