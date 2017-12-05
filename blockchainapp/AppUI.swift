@@ -12,6 +12,7 @@ struct AppColor {
 		static let tomato = UIColor.init(redInt: 243, greenInt: 71, blueInt: 36, alpha: 1)
 		static let subscribe = UIColor.red
 		static let redBlur = UIColor.init(redInt: 255, greenInt: 102, blueInt: 102, alpha: 0.6)
+		static let tagColor = UIColor.init(redInt: 31, greenInt: 60, blueInt: 74, alpha: 1)
 	}
 }
 

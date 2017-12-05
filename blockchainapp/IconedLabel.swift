@@ -7,15 +7,16 @@ enum IconLabelType: String {
 	comments = "commentCount",
 	likes = "likesCount",
 	listens = "listensCount",
-	subs = "subscriberIcon"
+	subs = "followersCount",
+	tracks = "tracksCount"
 }
 
 class IconedLabel: UIView {
 	var type: IconLabelType = .likes
 	private var textLabel: UILabel = {
 		let label = UILabel()
-		label.textColor = UIColor.init(white: 74.0/255, alpha: 1)
-		label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+		label.textColor = AppColor.Title.gray
+		label.font = AppFont.Text.mid
 		label.textAlignment = .left
 		label.text = "123"
 		return label
