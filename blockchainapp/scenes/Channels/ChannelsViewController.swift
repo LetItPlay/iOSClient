@@ -159,7 +159,14 @@ extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
-        cell.channel = source[indexPath.row]
+		let station = source[indexPath.row]
+        cell.channel = station
+		cell.subAction = {[weak self] channel in
+			if let ch = channel {
+				self?.presenter.select(station: ch)
+			}
+		}
+		cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)
         return cell
     }
     
@@ -171,15 +178,12 @@ extension ChannelsViewController {
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let channel = source[indexPath.row]
-//        presenter.select(station: channel)
 		let vc = ChannelsViewController()
 		self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        let channel = source[indexPath.row]
-//        presenter.select(station: channel)
+
     }
     
 }

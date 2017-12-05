@@ -77,6 +77,8 @@ class ChannelTableViewCell: UITableViewCell {
 	let subs: IconedLabel = IconedLabel(type: IconLabelType.subs)
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	
+	var subAction: (_ channel: Station?) -> Void = { _ in }
+	
 	weak var channel: Station? = nil {
 		didSet {
 			channelTitle.text = channel?.name
@@ -104,10 +106,16 @@ class ChannelTableViewCell: UITableViewCell {
 		}
 	}
 	
+	@objc func subPressed() {
+		self.subAction(self.channel)
+		self.subButton.isSelected = !self.subButton.isSelected
+	}
+	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		self.selectionStyle = .none
+		subButton.addTarget(self, action: #selector(subPressed), for: .touchUpInside)
 		
 		self.contentView.addSubview(channelImageView)
 		channelImageView.snp.makeConstraints { (make) in
