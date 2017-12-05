@@ -110,8 +110,9 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
-        
-        
+		
+		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
+		
         presenter.getData { [weak self] (channels) in
             self?.display(channels: channels)
         }
@@ -157,26 +158,28 @@ extension ChannelsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ChannelsCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
         cell.channel = source[indexPath.row]
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChannelsCell.recommendedHeight()
+        return ChannelTableViewCell.height//ChannelsCell.recommendedHeight()
     }
 }
 
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let channel = source[indexPath.row]
-        presenter.select(station: channel)
+//        let channel = source[indexPath.row]
+//        presenter.select(station: channel)
+		let vc = ChannelsViewController()
+		self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let channel = source[indexPath.row]
-        presenter.select(station: channel)
+//        let channel = source[indexPath.row]
+//        presenter.select(station: channel)
     }
     
 }
