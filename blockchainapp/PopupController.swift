@@ -84,6 +84,8 @@ class PopupController: LNPopupCustomBarViewController {
 			make.edges.equalToSuperview()
 		})
 		
+		self.playerView.volumeSlider.value = self.audioManager.currentVolume
+		
 		self.playButton.addTarget(self, action: #selector(playPressed(sender:)), for: .touchUpInside)
 		self.playerView.playButton.addTarget(self, action: #selector(playPressed(sender:)), for: .touchUpInside)
 		
@@ -95,7 +97,7 @@ class PopupController: LNPopupCustomBarViewController {
 		self.playerView.trackSeekButtons.forw.addTarget(self, action: #selector(remoteRightButtonPressed(_:)), for: .touchUpInside)
 		self.playerView.trackSeekButtons.backw.addTarget(self, action: #selector(remoteLeftButtonPressed(_:)), for: .touchUpInside)
 		
-		self.playerView.trackProgressView.addTarget(self, action: #selector(trackSeekChanged(_:)), for: .valueChanged)
+		self.playerView.trackProgressView.addTarget(self, action: #selector(trackSeekChanged(_:)), for: .touchUpInside)
 		
 		self.subscribe()
 	}
@@ -138,11 +140,13 @@ class PopupController: LNPopupCustomBarViewController {
 	}
 	
 	@objc func remoteLeftButtonPressed(_ sender: Any) {
-		audioManager.itemProgressPercent -= movePercent
+		let progress = audioManager.itemProgressPercent - 10.0/audioManager.maxTime
+		audioManager.itemProgressPercent = progress <= 0 ? 0 : progress
 	}
 	
 	@objc func remoteRightButtonPressed(_ sender: Any) {
-		audioManager.itemProgressPercent += movePercent
+		let progress = audioManager.itemProgressPercent + 10.0/audioManager.maxTime
+		audioManager.itemProgressPercent = progress >= 1.0 ? 0 : progress
 	}
 	
 	@objc func prevTrackButtonPressed(_ sender: Any) {
@@ -178,8 +182,6 @@ class PopupController: LNPopupCustomBarViewController {
 		updatePlayButtonState()
 	}
 	
-	private var movePercent = 0.05
-	
 	@objc func audioManagerPlaySoundOnSecond(_ notification: Notification) {
 		/*
 		let info: [String : Any] = ["itemID" : currentItemId ?? "",
@@ -188,7 +190,6 @@ class PopupController: LNPopupCustomBarViewController {
 		*/
 		if let currentTime = notification.userInfo?["currentTime"] as? Double,
 			let maxTime = notification.userInfo?["maxTime"] as? Double {
-			movePercent = 15 / maxTime
 			DispatchQueue.main.async {
 				UIView.animate(withDuration: 0.01, animations: {
 					self.popupItem.progress = Float(currentTime / maxTime)
@@ -254,6 +255,14 @@ class PopupController: LNPopupCustomBarViewController {
 		startAnimateVaiting()
 	}
 	
+	@objc func volumeChanged(_ notification: Notification) {
+		guard let volume = notification.userInfo?["volume"] as? Float else {
+			self.playerView.volumeSlider.value = 0
+			return
+		}
+		self.playerView.volumeSlider.value = volume
+	}
+	
 	private func startAnimateVaiting() {
 		DispatchQueue.main.async {
 			self.actIndicator.startAnimating()
@@ -303,6 +312,7 @@ class PopupController: LNPopupCustomBarViewController {
 											   selector: #selector(audioManagerNextPlayed(_:)),
 											   name: AudioManagerNotificationName.nextPlayed.notification,
 											   object: audioManager)
+		NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(_:)), name: AudioManagerNotificationName.volumeChanged.notification, object: audioManager)
 	}
 	
 	deinit {

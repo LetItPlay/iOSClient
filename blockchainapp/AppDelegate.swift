@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,7 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupAppearence() {
         UITabBar.appearance().tintColor = UIColor.vaActive
     }
-    
+	
+	func applicationWillEnterForeground(_ application: UIApplication) {
+		try? AVAudioSession.sharedInstance().setActive(true)
+	}
     //DB
     func migrate() {
         let config = Realm.Configuration(
@@ -49,5 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Realm.Configuration.defaultConfiguration = config
     }
 
+	func applicationDidBecomeActive(_ application: UIApplication) {
+		try? AVAudioSession.sharedInstance().setActive(true)
+	}
+	
 }
 

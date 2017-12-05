@@ -66,6 +66,11 @@ class TimedSlider: UIControl {
 		}
 		
 		self.slider.addTarget(self, action: #selector(sliderChanged(sender:)), for: .valueChanged)
+		self.slider.addTarget(self, action: #selector(sliderMoves(sender:)), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+	}
+	
+	@objc func sliderMoves(sender: UISlider) {
+		self.sendActions(for: .touchUpInside)
 	}
 	
 	@objc func sliderChanged(sender: UISlider) {
