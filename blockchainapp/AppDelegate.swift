@@ -20,7 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
         setupAppearence()
         migrate()
-        
+		
+		self.window = UIWindow.init(frame: UIScreen.main.bounds)
+		let tab = MainTabViewController()
+		self.window?.rootViewController = tab
+		self.window?.makeKeyAndVisible()
         return true
     }
 

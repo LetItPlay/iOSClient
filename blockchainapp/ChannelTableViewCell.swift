@@ -121,7 +121,6 @@ class ChannelTableViewCell: UITableViewCell {
 		channelImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
 			make.top.equalToSuperview().inset(8)
-			make.bottom.equalToSuperview().inset(16)
 			make.width.equalTo(164)
 			make.height.equalTo(164)
 		}

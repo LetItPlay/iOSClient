@@ -178,7 +178,7 @@ extension ChannelsViewController {
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let vc = ChannelsViewController()
+		let vc = ChannelViewController()
 		self.navigationController?.pushViewController(vc, animated: true)
     }
     

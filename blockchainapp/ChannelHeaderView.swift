@@ -71,7 +71,7 @@ class ChannelHeaderView: UIView {
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		
-		
+		self.viewInitialize(width: frame.width)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -128,5 +128,15 @@ class ChannelHeaderView: UIView {
 			make.top.equalTo(channelTitleView.snp.bottom).inset(14)
 			make.left.equalToSuperview().inset(16)
 		}
+		
+		self.addSubview(tagListView)
+		tagListView.snp.makeConstraints { (make) in
+			
+		}
+	}
+	
+	static func height(width: CGFloat) -> CGFloat {
+		
+		return 0.0
 	}
 }

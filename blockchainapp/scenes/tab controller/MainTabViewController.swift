@@ -10,32 +10,28 @@ import UIKit
 import LNPopupController
 
 class MainTabViewController: UITabBarController {
-
+	
+	let vc = PopupController()
+	
+	convenience init() {
+		self.init(nibName: nil, bundle: nil)
+		
+		let tabs: [String: (UIImage?, UIViewController)] = [
+			"Feed": (nil, FeedBuilder.build()),
+			"Trends": (nil, PopularBuilder.build()),
+			"Channels": (nil, ChannelsBuilder.build())]
+		
+		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
+			let nvc = UINavigationController(rootViewController: tuple.value.1)
+			nvc.tabBarItem = UITabBarItem(title: tuple.key, image: tuple.value.0, tag: 0)
+			return nvc
+		})
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        if let playerVC = AppManager.shared.audioPlayer {
-//            view.addSubview(playerVC.view)
-//
-//            playerVC.view.translatesAutoresizingMaskIntoConstraints = false
-//            playerVC.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//            playerVC.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-//            playerVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -49).isActive = true
-//            playerVC.view.heightAnchor.constraint(equalToConstant: 72).isActive = true
 			
-//			DemoPopupContentViewController* demoVC = [DemoPopupContentViewController new];
-//			demoVC.view.backgroundColor = [UIColor redColor];
-//			demoVC.popupItem.title = @"Hello World";
-//			demoVC.popupItem.subtitle = @"And a subtitle!";
-//			demoVC.popupItem.progress = 0.34;
-//
-//			[self.tabBarController presentPopupBarWithContentViewController:demoVC animated:YES completion:nil];
-			
-			let vc = PopupController()
-			self.presentPopupBar(withContentViewController: vc, animated: true, completion: nil)
-			
-        }
-		
+		self.presentPopupBar(withContentViewController: vc, animated: true, completion: nil)
         AppManager.shared.rootTabBarController = self
     }
     

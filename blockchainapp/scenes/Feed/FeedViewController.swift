@@ -144,12 +144,24 @@ class FeedCell: UITableViewCell {
     }
 }
 
+enum FeedType {
+	case feed, popular
+}
+
 class FeedViewController: UITableViewController, FeedViewProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 	var cellHeight: CGFloat = 343.0
 
+	var type: FeedType = .feed
+	
+	convenience init(type: FeedType) {
+		self.init(nibName: nil, bundle: nil)
+		
+		self.type = type
+	}
+	
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -158,7 +170,7 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         
         presenter = FeedPresenter(view: self, orderByListens: navigationController?.title == "42")
         
-        navigationController?.isNavigationBarHidden = true
+//        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
 
         tableView.dataSource = self

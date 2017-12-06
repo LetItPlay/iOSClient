@@ -16,6 +16,7 @@ import SDWebImage
 class PopupController: LNPopupCustomBarViewController {
 	
 	var playerView: PlayerView!
+	var playlistView: PlaylistView!
 	
 	var actIndicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
 	var playButton: UIButton = {
@@ -78,13 +79,7 @@ class PopupController: LNPopupCustomBarViewController {
 		self.popupBar.isHidden = true
 		
 		self.playerView = PlayerView.init(frame: self.view.frame)
-		self.view.addSubview(playerView)
-		
-		playerView.snp.makeConstraints({ (make) in
-			make.edges.equalToSuperview()
-		})
-		
-		self.playerView.volumeSlider.value = self.audioManager.currentVolume
+		self.playlistView = PlaylistView.init()
 		
 		self.playButton.addTarget(self, action: #selector(playPressed(sender:)), for: .touchUpInside)
 		self.playerView.playButton.addTarget(self, action: #selector(playPressed(sender:)), for: .touchUpInside)
@@ -98,6 +93,34 @@ class PopupController: LNPopupCustomBarViewController {
 		self.playerView.trackSeekButtons.backw.addTarget(self, action: #selector(remoteLeftButtonPressed(_:)), for: .touchUpInside)
 		
 		self.playerView.trackProgressView.addTarget(self, action: #selector(trackSeekChanged(_:)), for: .touchUpInside)
+		
+		
+		let scrollView = UIScrollView.init(frame: CGRect.zero)
+		self.view.addSubview(scrollView)
+		scrollView.snp.makeConstraints { (make) in
+			make.edges.equalToSuperview()
+		}
+		
+		scrollView.contentSize = CGSize.init(width: self.view.frame.width * 2, height: self.view.frame.height)
+		
+		scrollView.addSubview(playerView)
+		scrollView.isPagingEnabled = true
+		scrollView.bounces = false
+		
+		playerView.snp.makeConstraints({ (make) in
+			make.top.equalTo(self.view)
+			make.bottom.equalTo(self.view)
+			make.left.equalToSuperview()
+			make.width.equalTo(self.view.frame.width)
+		})
+		
+		scrollView.addSubview(playlistView)
+		playlistView.snp.makeConstraints { (make) in
+			make.width.equalTo(self.view.frame.width)
+			make.top.equalTo(self.view)
+			make.bottom.equalTo(self.view)
+			make.left.equalTo(playerView.snp.right)
+		}
 		
 		self.subscribe()
 	}

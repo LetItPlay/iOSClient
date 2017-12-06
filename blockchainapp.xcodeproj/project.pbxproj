@@ -12,6 +12,9 @@
 		01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
 		0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */; };
+		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
+		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
+		015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129F1FD7B25A002828F5 /* PlaylistView.swift */; };
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
@@ -24,9 +27,6 @@
 		01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31641FD1596400FB2B9E /* PlayerView.swift */; };
 		01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FF31661FD16FBA00FB2B9E /* Assets.xcassets */; };
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
-		01E52E3E1FC7FA6600CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
-		01E52E3F1FC7FA6F00CCFCC2 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; };
-		01E52E401FC7FA6F00CCFCC2 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
@@ -90,6 +90,9 @@
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
+		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
+		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
+		0158129F1FD7B25A002828F5 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
@@ -102,7 +105,6 @@
 		01FF31641FD1596400FB2B9E /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		01FF31661FD16FBA00FB2B9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
-		01E52E3D1FC7FA6600CCFCC2 /* LNPopupController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LNPopupController.framework; path = Carthage/Build/iOS/LNPopupController.framework; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -305,6 +307,7 @@
 				CF4453631F56CA5800660474 /* FeedPresenter.swift */,
 				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
 				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
+				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
 			);
 			name = Feed;
 			sourceTree = "<group>";
@@ -316,6 +319,7 @@
 				CF44536A1F57F50300660474 /* ChannelsPresenter.swift */,
 				CF44536C1F57F53100660474 /* ChannelsProtocol.swift */,
 				015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */,
+				0158129B1FD70561002828F5 /* ChannelsBuilder.swift */,
 			);
 			name = Channels;
 			sourceTree = "<group>";
@@ -328,6 +332,7 @@
 				01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */,
 				01321B691FCDB89C009BFE62 /* PopupController.swift */,
 				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
+				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -595,6 +600,8 @@
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
+				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
+				0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */,
 				01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,
@@ -612,6 +619,7 @@
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
+				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,
 				CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,
