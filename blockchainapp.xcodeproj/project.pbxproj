@@ -15,6 +15,7 @@
 		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
 		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
 		015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129F1FD7B25A002828F5 /* PlaylistView.swift */; };
+		015812A21FD80AF1002828F5 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812A11FD80AF1002828F5 /* AudioController.swift */; };
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
@@ -93,6 +94,7 @@
 		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
 		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
 		0158129F1FD7B25A002828F5 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
+		015812A11FD80AF1002828F5 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 				01321B691FCDB89C009BFE62 /* PopupController.swift */,
 				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
 				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
+				015812A11FD80AF1002828F5 /* AudioController.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 			files = (
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
+				015812A21FD80AF1002828F5 /* AudioController.swift in Sources */,
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
