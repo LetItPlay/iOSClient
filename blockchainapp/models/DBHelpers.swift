@@ -50,7 +50,7 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.tagString, new: tags ?? "")
             
             let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXXX"
+			formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
             
             changeCounter += updateIfNeeded(property: &track.publishedAt, new: formatter.date(from: publishDate) ?? Date())
             

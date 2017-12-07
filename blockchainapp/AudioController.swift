@@ -9,20 +9,13 @@
 import Foundation
 import SwiftyAudioManager
 
-enum AudioControllerUpdateNotification: String {
-	case playing = "PlayPressed",
-	paused = "PausePressed",
-	updateProgress = "ProgressUpdated",
-	waiting = "Waiting",
-	initialize = "Initializing",
-	failed = "Failed"
-	
-	func notification() -> NSNotification.Name {
-		return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
-	}
+protocol AudioControllerDelegate: class {
+	func updateTime(time: (current: Double, length: Double))
 }
 
 protocol AudioControllerProtocol: class {
+	weak var delegate: AudioControllerDelegate? {get set}
+	
 	var currentTrackIndex: Int {get}
 	var currentTrack: Track? {get}
 	var playlist: [Track] {get}
@@ -33,7 +26,9 @@ protocol AudioControllerProtocol: class {
 	
 	func setCurrentTrack(index: Int)
 	func setCurrentTrack(id: Int)
+	
 	func loadPlaylist(playlist:(String, [Track]))
+	func updatePlaylist()
 	
 	func popupPlayer(show: Bool, animated: Bool)
 }
@@ -43,20 +38,34 @@ enum AudioStatus {
 }
 
 enum AudioCommand {
-	case play, pause, next, prev, seekForward, seekBackward, seek(progress: Double)
+	case play(id: Int?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
 }
 
 class AudioController: AudioControllerProtocol {
 	
+	enum AudioStateNotification: String {
+		case playing = "Playing",
+		paused = "Paused",
+		loading = "Loading"
+		
+		func notification() -> NSNotification.Name {
+			return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
+		}
+	}
+	
+	static let main = AudioController()
+	
 	let audioManager = AppManager.shared.audioManager
+	
+	weak var delegate: AudioControllerDelegate?
 	
 	var playlistName: String = "Main"
 	var playlist: [Track] = []
-	var currentTrackIndex: Int = 0
+	var currentTrackIndex: Int = -1
 	var info: (current: Double, length: Double) = (current: 0.0, length: 0.0)
 	var currentTrack: Track? {
 		get {
-			return currentTrackIndex < playlist.count ? playlist[currentTrackIndex] : nil
+			return currentTrackIndex < playlist.count && currentTrackIndex >= 0 ? playlist[currentTrackIndex] : nil
 		}
 	}
 	var status: AudioStatus {
@@ -80,13 +89,16 @@ class AudioController: AudioControllerProtocol {
 	}
 	
 	func make(command: AudioCommand) {
-		
 		switch command {
-		case .play:
-			if audioManager.currentItem != nil {
-				audioManager.resume()
+		case .play(let id):
+			if let id = id, let index = self.playlist.index(where: {$0.id == id}) {
+				audioManager.playItem(at: index)
 			} else {
-				audioManager.playItem(at: currentTrackIndex)
+				if audioManager.isPlaying {
+					audioManager.pause()
+				} else {
+					audioManager.resume()
+				}
 			}
 			break
 		case .next:
@@ -106,27 +118,35 @@ class AudioController: AudioControllerProtocol {
 		case .seek(let progress):
 			audioManager.itemProgressPercent = progress
 			break
+		case .volume(let value):
+			break
 		default:
 			print("unknown command")
 		}
 	}
 	
 	func loadPlaylist(playlist: (String, [Track])) {
-		self.playlist = playlist.1
-		self.playlistName = playlist.0
 		
-		let items = self.playlist.map { (track) -> PlayerItem in
-			let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")
-			item.artist = track.findStationName() ?? "Various Artist"
-			item.title = track.name
-			item.autoLoadNext = true
-			item.autoPlay = true
+		if self.playlistName != playlist.0 {
+			self.playlist = playlist.1
+			self.playlistName = playlist.0
 			
-			return item
+			let items = self.playlist.map { (track) -> PlayerItem in
+				let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")
+				item.artist = track.findStationName() ?? "Various Artist"
+				item.title = track.name
+				item.autoLoadNext = true
+				item.autoPlay = true
+				
+				return item
+			}
+			audioManager.resetPlaylistAndStop()
+			let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
+			audioManager.add(playlist: [group])
 		}
-		audioManager.resetPlaylistAndStop()
-		let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
-		audioManager.add(playlist: [group])
+	}
+	
+	func updatePlaylist() {
 	}
 	
 	func setCurrentTrack(index: Int) {
@@ -185,14 +205,14 @@ class AudioController: AudioControllerProtocol {
 	// MARK: - AudioManager events
 	
 	@objc func audioManagerPaused(_ notification: Notification) {
-		if audioManager.isOnPause {
-			NotificationCenter.default.post(name: AudioControllerUpdateNotification.paused.notification(), object: nil)
+		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause {
+			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
 		}
 	}
 	
 	@objc func audioManagerEndPlaying(_ notification: Notification) {
-		if audioManager.isOnPause {
-			NotificationCenter.default.post(name: AudioControllerUpdateNotification.paused.notification(), object: nil)
+		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause {
+			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
 		}
 	}
 	
@@ -207,32 +227,57 @@ class AudioController: AudioControllerProtocol {
 			let maxTime = notification.userInfo?["maxTime"] as? Double {
 			self.info.current = currentTime
 			self.info.length = maxTime
-			NotificationCenter.default.post(name: AudioControllerUpdateNotification.updateProgress.notification(), object: nil)
 		}
 	}
 	
 	@objc func audioManagerFailed(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.failed.notification(), object: nil)
 	}
 	
 	@objc func audioManagerResume(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.playing.notification(), object: nil)
+		if let str = audioManager.currentItemId, let id = Int(str) {
+			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+		}
 	}
 	
 	@objc func audioManagerReadyToPlay(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.initialize.notification(), object: nil)
+		print("123")
 	}
 	
 	@objc func audioManagerNextPlayed(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.paused.notification(), object: nil)
+		if let id = self.currentTrack?.id {
+			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
+		}
+		if let str = audioManager.currentItemId, let id = Int(str) {
+			if let index = self.playlist.index(where: {$0.id == id}) {
+				currentTrackIndex = index
+			}
+			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+		}
 	}
 	
 	@objc func audioManagerPreviousPlayed(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.paused.notification(), object: nil)
+		if let id = self.currentTrack?.id {
+			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
+		}
+		if let str = audioManager.currentItemId, let id = Int(str) {
+			if let index = self.playlist.index(where: {$0.id == id}) {
+				currentTrackIndex = index
+			}
+			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+		}
 	}
 	
 	@objc func audioManagerRecievedPlay(_ notification: Notification) {
-		NotificationCenter.default.post(name: AudioControllerUpdateNotification.playing.notification(), object: nil)
+		if currentTrack != nil {
+			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": self.currentTrack?.id])
+		}
+		
+		if let str = audioManager.currentItemId, let id = Int(str) {
+			if let index = self.playlist.index(where: {$0.id == id}) {
+				currentTrackIndex = index
+			}
+			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+		}
 	}
 	
 	deinit {

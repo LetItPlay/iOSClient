@@ -168,7 +168,7 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        presenter = FeedPresenter(view: self, orderByListens: navigationController?.title == "42")
+        presenter = FeedPresenter(view: self, orderByListens: self.type == .popular)
         
 //        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
@@ -206,18 +206,22 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         // Dispose of any resources that can be recreated.
     }
     
-    func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int]) {
-        source = tracks
+    func display() {
+//        source = tracks
         tableView.reloadData()
         refreshControl?.endRefreshing()
     }
+	
+	func update(indexes: [Int]) {
+		tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .automatic)
+	}
 
 }
 
 extension FeedViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return source.count
+        return self.presenter.tracks.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -232,7 +236,9 @@ extension FeedViewController {
 	
 	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
-		cell?.track = source[indexPath.section]
+		let tuple = self.presenter.tracks[indexPath.section]
+		cell?.track = tuple.1
+		cell?.playButton.isSelected = tuple.0
 		
 		cell?.onPlay = { [weak self] track in
 			self?.presenter.play(trackUID: track)

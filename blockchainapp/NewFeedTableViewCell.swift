@@ -8,7 +8,7 @@ class NewFeedTableViewCell: UITableViewCell {
 	public static let cellID: String = "NewFeedCellID"
 	
 	let audioManager = AppManager.shared.audioManager
-	public var onPlay: ((String) -> Void)?
+	public var onPlay: ((Int) -> Void)?
 	public var onLike: ((Int) -> Void)?
 	
 	weak var track: Track? = nil {
@@ -43,37 +43,37 @@ class NewFeedTableViewCell: UITableViewCell {
 		
 		viewInitialize()
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPaused(_:)),
-											   name: AudioManagerNotificationName.paused.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerStartPlaying(_:)),
-											   name: AudioManagerNotificationName.startPlaying.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPaused(_:)),
-											   name: AudioManagerNotificationName.endPlaying.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerStartPlaying(_:)),
-											   name: AudioManagerNotificationName.resumed.notification,
-											   object: audioManager)
-		
+//		NotificationCenter.default.addObserver(self,
+//											   selector: #selector(audioManagerPaused(_:)),
+//											   name: AudioManagerNotificationName.paused.notification,
+//											   object: audioManager)
+//		NotificationCenter.default.addObserver(self,
+//											   selector: #selector(audioManagerStartPlaying(_:)),
+//											   name: AudioManagerNotificationName.startPlaying.notification,
+//											   object: audioManager)
+//		NotificationCenter.default.addObserver(self,
+//											   selector: #selector(audioManagerPaused(_:)),
+//											   name: AudioManagerNotificationName.endPlaying.notification,
+//											   object: audioManager)
+//		NotificationCenter.default.addObserver(self,
+//											   selector: #selector(audioManagerStartPlaying(_:)),
+//											   name: AudioManagerNotificationName.resumed.notification,
+//											   object: audioManager)
+//
 		self.playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
 		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
 	}
 	
 	@objc func playPressed(_: UIButton){
-		if track != nil {
-			onPlay?(track!.uniqString())
+		if let id = track?.id {
+			onPlay?(id)
 		}
 	}
 	
 	@objc func likePressed(_: UIButton) {
 		likeButton.isSelected = !likeButton.isSelected
-		if track != nil {
-			onLike?(track!.id)
+		if let id = track?.id {
+			onLike?(id)
 		}
 	}
 	

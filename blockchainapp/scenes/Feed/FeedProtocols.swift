@@ -12,11 +12,14 @@ typealias TrackResult = ([Track]) -> Void
 
 protocol FeedPresenterProtocol: class {
     func getData(onComplete: @escaping TrackResult)
-    
-    func play(trackUID: String)
+	
+	var tracks: [(Bool, Track)] {get}
+	
+    func play(trackUID: Int)
     func like(trackUID: Int)
 }
 
 protocol FeedViewProtocol: class {
-    func display(tracks: [Track], deletions: [Int], insertions: [Int], modifications: [Int])
+    func display()
+	func update(indexes: [Int])
 }
