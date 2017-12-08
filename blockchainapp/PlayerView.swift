@@ -9,6 +9,8 @@
 import UIKit
 import SnapKit
 import MarqueeLabel
+import MediaPlayer
+import LNPopupController
 
 class PlayerView: UIView {
 	
@@ -108,10 +110,13 @@ class PlayerView: UIView {
 		return (forw: arr.first!, backw: arr.last!)
 	}()
 	
-	let volumeSlider: CustomSlider = {
-		let slider = CustomSlider(frame: CGRect.zero)
-		slider.minimumTrackTintColor = AppColor.Element.subscribe
-		slider.maximumTrackTintColor = AppColor.Element.subscribe.withAlphaComponent(0.2)
+	let volumeSlider: MPVolumeView = {
+		let slider = MPVolumeView()
+		slider.setMinimumVolumeSliderImage(AppColor.Element.subscribe.img(), for: .normal)
+		slider.setMaximumVolumeSliderImage(AppColor.Element.subscribe.withAlphaComponent(0.2).img(), for: .normal)
+		slider.showsRouteButton = false
+//		slider.minimumTrackTintColor = AppColor.Element.subscribe
+//		slider.maximumTrackTintColor = AppColor.Element.subscribe.withAlphaComponent(0.2)
 		return slider
 	}()
 	
@@ -119,8 +124,8 @@ class PlayerView: UIView {
 		super.init(frame: frame)
 		viewInitialize()
 		
-		self.trackProgressView.trackProgressLabels.fin.text = "123"
-		self.trackProgressView.trackProgressLabels.start.text = "123"
+		self.trackProgressView.trackProgressLabels.fin.text = "0:00"
+		self.trackProgressView.trackProgressLabels.start.text = "-0:00"
 	}
 	
 	func viewInitialize() {
@@ -134,9 +139,9 @@ class PlayerView: UIView {
 		
 		addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(70)
-			make.left.equalToSuperview().inset(30)
-			make.right.equalToSuperview().inset(30)
+			make.top.equalToSuperview().inset(75)
+			make.left.equalToSuperview().inset(35)
+			make.right.equalToSuperview().inset(35)
 			make.width.equalTo(underblurimageView.snp.height)
 		}
 		
@@ -217,12 +222,12 @@ class PlayerView: UIView {
 			make.left.equalToSuperview().inset(30)
 		}
 		
-		
 		blur.contentView.addSubview(volumeSlider)
 		volumeSlider.snp.makeConstraints { (make) in
 			make.top.equalTo(playButton.snp.bottom).inset(-25)
 			make.left.equalTo(minVol.snp.right).inset(-8)
 			make.centerY.equalTo(minVol)
+			make.height.equalTo(20)
 		}
 		
 		blur.contentView.addSubview(maxVol)
@@ -246,24 +251,25 @@ class PlayerView: UIView {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-		return true
-	}
-	
-	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-		let funcElementPoints: [UIView] = [
-			trackProgressView, playButton, trackSeekButtons.backw,
-			trackSeekButtons.forw, trackChangeButtons.next, trackChangeButtons.prev,
-			volumeSlider]
-		for view in funcElementPoints {
-			if view.frame.contains(self.convert(point, to: view)) {
-				return view
-			}
-		}
-		if point.y < self.frame.height/2 {
-			return nil
-		} else {
-			return super.hitTest(point, with: event)
-		}
-	}
+//	override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+//		return true
+//	}
+//
+//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//		let funcElementPoints: [UIView] = [
+//			trackProgressView, playButton, trackSeekButtons.backw,
+//			trackSeekButtons.forw, trackChangeButtons.next, trackChangeButtons.prev,
+//			volumeSlider]
+//		for view in funcElementPoints {
+//			if view.frame.contains(self.convert(point, to: view)) {
+//				return view
+//			}
+//		}
+//
+//		if point.y < self.frame.height/2 {
+//			return nil
+//		} else {
+//			return super.hitTest(point, with: event)
+//		}
+//	}
 }

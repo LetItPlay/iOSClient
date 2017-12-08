@@ -9,39 +9,43 @@
 import UIKit
 import LNPopupController
 
-class MainTabViewController: UITabBarController {
+class MainTabViewController: UITabBarController, AudioControllerPresenter {
 	
 	let vc = PopupController()
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
 		
-		let tabs: [String: (UIImage?, UIViewController)] = [
-			"Feed": (nil, FeedBuilder.build()),
-			"Trends": (nil, PopularBuilder.build()),
-			"Channels": (nil, ChannelsBuilder.build())]
+		let tabs: [(String, (UIImage?, UIViewController))] = [
+			("Feed", (UIImage.init(named: "feedTab"), FeedBuilder.build())),
+			("Trends", (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
+			("Channels", (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
+			("Profile", (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
-			let nvc = UINavigationController(rootViewController: tuple.value.1)
-			nvc.tabBarItem = UITabBarItem(title: tuple.key, image: tuple.value.0, tag: 0)
+			let nvc = UINavigationController(rootViewController: tuple.1.1)
+			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})
+	}
+	
+	func popupPlayer(show: Bool, animated: Bool) {
+		if show {
+			self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
+		} else {
+			self.dismissPopupBar(animated: animated, completion: nil)
+		}
 	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 			
-		self.presentPopupBar(withContentViewController: vc, animated: true, completion: nil)
-        AppManager.shared.rootTabBarController = self
+		AppManager.shared.rootTabBarController = self
+		AudioController.main.popupDelegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        selectedIndex = 2
-		
-		let nvc = UINavigationController(rootViewController: ProfileViewController.init())
-		self.viewControllers?.append(nvc)
     }
 }
 

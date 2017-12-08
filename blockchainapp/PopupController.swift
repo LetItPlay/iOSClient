@@ -12,9 +12,24 @@ import SnapKit
 import SwiftyAudioManager
 import RealmSwift
 import SDWebImage
+import MediaPlayer
 
-class PopupController: LNPopupCustomBarViewController {
+class CustomScrollView: UIScrollView {
+//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//		let view = super.hitTest(point, with: event)
+//		if view is TimedSlider || view is MPVolumeView {
+//			return view?.hitTest(point, with: event)
+//		}
+//		return self
+//	}
 	
+	override func touchesShouldCancel(in view: UIView) -> Bool {
+		let needTouch = view is TimedSlider || view is MPVolumeView
+		return !needTouch
+	}
+}
+
+class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	var playerView: PlayerView!
 	var playlistView: PlaylistView!
 	
@@ -46,7 +61,7 @@ class PopupController: LNPopupCustomBarViewController {
 		return next
 	}()
 	
-	let audioManager = AppManager.shared.audioManager
+	let audioController = AudioController.main
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -94,244 +109,169 @@ class PopupController: LNPopupCustomBarViewController {
 		
 		self.playerView.trackProgressView.addTarget(self, action: #selector(trackSeekChanged(_:)), for: .touchUpInside)
 		
+		self.playerView.frame = self.view.frame
+		playlistView.tableView.tableHeaderView = self.playerView
 		
-		let scrollView = UIScrollView.init(frame: CGRect.zero)
-		self.view.addSubview(scrollView)
-		scrollView.snp.makeConstraints { (make) in
+		self.view.addSubview(playlistView)
+		playlistView.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview()
 		}
+		playlistView.tableView.scrollIndicatorInsets.top = 54
 		
-		scrollView.contentSize = CGSize.init(width: self.view.frame.width * 2, height: self.view.frame.height)
-		
-		scrollView.addSubview(playerView)
-		scrollView.isPagingEnabled = true
-		scrollView.bounces = false
-		
-		playerView.snp.makeConstraints({ (make) in
-			make.top.equalTo(self.view)
-			make.bottom.equalTo(self.view)
+		let topBar = UIView()
+		topBar.backgroundColor = .white
+		self.view.addSubview(topBar)
+		topBar.snp.makeConstraints { (make) in
+			make.top.equalToSuperview()
 			make.left.equalToSuperview()
-			make.width.equalTo(self.view.frame.width)
-		})
-		
-		scrollView.addSubview(playlistView)
-		playlistView.snp.makeConstraints { (make) in
-			make.width.equalTo(self.view.frame.width)
-			make.top.equalTo(self.view)
-			make.bottom.equalTo(self.view)
-			make.left.equalTo(playerView.snp.right)
+			make.right.equalToSuperview()
+			make.height.equalTo(64)
 		}
 		
-		self.subscribe()
+//		let scrollView = CustomScrollView.init(frame: CGRect.zero)
+//		self.view.addSubview(scrollView)
+//		scrollView.snp.makeConstraints { (make) in
+//			make.edges.equalToSuperview()
+//		}
+//
+//		scrollView.contentSize = CGSize.init(width: self.view.frame.width * 2, height: self.view.frame.height)
+//
+//		scrollView.addSubview(playerView)
+//		scrollView.isPagingEnabled = true
+//		scrollView.delaysContentTouches = false
+//
+//		playerView.snp.makeConstraints({ (make) in
+//			make.top.equalTo(self.view)
+//			make.bottom.equalTo(self.view)
+//			make.left.equalToSuperview()
+//			make.width.equalTo(self.view.frame.width)
+//		})
+//
+//		scrollView.addSubview(playlistView)
+//		playlistView.snp.makeConstraints { (make) in
+//			make.width.equalTo(self.view.frame.width)
+//			make.top.equalTo(self.view)
+//			make.bottom.equalTo(self.view)
+//			make.left.equalTo(playerView.snp.right)
+//		}
+		
+		AudioController.main.delegate = self
+		
+//		self.subscribe()
 	}
 	
-	func updateTrackInfo() {
-		if let trackStat =  self.audioManager.currentItemId,
-			let stringId = trackStat.split(separator: "_").first,
-			let id = Int(stringId) {
-			
-			let trackId = id
-			
-			let realm = try! Realm()
-			if let ob = realm.object(ofType: Track.self, forPrimaryKey: id) {
-				let channel = ob.findStationName() ?? ""
-				let title = ob.name
-				let url = ob.findChannelImage()
-				
-				self.popupItem.title = channel
-				self.popupItem.subtitle = title
-				self.playerView.channelNameLabel.text = channel
-				self.playerView.trackNameLabel.text = title
-				self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-					self.popupItem.image = img
-					self.playerView.underblurimageView.image = img
-				})
-			}
-		}
-	}
+//	func updateTrackInfo() {
+//		if let trackStat =  self.audioManager.currentItemId,
+//			let stringId = trackStat.split(separator: "_").first,
+//			let id = Int(stringId) {
+//
+//			let trackId = id
+//
+//			let realm = try! Realm()
+//			if let ob = realm.object(ofType: Track.self, forPrimaryKey: id) {
+//				let channel = ob.findStationName() ?? ""
+//				let title = ob.name
+//				let url = URL(string: ob.image)
+//
+//				self.popupItem.title = channel
+//				self.popupItem.subtitle = title
+//				self.playerView.channelNameLabel.text = channel
+//				self.playerView.trackNameLabel.text = title
+//				self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+//					self.popupItem.image = img
+//					self.playerView.underblurimageView.image = img
+//				})
+//			}
+//		}
+//	}
 	
 	@objc func trackSeekChanged(_ sender: Any) {
-		audioManager.itemProgressPercent = Double(self.playerView.trackProgressView.slider.value)
+		audioController.make(command: .seek(progress: Double(self.playerView.trackProgressView.slider.value)))
 	}
 	
 	@objc func playPressed(sender: UIButton) {
-		if audioManager.isPlaying {
-			audioManager.pause()
+		if audioController.status == .playing {
+			audioController.make(command: .pause)
 		} else {
-			audioManager.resume()
+			audioController.make(command: .play(id: nil))
 		}
 	}
 	
 	@objc func remoteLeftButtonPressed(_ sender: Any) {
-		let progress = audioManager.itemProgressPercent - 10.0/audioManager.maxTime
-		audioManager.itemProgressPercent = progress <= 0 ? 0 : progress
+		audioController.make(command: .seekBackward)
 	}
 	
 	@objc func remoteRightButtonPressed(_ sender: Any) {
-		let progress = audioManager.itemProgressPercent + 10.0/audioManager.maxTime
-		audioManager.itemProgressPercent = progress >= 1.0 ? 0 : progress
+		audioController.make(command: .seekForward)
 	}
 	
 	@objc func prevTrackButtonPressed(_ sender: Any) {
-		audioManager.playPrevious()
+		audioController.make(command: .prev)
 	}
 	
 	@objc func nextTrackButtonPressed(_ sender: Any) {
-		audioManager.playNext()
+		audioController.make(command: .next)
 	}
 	
-	// MARK: - Private
-	private func updatePlayButtonState() {
-		DispatchQueue.main.async {
-			self.actIndicator.stopAnimating()
-			self.playButton.isHidden = false
-			self.playButton.isSelected = self.audioManager.isPlaying
-			self.playerView.playButton.isSelected = self.audioManager.isPlaying
-		}
-	}
-	
-	// MARK: - AudioManager events
-	@objc func audioManagerStartPlaying(_ notification: Notification) {
-		updatePlayButtonState()
-	}
-	
-	@objc func audioManagerPaused(_ notification: Notification) {
-		if audioManager.isOnPause {
-			updatePlayButtonState()
-		}
-	}
-	
-	@objc func audioManagerEndPlaying(_ notification: Notification) {
-		updatePlayButtonState()
-	}
-	
-	@objc func audioManagerPlaySoundOnSecond(_ notification: Notification) {
-		/*
-		let info: [String : Any] = ["itemID" : currentItemId ?? "",
-		"currentTime" : currentTime,
-		"maxTime": maxTime]
-		*/
-		if let currentTime = notification.userInfo?["currentTime"] as? Double,
-			let maxTime = notification.userInfo?["maxTime"] as? Double {
-			DispatchQueue.main.async {
-				UIView.animate(withDuration: 0.01, animations: {
-					self.popupItem.progress = Float(currentTime / maxTime)
-					if !self.playerView.trackProgressView.slider.isHighlighted {
-						self.playerView.trackProgressView.slider.value = Float(currentTime / maxTime)
-					}
-					self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(currentTime).formatTime()
-					self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(maxTime - currentTime)).formatTime()
-				})
-			}
-		}
-	}
-	
-	@objc func audioManagerFailed(_ notification: Notification) {
-		//        guard (notification.object as? AudioManager) === audioManager else {
-		//            return
-		//        }
-		updatePlayButtonState()
-	}
-	
-	@objc func audioManagerResume(_ notification: Notification) {
-		//        guard (notification.object as? AudioManager) === audioManager else {
-		//            return
-		//        }
-		updatePlayButtonState()
-	}
-	
-	@objc func audioManagerReadyToPlay(_ notification: Notification) {
-		//        guard (notification.object as? AudioManager) === audioManager else {
-		//            return
-		//        }
-		self.popupBar.isHidden = false
+	func updateTime(time: (current: Double, length: Double)) {
 		DispatchQueue.main.async {
 			UIView.animate(withDuration: 0.01, animations: {
-				self.playerView.trackProgressView.slider.value = 0
-				self.playerView.trackProgressView.trackProgressLabels.start.text  = "00:00"
-				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-00:00"
-				
-				self.popupItem.progress = 0
-				
-				self.updateTrackInfo()
+				self.popupItem.progress = Float(time.current / time.length)
+				if !self.playerView.trackProgressView.slider.isHighlighted {
+					self.playerView.trackProgressView.slider.value = Float(time.current / time.length)
+				}
+				self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
+				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
 			})
 		}
 	}
 	
-	@objc func audioManagerNextPlayed(_ notification: Notification) {
-		startAnimateVaiting()
+	func volumeUpdate(value: Double) {
 	}
 	
-	@objc func audioManagerPreviousPlayed(_ notification: Notification) {
-		startAnimateVaiting()
+	func playState(isPlaying: Bool) {
+		self.playerView.playButton.isSelected = isPlaying
+		self.playButton.isSelected = isPlaying
 	}
 	
-	@objc func audioManagerRecievedPlay(_ notification: Notification) {
-		startAnimateVaiting()
-	}
-	
-	@objc func volumeChanged(_ notification: Notification) {
-		guard let volume = notification.userInfo?["volume"] as? Float else {
-			self.playerView.volumeSlider.value = 0
-			return
+	func trackUpdate() {
+		if let ob = audioController.currentTrack {
+			let channel = ob.findStationName() ?? ""
+			let title = ob.name
+			let url = ob.image.buildImageURL()
+
+			self.popupItem.title = channel
+			self.popupItem.subtitle = title
+			self.playerView.channelNameLabel.text = channel
+			self.playerView.trackNameLabel.text = title
+			self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+				self.popupItem.image = img
+				self.playerView.underblurimageView.image = img
+			})
 		}
-		self.playerView.volumeSlider.value = volume
-	}
-	
-	private func startAnimateVaiting() {
-		DispatchQueue.main.async {
-			self.actIndicator.startAnimating()
-			self.playButton.isHidden = true
+		if audioController.status != .playing {
+			UIView.animate(withDuration: 0.01, animations: {
+				self.playerView.trackProgressView.slider.value = 0
+				self.playerView.trackProgressView.trackProgressLabels.start.text  = "0:00"
+				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-0:00"
+				
+				self.popupItem.progress = 0
+			})
 		}
+		self.playlistView.currentIndex = audioController.currentTrackIndex
+		self.playlistView.tableView.reloadData()
 	}
 	
-	func subscribe() {
+	func playlistChanged() {
+		self.popupItem.title = ""
+		self.popupItem.subtitle = ""
+		self.playerView.channelNameLabel.text = ""
+		self.playerView.trackNameLabel.text = ""
+		self.playerView.coverImageView.image = nil
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPaused(_:)),
-											   name: AudioManagerNotificationName.paused.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerStartPlaying(_:)),
-											   name: AudioManagerNotificationName.startPlaying.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerEndPlaying(_:)),
-											   name: AudioManagerNotificationName.endPlaying.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPlaySoundOnSecond(_:)),
-											   name: AudioManagerNotificationName.playSoundOnSecond.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerFailed(_:)),
-											   name: AudioManagerNotificationName.failed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerResume(_:)),
-											   name: AudioManagerNotificationName.resumed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerReadyToPlay(_:)),
-											   name: AudioManagerNotificationName.readyToPlay.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerRecievedPlay(_:)),
-											   name: AudioManagerNotificationName.receivedPlayCommand.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPreviousPlayed(_:)),
-											   name: AudioManagerNotificationName.previousPlayed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerNextPlayed(_:)),
-											   name: AudioManagerNotificationName.nextPlayed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self, selector: #selector(volumeChanged(_:)), name: AudioManagerNotificationName.volumeChanged.notification, object: audioManager)
-	}
-	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
+		self.playlistView.tracks = AudioController.main.playlist
+		self.playlistView.currentIndex = -1
+		self.playlistView.tableView.reloadData()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

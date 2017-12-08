@@ -9,6 +9,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
+		imageView.layer.masksToBounds = true
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {
@@ -34,6 +35,44 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
+	weak var track: Track? = nil {
+		didSet {
+			if let iconUrl = track?.image.buildImageURL() {
+				trackImageView.sd_setImage(with: iconUrl)
+			} else {
+				trackImageView.image = nil
+			}
+			
+			trackNameLabel.text = track?.name ?? ""
+			channelNameLabel.text = track?.findStationName()
+			
+			let dateRangeStart = track?.publishedAt ?? Date()
+			let dateRangeEnd = Date()
+			let components = Calendar.current.dateComponents([.month, .day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
+			
+			var res = ""
+			if let month = components.month {
+				res = "\(month) month(s)"
+			} else
+			if let day = components.day {
+				res = "\(day) day(s)"
+			} else
+			if let hours = components.hour {
+				res = "\(hours) hour(s)"
+			} else
+			if let min = components.minute {
+				res = "\(min) min."
+			} else
+			if let sec = components.second {
+				res = "\(sec) sec."
+			}
+			self.timeLabel.text = res
+			
+			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
+			dataLabels[.time]?.setData(data: Int64(track?.audiofile?.lengthSeconds ?? 0))
+		}
+	}
+	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
@@ -57,7 +96,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 			make.right.equalToSuperview().inset(16)
 			make.centerY.equalTo(channelNameLabel)
 			make.left.equalTo(channelNameLabel.snp.right).inset(-10)
-			make.width.equalTo(60)
+			make.width.equalTo(80)
 		}
 		
 		self.contentView.addSubview(trackNameLabel)
@@ -97,25 +136,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.separatorInset.left = 90
 		self.selectionStyle = .none
 		
-		trackImageView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-		trackNameLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-		channelNameLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-		timeLabel.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-		
-		trackNameLabel.layer.masksToBounds = true
-		channelNameLabel.layer.masksToBounds = true
-		timeLabel.layer.masksToBounds = true
-		
-		trackNameLabel.layer.cornerRadius = 4
-		channelNameLabel.layer.cornerRadius = 4
-		timeLabel.layer.cornerRadius = 4
-
-		trackNameLabel.text = " "
-		channelNameLabel.text = " "
-		timeLabel.text = " "
-		
-		timeCount.set(isTemplate: true)
-		listensCount.set(isTemplate: true)
 	}
 	
 	static func trackText(text: String) -> NSAttributedString {

@@ -88,23 +88,23 @@ class AudioCoreViewController: UIViewController {
             
             startTime = 0
             
-            if !playList.isEmpty {
-                
-                var currentId: String? = nil
-                
-                if audioManager.isPlaying {
-                    currentId = audioManager.currentItemId
-                    startTime = audioManager.itemProgressPercent
-                }
-                
-                audioManager.resetPlaylistAndStop()
-                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
-                audioManager.add(playlist: [group])
-                
-                if currentId != nil {
-                    audioManager.playItem(with: currentId!)
-                }
-            }
+//            if !playList.isEmpty {
+//
+//                var currentId: String? = nil
+//
+//                if audioManager.isPlaying {
+//                    currentId = audioManager.currentItemId
+//                    startTime = audioManager.itemProgressPercent
+//                }
+//
+//                audioManager.resetPlaylistAndStop()
+//                let group = PlayerItemsGroup(id: "120", name: "main", playerItems: playList)
+//                audioManager.add(playlist: [group])
+//
+//                if currentId != nil {
+//                    audioManager.playItem(with: currentId!)
+//                }
+//            }
         }
     }
 
