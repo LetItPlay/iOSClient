@@ -98,6 +98,10 @@ class AudioController: AudioControllerProtocol {
 	}
 	
 	func make(command: AudioCommand) {
+		if self.currentTrackIndex < 0 {
+			self.popupDelegate?.popupPlayer(show: true, animated: true)
+		}
+		
 		switch command {
 		case .play(let id):
 			if let id = id {
@@ -265,7 +269,6 @@ class AudioController: AudioControllerProtocol {
 			}
 		}
 		self.delegate?.trackUpdate()
-		self.popupDelegate?.popupPlayer(show: true, animated: true)
 	}
 	
 	@objc func audioManagerNextPlayed(_ notification: Notification) {

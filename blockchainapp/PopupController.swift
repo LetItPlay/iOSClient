@@ -160,6 +160,18 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 //		self.subscribe()
 	}
 	
+	override func viewWillDisappear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		print("132")
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		playerView.snp.makeConstraints { (make) in
+			make.size.equalTo(self.view.frame.size)
+		}
+	}
+	
 //	func updateTrackInfo() {
 //		if let trackStat =  self.audioManager.currentItemId,
 //			let stringId = trackStat.split(separator: "_").first,
@@ -260,6 +272,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		}
 		self.playlistView.currentIndex = audioController.currentTrackIndex
 		self.playlistView.tableView.reloadData()
+		self.playerView.isHidden = false
 	}
 	
 	func playlistChanged() {
