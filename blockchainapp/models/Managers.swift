@@ -280,11 +280,11 @@ class SubscribeManager {
         }
         objc_sync_exit(stations)
         
-        let realm = try! Realm()
-        try? realm.write {
-            realm.delete(realm.objects(Track.self).filter("station = %@", id))
-        }
-        
+//        let realm = try! Realm()
+//        try? realm.write {
+//            realm.delete(realm.objects(Track.self).filter("station = %@", id))
+//        }
+		
         debugPrint("user unsubscribed on \(id)")
         NotificationCenter.default.post(name: NotificationName.deleted.notification,
                                         object: nil,

@@ -8,10 +8,14 @@
 
 import UIKit
 import SnapKit
+import RealmSwift
 
 class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
+	
+	var tracks: [Track] = []
+	var currentIndex: Int = -1
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -39,10 +43,50 @@ class ProfileViewController: UIViewController {
 		self.tableView.dataSource = self
 		
 		self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
+		
+		let view = UIView()
+		self.view.addSubview(view)
+		view.backgroundColor = UIColor.white
+		view.snp.makeConstraints { (make) in
+			make.top.equalToSuperview()
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			make.height.equalTo(20)
+		}
+		
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(trackPlayed(notification:)),
+											   name: AudioController.AudioStateNotification.playing.notification(),
+											   object: nil)
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(trackPaused(notification:)),
+											   name: AudioController.AudioStateNotification.paused.notification(),
+											   object: nil)
     }
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+	}
+	
+	@objc func trackPlayed(notification: Notification) {
+		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+			self.currentIndex = index
+		}
+	}
+	
+	@objc func trackPaused(notification: Notification) {
+		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+			self.currentIndex = -1
+		}
+	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		
+		let realm = try? Realm()
+		let likeMan = LikeManager.shared
+		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id)}) ?? []
+		self.tableView.reloadData()
 	}
 	
 
@@ -70,13 +114,24 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 10
+		return self.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID)
+		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
 		
-		return cell ?? UITableViewCell.init()
+		let track = self.tracks[indexPath.item]
+		cell.track = track
+		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
+		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
+		cell.timeLabel.isHidden = true
+		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		let contr = AudioController.main
+		contr.loadPlaylist(playlist: ("Liked", self.tracks))
+		contr.setCurrentTrack(index: indexPath.item)
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -143,23 +198,27 @@ class ProfileTopView: UIView {
 		}
 		
 		profileImageView.layer.cornerRadius = 120
-		
+		profileImageView.layer.masksToBounds = true
 		profileImageView.layer.shadowColor = UIColor.black.cgColor
 		profileImageView.layer.shadowOffset = CGSize.zero
 		profileImageView.layer.shadowRadius = 10.0
 		profileImageView.layer.shadowOpacity = 0.1
 		profileImageView.layer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: -10, y: -10), size: CGSize.init(width: 260, height: 260)), cornerRadius: 130).cgPath
 		profileImageView.layer.shouldRasterize = true
+		profileImageView.contentMode = .scaleAspectFill
 		
-		blur.contentView.addSubview(self.changePhotoButton)
-		self.changePhotoButton.snp.makeConstraints { (make) in
-			make.right.equalTo(profileImageView)
-			make.bottom.equalTo(profileImageView).inset(30)
-			make.width.equalTo(40)
-			make.height.equalTo(40)
-		}
+		profileImageView.image = UIImage(named: "placeholder")
+		bluredimageView.image = UIImage(named: "placeholder")
 		
-		changePhotoButton.layer.cornerRadius = 20
+//		blur.contentView.addSubview(self.changePhotoButton)
+//		self.changePhotoButton.snp.makeConstraints { (make) in
+//			make.right.equalTo(profileImageView)
+//			make.bottom.equalTo(profileImageView).inset(30)
+//			make.width.equalTo(40)
+//			make.height.equalTo(40)
+//		}
+//
+//		changePhotoButton.layer.cornerRadius = 20
 
 		blur.contentView.addSubview(profileNameLabel)
 		profileNameLabel.snp.makeConstraints { (make) in
@@ -169,7 +228,7 @@ class ProfileTopView: UIView {
 			make.left.equalTo(profileImageView.snp.left)
 		}
 		
-		profileNameLabel.text = "Anna Shekhtman"
+		profileNameLabel.text = "Your future profile"
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
 
@@ -185,22 +244,27 @@ class ProfileTopView: UIView {
 
 		blur.contentView.addSubview(logoutButton)
 		logoutButton.snp.makeConstraints { (make) in
-			make.width.equalTo(240)
-			make.height.equalTo(32)
 			make.top.equalTo(highlight.snp.bottom).inset(-24)
 			make.centerX.equalToSuperview()
 		}
+		
+		logoutButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
+		logoutButton.layer.cornerRadius = 6
+		logoutButton.layer.masksToBounds = true
+		logoutButton.setTitle("logout ", for: .normal)
+		logoutButton.setImage(UIImage(named: "logoutIcon"), for: .normal)
+		logoutButton.titleLabel?.font = AppFont.Button.mid
+		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
+		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 75, bottom: 6, right: 75)
+		logoutButton.isEnabled = false
+		logoutButton.semanticContentAttribute = .forceRightToLeft
 		
 		let bot = CALayer()
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
 		
-		profileImageView.backgroundColor = .red
-		bluredimageView.backgroundColor = .green
-//		profileNameLabel.backgroundColor = .blue
-		changePhotoButton.backgroundColor = .black
-		logoutButton.backgroundColor = .red
+		
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

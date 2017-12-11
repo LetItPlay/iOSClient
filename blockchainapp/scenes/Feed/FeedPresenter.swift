@@ -39,6 +39,7 @@ class FeedPresenter: FeedPresenterProtocol {
                 // Results are now populated and can be accessed without blocking the UI
                 self?.tracks = Array(results).filter(filter).map({($0.id == currentID, $0)})
 				
+				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
                 self?.tracks = Array(results).filter(filter).map({($0.id == currentID, $0)})
@@ -46,14 +47,15 @@ class FeedPresenter: FeedPresenterProtocol {
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
                 }
-                
+				let indexes = modifications.map({ (index) -> Int? in
+					return self?.tracks.index(where: {$0.1.id == results[index].id})
+				}).filter({$0 != nil}).map({$0!})
+				self?.view?.update(indexes: indexes)
+				
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
             }
-			
-			self?.view?.display()
-
         })
         
         NotificationCenter.default.addObserver(self,
@@ -108,7 +110,23 @@ class FeedPresenter: FeedPresenterProtocol {
             
         }
     }
-    
+	
+	func play(index: Int) {
+		if index < self.tracks.count {
+			let trackUID = self.tracks[index].1.id
+			if trackUID != AudioController.main.currentTrack?.id {
+				AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0.1})))
+			}
+			AudioController.main.make(command: .play(id: trackUID))
+		}
+	}
+	
+	func like(index: Int) {
+		if index < self.tracks.count {
+			LikeManager.shared.addOrDelete(id: self.tracks[index].1.id)
+		}
+	}
+	
     func play(trackUID: Int) {
         //TODO: fix this shet
 //        if audioManager.currentItemId == trackUID {

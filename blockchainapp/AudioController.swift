@@ -109,7 +109,11 @@ class AudioController: AudioControllerProtocol {
 					index != self.currentTrackIndex {
 					audioManager.playItem(at: index)
 				} else {
-					audioManager.resume()
+					if audioManager.isPlaying {
+						audioManager.pause()
+					} else {
+						audioManager.resume()
+					}
 				}
 			} else {
 					audioManager.resume()
@@ -166,6 +170,10 @@ class AudioController: AudioControllerProtocol {
 	}
 	
 	func setCurrentTrack(index: Int) {
+		if self.currentTrackIndex < 0 {
+			self.popupDelegate?.popupPlayer(show: true, animated: true)
+		}
+		
 		self.currentTrackIndex = index
 		audioManager.playItem(at: index)
 	}

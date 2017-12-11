@@ -96,7 +96,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
         navigationController?.navigationBar.prefersLargeTitles = true
         
         refreshControl = UIRefreshControl()
@@ -117,6 +117,10 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
             self?.display(channels: channels)
         }
     }
+	
+	override func viewWillAppear(_ animated: Bool) {
+		self.tableView.reloadData()
+	}
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { [weak self] (channels) in
@@ -178,7 +182,8 @@ extension ChannelsViewController {
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let vc = ChannelViewController()
+		let station = self.source[indexPath.row]
+		let vc = ChannelViewController(station: station)
 		self.navigationController?.pushViewController(vc, animated: true)
     }
     

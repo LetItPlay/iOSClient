@@ -43,38 +43,21 @@ class NewFeedTableViewCell: UITableViewCell {
 		
 		viewInitialize()
 		
-//		NotificationCenter.default.addObserver(self,
-//											   selector: #selector(audioManagerPaused(_:)),
-//											   name: AudioManagerNotificationName.paused.notification,
-//											   object: audioManager)
-//		NotificationCenter.default.addObserver(self,
-//											   selector: #selector(audioManagerStartPlaying(_:)),
-//											   name: AudioManagerNotificationName.startPlaying.notification,
-//											   object: audioManager)
-//		NotificationCenter.default.addObserver(self,
-//											   selector: #selector(audioManagerPaused(_:)),
-//											   name: AudioManagerNotificationName.endPlaying.notification,
-//											   object: audioManager)
-//		NotificationCenter.default.addObserver(self,
-//											   selector: #selector(audioManagerStartPlaying(_:)),
-//											   name: AudioManagerNotificationName.resumed.notification,
-//											   object: audioManager)
-//
 		self.playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
 		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
 	}
 	
 	@objc func playPressed(_: UIButton){
-		if let id = track?.id {
-			onPlay?(id)
-		}
+//		if let id = track?.id {
+			onPlay?(0)
+//		}
 	}
 	
 	@objc func likePressed(_: UIButton) {
 		likeButton.isSelected = !likeButton.isSelected
-		if let id = track?.id {
-			onLike?(id)
-		}
+//		if let id = track?.id {
+			onLike?(0)
+//		}
 	}
 	
 	// MARK: - AudioManager events

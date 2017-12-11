@@ -10,17 +10,25 @@ import UIKit
 import SnapKit
 import TagListView
 
+protocol ChannelsHeaderDelegate: class {
+	func set(height: CGFloat)
+}
+
 class ChannelHeaderView: UIView {
 
+	weak var delegate: ChannelsHeaderDelegate?
+	
 	let channelImageView: UIImageView = {
 		let imgView = UIImageView()
-		imgView.contentMode = .scaleToFill
+		imgView.contentMode = .scaleAspectFill
+		imgView.layer.masksToBounds = true
 		return imgView
 	}()
 	
 	let channelIconView: UIImageView = {
 		let imgView = UIImageView()
 		imgView.layer.cornerRadius = 20
+		imgView.layer.masksToBounds = true
 		imgView.contentMode = .scaleAspectFill
 		imgView.snp.makeConstraints({ (make) in
 			make.width.equalTo(40)
@@ -32,17 +40,19 @@ class ChannelHeaderView: UIView {
 	let subsView: IconedLabel = IconedLabel.init(type: IconLabelType.subs)
 	let followButton: UIButton = {
 		let button = UIButton()
-		button.setTitle("follow".localizedUppercase, for: .normal)
-		button.setTitle("following".localizedUppercase, for: .selected)
-		button.titleLabel?.font = AppFont.Button.mid
-		button.setBackgroundImage(UIColor.red.img(), for: .normal)
 		button.layer.cornerRadius = 6
 		button.layer.borderColor = AppColor.Element.subscribe.cgColor
 		button.layer.borderWidth = 1
-		
-		button.snp.makeConstraints({ (make) in
-			make.height.equalTo(32)
-		})
+		button.layer.masksToBounds = true
+		button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
+		button.setBackgroundImage(UIColor.clear.img(), for: .selected)
+		button.setTitle("follow".localizedCapitalized, for: .normal)
+		button.setTitle("following".localizedCapitalized, for: .selected)
+		button.setTitleColor(UIColor.white, for: .normal)
+		button.setTitleColor(AppColor.Element.subscribe, for: .selected)
+		button.contentEdgeInsets.left = 12
+		button.contentEdgeInsets.right = 12
+		button.titleLabel?.font = AppFont.Button.mid
 		return button
 	}()
 	
@@ -56,13 +66,28 @@ class ChannelHeaderView: UIView {
 	
 	let infoLabel: UILabel = {
 		let label = UILabel()
+		label.lineBreakMode = .byWordWrapping
 		label.numberOfLines = 6
 		label.font = AppFont.Text.mid
 		label.textColor = AppColor.Title.dark
 		return label
 	}()
 	
-	let tagListView = TagListView()
+	let tagListView: TagListView = {
+		let taglist = TagListView()
+		taglist.borderColor = AppColor.Element.tagColor.withAlphaComponent(0.2)
+		taglist.textColor = AppColor.Element.tagColor.withAlphaComponent(0.6)
+		taglist.tagBackgroundColor = .white
+		taglist.borderWidth = 1
+		taglist.cornerRadius = 9
+		taglist.marginX = 2
+		taglist.marginY = 3
+		taglist.paddingX = 6
+		taglist.paddingY = 4
+		taglist.textFont = AppFont.Title.info
+		taglist.clipsToBounds = true
+		return taglist
+	}()
 	
 	var topImgCnstr: NSLayoutConstraint!
 	var leftImgCnstr: NSLayoutConstraint!
@@ -72,6 +97,7 @@ class ChannelHeaderView: UIView {
 		super.init(frame: frame)
 		
 		self.viewInitialize(width: frame.width)
+		self.backgroundColor = .white		
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -84,11 +110,11 @@ class ChannelHeaderView: UIView {
 			self.topImgCnstr = make.top.equalToSuperview().constraint.layoutConstraints.first!
 			self.leftImgCnstr = make.left.equalToSuperview().constraint.layoutConstraints.first!
 			self.rightImgCnstr = make.right.equalToSuperview().constraint.layoutConstraints.first!
-			make.height.equalTo(width*CGFloat(16)/CGFloat(9))
+//			make.height.equalTo(width*CGFloat(9)/CGFloat(16))
 		}
 		
 		let view = UIView()
-		view.backgroundColor = AppColor.Element.redBlur
+		view.backgroundColor = AppColor.Element.redBlur.withAlphaComponent(0.09)
 		self.addSubview(view)
 		view.snp.makeConstraints { (make) in
 			make.top.equalTo(channelImageView.snp.bottom)
@@ -111,32 +137,79 @@ class ChannelHeaderView: UIView {
 		
 		view.addSubview(followButton)
 		followButton.snp.makeConstraints { (make) in
-			make.right.equalToSuperview().inset(-16)
+			make.right.equalToSuperview().inset(16)
 			make.centerY.equalToSuperview()
+			make.height.equalTo(32)
 		}
 
 		self.addSubview(channelTitleView)
 		channelTitleView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
-			make.top.equalTo(view.snp.bottom).inset(12)
+			make.top.equalTo(view.snp.bottom).inset(-12)
 			make.right.equalToSuperview().inset(16)
 		}
 		
 		self.addSubview(infoLabel)
 		infoLabel.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
-			make.top.equalTo(channelTitleView.snp.bottom).inset(14)
-			make.left.equalToSuperview().inset(16)
+			make.top.equalTo(channelTitleView.snp.bottom).inset(-14)
+			make.right.equalToSuperview().inset(16)
 		}
 		
 		self.addSubview(tagListView)
 		tagListView.snp.makeConstraints { (make) in
-			
+			make.top.equalTo(infoLabel.snp.bottom).inset(-16)
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
 		}
+		
+		let bottomLine = UIView()
+		bottomLine.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+		bottomLine.layer.masksToBounds = true
+		bottomLine.layer.cornerRadius = 1.0
+		
+		self.addSubview(bottomLine)
+		bottomLine.snp.makeConstraints { (make) in
+			make.height.equalTo(2)
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+			make.bottom.equalToSuperview()
+		}
+		
+		channelTitleView.text = "123 123 123 123 123"
+		infoLabel.text = "123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23"
 	}
 	
-	static func height(width: CGFloat) -> CGFloat {
+	func fill(station: Station, width: CGFloat) -> CGFloat {
+		channelTitleView.text = station.name
+		infoLabel.text = "No description for this channel"
+		subsView.setData(data: Int64(station.subscriptionCount))
+		if let iconUrl = station.image.buildImageURL() {
+			
+			channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
+				self?.channelImageView.image = image
+			})
+			channelIconView.backgroundColor = .white
+			channelImageView.snp.makeConstraints { (make) in
+				make.height.equalTo(width*CGFloat(6)/CGFloat(16))
+			}
+		} else {
+			channelImageView.snp.makeConstraints { (make) in
+				make.height.equalTo(0)//width*CGFloat(9)/CGFloat(16))
+			}
+			channelImageView.image = nil
+			channelIconView.image = nil
+			channelIconView.backgroundColor = .white
+		}
 		
-		return 0.0
+		self.tagListView.removeAllTags()
+		self.tagListView.addTags(station.getTags().map({$0.uppercased()}))
+		self.layoutIfNeeded()
+		
+		if let frame = tagListView.tagViews.last?.frame {
+			return tagListView.frame.origin.y + frame.origin.y + frame.height + 16
+		} else {
+			return tagListView.frame.origin.y + 16
+		}
 	}
 }

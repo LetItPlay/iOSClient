@@ -164,7 +164,9 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+		
+		navigationController?.navigationBar.prefersLargeTitles = true
+		
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
@@ -191,6 +193,7 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         presenter.getData { (tracks) in
 
         }
+		tableView.tableFooterView = UIView()
 		
 		self.cellHeight = self.tableView.frame.width - 16 * 2 // side margins
     }
@@ -212,8 +215,17 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         refreshControl?.endRefreshing()
     }
 	
+	
 	func update(indexes: [Int]) {
-		tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .automatic)
+		UIView.setAnimationsEnabled(false)
+		if let paths = tableView.indexPathsForVisibleRows, self.view.window != nil {
+//			tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .none)
+			tableView.reloadRows(at: paths, with: .none)
+		} else {
+			tableView.reloadData()
+		}
+		refreshControl?.endRefreshing()
+		UIView.setAnimationsEnabled(true)
 	}
 
 }
@@ -240,12 +252,14 @@ extension FeedViewController {
 		cell?.track = tuple.1
 		cell?.playButton.isSelected = tuple.0
 		
-		cell?.onPlay = { [weak self] track in
-			self?.presenter.play(trackUID: track)
+		cell?.onPlay = { [weak self] _ in
+			let index = indexPath.section
+			self?.presenter.play(index: index)
 		}
 		
 		cell?.onLike = { [weak self] track in
-			self?.presenter.like(trackUID: track)
+			let index = indexPath.section
+			self?.presenter.like(index: index)
 		}
 	}
 	
@@ -271,6 +285,10 @@ extension FeedViewController {
 		return self.cellHeight
         return FeedCell.recommendedHeight()
     }
+	
+	override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+		return self.cellHeight
+	}
     
 }
 

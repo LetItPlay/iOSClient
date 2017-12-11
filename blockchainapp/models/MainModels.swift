@@ -25,7 +25,7 @@ class Station: Object {
     }
     
     func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0) }
+        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
     }
 }
 
@@ -56,7 +56,7 @@ class Track: Object {
     }
     
     func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0) }
+        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
     }
 }
 extension Track {

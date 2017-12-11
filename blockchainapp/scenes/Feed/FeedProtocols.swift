@@ -17,6 +17,9 @@ protocol FeedPresenterProtocol: class {
 	
     func play(trackUID: Int)
     func like(trackUID: Int)
+	
+	func play(index: Int)
+	func like(index: Int)
 }
 
 protocol FeedViewProtocol: class {

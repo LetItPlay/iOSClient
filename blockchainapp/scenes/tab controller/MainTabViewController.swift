@@ -24,6 +24,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1)
+			tuple.1.1.title = tuple.0
 			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})

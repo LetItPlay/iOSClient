@@ -11,6 +11,8 @@
 		01321B661FCDADFF009BFE62 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; };
 		01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
+		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
+		01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAC1FDED922003AC116 /* RealmExtension.swift */; };
 		0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */; };
 		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
 		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
@@ -90,6 +92,8 @@
 		01321B601FCDADEB009BFE62 /* LNPopupController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LNPopupController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
+		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
+		01510EAC1FDED922003AC116 /* RealmExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
 		015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
 		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
 		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 			children = (
 				019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */,
 				019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */,
+				013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */,
 			);
 			name = "Channel Screen";
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
 				FD10B17549A87867E48B318C /* AppUI.swift */,
 				01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */,
+				01510EAC1FDED922003AC116 /* RealmExtension.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -604,6 +610,7 @@
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
+				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
 				0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */,
 				01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */,
@@ -618,6 +625,7 @@
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
+				013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
