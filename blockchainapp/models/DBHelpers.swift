@@ -58,6 +58,7 @@ class DBManager {
                 track.audiofile = audiofile
                 changeCounter += 1
             }
+			track.audiofile = audiofile
             
             debugPrint("track \(id) counter=\(changeCounter)")
         } else {

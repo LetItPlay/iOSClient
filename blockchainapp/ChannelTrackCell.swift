@@ -1,9 +1,9 @@
 import UIKit
 import SnapKit
 
-class SmallTrackTableViewCell: UITableViewCell {
-
-	static let cellID: String = "LikeTrackCellID"
+class ChannelTrackCell: UITableViewCell {
+	
+	static let cellID: String = "ChannelTrackCellID"
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -17,12 +17,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 		label.textColor = .black
 		label.numberOfLines = 2
-		return label
-	}()
-	let channelNameLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-		label.textColor = UIColor.black.withAlphaComponent(0.6)
 		return label
 	}()
 	let timeLabel: UILabel = {
@@ -52,27 +46,26 @@ class SmallTrackTableViewCell: UITableViewCell {
 			}
 			
 			trackNameLabel.text = track?.name ?? ""
-			channelNameLabel.text = track?.findStationName()
 			
 			let dateRangeStart = track?.publishedAt ?? Date()
 			let dateRangeEnd = Date()
 			let components = Calendar.current.dateComponents([.month, .day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
 			
 			var res = ""
-			if let month = components.month {
-				res = "\(month) month(s)"
+			if let month = components.weekOfYear {
+				res = "\(month)w ago"
 			} else
-			if let day = components.day {
-				res = "\(day) day(s)"
-			} else
-			if let hours = components.hour {
-				res = "\(hours) hour(s)"
-			} else
-			if let min = components.minute {
-				res = "\(min) min."
-			} else
-			if let sec = components.second {
-				res = "\(sec) sec."
+				if let day = components.day {
+					res = "\(day)d ago"
+				} else
+					if let hours = components.hour {
+						res = "\(hours)h ago"
+					} else
+						if let min = components.minute {
+							res = "\(min)m ago"
+						} else
+							if let sec = components.second {
+								res = "\(sec)s ago"
 			}
 			self.timeLabel.text = res
 			
@@ -92,26 +85,19 @@ class SmallTrackTableViewCell: UITableViewCell {
 			make.height.equalTo(60)
 		}
 		
-		self.contentView.addSubview(channelNameLabel)
-		channelNameLabel.snp.makeConstraints { (make) in
+		self.contentView.addSubview(trackNameLabel)
+		trackNameLabel.snp.makeConstraints { (make) in
 			make.left.equalTo(trackImageView.snp.right).inset(-14)
-			make.top.equalTo(trackImageView)
-			make.height.equalTo(18)
+			make.top.equalToSuperview().inset(16)
+//			make.right.equalToSuperview().inset(16)
 		}
 		
 		self.contentView.addSubview(timeLabel)
 		timeLabel.snp.makeConstraints { (make) in
 			make.right.equalToSuperview().inset(16)
-			make.centerY.equalTo(channelNameLabel)
-			make.left.equalTo(channelNameLabel.snp.right).inset(-10)
-			make.width.equalTo(80)
-		}
-		
-		self.contentView.addSubview(trackNameLabel)
-		trackNameLabel.snp.makeConstraints { (make) in
-			make.left.equalTo(channelNameLabel)
-			make.top.equalTo(channelNameLabel.snp.bottom).inset(-1)
-			make.right.equalToSuperview().inset(16)
+			make.top.equalTo(trackNameLabel)
+			make.left.equalTo(trackNameLabel.snp.right).inset(-4)
+			make.width.equalTo(60)
 		}
 		
 		let timeCount = IconedLabel(type: .time)
@@ -120,7 +106,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		self.contentView.addSubview(timeCount)
 		timeCount.snp.makeConstraints { (make) in
-			make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
+			make.top.equalTo(trackNameLabel.snp.bottom).inset(-11)
 			make.left.equalTo(trackNameLabel)
 			make.bottom.equalToSuperview().inset(12)
 		}
@@ -159,7 +145,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 			.boundingRect(with: CGSize.init(width: width, height: 9999),
 						  options: .usesLineFragmentOrigin,
 						  context: nil)
-		return min(rect.height, 44) + 31 + 32
+		return min(rect.height, 44) + 9 + 32
 	}
 	
 	
@@ -167,10 +153,11 @@ class SmallTrackTableViewCell: UITableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
+	override func setSelected(_ selected: Bool, animated: Bool) {
+		super.setSelected(selected, animated: animated)
+		
+		// Configure the view for the selected state
+	}
+	
 }
+

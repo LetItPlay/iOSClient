@@ -13,6 +13,7 @@
 		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
 		01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAC1FDED922003AC116 /* RealmExtension.swift */; };
+		01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */; };
 		0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */; };
 		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
 		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
@@ -94,6 +95,7 @@
 		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
 		01510EAC1FDED922003AC116 /* RealmExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
+		01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTrackCell.swift; sourceTree = "<group>"; };
 		015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
 		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
 		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */,
 				019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */,
 				013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */,
+				01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */,
 			);
 			name = "Channel Screen";
 			sourceTree = "<group>";
@@ -629,6 +632,7 @@
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
+				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
 				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,

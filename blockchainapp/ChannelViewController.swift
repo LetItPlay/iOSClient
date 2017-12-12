@@ -53,7 +53,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		tableView.delegate = self
 		tableView.dataSource = self
 		
-		tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
+		tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
 		self.header.followButton.isSelected = SubscribeManager.shared.stations.contains(self.presenter.station.id)
 		
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
@@ -110,7 +110,7 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
 		let track = self.presenter.tracks[indexPath.section][indexPath.item]
 		cell.track = track
 		let hideListens = indexPath.item == self.currentIndex

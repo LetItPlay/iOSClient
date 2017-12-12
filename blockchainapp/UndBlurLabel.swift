@@ -11,49 +11,50 @@ import SnapKit
 
 class UndBlurLabel: UIView {
 	
-	let blurView = UIVisualEffectView.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.regular))
+//	let blurView = UIVisualEffectView.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.regular))
 	let label: UILabel = UILabel.init(frame: CGRect.zero)
 	let shapeLayer: CAShapeLayer = CAShapeLayer()
 	
 	init() {
 		super.init(frame: CGRect.zero)
 		
-		self.backgroundColor = AppColor.Element.redBlur
+		self.backgroundColor = AppColor.Element.redBlur.withAlphaComponent(0.9)
 		
-		self.addSubview(blurView)
-		blurView.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
-		}
+//		self.addSubview(blurView)
+//		blurView.snp.makeConstraints { (make) in
+//			make.edges.equalToSuperview()
+//		}
 		
 		self.addSubview(label)
 		label.numberOfLines = 3
 		self.label.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview().inset(4)
 		}
-		self.layer.mask = shapeLayer
+//		self.layer.mask = shapeLayer
 	}
 	
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		if let title = label.text, title != "" {
-			self.updateShape(text: title)
-		} else {
-			self.updateShape(text: "  ")
-		}
-	}
+//	override func layoutSubviews() {
+//		super.layoutSubviews()
+////		if let title = label.text, title != "" {
+////			self.updateShape(text: title)
+////		} else {
+////			self.updateShape(text: "  ")
+////		}
+//	}
 	
 	func setTitle(title: String) {
 		self.label.attributedText = formatString(text: title)
-		self.layoutSubviews()
+//		self.layoutSubviews()
 	}
 	
 	func updateShape(text: String) {
-		let widths = self.calcLinesWidths(text: formatString(text: text, calc: true), frame: self.label.frame).map({$0 + 4 + 4})
+		let widths = self.calcLinesWidths(text: formatString(text: text, calc: true), frame: self.label.frame).map({$0 + 4 + 4 + 4})
 		if widths.count > 0 {
 			let tooBig = widths.count > 3
 			let path = UIBezierPath.init()
 			path.move(to: CGPoint.zero)
 			path.addLine(to: CGPoint.init(x: min(widths[0], self.frame.width), y: 0))
+			path.addLine(to: CGPoint.init(x: min(widths[0], self.frame.width), y: 4))
 			for i in 1..<widths.prefix(3).count {
 				path.addLine(to: CGPoint.init(x: min(widths[i - 1], self.frame.width) , y: CGFloat(i*29) + 4))
 				path.addLine(to: CGPoint.init(x: min(widths[i], self.frame.width), y: CGFloat(i*29) + 4))
@@ -89,14 +90,16 @@ class UndBlurLabel: UIView {
 	
 	func calcLinesWidths(text: NSAttributedString, frame: CGRect) -> [CGFloat] {
 		var newFrame = frame
-		newFrame.size.height = 60
+		newFrame.size.height = 200
 		var result: [CGFloat] = []
 		let fs = CTFramesetterCreateWithAttributedString(text)
-		let frame = CTFramesetterCreateFrame(fs, CFRangeMake(0, text.length), CGPath.init(rect: newFrame, transform: nil), nil)
+		let frame = CTFramesetterCreateFrame(fs, CFRangeMake(0, 0), CGPath.init(rect: newFrame, transform: nil), nil)
 		let lines = CTFrameGetLines(frame)
 		for line in lines as! Array<CTLine> {
 			let bounds = CTLineGetBoundsWithOptions(line, .useGlyphPathBounds)
-			result.append(bounds.width + bounds.origin.x)
+			let range = CTLineGetStringRange(line)
+			print("range = \(range.location) \(range.length)")
+			result.append(bounds.width - bounds.origin.x)
 		}
 		return result
 	}
