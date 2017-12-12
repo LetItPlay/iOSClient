@@ -48,7 +48,7 @@ class UndBlurLabel: UIView {
 	}
 	
 	func updateShape(text: String) {
-		let widths = self.calcLinesWidths(text: formatString(text: text, calc: true), frame: self.label.frame).map({$0 + 8 + 4})
+		let widths = self.calcLinesWidths(text: formatString(text: text, calc: true), frame: self.label.frame).map({$0 + 4 + 4})
 		if widths.count > 0 {
 			let tooBig = widths.count > 3
 			let path = UIBezierPath.init()
@@ -80,20 +80,23 @@ class UndBlurLabel: UIView {
 		para.minimumLineHeight = 29
 		para.maximumLineHeight = 29
 		para.lineBreakMode = calc ? .byWordWrapping : .byTruncatingTail
-		return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 24, weight: .regular), .foregroundColor: UIColor.white])
+		return NSAttributedString.init(string: text,
+									   attributes: [.font: UIFont.systemFont(ofSize: 24, weight: .regular),
+													.foregroundColor: UIColor.white,
+													.paragraphStyle: para])
+		// .kern:
 	}
 	
 	func calcLinesWidths(text: NSAttributedString, frame: CGRect) -> [CGFloat] {
 		var newFrame = frame
-		newFrame.size.width -= 8
-		newFrame.size.height = 1000
+		newFrame.size.height = 60
 		var result: [CGFloat] = []
 		let fs = CTFramesetterCreateWithAttributedString(text)
 		let frame = CTFramesetterCreateFrame(fs, CFRangeMake(0, text.length), CGPath.init(rect: newFrame, transform: nil), nil)
 		let lines = CTFrameGetLines(frame)
 		for line in lines as! Array<CTLine> {
-			let bounds = CTLineGetBoundsWithOptions(line, CTLineBoundsOptions.useGlyphPathBounds)
-			result.append(bounds.width - bounds.origin.x)
+			let bounds = CTLineGetBoundsWithOptions(line, .useGlyphPathBounds)
+			result.append(bounds.width + bounds.origin.x)
 		}
 		return result
 	}

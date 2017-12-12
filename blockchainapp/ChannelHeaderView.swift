@@ -161,6 +161,7 @@ class ChannelHeaderView: UIView {
 			make.top.equalTo(infoLabel.snp.bottom).inset(-16)
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
+			make.bottom.equalToSuperview().inset(26)
 		}
 		
 		let bottomLine = UIView()
@@ -204,12 +205,8 @@ class ChannelHeaderView: UIView {
 		
 		self.tagListView.removeAllTags()
 		self.tagListView.addTags(station.getTags().map({$0.uppercased()}))
-		self.layoutIfNeeded()
+//		self.layoutIfNeeded()
 		
-		if let frame = tagListView.tagViews.last?.frame {
-			return tagListView.frame.origin.y + frame.origin.y + frame.height + 16
-		} else {
-			return tagListView.frame.origin.y + 16
-		}
+		return self.frame.origin.y + self.frame.height
 	}
 }

@@ -150,7 +150,7 @@ class NewFeedTableViewCell: UITableViewCell {
 		mainPictureImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
-			make.top.equalToSuperview()
+			make.top.equalToSuperview().inset(24)
 			make.bottom.equalToSuperview()
 		}
 		

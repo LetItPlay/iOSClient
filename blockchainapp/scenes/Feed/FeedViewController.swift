@@ -152,9 +152,17 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
-	var cellHeight: CGFloat = 343.0
+	var cellHeight: CGFloat = 343.0 + 24.0
 
 	var type: FeedType = .feed
+	let emptyLabel: UILabel = {
+		let label = UILabel()
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.light
+		label.textAlignment = .center
+		label.text = "There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab"
+		return label
+	}()
 	
 	convenience init(type: FeedType) {
 		self.init(nibName: nil, bundle: nil)
@@ -190,13 +198,25 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 		tableView.sectionIndexBackgroundColor = .white
 		tableView.allowsSelection = false
 		refreshControl?.beginRefreshing()
-        presenter.getData { (tracks) in
 
-        }
 		tableView.tableFooterView = UIView()
 		
-		self.cellHeight = self.tableView.frame.width - 16 * 2 // side margins
-    }
+		self.cellHeight = self.tableView.frame.width - 16 * 2 + 24 // side margins
+		
+		self.view.addSubview(emptyLabel)
+		emptyLabel.snp.makeConstraints { (make) in
+			make.center.equalToSuperview()
+		}
+		emptyLabel.isHidden = true
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		presenter.getData { (tracks) in
+			
+		}
+	}
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         presenter.getData { (tracks) in
@@ -215,30 +235,20 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
         refreshControl?.endRefreshing()
     }
 	
-	
-	func update(indexes: [Int]) {
-		UIView.setAnimationsEnabled(false)
-		if let paths = tableView.indexPathsForVisibleRows, self.view.window != nil {
-			tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .none)
-//			tableView.reloadRows(at: paths, with: .none)
-		} else {
-			tableView.reloadData()
-		}
-		refreshControl?.endRefreshing()
-		UIView.setAnimationsEnabled(true)
-	}
-	
 	func reload(update: [Int], delete: [Int], insert: [Int]) {
 		UIView.setAnimationsEnabled(false)
+		tableView.beginUpdates()
 		if self.view.window != nil {
-			tableView.reloadRows(at: update.map({IndexPath(row: 0, section: $0)}), with: .none)
-			tableView.insertRows(at: insert.map({IndexPath(row: 0, section: $0)}), with: .none)
-			tableView.deleteRows(at: delete.map({IndexPath(row: 0, section: $0)}), with: .none)
+			tableView.insertRows(at: insert.map({IndexPath(row: $0, section: 0)}), with: .none)
+			tableView.deleteRows(at: delete.map({IndexPath(row: $0, section: 0)}), with: .none)
+			tableView.reloadRows(at: update.map({IndexPath(row: $0, section: 0)}), with: .none)
 		} else {
 			tableView.reloadData()
 		}
+		tableView.endUpdates()
 		refreshControl?.endRefreshing()
 		UIView.setAnimationsEnabled(true)
+		self.emptyLabel.isHidden = presenter.tracks.count != 0
 	}
 
 }
@@ -246,11 +256,11 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 extension FeedViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return self.presenter.tracks.count
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.presenter.tracks.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -261,17 +271,17 @@ extension FeedViewController {
 	
 	override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
-		let tuple = self.presenter.tracks[indexPath.section]
+		let tuple = self.presenter.tracks[indexPath.item]
 		cell?.track = tuple.1
 		cell?.playButton.isSelected = tuple.0
 		
 		cell?.onPlay = { [weak self] _ in
-			let index = indexPath.section
+			let index = indexPath.item
 			self?.presenter.play(index: index)
 		}
 		
 		cell?.onLike = { [weak self] track in
-			let index = indexPath.section
+			let index = indexPath.item
 			self?.presenter.like(index: index)
 		}
 	}

@@ -57,6 +57,8 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		self.header.followButton.isSelected = SubscribeManager.shared.stations.contains(self.presenter.station.id)
 		
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
+		
+		self.tableView.tableHeaderView = self.header
     }
 	
 	func followPressed() {
@@ -66,13 +68,13 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		let height = self.header.fill(station: self.station, width: self.view.frame.width)
-		self.header.frame.size.height = height
 		self.header.snp.makeConstraints { (make) in
-			make.height.equalTo(height)
+//			make.height.equalTo(height)
 			make.width.equalTo(self.view.frame.width)
 		}
-		self.tableView.tableHeaderView = self.header
+		
+		let height = self.header.fill(station: self.station, width: self.view.frame.width)
+		self.header.frame.size.height = height
 	}
 
     override func didReceiveMemoryWarning() {

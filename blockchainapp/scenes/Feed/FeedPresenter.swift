@@ -91,14 +91,14 @@ class FeedPresenter: FeedPresenterProtocol {
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.1.id == id}) {
 			self.tracks[index].0 = true
-			self.view?.update(indexes: [index])
+			self.view?.reload(update: [index], delete: [], insert: [])
 		}
 	}
 	
 	@objc func trackPaused(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.1.id == id}) {
 			self.tracks[index].0 = false
-			self.view?.update(indexes: [index])
+			self.view?.reload(update: [index], delete: [], insert: [])
 		}
 	}
     
