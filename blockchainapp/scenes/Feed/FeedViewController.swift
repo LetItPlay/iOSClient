@@ -219,8 +219,21 @@ class FeedViewController: UITableViewController, FeedViewProtocol {
 	func update(indexes: [Int]) {
 		UIView.setAnimationsEnabled(false)
 		if let paths = tableView.indexPathsForVisibleRows, self.view.window != nil {
-//			tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .none)
-			tableView.reloadRows(at: paths, with: .none)
+			tableView.reloadRows(at: indexes.map({IndexPath(row: 0, section: $0)}), with: .none)
+//			tableView.reloadRows(at: paths, with: .none)
+		} else {
+			tableView.reloadData()
+		}
+		refreshControl?.endRefreshing()
+		UIView.setAnimationsEnabled(true)
+	}
+	
+	func reload(update: [Int], delete: [Int], insert: [Int]) {
+		UIView.setAnimationsEnabled(false)
+		if self.view.window != nil {
+			tableView.reloadRows(at: update.map({IndexPath(row: 0, section: $0)}), with: .none)
+			tableView.insertRows(at: insert.map({IndexPath(row: 0, section: $0)}), with: .none)
+			tableView.deleteRows(at: delete.map({IndexPath(row: 0, section: $0)}), with: .none)
 		} else {
 			tableView.reloadData()
 		}

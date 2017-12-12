@@ -47,10 +47,16 @@ class FeedPresenter: FeedPresenterProtocol {
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
                 }
-				let indexes = modifications.map({ (index) -> Int? in
+				let update = modifications.map({ (index) -> Int? in
 					return self?.tracks.index(where: {$0.1.id == results[index].id})
 				}).filter({$0 != nil}).map({$0!})
-				self?.view?.update(indexes: indexes)
+				let delete = deletions.map({ (index) -> Int? in
+					return self?.tracks.index(where: {$0.1.id == results[index].id})
+				}).filter({$0 != nil}).map({$0!})
+				let insert = insertions.map({ (index) -> Int? in
+					return self?.tracks.index(where: {$0.1.id == results[index].id})
+				}).filter({$0 != nil}).map({$0!})
+				self?.view?.reload(update: update, delete: delete, insert: insert)
 				
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread

@@ -25,4 +25,5 @@ protocol FeedPresenterProtocol: class {
 protocol FeedViewProtocol: class {
     func display()
 	func update(indexes: [Int])
+	func reload(update: [Int], delete: [Int], insert: [Int])
 }
