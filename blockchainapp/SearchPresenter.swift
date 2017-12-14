@@ -14,7 +14,6 @@ enum SearchScreenState {
 }
 
 protocol SearchPresenterDelegate: class {
-	func show(state: SearchScreenState)
 	func updateSearch()
 }
 
@@ -31,7 +30,6 @@ class SearchPresenter {
 	
 	func searchChanged(string: String) {
 		if string.count == 0 {
-			delegate?.show(state: .recommendations)
 			self.tracks = []
 			self.channels = []
 		} else {
@@ -43,7 +41,7 @@ class SearchPresenter {
 	
 	func formatPlaylists() {
 		
-		let tags = ["новости", "IT", "юмор"]
+		let tags = ["новости", "IT", "спорт"]
 		
 		for tag in tags {
 			if let channels = self.realm?.objects(Station.self).filter("tagString CONTAINS '\(tag)'").map({$0.id}){

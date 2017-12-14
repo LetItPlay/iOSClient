@@ -52,7 +52,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 				trackImageView.image = nil
 			}
 			
-			trackNameLabel.text = track?.name ?? ""
+			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
 			channelNameLabel.text = track?.findStationName()
 			
 			let dateRangeStart = track?.publishedAt ?? Date()
@@ -88,7 +88,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.contentView.addSubview(trackImageView)
 		trackImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
-			make.centerY.equalToSuperview()
+//			make.centerY.equalToSuperview()
+			make.top.equalToSuperview().inset(12)
 			make.width.equalTo(60)
 			make.height.equalTo(60)
 		}
@@ -111,7 +112,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.contentView.addSubview(trackNameLabel)
 		trackNameLabel.snp.makeConstraints { (make) in
 			make.left.equalTo(channelNameLabel)
-			make.top.equalTo(channelNameLabel.snp.bottom).inset(-1)
+			make.top.equalTo(channelNameLabel.snp.bottom).inset(2)
 			make.right.equalToSuperview().inset(16)
 		}
 		

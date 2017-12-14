@@ -23,9 +23,13 @@ UISearchBarDelegate,
 SearchPresenterDelegate {
 
 	var searchController: UISearchController!
-	var tableView: UITableView = UITableView()
+	var searchResultsTableView: UITableView = UITableView()
+	var playlistTableView: UITableView = UITableView()
 	
 	let presenter = SearchPresenter()
+	
+	let searchResults = SearchResultsController()
+	let playlistsResults = PlaylistsController()
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +37,11 @@ SearchPresenterDelegate {
 		self.title = "Search"
 		self.presenter.delegate = self
 		
+		self.searchResults.presenter = self.presenter
+		self.searchResults.searchController = self.searchController
+		
 		self.navigationController?.navigationBar.prefersLargeTitles = true
-		self.navigationItem.largeTitleDisplayMode = .never
+		self.navigationItem.largeTitleDisplayMode = .always
 		self.view.backgroundColor = .white
 		
 		self.searchController = UISearchController(searchResultsController:  nil)
@@ -43,27 +50,36 @@ SearchPresenterDelegate {
 		self.searchController.delegate = self
 		self.searchController.searchBar.delegate = self
 		
-		self.searchController.hidesNavigationBarDuringPresentation = false
+		self.searchController.hidesNavigationBarDuringPresentation = true
 		self.searchController.dimsBackgroundDuringPresentation = true
-//		self.searchController.obscuresBackgroundDuringPresentation = false
-		
-		self.navigationItem.titleView = self.searchController.searchBar
-		
 		self.definesPresentationContext = true
+
+		self.navigationItem.searchController = self.searchController
 		
-		self.searchController.view.addSubview(tableView)
-		tableView.snp.makeConstraints { (make) in
+		self.searchController.view.addSubview(searchResultsTableView)
+		searchResultsTableView.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview()
 		}
 		
-		self.tableView.delegate = self
-		self.tableView.dataSource = self
-		self.tableView.tableFooterView = nil
+		self.searchResultsTableView.delegate = self.searchResults
+		self.searchResultsTableView.dataSource = self.searchResults
+		self.searchResultsTableView.tableFooterView = nil
 		
         // Do any additional setup after loading the view.
 		
-		self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
-		self.presenter.formatPlaylists()
+		self.searchResultsTableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
+		self.searchResultsTableView.register(SmallChannelTableViewCell.self, forCellReuseIdentifier: SmallChannelTableViewCell.cellID)
+//		self.presenter.formatPlaylists()
+		
+		
+		self.view.addSubview(playlistTableView)
+		playlistTableView.snp.makeConstraints { (make) in
+			make.edges.equalToSuperview()
+		}
+		playlistTableView.delegate = self.playlistsResults
+		playlistTableView.dataSource = self.playlistsResults
+		
+		self.navigationItem.hidesSearchBarWhenScrolling = false
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
@@ -72,37 +88,36 @@ SearchPresenterDelegate {
 		}
 	}
 	
-	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-		self.searchController.searchBar.resignFirstResponder()
-	}
-	
 	func updateSearch() {
-		self.tableView.reloadData()
+		self.searchResultsTableView.reloadData()
 	}
-	
-	func show(state: SearchScreenState) {
-		
-	}
-	
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
+	weak var presenter: SearchPresenter!
+
+	func numberOfSections(in tableView: UITableView) -> Int {
+		return 0
+	}
+	
+	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+		return 0
+	}
+	
+	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+		return UITableViewCell()
+	}
+}
+
+class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSource {
+
+	weak var presenter: SearchPresenter!
+	weak var searchController: UISearchController?
+	
+	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+		self.searchController?.searchBar.resignFirstResponder()
+	}
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return 2
@@ -118,17 +133,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 			cell.track = self.presenter.tracks[indexPath.item]
 			return cell
 		} else {
+			let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath)
 			
+			return cell
 		}
-		return UITableViewCell()
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		if indexPath.section == 0 {
+		if indexPath.section == 1 {
 			let track = self.presenter.tracks[indexPath.item]
 			return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
 		} else {
-			return 88.0
+			return SmallChannelTableViewCell.height
 		}
 	}
 }

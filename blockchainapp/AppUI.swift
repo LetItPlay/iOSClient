@@ -29,6 +29,7 @@ struct AppFont {
 	}
 	struct Text {
 		static let mid = UIFont.systemFont(ofSize: 14, weight: .regular)
+		static let descr = UIFont.systemFont(ofSize: 14, weight: .medium)
 	}
 	
 }

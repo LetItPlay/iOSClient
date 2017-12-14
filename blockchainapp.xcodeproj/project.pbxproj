@@ -24,6 +24,9 @@
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
+		019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */; };
+		019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2541FE27DEE0007FDEE /* FollowButton.swift */; };
+		019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */; };
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
 		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
@@ -108,6 +111,9 @@
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
+		019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelTableViewCell.swift; sourceTree = "<group>"; };
+		019FB2541FE27DEE0007FDEE /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
+		019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
 		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +194,8 @@
 			children = (
 				01510EB11FE0E907003AC116 /* SearchPresenter.swift */,
 				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
+				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
+				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
 			);
 			name = SearchScreen;
 			sourceTree = "<group>";
@@ -218,6 +226,7 @@
 				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
 				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
 				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
+				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
 			);
 			name = "UI Extensions";
 			sourceTree = "<group>";
@@ -615,6 +624,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
 				015812A21FD80AF1002828F5 /* AudioController.swift in Sources */,
@@ -640,6 +650,7 @@
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
+				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
@@ -648,6 +659,7 @@
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
+				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
 				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,
