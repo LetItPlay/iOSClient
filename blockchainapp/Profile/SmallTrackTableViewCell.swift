@@ -17,6 +17,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 		label.textColor = .black
 		label.numberOfLines = 2
+		label.lineBreakMode = .byTruncatingTail
 		return label
 	}()
 	let channelNameLabel: UILabel = {
@@ -59,20 +60,20 @@ class SmallTrackTableViewCell: UITableViewCell {
 			let components = Calendar.current.dateComponents([.month, .day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
 			
 			var res = ""
-			if let month = components.month {
-				res = "\(month) month(s)"
+			if let month = components.weekOfYear, month != 0 {
+				res = "\(month)w ago"
 			} else
-			if let day = components.day {
-				res = "\(day) day(s)"
+			if let day = components.day, day != 0 {
+				res = "\(day)d ago"
 			} else
-			if let hours = components.hour {
-				res = "\(hours) hour(s)"
+			if let hours = components.hour, hours != 0 {
+				res = "\(hours)h ago"
 			} else
-			if let min = components.minute {
-				res = "\(min) min."
+			if let min = components.minute, min != 0 {
+				res = "\(min)m ago"
 			} else
 			if let sec = components.second {
-				res = "\(sec) sec."
+				res = "\(sec)s ago"
 			}
 			self.timeLabel.text = res
 			
@@ -122,7 +123,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		timeCount.snp.makeConstraints { (make) in
 			make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
 			make.left.equalTo(trackNameLabel)
-			make.bottom.equalToSuperview().inset(12)
+//			make.bottom.equalToSuperview().inset(12)
 		}
 		
 		self.contentView.addSubview(listensCount)
@@ -156,7 +157,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	static func height(text: String, width: CGFloat) -> CGFloat {
 		let rect = self.trackText(text: text)
-			.boundingRect(with: CGSize.init(width: width, height: 9999),
+			.boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
 						  options: .usesLineFragmentOrigin,
 						  context: nil)
 		return min(rect.height, 44) + 31 + 32

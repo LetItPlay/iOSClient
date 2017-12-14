@@ -14,6 +14,8 @@
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
 		01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAC1FDED922003AC116 /* RealmExtension.swift */; };
 		01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */; };
+		01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EB11FE0E907003AC116 /* SearchPresenter.swift */; };
+		01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EB31FE0F421003AC116 /* SearchViewController.swift */; };
 		0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */; };
 		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
 		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
@@ -96,6 +98,8 @@
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
 		01510EAC1FDED922003AC116 /* RealmExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
 		01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTrackCell.swift; sourceTree = "<group>"; };
+		01510EB11FE0E907003AC116 /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
+		01510EB31FE0F421003AC116 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
 		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
 		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
@@ -179,6 +183,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01510EB01FE0E8EC003AC116 /* SearchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				01510EB11FE0E907003AC116 /* SearchPresenter.swift */,
+				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
+			);
+			name = SearchScreen;
+			sourceTree = "<group>";
+		};
 		019B3DC41FCC4599008C3B76 /* Channel Screen */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,6 +312,7 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				01510EB01FE0E8EC003AC116 /* SearchScreen */,
 				019B3DC41FCC4599008C3B76 /* Channel Screen */,
 				01AA891F1FC5610500D50C13 /* Profile */,
 				CFCEA3201F98AD4700DFAE70 /* FullPlayer */,
@@ -622,6 +636,7 @@
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
 				01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */,
+				01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
@@ -636,6 +651,7 @@
 				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
 				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,
+				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
 				CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,

@@ -19,6 +19,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 		let tabs: [(String, (UIImage?, UIViewController))] = [
 			("Feed", (UIImage.init(named: "feedTab"), FeedBuilder.build())),
 			("Trends", (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
+			("Search", (nil, SearchViewController())),
 			("Channels", (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
 			("Profile", (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
