@@ -19,6 +19,7 @@ struct AppColor {
 struct AppFont {
 	struct Title {
 		static let big = UIFont.systemFont(ofSize: 24, weight: .regular)
+		static let section = UIFont.systemFont(ofSize: 20, weight: .bold)
 		static let mid = UIFont.systemFont(ofSize: 18, weight: .medium)
 		static let midBold = UIFont.systemFont(ofSize: 18, weight: .bold)
 		static let sml = UIFont.systemFont(ofSize: 14, weight: .bold)

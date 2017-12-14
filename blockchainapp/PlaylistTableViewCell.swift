@@ -60,6 +60,12 @@ class PlaylistTableViewCell: UITableViewCell {
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
+		
+		self.selectionStyle = .none
+		
+		playlistImageView.backgroundColor = .red
+		playlistTitleLabel.attributedText = PlaylistTableViewCell.titleString(string: "Fresh IT news")
+		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
 	}
 	
 	static func titleString(string: String) -> NSAttributedString {
@@ -86,6 +92,16 @@ class PlaylistTableViewCell: UITableViewCell {
 	}
 
 	static func height(title: String, desc: String, width: CGFloat) -> CGFloat {
-		return 331.0
+		
+		let titleh = self.titleString(string: title)
+			.boundingRect(with: CGSize.init(width: width - 16 - 16, height: 9999),
+						  options: .usesLineFragmentOrigin,
+						  context: nil).height
+		let desch = self.descrString(string: desc)
+			.boundingRect(with: CGSize.init(width: width - 16 - 16, height: 9999),
+						  options: .usesLineFragmentOrigin,
+						  context: nil).height
+		let imgh = imageHeight(width: width)
+		return titleh + desch + imgh + 10 + 10 + 4 //+ 22
 	}
 }

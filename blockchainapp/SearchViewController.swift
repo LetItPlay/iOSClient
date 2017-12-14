@@ -24,7 +24,7 @@ SearchPresenterDelegate {
 
 	var searchController: UISearchController!
 	var searchResultsTableView: UITableView = UITableView()
-	var playlistTableView: UITableView = UITableView()
+	var playlistTableView: UITableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
 	let presenter = SearchPresenter()
 	
@@ -79,6 +79,10 @@ SearchPresenterDelegate {
 		playlistTableView.delegate = self.playlistsResults
 		playlistTableView.dataSource = self.playlistsResults
 		
+		playlistTableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
+		playlistTableView.separatorStyle = .none
+		playlistTableView.backgroundColor = .white
+		
 		self.navigationItem.hidesSearchBarWhenScrolling = false
     }
 	
@@ -98,15 +102,46 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 	weak var presenter: SearchPresenter!
 
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return 0
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 0
+		return 3
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return UITableViewCell()
+		let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath)
+		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return PlaylistTableViewCell.height(title: "123", desc: "123\n123", width: tableView.frame.width)
+	}
+	
+	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 41
+	}
+	
+	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 0.01
+	}
+	
+	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let label = UILabel()
+		label.textColor = AppColor.Title.dark
+		label.font = AppFont.Title.section
+		label.text = "Today playlists"
+		
+		let container = UIView()
+		container.backgroundColor = UIColor.white
+		container.addSubview(label)
+		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview()
+			make.bottom.equalToSuperview()
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+		}
+		return container
 	}
 }
 
