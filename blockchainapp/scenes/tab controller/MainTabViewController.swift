@@ -19,7 +19,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 		let tabs: [(String, (UIImage?, UIViewController))] = [
 			("Feed", (UIImage.init(named: "feedTab"), FeedBuilder.build())),
 			("Trends", (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
-			("Search", (nil, SearchViewController())),
+			("Search", (UIImage.init(named: "searchTab"), SearchViewController())),
 			("Channels", (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
 			("Profile", (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
@@ -37,6 +37,10 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 		} else {
 			self.dismissPopupBar(animated: animated, completion: nil)
 		}
+	}
+	
+	func showPlaylist() {
+		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
 	}
 	
     override func viewDidLoad() {

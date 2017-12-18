@@ -51,8 +51,12 @@ class DBManager {
             
             let formatter = DateFormatter()
 			formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-            
-            changeCounter += updateIfNeeded(property: &track.publishedAt, new: formatter.date(from: publishDate) ?? Date())
+			
+			if publishDate == "" {
+				print("fcuk")
+			}
+			
+            changeCounter += updateIfNeeded(property: &track.publishedAt, new: formatter.date(from: publishDate) ?? Date().addingTimeInterval(-60*60*24*30))
             
             if track.audiofile?.file != audiofile?.file {
                 track.audiofile = audiofile

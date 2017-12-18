@@ -39,6 +39,7 @@ SearchPresenterDelegate {
 		
 		self.searchResults.presenter = self.presenter
 		self.searchResults.searchController = self.searchController
+		self.searchResults.parent = self
 		
 		self.navigationController?.navigationBar.prefersLargeTitles = true
 		self.navigationItem.largeTitleDisplayMode = .always
@@ -78,6 +79,7 @@ SearchPresenterDelegate {
 		}
 		playlistTableView.delegate = self.playlistsResults
 		playlistTableView.dataSource = self.playlistsResults
+		self.playlistsResults.presenter = self.presenter
 		
 		playlistTableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
 		playlistTableView.separatorStyle = .none
@@ -95,7 +97,11 @@ SearchPresenterDelegate {
 	func updateSearch() {
 		self.searchResultsTableView.reloadData()
 	}
-
+	
+	func update(tracks: [Int], channels: [Int]) {
+		self.searchResultsTableView.reloadRows(at: tracks.map({IndexPath.init(row: $0, section: 1)}), with: .none)
+		self.searchResultsTableView.reloadRows(at: channels.map({IndexPath.init(row: $0, section: 0)}), with: .none)
+	}
 }
 
 class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -106,16 +112,22 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return 3
+		return self.presenter.playlists.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath)
+		let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
+		cell.fill(tuple: self.presenter.playlists[indexPath.item])
 		return cell
 	}
 	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.presenter.formatPlaylists(index: indexPath.item)
+	}
+	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return PlaylistTableViewCell.height(title: "123", desc: "123\n123", width: tableView.frame.width)
+		let playlist = self.presenter.playlists[indexPath.item]
+		return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.descr, width: tableView.frame.width)
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -148,6 +160,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSource {
 
 	weak var presenter: SearchPresenter!
+	weak var parent: UIViewController?
 	weak var searchController: UISearchController?
 	
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -166,11 +179,25 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
 		if indexPath.section != 0 {
 			let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
 			cell.track = self.presenter.tracks[indexPath.item]
+			let isPlaying = self.presenter.currentPlayingIndex == indexPath.item
+			cell.dataLabels[.listens]?.isHidden = isPlaying
+			cell.dataLabels[.playingIndicator]?.isHidden = !isPlaying
 			return cell
 		} else {
-			let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath)
-			
+			let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
+			cell.channel = self.presenter.channels[indexPath.item]
+			cell.onSub = { self.presenter.channelSubPressed(index: indexPath.item) }
 			return cell
+		}
+	}
+	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if indexPath.section == 0 {
+			let station = self.presenter.channels[indexPath.row]
+			let vc = ChannelViewController(station: station)
+			self.parent?.navigationController?.pushViewController(vc, animated: true)
+		} else {
+			self.presenter.trackSelected(index: indexPath.item)
 		}
 	}
 	

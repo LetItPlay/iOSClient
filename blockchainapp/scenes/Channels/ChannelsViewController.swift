@@ -113,9 +113,11 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
 		
 		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
 		
+		
         presenter.getData { [weak self] (channels) in
             self?.display(channels: channels)
         }
+//		refreshControl?.beginRefreshing()
     }
 	
 	override func viewWillAppear(_ animated: Bool) {

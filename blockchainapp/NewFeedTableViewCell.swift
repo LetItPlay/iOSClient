@@ -29,6 +29,8 @@ class NewFeedTableViewCell: UITableViewCell {
 			trackTitleLabel.setTitle(title: track?.name ?? "")
 			channelLabel.text = track?.findStationName()
 			
+			timeAgoLabel.text = track?.publishedAt.formatString()
+			
 			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
 			dataLabels[.time]?.setData(data: maxTime)
@@ -77,7 +79,6 @@ class NewFeedTableViewCell: UITableViewCell {
 		let imageView: UIImageView = UIImageView()
 		imageView.layer.masksToBounds = true
 		imageView.layer.cornerRadius = 10
-		imageView.backgroundColor = .red
 		imageView.snp.makeConstraints({ (maker) in
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)

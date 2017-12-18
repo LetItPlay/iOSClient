@@ -55,27 +55,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
 			channelNameLabel.text = track?.findStationName()
 			
-			let dateRangeStart = track?.publishedAt ?? Date()
-			let dateRangeEnd = Date()
-			let components = Calendar.current.dateComponents([.month, .day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
-			
-			var res = ""
-			if let month = components.weekOfYear, month != 0 {
-				res = "\(month)w ago"
-			} else
-			if let day = components.day, day != 0 {
-				res = "\(day)d ago"
-			} else
-			if let hours = components.hour, hours != 0 {
-				res = "\(hours)h ago"
-			} else
-			if let min = components.minute, min != 0 {
-				res = "\(min)m ago"
-			} else
-			if let sec = components.second {
-				res = "\(sec)s ago"
-			}
-			self.timeLabel.text = res
+			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
 			
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
 			dataLabels[.time]?.setData(data: Int64(track?.audiofile?.lengthSeconds ?? 0))
@@ -146,6 +126,15 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.separatorInset.left = 90
 		self.selectionStyle = .none
 		
+		let view = UIView()
+		view.backgroundColor = AppColor.Element.tomato.withAlphaComponent(0.2)
+		self.contentView.addSubview(view)
+		view.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(90)
+			make.right.equalToSuperview()
+			make.bottom.equalToSuperview()
+			make.height.equalTo(1)
+		}
 	}
 	
 	static func trackText(text: String) -> NSAttributedString {

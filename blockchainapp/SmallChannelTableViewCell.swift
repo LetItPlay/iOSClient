@@ -34,6 +34,22 @@ class SmallChannelTableViewCell: UITableViewCell {
 	var followButton: UIButton = FollowButton()
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
+	var onSub: (() -> Void)? = nil
+	
+	weak var channel: Station? = nil {
+		didSet {
+			channelNameLabel.text = channel?.name
+			dataLabels[.subs]?.setData(data: Int64(channel?.subscriptionCount ?? 0))
+			dataLabels[.listens]?.setData(data: 0)
+			if let urlString = channel?.image.buildImageURL() {
+				channelImageView.sd_setImage(with: urlString)
+			} else {
+				channelImageView.image = nil
+			}
+			self.followButton.isSelected = SubscribeManager.shared.hasStation(id: channel?.id ?? -1)
+		}
+	}
+	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
@@ -58,7 +74,6 @@ class SmallChannelTableViewCell: UITableViewCell {
 		
 		let subs = IconedLabel(type: .subs)
 		let listens = IconedLabel(type: .listens)
-		let indicator = IconedLabel(type: .playingIndicator)
 		
 		self.contentView.addSubview(subs)
 		subs.snp.makeConstraints { (make) in
@@ -72,18 +87,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 			make.left.equalTo(subs.snp.right).inset(-10)
 		}
 		
-		self.contentView.addSubview(indicator)
-		indicator.snp.makeConstraints { (make) in
-			make.centerY.equalTo(subs)
-			make.left.equalTo(subs.snp.right).inset(-10)
-		}
-		
-		indicator.isHidden = true
-		
-		channelImageView.backgroundColor = .red
-		channelNameLabel.text = "123 123123"
-		subs.setData(data: 123)
-		listens.setData(data: 123)
+		self.dataLabels = [.subs: subs, .listens: listens]
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

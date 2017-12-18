@@ -16,6 +16,7 @@ class PlaylistTableViewCell: UITableViewCell {
 	let playlistImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 6
+		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
 		return imageView
 	}()
@@ -61,11 +62,26 @@ class PlaylistTableViewCell: UITableViewCell {
 			make.right.equalToSuperview().inset(16)
 		}
 		
+		let lipicon = UIImageView.init(image: UIImage.init(named: "lipicon"))
+		self.contentView.addSubview(lipicon)
+		lipicon.snp.makeConstraints { (make) in
+			make.top.equalTo(playlistImageView).inset(10)
+			make.right.equalTo(playlistImageView).inset(10)
+			make.width.equalTo(37)
+			make.height.equalTo(14)
+		}
+		
 		self.selectionStyle = .none
 		
 		playlistImageView.backgroundColor = .red
 		playlistTitleLabel.attributedText = PlaylistTableViewCell.titleString(string: "Fresh IT news")
 		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
+	}
+	
+	func fill(tuple: (image: UIImage?, title: String, descr: String)) {
+		self.playlistImageView.image = tuple.image
+		self.playlistTitleLabel.attributedText = type(of: self).titleString(string: tuple.title)
+		self.descriptionLabel.attributedText = type(of: self).descrString(string: tuple.descr)
 	}
 	
 	static func titleString(string: String) -> NSAttributedString {

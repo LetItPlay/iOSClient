@@ -80,14 +80,16 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			make.center.equalTo(self.view)
 		}
 		emptyLabel.isHidden = false
+		
+		presenter.getData { (tracks) in
+			
+		}
+		self.tableView.refreshControl?.beginRefreshing()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		self.cellHeight = self.view.frame.width - 16 * 2 + 24 // side margins
-		presenter.getData { (tracks) in
-			
-		}
 	}
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {

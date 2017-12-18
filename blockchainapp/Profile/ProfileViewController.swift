@@ -12,7 +12,7 @@ import RealmSwift
 
 class ProfileViewController: UIViewController {
 
-	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.plain)
+	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
@@ -31,6 +31,10 @@ class ProfileViewController: UIViewController {
 		
 		tableView.tableHeaderView = ProfileTopView()
 		tableView.contentInset.bottom = 72
+		
+		self.tableView.separatorColor = self.tableView.backgroundColor
+		
+		self.tableView.separatorStyle = .none
 		
 		self.tableView.reloadData()
         // Do any additional setup after loading the view.
@@ -136,30 +140,69 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		let view = UIView()
-		view.backgroundColor = UIColor.init(white: 248.0/255, alpha: 1)
+		view.backgroundColor = .white
+		
 		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
-		label.text = "Tracks you've liked"
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.dark
+		label.text = "Tracks you’ve liked"
+		
+		let tracks = IconedLabel.init(type: .tracks)
+		tracks.setData(data: Int64(self.tracks.count))
+		
+		let time = IconedLabel.init(type: .time)
+		time.setData(data: Int64(self.tracks.map({$0.audiofile?.lengthSeconds ?? 0}).reduce(0, {$0 + $1})))
+		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().inset(12)
 			make.left.equalToSuperview().inset(16)
-			make.bottom.equalToSuperview().inset(6)
 		}
-		let bot = CALayer()
-		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 59), size: CGSize.init(width: 414, height: 1))
-		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
-		view.layer.addSublayer(bot)
+		
+		view.addSubview(tracks)
+		tracks.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.top.equalTo(label.snp.bottom).inset(-7)
+		}
+		
+		view.addSubview(time)
+		time.snp.makeConstraints { (make) in
+			make.left.equalTo(tracks.snp.right).inset(-8)
+			make.centerY.equalTo(tracks)
+		}
+		
+		let line = UIView()
+		line.backgroundColor = AppColor.Element.redBlur
+		line.layer.cornerRadius = 1
+		line.layer.masksToBounds = true
+		
+		view.addSubview(line)
+		line.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+			make.bottom.equalToSuperview()
+			make.height.equalTo(2)
+		}
+		
 		return view
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 60
+		return 81
+	}
+	
+	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 0.01
+	}
+	
+	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		return nil
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return SmallTrackTableViewCell.height(text: " ", width: tableView.frame.width)
-	}
-}
+		let track = self.tracks[indexPath.item]
+		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
+	}}
 
 class ProfileTopView: UIView {
 	

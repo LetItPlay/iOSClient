@@ -16,6 +16,7 @@ class ChannelTrackCell: UITableViewCell {
 		let label = UILabel()
 		label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
 		label.textColor = .black
+		label.lineBreakMode = .byTruncatingTail
 		label.numberOfLines = 2
 		return label
 	}()
@@ -45,29 +46,9 @@ class ChannelTrackCell: UITableViewCell {
 				trackImageView.image = nil
 			}
 			
-			trackNameLabel.text = track?.name ?? ""
-			
-			let dateRangeStart = track?.publishedAt ?? Date()
-			let dateRangeEnd = Date()
-			let components = Calendar.current.dateComponents([.month, .day, .hour, .minute, .second], from: dateRangeStart, to: dateRangeEnd)
-			
-			var res = ""
-			if let month = components.weekOfYear {
-				res = "\(month)w ago"
-			} else
-				if let day = components.day {
-					res = "\(day)d ago"
-				} else
-					if let hours = components.hour {
-						res = "\(hours)h ago"
-					} else
-						if let min = components.minute {
-							res = "\(min)m ago"
-						} else
-							if let sec = components.second {
-								res = "\(sec)s ago"
-			}
-			self.timeLabel.text = res
+			trackNameLabel.attributedText = type(of: self).trackText(text: track?.name ?? "")
+
+			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
 			
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
 			dataLabels[.time]?.setData(data: Int64(track?.audiofile?.lengthSeconds ?? 0))
@@ -88,14 +69,14 @@ class ChannelTrackCell: UITableViewCell {
 		self.contentView.addSubview(trackNameLabel)
 		trackNameLabel.snp.makeConstraints { (make) in
 			make.left.equalTo(trackImageView.snp.right).inset(-14)
-			make.top.equalToSuperview().inset(16)
+			make.top.equalToSuperview().inset(12)
 //			make.right.equalToSuperview().inset(16)
 		}
 		
 		self.contentView.addSubview(timeLabel)
 		timeLabel.snp.makeConstraints { (make) in
 			make.right.equalToSuperview().inset(16)
-			make.top.equalTo(trackNameLabel)
+			make.top.equalTo(trackNameLabel).inset(4)
 			make.left.equalTo(trackNameLabel.snp.right).inset(-4)
 			make.width.equalTo(60)
 		}
@@ -106,7 +87,7 @@ class ChannelTrackCell: UITableViewCell {
 		
 		self.contentView.addSubview(timeCount)
 		timeCount.snp.makeConstraints { (make) in
-			make.top.equalTo(trackNameLabel.snp.bottom).inset(-11)
+			make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
 			make.left.equalTo(trackNameLabel)
 			make.bottom.equalToSuperview().inset(12)
 		}
@@ -130,6 +111,15 @@ class ChannelTrackCell: UITableViewCell {
 		self.separatorInset.left = 90
 		self.selectionStyle = .none
 		
+		let view = UIView()
+		view.backgroundColor = AppColor.Element.tomato.withAlphaComponent(0.2)
+		self.contentView.addSubview(view)
+		view.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(90)
+			make.right.equalToSuperview()
+			make.bottom.equalToSuperview()
+			make.height.equalTo(1)
+		}
 	}
 	
 	static func trackText(text: String) -> NSAttributedString {
@@ -142,10 +132,10 @@ class ChannelTrackCell: UITableViewCell {
 	
 	static func height(text: String, width: CGFloat) -> CGFloat {
 		let rect = self.trackText(text: text)
-			.boundingRect(with: CGSize.init(width: width, height: 9999),
+			.boundingRect(with: CGSize.init(width: width - 16 - 60 - 16 - 60, height: 9999),
 						  options: .usesLineFragmentOrigin,
 						  context: nil)
-		return min(rect.height, 44) + 9 + 32
+		return round(min(rect.height, 44)) + 12 + 42 - 7
 	}
 	
 	

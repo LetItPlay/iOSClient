@@ -76,6 +76,7 @@ class PlayerViewController: UIViewController {
                                                selector: #selector(audioManagerNextPlayed(_:)),
                                                name: AudioManagerNotificationName.nextPlayed.notification,
                                                object: audioManager)
+		
     }
 
     override func didReceiveMemoryWarning() {

@@ -128,36 +128,11 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			make.height.equalTo(64)
 		}
 		
-//		let scrollView = CustomScrollView.init(frame: CGRect.zero)
-//		self.view.addSubview(scrollView)
-//		scrollView.snp.makeConstraints { (make) in
-//			make.edges.equalToSuperview()
-//		}
-//
-//		scrollView.contentSize = CGSize.init(width: self.view.frame.width * 2, height: self.view.frame.height)
-//
-//		scrollView.addSubview(playerView)
-//		scrollView.isPagingEnabled = true
-//		scrollView.delaysContentTouches = false
-//
-//		playerView.snp.makeConstraints({ (make) in
-//			make.top.equalTo(self.view)
-//			make.bottom.equalTo(self.view)
-//			make.left.equalToSuperview()
-//			make.width.equalTo(self.view.frame.width)
-//		})
-//
-//		scrollView.addSubview(playlistView)
-//		playlistView.snp.makeConstraints { (make) in
-//			make.width.equalTo(self.view.frame.width)
-//			make.top.equalTo(self.view)
-//			make.bottom.equalTo(self.view)
-//			make.left.equalTo(playerView.snp.right)
-//		}
-		
 		AudioController.main.delegate = self
-		
-//		self.subscribe()
+	}
+	
+	func showPlaylist() {
+		self.playlistView.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -171,31 +146,6 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			make.size.equalTo(self.view.frame.size)
 		}
 	}
-	
-//	func updateTrackInfo() {
-//		if let trackStat =  self.audioManager.currentItemId,
-//			let stringId = trackStat.split(separator: "_").first,
-//			let id = Int(stringId) {
-//
-//			let trackId = id
-//
-//			let realm = try! Realm()
-//			if let ob = realm.object(ofType: Track.self, forPrimaryKey: id) {
-//				let channel = ob.findStationName() ?? ""
-//				let title = ob.name
-//				let url = URL(string: ob.image)
-//
-//				self.popupItem.title = channel
-//				self.popupItem.subtitle = title
-//				self.playerView.channelNameLabel.text = channel
-//				self.playerView.trackNameLabel.text = title
-//				self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-//					self.popupItem.image = img
-//					self.playerView.underblurimageView.image = img
-//				})
-//			}
-//		}
-//	}
 	
 	@objc func trackSeekChanged(_ sender: Any) {
 		audioController.make(command: .seek(progress: Double(self.playerView.trackProgressView.slider.value)))

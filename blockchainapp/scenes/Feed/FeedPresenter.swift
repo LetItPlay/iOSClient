@@ -21,6 +21,8 @@ class FeedPresenter: FeedPresenterProtocol {
     
 	var isFeed: Bool = false
 	var tracks: [(Bool, Track)] = []
+	
+	var sort: (Track, Track) -> Bool? = {_,_ in return nil}
     
     init(view: FeedViewProtocol, orderByListens: Bool) {
         self.view = view
@@ -28,8 +30,25 @@ class FeedPresenter: FeedPresenterProtocol {
 		self.isFeed = !orderByListens
         
         let realm = try! Realm()
-        let results = orderByListens ? realm.objects(Track.self).sorted(byKeyPath: "listenCount", ascending: false)
-            : realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
+//		var sortDescriptors: [SortDescriptor] = []
+//		if orderByListens {
+//			sortDescriptors.append(SortDescriptor.init(keyPath: "listenCount", ascending: true))
+//		} else {
+//			sortDescriptors.append(SortDescriptor.init(keyPath: "publishedAt", ascending: true))
+//		}
+//		sortDescriptors.append(SortDescriptor.init(keyPath: "name", ascending: true))
+		
+		if (self.isFeed) {
+			sort = { first, second in
+				if first.publishedAt != second.publishedAt {
+					return first.publishedAt > second.publishedAt
+				}
+				return nil}
+		} else {
+			sort = {$0.listenCount != $1.listenCount ? $0.listenCount > $1.listenCount : nil}
+		}
+		
+		let results = realm.objects(Track.self)//.sorted(by: sortDescriptors)
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
 			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station)} : {(_) -> Bool in return true }
@@ -37,12 +56,24 @@ class FeedPresenter: FeedPresenterProtocol {
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
-                self?.tracks = Array(results).filter(filter).map({($0.id == currentID, $0)})
+				self?.tracks = Array(results).filter(filter).sorted(by: { (first, second) -> Bool in
+					if let res = self?.sort(first, second) {
+						return res
+					} else {
+						return first.name < second.name
+					}
+				}).map({($0.id == currentID, $0)})
 				
 				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                self?.tracks = Array(results).filter(filter).map({($0.id == currentID, $0)})
+				self?.tracks = Array(results).filter(filter).sorted(by: { (first, second) -> Bool in
+					if let res = self?.sort(first, second) {
+						return res
+					} else {
+						return first.name < second.name
+					}
+				}).map({($0.id == currentID, $0)})
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"

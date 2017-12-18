@@ -15,10 +15,12 @@ protocol AudioControllerDelegate: class {
 	func playState(isPlaying: Bool)
 	func trackUpdate()
 	func playlistChanged()
+	func showPlaylist()
 }
 
 protocol AudioControllerPresenter: class {
 	func popupPlayer(show: Bool, animated: Bool)
+	func showPlaylist()
 }
 
 protocol AudioControllerProtocol: class {
@@ -163,6 +165,13 @@ class AudioController: AudioControllerProtocol {
 			let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
 			self.delegate?.playlistChanged()
 			audioManager.add(playlist: [group])
+		}
+	}
+	
+	func showPlaylist() {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+			self.popupDelegate?.showPlaylist()
+			self.delegate?.showPlaylist()
 		}
 	}
 	

@@ -41,6 +41,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		
 		self.view.backgroundColor = UIColor.white
 		self.tableView.backgroundColor = .white
+		self.tableView.separatorColor = self.tableView.backgroundColor
 		
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
@@ -99,8 +100,34 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 		return self.presenter.tracks[section].count
 	}
 	
-	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return "Recent tracks"
+	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		let view = UIView()
+		view.backgroundColor = .white
+		
+		let label = UILabel()
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.dark
+		label.text = "Recent added"
+		
+		view.addSubview(label)
+		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().inset(12)
+			make.left.equalToSuperview().inset(16)
+		}
+		
+		return view
+	}
+	
+	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		return 53
+	}
+	
+	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+		return 0.01
+	}
+	
+	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+		return nil
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -117,5 +144,10 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 		cell.dataLabels[.listens]?.isHidden = hideListens
 		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
 		return cell
+	}
+	
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		let track = self.presenter.tracks[indexPath.section][indexPath.item]
+		return ChannelTrackCell.height(text: track.name, width: tableView.frame.width)
 	}
 }

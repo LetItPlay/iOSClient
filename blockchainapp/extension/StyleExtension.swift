@@ -86,3 +86,27 @@ extension Int64 {
         return "\(self)"
     }
 }
+
+extension Date {
+	func formatString() -> String {
+		let dateRangeEnd = Date()
+		let components = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: self, to: dateRangeEnd)
+		
+		if let day = components.day, day != 0 {
+			if day > 7 {
+				return "\(Int(ceil(Double(day)/7)))w ago"
+			}
+			return "\(day)d ago"
+		} else
+			if let hours = components.hour, hours != 0 {
+				return "\(hours)h ago"
+			} else
+				if let min = components.minute, min != 0 {
+					return "\(min)m ago"
+				} else
+					if let sec = components.second {
+						return "\(sec)s ago"
+		}
+		return "1s ago"
+	}
+}
