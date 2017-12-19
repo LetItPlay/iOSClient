@@ -15,6 +15,7 @@ class Station: Object {
     @objc dynamic var image: String = ""
     @objc dynamic var subscriptionCount: Int = 0
     @objc dynamic var tagString: String = ""
+	@objc dynamic var lang: String     		= ""
     
     override static func primaryKey() -> String? {
         return "id"
@@ -41,7 +42,8 @@ class Track: Object {
     @objc dynamic var reportCount: Int      = 0
     @objc dynamic var listenCount: Int      = 0
     @objc dynamic var tagString: String     = ""
-    
+	@objc dynamic var lang: String     		= ""
+
     /**
      * yyyy-mm-ddThh:mm:ss[.mmm]
      */

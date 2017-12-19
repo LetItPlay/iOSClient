@@ -66,30 +66,44 @@ class ProfileViewController: UIViewController {
 											   selector: #selector(trackPaused(notification:)),
 											   name: AudioController.AudioStateNotification.paused.notification(),
 											   object: nil)
-    }
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(settingsChanged(notification:)),
+											   name: SettingsNotfification.changed.notification(),
+											   object: nil)    }
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
+	@objc func settingsChanged(notification: Notification) {
+		self.reloadData()
+	}
+	
+	
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
 			self.currentIndex = index
+			self.tableView.reloadData()
 		}
 	}
 	
 	@objc func trackPaused(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
 			self.currentIndex = -1
+			self.tableView.reloadData()
 		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
+		self.reloadData()
+	}
+	
+	func reloadData() {
 		let realm = try? Realm()
 		let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id)}) ?? []
+		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
 		self.tableView.reloadData()
 	}
 	

@@ -27,7 +27,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
-                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount}))
+                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
                 self?.view?.display(channels: items)
                 
 				let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
@@ -39,7 +39,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
                 
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
-                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount}))
+                let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
                 self?.view?.display(channels: items)
                 
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
@@ -55,7 +55,25 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
             }
             
         })
-    }
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(settingsChanged(notification:)),
+											   name: SettingsNotfification.changed.notification(),
+											   object: nil)
+		
+	}
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self)
+		token?.invalidate()
+	}
+	
+	@objc func settingsChanged(notification: Notification) {
+		self.getData { _ in
+			
+		}
+	}
+	
+	
     
     //
     func getData(onComplete: @escaping StationResult) {

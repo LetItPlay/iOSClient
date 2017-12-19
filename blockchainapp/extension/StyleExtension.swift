@@ -53,7 +53,10 @@ extension String {
         if !self.contains("uploads") {
             result += "uploads/"
         }
-        return URL(string: result + self)
+		if let path = (result + self).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
+			return URL(string: path)
+		}
+        return nil
     }
 }
 

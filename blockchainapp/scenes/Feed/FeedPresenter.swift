@@ -20,7 +20,8 @@ class FeedPresenter: FeedPresenterProtocol {
 //    var playList = [PlayerItem]()
     
 	var isFeed: Bool = false
-	var tracks: [(Bool, Track)] = []
+	var tracks: [Track] = []
+	var playingIndex: Int = -1
 	
 	var sort: (Track, Track) -> Bool? = {_,_ in return nil}
     
@@ -51,7 +52,7 @@ class FeedPresenter: FeedPresenterProtocol {
 		let results = realm.objects(Track.self)//.sorted(by: sortDescriptors)
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station)} : {(_) -> Bool in return true }
+			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station) && $0.lang == UserSettings.language.rawValue} : {$0.lang == UserSettings.language.rawValue}
 			let currentID = AudioController.main.currentTrack?.id
             switch changes {
             case .initial:
@@ -62,7 +63,7 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({($0.id == currentID, $0)})
+				}).map({$0})
 				
 				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
@@ -73,19 +74,19 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({($0.id == currentID, $0)})
+				}).map({$0})
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
                     AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
                 }
 				let update = modifications.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.1.id == results[index].id})
+					return self?.tracks.index(where: {$0.id == results[index].id})
 				}).filter({$0 != nil}).map({$0!})
 				let delete = deletions.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.1.id == results[index].id})
+					return self?.tracks.index(where: {$0.id == results[index].id})
 				}).filter({$0 != nil}).map({$0!})
 				let insert = insertions.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.1.id == results[index].id})
+					return self?.tracks.index(where: {$0.id == results[index].id})
 				}).filter({$0 != nil}).map({$0!})
 				self?.view?.reload(update: update, delete: delete, insert: insert)
 				
@@ -112,24 +113,42 @@ class FeedPresenter: FeedPresenterProtocol {
 											   selector: #selector(trackPaused(notification:)),
 											   name: AudioController.AudioStateNotification.paused.notification(),
 											   object: nil)
-    }
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(settingsChanged(notification:)),
+											   name: SettingsNotfification.changed.notification(),
+											   object: nil)    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         token?.invalidate()
     }
 	
+	@objc func settingsChanged(notification: Notification) {
+		self.getData { _ in
+
+		}
+	}
+	
 	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.1.id == id}) {
-			self.tracks[index].0 = true
-			self.view?.reload(update: [index], delete: [], insert: [])
+		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+			var reload = [Int]()
+			if playingIndex != -1 {
+				reload.append(playingIndex)
+			}
+			reload.append(index)
+			self.playingIndex = index
+			self.view?.reload(update: reload, delete: [], insert: [])
 		}
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.1.id == id}) {
-			self.tracks[index].0 = false
-			self.view?.reload(update: [index], delete: [], insert: [])
+		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+			var reload = [Int]()
+			if playingIndex != -1 {
+				reload.append(playingIndex)
+			}
+			self.playingIndex = -1
+			self.view?.reload(update: reload, delete: [], insert: [])
 		}
 	}
     
@@ -150,9 +169,9 @@ class FeedPresenter: FeedPresenterProtocol {
 	
 	func play(index: Int) {
 		if index < self.tracks.count {
-			let trackUID = self.tracks[index].1.id
+			let trackUID = self.tracks[index].id
 			if trackUID != AudioController.main.currentTrack?.id {
-				AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0.1})))
+				AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0})))
 			}
 			AudioController.main.make(command: .play(id: trackUID))
 		}
@@ -160,7 +179,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	
 	func like(index: Int) {
 		if index < self.tracks.count {
-			LikeManager.shared.addOrDelete(id: self.tracks[index].1.id)
+			LikeManager.shared.addOrDelete(id: self.tracks[index].id)
 		}
 	}
 	
@@ -176,7 +195,7 @@ class FeedPresenter: FeedPresenterProtocol {
 //            audioManager.playItem(with: trackUID)
 //        }
 		if trackUID != AudioController.main.currentTrack?.id {
-			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0.1})))
+			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0})))
 		}
 		AudioController.main.make(command: .play(id: trackUID))
     }

@@ -26,6 +26,7 @@ class SearchPresenter {
 	let realm: Realm? = try? Realm()
 	var currentPlayingIndex: Int = -1
 	var playlists: [(image: UIImage?, title: String, descr: String)] = []
+	var currentSearchString: String = ""
 	
 	init() {
 		NotificationCenter.default.addObserver(self,
@@ -49,7 +50,19 @@ class SearchPresenter {
 		playlists.append((image: UIImage.init(named: "news"), title: "Актуальные новости за 30 минут", descr: "Подборка актуальных новостей в виде 30-минутного плейлиста"))
 //		playlists.append((image: nil, title: "IT", descr: "Новост\nНовости"))
 //		playlists.append((image: nil, title: "Спорт", descr: "Новост\nНовости"))
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(settingsChanged(notification:)),
+											   name: SettingsNotfification.changed.notification(),
+											   object: nil)    }
+	
+	deinit {
+		NotificationCenter.default.removeObserver(self)
 	}
+	
+	@objc func settingsChanged(notification: Notification) {
+		self.searchChanged(string: currentSearchString)
+	}
+	
 	
 	func trackSelected(index: Int) {
 		let contr = AudioController.main
@@ -68,12 +81,13 @@ class SearchPresenter {
 	}
 	
 	func searchChanged(string: String) {
+		self.currentSearchString = string
 		if string.count == 0 {
 			self.tracks = []
 			self.channels = []
 		} else {
-			self.tracks = self.realm?.objects(Track.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").map({$0}) ?? []
-			self.channels = self.realm?.objects(Station.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").map({$0}) ?? []
+			self.tracks = self.realm?.objects(Track.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			self.channels = self.realm?.objects(Station.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
 		}
 		self.delegate?.updateSearch()
 	}
@@ -93,7 +107,7 @@ class SearchPresenter {
 			trackSelection = trackSelection.sorted(by: {$0.publishedAt > $1.publishedAt})
 			var res = [Track]()
 			for track in trackSelection {
-				if let length = track.audiofile?.lengthSeconds, length < Int64(7*60)  {
+				if let length = track.audiofile?.lengthSeconds, length < Int64(7*60), track.audiofile?.file != "" || track.audiofile?.file != nil, track.lang == UserSettings.language.rawValue {
 					if maxlength + length < Int64(60*33) {
 						res.append(track)
 						maxlength += length
@@ -140,9 +154,5 @@ class SearchPresenter {
 			self.currentPlayingIndex = -1
 			self.delegate?.update(tracks: reload, channels: [])
 		}
-	}
-	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
 	}
 }

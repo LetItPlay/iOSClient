@@ -77,7 +77,8 @@ class DownloadManager {
                                                                     name: jStation["name"].string ?? "",
                                                                     image: jStation["image"].string ?? "",
                                                                     subscriptionCount: jStation["subscription_count"].int ?? 0,
-                                                                    tags: jStation["tags"].string)
+                                                                    tags: jStation["tags"].string,
+																	lang: jStation["lang"].string ?? "ru")
                             } else {
                                 print("ERROR: no id in \(jStation)")
                             }
@@ -94,7 +95,7 @@ class DownloadManager {
     
 	func requestTracks(all: Bool = false, success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
 		let path = all ? urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) :
-			urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+	urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
 		if let path = path, let url = URL(string: path) {
             
             let request = URLRequest(url: url)
@@ -115,7 +116,7 @@ class DownloadManager {
 					let realm = try Realm()
                     try realm.write {
                         for jTrack in json.array ?? [] {
-                            DBManager.shared.track(fromJSON: jTrack, realm: realm)
+							DBManager.shared.track(fromJSON: jTrack, realm: realm)
                         }
                     }
                 } catch(let error) {

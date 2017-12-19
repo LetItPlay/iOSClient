@@ -70,7 +70,6 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		tableView.backgroundColor = .white
 		tableView.backgroundView?.backgroundColor = .clear
 		tableView.sectionIndexBackgroundColor = .clear
-		tableView.allowsSelection = false
 		refreshControl.beginRefreshing()
 
 		tableView.tableFooterView = UIView()
@@ -147,11 +146,15 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
 	
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.presenter.play(index: indexPath.item)
+	}
+	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
-		let tuple = self.presenter.tracks[indexPath.item]
-		cell?.track = tuple.1
-		cell?.playButton.isSelected = tuple.0
+		let track = self.presenter.tracks[indexPath.item]
+		cell?.track = track
+		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
 		
 		cell?.onPlay = { [weak self] _ in
 			let index = indexPath.item
@@ -165,11 +168,15 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cellHeight
+		let track = self.presenter.tracks[indexPath.item]
+		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
+//		return self.cellHeight
     }
 	
 	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cellHeight
+		let track = self.presenter.tracks[indexPath.item]
+		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
+//		return self.cellHeight
 	}
     
 }

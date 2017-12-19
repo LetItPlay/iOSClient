@@ -19,12 +19,13 @@ class DBManager {
         return realm.object(ofType: Track.self, forPrimaryKey: byId)
     }
     
-    func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: String?) {
+	func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: String?, lang: String) {
         if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &station.name, new: name)
             _ = updateIfNeeded(property: &station.image, new: image)
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
             _ = updateIfNeeded(property: &station.tagString, new: tags ?? "")
+			_ = updateIfNeeded(property: &station.lang, new: lang)
         } else {
             let newStat = Station()
             newStat.id = id
@@ -32,12 +33,13 @@ class DBManager {
             newStat.image = image
             newStat.subscriptionCount = subscriptionCount
             newStat.tagString = tags ?? ""
+			newStat.lang = lang
             
             inRealm.add(newStat)
         }
     }
     
-    func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: String?, publishDate: String) {
+	func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: String?, publishDate: String, lang: String) {
         if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
             var changeCounter = 0
             changeCounter += updateIfNeeded(property: &track.station, new: station)
@@ -48,6 +50,7 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.reportCount, new: reportCount)
             changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
             changeCounter += updateIfNeeded(property: &track.tagString, new: tags ?? "")
+			changeCounter += updateIfNeeded(property: &track.lang, new: lang)
             
             let formatter = DateFormatter()
 			formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -78,6 +81,7 @@ class DBManager {
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
             newTrack.tagString   = tags ?? ""
+			newTrack.lang = lang
             
             inRealm.add(newTrack)
         }
@@ -119,7 +123,8 @@ extension DBManager {
                              reportCount: fromJSON["report_count"].int ?? 0,
                              listenCount: fromJSON["listen_count"].int ?? 0,
                              tags: fromJSON["tags"].string,
-                             publishDate: fromJSON["published_at"].string ?? "")
+                             publishDate: fromJSON["published_at"].string ?? "",
+							 lang: fromJSON["lang"].string ?? "ru")
         }
     }
 }
