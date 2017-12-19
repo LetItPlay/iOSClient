@@ -9,7 +9,7 @@
 import Foundation
 
 enum Language: String {
-	case en = "en", ru = "ru"
+	case en = "en", ru = "ru", none = "suicide silence"
 }
 
 class UserSettings {
@@ -20,9 +20,9 @@ class UserSettings {
 			if let langStr = def.value(forKey: "lang") as? String, let lang = Language.init(rawValue: langStr) {
 				res = lang
 			} else {
-				def.setValue("ru", forKey: "lang")
+				def.setValue(Language.none.rawValue, forKey: "lang")
 				def.synchronize()
-				res = .ru
+				res = .none
 			}
 			return res
 		}

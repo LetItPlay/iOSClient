@@ -13,6 +13,7 @@ import RealmSwift
 class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+	let profileView = ProfileTopView()
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
@@ -29,7 +30,7 @@ class ProfileViewController: UIViewController {
 			make.edges.equalToSuperview()
 		}
 		
-		tableView.tableHeaderView = ProfileTopView()
+		tableView.tableHeaderView = profileView
 		tableView.contentInset.bottom = 72
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
@@ -69,7 +70,20 @@ class ProfileViewController: UIViewController {
 		NotificationCenter.default.addObserver(self,
 											   selector: #selector(settingsChanged(notification:)),
 											   name: SettingsNotfification.changed.notification(),
-											   object: nil)    }
+											   object: nil)
+		
+		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
+	}
+	
+	@objc func langChanged(_: UIButton) {
+		if self.profileView.logoutButton.isSelected {
+			UserSettings.language = .en
+		} else {
+			UserSettings.language = .ru
+		}
+		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
+		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
+	}
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
@@ -308,12 +322,11 @@ class ProfileTopView: UIView {
 		logoutButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
 		logoutButton.layer.cornerRadius = 6
 		logoutButton.layer.masksToBounds = true
-		logoutButton.setTitle("logout ", for: .normal)
-		logoutButton.setImage(UIImage(named: "logoutIcon"), for: .normal)
+		logoutButton.setTitle("Switch to English 🇬🇧", for: .normal)
+		logoutButton.setTitle("Поменять на Русский 🇷🇺", for: .selected)
 		logoutButton.titleLabel?.font = AppFont.Button.mid
-		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.5), for: .normal)
-		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 75, bottom: 6, right: 75)
-		logoutButton.isEnabled = false
+		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
+		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
 		logoutButton.semanticContentAttribute = .forceRightToLeft
 		
 		let bot = CALayer()

@@ -40,6 +40,10 @@ class DBManager {
     }
     
 	func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, audiofile: Audiofile?, name: String, url: String, description: String, image: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: String?, publishDate: String, lang: String) {
+		
+		let formatter = DateFormatter()
+		formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+		
         if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
             var changeCounter = 0
             changeCounter += updateIfNeeded(property: &track.station, new: station)
@@ -51,9 +55,7 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
             changeCounter += updateIfNeeded(property: &track.tagString, new: tags ?? "")
 			changeCounter += updateIfNeeded(property: &track.lang, new: lang)
-            
-            let formatter = DateFormatter()
-			formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+			
 			
 			if publishDate == "" {
 				print("fcuk")
@@ -81,6 +83,7 @@ class DBManager {
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
             newTrack.tagString   = tags ?? ""
+			newTrack.publishedAt = formatter.date(from: publishDate) ?? Date().addingTimeInterval(-60*60*24*30)
 			newTrack.lang = lang
             
             inRealm.add(newTrack)

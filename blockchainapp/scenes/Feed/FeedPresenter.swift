@@ -77,7 +77,7 @@ class FeedPresenter: FeedPresenterProtocol {
 				}).map({$0})
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
-                    AppManager.shared.rootTabBarController?.tabBar.items?[2].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
+                    AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
                 }
 				let update = modifications.map({ (index) -> Int? in
 					return self?.tracks.index(where: {$0.id == results[index].id})

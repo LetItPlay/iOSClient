@@ -21,8 +21,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         migrate()
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
-		let tab = MainTabViewController()
-		self.window?.rootViewController = tab
+		
+		var vc: UIViewController!
+		if UserSettings.language == .none {
+			vc = SettingsViewController()
+		} else {
+			vc = MainTabViewController()
+		}
+		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()
         return true
     }
