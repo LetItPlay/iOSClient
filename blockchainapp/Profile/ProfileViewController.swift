@@ -67,10 +67,7 @@ class ProfileViewController: UIViewController {
 											   selector: #selector(trackPaused(notification:)),
 											   name: AudioController.AudioStateNotification.paused.notification(),
 											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(settingsChanged(notification:)),
-											   name: SettingsNotfification.changed.notification(),
-											   object: nil)
+
 		
 		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
 	}
@@ -83,6 +80,7 @@ class ProfileViewController: UIViewController {
 		}
 		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
+		self.reloadData()
 	}
 	
 	deinit {
@@ -173,7 +171,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		let label = UILabel()
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
-		label.text = "Tracks you’ve liked"
+		label.text = "Tracks you’ve liked".localized
 		
 		let tracks = IconedLabel.init(type: .tracks)
 		tracks.setData(data: Int64(self.tracks.count))
@@ -299,9 +297,10 @@ class ProfileTopView: UIView {
 			make.left.equalTo(profileImageView.snp.left)
 		}
 		
-		profileNameLabel.text = "Your future profile"
+		profileNameLabel.text = "Your future profile".localized
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
+		profileNameLabel.isUserInteractionEnabled = false
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)

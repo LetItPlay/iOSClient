@@ -47,7 +47,7 @@ class SearchPresenter {
 											   name: AudioController.AudioStateNotification.paused.notification(),
 											   object: nil)
 		
-		playlists.append((image: UIImage.init(named: "news"), title: "Актуальные новости за 30 минут", descr: "Подборка актуальных новостей в виде 30-минутного плейлиста"))
+		playlists.append((image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized))
 //		playlists.append((image: nil, title: "IT", descr: "Новост\nНовости"))
 //		playlists.append((image: nil, title: "Спорт", descr: "Новост\nНовости"))
 		NotificationCenter.default.addObserver(self,

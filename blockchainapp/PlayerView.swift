@@ -139,10 +139,10 @@ class PlayerView: UIView {
 		
 		addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(75)
-			make.left.equalToSuperview().inset(35)
-			make.right.equalToSuperview().inset(35)
-			make.width.equalTo(underblurimageView.snp.height)
+			make.top.equalToSuperview().inset(139)
+			make.left.equalToSuperview().inset(30)
+			make.right.equalToSuperview().inset(30)
+			make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9)
 		}
 		
 		let blur = UIVisualEffectView.init(effect: UIBlurEffect.init(style: .light))
@@ -155,17 +155,17 @@ class PlayerView: UIView {
 		
 		blur.contentView.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(70)
+			make.top.equalToSuperview().inset(139)
 			make.left.equalToSuperview().inset(30)
 			make.right.equalToSuperview().inset(30)
-			make.width.equalTo(coverImageView.snp.height)
+			make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9)
 		}
 		
 		blur.contentView.addSubview(trackProgressView)
 		trackProgressView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(33)
 			make.right.equalToSuperview().inset(33)
-			make.top.equalTo(coverImageView.snp.bottom).inset(-12)
+			make.top.equalTo(coverImageView.snp.bottom).inset(-80)
 		}
 		
 		blur.contentView.addSubview(channelNameLabel)

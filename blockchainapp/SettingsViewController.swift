@@ -63,7 +63,7 @@ class SettingsViewController: UIViewController {
 		para.minimumLineHeight = 41
 		para.maximumLineHeight = 41
 		para.alignment = .center
-		title.attributedText = NSAttributedString.init(string: "Select\nyour language", attributes: [.font: UIFont.systemFont(ofSize: 34, weight: .bold),
+		title.attributedText = NSAttributedString.init(string:  "Select your language".localized, attributes: [.font: UIFont.systemFont(ofSize: 34, weight: .bold),
 																				.kern: 0.4,
 																				.foregroundColor: UIColor.black,
 																				.paragraphStyle: para])

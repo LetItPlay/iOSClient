@@ -17,11 +17,11 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 		self.init(nibName: nil, bundle: nil)
 		
 		let tabs: [(String, (UIImage?, UIViewController))] = [
-			("Feed", (UIImage.init(named: "feedTab"), FeedBuilder.build())),
-			("Trends", (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
-			("Search", (UIImage.init(named: "searchTab"), SearchViewController())),
-			("Channels", (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
-			("Profile", (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
+			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build())),
+			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
+			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
+			("Channels".localized, (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
+			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1)

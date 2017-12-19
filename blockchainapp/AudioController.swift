@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyAudioManager
+import Reachability
 
 protocol AudioControllerDelegate: class {
 	func updateTime(time: (current: Double, length: Double))
@@ -91,8 +92,20 @@ class AudioController: AudioControllerProtocol {
 		}
 	}
 	
+	let reach: Reachability? = Reachability()
+	
 	init() {
 		subscribe()
+		
+		reach?.whenUnreachable = { _ in
+			self.audioManager.pause()
+		}
+		
+		do {
+			try reach?.startNotifier()
+		} catch {
+			print("reach doesnt work")
+		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
@@ -100,6 +113,11 @@ class AudioController: AudioControllerProtocol {
 	}
 	
 	func make(command: AudioCommand) {
+		
+		if reach?.connection == Reachability.Connection.none {
+			return
+		}
+		
 		if self.currentTrackIndex < 0 {
 			self.popupDelegate?.popupPlayer(show: true, animated: true)
 		}
@@ -169,22 +187,24 @@ class AudioController: AudioControllerProtocol {
 	}
 	
 	func showPlaylist() {
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//		DispatchQueue.main.asyncAfter(deadline: .now()) {
 			self.popupDelegate?.showPlaylist()
 			self.delegate?.showPlaylist()
-		}
+//		}
 	}
 	
 	func updatePlaylist() {
 	}
 	
 	func setCurrentTrack(index: Int) {
-		if self.currentTrackIndex < 0 {
-			self.popupDelegate?.popupPlayer(show: true, animated: true)
+		if reach?.connection != Reachability.Connection.none {
+			if self.currentTrackIndex < 0 {
+				self.popupDelegate?.popupPlayer(show: true, animated: true)
+			}
+			
+			self.currentTrackIndex = index
+			audioManager.playItem(at: index)
 		}
-		
-		self.currentTrackIndex = index
-		audioManager.playItem(at: index)
 	}
 	
 	func setCurrentTrack(id: Int) {

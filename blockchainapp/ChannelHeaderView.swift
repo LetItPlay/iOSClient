@@ -46,8 +46,8 @@ class ChannelHeaderView: UIView {
 		button.layer.masksToBounds = true
 		button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
 		button.setBackgroundImage(UIColor.clear.img(), for: .selected)
-		button.setTitle("follow".localizedCapitalized, for: .normal)
-		button.setTitle("following".localizedCapitalized, for: .selected)
+		button.setTitle("Follow".localized, for: .normal)
+		button.setTitle("Following".localized, for: .selected)
 		button.setTitleColor(UIColor.white, for: .normal)
 		button.setTitleColor(AppColor.Element.subscribe, for: .selected)
 		button.contentEdgeInsets.left = 12

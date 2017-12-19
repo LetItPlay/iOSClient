@@ -42,7 +42,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return "Current playlist"
+		return "Current playlist".localized
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -52,7 +52,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 		let label = UILabel()
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
-		label.text = "Recent added"
+		label.text = "Current playlist".localized
 		
 		let tracks = IconedLabel.init(type: .tracks)
 		tracks.setData(data: Int64(self.tracks.count))

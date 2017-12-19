@@ -19,8 +19,8 @@ class FollowButton: UIButton {
 		self.layer.masksToBounds = true
 		self.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
 		self.setBackgroundImage(UIColor.white.img(), for: .selected)
-		self.setTitle("follow".localizedCapitalized, for: .normal)
-		self.setTitle("following".localizedCapitalized, for: .selected)
+		self.setTitle("Follow".localized, for: .normal)
+		self.setTitle("Following".localized, for: .selected)
 		self.setTitleColor(UIColor.white, for: .normal)
 		self.setTitleColor(AppColor.Element.subscribe, for: .selected)
 		self.contentEdgeInsets.left = 12

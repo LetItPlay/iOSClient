@@ -1,6 +1,7 @@
 PODS:
-  - DynamicBlurView (2.0.0)
+  - DynamicBlurView (2.0.1)
   - MarqueeLabel/Swift (3.1.4)
+  - ReachabilitySwift (4.1.0)
   - Realm (3.0.2):
     - Realm/Headers (= 3.0.2)
   - Realm/Headers (3.0.2)
@@ -18,6 +19,7 @@ PODS:
 DEPENDENCIES:
   - DynamicBlurView
   - MarqueeLabel/Swift
+  - ReachabilitySwift
   - RealmSwift
   - SDWebImage
   - ShadowView
@@ -36,8 +38,9 @@ CHECKOUT OPTIONS:
     :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
 
 SPEC CHECKSUMS:
-  DynamicBlurView: 7b1bfbc1e7a0606b8a1855ff809ccaccfbda6b30
+  DynamicBlurView: 5e6babd80cc0ddfd3ddfc4f5dacf2fe4181e7c52
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
+  ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
   RealmSwift: 695393add1b8f9d5fa75dd16e6355cf3935f71e2
   SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
@@ -47,6 +50,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: a2716d73d619866c03186e54a8c669120ed9b2e8
+PODFILE CHECKSUM: f94963f7457e66adc851cfe1ce976f719f87d39b
 
 COCOAPODS: 1.3.1

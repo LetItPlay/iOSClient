@@ -37,7 +37,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.title = "Channel"
+		self.title = "Channel".localized
 		
 		self.view.backgroundColor = UIColor.white
 		self.tableView.backgroundColor = .white
@@ -107,7 +107,7 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 		let label = UILabel()
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
-		label.text = "Recent added"
+		label.text = "Recent added".localized
 		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in

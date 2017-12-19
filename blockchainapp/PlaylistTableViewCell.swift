@@ -76,6 +76,7 @@ class PlaylistTableViewCell: UITableViewCell {
 		playlistImageView.backgroundColor = .red
 		playlistTitleLabel.attributedText = PlaylistTableViewCell.titleString(string: "Fresh IT news")
 		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
+		
 	}
 	
 	func fill(tuple: (image: UIImage?, title: String, descr: String)) {

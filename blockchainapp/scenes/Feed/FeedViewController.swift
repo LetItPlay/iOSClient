@@ -27,7 +27,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		label.textColor = AppColor.Title.dark
 		label.textAlignment = .center
 		label.numberOfLines = 0
-		label.text = "There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab"
+		label.text = "There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab".localized
 		return label
 	}()
 	

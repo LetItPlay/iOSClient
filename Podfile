@@ -14,4 +14,5 @@ target 'blockchainapp' do
   pod "TagListView"#, '~> 1.0'
   pod "DynamicBlurView"
   pod "MarqueeLabel/Swift"
+  pod "ReachabilitySwift"
 end
