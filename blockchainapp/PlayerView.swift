@@ -120,8 +120,15 @@ class PlayerView: UIView {
 		return slider
 	}()
 	
+	var picTopConstrs: (undr: NSLayoutConstraint?, cover: NSLayoutConstraint?) = (nil, nil)
+	var underMults: (square: NSLayoutConstraint?, rect: NSLayoutConstraint?) = (nil, nil)
+	var coverMults: (square: NSLayoutConstraint?, rect: NSLayoutConstraint?) = (nil, nil)
+	var progressTopConstr: NSLayoutConstraint!
+	var titleTopConstr: NSLayoutConstraint!
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
+		self.translatesAutoresizingMaskIntoConstraints = false
 		viewInitialize()
 		
 		self.trackProgressView.trackProgressLabels.fin.text = "0:00"
@@ -139,10 +146,12 @@ class PlayerView: UIView {
 		
 		addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(139)
+			self.picTopConstrs.undr = make.top.equalToSuperview().inset(139).constraint.layoutConstraints.first
 			make.left.equalToSuperview().inset(30)
 			make.right.equalToSuperview().inset(30)
-			make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9)
+			self.underMults.rect = make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9).constraint.layoutConstraints.first
+			self.underMults.square = make.width.equalTo(underblurimageView.snp.height).constraint.layoutConstraints.first
+			self.underMults.square?.isActive = false
 		}
 		
 		let blur = UIVisualEffectView.init(effect: UIBlurEffect.init(style: .light))
@@ -155,22 +164,25 @@ class PlayerView: UIView {
 		
 		blur.contentView.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(139)
+			self.picTopConstrs.cover = make.top.equalToSuperview().inset(139).constraint.layoutConstraints.first
 			make.left.equalToSuperview().inset(30)
 			make.right.equalToSuperview().inset(30)
-			make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9)
+			self.coverMults.rect = make.width.equalTo(coverImageView.snp.height).multipliedBy(16.0/9).constraint.layoutConstraints.first
+			self.coverMults.square = make.width.equalTo(coverImageView.snp.height).constraint.layoutConstraints.first
+			self.coverMults.square?.isActive = false
+			
 		}
 		
 		blur.contentView.addSubview(trackProgressView)
 		trackProgressView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(33)
 			make.right.equalToSuperview().inset(33)
-			make.top.equalTo(coverImageView.snp.bottom).inset(-80)
+			self.progressTopConstr = make.top.equalTo(coverImageView.snp.bottom).inset(-80).constraint.layoutConstraints.first!
 		}
 		
 		blur.contentView.addSubview(channelNameLabel)
 		channelNameLabel.snp.makeConstraints { (make) in
-			make.top.equalTo(coverImageView.snp.bottom).inset(-43)
+			self.titleTopConstr = make.top.equalTo(coverImageView.snp.bottom).inset(-112).constraint.layoutConstraints.first!
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
@@ -245,6 +257,38 @@ class PlayerView: UIView {
 		self.shadowLayer.frame = self.underblurimageView.frame
 		self.channelNameLabel.fadeLength = 16
 		self.trackNameLabel.fadeLength = 16
+	}
+	
+	func setPicture(image: UIImage?) {
+		self.underblurimageView.image = image
+		self.coverImageView.image = image
+
+		guard let image = image else {
+			return
+		}
+		
+		if image.size.width / image.size.height - 1.0 < 0.3 {
+			self.picTopConstrs.cover?.constant = 70
+			self.picTopConstrs.undr?.constant = 70
+			self.underMults.square?.isActive = true
+			self.coverMults.square?.isActive = true
+			self.underMults.rect?.isActive = false
+			self.coverMults.rect?.isActive = false
+			self.titleTopConstr.constant = 43
+			self.progressTopConstr.constant = 12
+		} else {
+			self.picTopConstrs.cover?.constant = 139
+			self.picTopConstrs.undr?.constant = 139
+			self.underMults.square?.isActive = false
+			self.coverMults.square?.isActive = false
+			self.underMults.rect?.isActive = true
+			self.coverMults.rect?.isActive = true
+			self.titleTopConstr.constant = 112
+			self.progressTopConstr.constant = 80
+		}
+		UIView.animate(withDuration: 0.2) {
+			self.layoutIfNeeded()
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

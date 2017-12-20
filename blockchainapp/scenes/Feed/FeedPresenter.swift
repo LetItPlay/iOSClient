@@ -76,7 +76,7 @@ class FeedPresenter: FeedPresenterProtocol {
 					}
 				}).map({$0})
                 
-                if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController {
+                if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController && self?.isFeed == true {
                     AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
                 }
 				let update = modifications.map({ (index) -> Int? in
@@ -124,6 +124,7 @@ class FeedPresenter: FeedPresenterProtocol {
     }
 	
 	@objc func settingsChanged(notification: Notification) {
+		self.playingIndex = -1
 		self.getData { _ in
 
 		}
@@ -170,8 +171,9 @@ class FeedPresenter: FeedPresenterProtocol {
 	func play(index: Int) {
 		if index < self.tracks.count {
 			let trackUID = self.tracks[index].id
-			if trackUID != AudioController.main.currentTrack?.id {
-				AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0})))
+			let name = self.isFeed ? "Feed".localized : "Trends".localized
+			if trackUID != AudioController.main.currentTrack?.id || AudioController.main.playlistName != name {
+				AudioController.main.loadPlaylist(playlist: (name, self.tracks.map({$0})))
 			}
 			AudioController.main.make(command: .play(id: trackUID))
 		}
@@ -195,7 +197,7 @@ class FeedPresenter: FeedPresenterProtocol {
 //            audioManager.playItem(with: trackUID)
 //        }
 		if trackUID != AudioController.main.currentTrack?.id {
-			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed" : "Hot", self.tracks.map({$0})))
+			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed".localized : "Trends".localized, self.tracks.map({$0})))
 		}
 		AudioController.main.make(command: .play(id: trackUID))
     }

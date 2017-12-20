@@ -120,6 +120,7 @@ class SettingsViewController: UIViewController {
     }
 	
 	@objc func langSelected(sender: UIButton) {
+		sender.isEnabled = false
 		if sender.tag == 0 {
 			UserSettings.language = .en
 		} else {

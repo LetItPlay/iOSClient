@@ -132,7 +132,7 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Channel\(self.station.id)", self.presenter.tracks[indexPath.section]))
+		contr.loadPlaylist(playlist: ("Channel".localized + " \(self.station.id)", self.presenter.tracks[indexPath.section]))
 		contr.setCurrentTrack(index: indexPath.item)
 	}
 	

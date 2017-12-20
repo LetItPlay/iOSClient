@@ -78,7 +78,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		emptyLabel.snp.makeConstraints { (make) in
 			make.center.equalTo(self.view)
 		}
-		emptyLabel.isHidden = false
+		emptyLabel.isHidden = self.type == .popular
 		
 		presenter.getData { (tracks) in
 			
@@ -108,7 +108,9 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 //        source = tracks
         tableView.reloadData()
         self.tableView.refreshControl?.endRefreshing()
-		self.emptyLabel.isHidden = presenter.tracks.count != 0
+		if self.type == .feed {
+			self.emptyLabel.isHidden = presenter.tracks.count != 0
+		}
     }
 	
 	func reload(update: [Int], delete: [Int], insert: [Int]) {
@@ -124,7 +126,9 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 //		tableView.endUpdates()
 		self.tableView.refreshControl?.endRefreshing()
 //		UIView.setAnimationsEnabled(true)
-		self.emptyLabel.isHidden = presenter.tracks.count != 0
+		if self.type == .feed {
+			self.emptyLabel.isHidden = presenter.tracks.count != 0
+		}
 		
 	}
 

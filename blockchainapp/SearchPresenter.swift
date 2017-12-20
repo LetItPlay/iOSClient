@@ -60,6 +60,7 @@ class SearchPresenter {
 	}
 	
 	@objc func settingsChanged(notification: Notification) {
+		self.currentPlayingIndex = -1
 		self.searchChanged(string: currentSearchString)
 	}
 	
@@ -67,7 +68,7 @@ class SearchPresenter {
 	func trackSelected(index: Int) {
 		let contr = AudioController.main
 		if contr.currentTrackIndex != index {
-			contr.loadPlaylist(playlist: ("Player", self.tracks))
+			contr.loadPlaylist(playlist: ("Searching".localized, self.tracks))
 			contr.setCurrentTrack(index: index)
 		}
 	}
@@ -118,7 +119,7 @@ class SearchPresenter {
 			}
 			if res.count > 0 {
 				let contr = AudioController.main
-				contr.loadPlaylist(playlist: ("Playlist \"\(tags[index])\"", res))
+				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res))
 				contr.setCurrentTrack(index: 0)
 				contr.showPlaylist()
 			}

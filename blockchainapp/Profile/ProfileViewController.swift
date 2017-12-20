@@ -70,17 +70,21 @@ class ProfileViewController: UIViewController {
 
 		
 		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
+		self.profileView.logoutButton.isSelected = UserSettings.language == .en
 	}
 	
 	@objc func langChanged(_: UIButton) {
 		if self.profileView.logoutButton.isSelected {
-			UserSettings.language = .en
-		} else {
 			UserSettings.language = .ru
+		} else {
+			UserSettings.language = .en
 		}
 		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
+		self.currentIndex = -1
 		self.reloadData()
+		
+		AudioController.main.make(command: .pause)
 	}
 	
 	deinit {
@@ -160,7 +164,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Liked", self.tracks))
+		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks))
 		contr.setCurrentTrack(index: indexPath.item)
 	}
 	

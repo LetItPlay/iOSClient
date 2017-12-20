@@ -88,6 +88,12 @@ class SmallChannelTableViewCell: UITableViewCell {
 		}
 		
 		self.dataLabels = [.subs: subs, .listens: listens]
+		
+		self.followButton.addTarget(self, action: #selector(subChanged), for: .touchUpInside)
+	}
+	
+	@objc func subChanged() {
+		self.onSub?()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

@@ -118,7 +118,7 @@ class AudioController: AudioControllerProtocol {
 			return
 		}
 		
-		if self.currentTrackIndex < 0 {
+		if self.currentTrackIndex < 0 && self.playlist.count != 0 {
 			self.popupDelegate?.popupPlayer(show: true, animated: true)
 		}
 		
@@ -168,7 +168,7 @@ class AudioController: AudioControllerProtocol {
 	func loadPlaylist(playlist: (String, [Track])) {
 		if self.playlistName != playlist.0 {
 			self.playlist = playlist.1
-			self.playlistName = playlist.0
+			self.playlistName = playlist.0 + UserSettings.language.rawValue
 			
 			let items = self.playlist.map { (track) -> PlayerItem in
 				let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")

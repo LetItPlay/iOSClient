@@ -108,7 +108,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Player", self.tracks))
+		contr.loadPlaylist(playlist: ("Player".localized, self.tracks))
 		contr.setCurrentTrack(index: indexPath.item)
 	}
 	

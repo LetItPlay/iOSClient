@@ -34,7 +34,7 @@ SearchPresenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		self.title = "Search"
+		self.title = "Search".localized
 		self.presenter.delegate = self
 		
 		self.searchResults.presenter = self.presenter
@@ -142,7 +142,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 		let label = UILabel()
 		label.textColor = AppColor.Title.dark
 		label.font = AppFont.Title.section
-		label.text = "Today playlists"
+		label.text = "Today playlists".localized
 		
 		let container = UIView()
 		container.backgroundColor = UIColor.white

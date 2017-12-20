@@ -109,7 +109,6 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		
 		self.playerView.trackProgressView.addTarget(self, action: #selector(trackSeekChanged(_:)), for: .touchUpInside)
 		
-		self.playerView.frame = self.view.frame
 		playlistView.tableView.tableHeaderView = self.playerView
 		
 		self.view.addSubview(playlistView)
@@ -145,6 +144,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		playerView.snp.makeConstraints { (make) in
 			make.size.equalTo(self.view.frame.size)
 		}
+		self.view.layoutIfNeeded()
 	}
 	
 	@objc func trackSeekChanged(_ sender: Any) {
@@ -208,7 +208,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			self.playerView.trackNameLabel.text = title
 			self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
 				self.popupItem.image = img
-				self.playerView.underblurimageView.image = img
+				self.playerView.setPicture(image: img)
 			})
 		}
 		if audioController.status != .playing {
