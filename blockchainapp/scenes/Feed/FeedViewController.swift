@@ -129,7 +129,6 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		if self.type == .feed {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
 		}
-		
 	}
 
 }

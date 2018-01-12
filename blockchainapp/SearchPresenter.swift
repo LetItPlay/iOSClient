@@ -87,8 +87,8 @@ class SearchPresenter {
 			self.tracks = []
 			self.channels = []
 		} else {
-			self.tracks = self.realm?.objects(Track.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
-			self.channels = self.realm?.objects(Station.self).filter("name contains[c] '\(string.lowercased())' OR tagString contains[c] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			self.tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR tagString contains[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			self.channels = self.realm?.objects(Station.self).filter("name contains[cd] '\(string.lowercased())' OR tagString contains[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
 		}
 		self.delegate?.updateSearch()
 	}

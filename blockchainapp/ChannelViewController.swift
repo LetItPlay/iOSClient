@@ -62,7 +62,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		self.tableView.tableHeaderView = self.header
     }
 	
-	func followPressed() {
+	@objc func followPressed() {
 		self.presenter.followPressed()
 	}
 	

@@ -9,6 +9,10 @@
 import Foundation
 import SwiftyAudioManager
 import Reachability
+import SDWebImage
+
+import UIKit
+import MediaPlayer
 
 protocol AudioControllerDelegate: class {
 	func updateTime(time: (current: Double, length: Double))
@@ -67,6 +71,7 @@ class AudioController: AudioControllerProtocol {
 	static let main = AudioController()
 	
 	let audioManager = AppManager.shared.audioManager
+	let player = AudioPlayer2()
 	
 	weak var delegate: AudioControllerDelegate?
 	weak var popupDelegate: AudioControllerPresenter?
@@ -106,6 +111,15 @@ class AudioController: AudioControllerProtocol {
 		} catch {
 			print("reach doesnt work")
 		}
+		
+		UIApplication.shared.beginReceivingRemoteControlEvents()
+		
+		MPRemoteCommandCenter.shared().nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			return .success
+		}
+		MPRemoteCommandCenter.shared().previousTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			return .success
+		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
@@ -138,6 +152,7 @@ class AudioController: AudioControllerProtocol {
 			} else {
 					audioManager.resume()
 			}
+			self.popupDelegate?.popupPlayer(show: true, animated: true)
 			break
 		case .pause:
 			audioManager.pause()
@@ -168,21 +183,24 @@ class AudioController: AudioControllerProtocol {
 	func loadPlaylist(playlist: (String, [Track])) {
 		if self.playlistName != playlist.0 {
 			self.playlist = playlist.1
-			self.playlistName = playlist.0 + UserSettings.language.rawValue
+			self.playlistName = playlist.0
 			
-			let items = self.playlist.map { (track) -> PlayerItem in
-				let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")
-				item.artist = track.findStationName() ?? "Various Artist"
-				item.title = track.name
-				item.autoLoadNext = true
-				item.autoPlay = true
-				
-				return item
-			}
-			audioManager.resetPlaylistAndStop()
-			let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
-			self.delegate?.playlistChanged()
-			audioManager.add(playlist: [group])
+//			let items = self.playlist.map { (track) -> PlayerItem in
+//				let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")
+//				item.artist = track.findStationName() ?? "Various Artist"
+//				item.title = track.name
+////				item.image = SDImageCache.shared().imageFromCache(forKey: track.findChannelImage()?.absoluteString)
+//				item.autoLoadNext = true
+//				item.autoPlay = true
+//
+//				return item
+//			}
+//			audioManager.resetPlaylistAndStop()
+//			let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
+//			self.delegate?.playlistChanged()
+//			audioManager.add(playlist: [group])
+			self.player.load(playlist: self.playlist)
+			self.player.make(command: .play)
 		}
 	}
 	
@@ -261,7 +279,7 @@ class AudioController: AudioControllerProtocol {
 	// MARK: - AudioManager events
 	
 	@objc func audioManagerPaused(_ notification: Notification) {
-		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause {
+		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause, id != self.currentTrackIndex {
 			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
 			self.delegate?.playState(isPlaying: false)
 		}
@@ -304,6 +322,8 @@ class AudioController: AudioControllerProtocol {
 			if let index = self.playlist.index(where: {$0.id == id}) {
 				currentTrackIndex = index
 			}
+			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+			self.delegate?.playState(isPlaying: true)
 		}
 		self.delegate?.trackUpdate()
 	}
