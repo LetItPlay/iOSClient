@@ -9,7 +9,7 @@ enum PlayerCommand {
 }
 
 enum PlayerStatus {
-	case none, playing, paused, changed(index: Int), failed
+	case none, playing, paused, failed
 }
 
 typealias AudioTime = (current: Double, length: Double)
@@ -116,8 +116,9 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 			}
 		case .prev:
 			if self.currentIndex == 0 {
-				self.player.pause()
-				self.delegate?.update(status: .paused, index: self.currentIndex)
+				self.player.seek(to: kCMTimeZero)
+//				self.player.pause()
+//				self.delegate?.update(status: .paused, index: self.currentIndex)
 			} else {
 				self.delegate?.update(status: .paused, index: self.currentIndex)
 				self.currentIndex -= 1
@@ -126,9 +127,11 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 			}
 		case .play:
 			self.player.play()
+			self.status = .playing
 			self.delegate?.update(status: .playing, index: self.currentIndex)
 		case .pause:
 			self.player.pause()
+			self.status = .paused
 			self.delegate?.update(status: .paused, index: self.currentIndex)
 		case .seek(let progress):
 			let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
@@ -140,6 +143,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	}
 	
 	func load(playlist: [Track]) {
+		self.currentIndex = 0
 		removePlayerItemsErrorObservers()
 		
 		for item in player.items() {
@@ -252,8 +256,8 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 				syncScrubber()
 			}
 		case kCurrentItemKey:
-			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack, let index = self.player.items().map({ $0 as! AudioTrack }).index(where: { $0.id == item.id }) {
-				self.delegate?.update(status: self.status, index: index)
+			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
+				self.delegate?.update(status: self.status, index: currentIndex)
 				self.currentIndex = index
 				print(item.duration)
 			}
@@ -295,7 +299,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	private func syncScrubber() {
 		if let playerDuration = self.player.currentItem?.duration, CMTIME_IS_VALID(playerDuration), let currentItem = player.currentItem {
 			let duration = Double(CMTimeGetSeconds(playerDuration))
-			let current = Double(CMTimeGetSeconds(currentItem.duration))
+			let current = Double(CMTimeGetSeconds(player.currentTime()))
 			
 			if duration.isFinite && duration > 0 {
 				self.delegate?.update(time: AudioTime(current: current, length: duration) )

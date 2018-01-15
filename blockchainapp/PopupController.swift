@@ -224,8 +224,8 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		self.playlistView.tableView.reloadData()
 		self.playerView.isHidden = false
 		
-		self.playButton.isSelected = audioController.status == .playing
-		self.playerView.playButton.isSelected = audioController.status == .playing
+//		self.playButton.isSelected = audioController.status == .playing
+//		self.playerView.playButton.isSelected = audioController.status == .playing
 	}
 	
 	func playlistChanged() {

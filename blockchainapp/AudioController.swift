@@ -56,7 +56,7 @@ enum AudioCommand {
 	case play(id: Int?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
 }
 
-class AudioController: AudioControllerProtocol {
+class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	enum AudioStateNotification: String {
 		case playing = "Playing",
@@ -87,13 +87,14 @@ class AudioController: AudioControllerProtocol {
 	}
 	var status: AudioStatus {
 		get {
-			if audioManager.isPlaying {
-				return .playing
-			}
-			if audioManager.isOnPause {
-				return .pause
-			}
-			return .idle
+//			if audioManager.isPlaying {
+//				return .playing
+//			}
+//			if audioManager.isOnPause {
+//				return .pause
+//			}
+//			return .idle
+			return self.player.status == .playing ? .playing : .pause
 		}
 	}
 	
@@ -112,12 +113,16 @@ class AudioController: AudioControllerProtocol {
 			print("reach doesnt work")
 		}
 		
+		self.player.delegate = self
+		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		MPRemoteCommandCenter.shared().nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			self.player.make(command: .next)
 			return .success
 		}
 		MPRemoteCommandCenter.shared().previousTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			self.player.make(command: .prev)
 			return .success
 		}
 	}
@@ -139,39 +144,50 @@ class AudioController: AudioControllerProtocol {
 		switch command {
 		case .play(let id):
 			if let id = id {
-				if let index = self.playlist.index(where: {$0.id == id}),
-					index != self.currentTrackIndex {
-					audioManager.playItem(at: index)
+				if let index = self.playlist.index(where: {$0.id == id})//,
+					{//index != self.currentTrackIndex {
+					player.setTrack(index: index)
+					player.make(command: .play)
+					//audioManager.playItem(at: index)
 				} else {
-					if audioManager.isPlaying {
-						audioManager.pause()
+					if player.status == .playing {//audioManager.isPlaying {
+						player.make(command: .pause)
+//						audioManager.pause()
 					} else {
-						audioManager.resume()
+						player.make(command: .play)
+//						audioManager.resume()
 					}
 				}
 			} else {
-					audioManager.resume()
+				player.make(command: .play)
+//				audioManager.resume()
 			}
 			self.popupDelegate?.popupPlayer(show: true, animated: true)
 			break
 		case .pause:
-			audioManager.pause()
+			player.make(command: .pause)
+//			audioManager.pause()
 		case .next:
-			audioManager.playNext()
+			player.make(command: .next)
+//			audioManager.playNext()
 			break
 		case .prev:
-			audioManager.playPrevious()
+			player.make(command: .prev)
+//			audioManager.playPrevious()
 			break
 		case .seekForward:
 			let newProgress = ( info.current + 10.0 ) / info.length
-			audioManager.itemProgressPercent = newProgress < 1.0  ? newProgress : 1.0
+			player.make(command: .seek(progress: newProgress < 1.0  ? newProgress : 1.0))
+//			audioManager.itemProgressPercent = newProgress < 1.0  ? newProgress : 1.0
 			break
 		case .seekBackward:
 			let newProgress = ( info.current - 10.0 ) / info.length
-			audioManager.itemProgressPercent = newProgress > 0 ? newProgress : 0.0
+			player.make(command: .seek(progress: newProgress > 0 ? newProgress : 0.0))
+//			audioManager.itemProgressPercent = newProgress > 0 ? newProgress : 0.0
 			break
 		case .seek(let progress):
-			audioManager.itemProgressPercent = progress
+//			audioManager.itemProgressPercent = progress
+			player.make(command: .seek(progress: progress))
 			break
 		case .volume(let value):
 			break
@@ -221,7 +237,8 @@ class AudioController: AudioControllerProtocol {
 			}
 			
 			self.currentTrackIndex = index
-			audioManager.playItem(at: index)
+//			audioManager.playItem(at: index)
+			player.setTrack(index: index)
 		}
 	}
 	
@@ -229,12 +246,39 @@ class AudioController: AudioControllerProtocol {
 		for i in 0..<playlist.count {
 			if playlist[i].id == id {
 				setCurrentTrack(index: i)
-				break
+				return
 			}
 		}
 	}
 	
 	func changeVolume(value: Double) {
+		
+	}
+	
+	func update(time: AudioTime) {
+		self.info.current = time.current
+		self.info.length = time.length
+		DispatchQueue.main.async {
+			self.delegate?.updateTime(time: (current: time.current, length: time.length))
+		}
+	}
+	
+	func update(status: PlayerStatus, index: Int) {
+		DispatchQueue.main.async {
+			switch status {
+			case .paused:
+				NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
+				break
+			case .playing:
+				self.currentTrackIndex = index
+				NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
+				break
+			default:
+				break
+			}
+			self.delegate?.playState(isPlaying: self.player.status == .playing)
+			self.delegate?.trackUpdate()
+		}
 	}
 	
 	func subscribe() {
@@ -275,6 +319,7 @@ class AudioController: AudioControllerProtocol {
 											   name: AudioManagerNotificationName.nextPlayed.notification,
 											   object: audioManager)
 	}
+	
 	
 	// MARK: - AudioManager events
 	
