@@ -28,6 +28,17 @@ protocol AudioControllerPresenter: class {
 	func showPlaylist()
 }
 
+class AudioPlaylist {
+	var id: String = ""
+	var name: String = ""
+	var tracks: [AudioTrack] = []
+	var length: Int64 {
+		get {
+			return tracks.map({$0.length}).reduce(0, {$0 + $1})
+		}
+	}
+}
+
 protocol AudioControllerProtocol: class {
 	weak var delegate: AudioControllerDelegate? {get set}
 	
@@ -45,6 +56,7 @@ protocol AudioControllerProtocol: class {
 	func setCurrentTrack(id: Int)
 	
 	func loadPlaylist(playlist:(String, [Track]))
+	
 	func updatePlaylist()
 }
 
@@ -144,49 +156,38 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		switch command {
 		case .play(let id):
 			if let id = id {
-				if let index = self.playlist.index(where: {$0.id == id})//,
-					{//index != self.currentTrackIndex {
+				if let index = self.playlist.index(where: {$0.id == id}), index != self.currentTrackIndex {
 					player.setTrack(index: index)
 					player.make(command: .play)
-					//audioManager.playItem(at: index)
 				} else {
-					if player.status == .playing {//audioManager.isPlaying {
+					if player.status == .playing {
 						player.make(command: .pause)
-//						audioManager.pause()
 					} else {
 						player.make(command: .play)
-//						audioManager.resume()
 					}
 				}
 			} else {
 				player.make(command: .play)
-//				audioManager.resume()
 			}
 			self.popupDelegate?.popupPlayer(show: true, animated: true)
 			break
 		case .pause:
 			player.make(command: .pause)
-//			audioManager.pause()
 		case .next:
 			player.make(command: .next)
-//			audioManager.playNext()
 			break
 		case .prev:
 			player.make(command: .prev)
-//			audioManager.playPrevious()
 			break
 		case .seekForward:
 			let newProgress = ( info.current + 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress < 1.0  ? newProgress : 1.0))
-//			audioManager.itemProgressPercent = newProgress < 1.0  ? newProgress : 1.0
 			break
 		case .seekBackward:
 			let newProgress = ( info.current - 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress > 0 ? newProgress : 0.0))
-//			audioManager.itemProgressPercent = newProgress > 0 ? newProgress : 0.0
 			break
 		case .seek(let progress):
-//			audioManager.itemProgressPercent = progress
 			player.make(command: .seek(progress: progress))
 			break
 		case .volume(let value):
@@ -267,7 +268,9 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		DispatchQueue.main.async {
 			switch status {
 			case .paused:
-				NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
+				if index != -1 {
+					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
+				}
 				break
 			case .playing:
 				self.currentTrackIndex = index

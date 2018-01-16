@@ -14,7 +14,7 @@ enum PlayerStatus {
 
 typealias AudioTime = (current: Double, length: Double)
 
-fileprivate class AudioTrack: AVPlayerItem {
+class AudioTrack: AVPlayerItem {
 	var id: Int = -1
 	var name: String = ""
 	var author: String = ""
@@ -111,7 +111,8 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 			} else {
 				self.delegate?.update(status: .paused, index: self.currentIndex)
 				self.currentIndex += 1
-				self.player.advanceToNextItem()
+				self.setTrack(index: self.currentIndex)
+//				self.player.advanceToNextItem()
 				self.delegate?.update(status: .playing, index: self.currentIndex)
 			}
 		case .prev:
@@ -255,8 +256,12 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 //				delegate?.audioReadyToPlay?()
 				syncScrubber()
 			}
+			if player.status == AVPlayerStatus.failed {
+				self.delegate?.update(status: .paused, index: currentIndex)
+				self.make(command: .pause)
+			}
 		case kCurrentItemKey:
-			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
+			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack, let index = player.items().index(of: item) {
 				self.delegate?.update(status: self.status, index: currentIndex)
 				self.currentIndex = index
 				print(item.duration)
@@ -297,15 +302,12 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	
 	/* Set the scrubber based on the player current time. */
 	private func syncScrubber() {
-		if let playerDuration = self.player.currentItem?.duration, CMTIME_IS_VALID(playerDuration), let currentItem = player.currentItem {
+		if let playerDuration = self.player.currentItem?.duration, CMTIME_IS_VALID(playerDuration) {
 			let duration = Double(CMTimeGetSeconds(playerDuration))
 			let current = Double(CMTimeGetSeconds(player.currentTime()))
 			
 			if duration.isFinite && duration > 0 {
 				self.delegate?.update(time: AudioTime(current: current, length: duration) )
-//				delegate?.audioPlayerPlaySoundOnSecond?(CMTimeGetSeconds(player.currentTime()),
-//														maxTime: duration,
-//														item: currentItem)
 			}
 		}
 	}

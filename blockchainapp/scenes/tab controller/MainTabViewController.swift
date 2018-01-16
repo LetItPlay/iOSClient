@@ -33,7 +33,9 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 	
 	func popupPlayer(show: Bool, animated: Bool) {
 		if show {
-			self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
+			if vc.popupPresentationState == .hidden {
+				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
+			}
 		} else {
 			self.dismissPopupBar(animated: animated, completion: nil)
 		}
