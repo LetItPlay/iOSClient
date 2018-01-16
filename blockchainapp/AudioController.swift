@@ -47,9 +47,7 @@ protocol AudioControllerProtocol: class {
 	var playlist: [Track] {get}
 	var status: AudioStatus {get}
 	var info: (current: Double, length: Double) {get}
-	
-	func changeVolume(value: Double)
-	
+		
 	func make(command: AudioCommand)
 	
 	func setCurrentTrack(index: Int)
@@ -99,13 +97,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	}
 	var status: AudioStatus {
 		get {
-//			if audioManager.isPlaying {
-//				return .playing
-//			}
-//			if audioManager.isOnPause {
-//				return .pause
-//			}
-//			return .idle
 			return self.player.status == .playing ? .playing : .pause
 		}
 	}
@@ -113,7 +104,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	let reach: Reachability? = Reachability()
 	
 	init() {
-		subscribe()
 		
 		reach?.whenUnreachable = { _ in
 			self.audioManager.pause()
@@ -170,28 +160,20 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 				player.make(command: .play)
 			}
 			self.popupDelegate?.popupPlayer(show: true, animated: true)
-			break
 		case .pause:
 			player.make(command: .pause)
 		case .next:
 			player.make(command: .next)
-			break
 		case .prev:
 			player.make(command: .prev)
-			break
 		case .seekForward:
 			let newProgress = ( info.current + 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress < 1.0  ? newProgress : 1.0))
-			break
 		case .seekBackward:
 			let newProgress = ( info.current - 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress > 0 ? newProgress : 0.0))
-			break
 		case .seek(let progress):
 			player.make(command: .seek(progress: progress))
-			break
-		case .volume(let value):
-			break
 		default:
 			print("unknown command")
 		}
@@ -201,31 +183,14 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		if self.playlistName != playlist.0 {
 			self.playlist = playlist.1
 			self.playlistName = playlist.0
-			
-//			let items = self.playlist.map { (track) -> PlayerItem in
-//				let item = PlayerItem.init(itemId: track.uniqString(), url: track.audiofile?.file.buildImageURL()?.absoluteString ?? "")
-//				item.artist = track.findStationName() ?? "Various Artist"
-//				item.title = track.name
-////				item.image = SDImageCache.shared().imageFromCache(forKey: track.findChannelImage()?.absoluteString)
-//				item.autoLoadNext = true
-//				item.autoPlay = true
-//
-//				return item
-//			}
-//			audioManager.resetPlaylistAndStop()
-//			let group = PlayerItemsGroup.init(id: "42", name: playlist.0, playerItems: items)
-//			self.delegate?.playlistChanged()
-//			audioManager.add(playlist: [group])
 			self.player.load(playlist: self.playlist)
 			self.player.make(command: .play)
 		}
 	}
 	
 	func showPlaylist() {
-//		DispatchQueue.main.asyncAfter(deadline: .now()) {
-			self.popupDelegate?.showPlaylist()
-			self.delegate?.showPlaylist()
-//		}
+        self.popupDelegate?.showPlaylist()
+        self.delegate?.showPlaylist()
 	}
 	
 	func updatePlaylist() {
@@ -238,7 +203,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 			}
 			
 			self.currentTrackIndex = index
-//			audioManager.playItem(at: index)
 			player.setTrack(index: index)
 		}
 	}
@@ -250,10 +214,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 				return
 			}
 		}
-	}
-	
-	func changeVolume(value: Double) {
-		
 	}
 	
 	func update(time: AudioTime) {
@@ -282,141 +242,5 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 			self.delegate?.playState(isPlaying: self.player.status == .playing)
 			self.delegate?.trackUpdate()
 		}
-	}
-	
-	func subscribe() {
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPaused(_:)),
-											   name: AudioManagerNotificationName.paused.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerEndPlaying(_:)),
-											   name: AudioManagerNotificationName.endPlaying.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPlaySoundOnSecond(_:)),
-											   name: AudioManagerNotificationName.playSoundOnSecond.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerFailed(_:)),
-											   name: AudioManagerNotificationName.failed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerResume(_:)),
-											   name: AudioManagerNotificationName.resumed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerReadyToPlay(_:)),
-											   name: AudioManagerNotificationName.readyToPlay.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerRecievedPlay(_:)),
-											   name: AudioManagerNotificationName.receivedPlayCommand.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerPreviousPlayed(_:)),
-											   name: AudioManagerNotificationName.previousPlayed.notification,
-											   object: audioManager)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(audioManagerNextPlayed(_:)),
-											   name: AudioManagerNotificationName.nextPlayed.notification,
-											   object: audioManager)
-	}
-	
-	
-	// MARK: - AudioManager events
-	
-	@objc func audioManagerPaused(_ notification: Notification) {
-		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause, id != self.currentTrackIndex {
-			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
-			self.delegate?.playState(isPlaying: false)
-		}
-	}
-	
-	@objc func audioManagerEndPlaying(_ notification: Notification) {
-		if let str = audioManager.currentItemId, let id = Int(str), audioManager.isOnPause {
-			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
-			self.delegate?.playState(isPlaying: false)
-		}
-	}
-	
-	@objc func audioManagerPlaySoundOnSecond(_ notification: Notification) {
-
-		/*
-		let info: [String : Any] = ["itemID" : currentItemId ?? "",
-		"currentTime" : currentTime,
-		"maxTime": maxTime]
-		*/
-		if let currentTime = notification.userInfo?["currentTime"] as? Double,
-			let maxTime = notification.userInfo?["maxTime"] as? Double {
-			self.info.current = currentTime
-			self.info.length = maxTime
-			self.delegate?.updateTime(time: (current: currentTime, length: maxTime))
-		}
-	}
-	
-	@objc func audioManagerFailed(_ notification: Notification) {
-	}
-	
-	@objc func audioManagerResume(_ notification: Notification) {
-		if let str = audioManager.currentItemId, let id = Int(str) {
-			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
-			self.delegate?.playState(isPlaying: true)
-		}
-	}
-	
-	@objc func audioManagerReadyToPlay(_ notification: Notification) {
-		if let str = audioManager.currentItemId, let id = Int(str) {
-			if let index = self.playlist.index(where: {$0.id == id}) {
-				currentTrackIndex = index
-			}
-			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
-			self.delegate?.playState(isPlaying: true)
-		}
-		self.delegate?.trackUpdate()
-	}
-	
-	@objc func audioManagerNextPlayed(_ notification: Notification) {
-		if let id = self.currentTrack?.id {
-			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		if let str = audioManager.currentItemId, let id = Int(str) {
-			if let index = self.playlist.index(where: {$0.id == id}) {
-				currentTrackIndex = index
-			}
-			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		self.delegate?.trackUpdate()
-	}
-	
-	@objc func audioManagerPreviousPlayed(_ notification: Notification) {
-		if let id = self.currentTrack?.id {
-			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		if let str = audioManager.currentItemId, let id = Int(str) {
-			if let index = self.playlist.index(where: {$0.id == id}) {
-				currentTrackIndex = index
-			}
-			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		self.delegate?.trackUpdate()
-	}
-	
-	@objc func audioManagerRecievedPlay(_ notification: Notification) {
-		if let id = self.currentTrack?.id {
-			NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		
-		if let str = audioManager.currentItemId, let id = Int(str) {
-			if let index = self.playlist.index(where: {$0.id == id}) {
-				currentTrackIndex = index
-			}
-			NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
-		}
-		self.delegate?.playState(isPlaying: true)
-	}
-	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
 	}
 }

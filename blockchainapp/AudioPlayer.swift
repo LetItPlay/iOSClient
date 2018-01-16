@@ -118,8 +118,6 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		case .prev:
 			if self.currentIndex == 0 {
 				self.player.seek(to: kCMTimeZero)
-//				self.player.pause()
-//				self.delegate?.update(status: .paused, index: self.currentIndex)
 			} else {
 				self.delegate?.update(status: .paused, index: self.currentIndex)
 				self.currentIndex -= 1
