@@ -11,7 +11,7 @@ import UIKit
 class PlaylistView: UIView {
 	
 	let tableView: UITableView = UITableView.init(frame: .zero, style: .grouped)
-	var tracks: [Track] = []
+	var tracks: [AudioTrack] = []
 	var currentIndex: Int = -1
 	
 	convenience init() {
@@ -26,7 +26,7 @@ class PlaylistView: UIView {
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
 
-		tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
+		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
 	}
 
 }
@@ -58,7 +58,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 		tracks.setData(data: Int64(self.tracks.count))
 		
 		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.audiofile?.lengthSeconds ?? 0}).reduce(0, {$0 + $1})))
+		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
 		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in
@@ -113,7 +113,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
 		let track = tracks[indexPath.item]
 		cell.track = track
 		let hideListens = indexPath.item == self.currentIndex

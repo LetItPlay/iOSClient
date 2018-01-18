@@ -313,12 +313,12 @@ class AudioCoreCell: UICollectionViewCell {
     
     let audioManager = AppManager.shared.audioManager
     
-    public weak var track: Track? = nil {
+    public weak var track: AudioTrack? = nil {
         didSet {
             nameLabel.text = track?.name
-            stationNameLabel.text = track?.findStationName()
+            stationNameLabel.text = track?.author
             
-            if let iconUrl = track?.image.buildImageURL() {
+            if let iconUrl = track?.imageURL {
                 imageView.sd_setImage(with: iconUrl)
             } else {
                 imageView.image = nil

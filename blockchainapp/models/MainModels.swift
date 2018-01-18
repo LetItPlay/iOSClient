@@ -71,6 +71,12 @@ extension Track {
     }
 }
 
+extension Track {
+	func audioTrack() -> AudioTrack {
+		return AudioTrack.init(id: "\(self.id)", trackURL: (self.audiofile?.file.buildImageURL())!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.audiofile?.lengthSeconds ?? 0)
+	}
+}
+
 class Audiofile: Object {
     @objc dynamic var file: String = ""
     @objc dynamic var lengthSeconds: Int64 = 0

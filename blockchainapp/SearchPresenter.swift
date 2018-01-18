@@ -68,7 +68,7 @@ class SearchPresenter {
 	func trackSelected(index: Int) {
 		let contr = AudioController.main
 		if contr.currentTrackIndex != index {
-			contr.loadPlaylist(playlist: ("Searching".localized, self.tracks))
+			contr.loadPlaylist(playlist: ("Searching".localized, self.tracks.map({$0.audioTrack()})))
 			contr.setCurrentTrack(index: index)
 		}
 	}
@@ -119,7 +119,7 @@ class SearchPresenter {
 			}
 			if res.count > 0 {
 				let contr = AudioController.main
-				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res))
+				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res.map({$0.audioTrack()})))
 				contr.setCurrentTrack(index: 0)
 				contr.showPlaylist()
 			}

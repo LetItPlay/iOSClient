@@ -172,10 +172,10 @@ class FeedPresenter: FeedPresenterProtocol {
 		if index < self.tracks.count {
 			let trackUID = self.tracks[index].id
 			let name = self.isFeed ? "Feed".localized : "Trends".localized
-			if trackUID != AudioController.main.currentTrack?.id || AudioController.main.playlistName != name {
-				AudioController.main.loadPlaylist(playlist: (name, self.tracks.map({$0})))
+			if "\(trackUID)" != AudioController.main.currentTrack?.id || AudioController.main.playlistName != name {
+				AudioController.main.loadPlaylist(playlist: (name, self.tracks.map({$0.audioTrack()})))
 			}
-			AudioController.main.make(command: .play(id: trackUID))
+			AudioController.main.make(command: .play(id: "\(trackUID)"))
 		}
 	}
 	
@@ -196,10 +196,10 @@ class FeedPresenter: FeedPresenterProtocol {
 //        } else {
 //            audioManager.playItem(with: trackUID)
 //        }
-		if trackUID != AudioController.main.currentTrack?.id {
-			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed".localized : "Trends".localized, self.tracks.map({$0})))
+		if "\(trackUID)" != AudioController.main.currentTrack?.id {
+			AudioController.main.loadPlaylist(playlist: (self.isFeed ? "Feed".localized : "Trends".localized, self.tracks.map({$0.audioTrack()})))
 		}
-		AudioController.main.make(command: .play(id: trackUID))
+		AudioController.main.make(command: .play(id: "\(trackUID)"))
     }
     
     func like(trackUID: Int) {

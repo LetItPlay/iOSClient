@@ -15,18 +15,34 @@ enum PlayerStatus {
 typealias AudioTime = (current: Double, length: Double)
 
 class AudioTrack: AVPlayerItem {
-	var id: Int = -1
+	var id: String = UUID.init().uuidString
 	var name: String = ""
 	var author: String = ""
-	var image: UIImage?
+	var imageURL: URL?
 	var length: Int64 = 0
 	
 	convenience init(track: Track) {
 		self.init(url: track.audiofile!.file.buildImageURL()!)
-		self.id = track.id
+		self.id = "\(track.id)"
 		self.name = track.name
 		self.author = track.findStationName() ?? ""
 		self.length = track.audiofile?.lengthSeconds ?? 0
+	}
+	
+	convenience init(id: String = UUID.init().uuidString, trackURL: URL , name: String, author: String, imageURL: URL? = nil, length: Int64) {
+		let asset = AVAsset.init(url: trackURL)
+		self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
+		self.id = id
+		self.name = name
+		self.author = author
+		self.imageURL = imageURL
+		self.length = length
+	}
+}
+
+class AudioPlayer: AVQueuePlayer {
+	func currentTrack() -> AudioTrack? {
+		return self.currentItem as? AudioTrack
 	}
 }
 
@@ -37,7 +53,7 @@ protocol AudioPlayerProto {
 	var error: Error? {get}
 	
 	func make(command: PlayerCommand)
-	func load(playlist: [Track])
+	func load(playlist: [AudioTrack])
 	func setTrack(index: Int)
 	func clear()
 	func setPlayingMode(speaker: Bool)
@@ -71,7 +87,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	private let kErrorKey = "error"
 	private let kVolumeKey = "outputVolume"
 	
-	private var player: AVQueuePlayer!
+	private var player: AudioPlayer!
 	private var audioSession: AVAudioSession!
 	private var timeObserver: Any?
 	
@@ -79,7 +95,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		super.init()
 		
 		//--- player settings --//
-		player = AVQueuePlayer()
+		player = AudioPlayer()
 		//-- session settings --//
 		audioSession = AVAudioSession.sharedInstance()
 		do {
@@ -141,7 +157,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		}
 	}
 	
-	func load(playlist: [Track]) {
+	func load(playlist: [AudioTrack]) {
 		self.currentIndex = 0
 		removePlayerItemsErrorObservers()
 		
@@ -156,19 +172,18 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		var previousItem: AudioTrack?
 		
 		for track in playlist {
-			let item = AudioTrack(track: track)
-			item.addObserver(self,
+			track.addObserver(self,
 							 forKeyPath: kErrorKey,
 							 options:  [.initial, .new],
 							 context: nil)
-			player.insert(item, after: previousItem)
-			previousItem = item
+			player.insert(track, after: previousItem)
+			previousItem = track
 			
 			//--listen finish --//
 			NotificationCenter.default.addObserver(self,
 												   selector: #selector(itemDidFinishPlaying),
 												   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-												   object:  item)
+												   object:  track)
 		}
 		//-- observe the player item "status" key to determine when it is ready to play
 		player.addObserver(self,

@@ -2,11 +2,11 @@ PODS:
   - DynamicBlurView (2.0.1)
   - MarqueeLabel/Swift (3.1.4)
   - ReachabilitySwift (4.1.0)
-  - Realm (3.0.2):
-    - Realm/Headers (= 3.0.2)
-  - Realm/Headers (3.0.2)
-  - RealmSwift (3.0.2):
-    - Realm (= 3.0.2)
+  - Realm (3.1.0):
+    - Realm/Headers (= 3.1.0)
+  - Realm/Headers (3.1.0)
+  - RealmSwift (3.1.0):
+    - Realm (= 3.1.0)
   - SDWebImage (4.2.3):
     - SDWebImage/Core (= 4.2.3)
   - SDWebImage/Core (4.2.3)
@@ -41,8 +41,8 @@ SPEC CHECKSUMS:
   DynamicBlurView: 5e6babd80cc0ddfd3ddfc4f5dacf2fe4181e7c52
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-  Realm: 6f23fd1f178a09342eac21bfa7c2bf4312a7a180
-  RealmSwift: 695393add1b8f9d5fa75dd16e6355cf3935f71e2
+  Realm: 09513d7c054678d65cd02ce09871f805b0d758ac
+  RealmSwift: e868fee9b10e5490ad94b6b6ecd9027944da1824
   SDWebImage: 791bb72962b3492327ddcac4b1880bd1b5458431
   ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
@@ -52,4 +52,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: f94963f7457e66adc851cfe1ce976f719f87d39b
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.3.1

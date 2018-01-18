@@ -198,18 +198,19 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	
 	func trackUpdate() {
 		if let ob = audioController.currentTrack {
-			let channel = ob.findStationName() ?? ""
+			let channel = ob.author
 			let title = ob.name
-			let url = ob.image.buildImageURL()
 
 			self.popupItem.title = channel
 			self.popupItem.subtitle = title
 			self.playerView.channelNameLabel.text = channel
 			self.playerView.trackNameLabel.text = title
-			self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-				self.popupItem.image = img
-				self.playerView.setPicture(image: img)
-			})
+			if let url = ob.imageURL {
+				self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+					self.popupItem.image = img
+					self.playerView.setPicture(image: img)
+				})
+			}
 		}
 		if audioController.status != .playing {
 			UIView.animate(withDuration: 0.01, animations: {

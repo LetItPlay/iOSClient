@@ -43,17 +43,17 @@ protocol AudioControllerProtocol: class {
 	weak var delegate: AudioControllerDelegate? {get set}
 	
 	var currentTrackIndex: Int {get}
-	var currentTrack: Track? {get}
-	var playlist: [Track] {get}
+	var currentTrack: AudioTrack? {get}
+	var playlist: [AudioTrack] {get}
 	var status: AudioStatus {get}
 	var info: (current: Double, length: Double) {get}
 		
 	func make(command: AudioCommand)
 	
 	func setCurrentTrack(index: Int)
-	func setCurrentTrack(id: Int)
+	func setCurrentTrack(id: String)
 	
-	func loadPlaylist(playlist:(String, [Track]))
+	func loadPlaylist(playlist:(String, [AudioTrack]))
 	
 	func updatePlaylist()
 }
@@ -63,7 +63,7 @@ enum AudioStatus {
 }
 
 enum AudioCommand {
-	case play(id: Int?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
+	case play(id: String?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
 }
 
 class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
@@ -87,10 +87,10 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	weak var popupDelegate: AudioControllerPresenter?
 	
 	var playlistName: String = "Main"
-	var playlist: [Track] = []
+	var playlist: [AudioTrack] = []
 	var currentTrackIndex: Int = -1
 	var info: (current: Double, length: Double) = (current: 0.0, length: 0.0)
-	var currentTrack: Track? {
+	var currentTrack: AudioTrack? {
 		get {
 			return currentTrackIndex < playlist.count && currentTrackIndex >= 0 ? playlist[currentTrackIndex] : nil
 		}
@@ -179,7 +179,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 	}
 	
-	func loadPlaylist(playlist: (String, [Track])) {
+	func loadPlaylist(playlist: (String, [AudioTrack])) {
 		if self.playlistName != playlist.0 {
 			self.playlist = playlist.1
 			self.playlistName = playlist.0
@@ -207,7 +207,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 	}
 	
-	func setCurrentTrack(id: Int) {
+	func setCurrentTrack(id: String) {
 		for i in 0..<playlist.count {
 			if playlist[i].id == id {
 				setCurrentTrack(index: i)

@@ -12,6 +12,7 @@
 		01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
+		014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014761132010620F006E3373 /* PlayerTableViewCell.swift */; };
 		015088842006472200E42F7D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015088832006472200E42F7D /* AudioPlayer.swift */; };
 		01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAC1FDED922003AC116 /* RealmExtension.swift */; };
 		01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */; };
@@ -102,6 +103,7 @@
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
+		014761132010620F006E3373 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		015088832006472200E42F7D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		01510EAC1FDED922003AC116 /* RealmExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
 		01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTrackCell.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
 				015812A11FD80AF1002828F5 /* AudioController.swift */,
 				015088832006472200E42F7D /* AudioPlayer.swift */,
+				014761132010620F006E3373 /* PlayerTableViewCell.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -580,7 +583,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */ = {
@@ -643,6 +646,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
