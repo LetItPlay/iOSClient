@@ -35,13 +35,11 @@
 		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
 		01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991B1FE8DBB00016060E /* UserSettings.swift */; };
 		01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */; };
-		01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
 		01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31641FD1596400FB2B9E /* PlayerView.swift */; };
 		01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FF31661FD16FBA00FB2B9E /* Assets.xcassets */; };
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
-		CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
@@ -58,12 +56,8 @@
 		CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453681F57F4D200660474 /* ChannelsViewController.swift */; };
 		CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536A1F57F50300660474 /* ChannelsPresenter.swift */; };
 		CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536C1F57F53100660474 /* ChannelsProtocol.swift */; };
-		CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF44536F1F5D78C000660474 /* PlayerViewController.swift */; };
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
-		CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */; };
-		CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */; };
-		CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
 /* End PBXBuildFile section */
 
@@ -126,7 +120,6 @@
 		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
 		01E1991B1FE8DBB00016060E /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewPlayCollectionViewCell.swift; path = scenes/FullPlayer/NewPlayCollectionViewCell.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
 		01FF31641FD1596400FB2B9E /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		01FF31661FD16FBA00FB2B9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -134,7 +127,6 @@
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
-		CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AudioCoreViewController.swift; path = scenes/player/AudioCoreViewController.swift; sourceTree = "<group>"; };
 		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		CF27152A1F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		CF27152E1F97C79A0038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -160,12 +152,8 @@
 		CF4453681F57F4D200660474 /* ChannelsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsViewController.swift; path = scenes/Channels/ChannelsViewController.swift; sourceTree = "<group>"; };
 		CF44536A1F57F50300660474 /* ChannelsPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsPresenter.swift; path = scenes/Channels/ChannelsPresenter.swift; sourceTree = "<group>"; };
 		CF44536C1F57F53100660474 /* ChannelsProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChannelsProtocol.swift; path = scenes/Channels/ChannelsProtocol.swift; sourceTree = "<group>"; };
-		CF44536F1F5D78C000660474 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerViewController.swift; path = scenes/player/PlayerViewController.swift; sourceTree = "<group>"; };
 		CF4453721F5D8EBE00660474 /* MainTabViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainTabViewController.swift; path = "scenes/tab controller/MainTabViewController.swift"; sourceTree = "<group>"; };
 		CF4453741F666BB800660474 /* DBModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DBModels.swift; path = models/DBModels.swift; sourceTree = "<group>"; };
-		CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerViewController.swift; path = scenes/FullPlayer/FullPlayerViewController.swift; sourceTree = "<group>"; };
-		CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerPresenter.swift; path = scenes/FullPlayer/FullPlayerPresenter.swift; sourceTree = "<group>"; };
-		CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FullPlayerProtocols.swift; path = scenes/FullPlayer/FullPlayerProtocols.swift; sourceTree = "<group>"; };
 		D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.release.xcconfig"; sourceTree = "<group>"; };
 		FD10B17549A87867E48B318C /* AppUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -245,6 +233,15 @@
 				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
 			);
 			name = "UI Extensions";
+			sourceTree = "<group>";
+		};
+		01FF376B201072B7007F57E0 /* AudioCore */ = {
+			isa = PBXGroup;
+			children = (
+				015812A11FD80AF1002828F5 /* AudioController.swift */,
+				015088832006472200E42F7D /* AudioPlayer.swift */,
+			);
+			name = AudioCore;
 			sourceTree = "<group>";
 		};
 		CF2715311F97EA560038C81C /* about */ = {
@@ -342,7 +339,6 @@
 				01510EB01FE0E8EC003AC116 /* SearchScreen */,
 				019B3DC41FCC4599008C3B76 /* Channel Screen */,
 				01AA891F1FC5610500D50C13 /* Profile */,
-				CFCEA3201F98AD4700DFAE70 /* FullPlayer */,
 				CF2715311F97EA560038C81C /* about */,
 				CF4453711F5D8E8600660474 /* tab controller */,
 				CF44536E1F5D787A00660474 /* player */,
@@ -379,15 +375,11 @@
 		CF44536E1F5D787A00660474 /* player */ = {
 			isa = PBXGroup;
 			children = (
-				CF44536F1F5D78C000660474 /* PlayerViewController.swift */,
-				CF1E048C1F90B0B900D8812F /* AudioCoreViewController.swift */,
-				01E2CA4C1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift */,
 				01321B691FCDB89C009BFE62 /* PopupController.swift */,
 				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
 				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
-				015812A11FD80AF1002828F5 /* AudioController.swift */,
-				015088832006472200E42F7D /* AudioPlayer.swift */,
 				014761132010620F006E3373 /* PlayerTableViewCell.swift */,
+				01FF376B201072B7007F57E0 /* AudioCore */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -398,16 +390,6 @@
 				CF4453721F5D8EBE00660474 /* MainTabViewController.swift */,
 			);
 			name = "tab controller";
-			sourceTree = "<group>";
-		};
-		CFCEA3201F98AD4700DFAE70 /* FullPlayer */ = {
-			isa = PBXGroup;
-			children = (
-				CFCEA3211F98AEA100DFAE70 /* FullPlayerViewController.swift */,
-				CFCEA3231F98B00900DFAE70 /* FullPlayerPresenter.swift */,
-				CFCEA3251F98B01F00DFAE70 /* FullPlayerProtocols.swift */,
-			);
-			name = FullPlayer;
 			sourceTree = "<group>";
 		};
 		D6466F373F64D97EFA77D614 /* Pods */ = {
@@ -601,7 +583,6 @@
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/ShadowView/ShadowView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyAudioManager/SwiftyAudioManager.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
 			);
@@ -615,7 +596,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ShadowView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyAudioManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
 			);
@@ -654,23 +634,19 @@
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
-				CFCEA3241F98B00900DFAE70 /* FullPlayerPresenter.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
 				01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */,
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
-				CF1E048D1F90B0B900D8812F /* AudioCoreViewController.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
 				01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */,
 				0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */,
 				01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
-				CFCEA3261F98B01F00DFAE70 /* FullPlayerProtocols.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
-				01E2CA4D1FC5CED2008AB046 /* NewPlayCollectionViewCell.swift in Sources */,
 				01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
@@ -686,11 +662,9 @@
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
 				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
-				CF4453701F5D78C000660474 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
 				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
-				CFCEA3221F98AEA100DFAE70 /* FullPlayerViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,
 				FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */,

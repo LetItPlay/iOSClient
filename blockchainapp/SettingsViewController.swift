@@ -68,8 +68,8 @@ class SettingsViewController: UIViewController {
 																				.foregroundColor: UIColor.black,
 																				.paragraphStyle: para])
 		
-		var lipIcon: UIImageView = UIImageView.init(image: UIImage.init(named: "redTriangle"))
-		var lipText: UIImageView = UIImageView.init(image: UIImage.init(named: "textLogo"))
+		let lipIcon: UIImageView = UIImageView.init(image: UIImage.init(named: "redTriangle"))
+		let lipText: UIImageView = UIImageView.init(image: UIImage.init(named: "textLogo"))
 		
 		let tupleEng = button()
 		tupleEng.0.tag = 0

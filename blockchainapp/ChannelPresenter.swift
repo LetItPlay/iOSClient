@@ -32,13 +32,12 @@ class ChannelPresenter {
 		
 		token = results.observe({ [weak self] (changes: RealmCollectionChange) in
 			let filter: (Track) -> Bool = {$0.station == self?.station.id}
-			let currentID = AudioController.main.currentTrack?.id
 			switch changes {
 			case .initial:
 				// Results are now populated and can be accessed without blocking the UI
 				self?.tracks = [Array(results).filter(filter)]
 				
-			case .update(_, let deletions, let insertions, let modifications):
+			case .update(_, _, _, _):
 				// Query results have changed, so apply them to the UITableView
 				self?.tracks = [Array(results).filter(filter)]
 				
@@ -87,7 +86,7 @@ class ChannelPresenter {
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.first?.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? Int, let _ = self.tracks.first?.index(where: {$0.id == id}) {
 			self.view?.currentIndex = -1
 			self.view?.update()
 		}

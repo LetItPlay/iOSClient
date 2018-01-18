@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import SwiftyAudioManager
+ 
 import RealmSwift
 
 class FeedPresenter: FeedPresenterProtocol {	
     
     weak var view: FeedViewProtocol?
-    let audioManager = AppManager.shared.audioManager
     
     var token: NotificationToken?
     
@@ -53,7 +52,7 @@ class FeedPresenter: FeedPresenterProtocol {
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
 			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station) && $0.lang == UserSettings.language.rawValue} : {$0.lang == UserSettings.language.rawValue}
-			let currentID = AudioController.main.currentTrack?.id
+			let _ = AudioController.main.currentTrack?.id
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
@@ -143,7 +142,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? Int, let _ = self.tracks.index(where: {$0.id == id}) {
 			var reload = [Int]()
 			if playingIndex != -1 {
 				reload.append(playingIndex)

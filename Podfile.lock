@@ -12,7 +12,6 @@ PODS:
   - SDWebImage/Core (4.2.3)
   - ShadowView (1.2)
   - SnapKit (4.0.0)
-  - SwiftyAudioManager (0.1.0)
   - SwiftyJSON (4.0.0)
   - TagListView (1.3.0)
 
@@ -24,18 +23,8 @@ DEPENDENCIES:
   - SDWebImage
   - ShadowView
   - SnapKit
-  - SwiftyAudioManager (from `git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git`)
   - SwiftyJSON
   - TagListView
-
-EXTERNAL SOURCES:
-  SwiftyAudioManager:
-    :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
-
-CHECKOUT OPTIONS:
-  SwiftyAudioManager:
-    :commit: 0b6c28ea67ed4863fd5f509f29e32f66ca18fc88
-    :git: git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git
 
 SPEC CHECKSUMS:
   DynamicBlurView: 5e6babd80cc0ddfd3ddfc4f5dacf2fe4181e7c52
@@ -46,10 +35,9 @@ SPEC CHECKSUMS:
   SDWebImage: 791bb72962b3492327ddcac4b1880bd1b5458431
   ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftyAudioManager: 085c5bb43718c74cfac9f5fb926b32d4a17bca02
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: f94963f7457e66adc851cfe1ce976f719f87d39b
+PODFILE CHECKSUM: 1e5c14dc6632c6fe4b9d3e5358fd256c4cc94d93
 
 COCOAPODS: 1.3.1

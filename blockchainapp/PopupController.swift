@@ -9,20 +9,12 @@
 import UIKit
 import LNPopupController
 import SnapKit
-import SwiftyAudioManager
+
 import RealmSwift
 import SDWebImage
 import MediaPlayer
 
-class CustomScrollView: UIScrollView {
-//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//		let view = super.hitTest(point, with: event)
-//		if view is TimedSlider || view is MPVolumeView {
-//			return view?.hitTest(point, with: event)
-//		}
-//		return self
-//	}
-	
+class CustomScrollView: UIScrollView {	
 	override func touchesShouldCancel(in view: UIView) -> Bool {
 		let needTouch = view is TimedSlider || view is MPVolumeView
 		return !needTouch

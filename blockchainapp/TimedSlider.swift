@@ -74,11 +74,11 @@ class TimedSlider: UIControl {
 	}
 	
 	@objc func sliderChanged(sender: UISlider) {
-		let dist = self.slider.frame.width * CGFloat(self.slider.value)
+		let _ = self.slider.frame.width * CGFloat(self.slider.value)
 		
-		let startFrame = trackProgressLabels.start.frame
-		let finFrame = trackProgressLabels.fin.frame
-		let modelPoint = CGPoint.init(x: dist, y: self.frame.height - 10)
+//		let startFrame = trackProgressLabels.start.frame
+//		let finFrame = trackProgressLabels.fin.frame
+//		let modelPoint = CGPoint.init(x: dist, y: self.frame.height - 10)
 
 		self.sendActions(for: .valueChanged)
 	}

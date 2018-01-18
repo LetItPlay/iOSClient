@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyAudioManager
 import Reachability
 import SDWebImage
 
@@ -80,7 +79,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	static let main = AudioController()
 	
-	let audioManager = AppManager.shared.audioManager
 	let player = AudioPlayer2()
 	
 	weak var delegate: AudioControllerDelegate?
@@ -106,7 +104,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	init() {
 		
 		reach?.whenUnreachable = { _ in
-			self.audioManager.pause()
+			self.player.make(command: .pause)
 		}
 		
 		do {

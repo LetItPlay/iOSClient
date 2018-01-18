@@ -8,7 +8,7 @@
 
 import Foundation
 import SwiftyJSON
-import SwiftyAudioManager
+ 
 import RealmSwift
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
@@ -18,9 +18,8 @@ typealias ChannelsLoaderFail = (Error?) -> Void
 class AppManager {
     static let shared = AppManager()
     
-    public let audioManager = AudioManager()
-    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
-    
+//    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
+	
     private let tabDelegate = MainTabBarDelegate()
     public var rootTabBarController: MainTabViewController? {
         didSet {
@@ -31,8 +30,6 @@ class AppManager {
     }
     
     init() {
-        audioManager.isPlayingSpeakerMode = true
-        audioManager.resetOnLast = false
     }
 }
 
@@ -210,10 +207,10 @@ class SubscribeManager {
         stations = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
         listenedTracks = (UserDefaults.standard.array(forKey: "listen_tracks") as? [Int]) ?? []
         
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(audioManagerStartPlaying(_:)),
-                                               name: AudioManagerNotificationName.startPlaying.notification,
-                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(audioManagerStartPlaying(_:)),
+//                                               name: AudioManagerNotificationName.startPlaying.notification,
+//                                               object: nil)
 
     }
     
@@ -222,19 +219,19 @@ class SubscribeManager {
     }
     
     @objc func audioManagerStartPlaying(_ notification: Notification) {
-        DispatchQueue.global().async { [unowned self] in
-            if let id = AppManager.shared.audioManager.currentItemId,
-                let idstring = id.split(separator: "_").last,
-                let trackId = Int(idstring) {
-                if !self.listenedTracks.contains(trackId) {
-                    objc_sync_enter(self.listenedTracks)
-                    self.listenedTracks.append(trackId)
-                    UserDefaults.standard.set(self.listenedTracks, forKey: "listen_tracks")
-                    objc_sync_exit(self.listenedTracks)
-                    DownloadManager.shared.track(id: trackId, listen: 1)
-                }
-            }
-        }
+//        DispatchQueue.global().async { [unowned self] in
+//            if let id = AppManager.shared.audioManager.currentItemId,
+//                let idstring = id.split(separator: "_").last,
+//                let trackId = Int(idstring) {
+//                if !self.listenedTracks.contains(trackId) {
+//                    objc_sync_enter(self.listenedTracks)
+//                    self.listenedTracks.append(trackId)
+//                    UserDefaults.standard.set(self.listenedTracks, forKey: "listen_tracks")
+//                    objc_sync_exit(self.listenedTracks)
+//                    DownloadManager.shared.track(id: trackId, listen: 1)
+//                }
+//            }
+//        }
     }
 
     

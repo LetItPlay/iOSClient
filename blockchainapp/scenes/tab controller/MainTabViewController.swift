@@ -80,13 +80,13 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
         if let nc = viewController as? UINavigationController,
             let root = nc.viewControllers.first {
             if root is FeedViewController {
-                AppManager.shared.audioPlayer?.showPlayer()
+//                AppManager.shared.audioPlayer?.showPlayer()
             }
             
-            if (root is ChannelsViewController || root is AboutViewController)
-                && !AppManager.shared.audioManager.isPlaying {
-                AppManager.shared.audioPlayer?.hidePlayer()
-            }
+//            if (root is ChannelsViewController || root is AboutViewController)
+//                && !AppManager.shared.audioManager.isPlaying {
+//                AppManager.shared.audioPlayer?.hidePlayer()
+//            }
         }
     }
     

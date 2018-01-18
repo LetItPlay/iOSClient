@@ -246,7 +246,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		
 		switch keyPath {
 		case kRateKey:
-			if player.rate >= 1, let currentItem = player.currentItem {
+			if player.rate >= 1, let _ = player.currentItem {
 				if CMTimeGetSeconds(player.currentTime()) < 0.5 {
 					//-- начался новый трек --//
 //						self.delegate?.audioPlayerStartPlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
@@ -260,7 +260,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 			}
 		case kTimedMetadataKey:
 			if let itemMetadata = player.currentItem?.timedMetadata {
-				for metadataItem in itemMetadata {
+				for _ in itemMetadata {
 //					handleTimedMetadata(timedMetadata: metadataItem)
 				}
 			}
@@ -296,7 +296,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	}
 	
 	@objc private func itemDidFinishPlaying(notification: Notification) {
-		if let currentItem = player.currentItem {
+		if let _ = player.currentItem {
 			DispatchQueue.main.async {
 //				self.delegate?.audioPlayerFinishPlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
 			}

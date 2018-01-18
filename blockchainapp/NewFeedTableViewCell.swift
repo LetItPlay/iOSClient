@@ -1,13 +1,11 @@
 
 import UIKit
 import SnapKit
-import SwiftyAudioManager
 
 class NewFeedTableViewCell: UITableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
-	let audioManager = AppManager.shared.audioManager
 	public var onPlay: ((Int) -> Void)?
 	public var onLike: ((Int) -> Void)?
 	

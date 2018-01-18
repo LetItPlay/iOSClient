@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SwiftyAudioManager
 
 enum FeedType {
 	case feed, popular

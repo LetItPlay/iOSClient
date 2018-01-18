@@ -37,7 +37,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
                     }
                 }
                 
-            case .update(_, let deletions, let insertions, let modifications):
+			case .update(_, _, _, _):
                 // Query results have changed, so apply them to the UITableView
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
                 self?.view?.display(channels: items)
