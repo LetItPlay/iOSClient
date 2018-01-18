@@ -165,7 +165,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
 		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})))
-		contr.setCurrentTrack(index: indexPath.item)
+		contr.setCurrentTrack(id: self.tracks[indexPath.item].audiotrackId())
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

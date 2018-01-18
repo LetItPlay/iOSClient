@@ -11,8 +11,8 @@ import UIKit
 class PlaylistView: UIView {
 	
 	let tableView: UITableView = UITableView.init(frame: .zero, style: .grouped)
-	var tracks: [AudioTrack] = []
-	var currentIndex: Int = -1
+	var tracks: [[AudioTrack]] = [[]]
+	var currentIndex: IndexPath = IndexPath.invalid
 	
 	convenience init() {
 		self.init(frame: CGRect.zero)
@@ -34,11 +34,11 @@ class PlaylistView: UIView {
 extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
+		return self.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.tracks.count
+		return self.tracks[section].count
 	}
 	
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -58,7 +58,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 		tracks.setData(data: Int64(self.tracks.count))
 		
 		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
+		time.setData(data: Int64(self.tracks[section].map({$0.length}).reduce(0, {$0 + $1})))
 		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in
@@ -108,22 +108,22 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Player".localized, self.tracks))
-		contr.setCurrentTrack(index: indexPath.item)
+		contr.loadPlaylist(playlist: ("Player".localized, self.tracks[indexPath.section]))
+		contr.setCurrentTrack(id: self.tracks[indexPath].id)
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-		let track = tracks[indexPath.item]
+		let track = self.tracks[indexPath]
 		cell.track = track
-		let hideListens = indexPath.item == self.currentIndex
+		let hideListens = indexPath == currentIndex
 		cell.dataLabels[.listens]?.isHidden = hideListens
 		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
 		return cell
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.tracks[indexPath.item]
+		let track = self.tracks[indexPath]
 		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
 	}
 }

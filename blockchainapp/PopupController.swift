@@ -213,7 +213,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 				self.popupItem.progress = 0
 			})
 		}
-		self.playlistView.currentIndex = audioController.currentTrackIndex
+		self.playlistView.currentIndex = audioController.currentTrackIndexPath
 		self.playlistView.tableView.reloadData()
 		self.playerView.isHidden = false
 		
@@ -228,8 +228,8 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		self.playerView.trackNameLabel.text = ""
 		self.playerView.coverImageView.image = nil
 		
-		self.playlistView.tracks = AudioController.main.playlist
-		self.playlistView.currentIndex = -1
+		self.playlistView.tracks = [audioController.userPlaylist.tracks, AudioController.main.playlist.tracks]
+		self.playlistView.currentIndex = audioController.currentTrackIndexPath
 		self.playlistView.tableView.reloadData()
 	}
 	

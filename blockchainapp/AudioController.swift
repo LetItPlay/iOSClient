@@ -41,15 +41,14 @@ class AudioPlaylist {
 protocol AudioControllerProtocol: class {
 	weak var delegate: AudioControllerDelegate? {get set}
 	
-	var currentTrackIndex: Int {get}
 	var currentTrack: AudioTrack? {get}
-	var playlist: [AudioTrack] {get}
+	var userPlaylist: AudioPlaylist {get}
+	var playlist: AudioPlaylist {get}
 	var status: AudioStatus {get}
 	var info: (current: Double, length: Double) {get}
 		
 	func make(command: AudioCommand)
 	
-	func setCurrentTrack(index: Int)
 	func setCurrentTrack(id: String)
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]))
@@ -85,12 +84,18 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	weak var popupDelegate: AudioControllerPresenter?
 	
 	var playlistName: String = "Main"
-	var playlist: [AudioTrack] = []
-	var currentTrackIndex: Int = -1
+	var userPlaylist: AudioPlaylist = AudioPlaylist.init()
+	var playlist: AudioPlaylist = AudioPlaylist.init()
+	var currentTrackIndexPath: IndexPath = IndexPath.init(row: -1, section: -1)
 	var info: (current: Double, length: Double) = (current: 0.0, length: 0.0)
 	var currentTrack: AudioTrack? {
 		get {
-			return currentTrackIndex < playlist.count && currentTrackIndex >= 0 ? playlist[currentTrackIndex] : nil
+			let index = currentTrackIndexPath.item
+			if currentTrackIndexPath.section == 0 {
+				return index < userPlaylist.tracks.count && index >= 0 ? userPlaylist.tracks[index] : nil
+			} else {
+				return index < playlist.tracks.count && index >= 0 ? playlist.tracks[index] : nil
+			}
 		}
 	}
 	var status: AudioStatus {
@@ -137,14 +142,17 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 			return
 		}
 		
-		if self.currentTrackIndex < 0 && self.playlist.count != 0 {
-			self.popupDelegate?.popupPlayer(show: true, animated: true)
-		}
+//		if self.currentTrackIndex < 0 && self.playlist.tracks.count != 0 {
+//			self.popupDelegate?.popupPlayer(show: true, animated: true)
+//		}
 		
 		switch command {
 		case .play(let id):
 			if let id = id {
-				if let index = self.playlist.index(where: {$0.id == id}), index != self.currentTrackIndex {
+				if let indexPath = getIndexPath(id: id),
+					indexPath != self.currentTrackIndexPath {
+					self.currentTrackIndexPath = indexPath
+					let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
 					player.setTrack(index: index)
 					player.make(command: .play)
 				} else {
@@ -177,12 +185,24 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 	}
 	
+	func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {
+		if !self.userPlaylist.tracks.contains(where: {$0.id == track.id}) {
+			var userIndexInsert = -1
+			if inBeginning {
+				
+			} else {
+				self.userPlaylist.tracks.append(track)
+			}
+		}
+	}
+	
 	func loadPlaylist(playlist: (String, [AudioTrack])) {
 		if self.playlistName != playlist.0 {
-			self.playlist = playlist.1
-			self.playlistName = playlist.0
-			self.player.load(playlist: self.playlist)
-			self.player.make(command: .play)
+			let newPlaylist = AudioPlaylist()
+			newPlaylist.tracks = playlist.1
+			newPlaylist.name = playlist.0
+			self.playlist = newPlaylist
+			self.player.load(playlist: self.playlist.tracks)
 		}
 	}
 	
@@ -194,23 +214,40 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	func updatePlaylist() {
 	}
 	
-	func setCurrentTrack(index: Int) {
-		if reach?.connection != Reachability.Connection.none {
-			if self.currentTrackIndex < 0 {
-				self.popupDelegate?.popupPlayer(show: true, animated: true)
-			}
-			
-			self.currentTrackIndex = index
-			player.setTrack(index: index)
+	private func getIndexPath(id: String) -> IndexPath? {
+		let mainIndex = self.playlist.tracks.index(where: {$0.id == id})
+		let userIndex = self.userPlaylist.tracks.index(where: {$0.id == id})
+		var indexPath: IndexPath? = nil
+		if let mainIndex = mainIndex {
+			return IndexPath.init(row: mainIndex, section: 1)
+		} else if let userIndex = userIndex {
+			return IndexPath.init(row: userIndex, section: 0)
 		}
+		
+		return nil
+	}
+	
+	private func getIndexPath(index: Int) -> IndexPath? {
+		if index < 0 {
+			return nil
+		}
+		if index < userPlaylist.tracks.count {
+			return IndexPath.init(row: index, section: 0)
+		} else if index < userPlaylist.tracks.count + playlist.tracks.count {
+			return IndexPath.init(row: index - userPlaylist.tracks.count , section: 1)
+		}
+		return nil
+	}
+	
+	private subscript(indexPath: IndexPath) -> AudioTrack? {
+		
+		return nil
 	}
 	
 	func setCurrentTrack(id: String) {
-		for i in 0..<playlist.count {
-			if playlist[i].id == id {
-				setCurrentTrack(index: i)
-				return
-			}
+		if let indexPath = getIndexPath(id: id) {
+			let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
+			self.player.setTrack(index: index)
 		}
 	}
 	
@@ -223,19 +260,20 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	}
 	
 	func update(status: PlayerStatus, index: Int) {
+		let indexPath = getIndexPath(index: index)
 		DispatchQueue.main.async {
-			switch status {
-			case .paused:
-				if index != -1 {
-					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
+			if let indexPath = indexPath, let track = self[indexPath] {
+				switch status {
+				case .paused:
+					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": track.id])
+					break
+				case .playing:
+					self.currentTrackIndexPath = indexPath
+					NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": track.id])
+					break
+				default:
+					break
 				}
-				break
-			case .playing:
-				self.currentTrackIndex = index
-				NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": self.playlist[index].id])
-				break
-			default:
-				break
 			}
 			self.delegate?.playState(isPlaying: self.player.status == .playing)
 			self.delegate?.trackUpdate()
