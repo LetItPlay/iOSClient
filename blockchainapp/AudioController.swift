@@ -13,57 +13,6 @@ import SDWebImage
 import UIKit
 import MediaPlayer
 
-protocol AudioControllerDelegate: class {
-	func updateTime(time: (current: Double, length: Double))
-	func volumeUpdate(value: Double)
-	func playState(isPlaying: Bool)
-	func trackUpdate()
-	func playlistChanged()
-	func showPlaylist()
-}
-
-protocol AudioControllerPresenter: class {
-	func popupPlayer(show: Bool, animated: Bool)
-	func showPlaylist()
-}
-
-class AudioPlaylist {
-	var id: String = ""
-	var name: String = ""
-	var tracks: [AudioTrack] = []
-	var length: Int64 {
-		get {
-			return tracks.map({$0.length}).reduce(0, {$0 + $1})
-		}
-	}
-}
-
-protocol AudioControllerProtocol: class {
-	weak var delegate: AudioControllerDelegate? {get set}
-	
-	var currentTrack: AudioTrack? {get}
-	var userPlaylist: AudioPlaylist {get}
-	var playlist: AudioPlaylist {get}
-	var status: AudioStatus {get}
-	var info: (current: Double, length: Double) {get}
-		
-	func make(command: AudioCommand)
-	
-	func setCurrentTrack(id: String)
-	
-	func loadPlaylist(playlist:(String, [AudioTrack]))
-	
-	func updatePlaylist()
-}
-
-enum AudioStatus {
-	case playing, pause, failed, idle
-}
-
-enum AudioCommand {
-	case play(id: String?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
-}
-
 class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	enum AudioStateNotification: String {
@@ -90,12 +39,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	var info: (current: Double, length: Double) = (current: 0.0, length: 0.0)
 	var currentTrack: AudioTrack? {
 		get {
-			let index = currentTrackIndexPath.item
-			if currentTrackIndexPath.section == 0 {
-				return index < userPlaylist.tracks.count && index >= 0 ? userPlaylist.tracks[index] : nil
-			} else {
-				return index < playlist.tracks.count && index >= 0 ? playlist.tracks[index] : nil
-			}
+			return self[currentTrackIndexPath]
 		}
 	}
 	var status: AudioStatus {
@@ -142,17 +86,14 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 			return
 		}
 		
-//		if self.currentTrackIndex < 0 && self.playlist.tracks.count != 0 {
-//			self.popupDelegate?.popupPlayer(show: true, animated: true)
-//		}
-		
 		switch command {
 		case .play(let id):
 			if let id = id {
-				if let indexPath = getIndexPath(id: id),
+				if let indexPath = indexPath(id: id),
 					indexPath != self.currentTrackIndexPath {
 					self.currentTrackIndexPath = indexPath
 					let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
+					player.load(item: (indexPath.section == 0 ? self.userPlaylist.tracks : self.playlist.tracks)[indexPath.item])
 					player.setTrack(index: index)
 					player.make(command: .play)
 				} else {
@@ -165,13 +106,15 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 			} else {
 				player.make(command: .play)
 			}
-			self.popupDelegate?.popupPlayer(show: true, animated: true)
+			DispatchQueue.main.async {
+				self.popupDelegate?.popupPlayer(show: true, animated: true)
+			}
 		case .pause:
 			player.make(command: .pause)
 		case .next:
-			player.make(command: .next)
+			self.play(indexPath: self.currentTrackIndexPath, next: true)
 		case .prev:
-			player.make(command: .prev)
+			self.play(indexPath: self.currentTrackIndexPath, next: false)
 		case .seekForward:
 			let newProgress = ( info.current + 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress < 1.0  ? newProgress : 1.0))
@@ -196,38 +139,113 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 	}
 	
-	func loadPlaylist(playlist: (String, [AudioTrack])) {
-		if self.playlistName != playlist.0 {
-			let newPlaylist = AudioPlaylist()
-			newPlaylist.tracks = playlist.1
-			newPlaylist.name = playlist.0
-			self.playlist = newPlaylist
-			self.player.load(playlist: self.playlist.tracks)
+	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
+		DispatchQueue.global(qos: .background).async {
+			if self.playlistName != playlist.0 {
+				let newPlaylist = AudioPlaylist()
+				newPlaylist.tracks = playlist.1
+				newPlaylist.name = playlist.0
+				self.playlist = newPlaylist
+				if let id = playId {
+					self.make(command: .play(id: id))
+				}
+			}
 		}
 	}
 	
 	func showPlaylist() {
-        self.popupDelegate?.showPlaylist()
-        self.delegate?.showPlaylist()
+		DispatchQueue.main.async {
+			self.popupDelegate?.showPlaylist()
+			self.delegate?.showPlaylist()
+		}
 	}
 	
 	func updatePlaylist() {
 	}
 	
-	private func getIndexPath(id: String) -> IndexPath? {
-		let mainIndex = self.playlist.tracks.index(where: {$0.id == id})
-		let userIndex = self.userPlaylist.tracks.index(where: {$0.id == id})
-		var indexPath: IndexPath? = nil
-		if let mainIndex = mainIndex {
+	func setCurrentTrack(id: String) {
+		if let indexPath = indexPath(id: id) {
+			let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
+			self.player.setTrack(index: index)
+		}
+	}
+	
+	func itemFinishedPlaying(id: String) {
+		self.play(id: id)
+	}
+	
+	func play(indexPath: IndexPath, next: Bool) {
+		let way = next ? 1 : -1
+		
+		if indexPath.section == 0 {
+			if indexPath.item + way == self.userPlaylist.tracks.count {
+				self.currentTrackIndexPath = IndexPath.init(row: 0, section: 1)
+			} else {
+				self.currentTrackIndexPath.item += way
+			}
+		} else {
+			if indexPath.item + way == self.playlist.tracks.count {
+				self.make(command: .pause)
+				self.currentTrackIndexPath = IndexPath.invalid
+				self.userPlaylist.tracks = []
+				self.playlist.tracks = []
+				// TODO: hide player
+			} else {
+				self.currentTrackIndexPath.item += way
+			}
+		}
+		if let item = self[indexPath] {
+			self.player.load(item: item)
+			self.player.make(command: .play)
+		}
+	}
+	
+	func play(id: String, next: Bool = true) {
+		guard let indexPath = indexPath(id: id) else {
+			return
+		}
+		self.play(indexPath: indexPath, next: next)
+	}
+	
+	func update(time: AudioTime) {
+		self.info.current = time.current
+		self.info.length = time.length
+		DispatchQueue.main.async {
+			self.delegate?.updateTime(time: (current: time.current, length: time.length))
+		}
+	}
+	
+	func update(status: PlayerStatus, id: String) {
+		DispatchQueue.main.async {
+			if let indexPath = self.indexPath(id: id) {
+				switch status {
+				case .paused:
+					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": id])
+					break
+				case .playing:
+					self.currentTrackIndexPath = indexPath
+					NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": id])
+					break
+				default:
+					break
+				}
+			}
+			self.delegate?.playState(isPlaying: self.player.status == .playing)
+			self.delegate?.trackUpdate()
+		}
+	}
+	
+	private func indexPath(id: String) -> IndexPath? {
+		if let mainIndex = self.playlist.tracks.index(where: {$0.id == id}) {
 			return IndexPath.init(row: mainIndex, section: 1)
-		} else if let userIndex = userIndex {
+		}
+		if let userIndex = self.userPlaylist.tracks.index(where: {$0.id == id}) {
 			return IndexPath.init(row: userIndex, section: 0)
 		}
-		
 		return nil
 	}
 	
-	private func getIndexPath(index: Int) -> IndexPath? {
+	private func indexPath(index: Int) -> IndexPath? {
 		if index < 0 {
 			return nil
 		}
@@ -240,43 +258,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	}
 	
 	private subscript(indexPath: IndexPath) -> AudioTrack? {
-		
 		return nil
-	}
-	
-	func setCurrentTrack(id: String) {
-		if let indexPath = getIndexPath(id: id) {
-			let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
-			self.player.setTrack(index: index)
-		}
-	}
-	
-	func update(time: AudioTime) {
-		self.info.current = time.current
-		self.info.length = time.length
-		DispatchQueue.main.async {
-			self.delegate?.updateTime(time: (current: time.current, length: time.length))
-		}
-	}
-	
-	func update(status: PlayerStatus, index: Int) {
-		let indexPath = getIndexPath(index: index)
-		DispatchQueue.main.async {
-			if let indexPath = indexPath, let track = self[indexPath] {
-				switch status {
-				case .paused:
-					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["ItemID": track.id])
-					break
-				case .playing:
-					self.currentTrackIndexPath = indexPath
-					NotificationCenter.default.post(name: AudioStateNotification.playing.notification(), object: nil, userInfo: ["ItemID": track.id])
-					break
-				default:
-					break
-				}
-			}
-			self.delegate?.playState(isPlaying: self.player.status == .playing)
-			self.delegate?.trackUpdate()
-		}
 	}
 }

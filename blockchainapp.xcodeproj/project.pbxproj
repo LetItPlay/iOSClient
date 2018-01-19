@@ -40,6 +40,7 @@
 		01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FF31661FD16FBA00FB2B9E /* Assets.xcassets */; };
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
+		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
@@ -126,6 +127,7 @@
 		01FF31661FD16FBA00FB2B9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 			children = (
 				015812A11FD80AF1002828F5 /* AudioController.swift */,
 				015088832006472200E42F7D /* AudioPlayer.swift */,
+				01FF376E201224CB007F57E0 /* Models.swift */,
 			);
 			name = AudioCore;
 			sourceTree = "<group>";
@@ -653,6 +656,7 @@
 				01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
+				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
 				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,

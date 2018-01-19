@@ -4,39 +4,39 @@ import Foundation
 import AVFoundation
 import MediaPlayer
 
-enum PlayerCommand {
-	case play, pause, next, prev, seek(progress: Double)
-}
-
-enum PlayerStatus {
-	case none, playing, paused, failed
-}
-
-typealias AudioTime = (current: Double, length: Double)
-
-class AudioTrack: AVPlayerItem {
+fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
+	
+	var audioURL: URL = URL(fileURLWithPath: "")
 	var id: String = UUID.init().uuidString
 	var name: String = ""
 	var author: String = ""
 	var imageURL: URL?
 	var length: Int64 = 0
 	
-	convenience init(track: Track) {
-		self.init(url: track.audiofile!.file.buildImageURL()!)
-		self.id = "\(track.id)"
-		self.name = track.name
-		self.author = track.findStationName() ?? ""
-		self.length = track.audiofile?.lengthSeconds ?? 0
+	override init(asset: AVAsset, automaticallyLoadedAssetKeys: [String]?) {
+		super.init(asset: asset, automaticallyLoadedAssetKeys: automaticallyLoadedAssetKeys)
 	}
 	
-	convenience init(id: String = UUID.init().uuidString, trackURL: URL , name: String, author: String, imageURL: URL? = nil, length: Int64) {
-		let asset = AVAsset.init(url: trackURL)
-		self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
+	required convenience init(id: String, trackURL: URL , name: String, author: String, imageURL: URL?, length: Int64) {
+		self.init(url: trackURL)
 		self.id = id
+		self.audioURL = trackURL
 		self.name = name
 		self.author = author
 		self.imageURL = imageURL
 		self.length = length
+	}
+	
+	convenience init(track: AudioTrack) {
+		let asset = AVAsset.init(url: track.audioURL)
+		self.init(asset: asset, automaticallyLoadedAssetKeys: nil)
+		self.id = track.id
+		self.audioURL = track.audioURL
+		self.name = track.name
+		self.author = track.author
+		self.imageURL = track.imageURL
+		self.length = track.length
+		
 	}
 }
 
@@ -46,35 +46,10 @@ class AudioPlayer: AVQueuePlayer {
 	}
 }
 
-protocol AudioPlayerProto {
-	weak var delegate: AudioPlayerDelegate1? {get set}
-	var currentIndex: Int {get}
-	var status: PlayerStatus {get}
-	var error: Error? {get}
-	
-	func make(command: PlayerCommand)
-	func load(playlist: [AudioTrack])
-	func setTrack(index: Int)
-	func clear()
-	func setPlayingMode(speaker: Bool)
-	
-	init()
-}
-
-protocol AudioPlayerDelegate1: class {
-	func update(status: PlayerStatus, index: Int)
-	func update(time: AudioTime)
-}
-
 final class AudioPlayer2: NSObject, AudioPlayerProto {
 	
 	weak var delegate: AudioPlayerDelegate1?
 	var currentIndex: Int = -1
-//	{
-//		get{
-//			return self.player.items().map({$0 as! AudioTrack}).index(where: { $0.id == (self.player.currentItem as! AudioTrack).id }) ?? -1
-//		}
-//	}
 	
 	var status: PlayerStatus = .none
 	
@@ -110,6 +85,12 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		audioSession.addObserver(self, forKeyPath: kVolumeKey, options: [.initial, .new], context: nil)
 		
 		addPeriodicTimeObserver()
+		
+		//-- observe the player item "status" key to determine when it is ready to play
+		player.addObserver(self,
+						   forKeyPath: kStatusKey,
+						   options: [.initial, .new],
+						   context: nil)
 	}
 	
 	deinit {
@@ -120,58 +101,53 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	
 	func make(command: PlayerCommand) {
 		switch command {
-		case .next:
-			if self.currentIndex == player.items().count - 1 {
-				self.player.pause()
-				self.delegate?.update(status: .paused, index: self.currentIndex)
-			} else {
-				self.delegate?.update(status: .paused, index: self.currentIndex)
-				self.currentIndex += 1
-				self.setTrack(index: self.currentIndex)
-//				self.player.advanceToNextItem()
-				self.delegate?.update(status: .playing, index: self.currentIndex)
-			}
-		case .prev:
-			if self.currentIndex == 0 {
-				self.player.seek(to: kCMTimeZero)
-			} else {
-				self.delegate?.update(status: .paused, index: self.currentIndex)
-				self.currentIndex -= 1
-				self.setTrack(index: self.currentIndex)
-				self.delegate?.update(status: .playing, index: self.currentIndex)
-			}
 		case .play:
 			self.player.play()
 			self.status = .playing
-			self.delegate?.update(status: .playing, index: self.currentIndex)
+			if let id = self.player.currentTrack()?.id {
+				self.delegate?.update(status: .playing, id: id)
+			}
 		case .pause:
 			self.player.pause()
 			self.status = .paused
-			self.delegate?.update(status: .paused, index: self.currentIndex)
+			if let id = self.player.currentTrack()?.id {
+				self.delegate?.update(status: .paused, id: id)
+			}
 		case .seek(let progress):
 			let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
 			let current = length * progress
 			let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
 			self.player.seek(to: time)
 			self.delegate?.update(time: (current: current, length: length))
+		default:
+			break
 		}
 	}
 	
+	func load(item: AudioTrack) {
+		let item = PlayerItem.init(track: item)
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(itemDidFinishPlaying),
+											   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+											   object:  item)
+		item.addObserver(self,
+						  forKeyPath: kErrorKey,
+						  options:  [.initial, .new],
+						  context: nil)
+		self.player.insert(item, after: player.currentItem)
+		self.player.play()
+	}
+	
 	func load(playlist: [AudioTrack]) {
-		self.currentIndex = 0
-		removePlayerItemsErrorObservers()
-		
-		for item in player.items() {
-			NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-		}
 		
 		player.removeAllItems()
 		
 		player.actionAtItemEnd = playlist.count == 1 ? .pause : .none
 		
-		var previousItem: AudioTrack?
+		let tracks = playlist.map({PlayerItem.init(track: $0)})
+		var previousItem: PlayerItem?
 		
-		for track in playlist {
+		for track in tracks {
 			track.addObserver(self,
 							 forKeyPath: kErrorKey,
 							 options:  [.initial, .new],
@@ -185,43 +161,10 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 												   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
 												   object:  track)
 		}
-		//-- observe the player item "status" key to determine when it is ready to play
-		player.addObserver(self,
-						   forKeyPath: kStatusKey,
-						   options: [.initial, .new],
-						   context: nil)
 	}
 	
 	
 	func setTrack(index: Int) {
-		let status = self.status
-		self.player.pause()
-		guard index < self.player.items().count else {
-			return
-		}
-		
-		let tracks = self.player.items()
-		self.player.removeAllItems()
-		
-		var previousItem: AVPlayerItem?
-		for track in tracks {
-			player.insert(track, after: previousItem)
-			previousItem = track
-		}
-		for _ in 0..<index {
-			self.player.advanceToNextItem()
-		}
-		
-		switch status {
-		case .playing:
-			self.delegate?.update(status: .paused, index: self.currentIndex)
-			self.player.play()
-			self.delegate?.update(status: .playing, index: index)
-		case .paused:
-			self.player.pause()
-		default:
-			break
-		}
 		self.currentIndex = index
 	}
 	
@@ -252,7 +195,9 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 //						self.delegate?.audioPlayerStartPlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
 				} else {
 					//-- продолжился старый после паузы
-					self.delegate?.update(status: .playing, index: self.currentIndex)
+					if let id = self.player.currentTrack()?.id {
+						self.delegate?.update(status: .playing, id: id)
+					}
 					DispatchQueue.main.async {
 //						self.delegate?.audioPlayerResumePlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
 					}
@@ -270,25 +215,27 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 				syncScrubber()
 			}
 			if player.status == AVPlayerStatus.failed {
-				self.delegate?.update(status: .paused, index: currentIndex)
+				if let id = self.player.currentTrack()?.id {
+					self.delegate?.update(status: .paused, id: id)
+				}
 				self.make(command: .pause)
 			}
 		case kCurrentItemKey:
-			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack, let index = player.items().index(of: item) {
-				self.delegate?.update(status: self.status, index: currentIndex)
+			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack, let index = player.items().map({$0 as! AudioTrack}).index(where: {$0.id == item.id}) {
+				self.delegate?.update(status: self.status, id: item.id)
 				self.currentIndex = index
-				print(item.duration)
 			}
 			if let item = change?[NSKeyValueChangeKey.oldKey] as? AudioTrack {
-				self.delegate?.update(status: .paused, index: self.currentIndex)
-				print(item.duration)
+				self.delegate?.update(status: .paused, id: item.id)
 			}
 			break
 		case kErrorKey:
 			if let error = player.currentItem?.error {
 				debugPrint(#function, " \(error)")
 				self.status = .failed
-				self.delegate?.update(status: .failed, index: self.currentIndex)
+				if let id = self.player.currentTrack()?.id {
+					self.delegate?.update(status: .failed, id: id)
+				}
 			}
 		default:
 			print("Audio Player unrecognized event happened!")
@@ -296,9 +243,9 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	}
 	
 	@objc private func itemDidFinishPlaying(notification: Notification) {
-		if let _ = player.currentItem {
+		if let item = player.currentItem as? AudioTrack {
 			DispatchQueue.main.async {
-//				self.delegate?.audioPlayerFinishPlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
+				self.delegate?.itemFinishedPlaying(id: item.id)
 			}
 		}
 	}

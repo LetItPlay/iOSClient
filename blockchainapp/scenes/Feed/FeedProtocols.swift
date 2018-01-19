@@ -16,7 +16,6 @@ protocol FeedPresenterProtocol: class {
 	var tracks: [Track] {get}
 	var playingIndex: Int {get}
 	
-    func play(trackUID: Int)
     func like(trackUID: Int)
 	
 	func play(index: Int)
