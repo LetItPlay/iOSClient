@@ -179,6 +179,10 @@ extension ChannelsViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ChannelTableViewCell.height//ChannelsCell.recommendedHeight()
     }
+	
+	override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+		return ChannelTableViewCell.height//ChannelsCell.recommendedHeight()
+	}
 }
 
 extension ChannelsViewController {

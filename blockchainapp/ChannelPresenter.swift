@@ -28,18 +28,17 @@ class ChannelPresenter {
 		
 		self.station = station
 		let realm = try! Realm()
-		let results = realm.objects(Track.self).sorted(byKeyPath: "publishedAt", ascending: false)
-		
+		let results = realm.objects(Track.self).filter("station == \(station.id)").sorted(byKeyPath: "publishedAt", ascending: false)
 		token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-			let filter: (Track) -> Bool = {$0.station == self?.station.id}
+//			let filter: (Track) -> Bool = {$0.station == self?.station.id}
 			switch changes {
 			case .initial:
 				// Results are now populated and can be accessed without blocking the UI
-				self?.tracks = [Array(results).filter(filter)]
+				self?.tracks = [Array(results)]
 				
 			case .update(_, _, _, _):
 				// Query results have changed, so apply them to the UITableView
-				self?.tracks = [Array(results).filter(filter)]
+				self?.tracks = [Array(results)]
 				
 				
 			case .error(let error):
@@ -66,7 +65,16 @@ class ChannelPresenter {
 											   selector: #selector(unsubscribed(notification:)),
 											   name: SubscribeManager.NotificationName.deleted.notification,
 											   object: nil)
-				
+		
+		self.getData()
+	}
+	
+	func getData() {
+		DownloadManager.shared.requestTracks(all: true, success: { (feed) in
+			
+		}) { (err) in
+			
+		}
 	}
 	
 	deinit {
