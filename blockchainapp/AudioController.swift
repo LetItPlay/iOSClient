@@ -258,6 +258,15 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	}
 	
 	private subscript(indexPath: IndexPath) -> AudioTrack? {
+		if indexPath.section == 0 {
+			if indexPath.item >= 0 && indexPath.item < self.userPlaylist.tracks.count {
+				return self.userPlaylist.tracks[indexPath.item]
+			}
+		} else if indexPath.section == 1 {
+			if indexPath.item >= 0 && indexPath.item < self.playlist.tracks.count {
+				return self.playlist.tracks[indexPath.item]
+			}
+		}
 		return nil
 	}
 }
