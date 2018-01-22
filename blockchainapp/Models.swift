@@ -100,8 +100,6 @@ protocol AudioControllerProtocol: class {
 	func setCurrentTrack(id: String)
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?)
-	
-	func updatePlaylist()
 }
 
 //MARK: - Audio Player Protocols

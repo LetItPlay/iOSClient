@@ -169,14 +169,12 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	
 	func updateTime(time: (current: Double, length: Double)) {
 		DispatchQueue.main.async {
-			UIView.animate(withDuration: 0.01, animations: {
-				self.popupItem.progress = Float(time.current / time.length)
-				if !self.playerView.trackProgressView.slider.isHighlighted {
-					self.playerView.trackProgressView.slider.value = Float(time.current / time.length)
-				}
-				self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
-				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
-			})
+			self.popupItem.progress = Float(time.current / time.length)
+			if !self.playerView.trackProgressView.slider.isHighlighted {
+				self.playerView.trackProgressView.slider.value = Float(time.current / time.length)
+			}
+			self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
+			self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
 		}
 	}
 	
@@ -205,10 +203,11 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			}
 		}
 		if audioController.status != .playing {
+			let info = self.audioController.info
 			UIView.animate(withDuration: 0.01, animations: {
-				self.playerView.trackProgressView.slider.value = 0
-				self.playerView.trackProgressView.trackProgressLabels.start.text  = "0:00"
-				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-0:00"
+				self.playerView.trackProgressView.slider.value = Float(info.current)
+				self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
+				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
 				
 				self.popupItem.progress = 0
 			})

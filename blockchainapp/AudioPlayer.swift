@@ -40,9 +40,9 @@ fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	}
 }
 
-class AudioPlayer: AVQueuePlayer {
-	func currentTrack() -> AudioTrack? {
-		return self.currentItem as? AudioTrack
+fileprivate class AudioPlayer: AVQueuePlayer {
+	func currentTrack() -> PlayerItem? {
+		return self.currentItem as? PlayerItem
 	}
 }
 
@@ -134,7 +134,11 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 						  forKeyPath: kErrorKey,
 						  options:  [.initial, .new],
 						  context: nil)
-		self.player.insert(item, after: player.currentItem)
+		self.player.insert(item, after: self.player.currentItem)
+		if let curr = player.currentTrack(), item.id != curr.id {
+			self.player.advanceToNextItem()
+		}
+		self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
 		self.player.play()
 	}
 	
