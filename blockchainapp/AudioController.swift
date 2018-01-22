@@ -150,7 +150,9 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 					self.make(command: .play(id: id))
 				}
 			}
+			self.delegate?.playlistChanged()
 		}
+		
 	}
 	
 	func showPlaylist() {

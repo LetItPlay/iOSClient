@@ -46,6 +46,10 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		if self.tracks[section].count == 0 {
+			return nil
+		}
+		
 		let view = UIView()
 		view.backgroundColor = .white
 		
@@ -55,7 +59,7 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 		label.text = "Current playlist".localized
 		
 		let tracks = IconedLabel.init(type: .tracks)
-		tracks.setData(data: Int64(self.tracks.count))
+		tracks.setData(data: Int64(self.tracks[section].count))
 		
 		let time = IconedLabel.init(type: .time)
 		time.setData(data: Int64(self.tracks[section].map({$0.length}).reduce(0, {$0 + $1})))
@@ -103,6 +107,9 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+		if self.tracks[section].count == 0 {
+			return 0.1
+		}
 		return 73
 	}
 	

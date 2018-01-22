@@ -75,6 +75,8 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		audioSession = AVAudioSession.sharedInstance()
 		do {
 			try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+			try audioSession.setCategory(AVAudioSessionCategoryMultiRoute)
+			try audioSession.overrideOutputAudioPort(.none)
 		} catch let error {
 			print(error)
 		}

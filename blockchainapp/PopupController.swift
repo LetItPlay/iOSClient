@@ -187,49 +187,53 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	}
 	
 	func trackUpdate() {
-		if let ob = audioController.currentTrack {
-			let channel = ob.author
-			let title = ob.name
+		DispatchQueue.main.async {
+			if let ob = self.audioController.currentTrack {
+				let channel = ob.author
+				let title = ob.name
 
-			self.popupItem.title = channel
-			self.popupItem.subtitle = title
-			self.playerView.channelNameLabel.text = channel
-			self.playerView.trackNameLabel.text = title
-			if let url = ob.imageURL {
-				self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-					self.popupItem.image = img
-					self.playerView.setPicture(image: img)
+				self.popupItem.title = channel
+				self.popupItem.subtitle = title
+				self.playerView.channelNameLabel.text = channel
+				self.playerView.trackNameLabel.text = title
+				if let url = ob.imageURL {
+					self.playerView.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+						self.popupItem.image = img
+						self.playerView.setPicture(image: img)
+					})
+				}
+			}
+			if self.audioController.status != .playing {
+				let info = self.audioController.info
+				UIView.animate(withDuration: 0.01, animations: {
+					self.playerView.trackProgressView.slider.value = Float(info.current)
+					self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
+					self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
+					
+					self.popupItem.progress = 0
 				})
 			}
-		}
-		if audioController.status != .playing {
-			let info = self.audioController.info
-			UIView.animate(withDuration: 0.01, animations: {
-				self.playerView.trackProgressView.slider.value = Float(info.current)
-				self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
-				self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
-				
-				self.popupItem.progress = 0
-			})
-		}
-		self.playlistView.currentIndex = audioController.currentTrackIndexPath
-		self.playlistView.tableView.reloadData()
-		self.playerView.isHidden = false
+			self.playlistView.currentIndex = self.audioController.currentTrackIndexPath
+			self.playlistView.tableView.reloadData()
+			self.playerView.isHidden = false
 		
+		}
 //		self.playButton.isSelected = audioController.status == .playing
 //		self.playerView.playButton.isSelected = audioController.status == .playing
 	}
 	
 	func playlistChanged() {
-		self.popupItem.title = ""
-		self.popupItem.subtitle = ""
-		self.playerView.channelNameLabel.text = ""
-		self.playerView.trackNameLabel.text = ""
-		self.playerView.coverImageView.image = nil
-		
-		self.playlistView.tracks = [audioController.userPlaylist.tracks, AudioController.main.playlist.tracks]
-		self.playlistView.currentIndex = audioController.currentTrackIndexPath
-		self.playlistView.tableView.reloadData()
+		DispatchQueue.main.async {
+			self.popupItem.title = ""
+			self.popupItem.subtitle = ""
+			self.playerView.channelNameLabel.text = ""
+			self.playerView.trackNameLabel.text = ""
+			self.playerView.coverImageView.image = nil
+			
+			self.playlistView.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
+			self.playlistView.currentIndex = self.audioController.currentTrackIndexPath
+			self.playlistView.tableView.reloadData()
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
