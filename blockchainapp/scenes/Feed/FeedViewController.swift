@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwipeCellKit
 
 enum FeedType {
 	case feed, popular
@@ -159,6 +160,11 @@ class FeedViewController: UIViewController, FeedViewProtocol {
             }
         }
     }
+    
+    func addChannel(toBegining: Bool)
+    {
+        //TODO: adding channel to playlist
+    }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -183,6 +189,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
+        cell?.delegate = self
 		let track = self.presenter.tracks[indexPath.item]
 		cell?.track = track
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
@@ -196,7 +203,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 			let index = indexPath.item
 			self?.presenter.like(index: index)
 		}
-	}
+    }
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.presenter.tracks[indexPath.item]
@@ -211,3 +218,35 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 }
 
+extension FeedViewController: SwipeTableViewCellDelegate
+{
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        var begin: Bool!
+        var image: UIImage!
+        if orientation == .left
+        {
+            image = UIImage(named: "heartActive")
+            begin = true
+        }
+        else
+        {
+            image = UIImage(named: "playInactive")
+            begin = false
+        }
+        let addToPlaylistAction = SwipeAction(style: .default, title: "Add", handler: { action, indexPath in
+            self.addChannel(toBegining: begin)
+        })
+        addToPlaylistAction.image = image
+        addToPlaylistAction.backgroundColor = .blue
+        
+        return [addToPlaylistAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.expansionStyle = SwipeExpansionStyle.selection
+        options.transitionStyle = .border
+        
+        return options
+    }
+}

@@ -1,8 +1,9 @@
 
 import UIKit
 import SnapKit
+import SwipeCellKit
 
-class NewFeedTableViewCell: UITableViewCell {
+class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
@@ -180,6 +181,7 @@ class NewFeedTableViewCell: UITableViewCell {
 	func viewInitialize() {
 		
 		self.selectionStyle = .none
+        self.tintColor = .clear
 		
 		let cellContentView = UIView()
 		cellContentView.layer.masksToBounds = true
