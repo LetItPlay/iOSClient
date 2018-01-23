@@ -43,7 +43,7 @@ class NewFeedTableViewCell: UITableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		viewInitialize()
-		
+        
 //		self.playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
 		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
 	}
@@ -98,7 +98,7 @@ class NewFeedTableViewCell: UITableViewCell {
 	let iconImageView: UIImageView = {
 		let imageView: UIImageView = UIImageView()
 		imageView.layer.masksToBounds = true
-		imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 10
 		imageView.snp.makeConstraints({ (maker) in
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)
@@ -175,7 +175,6 @@ class NewFeedTableViewCell: UITableViewCell {
 			make.right.equalToSuperview().inset(16)
 			make.top.equalToSuperview().inset(24)
 			make.bottom.equalToSuperview()
-			
 		}
 		
 		cellContentView.addSubview(mainPictureImageView)

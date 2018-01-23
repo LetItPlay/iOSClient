@@ -129,7 +129,17 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
 		}
 	}
-
+    
+    @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        
+        if longPressGestureRecognizer.state == .began {
+            
+            let touchPoint = longPressGestureRecognizer.location(in: self.view)
+            if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+                
+            }
+        }
+    }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -144,6 +154,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
+        cell?.contentView.addGestureRecognizer(longPressRecognizer)
 		
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
@@ -180,6 +193,5 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
 	}
-    
 }
 
