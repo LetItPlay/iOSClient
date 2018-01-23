@@ -64,16 +64,38 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		
 		self.player.delegate = self
 		
-		UIApplication.shared.beginReceivingRemoteControlEvents()
-		
-		MPRemoteCommandCenter.shared().nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+		let mpcenter = MPRemoteCommandCenter.shared()
+		mpcenter.playCommand.isEnabled = true
+		mpcenter.pauseCommand.isEnabled = true
+		mpcenter.nextTrackCommand.isEnabled = true
+		mpcenter.skipBackwardCommand.isEnabled = true
+		mpcenter.skipBackwardCommand.preferredIntervals = [10]
+		mpcenter.previousTrackCommand.isEnabled = false
+
+		mpcenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			self.make(command: .play(id: nil))
+			return .success
+		}
+
+		mpcenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			self.make(command: .pause)
+			return .success
+		}
+
+		mpcenter.nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
 			self.player.make(command: .next)
 			return .success
 		}
-		MPRemoteCommandCenter.shared().previousTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-			self.player.make(command: .prev)
+
+		mpcenter.skipBackwardCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+			self.make(command: .seekBackward)
 			return .success
 		}
+//
+//		MPRemoteCommandCenter.shared().previousTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+//			self.player.make(command: .prev)
+//			return .success
+//		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {

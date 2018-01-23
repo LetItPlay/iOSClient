@@ -75,8 +75,6 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		audioSession = AVAudioSession.sharedInstance()
 		do {
 			try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-			try audioSession.setCategory(AVAudioSessionCategoryMultiRoute)
-			try audioSession.overrideOutputAudioPort(.none)
 		} catch let error {
 			print(error)
 		}
@@ -84,7 +82,6 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		player.addObserver(self, forKeyPath: kRateKey, options: [.initial, .new], context: nil)
 		player.addObserver(self, forKeyPath: kTimedMetadataKey, options: [.initial, .new], context: nil)
 		player.addObserver(self, forKeyPath: kCurrentItemKey, options: [.initial, .new, .old], context: nil)
-		audioSession.addObserver(self, forKeyPath: kVolumeKey, options: [.initial, .new], context: nil)
 		NotificationCenter.default.addObserver(self,
 											   selector: #selector(handleRouteChange),
 											   name: .AVAudioSessionRouteChange,
@@ -172,6 +169,28 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		}
 		self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
 		self.player.play()
+		self.showLockScreenData()
+	}
+	
+	func showLockScreenData() {
+		guard let currentItem = player.currentTrack() else {
+			return
+		}
+		
+		DispatchQueue.main.async {
+			let duration = CMTimeGetSeconds(currentItem.duration)
+			let currentTime = CMTimeGetSeconds(currentItem.currentTime())
+			
+			var infoDict: [String : Any] = [MPMediaItemPropertyPlaybackDuration: duration,
+											MPNowPlayingInfoPropertyElapsedPlaybackTime: currentTime,
+											MPNowPlayingInfoPropertyPlaybackRate: 1.0]
+			
+			infoDict[MPMediaItemPropertyTitle] = currentItem.name
+//			infoDict[MPMediaItemPropertyArtwork] = image
+			infoDict[MPMediaItemPropertyArtist] = currentItem.author
+			
+			MPNowPlayingInfoCenter.default().nowPlayingInfo = infoDict
+		}
 	}
 	
 	func load(playlist: [AudioTrack]) {
