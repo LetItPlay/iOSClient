@@ -16,4 +16,9 @@ target 'blockchainapp' do
   pod "DynamicBlurView"
   pod "MarqueeLabel/Swift"
   pod "ReachabilitySwift"
+  
+  
+  #Crashlytics
+  pod 'Fabric'
+  pod 'Crashlytics'
 end

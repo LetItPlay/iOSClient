@@ -97,14 +97,14 @@ class ProfileViewController: UIViewController {
 	
 	
 	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			self.currentIndex = index
 			self.tableView.reloadData()
 		}
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let _ = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			self.currentIndex = -1
 			self.tableView.reloadData()
 		}

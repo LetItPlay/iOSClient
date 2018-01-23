@@ -149,7 +149,7 @@ class ChannelTableViewCell: UITableViewCell {
 		
 		self.contentView.addSubview(subs)
 		subs.snp.makeConstraints { (make) in
-			make.top.equalTo(tagsList.snp.bottom).inset(-5)
+			make.top.equalTo(tagsList.snp.bottom).inset(-4)
 			make.left.equalTo(channelTitle)
 			make.bottom.equalTo(channelImageView).inset(4)
 		}

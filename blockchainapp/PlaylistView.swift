@@ -41,10 +41,6 @@ extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
 		return self.tracks[section].count
 	}
 	
-	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		return "Current playlist".localized
-	}
-	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 		if self.tracks[section].count == 0 {
 			return nil

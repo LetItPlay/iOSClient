@@ -74,7 +74,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		//-- session settings --//
 		audioSession = AVAudioSession.sharedInstance()
 		do {
-			try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+			try audioSession.setCategory(AVAudioSessionCategoryPlayback)
 		} catch let error {
 			print(error)
 		}
@@ -154,6 +154,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	}
 	
 	func load(item: AudioTrack) {
+		
 		let item = PlayerItem.init(track: item)
 		NotificationCenter.default.addObserver(self,
 											   selector: #selector(itemDidFinishPlaying),
@@ -170,6 +171,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
 		self.player.play()
 		self.showLockScreenData()
+//		= 0.0
 	}
 	
 	func showLockScreenData() {
@@ -178,12 +180,12 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		}
 		
 		DispatchQueue.main.async {
-			let duration = CMTimeGetSeconds(currentItem.duration)
-			let currentTime = CMTimeGetSeconds(currentItem.currentTime())
+			let duration = Double(currentItem.length)
+//			let currentTime = CMTimeGetSeconds(currentItem.currentTime())
 			
 			var infoDict: [String : Any] = [MPMediaItemPropertyPlaybackDuration: duration,
-											MPNowPlayingInfoPropertyElapsedPlaybackTime: currentTime,
-											MPNowPlayingInfoPropertyPlaybackRate: 1.0]
+											MPNowPlayingInfoPropertyElapsedPlaybackTime: 0.0,
+											MPNowPlayingInfoPropertyPlaybackRate: 0.0]
 			
 			infoDict[MPMediaItemPropertyTitle] = currentItem.name
 //			infoDict[MPMediaItemPropertyArtwork] = image
@@ -321,8 +323,11 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 			let duration = Double(CMTimeGetSeconds(playerDuration))
 			let current = Double(CMTimeGetSeconds(player.currentTime()))
 			
-			if duration.isFinite && duration > 0 {
+			if let status = self.player.currentItem?.status, duration.isFinite && duration > 0 && status == AVPlayerItemStatus.readyToPlay {
 				self.delegate?.update(time: AudioTime(current: current, length: duration) )
+				MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
+			} else {
+				MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
 			}
 		}
 	}

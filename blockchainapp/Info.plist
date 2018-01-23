@@ -21,7 +21,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>0.0.28</string>
 	<key>CFBundleVersion</key>
-	<string>34</string>
+	<string>38</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -48,5 +48,19 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>fb78ed9a96aa52005e34cdb8a48b73973dcdd0f8</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 </dict>
 </plist>

@@ -47,8 +47,8 @@ class FeedPresenter: FeedPresenterProtocol {
 		} else {
 			sort = {$0.listenCount != $1.listenCount ? $0.listenCount > $1.listenCount : nil}
 		}
-		
-		let results = realm.objects(Track.self)//.sorted(by: sortDescriptors)
+		let date = Date().addingTimeInterval(-60*60*24*7)
+		let results = orderByListens ? realm.objects(Track.self).filter("publishedAt >= %@", date) : realm.objects(Track.self) //.sorted(by: sortDescriptors)
 
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
 			let filter: (Track) -> Bool = (self?.isFeed ?? false) ? {SubscribeManager.shared.stations.contains($0.station) && $0.lang == UserSettings.language.rawValue} : {$0.lang == UserSettings.language.rawValue}
@@ -130,7 +130,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	}
 	
 	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let index = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			var reload = [Int]()
 			if playingIndex != -1 {
 				reload.append(playingIndex)
@@ -142,7 +142,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int, let _ = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			var reload = [Int]()
 			if playingIndex != -1 {
 				reload.append(playingIndex)

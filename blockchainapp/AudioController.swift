@@ -83,7 +83,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 
 		mpcenter.nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-			self.player.make(command: .next)
+			self.make(command: .next)
 			return .success
 		}
 
@@ -163,6 +163,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
 			if self.playlistName != playlist.0 {
+				self.currentTrackIndexPath = IndexPath.invalid
 				let newPlaylist = AudioPlaylist()
 				newPlaylist.tracks = playlist.1
 				newPlaylist.name = playlist.0
