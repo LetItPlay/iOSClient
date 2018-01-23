@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 4,
+            schemaVersion: 5,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -61,7 +61,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     // Realm will automatically detect new properties and removed properties
                     // And will update the schema on disk automatically
                 }
-        })
+				
+				if (oldSchemaVersion < 5) {
+					migration.enumerateObjects(ofType: "Station", { (old, new) in
+						new?["trackCount"] = 0
+					})
+				}
+				
+		})
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config
     }
