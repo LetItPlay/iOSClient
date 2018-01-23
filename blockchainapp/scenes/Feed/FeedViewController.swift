@@ -17,6 +17,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 	var cellHeight: CGFloat = 343.0 + 24.0
+    var previousCell: NewFeedTableViewCell?
 
 	var type: FeedType = .feed
 	let tableView: UITableView = UITableView()
@@ -69,6 +70,10 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		tableView.backgroundColor = .white
 		tableView.backgroundView?.backgroundColor = .clear
 		tableView.sectionIndexBackgroundColor = .clear
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
+        tableView.addGestureRecognizer(longPressRecognizer)
+        
 		refreshControl.beginRefreshing()
 
 		tableView.tableFooterView = UIView()
@@ -134,9 +139,23 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         
         if longPressGestureRecognizer.state == .began {
             
-            let touchPoint = longPressGestureRecognizer.location(in: self.view)
+            let touchPoint = longPressGestureRecognizer.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-                
+                let cell = tableView.cellForRow(at: indexPath)
+                if self.previousCell != nil,
+                   self.previousCell != cell
+                {
+                    previousCell?.getInfo()
+                }
+                if self.previousCell == cell
+                {
+                    previousCell = nil
+                }
+                else
+                {
+                    previousCell = cell as? NewFeedTableViewCell
+                }
+                (cell as! NewFeedTableViewCell).getInfo()
             }
         }
     }
@@ -154,9 +173,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
-        
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
-        cell?.contentView.addGestureRecognizer(longPressRecognizer)
 		
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }

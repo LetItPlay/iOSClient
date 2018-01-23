@@ -157,6 +157,25 @@ class NewFeedTableViewCell: UITableViewCell {
 		label.numberOfLines = 3
 		return label
 	}()
+    
+    let infoBlurView: UIVisualEffectView = {
+        var blurView = UIVisualEffectView()
+        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.clipsToBounds = true
+        return blurView
+    }()
+    
+    let infoText: UITextView = {
+        let textView = UITextView()
+        textView.font = AppFont.Title.info
+        textView.textColor = .white
+        textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = false
+        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
+        return textView
+    }()
 	
 	func viewInitialize() {
 		
@@ -259,6 +278,24 @@ class NewFeedTableViewCell: UITableViewCell {
 		}
 		likeBlurView.layer.masksToBounds = true
 		likeBlurView.layer.cornerRadius = 18
+        
+        self.infoBlurView.contentView.addSubview(infoText)
+        infoText.snp.makeConstraints { (make) in
+            make.top.equalTo(infoBlurView).inset(10)
+            make.bottom.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(10)
+            make.right.equalTo(infoBlurView).inset(10)
+        }
+        
+        cellContentView.addSubview(infoBlurView)
+        infoBlurView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(cellContentView)
+            make.right.equalTo(cellContentView)
+            make.width.equalTo(cellContentView)
+            make.height.equalTo(cellContentView)
+        }
+        
+        infoBlurView.alpha = 0
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -277,4 +314,19 @@ class NewFeedTableViewCell: UITableViewCell {
 //		return super.hitTest(point, with: event)
 //	}
 
+    func getInfo()
+    {
+        if self.infoBlurView.alpha == 1
+        {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.infoBlurView.alpha = 0
+            })
+        }
+        else
+        {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.infoBlurView.alpha = 1
+            })
+        }
+    }
 }
