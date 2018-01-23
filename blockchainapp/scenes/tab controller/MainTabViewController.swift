@@ -42,6 +42,9 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 	}
 	
 	func showPlaylist() {
+//		self.vc.openPopup(animated: true) {
+//			print("Player Opened")
+//		}
 		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
 	}
 	

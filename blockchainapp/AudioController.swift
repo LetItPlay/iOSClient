@@ -140,7 +140,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	}
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
-		DispatchQueue.global(qos: .background).async {
 			if self.playlistName != playlist.0 {
 				let newPlaylist = AudioPlaylist()
 				newPlaylist.tracks = playlist.1
@@ -150,13 +149,11 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 					self.make(command: .play(id: id))
 				}
 			}
-			self.delegate?.playlistChanged()
-		}
-		
+			self.delegate?.playlistChanged()		
 	}
 	
 	func showPlaylist() {
-		DispatchQueue.main.async {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
 			self.popupDelegate?.showPlaylist()
 			self.delegate?.showPlaylist()
 		}

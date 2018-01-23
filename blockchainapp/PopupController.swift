@@ -123,7 +123,11 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	}
 	
 	func showPlaylist() {
-		self.playlistView.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
+		if self.playlistView.tracks[0].count != 0 {
+			self.playlistView.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 0), at: .top, animated: true)
+		} else if self.playlistView.tracks[1].count != 0 {
+			self.playlistView.tableView.scrollToRow(at: IndexPath.init(row: 0, section: 1), at: .top, animated: true)
+		}
 	}
 	
 	override func viewWillDisappear(_ animated: Bool) {
@@ -206,7 +210,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			if self.audioController.status != .playing {
 				let info = self.audioController.info
 				UIView.animate(withDuration: 0.01, animations: {
-					self.playerView.trackProgressView.slider.value = Float(info.current)
+					self.playerView.trackProgressView.slider.value = Float(info.current/info.length)
 					self.playerView.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
 					self.playerView.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
 					
@@ -223,17 +227,15 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	}
 	
 	func playlistChanged() {
-		DispatchQueue.main.async {
-			self.popupItem.title = ""
-			self.popupItem.subtitle = ""
-			self.playerView.channelNameLabel.text = ""
-			self.playerView.trackNameLabel.text = ""
-			self.playerView.coverImageView.image = nil
-			
-			self.playlistView.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
-			self.playlistView.currentIndex = self.audioController.currentTrackIndexPath
-			self.playlistView.tableView.reloadData()
-		}
+		self.popupItem.title = ""
+		self.popupItem.subtitle = ""
+		self.playerView.channelNameLabel.text = ""
+		self.playerView.trackNameLabel.text = ""
+		self.playerView.coverImageView.image = nil
+		
+		self.playlistView.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
+		self.playlistView.currentIndex = self.audioController.currentTrackIndexPath
+		self.playlistView.tableView.reloadData()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

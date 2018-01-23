@@ -85,6 +85,10 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		player.addObserver(self, forKeyPath: kTimedMetadataKey, options: [.initial, .new], context: nil)
 		player.addObserver(self, forKeyPath: kCurrentItemKey, options: [.initial, .new, .old], context: nil)
 		audioSession.addObserver(self, forKeyPath: kVolumeKey, options: [.initial, .new], context: nil)
+		NotificationCenter.default.addObserver(self,
+											   selector: #selector(handleRouteChange),
+											   name: .AVAudioSessionRouteChange,
+											   object: AVAudioSession.sharedInstance())
 		
 		addPeriodicTimeObserver()
 		
@@ -93,6 +97,32 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 						   forKeyPath: kStatusKey,
 						   options: [.initial, .new],
 						   context: nil)
+	}
+	
+	@objc func handleRouteChange(_ notification: Notification) {
+		guard let userInfo = notification.userInfo,
+			let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+			let reason = AVAudioSessionRouteChangeReason(rawValue:reasonValue) else {
+				return
+		}
+		switch reason {
+		case .newDeviceAvailable:
+			let session = AVAudioSession.sharedInstance()
+			for output in session.currentRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+			}
+		case .oldDeviceUnavailable:
+			if let previousRoute =
+				userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription,
+				let track = self.player.currentTrack(){
+				for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+					self.status = .paused
+					self.delegate?.update(status: .paused, id: track.id)
+					break
+				}
+			}
+		default: ()
+		}
+		
 	}
 	
 	deinit {

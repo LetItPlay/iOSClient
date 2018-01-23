@@ -112,7 +112,7 @@ class SearchPresenter {
 			}
 			if res.count > 0 {
 				let contr = AudioController.main
-				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res.map({$0.audioTrack()})), playId: self.tracks[0].audiotrackId())
+				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res.map({$0.audioTrack()})), playId: res[0].audiotrackId())
 				contr.showPlaylist()
 			}
 			print("res = \(res.map({$0.name}))")
