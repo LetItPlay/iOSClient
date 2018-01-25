@@ -10,7 +10,13 @@ import UIKit
 import MarqueeLabel
 import SnapKit
 
-class MiniPlayerView: UIButton {
+protocol MiniPlayerPresentationDelegate: class {
+	func playerTapped()
+}
+
+class MiniPlayerView: UITabBar {
+	
+	weak var presentationDelegate: MiniPlayerPresentationDelegate?
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -42,7 +48,8 @@ class MiniPlayerView: UIButton {
 	
 	let progressView: UIProgressView = {
 		let progressView = UIProgressView(progressViewStyle: .default)
-		
+		progressView.progressTintColor = AppColor.Element.subscribe
+		progressView.trackTintColor = AppColor.Element.subscribe.withAlphaComponent(0.2)
 		return progressView
 	}()
 	
@@ -50,19 +57,83 @@ class MiniPlayerView: UIButton {
 		let button = UIButton()
 		button.setImage(UIImage(named: "playInactive"), for: .normal)
 		button.setImage(UIImage(named: "stopInactive"), for: .selected)
-		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .normal)
+		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .highlighted)
+		button.snp.makeConstraints({ (make) in
+			make.width.equalTo(40)
+			make.height.equalTo(40)
+		})
 		return button
 	}()
 	
 	let nextButton: UIButton = {
 		let button = UIButton()
-		
+		button.setImage(UIImage.init(named: "popupNextInactive"), for: .normal)
+		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .highlighted)
+		button.snp.makeConstraints({ (make) in
+			make.width.equalTo(40)
+			make.height.equalTo(40)
+		})
 		return button
 	}()
 	
 	convenience init() {
 		self.init(frame: CGRect.zero)
 		
+		self.snp.makeConstraints { (make) in
+			make.height.equalTo(72)
+		}
+		
+		self.addSubview(nextButton)
+		nextButton.snp.makeConstraints { (make) in
+			make.right.equalToSuperview().inset(16)
+			make.centerY.equalToSuperview().inset(-4)
+		}
+		
+		self.addSubview(playButton)
+		playButton.snp.makeConstraints { (make) in
+			make.right.equalTo(nextButton.snp.left).inset(-16)
+			make.centerY.equalTo(nextButton)
+		}
+		
+		self.addSubview(progressView)
+		progressView.snp.makeConstraints { (make) in
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			make.bottom.equalToSuperview().inset(6)
+		}
+		
+		self.addSubview(trackImageView)
+		trackImageView.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.centerY.equalToSuperview().inset(-4)
+		}
+		
+		self.addSubview(trackAuthorLabel)
+		trackAuthorLabel.snp.makeConstraints { (make) in
+			make.left.equalTo(trackImageView.snp.right).inset(-16)
+			make.right.equalTo(playButton.snp.left).inset(-16)
+			make.top.equalToSuperview().inset(12)
+		}
+		
+		self.addSubview(trackNameLabel)
+		trackNameLabel.snp.makeConstraints { (make) in
+			make.left.equalTo(trackImageView.snp.right).inset(-16)
+			make.right.equalTo(playButton.snp.left).inset(-16)
+			make.top.equalTo(trackAuthorLabel.snp.bottom).inset(-4)
+		}
+		
+		progressView.progress = 0.4
+		trackImageView.backgroundColor = .red
+		trackNameLabel.text = "123 123 123123 123 123123 123 123123 123 123"
+		trackAuthorLabel.text = "123 123 123123 123 123123 123 123123 123 123"
+
+		let tap = UITapGestureRecognizer(target: self, action: #selector(playerTapped))
+		self.addGestureRecognizer(tap)
 	}
+	
+	@objc func playerTapped() {
+		self.presentationDelegate?.playerTapped()
+	}
+	
 	
 }

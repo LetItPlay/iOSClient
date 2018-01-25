@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import LNPopupController
+//import LNPopupController
 import SnapKit
 
 import RealmSwift
@@ -21,7 +21,7 @@ class CustomScrollView: UIScrollView {
 	}
 }
 
-class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
+class PopupController: UIViewController, AudioControllerDelegate {
 	var playerView: PlayerView!
 	var playlistView: PlaylistView!
 	
@@ -57,13 +57,13 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
-		self.popupBar.marqueeScrollEnabled = true
-		self.popupBar.progressViewStyle = .bottom
-		
-		self.popupBar.titleTextAttributes = [NSAttributedStringKey.font.rawValue: AppFont.Text.mid, NSAttributedStringKey.foregroundColor.rawValue: AppColor.Title.gray]
-		self.popupBar.subtitleTextAttributes = [NSAttributedStringKey.font.rawValue: AppFont.Title.sml, NSAttributedStringKey.foregroundColor.rawValue: AppColor.Title.gray]
-		
-		self.popupBar.layoutSubviews()
+//		self.popupBar.marqueeScrollEnabled = true
+//		self.popupBar.progressViewStyle = .bottom
+//
+//		self.popupBar.titleTextAttributes = [NSAttributedStringKey.font.rawValue: AppFont.Text.mid, NSAttributedStringKey.foregroundColor.rawValue: AppColor.Title.gray]
+//		self.popupBar.subtitleTextAttributes = [NSAttributedStringKey.font.rawValue: AppFont.Title.sml, NSAttributedStringKey.foregroundColor.rawValue: AppColor.Title.gray]
+//
+//		self.popupBar.layoutSubviews()
 		
 		let playContainer: UIView = UIView()
 		playContainer.addSubview(playButton)
@@ -74,16 +74,16 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 		actIndicator.snp.makeConstraints { (make) in
 			make.center.equalToSuperview()
 		}
-		
-		self.popupItem.rightBarButtonItems = [playContainer, nextButton].map({UIBarButtonItem.init(customView: $0)})
-		
-		self.popupItem.title = ""
-		self.popupItem.subtitle = ""
-		
-		self.popupItem.progress = 0.0
-		self.popupBar.progressViewStyle = .bottom
-		
-		self.popupBar.isHidden = true
+//
+//		self.popupItem.rightBarButtonItems = [playContainer, nextButton].map({UIBarButtonItem.init(customView: $0)})
+//
+//		self.popupItem.title = ""
+//		self.popupItem.subtitle = ""
+//
+//		self.popupItem.progress = 0.0
+//		self.popupBar.progressViewStyle = .bottom
+//
+//		self.popupBar.isHidden = true
 		
 		self.playerView = PlayerView.init(frame: self.view.frame)
 		self.playlistView = PlaylistView.init()

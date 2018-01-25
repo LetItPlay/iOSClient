@@ -7,11 +7,13 @@
 //
 
 import UIKit
-import LNPopupController
+//import LNPopupController
 
-class MainTabViewController: UITabBarController, AudioControllerPresenter {
+class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 	
 	let vc = PopupController()
+	let miniPlayer = MiniPlayerView()
+	var miniPlayerBottomConstr: NSLayoutConstraint?
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -29,23 +31,38 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})
+		
+		self.miniPlayer.presentationDelegate = self
+		self.view.insertSubview(miniPlayer, belowSubview: self.tabBar)
+		miniPlayer.snp.makeConstraints { (make) in
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
+		}
+	}
+	
+	func playerTapped() {
+		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
+		UIView.animate(withDuration: 0.5) {
+			self.view.layoutIfNeeded()
+		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
-		if show {
-			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
-				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
-			}
-		} else {
-			self.dismissPopupBar(animated: animated, completion: nil)
-		}
+//		if show {
+//			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
+//				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
+//			}
+//		} else {
+//			self.dismissPopupBar(animated: animated, completion: nil)
+//		}
 	}
 	
 	func showPlaylist() {
 //		self.vc.openPopup(animated: true) {
 //			print("Player Opened")
 //		}
-		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
+//		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
 	}
 	
     override func viewDidLoad() {
