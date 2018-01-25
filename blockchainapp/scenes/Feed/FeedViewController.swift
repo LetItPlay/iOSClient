@@ -19,6 +19,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     fileprivate var source = [Track]()
 	var cellHeight: CGFloat = 343.0 + 24.0
     var previousCell: NewFeedTableViewCell?
+    var alertBlurView: UIVisualEffectView!
+    var alertLabel: UILabel!
 
 	var type: FeedType = .feed
 	let tableView: UITableView = UITableView()
@@ -89,6 +91,43 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			
 		}
 		self.tableView.refreshControl?.beginRefreshing()
+        
+        alertBlurView = UIVisualEffectView()
+        alertBlurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
+        alertBlurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        alertBlurView.clipsToBounds = true
+        alertBlurView.layer.cornerRadius = 10
+        
+        self.view.addSubview(alertBlurView)
+        alertBlurView.snp.makeConstraints{ (make) in
+            make.centerX.equalTo(self.view.snp.centerX)
+            make.centerY.equalTo(self.view.snp.centerY)
+            make.width.equalTo(182)
+            make.height.equalTo(128)
+        }
+        
+        alertLabel = UILabel()
+        alertLabel.font = AppFont.Title.big
+        alertLabel.textAlignment = .center
+        alertLabel.text = "Трек был добавлен"
+        
+        self.alertBlurView.contentView.addSubview(alertLabel)
+        alertLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(16)
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+        }
+        
+        let imageView = UIImageView.init(image: UIImage(named: "completeIcon"))
+        
+        self.alertBlurView.contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { (make) in
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+            make.width.equalTo(54)
+            make.height.equalTo(54)
+            make.top.equalTo(alertLabel.snp.bottom).inset(-14)
+        }
+        
+        alertBlurView.alpha = 0
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -146,7 +185,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
                 if self.previousCell != nil,
                    self.previousCell != cell
                 {
-                    previousCell?.getInfo()
+                    previousCell?.getInfo(toHide: true, animated: true)
                 }
                 if self.previousCell == cell
                 {
@@ -156,14 +195,33 @@ class FeedViewController: UIViewController, FeedViewProtocol {
                 {
                     previousCell = cell as? NewFeedTableViewCell
                 }
-                (cell as! NewFeedTableViewCell).getInfo()
+                (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
             }
         }
     }
     
-    func addChannel(toBegining: Bool)
+    func addTrack(toBegining: Bool)
     {
         //TODO: adding channel to playlist
+        if toBegining
+        {
+            
+        }
+        else
+        {
+            
+        }
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            self.alertBlurView.alpha = 1
+        })
+        
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when){
+            UIView.animate(withDuration: 0.3, animations:{
+                self.alertBlurView.alpha = 0
+            })
+        }
     }
 }
 
@@ -193,6 +251,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		let track = self.presenter.tracks[indexPath.item]
 		cell?.track = track
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
+        
+        cell?.getInfo(toHide: true, animated: false)
 		
 		cell?.onPlay = { [weak self] _ in
 			let index = indexPath.item
@@ -223,21 +283,24 @@ extension FeedViewController: SwipeTableViewCellDelegate
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         var begin: Bool!
         var image: UIImage!
+        var addTo = ""
         if orientation == .left
         {
-            image = UIImage(named: "heartActive")
+            image = UIImage(named: "topIcon")
             begin = true
+            addTo = "up"
         }
         else
         {
-            image = UIImage(named: "playInactive")
+            image = UIImage(named: "downIcon")
             begin = false
+            addTo = "down"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add", handler: { action, indexPath in
-            self.addChannel(toBegining: begin)
+        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo) the playlist", handler: { action, indexPath in
+            self.addTrack(toBegining: begin)
         })
         addToPlaylistAction.image = image
-        addToPlaylistAction.backgroundColor = .blue
+        addToPlaylistAction.backgroundColor = .white
         
         return [addToPlaylistAction]
     }
@@ -246,6 +309,9 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var options = SwipeTableOptions()
         options.expansionStyle = SwipeExpansionStyle.selection
         options.transitionStyle = .border
+        options.maximumButtonWidth = 400
+        options.minimumButtonWidth = 200
+        options.backgroundColor = .white
         
         return options
     }

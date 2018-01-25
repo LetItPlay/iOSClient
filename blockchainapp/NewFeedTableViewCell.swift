@@ -164,6 +164,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurView.clipsToBounds = true
+        blurView.contentView.backgroundColor = .darkGray
         return blurView
     }()
     
@@ -181,7 +182,9 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 	func viewInitialize() {
 		
 		self.selectionStyle = .none
-        self.tintColor = .clear
+        self.backgroundColor = .white
+        self.backgroundView?.backgroundColor = .white
+        self.tintColor = .white
 		
 		let cellContentView = UIView()
 		cellContentView.layer.masksToBounds = true
@@ -316,13 +319,20 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 //		return super.hitTest(point, with: event)
 //	}
 
-    func getInfo()
+    func getInfo(toHide: Bool, animated: Bool)
     {
-        if self.infoBlurView.alpha == 1
+        if toHide
         {
-            UIView.animate(withDuration: 0.5, animations: {
+            if animated
+            {
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.infoBlurView.alpha = 0
+                })
+            }
+            else
+            {
                 self.infoBlurView.alpha = 0
-            })
+            }
         }
         else
         {
