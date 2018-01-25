@@ -178,7 +178,23 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
-	
+    
+    let alertBlurView: UIVisualEffectView = {
+        let alert = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
+        alert.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        alert.clipsToBounds = true
+        alert.layer.cornerRadius = 10
+        return alert
+    }()
+    
+    let alertLabel: UILabel = {
+        let alert = UILabel()
+        alert.font = AppFont.Title.big
+        alert.textAlignment = .center
+        alert.text = "Track added"
+        return alert
+    }()
+        
 	func viewInitialize() {
 		
 		self.selectionStyle = .none
@@ -301,6 +317,32 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         }
         
         infoBlurView.alpha = 0
+        
+        cellContentView.addSubview(alertBlurView)
+        alertBlurView.snp.makeConstraints{ (make) in
+            make.centerX.equalTo(mainPictureImageView.snp.centerX)
+            make.centerY.equalTo(mainPictureImageView.snp.centerY)
+            make.width.equalTo(182)
+            make.height.equalTo(128)
+        }
+        
+        self.alertBlurView.contentView.addSubview(alertLabel)
+        alertLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(16)
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+        }
+        
+        let imageView = UIImageView.init(image: UIImage(named: "completeIcon"))
+        
+        self.alertBlurView.contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { (make) in
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+            make.width.equalTo(54)
+            make.height.equalTo(54)
+            make.top.equalTo(alertLabel.snp.bottom).inset(-14)
+        }
+        
+        alertBlurView.alpha = 0
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

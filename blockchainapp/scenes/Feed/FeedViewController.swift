@@ -92,43 +92,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		}
 		self.tableView.refreshControl?.beginRefreshing()
         
-        alertBlurView = UIVisualEffectView()
-        alertBlurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
-        alertBlurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        alertBlurView.clipsToBounds = true
-        alertBlurView.layer.cornerRadius = 10
-        
-        self.view.addSubview(alertBlurView)
-        alertBlurView.snp.makeConstraints{ (make) in
-            make.centerX.equalTo(self.view.snp.centerX)
-            make.centerY.equalTo(self.view.snp.centerY)
-            make.width.equalTo(182)
-            make.height.equalTo(128)
-        }
-        
-        alertLabel = UILabel()
-        alertLabel.font = AppFont.Title.big
-        alertLabel.textAlignment = .center
-        alertLabel.text = "Трек был добавлен"
-        
-        self.alertBlurView.contentView.addSubview(alertLabel)
-        alertLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(16)
-            make.centerX.equalTo(alertBlurView.snp.centerX)
-        }
-        
-        let imageView = UIImageView.init(image: UIImage(named: "completeIcon"))
-        
-        self.alertBlurView.contentView.addSubview(imageView)
-        imageView.snp.makeConstraints { (make) in
-            make.centerX.equalTo(alertBlurView.snp.centerX)
-            make.width.equalTo(54)
-            make.height.equalTo(54)
-            make.top.equalTo(alertLabel.snp.bottom).inset(-14)
-        }
-        
-        alertBlurView.alpha = 0
-	}
+    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -200,7 +164,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         }
     }
     
-    func addTrack(toBegining: Bool)
+    func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
         //TODO: adding channel to playlist
         if toBegining
@@ -212,17 +176,23 @@ class FeedViewController: UIViewController, FeedViewProtocol {
             
         }
         
+        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+        
         UIView.animate(withDuration: 0.3, animations: {
-            self.alertBlurView.alpha = 1
+            cell.alertBlurView.alpha = 1
         })
         
         let when = DispatchTime.now() + 1
         DispatchQueue.main.asyncAfter(deadline: when){
             UIView.animate(withDuration: 0.3, animations:{
-                self.alertBlurView.alpha = 0
+                cell.alertBlurView.alpha = 0
             })
         }
     }
+    
+    func addBlurToCell(cell: NewFeedTableViewCell)
+    {
+            }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -253,6 +223,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
         
         cell?.getInfo(toHide: true, animated: false)
+        cell?.alertBlurView.alpha = 0
 		
 		cell?.onPlay = { [weak self] _ in
 			let index = indexPath.item
@@ -297,7 +268,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             addTo = "down"
         }
         let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo) the playlist", handler: { action, indexPath in
-            self.addTrack(toBegining: begin)
+            self.addTrack(toBegining: begin, for: indexPath)
         })
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .white
