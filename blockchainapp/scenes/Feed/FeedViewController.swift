@@ -264,11 +264,14 @@ extension FeedViewController: SwipeTableViewCellDelegate
             begin = false
             addTo = "down"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo) the playlist", handler: { action, indexPath in
+        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
             self.addTrack(toBegining: begin, for: indexPath)
         })
         addToPlaylistAction.image = image
-        addToPlaylistAction.backgroundColor = .white
+        addToPlaylistAction.backgroundColor = .clear
+        
+        addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
+        addToPlaylistAction.font = AppFont.Title.big
         
         return [addToPlaylistAction]
     }
@@ -277,8 +280,8 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var options = SwipeTableOptions()
         options.expansionStyle = SwipeExpansionStyle.selection
         options.transitionStyle = .border
-        options.maximumButtonWidth = 400
-        options.minimumButtonWidth = 200
+        options.maximumButtonWidth = 300
+        options.minimumButtonWidth = 150
         options.backgroundColor = .white
         
         return options

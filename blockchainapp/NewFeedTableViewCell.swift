@@ -187,7 +187,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.isSelectable = false
-        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
+        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
     
@@ -322,7 +322,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         
         self.infoBlurView.contentView.addSubview(infoText)
         infoText.snp.makeConstraints { (make) in
-            make.top.equalTo(infoTitle.snp.bottom).inset(5)
+            make.top.equalTo(infoTitle.snp.bottom).inset(-12)
             make.bottom.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
@@ -401,6 +401,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         }
         else
         {
+            self.infoText.setContentOffset(.zero, animated: false)
             UIView.animate(withDuration: 0.5, animations: {
                 self.infoBlurView.alpha = 1
             })
