@@ -161,17 +161,17 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     
     let infoBlurView: UIVisualEffectView = {
         var blurView = UIVisualEffectView()
-        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
+        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurView.clipsToBounds = true
-        blurView.contentView.backgroundColor = .darkGray
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.3)
         return blurView
     }()
     
     let infoText: UITextView = {
         let textView = UITextView()
         textView.font = AppFont.Title.info
-        textView.textColor = .white
+        textView.textColor = .black
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.isSelectable = false
@@ -191,7 +191,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         let alert = UILabel()
         alert.font = AppFont.Title.big
         alert.textAlignment = .center
-        alert.text = "Track added"
+        alert.text = "Трек добавлен"
         return alert
     }()
         
@@ -318,11 +318,14 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         
         infoBlurView.alpha = 0
         
+//        let sizeOfText = yourText sizeWithFont:yourFont constrainedToSize:CGSizeMake(constrainedWidth, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap
+        let sizeOfText: CGSize = alertLabel.text!.size(withAttributes: [NSAttributedStringKey.font: AppFont.Title.big])
+        
         cellContentView.addSubview(alertBlurView)
         alertBlurView.snp.makeConstraints{ (make) in
             make.centerX.equalTo(mainPictureImageView.snp.centerX)
             make.centerY.equalTo(mainPictureImageView.snp.centerY)
-            make.width.equalTo(182)
+            make.width.equalTo(sizeOfText.width + 40)
             make.height.equalTo(128)
         }
         
