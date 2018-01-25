@@ -168,6 +168,18 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         return blurView
     }()
     
+    let infoTitle: UITextView = {
+       let textView = UITextView()
+        textView.font = AppFont.Title.sml
+        textView.textColor = .black
+        textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = false
+        textView.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
+        textView.sizeToFit()
+        return textView
+    }()
+    
     let infoText: UITextView = {
         let textView = UITextView()
         textView.font = AppFont.Title.info
@@ -300,9 +312,17 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		likeBlurView.layer.masksToBounds = true
 		likeBlurView.layer.cornerRadius = 18
         
+        self.infoBlurView.contentView.addSubview(infoTitle)
+        infoTitle.snp.makeConstraints { (make) in
+            make.top.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(10)
+            make.right.equalTo(infoBlurView).inset(10)
+            make.height.equalTo(infoTitle.frame.size.height)
+        }
+        
         self.infoBlurView.contentView.addSubview(infoText)
         infoText.snp.makeConstraints { (make) in
-            make.top.equalTo(infoBlurView).inset(10)
+            make.top.equalTo(infoTitle.snp.bottom).inset(5)
             make.bottom.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)

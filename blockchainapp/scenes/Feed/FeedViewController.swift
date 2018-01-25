@@ -154,12 +154,13 @@ class FeedViewController: UIViewController, FeedViewProtocol {
                 if self.previousCell == cell
                 {
                     previousCell = nil
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
                     previousCell = cell as? NewFeedTableViewCell
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
-                (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
             }
         }
     }
@@ -189,10 +190,6 @@ class FeedViewController: UIViewController, FeedViewProtocol {
             })
         }
     }
-    
-    func addBlurToCell(cell: NewFeedTableViewCell)
-    {
-            }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
