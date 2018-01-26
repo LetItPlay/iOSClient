@@ -13,6 +13,7 @@ struct AppColor {
 		static let subscribe = UIColor.red
 		static let redBlur = UIColor.init(redInt: 255, greenInt: 102, blueInt: 102, alpha: 0.6)
 		static let tagColor = UIColor.init(redInt: 31, greenInt: 60, blueInt: 74, alpha: 1)
+        static let backgroundColor = UIColor.init(redInt: 248, greenInt: 248, blueInt: 248, alpha: 0.82)
 	}
 }
 
@@ -20,6 +21,7 @@ struct AppFont {
 	struct Title {
 		static let big = UIFont.systemFont(ofSize: 24, weight: .regular)
 		static let section = UIFont.systemFont(ofSize: 20, weight: .bold)
+        static let sectionNotBold = UIFont.systemFont(ofSize: 20, weight: .medium)
 		static let mid = UIFont.systemFont(ofSize: 18, weight: .medium)
 		static let midBold = UIFont.systemFont(ofSize: 18, weight: .bold)
 		static let sml = UIFont.systemFont(ofSize: 14, weight: .bold)

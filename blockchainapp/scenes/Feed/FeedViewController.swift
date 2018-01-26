@@ -19,6 +19,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 	var cellHeight: CGFloat = 343.0 + 24.0
 
 	var type: FeedType = .feed
+    var channelsView: ChannelsCollectionView!
 	let tableView: UITableView = UITableView()
 	let emptyLabel: UILabel = {
 		let label = UILabel()
@@ -50,9 +51,25 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 //        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
 
+        channelsView = ChannelsCollectionView.init(frame: self.view.frame)
+        
+        self.view.addSubview(channelsView)
+        channelsView.snp.makeConstraints { (make) in
+            make.top.equalTo(64)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(121)
+        }
+        
+        channelsView.isHidden = self.type != .popular
+        
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
+//            make.edges.equalToSuperview()
+            make.top.equalTo(channelsView.snp.bottom)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.bottom.equalTo(0)
 		}
 		
         tableView.dataSource = self
@@ -69,6 +86,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		tableView.backgroundColor = .white
 		tableView.backgroundView?.backgroundColor = .clear
 		tableView.sectionIndexBackgroundColor = .clear
+        self.view.backgroundColor = .white
 		refreshControl.beginRefreshing()
 
 		tableView.tableFooterView = UIView()
@@ -180,6 +198,4 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
 	}
-    
 }
-
