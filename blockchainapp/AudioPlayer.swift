@@ -40,15 +40,15 @@ fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	}
 }
 
-fileprivate class AudioPlayer: AVQueuePlayer {
+fileprivate class QueuePlayer: AVQueuePlayer {
 	func currentTrack() -> PlayerItem? {
 		return self.currentItem as? PlayerItem
 	}
 }
 
-final class AudioPlayer2: NSObject, AudioPlayerProto {
+final class AudioPlayer: NSObject, AudioPlayerProto {
 	
-	weak var delegate: AudioPlayerDelegate1?
+	weak var delegate: AudioPlayerDelegate?
 	var currentIndex: Int = -1
 	
 	var status: PlayerStatus = .none
@@ -62,7 +62,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 	private let kErrorKey = "error"
 	private let kVolumeKey = "outputVolume"
 	
-	private var player: AudioPlayer!
+	private var player: QueuePlayer!
 	private var audioSession: AVAudioSession!
 	private var timeObserver: Any?
 	
@@ -70,7 +70,7 @@ final class AudioPlayer2: NSObject, AudioPlayerProto {
 		super.init()
 		
 		//--- player settings --//
-		player = AudioPlayer()
+		player = QueuePlayer()
 		//-- session settings --//
 		audioSession = AVAudioSession.sharedInstance()
 		do {

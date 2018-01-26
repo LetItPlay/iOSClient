@@ -127,12 +127,27 @@ class MiniPlayerView: UITabBar {
 		trackNameLabel.text = "123 123 123123 123 123123 123 123123 123 123"
 		trackAuthorLabel.text = "123 123 123123 123 123123 123 123123 123 123"
 
-		let tap = UITapGestureRecognizer(target: self, action: #selector(playerTapped))
+		let tap = UITapGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
 		self.addGestureRecognizer(tap)
+		
+		let swipe = UISwipeGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
+		self.addGestureRecognizer(swipe)
+		
+		let pan = UIPanGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
+		self.addGestureRecognizer(pan)
 	}
 	
-	@objc func playerTapped() {
-		self.presentationDelegate?.playerTapped()
+	@objc func playerOpen(gesture: UIGestureRecognizer) {
+		if let pan = gesture as? UIPanGestureRecognizer {
+			switch pan.state {
+				case .began:
+					self.presentationDelegate?.playerTapped()
+				default:
+					break
+			}
+		} else {
+			self.presentationDelegate?.playerTapped()
+		}
 	}
 	
 	

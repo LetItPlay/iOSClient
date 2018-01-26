@@ -104,7 +104,7 @@ protocol AudioControllerProtocol: class {
 
 //MARK: - Audio Player Protocols
 protocol AudioPlayerProto {
-	weak var delegate: AudioPlayerDelegate1? {get set}
+	weak var delegate: AudioPlayerDelegate? {get set}
 	var currentIndex: Int {get}
 	var status: PlayerStatus {get}
 	var error: Error? {get}
@@ -116,7 +116,7 @@ protocol AudioPlayerProto {
 	init()
 }
 
-protocol AudioPlayerDelegate1: class {
+protocol AudioPlayerDelegate: class {
 	func update(status: PlayerStatus, id: String)
 	func update(time: AudioTime)
 	func itemFinishedPlaying(id: String)

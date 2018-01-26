@@ -7,11 +7,10 @@
 //
 
 import UIKit
-//import LNPopupController
 
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
-	
-	let vc = PopupController()
+		
+	let playerController = PlayerViewController()
 	let miniPlayer = MiniPlayerView()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
 	
@@ -39,13 +38,24 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 			make.right.equalToSuperview()
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
+		playerController.modalPresentationStyle = .overFullScreen
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		print(self.miniPlayer.frame)
 	}
 	
 	func playerTapped() {
-		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
-		UIView.animate(withDuration: 0.5) {
-			self.view.layoutIfNeeded()
-		}
+//		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
+//		UIView.animate(withDuration: 0.5) {
+//			self.view.layoutIfNeeded()
+//		}
+		self.present(playerController, animated: true, completion: nil)
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
