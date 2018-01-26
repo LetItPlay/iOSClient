@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 enum FeedType {
 	case feed, popular
@@ -20,6 +21,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 
 	var type: FeedType = .feed
     var channelsView: ChannelsCollectionView!
+    var animatedChannels: Bool = true
+    var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView()
 	let emptyLabel: UILabel = {
 		let label = UILabel()
@@ -65,11 +68,11 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
-//            make.edges.equalToSuperview()
             make.top.equalTo(channelsView.snp.bottom)
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.bottom.equalTo(0)
+//            make.edges.equalTo(self.view)
 		}
 		
         tableView.dataSource = self
@@ -148,6 +151,34 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		}
 	}
 
+    func showChannels(up: Bool)
+    {
+        if animatedChannels
+        {
+            if up, self.channelsView.frame.origin.y != -136
+            {
+                animatedChannels = false
+                var frame = self.channelsView.frame
+                frame.origin.y -= 200
+                UIView.animate(withDuration: 0.4, animations: {
+                    self.channelsView.frame = frame
+                }, completion: { (value: Bool) in
+                    self.animatedChannels = true
+                    })
+            }
+            if !up, self.channelsView.frame.origin.y != 64
+            {
+                animatedChannels = false
+                var frame = self.channelsView.frame
+                frame.origin.y += 200
+                UIView.animate(withDuration: 0.4, animations: {
+                    self.channelsView.frame = frame
+                }, completion: { (value: Bool) in
+                    self.animatedChannels = true
+                })
+            }
+        }
+    }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -197,5 +228,18 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		let track = self.presenter.tracks[indexPath.item]
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
-	}
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if previousOffsetY + 60 < scrollView.contentOffset.y
+        {
+            previousOffsetY = scrollView.contentOffset.y
+            self.showChannels(up: true)
+        }
+        if previousOffsetY - 60 > scrollView.contentOffset.y
+        {
+            previousOffsetY = scrollView.contentOffset.y
+            self.showChannels(up: false)
+        }
+    }
 }
