@@ -13,7 +13,7 @@ enum FeedType {
 	case feed, popular
 }
 
-class FeedViewController: UIViewController, FeedViewProtocol {
+class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
@@ -65,6 +65,7 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         }
         
         channelsView.isHidden = self.type != .popular
+        channelsView.delegate = self
         
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
@@ -150,6 +151,16 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
 		}
 	}
+    
+    func showAllChannels() {
+        let vc = ChannelsBuilder.build()
+//        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func showChannel(station: Station) {
+        let vc = ChannelViewController(station: station)
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 
     func showChannels(up: Bool)
     {

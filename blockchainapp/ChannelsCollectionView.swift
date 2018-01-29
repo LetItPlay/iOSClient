@@ -11,6 +11,8 @@ import SnapKit
 
 class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsViewProtocol {
     
+    var delegate: ChannelProtocol?
+    
     func display(channels: [Station]) {
         source = channels
         channelsCollectionView.reloadData()
@@ -72,6 +74,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         
         self.backgroundColor = AppColor.Element.backgroundColor
         
+        seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
         self.addSubview(seeAlsoButton)
         seeAlsoButton.snp.makeConstraints { (make) in
             make.top.equalTo(2)
@@ -105,6 +108,10 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         }
     }
     
+    @objc func onSeeAllBtnTouched(_ sender: Any) {
+        delegate?.showAllChannels()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -119,5 +126,9 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         cell.configureWith(image: source[indexPath.row].image)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.showChannel(station: source[indexPath.row])
     }
 }
