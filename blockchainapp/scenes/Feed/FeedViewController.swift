@@ -157,22 +157,30 @@ class FeedViewController: UIViewController, FeedViewProtocol {
         {
             if up, self.channelsView.frame.origin.y != -136
             {
+                var tableFrame = self.tableView.frame
+                tableFrame.size.height += self.channelsView.frame.height
+                tableFrame.origin.y -= self.channelsView.frame.height
                 animatedChannels = false
                 var frame = self.channelsView.frame
                 frame.origin.y -= 200
                 UIView.animate(withDuration: 0.4, animations: {
                     self.channelsView.frame = frame
+                    self.tableView.frame = tableFrame
                 }, completion: { (value: Bool) in
                     self.animatedChannels = true
                     })
             }
             if !up, self.channelsView.frame.origin.y != 64
             {
+                var tableFrame = self.tableView.frame
+                tableFrame.size.height -= self.channelsView.frame.height
+                tableFrame.origin.y += self.channelsView.frame.height
                 animatedChannels = false
                 var frame = self.channelsView.frame
                 frame.origin.y += 200
                 UIView.animate(withDuration: 0.4, animations: {
                     self.channelsView.frame = frame
+                    self.tableView.frame = tableFrame
                 }, completion: { (value: Bool) in
                     self.animatedChannels = true
                 })

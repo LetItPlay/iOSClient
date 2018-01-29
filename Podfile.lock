@@ -1,5 +1,5 @@
 PODS:
-  - DynamicBlurView (2.0.1)
+  - DynamicBlurView (2.0.2)
   - MarqueeLabel/Swift (3.1.4)
   - ReachabilitySwift (4.1.0)
   - Realm (3.1.0):
@@ -27,7 +27,7 @@ DEPENDENCIES:
   - TagListView
 
 SPEC CHECKSUMS:
-  DynamicBlurView: 5e6babd80cc0ddfd3ddfc4f5dacf2fe4181e7c52
+  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
   Realm: 09513d7c054678d65cd02ce09871f805b0d758ac
