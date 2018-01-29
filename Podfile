@@ -21,7 +21,7 @@ target 'blockchainapp' do
   pod "RxSwift"
   pod "Action"
   
-  pod 'SwipeCellKit'  
+  pod 'SwipeCellKit', :inhibit_warnings => true
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'
