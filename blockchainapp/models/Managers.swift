@@ -66,6 +66,9 @@ class DownloadManager {
                 do {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
+					try realm.write {
+						realm.delete(realm.objects(Station.self))
+					}
                     try realm.write {
                         for jStation in json.array ?? [] {
                             if let idInt = jStation["id"].int {

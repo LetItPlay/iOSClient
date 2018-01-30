@@ -15,6 +15,7 @@ class Station: Object {
     @objc dynamic var image: String = ""
     @objc dynamic var subscriptionCount: Int = 0
     @objc dynamic var tagString: String = ""
+	@objc dynamic var trackCount: Int = 0
 	@objc dynamic var lang: String     		= ""
     
     override static func primaryKey() -> String? {

@@ -318,6 +318,7 @@
 		CF4453571F553FE400660474 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				01FF376B201072B7007F57E0 /* AudioCore */,
 				CF4453581F55400F00660474 /* MainModels.swift */,
 				CF44535A1F55406B00660474 /* Managers.swift */,
 				CF4453741F666BB800660474 /* DBModels.swift */,
@@ -385,7 +386,6 @@
 				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
 				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
 				014761132010620F006E3373 /* PlayerTableViewCell.swift */,
-				01FF376B201072B7007F57E0 /* AudioCore */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -431,6 +431,7 @@
 				85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */,
 				CE6A97D7F56884174CDDB3E3 /* [CP] Copy Pods Resources */,
 				01321B681FCDADFF009BFE62 /* Embed Frameworks */,
+				01EB96C320171CEE00D5A419 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -556,6 +557,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		01EB96C320171CEE00D5A419 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" fb78ed9a96aa52005e34cdb8a48b73973dcdd0f8 78e9118fa68fa92aa64e71fe7efb63980a37da620fa8e4878d743255b3e005f1\n";
+		};
 		69FD1FFD8E350820AE7043D5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -847,7 +861,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -872,7 +886,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
