@@ -97,7 +97,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)

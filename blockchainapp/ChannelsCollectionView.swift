@@ -17,7 +17,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         source = channels
         channelsCollectionView.reloadData()
         
-//        refreshControl?.endRefreshing()
+        refreshControl?.endRefreshing()
     }
     
     func select(rows: [Int]) {
@@ -60,11 +60,12 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     }()
     
     var presenter: ChannelsPresenter!
+    var refreshControl: UIRefreshControl!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let refreshControl = UIRefreshControl()
+        refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         presenter = ChannelsPresenter(view: self)

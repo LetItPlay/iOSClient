@@ -30,12 +30,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()
+        
         return true
     }
 
     // MARK: - appearence setup
     func setupAppearence() {
         UITabBar.appearance().tintColor = UIColor.vaActive
+        
+        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .highlighted)
+        BarButtonItemAppearance.tintColor = .red
     }
 	
 	func applicationWillEnterForeground(_ application: UIApplication) {

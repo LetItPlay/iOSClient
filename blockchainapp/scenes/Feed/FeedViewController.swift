@@ -153,7 +153,8 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 	}
     
     func showAllChannels() {
-        self.tabBarController?.selectedIndex = 3
+        let vc = ChannelsBuilder.build()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     func showChannel(station: Station) {
