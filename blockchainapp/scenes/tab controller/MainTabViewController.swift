@@ -8,6 +8,7 @@
 
 import UIKit
 import LNPopupController
+import Crashlytics
 
 class MainTabViewController: UITabBarController, AudioControllerPresenter {
 	
@@ -79,6 +80,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        self.tabSelected(controller: viewController.title!)
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
         if let nc = viewController as? UINavigationController,
             let root = nc.viewControllers.first {
@@ -93,4 +95,8 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
         }
     }
     
+    func tabSelected(controller: String)
+    {
+        Crashlytics.sharedInstance().setObjectValue(controller, forKey: "Tab_selected")
+    }
 }

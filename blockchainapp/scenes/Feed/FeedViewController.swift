@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Crashlytics
 
 enum FeedType {
 	case feed, popular
