@@ -13,7 +13,6 @@ struct AppColor {
 		static let subscribe = UIColor.red
 		static let redBlur = UIColor.init(redInt: 255, greenInt: 102, blueInt: 102, alpha: 0.6)
 		static let tagColor = UIColor.init(redInt: 31, greenInt: 60, blueInt: 74, alpha: 1)
-        static let sideButtonColor = UIColor.init(redInt: 180, greenInt: 192, blueInt: 192, alpha: 1)
 	}
 }
 

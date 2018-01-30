@@ -37,9 +37,9 @@ class DownloadManager {
     
     enum urlServices: String {
         case audiofiles = "https://manage.letitplay.io/api/audiofiles/"
-        case stations = "https://api.letitplay.io/stations/"
-        case tracks = "https://api.letitplay.io/tracks/"
-        case tracksForStations = "https://api.letitplay.io/tracks/stations/"
+        case stations = "https://manage.letitplay.io/api/stations/"
+        case tracks = "https://manage.letitplay.io/api/tracks/"
+        case tracksForStations = "https://manage.letitplay.io/api/tracks/stations/"
         case subForStations = "https://manage.letitplay.io/api/stations/%d/counts/"
         case forTracks = "https://manage.letitplay.io/api/tracks/%d/counts/"
     }
