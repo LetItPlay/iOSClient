@@ -17,8 +17,8 @@ target 'blockchainapp' do
   pod "MarqueeLabel/Swift"
   pod "ReachabilitySwift"
 
-  pod "ARNTransitionAnimator"  
-  
+  pod "AssistantKit"
+
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'

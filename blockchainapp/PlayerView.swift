@@ -146,7 +146,7 @@ class PlayerView: UIView {
 		
 		addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
-			self.picTopConstrs.undr = make.top.equalToSuperview().inset(139).constraint.layoutConstraints.first
+			self.picTopConstrs.undr = make.top.equalToSuperview().inset(30).constraint.layoutConstraints.first
 			make.left.equalToSuperview().inset(30)
 			make.right.equalToSuperview().inset(30)
 			self.underMults.rect = make.width.equalTo(underblurimageView.snp.height).multipliedBy(16.0/9).constraint.layoutConstraints.first
@@ -164,7 +164,7 @@ class PlayerView: UIView {
 		
 		blur.contentView.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
-			self.picTopConstrs.cover = make.top.equalToSuperview().inset(139).constraint.layoutConstraints.first
+			self.picTopConstrs.cover = make.top.equalToSuperview().inset(30).constraint.layoutConstraints.first
 			make.left.equalToSuperview().inset(30)
 			make.right.equalToSuperview().inset(30)
 			self.coverMults.rect = make.width.equalTo(coverImageView.snp.height).multipliedBy(16.0/9).constraint.layoutConstraints.first
@@ -259,61 +259,39 @@ class PlayerView: UIView {
 		self.trackNameLabel.fadeLength = 16
 	}
 	
-	func setPicture(image: UIImage?) {
-		self.underblurimageView.image = image
-		self.coverImageView.image = image
-
-		guard let image = image else {
-			return
-		}
-		
-		if image.size.width / image.size.height - 1.0 < 0.3 {
-			self.picTopConstrs.cover?.constant = 70
-			self.picTopConstrs.undr?.constant = 70
-			self.underMults.square?.isActive = true
-			self.coverMults.square?.isActive = true
-			self.underMults.rect?.isActive = false
-			self.coverMults.rect?.isActive = false
-			self.titleTopConstr.constant = 43
-			self.progressTopConstr.constant = 12
-		} else {
-			self.picTopConstrs.cover?.constant = 139
-			self.picTopConstrs.undr?.constant = 139
-			self.underMults.square?.isActive = false
-			self.coverMults.square?.isActive = false
-			self.underMults.rect?.isActive = true
-			self.coverMults.rect?.isActive = true
-			self.titleTopConstr.constant = 112
-			self.progressTopConstr.constant = 80
-		}
-		UIView.animate(withDuration: 0.2) {
-			self.layoutIfNeeded()
-		}
-	}
+//	func setPicture(image: UIImage?) {
+//		self.underblurimageView.image = image
+//		self.coverImageView.image = image
+//
+//		guard let image = image else {
+//			return
+//		}
+//
+//		if image.size.width / image.size.height - 1.0 < 0.3 {
+//			self.picTopConstrs.cover?.constant = 70
+//			self.picTopConstrs.undr?.constant = 70
+//			self.underMults.square?.isActive = true
+//			self.coverMults.square?.isActive = true
+//			self.underMults.rect?.isActive = false
+//			self.coverMults.rect?.isActive = false
+//			self.titleTopConstr.constant = 43
+//			self.progressTopConstr.constant = 12
+//		} else {
+//			self.picTopConstrs.cover?.constant = 30
+//			self.picTopConstrs.undr?.constant = 30
+//			self.underMults.square?.isActive = false
+//			self.coverMults.square?.isActive = false
+//			self.underMults.rect?.isActive = true
+//			self.coverMults.rect?.isActive = true
+//			self.titleTopConstr.constant = 112
+//			self.progressTopConstr.constant = 80
+//		}
+//		UIView.animate(withDuration: 0.2) {
+//			self.layoutIfNeeded()
+//		}
+//	}
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-	
-//	override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-//		return true
-//	}
-//
-//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//		let funcElementPoints: [UIView] = [
-//			trackProgressView, playButton, trackSeekButtons.backw,
-//			trackSeekButtons.forw, trackChangeButtons.next, trackChangeButtons.prev,
-//			volumeSlider]
-//		for view in funcElementPoints {
-//			if view.frame.contains(self.convert(point, to: view)) {
-//				return view
-//			}
-//		}
-//
-//		if point.y < self.frame.height/2 {
-//			return nil
-//		} else {
-//			return super.hitTest(point, with: event)
-//		}
-//	}
 }

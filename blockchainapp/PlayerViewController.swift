@@ -26,28 +26,41 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 		
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(64)
+			make.top.equalToSuperview()
 			make.left.equalToSuperview()
 			make.right.equalToSuperview()
 			make.bottom.equalToSuperview()
 		}
 		pageController.view.backgroundColor = .white
-		self.view.backgroundColor = .red
+		pageController.delegate = self
+		pageController.dataSource = self
+		pageController.setViewControllers([mainPlayer], direction: .forward, animated: false, completion: nil)
 		
 		self.mask = CAShapeLayer.init()
 		self.view.layer.mask = self.mask
 		
 		let panGest = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
 		self.view.addGestureRecognizer(panGest)
+		
+		self.transitioningDelegate = self
+		
+		let ind = UIView()
+		self.view.addSubview(ind)
+		ind.backgroundColor = .red
+		ind.snp.makeConstraints { (make) in
+			make.width.equalTo(37)
+			make.height.equalTo(12)
+			make.top.equalToSuperview().inset(40)
+			make.centerX.equalToSuperview()
+		}
 	}
 	
 	@objc func pan(gesture: UIPanGestureRecognizer) {
-		let threshhold = self.view.frame.size.height / 2
+		let threshhold = self.view.frame.size.height / 4
 		switch gesture.state {
 		case .changed:
 			let acc: CGFloat = 0.618
 			let point = gesture.translation(in: self.view)
-			print(point)
 			if point.y < 0 {
 				self.view.frame.origin.y = 0.0
 			} else if point.y < threshhold + 20 {
@@ -56,7 +69,7 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 			break
 		case .ended:
 			let point = gesture.translation(in: self.view)
-			if point.y >= threshhold/3 {
+			if point.y >= threshhold/2 {
 				self.dismiss(animated: true, completion: {
 					self.view.frame.origin.y = 0.0
 					print("Player dismissed")
@@ -99,5 +112,84 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil
+	}
+}
+
+extension PlayerViewController: UIViewControllerTransitioningDelegate {
+	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		return PlayerPresentTransition.init(originFrame: self.view.frame)
+	}
+	
+	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+		return PlayerDismissTransition.init(originFrame: self.view.frame)
+	}
+}
+
+class PlayerTransition: NSObject, UIViewControllerAnimatedTransitioning {
+	
+	private let originFrame: CGRect
+	
+	init(originFrame: CGRect) {
+		self.originFrame = originFrame
+	}
+	
+	func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+		return 0.5
+	}
+	
+	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+		
+	}
+	
+	
+}
+
+class PlayerPresentTransition: PlayerTransition {
+	override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+		transitionContext.containerView.backgroundColor = UIColor.black.withAlphaComponent(0)
+		
+		guard let to = transitionContext.viewController(forKey: .to),
+		let _ = transitionContext.viewController(forKey: .from) else { return }
+		
+		let containerView = transitionContext.containerView
+		let finalFrame = transitionContext.finalFrame(for: to)
+		
+		containerView.addSubview(to.view)
+		to.view.isHidden = false
+		
+		let duration = transitionDuration(using: transitionContext)
+		
+		to.view.frame.size = finalFrame.size
+		to.view.frame.origin = CGPoint.init(x: 0, y: finalFrame.size.height)
+		
+		UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 10, initialSpringVelocity: 10.0, options: .curveEaseInOut, animations: {
+			to.view.frame.origin = CGPoint.zero
+			containerView.layer.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
+		}) { (completed) in
+			print("Animation completed: \(completed)")
+			transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+		}
+	}
+}
+
+class PlayerDismissTransition: PlayerTransition {
+	override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+		transitionContext.containerView.backgroundColor = UIColor.black.withAlphaComponent(0)
+		
+		guard let from = transitionContext.viewController(forKey: .from) as? PlayerViewController else { return }
+		
+		
+		let containerView = transitionContext.containerView
+		containerView.layer.backgroundColor = UIColor.black.withAlphaComponent(0.6).cgColor
+		let duration = transitionDuration(using: transitionContext)
+		
+		UIView.animate(withDuration: duration, delay: 0.0, usingSpringWithDamping: 10, initialSpringVelocity: 10.0, options: .curveEaseInOut, animations: {
+			from.view.frame.origin = CGPoint(x: 0, y: from.view.frame.height)
+			containerView.layer.backgroundColor = UIColor.clear.cgColor
+		}) { (completed) in
+			print("Animation completed: \(completed)")
+			from.view.removeFromSuperview()
+			transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+		}
 	}
 }

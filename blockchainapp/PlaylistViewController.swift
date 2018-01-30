@@ -7,12 +7,24 @@
 //
 
 import UIKit
+import SnapKit
 
 class PlaylistViewController: UIViewController {
 
+	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
+		self.view.backgroundColor = .gray
+		
+		self.view.addSubview(tableView)
+		tableView.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().inset(60)
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			make.bottom.equalToSuperview()
+		}
         // Do any additional setup after loading the view.
     }
 
