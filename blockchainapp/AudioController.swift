@@ -83,7 +83,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		}
 
 		mpcenter.nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-			self.player.make(command: .next)
+			self.make(command: .next)
 			return .success
 		}
 
@@ -138,8 +138,11 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 		case .prev:
 			self.play(indexPath: self.currentTrackIndexPath, next: false)
 		case .seekForward:
-			let newProgress = ( info.current + 10.0 ) / info.length
-			player.make(command: .seek(progress: newProgress < 1.0  ? newProgress : 1.0))
+			let progress = ( info.current + 10.0 ) / info.length
+			let validPregress = progress < 1.0  ? progress : 2.0
+			if validPregress < 1.0 {
+				self.player.make(command: .seek(progress: validPregress))
+			}
 		case .seekBackward:
 			let newProgress = ( info.current - 10.0 ) / info.length
 			player.make(command: .seek(progress: newProgress > 0 ? newProgress : 0.0))
@@ -163,6 +166,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
 			if self.playlistName != playlist.0 {
+				self.currentTrackIndexPath = IndexPath.invalid
 				let newPlaylist = AudioPlaylist()
 				newPlaylist.tracks = playlist.1
 				newPlaylist.name = playlist.0

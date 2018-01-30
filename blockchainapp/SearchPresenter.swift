@@ -127,8 +127,8 @@ class SearchPresenter {
 	}
 	
 	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int,
-			let index = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String,
+			let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			var reload = [Int]()
 			if currentPlayingIndex != -1 {
 				reload.append(self.currentPlayingIndex)
@@ -141,8 +141,8 @@ class SearchPresenter {
 	}
 	
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? Int,
-			let _ = self.tracks.index(where: {$0.id == id}) {
+		if let id = notification.userInfo?["ItemID"] as? String,
+			let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
 			let reload = [self.currentPlayingIndex]
 			self.currentPlayingIndex = -1
 			self.delegate?.update(tracks: reload, channels: [])

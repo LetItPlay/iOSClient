@@ -26,6 +26,7 @@ class DBManager {
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
             _ = updateIfNeeded(property: &station.tagString, new: tags ?? "")
 			_ = updateIfNeeded(property: &station.lang, new: lang)
+			_ = updateIfNeeded(property: &station.trackCount, new: inRealm.objects(Track.self).filter("station == \(id)").count)
         } else {
             let newStat = Station()
             newStat.id = id
@@ -34,6 +35,8 @@ class DBManager {
             newStat.subscriptionCount = subscriptionCount
             newStat.tagString = tags ?? ""
 			newStat.lang = lang
+			newStat.trackCount = inRealm.objects(Track.self).filter("station == \(id)").count
+			
             
             inRealm.add(newStat)
         }

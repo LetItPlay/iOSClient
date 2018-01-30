@@ -83,7 +83,7 @@ class ChannelTableViewCell: UITableViewCell {
 		didSet {
 			channelTitle.text = channel?.name
 			subs.setData(data: Int64(channel?.subscriptionCount ?? 0))
-			plays.setData(data: 0)
+			plays.setData(data: Int64(channel?.trackCount ?? 0))
 			self.tagsList.removeAllTags()
 			if let tags = channel?.getTags().prefix(4) {
 				if tags.count != 0 {
@@ -149,7 +149,7 @@ class ChannelTableViewCell: UITableViewCell {
 		
 		self.contentView.addSubview(subs)
 		subs.snp.makeConstraints { (make) in
-			make.top.equalTo(tagsList.snp.bottom).inset(-5)
+			make.top.equalTo(tagsList.snp.bottom).inset(-4)
 			make.left.equalTo(channelTitle)
 			make.bottom.equalTo(channelImageView).inset(4)
 		}
