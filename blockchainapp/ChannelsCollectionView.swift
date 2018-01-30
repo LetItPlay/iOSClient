@@ -37,7 +37,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     let seeAlsoButton: UIButton = {
         let button = UIButton()
         button.setTitle("see all", for: .normal)
-        button.setTitleColor(AppColor.Element.redBlur, for: .normal)
+        button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = AppFont.Button.mid
         return button
