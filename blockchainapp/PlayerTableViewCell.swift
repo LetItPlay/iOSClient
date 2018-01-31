@@ -77,16 +77,9 @@ class PlayerTableViewCell: UITableViewCell {
 		self.contentView.addSubview(channelNameLabel)
 		channelNameLabel.snp.makeConstraints { (make) in
 			make.left.equalTo(trackImageView.snp.right).inset(-14)
+			make.right.equalToSuperview().inset(16)
 			make.top.equalTo(trackImageView)
 			make.height.equalTo(18)
-		}
-		
-		self.contentView.addSubview(timeLabel)
-		timeLabel.snp.makeConstraints { (make) in
-			make.right.equalToSuperview().inset(16)
-			make.centerY.equalTo(channelNameLabel)
-			make.left.equalTo(channelNameLabel.snp.right).inset(-10)
-			make.width.equalTo(80)
 		}
 		
 		self.contentView.addSubview(trackNameLabel)

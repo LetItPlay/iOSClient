@@ -11,7 +11,6 @@ import UIKit
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 		
 	let playerController = PlayerViewController()
-	let miniPlayer = MiniPlayerView()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
 	
 	convenience init() {
@@ -31,14 +30,17 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 			return nvc
 		})
 		
-		self.miniPlayer.presentationDelegate = self
-		self.view.insertSubview(miniPlayer, belowSubview: self.tabBar)
-		miniPlayer.snp.makeConstraints { (make) in
+		self.playerController.miniPlayer.presentationDelegate = self
+		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
+		self.playerController.miniPlayer.snp.makeConstraints { (make) in
 			make.left.equalToSuperview()
 			make.right.equalToSuperview()
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
 		playerController.modalPresentationStyle = .overFullScreen
+		
+		miniPlayerBottomConstr?.constant = 120
+		
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -47,7 +49,6 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		print(self.miniPlayer.frame)
 	}
 	
 	func playerTapped() {
@@ -66,13 +67,19 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //		} else {
 //			self.dismissPopupBar(animated: animated, completion: nil)
 //		}
+		if !show {
+			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
+		} else {
+			miniPlayerBottomConstr?.constant = 0
+		}
+		UIView.animate(withDuration: 0.5) {
+			self.view.layoutIfNeeded()
+		}
 	}
 	
 	func showPlaylist() {
-//		self.vc.openPopup(animated: true) {
-//			print("Player Opened")
-//		}
-//		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
+		self.present(playerController, animated: true, completion: nil)
+		self.playerController.showPlaylist()
 	}
 	
     override func viewDidLoad() {

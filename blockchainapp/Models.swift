@@ -74,7 +74,6 @@ class PlayerTrack: AudioTrack {
 //MARK: - Audio Controller Protocols
 protocol AudioControllerDelegate: class {
 	func updateTime(time: (current: Double, length: Double))
-	func volumeUpdate(value: Double)
 	func playState(isPlaying: Bool)
 	func trackUpdate()
 	func playlistChanged()

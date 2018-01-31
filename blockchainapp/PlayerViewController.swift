@@ -8,10 +8,12 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
-class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+class PlayerViewController: UIViewController, AudioControllerDelegate {
 	
 	let miniPlayer: MiniPlayerView = MiniPlayerView()
+	let audioController = AudioController.main
 	
 	let pageController: UIPageViewController = UIPageViewController(transitionStyle: UIPageViewControllerTransitionStyle.scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.horizontal, options: [:])
 	let mainPlayer: MainPlayerViewController = MainPlayerViewController()
@@ -23,7 +25,7 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 		super.init(nibName: nil, bundle: nil)
 		
 		pageController.delegate = self
-		
+				
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
 			make.top.equalToSuperview()
@@ -53,6 +55,77 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 			make.top.equalToSuperview().inset(40)
 			make.centerX.equalToSuperview()
 		}
+		
+		audioController.delegate = self
+	}
+	
+	func updateTime(time: (current: Double, length: Double)) {
+		DispatchQueue.main.async {
+			self.miniPlayer.progressView.progress = Float(time.current / time.length)
+			if !self.mainPlayer.trackProgressView.slider.isHighlighted {
+				self.mainPlayer.trackProgressView.slider.value = Float(time.current / time.length)
+			}
+			self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
+			self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
+		}
+	}
+	
+	func playState(isPlaying: Bool) {
+		self.miniPlayer.playButton.isSelected = isPlaying
+		self.mainPlayer.playButton.isSelected = isPlaying
+	}
+	
+	func trackUpdate() {
+		DispatchQueue.main.async {
+			if let ob = self.audioController.currentTrack {
+				let channel = ob.author
+				let title = ob.name
+
+				self.miniPlayer.trackAuthorLabel.text = channel
+				self.miniPlayer.trackNameLabel.text = title
+				self.mainPlayer.channelNameLabel.text = channel
+				self.mainPlayer.trackNameLabel.text = title
+				if let url = ob.imageURL {
+					self.mainPlayer.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+						self.miniPlayer.trackImageView.image = img
+						self.mainPlayer.setPicture(image: img)
+					})
+				}
+			}
+			if self.audioController.status != .playing {
+				let info = self.audioController.info
+				UIView.animate(withDuration: 0.01, animations: {
+					self.mainPlayer.trackProgressView.slider.value = Float(info.current/info.length)
+					self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
+					self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
+
+					self.miniPlayer.progressView.progress = Float(info.current/info.length)
+				})
+			}
+			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
+			self.playlist.tableView.reloadData()
+//			self.playlist.isHidden = false
+
+		}
+//		self.playButton.isSelected = audioController.status == .playing
+//		self.playerView.playButton.isSelected = audioController.status == .playing
+	}
+	
+	func playlistChanged() {
+		self.miniPlayer.trackNameLabel.text = ""
+		self.miniPlayer.trackAuthorLabel.text = ""
+		self.miniPlayer.progressView.progress = 0.0
+		self.mainPlayer.channelNameLabel.text = ""
+		self.mainPlayer.trackNameLabel.text = ""
+		self.mainPlayer.coverImageView.image = nil
+
+		self.playlist.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
+		self.playlist.currentIndex = self.audioController.currentTrackIndexPath
+		self.playlist.tableView.reloadData()
+	}
+	
+	func showPlaylist() {
+		self.pageController.setViewControllers([playlist], direction: .forward, animated: false, completion: nil)
 	}
 	
 	@objc func pan(gesture: UIPanGestureRecognizer) {
@@ -91,9 +164,15 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
-		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 40, cornerHeight: 40, transform: nil)
+		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
 	
+	required init?(coder aDecoder: NSCoder) {
+		return nil
+	}
+}
+
+extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 		if viewController is PlaylistViewController {
 			return mainPlayer
@@ -107,10 +186,6 @@ class PlayerViewController: UIViewController, UIPageViewControllerDelegate, UIPa
 			return playlist
 		}
 		
-		return nil
-	}
-	
-	required init?(coder aDecoder: NSCoder) {
 		return nil
 	}
 }
@@ -140,8 +215,6 @@ class PlayerTransition: NSObject, UIViewControllerAnimatedTransitioning {
 	func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
 		
 	}
-	
-	
 }
 
 class PlayerPresentTransition: PlayerTransition {

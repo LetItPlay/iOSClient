@@ -135,6 +135,21 @@ class MiniPlayerView: UITabBar {
 //
 //		let pan = UIPanGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
 //		self.addGestureRecognizer(pan)
+		
+		self.playButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+		self.nextButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+	}
+	
+	@objc func buttonPressed(sender: UIButton) {
+		if sender == self.nextButton {
+			AudioController.main.make(command: .next)
+		} else {
+			if sender.isSelected {
+				AudioController.main.make(command: .pause)
+			} else {
+				AudioController.main.make(command: .play(id: nil))
+			}
+		}
 	}
 	
 	@objc func playerOpen(gesture: UIGestureRecognizer) {
