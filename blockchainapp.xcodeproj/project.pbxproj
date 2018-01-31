@@ -41,6 +41,8 @@
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
+		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
+		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
@@ -128,6 +130,8 @@
 		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
+		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
@@ -250,6 +254,15 @@
 			name = AudioCore;
 			sourceTree = "<group>";
 		};
+		36F7C399201AF71200F99A9A /* Channels */ = {
+			isa = PBXGroup;
+			children = (
+				36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */,
+				36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */,
+			);
+			name = Channels;
+			sourceTree = "<group>";
+		};
 		CF2715311F97EA560038C81C /* about */ = {
 			isa = PBXGroup;
 			children = (
@@ -363,6 +376,7 @@
 				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
 				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
 				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
+				36F7C399201AF71200F99A9A /* Channels */,
 			);
 			name = Feed;
 			sourceTree = "<group>";
@@ -650,6 +664,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */,
 				014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
@@ -681,6 +696,7 @@
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
+				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */,
 				01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,

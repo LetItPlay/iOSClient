@@ -20,7 +20,6 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build())),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
-			("Channels".localized, (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
