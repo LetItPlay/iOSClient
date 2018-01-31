@@ -62,7 +62,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         
         self.view.addSubview(channelsView)
         channelsView.snp.makeConstraints { (make) in
-            make.top.equalTo(64)
+            make.top.equalTo((self.navigationController?.navigationBar.frame.origin.y)! + (self.navigationController?.navigationBar.frame.size.height)!)
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.height.equalTo(121)
