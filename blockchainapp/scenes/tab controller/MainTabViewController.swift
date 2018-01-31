@@ -89,6 +89,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
 //                && !AppManager.shared.audioManager.isPlaying {
 //                AppManager.shared.audioPlayer?.hidePlayer()
 //            }
+            
         }
     }
     
