@@ -97,6 +97,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     
     func tabSelected(controller: String)
     {
-        Crashlytics.sharedInstance().setObjectValue(controller, forKey: "Tab_selected")
+//        Crashlytics.sharedInstance().setObjectValue(controller, forKey: "Tab_selected")
+        Answers.logCustomEvent(withName: "Tab selected", customAttributes: ["controller" : controller])
     }
 }
