@@ -68,17 +68,27 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
             make.height.equalTo(121)
         }
         
-        channelsView.isHidden = self.type != .popular
-        channelsView.delegate = self
+        self.view.addSubview(tableView)
         
-		self.view.addSubview(tableView)
-		tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(channelsView.snp.bottom)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.bottom.equalTo(0)
-//            make.edges.equalTo(self.view)
-		}
+        if self.type != .popular
+        {
+            channelsView.isHidden = true
+            tableView.snp.makeConstraints { (make) in
+                make.edges.equalTo(self.view)
+            }
+        }
+        else
+        {
+            channelsView.delegate = self
+            
+            tableView.snp.makeConstraints { (make) in
+                make.top.equalTo(channelsView.snp.bottom)
+                make.left.equalTo(0)
+                make.right.equalTo(0)
+                make.bottom.equalTo(0)
+                //            make.edges.equalTo(self.view)
+            }
+        }
 		
         tableView.dataSource = self
         tableView.delegate   = self
@@ -260,6 +270,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
             UIView.animate(withDuration: 0.3, animations:{
                 cell.alertBlurView.alpha = 0
             })
+        }
     }
 }
 
