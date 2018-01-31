@@ -1,8 +1,9 @@
 
 import UIKit
 import SnapKit
+import SwipeCellKit
 
-class NewFeedTableViewCell: UITableViewCell {
+class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
@@ -43,7 +44,7 @@ class NewFeedTableViewCell: UITableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		viewInitialize()
-		
+        
 //		self.playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
 		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
 	}
@@ -98,7 +99,7 @@ class NewFeedTableViewCell: UITableViewCell {
 	let iconImageView: UIImageView = {
 		let imageView: UIImageView = UIImageView()
 		imageView.layer.masksToBounds = true
-		imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 10
 		imageView.snp.makeConstraints({ (maker) in
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)
@@ -157,10 +158,61 @@ class NewFeedTableViewCell: UITableViewCell {
 		label.numberOfLines = 3
 		return label
 	}()
-	
+    
+    let infoBlurView: UIVisualEffectView = {
+        var blurView = UIVisualEffectView()
+        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.clipsToBounds = true
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        return blurView
+    }()
+    
+    let infoTitle: UITextView = {
+       let textView = UITextView()
+        textView.font = AppFont.Title.sml
+        textView.textColor = .black
+        textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = false
+        textView.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
+        textView.sizeToFit()
+        return textView
+    }()
+    
+    let infoText: UITextView = {
+        let textView = UITextView()
+        textView.font = AppFont.Title.info
+        textView.textColor = .black
+        textView.backgroundColor = .clear
+        textView.isEditable = false
+        textView.isSelectable = false
+        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
+        return textView
+    }()
+    
+    let alertBlurView: UIVisualEffectView = {
+        let alert = UIVisualEffectView(effect: UIBlurEffect.init(style: .light))
+        alert.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        alert.clipsToBounds = true
+        alert.layer.cornerRadius = 10
+        return alert
+    }()
+    
+    let alertLabel: UILabel = {
+        let alert = UILabel()
+        alert.font = AppFont.Title.big
+        alert.textAlignment = .center
+        alert.text = "Трек добавлен"
+        return alert
+    }()
+        
 	func viewInitialize() {
 		
 		self.selectionStyle = .none
+        self.backgroundColor = .white
+        self.backgroundView?.backgroundColor = .white
+        self.tintColor = .white
 		
 		let cellContentView = UIView()
 		cellContentView.layer.masksToBounds = true
@@ -175,7 +227,6 @@ class NewFeedTableViewCell: UITableViewCell {
 			make.right.equalToSuperview().inset(16)
 			make.top.equalToSuperview().inset(24)
 			make.bottom.equalToSuperview()
-			
 		}
 		
 		cellContentView.addSubview(mainPictureImageView)
@@ -260,6 +311,61 @@ class NewFeedTableViewCell: UITableViewCell {
 		}
 		likeBlurView.layer.masksToBounds = true
 		likeBlurView.layer.cornerRadius = 18
+        
+        self.infoBlurView.contentView.addSubview(infoTitle)
+        infoTitle.snp.makeConstraints { (make) in
+            make.top.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(10)
+            make.right.equalTo(infoBlurView).inset(10)
+            make.height.equalTo(infoTitle.frame.size.height)
+        }
+        
+        self.infoBlurView.contentView.addSubview(infoText)
+        infoText.snp.makeConstraints { (make) in
+            make.top.equalTo(infoTitle.snp.bottom).inset(-12)
+            make.bottom.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(10)
+            make.right.equalTo(infoBlurView).inset(10)
+        }
+        
+        cellContentView.addSubview(infoBlurView)
+        infoBlurView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(cellContentView)
+            make.right.equalTo(cellContentView)
+            make.width.equalTo(cellContentView)
+            make.height.equalTo(cellContentView)
+        }
+        
+        infoBlurView.alpha = 0
+        
+//        let sizeOfText = yourText sizeWithFont:yourFont constrainedToSize:CGSizeMake(constrainedWidth, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap
+        let sizeOfText: CGSize = alertLabel.text!.size(withAttributes: [NSAttributedStringKey.font: AppFont.Title.big])
+        
+        cellContentView.addSubview(alertBlurView)
+        alertBlurView.snp.makeConstraints{ (make) in
+            make.centerX.equalTo(mainPictureImageView.snp.centerX)
+            make.centerY.equalTo(mainPictureImageView.snp.centerY)
+            make.width.equalTo(sizeOfText.width + 40)
+            make.height.equalTo(128)
+        }
+        
+        self.alertBlurView.contentView.addSubview(alertLabel)
+        alertLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(16)
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+        }
+        
+        let imageView = UIImageView.init(image: UIImage(named: "completeIcon"))
+        
+        self.alertBlurView.contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { (make) in
+            make.centerX.equalTo(alertBlurView.snp.centerX)
+            make.width.equalTo(54)
+            make.height.equalTo(54)
+            make.top.equalTo(alertLabel.snp.bottom).inset(-14)
+        }
+        
+        alertBlurView.alpha = 0
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -278,4 +384,27 @@ class NewFeedTableViewCell: UITableViewCell {
 //		return super.hitTest(point, with: event)
 //	}
 
+    func getInfo(toHide: Bool, animated: Bool)
+    {
+        if toHide
+        {
+            if animated
+            {
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.infoBlurView.alpha = 0
+                })
+            }
+            else
+            {
+                self.infoBlurView.alpha = 0
+            }
+        }
+        else
+        {
+            self.infoText.setContentOffset(.zero, animated: false)
+            UIView.animate(withDuration: 0.5, animations: {
+                self.infoBlurView.alpha = 1
+            })
+        }
+    }
 }

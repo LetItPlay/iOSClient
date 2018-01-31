@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwipeCellKit
 
 enum FeedType {
 	case feed, popular
@@ -17,6 +18,9 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 	var cellHeight: CGFloat = 343.0 + 24.0
+    var previousCell: NewFeedTableViewCell?
+    var alertBlurView: UIVisualEffectView!
+    var alertLabel: UILabel!
 
 	var type: FeedType = .feed
 	let tableView: UITableView = UITableView()
@@ -69,6 +73,10 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		tableView.backgroundColor = .white
 		tableView.backgroundView?.backgroundColor = .clear
 		tableView.sectionIndexBackgroundColor = .clear
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
+        tableView.addGestureRecognizer(longPressRecognizer)
+        
 		refreshControl.beginRefreshing()
 
 		tableView.tableFooterView = UIView()
@@ -85,7 +93,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			
 		}
 		self.tableView.refreshControl?.beginRefreshing()
-	}
+        
+    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -131,7 +140,58 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
 		}
 	}
-
+    
+    @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        
+        if longPressGestureRecognizer.state == .began {
+            
+            let touchPoint = longPressGestureRecognizer.location(in: tableView)
+            if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+                let cell = tableView.cellForRow(at: indexPath)
+                if self.previousCell != nil,
+                   self.previousCell != cell
+                {
+                    previousCell?.getInfo(toHide: true, animated: true)
+                }
+                if self.previousCell == cell
+                {
+                    previousCell = nil
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+                }
+                else
+                {
+                    previousCell = cell as? NewFeedTableViewCell
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+                }
+            }
+        }
+    }
+    
+    func addTrack(toBegining: Bool, for indexPath: IndexPath)
+    {
+        //TODO: adding channel to playlist
+        if toBegining
+        {
+            
+        }
+        else
+        {
+            
+        }
+        
+        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            cell.alertBlurView.alpha = 1
+        })
+        
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when){
+            UIView.animate(withDuration: 0.3, animations:{
+                cell.alertBlurView.alpha = 0
+            })
+        }
+    }
 }
 
 extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
@@ -156,9 +216,13 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
+        cell?.delegate = self
 		let track = self.presenter.tracks[indexPath.item]
 		cell?.track = track
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
+        
+        cell?.getInfo(toHide: true, animated: false)
+        cell?.alertBlurView.alpha = 0
 		
 		cell?.onPlay = { [weak self] _ in
 			let index = indexPath.item
@@ -169,7 +233,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 			let index = indexPath.item
 			self?.presenter.like(index: index)
 		}
-	}
+    }
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.presenter.tracks[indexPath.item]
@@ -182,6 +246,46 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
 	}
-    
 }
 
+extension FeedViewController: SwipeTableViewCellDelegate
+{
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        var begin: Bool!
+        var image: UIImage!
+        var addTo = ""
+        if orientation == .left
+        {
+            image = UIImage(named: "topIcon")
+            begin = true
+            addTo = "up"
+        }
+        else
+        {
+            image = UIImage(named: "downIcon")
+            begin = false
+            addTo = "down"
+        }
+        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
+            self.addTrack(toBegining: begin, for: indexPath)
+        })
+        addToPlaylistAction.image = image
+        addToPlaylistAction.backgroundColor = .clear
+        
+        addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
+        addToPlaylistAction.font = AppFont.Title.big
+        
+        return [addToPlaylistAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.expansionStyle = SwipeExpansionStyle.selection
+        options.transitionStyle = .border
+        options.maximumButtonWidth = 300
+        options.minimumButtonWidth = 150
+        options.backgroundColor = .white
+        
+        return options
+    }
+}
