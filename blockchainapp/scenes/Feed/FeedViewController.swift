@@ -84,6 +84,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
 		self.view.addSubview(emptyLabel)
 		emptyLabel.snp.makeConstraints { (make) in
 			make.center.equalTo(self.view)
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
 		}
 		emptyLabel.isHidden = self.type == .popular
 		

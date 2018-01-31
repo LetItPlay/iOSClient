@@ -60,10 +60,6 @@ class DBManager {
 			changeCounter += updateIfNeeded(property: &track.lang, new: lang)
 			
 			
-			if publishDate == "" {
-				print("fcuk")
-			}
-			
             changeCounter += updateIfNeeded(property: &track.publishedAt, new: formatter.date(from: publishDate) ?? Date().addingTimeInterval(-60*60*24*30))
             
             if track.audiofile?.file != audiofile?.file {
