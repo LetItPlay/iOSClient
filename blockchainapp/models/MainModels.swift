@@ -13,7 +13,8 @@ class Station: Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var name: String = ""
     @objc dynamic var image: String = ""
-    @objc dynamic var subscriptionCount: Int = 0
+	@objc dynamic var sourceURL: String = ""
+	@objc dynamic var subscriptionCount: Int = 0
 	@objc dynamic var trackCount: Int = 0
 	@objc dynamic var lang: String     		= ""
 	var tags: List<Tag> = List<Tag>()
@@ -34,15 +35,14 @@ class Tag: RealmString {
 class Track: Object {
     @objc dynamic var id: Int               = 0
     @objc dynamic var station: Int          = 0
-    @objc dynamic var audiofile: Audiofile? = nil
     @objc dynamic var name: String          = ""
-    @objc dynamic var url: String           = ""
     @objc dynamic var desc: String          = ""
     @objc dynamic var image: String         = ""
-	
-	@objc dynamic var length: Int     		= 0
+
+	@objc dynamic var length: Int64     		= 0
 	@objc dynamic var coverURL: String     	= ""
-	@objc dynamic var trackURL: String     	= ""
+	@objc dynamic var url: String           = ""
+
 
 	@objc dynamic var likeCount: Int        = 0
 	@objc dynamic var reportCount: Int      = 0
@@ -78,16 +78,10 @@ extension Track {
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: (self.audiofile?.file.buildImageURL())!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.audiofile?.lengthSeconds ?? 0)
+		return PlayerTrack.init(id: self.audiotrackId(), trackURL: url, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}
 	
 	func audiotrackId() -> String {
 		return "\(self.id)"
 	}
-}
-
-class Audiofile: Object {
-    @objc dynamic var file: String = ""
-    @objc dynamic var lengthSeconds: Int64 = 0
-    @objc dynamic var sizeBytes: Int64 = 0
 }

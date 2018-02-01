@@ -84,6 +84,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 							tags.forEach({ (tag) in
 								newObj.tags.append(tag)
 							})
+							new["length"] = old["audiofile"]?["lengthSeconds"] as? Int ?? 0
+							new["coverURL"] = old["audiofile"]?["lengthSeconds"] as? String ?? ""
+							new["url"] = old["audiofile"]?["file"] as? String ?? ""
 						}
 					})
 					migration.enumerateObjects(ofType: "Station", { (old, new) in
@@ -96,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 							tags.forEach({ (tag) in
 								newObj.tags.append(tag)
 							})
+							new["sourceURL"] = ""
 						}
 					})
 				}
