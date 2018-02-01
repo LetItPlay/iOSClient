@@ -152,6 +152,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if self.type == .feed {
+            AnalyticsEngine.sendEvent(event: .feedCardSelected)
+        }
+        else {
+            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
+        }
 		self.presenter.play(index: indexPath.item)
 	}
 	

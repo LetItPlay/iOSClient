@@ -8,6 +8,7 @@
 
 
 import CloudKit
+import Crashlytics
 
 enum AnalyticsEvent {
     case tabSelected(controller: String)
@@ -20,12 +21,8 @@ enum AnalyticsEvent {
     case player(to: Player)
     case profileEvent(on: ProfileEvent)
     case trackInPlaylistTapped
-    case channelEvent(event: ChannelEvent)
-    
-    enum ChannelEvent: String {
-        case tegTapped = "tegTapped"
-        case cardTapped = "cardTapped"
-    }
+    case channelTegTapped
+
     
     enum ProfileEvent: String {
         case avatar = "avatarTapped"
@@ -33,11 +30,11 @@ enum AnalyticsEvent {
         case like = "likeTapped"
     }
     
-    enum SearchEvent: String {
-        case search = "search"
-        case channelTapped = "channelTapped"
-        case trackTapped = "trackTapped"
-        case playlistTapped = "playlistTapped"
+    enum SearchEvent {
+        case search(text: String)
+        case channelTapped
+        case trackTapped
+        case playlistTapped
     }
     
     enum TrendEvent: String {
@@ -65,27 +62,27 @@ enum AnalyticsEvent {
     var name: String {
         switch self {
         case .tabSelected:
-            return "tab"
+            return "Tab selected"
         case .searchEvent:
-            return "searchTab"
+            return "Search Tab"
         case .feedCardSelected:
-            return "feedTab"
+            return "Feed Tab"
         case .trendEvent:
-            return "trendTab"
+            return "Trend Tab"
         case .swipe:
             return "swipe"
         case .tapAfterSwipe:
-            return "tapAfterSwipe"
+            return "Tap After Swipe"
         case .longTap:
-            return "longTap"
+            return "Long Tap"
         case .player:
-            return "playerTab"
+            return "Player"
         case .profileEvent:
-            return "profileEvent"
+            return "Profile Tab"
         case .trackInPlaylistTapped:
-            return "playlist"
-        case .channelEvent:
-            return "channelTab"
+            return "Playlist"
+        case .channelTegTapped:
+            return "Cannel Tab"
         }
     }
     
@@ -93,10 +90,16 @@ enum AnalyticsEvent {
         switch self {
         case .tabSelected(let controller):
             return ["controllerSelected" : controller]
-        case .searchEvent(let searchEvent):
-            return ["action" : searchEvent.rawValue]
+        case .searchEvent(event: .search(let text)):
+            return ["searching" : text]
+        case .searchEvent(event: .channelTapped):
+            return ["event" : "channelTapped"]
+        case .searchEvent(event: .trackTapped):
+            return ["event" : "trackTapped"]
+        case .searchEvent(event: .playlistTapped):
+            return ["event" : "playlistTapped"]
         case .feedCardSelected:
-            return ["cardSelected" : ""]
+            return ["cardSelected" : "cardSelected"]
         case .trendEvent(let event):
             return ["event" : event.rawValue]
         case .swipe(let direction):
@@ -111,45 +114,15 @@ enum AnalyticsEvent {
             return ["event" : event.rawValue]
         case .trackInPlaylistTapped:
             return ["event" : "trackTapped"]
-        case .channelEvent(let event):
-            return ["event" : event.rawValue]
+        case .channelTegTapped:
+            return ["event" :  "tegTapped"]
         }
     }
 }
-    
 
-protocol AnalyticsEngine: class {
-    func sendAnalyticsEvent(named name: String, metadata: [String : String])
-}
-
-class AnalyticsManager {
-    private let engine: AnalyticsEngine
-    
-    init(engine: AnalyticsEngine) {
-        self.engine = engine
-    }
-    
-    func log(_ event: AnalyticsEvent) {
-        engine.sendAnalyticsEvent(named: event.name, metadata: event.metadata)
+class AnalyticsEngine {
+    class func sendEvent(event: AnalyticsEvent) {
+        Answers.logCustomEvent(withName: event.name, customAttributes: event.metadata)
     }
 }
 
-class CloudKitAnalyticsEngine: AnalyticsEngine {
-    private let database: CKDatabase
-    
-    init(database: CKDatabase = CKContainer.default().publicCloudDatabase) {
-        self.database = database
-    }
-    
-    func sendAnalyticsEvent(named name: String, metadata: [String : String]) {
-        let record = CKRecord(recordType: "AnalyticsEvent.\(name)")
-        
-        for (key, value) in metadata {
-            record[key] = value as NSString
-        }
-        
-        database.save(record) { _, _ in
-            // We treat this as a fire-and-forget type operation
-        }
-    }
-}

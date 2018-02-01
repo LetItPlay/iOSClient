@@ -133,6 +133,7 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 	override func viewWillDisappear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		print("132")
+        AnalyticsEngine.sendEvent(event: .player(to: .close))
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -141,6 +142,8 @@ class PopupController: LNPopupCustomBarViewController, AudioControllerDelegate {
 			make.size.equalTo(self.view.frame.size)
 		}
 		self.view.layoutIfNeeded()
+        
+        AnalyticsEngine.sendEvent(event: .player(to: .open))
 	}
 	
 	@objc func trackSeekChanged(_ sender: Any) {

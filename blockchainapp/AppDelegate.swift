@@ -16,6 +16,7 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
@@ -23,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         migrate()
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
+        
 		
 		var vc: UIViewController!
 		if UserSettings.language == .none {
