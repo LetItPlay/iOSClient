@@ -15,19 +15,36 @@ enum AnalyticsEvent {
     case feedCardSelected
     case trendEvent(event: TrendEvent)
     case swipe(direction: Swipe)
+    case tapAfterSwipe(direction: Swipe)
     case longTap(to: LongTap)
     case player(to: Player)
+    case profileEvent(on: ProfileEvent)
+    case trackInPlaylistTapped
+    case channelEvent(event: ChannelEvent)
     
-    enum SearchEvent {
-        case search
-        case channelTapped
-        case trackTapped
+    enum ChannelEvent: String {
+        case tegTapped = "tegTapped"
+        case cardTapped = "cardTapped"
     }
     
-    enum TrendEvent {
-        case cardTapped
-        case channelTapped
-        case seeAll
+    enum ProfileEvent: String {
+        case avatar = "avatarTapped"
+        case name = "nameTapped"
+        case like = "likeTapped"
+    }
+    
+    enum SearchEvent: String {
+        case search = "search"
+        case channelTapped = "channelTapped"
+        case trackTapped = "trackTapped"
+        case playlistTapped = "playlistTapped"
+    }
+    
+    enum TrendEvent: String {
+        case cardTapped = "cardTapped"
+        case channelTapped = "channelTapped"
+        case seeAll = "seeAllTapped"
+        case channelSeeAll = "channelSeeAllTapped"
     }
     
     enum Swipe: String {
@@ -35,9 +52,9 @@ enum AnalyticsEvent {
         case right = "right"
     }
     
-    enum LongTap {
-        case showInfo
-        case hideInfo
+    enum LongTap: String {
+        case showInfo = "show"
+        case hideInfo = "hide"
     }
     
     enum Player: String {
@@ -48,59 +65,54 @@ enum AnalyticsEvent {
     var name: String {
         switch self {
         case .tabSelected:
-            return "tabSelected"
-        case .searchEvent(event: .search):
-            return "search"
-        case .searchEvent(event: .channelTapped):
-            return "channelTapped"
-        case .searchEvent(event: .trackTapped):
-            return "trackTapped"
+            return "tab"
+        case .searchEvent:
+            return "searchTab"
         case .feedCardSelected:
-            return "cardSelected"
-        case .trendEvent(event: .cardTapped):
-            return "cardTapped"
-        case .trendEvent(event: .channelTapped):
-            return "channelTapped"
-        case .trendEvent(event: .seeAll):
-            return "seeAll"
+            return "feedTab"
+        case .trendEvent:
+            return "trendTab"
         case .swipe:
             return "swipe"
-        case .longTap(to: .showInfo):
-            return "longTap"
-        case .longTap(to: .hideInfo):
+        case .tapAfterSwipe:
+            return "tapAfterSwipe"
+        case .longTap:
             return "longTap"
         case .player:
-            return "player"
+            return "playerTab"
+        case .profileEvent:
+            return "profileEvent"
+        case .trackInPlaylistTapped:
+            return "playlist"
+        case .channelEvent:
+            return "channelTab"
         }
     }
     
     var metadata: [String : String] {
         switch self {
         case .tabSelected(let controller):
-            return ["controller" : controller]
-        case .searchEvent(event: .search):
-            return ["search" : ""]
-        case .searchEvent(event: .channelTapped):
-            return ["channelTapped" : ""]
-        case .searchEvent(event: .trackTapped):
-            return ["trackTapped" : ""]
+            return ["controllerSelected" : controller]
+        case .searchEvent(let searchEvent):
+            return ["action" : searchEvent.rawValue]
         case .feedCardSelected:
             return ["cardSelected" : ""]
-        case .trendEvent(event: .cardTapped):
-            return ["cardTapped" : ""]
-        case .trendEvent(event: .channelTapped):
-            return ["channelTapped" : ""]
-        case .trendEvent(event: .seeAll):
-            return ["seeAll" : ""]
+        case .trendEvent(let event):
+            return ["event" : event.rawValue]
         case .swipe(let direction):
             return ["direction" : direction.rawValue]
-        case .longTap(to: .showInfo):
-            return ["info" : "show"]
-        case .longTap(to: .hideInfo):
-            return ["info" : "hide"]
+        case .tapAfterSwipe(let direction):
+            return ["side" : direction.rawValue]
+        case .longTap(let event):
+            return ["info" : event.rawValue]
         case .player(let move):
-            return ["move" : move.rawValue]
-            
+            return ["moveTo" : move.rawValue]
+        case .profileEvent(let event):
+            return ["event" : event.rawValue]
+        case .trackInPlaylistTapped:
+            return ["event" : "trackTapped"]
+        case .channelEvent(let event):
+            return ["event" : event.rawValue]
         }
     }
 }
