@@ -180,6 +180,10 @@ class FeedPresenter: FeedPresenterProtocol {
 			LikeManager.shared.addOrDelete(id: self.tracks[index].id)
 		}
 	}
+	
+	func addTrack(toBeggining: Bool, for index: Int) {
+		
+	}
     
     func like(trackUID: Int) {
         LikeManager.shared.addOrDelete(id: trackUID)

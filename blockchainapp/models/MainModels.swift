@@ -14,9 +14,9 @@ class Station: Object {
     @objc dynamic var name: String = ""
     @objc dynamic var image: String = ""
     @objc dynamic var subscriptionCount: Int = 0
-    @objc dynamic var tagString: String = ""
 	@objc dynamic var trackCount: Int = 0
 	@objc dynamic var lang: String     		= ""
+	var tags: List<Tag> = List<Tag>()
     
     override static func primaryKey() -> String? {
         return "id"
@@ -25,10 +25,10 @@ class Station: Object {
     func uniqString() -> String {
         return "\(id)"
     }
-    
-    func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
-    }
+}
+
+class Tag: RealmString {
+	
 }
 
 class Track: Object {
@@ -39,11 +39,19 @@ class Track: Object {
     @objc dynamic var url: String           = ""
     @objc dynamic var desc: String          = ""
     @objc dynamic var image: String         = ""
-    @objc dynamic var likeCount: Int        = 0
-    @objc dynamic var reportCount: Int      = 0
-    @objc dynamic var listenCount: Int      = 0
-    @objc dynamic var tagString: String     = ""
+	
+	@objc dynamic var length: Int     		= 0
+	@objc dynamic var coverURL: String     	= ""
+	@objc dynamic var trackURL: String     	= ""
+
+	@objc dynamic var likeCount: Int        = 0
+	@objc dynamic var reportCount: Int      = 0
+	@objc dynamic var listenCount: Int      = 0
+	
 	@objc dynamic var lang: String     		= ""
+	var tags: List<Tag> = List<Tag>()
+	
+
 
     /**
      * yyyy-mm-ddThh:mm:ss[.mmm]
@@ -56,10 +64,6 @@ class Track: Object {
     
     func uniqString() -> String {
         return "\(id)"
-    }
-    
-    func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
     }
 }
 extension Track {

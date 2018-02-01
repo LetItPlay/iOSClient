@@ -85,7 +85,7 @@ class ChannelTableViewCell: UITableViewCell {
 			subs.setData(data: Int64(channel?.subscriptionCount ?? 0))
 			plays.setData(data: Int64(channel?.trackCount ?? 0))
 			self.tagsList.removeAllTags()
-			if let tags = channel?.getTags().prefix(4) {
+			if let tags = channel?.tags.map({$0.value}).prefix(4) {
 				if tags.count != 0 {
 					tagsList.addTags(tags.map({$0.uppercased()}))
 					self.noTagsView.isHidden = true

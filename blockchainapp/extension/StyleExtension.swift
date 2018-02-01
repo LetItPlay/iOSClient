@@ -97,7 +97,7 @@ extension Date {
 		
 		if let day = components.day, day != 0 {
 			if day > 7 {
-				return "\(Int(ceil(Double(day)/7)))" + "w ago".localized
+				return "\(Int(Double(day)/7))" + "w ago".localized
 			}
 			return "\(day)" + "d ago".localized
 		} else

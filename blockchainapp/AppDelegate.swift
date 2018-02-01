@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 5,
+            schemaVersion: 6,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -73,6 +73,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					})
 				}
 				
+				if (oldSchemaVersion < 5) {
+					migration.enumerateObjects(ofType: "Track", { (old, new) in
+						if let tagString = old?["tagString"] as? String, let newObj = new?["tags"] as? Track {
+							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+								let rlmTag = Tag.init()
+								rlmTag.value = tag
+								return rlmTag
+							})
+							tags.forEach({ (tag) in
+								newObj.tags.append(tag)
+							})
+						}
+					})
+					migration.enumerateObjects(ofType: "Station", { (old, new) in
+						if let tagString = old?["tagString"] as? String, let newObj = new?["tags"] as? Track {
+							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+								let rlmTag = Tag.init()
+								rlmTag.value = tag
+								return rlmTag
+							})
+							tags.forEach({ (tag) in
+								newObj.tags.append(tag)
+							})
+						}
+					})
+				}
 		})
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config

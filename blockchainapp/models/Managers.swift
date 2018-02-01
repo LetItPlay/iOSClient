@@ -38,7 +38,7 @@ class DownloadManager {
     enum urlServices: String {
         case audiofiles = "https://manage.letitplay.io/api/audiofiles/"
         case stations = "https://api.letitplay.io/stations/"
-        case tracks = "https://api.letitplay.io/tracks/"
+        case tracks = "https://api.letitplay.io/tracks"
         case tracksForStations = "https://api.letitplay.io/tracks/stations/"
         case subForStations = "https://manage.letitplay.io/api/stations/%d/counts/"
         case forTracks = "https://manage.letitplay.io/api/tracks/%d/counts/"
@@ -71,14 +71,14 @@ class DownloadManager {
 					}
                     try realm.write {
                         for jStation in json.array ?? [] {
-                            if let idInt = jStation["id"].int {
+                            if let idInt = jStation["Id"].int {
                                 DBManager.shared.addOrUpdateStation(inRealm: realm,
                                                                     id: idInt,
-                                                                    name: jStation["name"].string ?? "",
-                                                                    image: jStation["image"].string ?? "",
-                                                                    subscriptionCount: jStation["subscription_count"].int ?? 0,
-                                                                    tags: jStation["tags"].string,
-																	lang: jStation["lang"].string ?? "ru")
+                                                                    name: jStation["Name"].string ?? "",
+                                                                    image: jStation["ImageURL"].string ?? "",
+                                                                    subscriptionCount: jStation["SubscriptionCount"].int ?? 0,
+                                                                    tags: jStation["Tags"].array?.map({$0.string}),
+																	lang: jStation["Lang"].string ?? "ru")
                             } else {
                                 print("ERROR: no id in \(jStation)")
                             }
@@ -94,8 +94,8 @@ class DownloadManager {
     }
     
 	func requestTracks(all: Bool = false, success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
-		let path = all ? urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) :
-	urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+		let path = /*all ?*/ urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) /* :
+	urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)*/
 		if let path = path, let url = URL(string: path) {
             
             let request = URLRequest(url: url)

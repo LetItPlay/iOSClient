@@ -250,14 +250,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
         //TODO: adding channel to playlist
-        if toBegining
-        {
-
-        }
-        else
-        {
-
-        }
+		self.presenter.addTrack(toBeggining: toBegining, for: indexPath.item)
 
         let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
 
