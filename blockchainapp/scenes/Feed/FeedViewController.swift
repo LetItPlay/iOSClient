@@ -186,7 +186,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 
   func showChannels(up: Bool)
   {
-      if animatedChannels
+      if animatedChannels && self.type == .popular
       {
           if up, self.channelsView.frame.origin.y != -136
           {
