@@ -10,6 +10,8 @@ import Foundation
 import SwiftyJSON
  
 import RealmSwift
+
+import RxSwift
 import Action
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
@@ -38,7 +40,7 @@ class DownloadManager {
     
     enum urlServices: String {
         case audiofiles = "https://manage.letitplay.io/api/audiofiles/"
-        case stations = "https://api.letitplay.io/stations/"
+        case stations = "https://api.letitplay.io/stations"
         case tracks = "https://api.letitplay.io/tracks"
         case tracksForStations = "https://api.letitplay.io/tracks/stations/"
         case subForStations = "https://manage.letitplay.io/api/stations/%d/counts/"
@@ -46,6 +48,67 @@ class DownloadManager {
     }
     
     static let shared = DownloadManager()
+	
+	func channelsSignal() -> Observable<[Station]> {
+		return Observable<[Station]>.create { (observer) -> Disposable in
+			
+			if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+				let url = URL(string: str) {
+				
+				let request = URLRequest(url: url)
+				let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+					
+					guard error == nil else {
+						observer.onError(error!)
+						return
+					}
+					
+					guard let data = data else {
+						observer.onError(NSError.init(domain: "", code: 42, userInfo: nil))
+						return
+					}
+					
+					do {
+						let json  = try JSON(data: data)
+						if let array = json.array {
+							let stations = array.map({ Station.init(json: $0) }).filter({$0 != nil}).map({$0!})
+							observer.onNext(stations)
+							let realm = try Realm()
+							try realm.write {
+								realm.delete(realm.objects(Station.self))
+							}
+							try realm.write {
+								realm.add(stations, update: true)
+//								for jStation in json.array ?? [] {
+//									if let idInt = jStation["Id"].int {
+//										DBManager.shared.addOrUpdateStation(inRealm: realm,
+//																			id: idInt,
+//																			name: jStation["Name"].string ?? "",
+//																			image: jStation["ImageURL"].string ?? "",
+//																			subscriptionCount: jStation["SubscriptionCount"].int ?? 0,
+//																			tags: jStation["Tags"].array?.map({$0.string}),
+//																			lang: jStation["Lang"].string ?? "ru")
+//									} else {
+//										print("ERROR: no id in \(jStation)")
+//									}
+//								}
+							}
+						}
+					} catch(let error) {
+						print(error)
+					}
+					observer.onCompleted()
+				})
+				task.resume()
+			} else {
+				observer.onError(NSError.init(domain: "", code: 42, userInfo: nil))
+			}
+			
+			return Disposables.create {
+				print("Channels sginal disposed")
+			}
+		}
+	}
 	
     func requestChannels(success: @escaping ChannelsLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
         if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
@@ -88,7 +151,7 @@ class DownloadManager {
                 } catch(let error) {
                     print(error)
                 }
-//                success(result)
+                 success([])
             })
             task.resume()
         }

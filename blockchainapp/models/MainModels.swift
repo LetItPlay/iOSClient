@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import SwiftyJSON
 
 class Station: Object {
     @objc dynamic var id: Int = 0
@@ -26,6 +27,34 @@ class Station: Object {
     func uniqString() -> String {
         return "\(id)"
     }
+	
+	convenience init?(json: JSON) {
+		if let id = json["Id"].int,
+			let name = json["Name"].string,
+			let image = json["ImageURL"].string,
+			let subscriptionCount = json["SubscriptionCount"].int,
+			let lang = json["Lang"].string{
+			
+			self.init()
+			self.id = id
+			self.name = name
+			self.image = image
+			self.subscriptionCount = subscriptionCount
+			self.lang = lang
+			if let tags = json["Tags"].array?.map({$0.string}) {
+				tags.forEach({ (tag) in
+					if let tag = tag {
+						let rlmTag = Tag()
+						rlmTag.value = tag
+						self.tags.append(rlmTag)
+					}
+				})
+			}
+			return
+		}
+		
+		return nil
+	}
 }
 
 class Tag: RealmString {
