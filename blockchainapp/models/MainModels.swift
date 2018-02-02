@@ -37,10 +37,9 @@ class Track: Object {
     @objc dynamic var station: Int          = 0
     @objc dynamic var name: String          = ""
     @objc dynamic var desc: String          = ""
+	
     @objc dynamic var image: String         = ""
-
 	@objc dynamic var length: Int64     		= 0
-	@objc dynamic var coverURL: String     	= ""
 	@objc dynamic var url: String           = ""
 
 
@@ -78,7 +77,7 @@ extension Track {
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: url, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
+		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}
 	
 	func audiotrackId() -> String {

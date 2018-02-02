@@ -17,6 +17,9 @@ target 'blockchainapp' do
   pod "MarqueeLabel/Swift"
   pod "ReachabilitySwift"
   
+  pod "RxSwift"
+  pod "Action"
+  
   pod 'SwipeCellKit'  
   
   #Crashlytics

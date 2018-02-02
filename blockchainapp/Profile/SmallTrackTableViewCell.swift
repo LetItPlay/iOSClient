@@ -58,7 +58,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
 			
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: Int64(track?.audiofile?.lengthSeconds ?? 0))
+			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
 		}
 	}
 	

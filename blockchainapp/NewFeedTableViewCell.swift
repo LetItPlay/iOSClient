@@ -18,12 +18,11 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 				iconImageView.image = nil
 			}
 			
-			if let iconUrl = track?.image.buildImageURL() {
-				mainPictureImageView.sd_setImage(with: iconUrl)
+			if let icon = track?.image, let url = URL(string: icon) {
+				mainPictureImageView.sd_setImage(with: url)
 			} else {
 				mainPictureImageView.image = nil
 			}
-			let maxTime = track?.audiofile?.lengthSeconds ?? 0
 			
 			trackTitleLabel.attributedText = type(of: self).title(text: track?.name ?? "")
 			infoTitle.text = track?.name ?? ""
@@ -35,7 +34,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 			
 			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: maxTime)
+			dataLabels[.time]?.setData(data: track?.length ?? 0)
 			
 			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
 //			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()

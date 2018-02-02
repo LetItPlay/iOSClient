@@ -74,34 +74,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				}
 				
 				if (oldSchemaVersion < 5) {
-					migration.enumerateObjects(ofType: "Track", { (old, new) in
-						if let tagString = old?["tagString"] as? String, let newObj = new?["tags"] as? Track {
-							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
-								let rlmTag = Tag.init()
-								rlmTag.value = tag
-								return rlmTag
-							})
-							tags.forEach({ (tag) in
-								newObj.tags.append(tag)
-							})
-							new["length"] = old["audiofile"]?["lengthSeconds"] as? Int ?? 0
-							new["coverURL"] = old["audiofile"]?["lengthSeconds"] as? String ?? ""
-							new["url"] = old["audiofile"]?["file"] as? String ?? ""
-						}
-					})
-					migration.enumerateObjects(ofType: "Station", { (old, new) in
-						if let tagString = old?["tagString"] as? String, let newObj = new?["tags"] as? Track {
-							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
-								let rlmTag = Tag.init()
-								rlmTag.value = tag
-								return rlmTag
-							})
-							tags.forEach({ (tag) in
-								newObj.tags.append(tag)
-							})
-							new["sourceURL"] = ""
-						}
-					})
+//					migration.enumerateObjects(ofType: "Track", { (old, new) in
+//						if let tagString = old?["tagString"] as? String, let newObj = new {
+//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+//								let rlmTag = Tag.init()
+//								rlmTag.value = tag
+//								return rlmTag
+//							})
+//							let list = List<Tag>.init()
+//							tags.forEach({ (tag) in
+//								list.append(tag)
+//							})
+//							newObj["tags"] = list
+//						}
+//						if let length = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? Int64,
+//							let cover = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? String,
+//							let url = (old?["audiofile"]as? MigrationObject)?["file"] as? String {
+//							new?["length"] = length
+//							new?["coverURL"] = cover
+//							new?["url"] = url
+//						} else {
+//							new?["length"] = 0
+//							new?["coverURL"] = ""
+//							new?["url"] = ""
+//						}
+//					})
+//					migration.enumerateObjects(ofType: "Station", { (old, new) in
+//						if let tagString = old?["tagString"] as? String, let newObj = new {
+//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+//								let rlmTag = Tag.init()
+//								rlmTag.value = tag
+//								return rlmTag
+//							})
+//							let list = List<Tag>.init()
+//							tags.forEach({ (tag) in
+//								list.append(tag)
+//							})
+//							newObj["tags"] = list
+//							new?["sourceURL"] = ""
+//						}
+//					})
+					(try? Realm.init())?.deleteAll()
 				}
 		})
         // Tell Realm to use this new configuration object for the default Realm

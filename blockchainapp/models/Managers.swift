@@ -10,6 +10,7 @@ import Foundation
 import SwiftyJSON
  
 import RealmSwift
+import Action
 
 typealias ChannelsLoaderSuccess = ([Station]) -> Void
 typealias TracksLoaderSuccess = ([Track]) -> Void
@@ -45,7 +46,7 @@ class DownloadManager {
     }
     
     static let shared = DownloadManager()
-    
+	
     func requestChannels(success: @escaping ChannelsLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
         if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
