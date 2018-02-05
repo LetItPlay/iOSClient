@@ -169,15 +169,8 @@ class FeedViewController: UIViewController, FeedViewProtocol {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-        //TODO: adding channel to playlist
-        if toBegining
-        {
-            
-        }
-        else
-        {
-            
-        }
+        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
+        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
         
         let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
         
