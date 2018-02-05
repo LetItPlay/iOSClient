@@ -18,14 +18,15 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 				iconImageView.image = nil
 			}
 			
-			if let iconUrl = track?.image.buildImageURL() {
-				mainPictureImageView.sd_setImage(with: iconUrl)
+			if let icon = track?.image, let url = URL(string: icon) {
+				mainPictureImageView.sd_setImage(with: url)
 			} else {
 				mainPictureImageView.image = nil
 			}
-			let maxTime = track?.audiofile?.lengthSeconds ?? 0
 			
 			trackTitleLabel.attributedText = type(of: self).title(text: track?.name ?? "")
+			infoTitle.text = track?.name ?? ""
+			infoText.text = track?.desc ?? ""
 //			trackTitleLabel.text = track?.name ?? ""
 			channelLabel.text = track?.findStationName()
 			
@@ -33,7 +34,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 			
 			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
 			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: maxTime)
+			dataLabels[.time]?.setData(data: track?.length ?? 0)
 			
 			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
 //			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
@@ -168,16 +169,16 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         return blurView
     }()
     
-    let infoTitle: UITextView = {
-       let textView = UITextView()
-        textView.font = AppFont.Title.sml
-        textView.textColor = .black
-        textView.backgroundColor = .clear
-        textView.isEditable = false
-        textView.isSelectable = false
-        textView.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
-        textView.sizeToFit()
-        return textView
+    let infoTitle: UILabel = {
+       let label = UILabel()
+        label.font = AppFont.Title.sml
+        label.textColor = .black
+        label.backgroundColor = .clear
+		label.lineBreakMode = NSLineBreakMode.byWordWrapping
+		label.numberOfLines = 2
+        label.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
+		label.sizeToFit()
+        return label
     }()
     
     let infoText: UITextView = {
@@ -317,7 +318,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
             make.top.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
-            make.height.equalTo(infoTitle.frame.size.height)
+//            make.height.equalTo(infoTitle.frame.size.height)
         }
         
         self.infoBlurView.contentView.addSubview(infoText)
@@ -327,6 +328,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
         }
+		infoText.setContentHuggingPriority(.init(999), for: .vertical)
         
         cellContentView.addSubview(infoBlurView)
         infoBlurView.snp.makeConstraints { (make) in

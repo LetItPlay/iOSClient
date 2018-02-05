@@ -7,11 +7,11 @@
 //
 
 import UIKit
-import LNPopupController
 
-class MainTabViewController: UITabBarController, AudioControllerPresenter {
-	
-	let vc = PopupController()
+class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
+		
+	let playerController = PlayerViewController()
+	var miniPlayerBottomConstr: NSLayoutConstraint?
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -20,7 +20,6 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build())),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
-			("Channels".localized, (UIImage.init(named: "channelsTab"), ChannelsBuilder.build())),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
@@ -29,23 +28,57 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter {
 			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})
+		
+		self.playerController.miniPlayer.presentationDelegate = self
+		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
+		self.playerController.miniPlayer.snp.makeConstraints { (make) in
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
+		}
+		playerController.modalPresentationStyle = .overFullScreen
+		
+		miniPlayerBottomConstr?.constant = 120
+		
+	}
+
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+	}
+	
+	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+	}
+	
+	func playerTapped() {
+//		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
+//		UIView.animate(withDuration: 0.5) {
+//			self.view.layoutIfNeeded()
+//		}
+		self.present(playerController, animated: true, completion: nil)
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
-		if show {
-			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
-				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
-			}
+//		if show {
+//			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
+//				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
+//			}
+//		} else {
+//			self.dismissPopupBar(animated: animated, completion: nil)
+//		}
+		if !show {
+			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
 		} else {
-			self.dismissPopupBar(animated: animated, completion: nil)
+			miniPlayerBottomConstr?.constant = 0
+		}
+		UIView.animate(withDuration: 0.5) {
+			self.view.layoutIfNeeded()
 		}
 	}
 	
 	func showPlaylist() {
-//		self.vc.openPopup(animated: true) {
-//			print("Player Opened")
-//		}
-		self.presentPopupBar(withContentViewController: vc, openPopup: true, animated: true, completion: nil)
+		self.present(playerController, animated: true, completion: nil)
+		self.playerController.showPlaylist()
 	}
 	
     override func viewDidLoad() {
@@ -90,6 +123,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
 //                && !AppManager.shared.audioManager.isPlaying {
 //                AppManager.shared.audioPlayer?.hidePlayer()
 //            }
+            
         }
     }
     

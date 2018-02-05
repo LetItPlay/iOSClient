@@ -49,6 +49,11 @@ extension UIFont {
 
 extension String {
     func buildImageURL() -> URL? {
+		
+		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
+			return URL(string: self)
+		}
+		
         var result = "https://manage.letitplay.io/"
         if !self.contains("uploads") {
             result += "uploads/"
@@ -97,7 +102,7 @@ extension Date {
 		
 		if let day = components.day, day != 0 {
 			if day > 7 {
-				return "\(Int(ceil(Double(day)/7)))" + "w ago".localized
+				return "\(Int(Double(day)/7))" + "w ago".localized
 			}
 			return "\(day)" + "d ago".localized
 		} else

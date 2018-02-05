@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()
-		
+
 		Fabric.with([Crashlytics.self])
         return true
     }
@@ -40,6 +40,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - appearence setup
     func setupAppearence() {
         UITabBar.appearance().tintColor = UIColor.vaActive
+        
+        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .highlighted)
+        BarButtonItemAppearance.tintColor = .red
     }
 	
 	func applicationWillEnterForeground(_ application: UIApplication) {
@@ -50,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 5,
+            schemaVersion: 6,
             
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -68,6 +73,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					})
 				}
 				
+				if (oldSchemaVersion < 5) {
+//					migration.enumerateObjects(ofType: "Track", { (old, new) in
+//						if let tagString = old?["tagString"] as? String, let newObj = new {
+//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+//								let rlmTag = Tag.init()
+//								rlmTag.value = tag
+//								return rlmTag
+//							})
+//							let list = List<Tag>.init()
+//							tags.forEach({ (tag) in
+//								list.append(tag)
+//							})
+//							newObj["tags"] = list
+//						}
+//						if let length = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? Int64,
+//							let cover = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? String,
+//							let url = (old?["audiofile"]as? MigrationObject)?["file"] as? String {
+//							new?["length"] = length
+//							new?["coverURL"] = cover
+//							new?["url"] = url
+//						} else {
+//							new?["length"] = 0
+//							new?["coverURL"] = ""
+//							new?["url"] = ""
+//						}
+//					})
+//					migration.enumerateObjects(ofType: "Station", { (old, new) in
+//						if let tagString = old?["tagString"] as? String, let newObj = new {
+//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
+//								let rlmTag = Tag.init()
+//								rlmTag.value = tag
+//								return rlmTag
+//							})
+//							let list = List<Tag>.init()
+//							tags.forEach({ (tag) in
+//								list.append(tag)
+//							})
+//							newObj["tags"] = list
+//							new?["sourceURL"] = ""
+//						}
+//					})
+					(try? Realm.init())?.deleteAll()
+				}
 		})
         // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config

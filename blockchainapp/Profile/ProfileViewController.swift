@@ -180,7 +180,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		tracks.setData(data: Int64(self.tracks.count))
 		
 		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.audiofile?.lengthSeconds ?? 0}).reduce(0, {$0 + $1})))
+		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
 		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in

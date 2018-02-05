@@ -74,7 +74,6 @@ class PlayerTrack: AudioTrack {
 //MARK: - Audio Controller Protocols
 protocol AudioControllerDelegate: class {
 	func updateTime(time: (current: Double, length: Double))
-	func volumeUpdate(value: Double)
 	func playState(isPlaying: Bool)
 	func trackUpdate()
 	func playlistChanged()
@@ -104,7 +103,7 @@ protocol AudioControllerProtocol: class {
 
 //MARK: - Audio Player Protocols
 protocol AudioPlayerProto {
-	weak var delegate: AudioPlayerDelegate1? {get set}
+	weak var delegate: AudioPlayerDelegate? {get set}
 	var currentIndex: Int {get}
 	var status: PlayerStatus {get}
 	var error: Error? {get}
@@ -116,7 +115,7 @@ protocol AudioPlayerProto {
 	init()
 }
 
-protocol AudioPlayerDelegate1: class {
+protocol AudioPlayerDelegate: class {
 	func update(status: PlayerStatus, id: String)
 	func update(time: AudioTime)
 	func itemFinishedPlaying(id: String)

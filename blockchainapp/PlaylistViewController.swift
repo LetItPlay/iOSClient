@@ -1,37 +1,49 @@
 //
-//  PlaylistView.swift
+//  PlaylistViewController.swift
 //  blockchainapp
 //
-//  Created by Aleksey Tyurnin on 06/12/2017.
-//  Copyright © 2017 Ivan Gorbulin. All rights reserved.
+//  Created by Aleksey Tyurnin on 25/01/2018.
+//  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import UIKit
+import SnapKit
 
-class PlaylistView: UIView {
-	
-	let tableView: UITableView = UITableView.init(frame: .zero, style: .grouped)
+class PlaylistViewController: UIViewController {
+
+	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
 	var currentIndex: IndexPath = IndexPath.invalid
 	
-	convenience init() {
-		self.init(frame: CGRect.zero)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+		self.view.backgroundColor = .white
 		
-		self.addSubview(tableView)
+		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
+			make.top.equalToSuperview().inset(60)
+			make.left.equalToSuperview()
+			make.right.equalToSuperview()
+			make.bottom.equalToSuperview()
 		}
+		
 		tableView.delegate = self
 		tableView.dataSource = self
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
-
+		
 		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
-	}
+        // Do any additional setup after loading the view.
+    }
 
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 }
 
-extension PlaylistView: UITableViewDelegate, UITableViewDataSource {
+extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return self.tracks.count

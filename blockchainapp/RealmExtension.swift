@@ -42,3 +42,11 @@ extension Object: DetachableObject {
 	}
 	
 }
+
+class RealmString: Object {
+	@objc dynamic var value: String = ""
+	
+	override static func primaryKey() -> String? {
+		return "value"
+	}
+}

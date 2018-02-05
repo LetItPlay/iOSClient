@@ -8,15 +8,17 @@
 
 import Foundation
 import RealmSwift
+import SwiftyJSON
 
 class Station: Object {
     @objc dynamic var id: Int = 0
     @objc dynamic var name: String = ""
     @objc dynamic var image: String = ""
-    @objc dynamic var subscriptionCount: Int = 0
-    @objc dynamic var tagString: String = ""
+	@objc dynamic var sourceURL: String = ""
+	@objc dynamic var subscriptionCount: Int = 0
 	@objc dynamic var trackCount: Int = 0
 	@objc dynamic var lang: String     		= ""
+	var tags: List<Tag> = List<Tag>()
     
     override static func primaryKey() -> String? {
         return "id"
@@ -25,25 +27,59 @@ class Station: Object {
     func uniqString() -> String {
         return "\(id)"
     }
-    
-    func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
-    }
+	
+	convenience init?(json: JSON) {
+		if let id = json["Id"].int,
+			let name = json["Name"].string,
+			let image = json["ImageURL"].string?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed),
+			let subscriptionCount = json["SubscriptionCount"].int,
+			let lang = json["Lang"].string{
+			
+			self.init()
+			self.id = id
+			self.name = name
+			self.image = image
+			self.subscriptionCount = subscriptionCount
+			self.lang = lang
+			if let tags = json["Tags"].array?.map({$0.string}) {
+				tags.forEach({ (tag) in
+					if let tag = tag {
+						let rlmTag = Tag()
+						rlmTag.value = tag
+						self.tags.append(rlmTag)
+					}
+				})
+			}
+			return
+		}
+		
+		return nil
+	}
+}
+
+class Tag: RealmString {
+	
 }
 
 class Track: Object {
     @objc dynamic var id: Int               = 0
     @objc dynamic var station: Int          = 0
-    @objc dynamic var audiofile: Audiofile? = nil
     @objc dynamic var name: String          = ""
-    @objc dynamic var url: String           = ""
     @objc dynamic var desc: String          = ""
+	
     @objc dynamic var image: String         = ""
-    @objc dynamic var likeCount: Int        = 0
-    @objc dynamic var reportCount: Int      = 0
-    @objc dynamic var listenCount: Int      = 0
-    @objc dynamic var tagString: String     = ""
+	@objc dynamic var length: Int64     		= 0
+	@objc dynamic var url: String           = ""
+
+
+	@objc dynamic var likeCount: Int        = 0
+	@objc dynamic var reportCount: Int      = 0
+	@objc dynamic var listenCount: Int      = 0
+	
 	@objc dynamic var lang: String     		= ""
+	var tags: List<Tag> = List<Tag>()
+	
+
 
     /**
      * yyyy-mm-ddThh:mm:ss[.mmm]
@@ -56,10 +92,6 @@ class Track: Object {
     
     func uniqString() -> String {
         return "\(id)"
-    }
-    
-    func getTags() -> [String] {
-        return tagString.split(separator: ",").map{ String($0.trimmingCharacters(in: .whitespacesAndNewlines)) }
     }
 }
 extension Track {
@@ -74,16 +106,10 @@ extension Track {
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: (self.audiofile?.file.buildImageURL())!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.audiofile?.lengthSeconds ?? 0)
+		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}
 	
 	func audiotrackId() -> String {
 		return "\(self.id)"
 	}
-}
-
-class Audiofile: Object {
-    @objc dynamic var file: String = ""
-    @objc dynamic var lengthSeconds: Int64 = 0
-    @objc dynamic var sizeBytes: Int64 = 0
 }

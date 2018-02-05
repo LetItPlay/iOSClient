@@ -9,6 +9,7 @@
 import Foundation
  
 import RealmSwift
+import RxSwift
 
 class FeedPresenter: FeedPresenterProtocol {	
     
@@ -67,6 +68,7 @@ class FeedPresenter: FeedPresenterProtocol {
 				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
                 // Query results have changed, so apply them to the UITableView
+                let oldTracks = self?.tracks.count ?? 0
 				self?.tracks = Array(results).filter(filter).sorted(by: { (first, second) -> Bool in
 					if let res = self?.sort(first, second) {
 						return res
@@ -76,7 +78,8 @@ class FeedPresenter: FeedPresenterProtocol {
 				}).map({$0})
                 
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController && self?.isFeed == true {
-                    AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = insertions.isEmpty ? nil : "\(insertions.count)"
+                    let new = (self?.tracks.count ?? 0) - oldTracks
+                    AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = new == 0 ? nil : "\(new)"
                 }
 				let update = modifications.map({ (index) -> Int? in
 					return self?.tracks.index(where: {$0.id == results[index].id})
@@ -157,14 +160,17 @@ class FeedPresenter: FeedPresenterProtocol {
 			
         }
     }
-    
+	
+	let disposeBag = DisposeBag()
+	
     func getData(onComplete: @escaping TrackResult) {
-        
-		DownloadManager.shared.requestTracks(all: !isFeed, success: { (feed) in
-            
-        }) { (err) in
-            
-        }
+		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).subscribe( onCompleted: {
+			DownloadManager.shared.requestTracks(all: !self.isFeed, success: { (feed) in
+				
+			}) { (err) in
+				
+			}
+		}).disposed(by: self.disposeBag)
     }
 	
 	func play(index: Int) {
@@ -179,6 +185,10 @@ class FeedPresenter: FeedPresenterProtocol {
 		if index < self.tracks.count {
 			LikeManager.shared.addOrDelete(id: self.tracks[index].id)
 		}
+	}
+	
+	func addTrack(toBeggining: Bool, for index: Int) {
+		
 	}
     
     func like(trackUID: Int) {
