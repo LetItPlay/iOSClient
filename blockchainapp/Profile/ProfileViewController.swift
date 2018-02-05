@@ -14,6 +14,7 @@ class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
 	let profileView = ProfileTopView()
+    let imagePicker = UIImagePickerController()
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
@@ -29,7 +30,15 @@ class ProfileViewController: UIViewController {
 		tableView.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview()
 		}
-		
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
+        
+        self.view.addGestureRecognizer(tap)
+        
+        imagePicker.delegate = self
+        profileView.delegate = self
 		tableView.tableHeaderView = profileView
 		tableView.contentInset.bottom = 72
 		
@@ -72,6 +81,18 @@ class ProfileViewController: UIViewController {
 		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
 		self.profileView.logoutButton.isSelected = UserSettings.language == .en
 	}
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
+    }
+    
+    @objc func dismissKeyboard(_ sender: Any) {
+        view.endEditing(true)
+        let height = sender is UITapGestureRecognizer ? 0 : 100
+        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
+        UserSettings.name = self.profileView.profileNameLabel.text!
+        self.profileView.updateData()
+    }
 	
 	@objc func langChanged(_: UIButton) {
 		if self.profileView.logoutButton.isSelected {
@@ -94,7 +115,6 @@ class ProfileViewController: UIViewController {
 	@objc func settingsChanged(notification: Notification) {
 		self.reloadData()
 	}
-	
 	
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
@@ -128,21 +148,66 @@ class ProfileViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
+
+extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
+{
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func addImage() {
+        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            self.openCamera()
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+            self.openGallery()
+        }))
+        
+        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
-    */
-
+    
+    func openCamera()
+    {
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
+        {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
+//            imagePicker.allowsEditing = true
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+        else
+        {
+            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func openGallery()
+    {
+        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+//        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true, completion: {
+        })
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            UserSettings.image = UIImagePNGRepresentation(pickedImage)!
+        }
+        
+        dismiss(animated: true, completion: nil)
+        self.profileView.updateData()
+    }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.dismissKeyboard(scrollView)
+    }
+    
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return 1
 	}
@@ -231,24 +296,32 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.tracks[indexPath.item]
 		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
-	}}
+	}
+}
+
+protocol ProfileViewDelegate {
+    func addImage()
+}
 
 class ProfileTopView: UIView {
 	
+    var delegate: ProfileViewDelegate?
+    
 	let profileImageView: UIImageView = UIImageView()
-	let bluredimageView: UIImageView = UIImageView()
+	let bluredImageView: UIImageView = UIImageView()
 	let profileNameLabel: UITextField = UITextField()
 	let changePhotoButton: UIButton = UIButton()
 	let logoutButton: UIButton = UIButton()
 	
 	init() {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
+		self.updateData()
+        
+		bluredImageView.layer.cornerRadius = 140
+		bluredImageView.layer.masksToBounds = true
 		
-		bluredimageView.layer.cornerRadius = 140
-		bluredimageView.layer.masksToBounds = true
-		
-		self.addSubview(bluredimageView)
-		bluredimageView.snp.makeConstraints { (make) in
+		self.addSubview(bluredImageView)
+		bluredImageView.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()
 			make.top.equalToSuperview().inset(68)
 			make.width.equalTo(260)
@@ -279,18 +352,18 @@ class ProfileTopView: UIView {
 		profileImageView.layer.shouldRasterize = true
 		profileImageView.contentMode = .scaleAspectFill
 		
-		profileImageView.image = UIImage(named: "placeholder")
-		bluredimageView.image = UIImage(named: "placeholder")
-		
-//		blur.contentView.addSubview(self.changePhotoButton)
-//		self.changePhotoButton.snp.makeConstraints { (make) in
-//			make.right.equalTo(profileImageView)
-//			make.bottom.equalTo(profileImageView).inset(30)
-//			make.width.equalTo(40)
-//			make.height.equalTo(40)
-//		}
-//
-//		changePhotoButton.layer.cornerRadius = 20
+        blur.contentView.addSubview(self.changePhotoButton)
+        self.changePhotoButton.snp.makeConstraints { (make) in
+            make.right.equalTo(profileImageView)
+            make.bottom.equalTo(profileImageView).inset(30)
+            make.width.equalTo(40)
+            make.height.equalTo(40)
+        }
+
+        changePhotoButton.layer.cornerRadius = 20
+        changePhotoButton.setImage(UIImage.init(named: "editPhotoInactive"), for: .normal)
+        changePhotoButton.backgroundColor = .red
+        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
 
 		blur.contentView.addSubview(profileNameLabel)
 		profileNameLabel.snp.makeConstraints { (make) in
@@ -300,10 +373,8 @@ class ProfileTopView: UIView {
 			make.left.equalTo(profileImageView.snp.left)
 		}
 		
-		profileNameLabel.text = "Your future profile".localized
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
-		profileNameLabel.isUserInteractionEnabled = false
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
@@ -338,6 +409,25 @@ class ProfileTopView: UIView {
 		
 		
 	}
+    
+    func updateData()
+    {
+        if UserSettings.name != "name"
+        {
+            profileNameLabel.text = UserSettings.name
+        }
+        else
+        {
+            profileNameLabel.placeholder = "name"
+        }
+        
+        profileImageView.image = UIImage.init(data: UserSettings.image)
+        bluredImageView.image = UIImage.init(data: UserSettings.image)
+    }
+    
+    @objc func changePhotoButtonTapped(_ sender: Any) {
+        delegate?.addImage()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
