@@ -253,6 +253,20 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
+        if tappedSideButton {
+            if toBegining {
+                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .left))
+            } else {
+                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .right))
+            }
+            tappedSideButton = false
+        } else {
+            if toBegining {
+                AnalyticsEngine.sendEvent(event: .swipe(direction: .left))
+            } else {
+                AnalyticsEngine.sendEvent(event: .swipe(direction: .right))
+            }
+        }
         let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
         AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
         
@@ -370,6 +384,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         
         addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
         addToPlaylistAction.font = AppFont.Title.big
+        addToPlaylistAction.delegate = self
         
         return [addToPlaylistAction]
     }
@@ -383,5 +398,13 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.backgroundColor = .white
         
         return options
+    }
+}
+
+extension FeedViewController: SwipeDelegate
+{
+    func buttonTapped()
+    {
+        tappedSideButton = true
     }
 }

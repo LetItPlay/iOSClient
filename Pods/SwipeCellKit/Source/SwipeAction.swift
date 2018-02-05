@@ -7,6 +7,10 @@
 
 import UIKit
 
+public protocol SwipeDelegate {
+    func buttonTapped()
+}
+
 /// Constants that help define the appearance of action buttons.
 public enum SwipeActionStyle: Int {
     /// Apply a style that reflects standard non-destructive actions.
@@ -22,6 +26,8 @@ public enum SwipeActionStyle: Int {
  This class lets you define one or more custom actions to display for a given row in your table. Each instance of this class represents a single action to perform and includes the text, formatting information, and behavior for the corresponding button.
  */
 public class SwipeAction: NSObject {
+    
+    public var delegate: SwipeDelegate?
     /// An optional unique action identifier.
     public var identifier: String?
     
