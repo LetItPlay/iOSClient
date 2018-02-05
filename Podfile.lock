@@ -1,5 +1,4 @@
 PODS:
-  - ARNTransitionAnimator (3.0.1)
   - Crashlytics (3.9.3):
     - Fabric (~> 1.7.2)
   - DynamicBlurView (2.0.2)
@@ -21,7 +20,6 @@ PODS:
   - TagListView (1.3.0)
 
 DEPENDENCIES:
-  - ARNTransitionAnimator
   - Crashlytics
   - DynamicBlurView
   - Fabric
@@ -36,7 +34,6 @@ DEPENDENCIES:
   - TagListView
 
 SPEC CHECKSUMS:
-  ARNTransitionAnimator: 26f24acc0e2fd5134596ece6f9479c36cfcfce68
   Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
@@ -51,6 +48,6 @@ SPEC CHECKSUMS:
   SwipeCellKit: 76888d93d1843dc568fdf38fff21b15dbbcf6b28
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: d986fcca26c55c8038c526b397f510821227b157
+PODFILE CHECKSUM: 0ac313053532fb2b80b5ed696ce2546638dd3738
 
 COCOAPODS: 1.3.1

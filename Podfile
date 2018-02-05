@@ -17,7 +17,7 @@ target 'blockchainapp' do
   pod "MarqueeLabel/Swift"
   pod "ReachabilitySwift"
   
-  pod 'SwipeCellKit'  
+  pod 'SwipeCellKit', :inhibit_warnings => true
   
   #Crashlytics
   pod 'Fabric'
