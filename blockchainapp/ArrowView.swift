@@ -16,7 +16,6 @@ class ArrowView: UIView {
         left.masksToBounds = true
         left.cornerRadius = 3
         
-//        self.backgroundColor = .gray
         right.backgroundColor = UIColor.gray.cgColor
         left.backgroundColor = UIColor.gray.cgColor
         
