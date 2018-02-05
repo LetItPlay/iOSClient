@@ -20,6 +20,7 @@ protocol FeedPresenterProtocol: class {
 	
 	func play(index: Int)
 	func like(index: Int)
+	func addTrack(toBeggining: Bool, for index: Int)
 }
 
 protocol FeedViewProtocol: class {

@@ -59,7 +59,7 @@ class ChannelsCell: UITableViewCell {
             nameLabel.text = channel?.name
             subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
 			self.tagsView.removeAllTags()
-			if let tags = channel?.getTags().prefix(4) {
+			if let tags = channel?.tags.map({$0.value}).prefix(4) {
 				if tags.count != 0 {
 					self.tagsView.addTags(tags.map({$0.uppercased()}))
 					self.noTagsView.isHidden = true
@@ -97,7 +97,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)

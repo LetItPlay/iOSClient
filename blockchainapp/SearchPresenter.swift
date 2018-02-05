@@ -101,10 +101,10 @@ class SearchPresenter {
 			trackSelection = trackSelection.sorted(by: {$0.publishedAt > $1.publishedAt})
 			var res = [Track]()
 			for track in trackSelection {
-				if let length = track.audiofile?.lengthSeconds, length < Int64(7*60), track.audiofile?.file != "" || track.audiofile?.file != nil, track.lang == UserSettings.language.rawValue {
-					if maxlength + length < Int64(60*33) {
+				if track.length < Int64(7*60) && track.length > 0, track.url != "", track.lang == UserSettings.language.rawValue {
+					if maxlength + track.length < Int64(60*33) {
 						res.append(track)
-						maxlength += length
+						maxlength += track.length
 					} else {
 						break
 					}

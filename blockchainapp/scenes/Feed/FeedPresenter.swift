@@ -9,6 +9,7 @@
 import Foundation
  
 import RealmSwift
+import RxSwift
 
 class FeedPresenter: FeedPresenterProtocol {	
     
@@ -157,14 +158,17 @@ class FeedPresenter: FeedPresenterProtocol {
 			
         }
     }
-    
+	
+	let disposeBag = DisposeBag()
+	
     func getData(onComplete: @escaping TrackResult) {
-        
-		DownloadManager.shared.requestTracks(all: !isFeed, success: { (feed) in
-            
-        }) { (err) in
-            
-        }
+		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).subscribe( onCompleted: {
+			DownloadManager.shared.requestTracks(all: !self.isFeed, success: { (feed) in
+				
+			}) { (err) in
+				
+			}
+		}).disposed(by: self.disposeBag)
     }
 	
 	func play(index: Int) {
@@ -179,6 +183,10 @@ class FeedPresenter: FeedPresenterProtocol {
 		if index < self.tracks.count {
 			LikeManager.shared.addOrDelete(id: self.tracks[index].id)
 		}
+	}
+	
+	func addTrack(toBeggining: Bool, for index: Int) {
+		
 	}
     
     func like(trackUID: Int) {
