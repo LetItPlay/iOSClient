@@ -20,7 +20,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let playlist: PlaylistViewController = PlaylistViewController()
 	
 	var mask: CAShapeLayer!
-	
+	let ind = ArrowView()
+    
 	init() {
 		super.init(nibName: nil, bundle: nil)
 		
@@ -46,9 +47,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		self.transitioningDelegate = self
 		
-		let ind = UIView()
 		self.view.addSubview(ind)
-		ind.backgroundColor = .red
 		ind.snp.makeConstraints { (make) in
 			make.width.equalTo(37)
 			make.height.equalTo(12)
@@ -139,6 +138,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 			} else if point.y < threshhold + 20 {
 				self.view.frame.origin.y = point.y - acc*point.y
 			}
+            self.ind.setFlat(true, animated: true)
 			break
 		case .ended:
 			let point = gesture.translation(in: self.view)
@@ -146,6 +146,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 				self.dismiss(animated: true, completion: {
 					self.view.frame.origin.y = 0.0
 					print("Player dismissed")
+                    self.ind.setFlat(false, animated: true)
 				})
 			} else {
 				UIApplication.shared.beginIgnoringInteractionEvents()
@@ -153,6 +154,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 					self.view.frame.origin.y = 0.0
 				}, completion: { (completed) in
 					UIApplication.shared.endIgnoringInteractionEvents()
+                    self.ind.setFlat(false, animated: true)
 				})
 			}
 		default:
