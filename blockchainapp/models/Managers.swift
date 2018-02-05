@@ -75,9 +75,7 @@ class DownloadManager {
 							observer.onNext(stations)
 							let realm = try Realm()
 							try realm.write {
-								realm.delete(realm.objects(Station.self))
-							}
-							try realm.write {
+                                realm.delete(realm.objects(Station.self))
 								realm.add(stations, update: true)
 //								for jStation in json.array ?? [] {
 //									if let idInt = jStation["Id"].int {
@@ -179,6 +177,7 @@ class DownloadManager {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
                     try realm.write {
+                        realm.delete(realm.objects(Track.self))
                         for jTrack in json.array ?? [] {
 							DBManager.shared.track(fromJSON: jTrack, realm: realm)
                         }
