@@ -31,7 +31,7 @@ class Station: Object {
 	convenience init?(json: JSON) {
 		if let id = json["Id"].int,
 			let name = json["Name"].string,
-			let image = json["ImageURL"].string,
+			let image = json["ImageURL"].string?.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed),
 			let subscriptionCount = json["SubscriptionCount"].int,
 			let lang = json["Lang"].string{
 			

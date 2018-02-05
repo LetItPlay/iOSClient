@@ -22,7 +22,7 @@ class DBManager {
 	func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
         if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &station.name, new: name)
-            _ = updateIfNeeded(property: &station.image, new: image)
+            _ = updateIfNeeded(property: &station.image, new: image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
 			_ = updateIfNeeded(property: &station.lang, new: lang)
 			_ = updateIfNeeded(property: &station.trackCount, new: inRealm.objects(Track.self).filter("station == \(id)").count)
@@ -40,7 +40,7 @@ class DBManager {
             let newStat = Station()
             newStat.id = id
             newStat.name = name
-            newStat.image = image
+            newStat.image = image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             newStat.subscriptionCount = subscriptionCount
 			if let tags = tags {
 				tags.forEach({ (tag) in
@@ -101,11 +101,12 @@ class DBManager {
             newTrack.id = id
             newTrack.station   = station
             newTrack.name = name
-            newTrack.url  = url
+            newTrack.url  = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             newTrack.desc = description
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
+            newTrack.image = coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
 				tags.forEach({ (tag) in

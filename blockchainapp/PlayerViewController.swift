@@ -138,7 +138,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 			} else if point.y < threshhold + 20 {
 				self.view.frame.origin.y = point.y - acc*point.y
 			}
-            self.ind.setFlat(true, animated: true)
+            let velo = gesture.velocity(in: self.view)
+            if velo.y > 0 {
+                self.ind.setFlat(true, animated: true)
+            }
 			break
 		case .ended:
 			let point = gesture.translation(in: self.view)
