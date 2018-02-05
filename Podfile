@@ -22,6 +22,7 @@ target 'blockchainapp' do
   pod "Action"
   
   pod 'SwipeCellKit', :inhibit_warnings => true
+
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'

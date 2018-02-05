@@ -249,9 +249,9 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-        //TODO: adding channel to playlist
-		self.presenter.addTrack(toBeggining: toBegining, for: indexPath.item)
-
+        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
+        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
+        
         let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
 
         UIView.animate(withDuration: 0.3, animations: {

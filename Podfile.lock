@@ -27,6 +27,7 @@ PODS:
   - TagListView (1.3.0)
 
 DEPENDENCIES:
+
   - AssistantKit
   - Action
   - Crashlytics
@@ -44,6 +45,7 @@ DEPENDENCIES:
   - TagListView
 
 SPEC CHECKSUMS:
+
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
   Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
@@ -63,6 +65,5 @@ SPEC CHECKSUMS:
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
 PODFILE CHECKSUM: 8a52b8af591706083a572b8b2a7506668155f97a
-
 
 COCOAPODS: 1.3.1

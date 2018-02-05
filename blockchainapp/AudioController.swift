@@ -154,14 +154,29 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	}
 	
 	func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {
-		if !self.userPlaylist.tracks.contains(where: {$0.id == track.id}) {
-			var userIndexInsert = -1
-			if inBeginning {
-				
-			} else {
-				self.userPlaylist.tracks.append(track)
-			}
-		}
+        if !self.userPlaylist.tracks.contains(where: {$0.id == track.id}) {
+            var userIndexInsert = 0
+            
+            if self.currentTrack != nil
+            {
+                self.userPlaylist.tracks.insert(self.currentTrack!, at: 0)
+                self.currentTrackIndexPath = [0, 0]
+                self.playlist.tracks.remove(at: currentTrackIndexPath.row)
+                userIndexInsert += 1
+            }
+            
+            if inBeginning {
+                self.userPlaylist.tracks.insert(track, at: userIndexInsert)
+            } else {
+                self.userPlaylist.tracks.append(track)
+            }
+        
+//            if let index = self.playlist.tracks.index(where: {$0.id == track.id})
+//            {
+//                self.playlist.tracks.remove(at: index)
+//            }
+            self.delegate?.playlistChanged()
+        }
 	}
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
