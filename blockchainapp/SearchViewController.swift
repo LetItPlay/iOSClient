@@ -102,6 +102,14 @@ SearchPresenterDelegate {
 		self.searchResultsTableView.reloadRows(at: tracks.map({IndexPath.init(row: $0, section: 1)}), with: .none)
 		self.searchResultsTableView.reloadRows(at: channels.map({IndexPath.init(row: $0, section: 0)}), with: .none)
 	}
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.presenter.currentSearchString != "" {
+            AnalyticsEngine.sendEvent(event: .searchEvent(event: .search(text: self.presenter.currentSearchString)))
+        }
+    }
 }
 
 class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
@@ -193,10 +201,12 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if indexPath.section == 0 {
+            AnalyticsEngine.sendEvent(event: .searchEvent(event: .playlistTapped))
 			let station = self.presenter.channels[indexPath.row]
 			let vc = ChannelViewController(station: station)
 			self.parent?.navigationController?.pushViewController(vc, animated: true)
 		} else {
+            AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
 			self.presenter.trackSelected(index: indexPath.item)
 		}
 	}

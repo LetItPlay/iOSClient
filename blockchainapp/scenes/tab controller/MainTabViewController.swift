@@ -112,6 +112,7 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        self.tabSelected(controller: controllersNames[tabBarController.selectedIndex])
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
         if let nc = viewController as? UINavigationController,
             let root = nc.viewControllers.first {
@@ -127,4 +128,10 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
         }
     }
     
+    let controllersNames = ["Feed", "Trends", "Search", "Channels", "Profile"]
+    
+    func tabSelected(controller: String)
+    {
+        AnalyticsEngine.sendEvent(event: .tabSelected(controller: controller))
+    }
 }
