@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */; };
-		01321B661FCDADFF009BFE62 /* LNPopupController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; };
-		01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B601FCDADEB009BFE62 /* LNPopupController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01321B691FCDB89C009BFE62 /* PopupController.swift */; };
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
 		014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014761132010620F006E3373 /* PlayerTableViewCell.swift */; };
 		015088842006472200E42F7D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015088832006472200E42F7D /* AudioPlayer.swift */; };
@@ -21,7 +18,6 @@
 		0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */; };
 		0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129B1FD70561002828F5 /* ChannelsBuilder.swift */; };
 		0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129D1FD70793002828F5 /* FeedBuilders.swift */; };
-		015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0158129F1FD7B25A002828F5 /* PlaylistView.swift */; };
 		015812A21FD80AF1002828F5 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812A11FD80AF1002828F5 /* AudioController.swift */; };
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
@@ -36,11 +32,15 @@
 		01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991B1FE8DBB00016060E /* UserSettings.swift */; };
 		01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
-		01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31641FD1596400FB2B9E /* PlayerView.swift */; };
+		01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */; };
+		01EFC873201A21D6005321B9 /* PlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC872201A21D6005321B9 /* PlayerViewController.swift */; };
+		01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC874201A240B005321B9 /* MainPlayerViewController.swift */; };
+		01EFC877201A2421005321B9 /* PlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC876201A2421005321B9 /* PlaylistViewController.swift */; };
 		01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01FF31661FD16FBA00FB2B9E /* Assets.xcassets */; };
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
+		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
 		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
@@ -89,7 +89,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				01321B671FCDADFF009BFE62 /* LNPopupController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -97,9 +96,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		01321B601FCDADEB009BFE62 /* LNPopupController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LNPopupController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		01321B691FCDB89C009BFE62 /* PopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupController.swift; sourceTree = "<group>"; };
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
 		014761132010620F006E3373 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		015088832006472200E42F7D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -110,7 +107,6 @@
 		015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTableViewCell.swift; sourceTree = "<group>"; };
 		0158129B1FD70561002828F5 /* ChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsBuilder.swift; sourceTree = "<group>"; };
 		0158129D1FD70793002828F5 /* FeedBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedBuilders.swift; sourceTree = "<group>"; };
-		0158129F1FD7B25A002828F5 /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
 		015812A11FD80AF1002828F5 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
@@ -125,11 +121,15 @@
 		01E1991B1FE8DBB00016060E /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
-		01FF31641FD1596400FB2B9E /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		01EFC872201A21D6005321B9 /* PlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		01EFC874201A240B005321B9 /* MainPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerViewController.swift; sourceTree = "<group>"; };
+		01EFC876201A2421005321B9 /* PlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewController.swift; sourceTree = "<group>"; };
 		01FF31661FD16FBA00FB2B9E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,7 +172,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
-				01321B661FCDADFF009BFE62 /* LNPopupController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,10 +395,12 @@
 		CF44536E1F5D787A00660474 /* player */ = {
 			isa = PBXGroup;
 			children = (
-				01321B691FCDB89C009BFE62 /* PopupController.swift */,
-				01FF31641FD1596400FB2B9E /* PlayerView.swift */,
-				0158129F1FD7B25A002828F5 /* PlaylistView.swift */,
 				014761132010620F006E3373 /* PlayerTableViewCell.swift */,
+				01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */,
+				01EFC872201A21D6005321B9 /* PlayerViewController.swift */,
+				01EFC874201A240B005321B9 /* MainPlayerViewController.swift */,
+				01EFC876201A2421005321B9 /* PlaylistViewController.swift */,
+				2CEBFBC9202827C700523FDE /* ArrowView.swift */,
 			);
 			name = player;
 			sourceTree = "<group>";
@@ -425,7 +426,6 @@
 			isa = PBXGroup;
 			children = (
 				01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */,
-				01321B601FCDADEB009BFE62 /* LNPopupController.framework */,
 				68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */,
 			);
 			name = Frameworks;
@@ -609,6 +609,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AssistantKit/AssistantKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Action/Action.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
@@ -626,6 +627,7 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AssistantKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Action.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
@@ -685,8 +687,8 @@
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
 				01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */,
+				01EFC877201A2421005321B9 /* PlaylistViewController.swift in Sources */,
 				0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */,
-				01FF31651FD1596400FB2B9E /* PlayerView.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
@@ -695,10 +697,10 @@
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
 				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,
+				01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
-				01321B6A1FCDB89C009BFE62 /* PopupController.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */,
@@ -706,10 +708,12 @@
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
+				01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
 				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
+				2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */,
+				01EFC873201A21D6005321B9 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
-				015812A01FD7B25B002828F5 /* PlaylistView.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,
@@ -883,7 +887,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -908,7 +912,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 39;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

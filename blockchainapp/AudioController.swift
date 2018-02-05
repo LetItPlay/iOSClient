@@ -13,7 +13,7 @@ import SDWebImage
 import UIKit
 import MediaPlayer
 
-class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
+class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	
 	enum AudioStateNotification: String {
 		case playing = "Playing",
@@ -27,7 +27,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate1 {
 	
 	static let main = AudioController()
 	
-	let player = AudioPlayer2()
+	let player = AudioPlayer()
 	
 	weak var delegate: AudioControllerDelegate?
 	weak var popupDelegate: AudioControllerPresenter?
