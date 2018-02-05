@@ -83,6 +83,7 @@ class ProfileViewController: UIViewController {
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .name))
         tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
     }
     
@@ -152,7 +153,6 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
-    
     func addImage() {
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
@@ -228,6 +228,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
 		let contr = AudioController.main
 		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
 	}
@@ -426,6 +427,7 @@ class ProfileTopView: UIView {
     }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .avatar))
         delegate?.addImage()
     }
 	

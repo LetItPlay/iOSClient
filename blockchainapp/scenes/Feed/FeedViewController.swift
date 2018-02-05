@@ -38,6 +38,8 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		label.text = "There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab".localized
 		return label
 	}()
+    
+    var tappedSideButton = false
 	
 	convenience init(type: FeedType) {
 		self.init(nibName: nil, bundle: nil)
@@ -225,7 +227,6 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
         
         if longPressGestureRecognizer.state == .began {
-            
             let touchPoint = longPressGestureRecognizer.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
                 let cell = tableView.cellForRow(at: indexPath)
@@ -237,11 +238,13 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
                 if self.previousCell == cell
                 {
                     previousCell = nil
+                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
                     (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
                     previousCell = cell as? NewFeedTableViewCell
+                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
                     (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
@@ -344,23 +347,23 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 extension FeedViewController: SwipeTableViewCellDelegate
 {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        var begin: Bool!
+        var toBeginning: Bool!
         var image: UIImage!
         var addTo = ""
         if orientation == .left
         {
             image = UIImage(named: "topIcon")
-            begin = true
+            toBeginning = true
             addTo = "up"
         }
         else
         {
             image = UIImage(named: "downIcon")
-            begin = false
+            toBeginning = false
             addTo = "down"
         }
         let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
-            self.addTrack(toBegining: begin, for: indexPath)
+            self.addTrack(toBegining: toBeginning, for: indexPath)
         })
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear

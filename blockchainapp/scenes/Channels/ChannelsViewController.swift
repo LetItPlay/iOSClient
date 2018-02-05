@@ -188,6 +188,7 @@ extension ChannelsViewController {
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelSeeAll))
 		let station = self.source[indexPath.row]
 		let vc = ChannelViewController(station: station)
 		self.navigationController?.pushViewController(vc, animated: true)
