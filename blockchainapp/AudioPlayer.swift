@@ -136,6 +136,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 			if let id = self.player.currentTrack()?.id {
 				self.delegate?.update(status: .playing, id: id)
 			}
+            ListenManager.shared.add(id: Int((self.player.currentTrack()?.id)!)!)
 		case .pause:
 			self.player.pause()
 			self.status = .paused

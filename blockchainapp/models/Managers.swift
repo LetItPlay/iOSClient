@@ -405,3 +405,33 @@ class LikeManager {
     }
 }
 
+class ListenManager {
+    static let shared = ListenManager()
+    
+    private var stations = [Int]()
+    
+    init() {
+        stations = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
+    }
+    
+    public func add(id: Int) {
+        if !hasObject(id: id) {
+            listened(id: id)
+            UserDefaults.standard.set(stations, forKey: "array_listened")
+        }
+    }
+    
+    public func hasObject(id: Int) -> Bool {
+        return stations.contains(id)
+    }
+    
+    private func listened(id: Int) {
+        objc_sync_enter(stations)
+        stations.append(id)
+        objc_sync_exit(stations)
+        
+        debugPrint("user listened \(id)")
+        
+        DownloadManager.shared.track(id: id, listen: 1)
+    }
+}
