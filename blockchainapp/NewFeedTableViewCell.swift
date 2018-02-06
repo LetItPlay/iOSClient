@@ -38,6 +38,9 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 			
 			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
 //			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
+            
+            infoTitle.text = track?.name
+            infoText.text = track?.desc
 		}
 	}
 	

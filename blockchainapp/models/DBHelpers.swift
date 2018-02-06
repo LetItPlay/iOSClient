@@ -147,20 +147,6 @@ extension DBManager {
 			let lang = fromJSON["Lang"].string,
 			let station = fromJSON["StationID"].int {
 			
-//            addOrUpdateTrack(inRealm: realm,
-//                             id: idInt,
-//                             station: fromJSON["station"].int ?? 0,
-//                             audiofile: audioFile,
-//                             name: fromJSON["name"].string ?? "",
-//                             url: fromJSON["url"].string ?? "",
-//                             description: fromJSON["description"].string ?? "",
-//                             image: fromJSON["image"].string ?? "",
-//                             likeCount: fromJSON["like_count"].int ?? 0,
-//                             reportCount: fromJSON["report_count"].int ?? 0,
-//                             listenCount: fromJSON["listen_count"].int ?? 0,
-//                             tags: fromJSON["Tags"].array?.map({$0.string}),
-//                             publishDate: fromJSON["published_at"].string ?? "",
-//							 lang: fromJSON["lang"].string ?? "ru")
 			addOrUpdateTrack(inRealm: realm,
 							 id: idInt,
 							 station: station,
@@ -171,10 +157,25 @@ extension DBManager {
 							 coverURL: fromJSON["CoverURL"].string ?? "",
 							 likeCount: fromJSON["LikeCount"].int ?? 0,
 							 reportCount: 0,
-							 listenCount: fromJSON["ListensCount"].int ?? 0,
+							 listenCount: fromJSON["ListenCount"].int ?? 0,
 							 tags: fromJSON["Tags"].array?.map({$0.string}),
 							 publishDate: publishedAt,
 							 lang: lang)
+        } else if let idInt = fromJSON["id"].int {
+            addOrUpdateTrack(inRealm: realm,
+                             id: idInt,
+                             station: fromJSON["station"].int ?? 0,
+                             name: fromJSON["name"].string ?? "",
+                             url: fromJSON["audio_file"]["file"].string ?? "",
+                             length: fromJSON["audio_file"]["length_seconds"].int64 ?? 0,
+                             description: fromJSON["description"].string ?? "",
+                             coverURL: fromJSON["image"].string ?? "",
+                             likeCount: fromJSON["like_count"].int ?? 0,
+                             reportCount: 0,
+                             listenCount: fromJSON["listen_count"].int ?? 0,
+                             tags: fromJSON["tags"].string?.components(separatedBy: ","),
+                             publishDate: fromJSON["published_at"].string ?? "",
+                             lang: fromJSON["lang"].string ?? "ru")
         }
     }
 }
