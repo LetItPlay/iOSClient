@@ -124,11 +124,10 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
 //                && !AppManager.shared.audioManager.isPlaying {
 //                AppManager.shared.audioPlayer?.hidePlayer()
 //            }
-            
         }
     }
     
-    let controllersNames = ["Feed", "Trends", "Search", "Channels", "Profile"]
+    let controllersNames = ["Feed", "Trends", "Search", "Profile"]
     
     func tabSelected(controller: String)
     {
