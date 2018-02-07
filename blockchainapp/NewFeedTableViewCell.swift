@@ -3,7 +3,7 @@ import UIKit
 import SnapKit
 import SwipeCellKit
 
-class NewFeedTableViewCell: SwipeTableViewCell {
+class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	

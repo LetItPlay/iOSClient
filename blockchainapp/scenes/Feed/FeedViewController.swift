@@ -313,7 +313,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
-        cell?.delegate = self
+//        cell?.delegate = self
 		let track = self.presenter.tracks[indexPath.item]
 		cell?.track = track
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
