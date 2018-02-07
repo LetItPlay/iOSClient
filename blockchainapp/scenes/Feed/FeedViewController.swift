@@ -35,9 +35,21 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		label.textColor = AppColor.Title.dark
 		label.textAlignment = .center
 		label.numberOfLines = 0
-		label.text = "There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab".localized
+		label.text = "There are no tracks".localized
 		return label
 	}()
+    let emptyButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = AppFont.Title.section
+        button.setTitle("Browse channels list".localized, for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 5
+        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
+        return button
+    }()
     
     var tappedSideButton = false
 	
@@ -124,6 +136,14 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 			make.right.equalToSuperview().inset(16)
 		}
 		emptyLabel.isHidden = self.type == .popular
+        
+        self.view.addSubview(emptyButton)
+        emptyButton.snp.makeConstraints { (make) in
+            make.centerX.equalTo(self.view)
+            make.top.equalTo(emptyLabel).inset(51)
+        }
+        emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
+        emptyButton.isHidden = self.type == .popular
 		
 		presenter.getData { (tracks) in
 			
@@ -177,7 +197,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		}
 	}
     
-  func showAllChannels() {
+    @objc func showAllChannels() {
       let vc = ChannelsBuilder.build()
       self.navigationController?.pushViewController(vc, animated: true)
   }

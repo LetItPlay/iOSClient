@@ -29,7 +29,8 @@
 "Select your language" = "Выберите язык контента";
 "Fresh news in 30 minutes" = "Актуальные новости за 30 минут";
 "A compilation of fresh news in one 30-minute playlist" = "Подборка актуальных новостей в виде 30-минутного плейлиста";
-"There are no tracks here.\nPlease subscribe on one\nof the channels in Channel tab" = "Пока здесь нет треков.\nПодпишитесь на один из каналов\nво вкладке \"Каналы\"";
+"There are no tracks" = "Треки отсутствуют";
+"Browse channels list" = "Перейти к списку каналов";
 
 "Today playlists"="Сегодняшняя подборка";
 
