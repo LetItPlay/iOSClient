@@ -92,7 +92,7 @@ class ProfileViewController: UIViewController {
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
         UserSettings.name = self.profileView.profileNameLabel.text!
-        self.profileView.updateData()
+        self.profileView.updateText()
     }
 	
 	@objc func langChanged(_: UIButton) {
@@ -198,7 +198,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
         }
         
         dismiss(animated: true, completion: nil)
-        self.profileView.updateData()
+        self.profileView.updateImage()
     }
 }
 
@@ -316,7 +316,8 @@ class ProfileTopView: UIView {
 	
 	init() {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
-		self.updateData()
+		self.updateText()
+		self.updateImage()
         
 		bluredImageView.layer.cornerRadius = 140
 		bluredImageView.layer.masksToBounds = true
@@ -410,8 +411,13 @@ class ProfileTopView: UIView {
 		
 		
 	}
-    
-    func updateData()
+	
+	func updateImage() {
+		profileImageView.image = UIImage.init(data: UserSettings.image)
+		bluredImageView.image = UIImage.init(data: UserSettings.image)
+	}
+	
+    func updateText()
     {
         if UserSettings.name != "name"
         {
@@ -421,9 +427,6 @@ class ProfileTopView: UIView {
         {
             profileNameLabel.placeholder = "name"
         }
-        
-        profileImageView.image = UIImage.init(data: UserSettings.image)
-        bluredImageView.image = UIImage.init(data: UserSettings.image)
     }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {

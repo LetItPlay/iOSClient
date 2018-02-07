@@ -35,7 +35,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		label.textColor = AppColor.Title.dark
 		label.textAlignment = .center
 		label.numberOfLines = 0
-		label.text = "Oops. There are no tracks here yet. Subscribe to one of the channels first".localized
+		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
 		return label
 	}()
     let emptyButton: UIButton = {
@@ -140,7 +140,8 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         self.view.addSubview(emptyButton)
         emptyButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
-            make.top.equalTo(emptyLabel).inset(51)
+			make.height.equalTo(32)
+            make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
         emptyButton.isHidden = self.type == .popular
@@ -176,6 +177,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         self.tableView.refreshControl?.endRefreshing()
 		if self.type == .feed {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
+			self.emptyButton.isHidden = presenter.tracks.count != 0
 		}
     }
 	
@@ -194,6 +196,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 //		UIView.setAnimationsEnabled(true)
 		if self.type == .feed {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
+			self.emptyButton.isHidden = presenter.tracks.count != 0
 		}
 	}
     
@@ -363,7 +366,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
     }
-    
+	
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if previousOffsetY + 60 < scrollView.contentOffset.y
         {

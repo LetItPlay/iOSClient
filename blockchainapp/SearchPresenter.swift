@@ -90,7 +90,7 @@ class SearchPresenter {
 		
 		let tags = ["новости", "IT", "спорт"]
 		
-		if let channels = self.realm?.objects(Station.self).filter("tagString CONTAINS '\(tags[index])'").map({$0.id}){
+		if let channels = self.realm?.objects(Station.self).filter("ANY tags.value CONTAINS[cd] '\(tags[index])'").map({$0.id}){
 			var trackSelection = [Track]()
 			for id in channels {
 				if let tracks = self.realm?.objects(Track.self).filter("station = \(id)"){

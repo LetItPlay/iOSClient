@@ -106,6 +106,7 @@ class DBManager {
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
+			newTrack.length = length
             newTrack.image = coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
