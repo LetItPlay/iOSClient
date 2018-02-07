@@ -35,7 +35,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		label.textColor = AppColor.Title.dark
 		label.textAlignment = .center
 		label.numberOfLines = 0
-		label.text = "There are no tracks".localized
+		label.text = "Oops. There are no tracks here yet. Subscribe to one of the channels first".localized
 		return label
 	}()
     let emptyButton: UIButton = {
