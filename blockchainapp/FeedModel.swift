@@ -158,14 +158,12 @@ class FeedModel {
 		
 	}
 
-//	func getData(onComplete: @escaping TrackResult) {
-//		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).subscribe( onCompleted: {
-//			DownloadManager.shared.requestTracks(all: !self.isFeed, success: { (feed) in
-//
-//			}) { (err) in
-//
-//			}
-//		}).disposed(by: self.disposeBag)
-//	}
+	func getData(onComplete: @escaping TrackResult) {
+		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).flatMap({ (_) -> Observable<[Track]> in
+			return DownloadManager.shared.requestTracks(all: !self.isFeed)
+		}).subscribe( onCompleted: {
+			print("Tracks dowloaded")
+		}) .disposed(by: self.disposeBag)
+	}
 }
 

@@ -154,7 +154,48 @@ class DownloadManager {
             task.resume()
         }
     }
-    
+	
+	func requestTracks(all: Bool = false) -> Observable<[Track]> {
+		let path = /*all ?*/ urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) /* :
+		urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)*/
+		return Observable<[Track]>.create({ (observer) -> Disposable in
+			if let path = path, let url = URL(string: path) {
+				
+				let request = URLRequest(url: url)
+				let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+					
+					guard error == nil else {
+						observer.onError(error!)
+						return
+					}
+					
+					guard let data = data else {
+						return
+					}
+					
+					do {
+						let json  = try JSON(data: data)
+						let realm = try Realm()
+						if let tracks = json.array?.map({Track.init(json: $0)}).filter({$0 != nil}).map({$0!}) {
+							try realm.write {
+								realm.delete(realm.objects(Track.self))
+								realm.add(tracks, update: true)
+							}
+						}
+					} catch(let error) {
+						print(error)
+					}
+					observer.onCompleted()
+				})
+				task.resume()
+			}
+			
+			return Disposables.create {
+				print("Track signal disposed")
+			}
+		})
+	}
+	
 	func requestTracks(all: Bool = false, success: @escaping TracksLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
 		let path = /*all ?*/ urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) /* :
 	urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)*/
