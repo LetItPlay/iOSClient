@@ -17,7 +17,6 @@ class ProfileViewController: UIViewController {
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
-        imagePicker.preferredContentSize = CGSize.init(width: 260, height: 260)
         return imagePicker
     }()
 	
