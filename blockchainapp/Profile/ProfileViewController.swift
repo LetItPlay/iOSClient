@@ -14,7 +14,12 @@ class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
 	let profileView = ProfileTopView()
-    let imagePicker = UIImagePickerController()
+    let imagePicker: UIImagePickerController = {
+        var imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.preferredContentSize = CGSize.init(width: 260, height: 260)
+        return imagePicker
+    }()
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
@@ -172,8 +177,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     {
         if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
         {
-            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
-//            imagePicker.allowsEditing = true
+            imagePicker.sourceType = .camera
             self.present(imagePicker, animated: true, completion: nil)
         }
         else
@@ -186,14 +190,17 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     
     func openGallery()
     {
-        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
-//        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: {
         })
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        if var pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            let compressionQuality: CGFloat = 0.5
+            let data = UIImageJPEGRepresentation(pickedImage, compressionQuality)
+            pickedImage = UIImage.init(data: data!)!
+            
             UserSettings.image = UIImagePNGRepresentation(pickedImage)!
         }
         
