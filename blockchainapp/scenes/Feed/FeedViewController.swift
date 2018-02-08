@@ -113,7 +113,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         
         tableView.contentInset = UIEdgeInsets(top: 0,
                                               left: 0,
-                                              bottom: 72,
+                                              bottom: 80,
                                               right: 0)
 		
 		tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
@@ -376,7 +376,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 	
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y > 0
+        let  height = scrollView.frame.size.height
+        let distanceFromBottom = scrollView.contentSize.height - scrollView.contentOffset.y
+        
+        if scrollView.contentOffset.y > 0 && distanceFromBottom > height
         {
             if previousOffsetY + 60 < scrollView.contentOffset.y
             {
