@@ -109,7 +109,10 @@ extension Track {
     }
     
     public func findChannelImage() -> URL? {
-        return (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+		if let image = (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.image, let url = URL(string: image) {
+			return url
+		}
+		return nil
     }
 }
 

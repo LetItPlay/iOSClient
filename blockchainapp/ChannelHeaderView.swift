@@ -61,6 +61,7 @@ class ChannelHeaderView: UIView {
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
 		label.lineBreakMode = .byTruncatingTail
+		label.numberOfLines = 3
 		return label
 	}()
 	

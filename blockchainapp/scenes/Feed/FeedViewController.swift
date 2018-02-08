@@ -131,7 +131,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		
 		self.view.addSubview(emptyLabel)
 		emptyLabel.snp.makeConstraints { (make) in
-			make.center.equalTo(self.view)
+			make.center.equalTo(self.view).inset(-40)
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
