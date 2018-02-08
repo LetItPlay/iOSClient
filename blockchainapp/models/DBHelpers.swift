@@ -22,7 +22,7 @@ class DBManager {
 	func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
         if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &station.name, new: name)
-            _ = updateIfNeeded(property: &station.image, new: image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+            _ = updateIfNeeded(property: &station.image, new: image.buildImageURL()?.absoluteString ?? "")
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
 			_ = updateIfNeeded(property: &station.lang, new: lang)
 			_ = updateIfNeeded(property: &station.trackCount, new: inRealm.objects(Track.self).filter("station == \(id)").count)
@@ -40,7 +40,7 @@ class DBManager {
             let newStat = Station()
             newStat.id = id
             newStat.name = name
-            newStat.image = image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newStat.image = image.buildImageURL()?.absoluteString ?? ""
             newStat.subscriptionCount = subscriptionCount
 			if let tags = tags {
 				tags.forEach({ (tag) in
@@ -75,8 +75,8 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.likeCount, new: likeCount)
             changeCounter += updateIfNeeded(property: &track.reportCount, new: reportCount)
             changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
-			changeCounter += updateIfNeeded(property: &track.url, new: url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-			changeCounter += updateIfNeeded(property: &track.image, new: coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+			changeCounter += updateIfNeeded(property: &track.url, new: url.buildImageURL()?.absoluteString ?? "")
+			changeCounter += updateIfNeeded(property: &track.image, new: coverURL.buildImageURL()?.absoluteString ?? "")
 			changeCounter += updateIfNeeded(property: &track.length, new: length)
 
 			changeCounter += updateIfNeeded(property: &track.lang, new: lang)
@@ -101,13 +101,13 @@ class DBManager {
             newTrack.id = id
             newTrack.station   = station
             newTrack.name = name
-            newTrack.url  = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newTrack.url  = url.buildImageURL()?.absoluteString ?? ""
             newTrack.desc = description
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
 			newTrack.length = length
-            newTrack.image = coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newTrack.image = coverURL.buildImageURL()?.absoluteString ?? ""
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
 				tags.forEach({ (tag) in

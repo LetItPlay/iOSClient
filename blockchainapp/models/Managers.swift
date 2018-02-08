@@ -236,16 +236,17 @@ class DownloadManager {
                 
                 guard error == nil else { return }
                 guard let data = data else { return }
-
-                do {
-					let json  = try JSON(data: data)
-					let realm = try Realm()
-                    try realm.write {
-                        DBManager.shared.track(fromJSON: json, realm: realm)
-                    }
-                } catch(let error) {
-                    print(error)
-                }
+				if listen != 1 {
+					do {
+						let json  = try JSON(data: data)
+						let realm = try Realm()
+						try realm.write {
+							DBManager.shared.track(fromJSON: json, realm: realm)
+						}
+					} catch(let error) {
+						print(error)
+					}
+				}
                 
             })
             task.resume()

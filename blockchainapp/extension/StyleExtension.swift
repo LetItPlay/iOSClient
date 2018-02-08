@@ -51,7 +51,7 @@ extension String {
     func buildImageURL() -> URL? {
 		
 		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-			return URL(string: self)
+			return URL(string: str)
 		}
 		
         var result = "https://manage.letitplay.io/"
