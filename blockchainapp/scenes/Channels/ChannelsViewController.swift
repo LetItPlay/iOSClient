@@ -110,6 +110,11 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
+        
+        tableView.contentInset = UIEdgeInsets(top: 0,
+                                              left: 0,
+                                              bottom: 72,
+                                              right: 0)
 		
 		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
 		
