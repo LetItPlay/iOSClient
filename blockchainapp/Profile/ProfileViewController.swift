@@ -161,6 +161,10 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
+    func setName() {
+        self.dismissKeyboard(UITapGestureRecognizer.init())
+    }
+    
     func addImage() {
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
@@ -314,9 +318,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 
 protocol ProfileViewDelegate {
     func addImage()
+    func setName()
 }
 
-class ProfileTopView: UIView {
+class ProfileTopView: UIView, UITextFieldDelegate {
 	
     var delegate: ProfileViewDelegate?
     
@@ -389,6 +394,8 @@ class ProfileTopView: UIView {
 		
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
+        profileNameLabel.returnKeyType = .done
+        profileNameLabel.delegate = self
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
@@ -423,6 +430,11 @@ class ProfileTopView: UIView {
 		
 		
 	}
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        delegate?.setName()
+        return true
+    }
 	
 	func updateImage() {
 		profileImageView.image = UIImage.init(data: UserSettings.image)
