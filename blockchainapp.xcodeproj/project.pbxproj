@@ -46,6 +46,7 @@
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
 		36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */; };
+		36952672202C610100F97E1E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36952671202C610100F97E1E /* ProfileModel.swift */; };
 		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
@@ -140,6 +141,7 @@
 		2CE07EF62028883C00B3D939 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		36952671202C610100F97E1E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -230,6 +232,7 @@
 				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
 				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
 				3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */,
+				36952671202C610100F97E1E /* ProfileModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
 				01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */,
+				36952672202C610100F97E1E /* ProfileModel.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,

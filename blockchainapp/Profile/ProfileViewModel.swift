@@ -8,15 +8,53 @@
 
 import Foundation
 
-struct ProfileViewModel {
+enum ProfileUpdate {
+    case image, name, language
+}
+
+protocol ProfileVMDelegate: class {
+    func reload()
+    func make(updates: [ProfileUpdate])
+}
+
+class ProfileViewModel: ProfileModelDelegate {
+    
     var name: String = ""
-    var imageURL: URL? = nil
+    var imageData: Data? = nil
     var language: String = ""
     
-    init(name: String = "name", image: String, language: String = "en")
+    weak var delegate: ProfileVMDelegate?
+    
+    init(name: String = "name", image: Data, language: String = "en")
     {
         self.name = name
-        self.imageURL = URL.init(string: image)
+        self.imageData = image
         self.language = language
+    }
+    
+    func reload(name: String = "name", image: Data, language: String = "en")
+    {
+        self.name = name
+        self.imageData = image
+        self.language = language
+        self.delegate?.reload()
+    }
+    
+    func update(image: Data)
+    {
+        self.imageData  = image
+        self.delegate?.make(updates: [.image])
+    }
+    
+    func update(name: String)
+    {
+        self.name = name
+        self.delegate?.make(updates: [.name])
+    }
+    
+    func update(language: String)
+    {
+        self.language = language
+        self.delegate?.make(updates: [.language])
     }
 }
