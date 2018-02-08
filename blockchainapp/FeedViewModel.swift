@@ -49,7 +49,10 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
 		self.delegate?.reload()
 	}
 	
-	func update(index: Int) {
-		self.delegate?.make(updates: [.update: [index]])
+	func update(index: Int, track: TrackViewModel) {
+		if index < self.tracks.count {
+			self.tracks[index] = track
+			self.delegate?.make(updates: [.update : [index]])
+		}
 	}
 }

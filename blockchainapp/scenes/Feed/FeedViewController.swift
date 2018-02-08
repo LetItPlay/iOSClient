@@ -16,7 +16,9 @@ enum FeedType {
 }
 
 class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
-    
+	
+	var viewModel: FeedVMProtocol!
+	
     var presenter: FeedPresenterProtocol!
     fileprivate var source = [Track]()
 	var cellHeight: CGFloat = 343.0 + 24.0
@@ -275,12 +277,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.presenter.tracks.count
+        return self.viewModel.tracks.count
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
-		
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
 	
