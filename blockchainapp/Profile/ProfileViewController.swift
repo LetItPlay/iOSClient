@@ -23,6 +23,7 @@ class ProfileViewController: UIViewController {
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
+    var isKeyboardShown = true
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -88,11 +89,13 @@ class ProfileViewController: UIViewController {
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        isKeyboardShown = true
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .name))
         tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
+        isKeyboardShown = false
         view.endEditing(true)
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
@@ -212,7 +215,9 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.dismissKeyboard(scrollView)
+        if isKeyboardShown {
+            self.dismissKeyboard(scrollView)
+        }
     }
     
 	func numberOfSections(in tableView: UITableView) -> Int {
@@ -432,7 +437,7 @@ class ProfileTopView: UIView {
         }
         else
         {
-            profileNameLabel.placeholder = "name"
+            profileNameLabel.placeholder = "Name".localized
         }
     }
     
