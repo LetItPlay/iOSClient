@@ -303,9 +303,34 @@ protocol ProfileViewDelegate {
     func addImage()
 }
 
-class ProfileTopView: UIView {
+class ProfileTopView: UIView, ProfileVMDelegate {
+    
+    func reload() {
+        print("reload data")
+    }
+    
+    func make(updates: ProfileUpdate) {
+        switch updates {
+        case .image:
+            profileImageView.image = UIImage.init(data: UserSettings.image)
+            bluredImageView.image = UIImage.init(data: UserSettings.image)
+        case .language:
+            print("change lang")
+        case .name:
+            if UserSettings.name != "name"
+            {
+                profileNameLabel.text = UserSettings.name
+            }
+            else
+            {
+                profileNameLabel.placeholder = "name"
+            }
+        }
+    }
 	
     var delegate: ProfileViewDelegate?
+    
+    var viewModel: ProfileModelProtocol?
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
@@ -412,17 +437,7 @@ class ProfileTopView: UIView {
     
     func updateData()
     {
-        if UserSettings.name != "name"
-        {
-            profileNameLabel.text = UserSettings.name
-        }
-        else
-        {
-            profileNameLabel.placeholder = "name"
-        }
         
-        profileImageView.image = UIImage.init(data: UserSettings.image)
-        bluredImageView.image = UIImage.init(data: UserSettings.image)
     }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {

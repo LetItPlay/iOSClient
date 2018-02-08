@@ -20,7 +20,7 @@ protocol ProfileVMProtocol {
 
 protocol ProfileVMDelegate: class {
     func reload()
-    func make(updates: [ProfileUpdate])
+    func make(updates: ProfileUpdate)
 }
 
 class ProfileViewModel: ProfileVMProtocol, ProfileModelDelegate {
@@ -46,19 +46,19 @@ class ProfileViewModel: ProfileVMProtocol, ProfileModelDelegate {
     func update(image: Data)
     {
         self.imageData  = image
-        self.delegate?.make(updates: [.image])
+        self.delegate?.make(updates: .image)
     }
     
     func update(name: String)
     {
         self.name = name
-        self.delegate?.make(updates: [.name])
+        self.delegate?.make(updates: .name)
     }
     
     func update(language: String)
     {
         self.language = language
-        self.delegate?.make(updates: [.language])
+        self.delegate?.make(updates: .language)
     }
     
     func set(name: String) {
