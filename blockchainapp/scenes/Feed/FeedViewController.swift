@@ -27,6 +27,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 	var type: FeedType = .feed
     var channelsView: ChannelsCollectionView!
     var animatedChannels: Bool = true
+    var refreshingTable: Bool = false
     var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView()
 	let emptyLabel: UILabel = {
@@ -163,7 +164,11 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 			
         }
 		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
+//        refreshingTable = true
+        self.showChannels(up: false)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()
+//            self?.refreshingTable = false
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -198,6 +203,9 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 			self.emptyLabel.isHidden = presenter.tracks.count != 0
 			self.emptyButton.isHidden = presenter.tracks.count != 0
 		}
+        else {
+            
+        }
 	}
     
     @objc func showAllChannels() {
@@ -214,7 +222,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
   {
       if animatedChannels && self.type == .popular
       {
-          if up, self.channelsView.frame.origin.y != -136
+        if ( up || refreshingTable) && self.channelsView.frame.origin.y != -136
           {
               var tableFrame = self.tableView.frame
               tableFrame.size.height += self.channelsView.frame.height
@@ -368,15 +376,18 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 	
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if previousOffsetY + 60 < scrollView.contentOffset.y
+        if scrollView.contentOffset.y > 0
         {
-            previousOffsetY = scrollView.contentOffset.y
-            self.showChannels(up: true)
-        }
-        if previousOffsetY - 60 > scrollView.contentOffset.y
-        {
-            previousOffsetY = scrollView.contentOffset.y
-            self.showChannels(up: false)
+            if previousOffsetY + 60 < scrollView.contentOffset.y
+            {
+                previousOffsetY = scrollView.contentOffset.y
+                self.showChannels(up: true)
+            }
+            if previousOffsetY - 60 > scrollView.contentOffset.y
+            {
+                previousOffsetY = scrollView.contentOffset.y
+                self.showChannels(up: false)
+            }
         }
     }
 }
