@@ -39,7 +39,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
 			case .update(_, let del, let ins, let mod):
                 // Query results have changed, so apply them to the UITableView
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
-				if del.count == 0 && ins.count != 0 {
+				if items.count != 0 && ins.count != 0 {
                 	self?.view?.display(channels: items.map({$0.detached()}))
 					
 					let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })

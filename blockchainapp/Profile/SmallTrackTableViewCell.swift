@@ -44,9 +44,11 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
+	var separator: UIView!
+	
 	weak var track: Track? = nil {
 		didSet {
-			if let iconUrl = track?.image.buildImageURL() {
+			if let iconUrl = URL(string: track?.image) {
 				trackImageView.sd_setImage(with: iconUrl)
 			} else {
 				trackImageView.image = nil
@@ -135,6 +137,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 			make.bottom.equalToSuperview()
 			make.height.equalTo(1)
 		}
+		self.separator = view
 	}
 	
 	static func trackText(text: String) -> NSAttributedString {

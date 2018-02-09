@@ -186,7 +186,7 @@ class ChannelHeaderView: UIView {
 		channelTitleView.text = station.name
 		infoLabel.text = "No description for this channel"
 		subsView.setData(data: Int64(station.subscriptionCount))
-		if let iconUrl = station.image.buildImageURL() {
+		if let iconUrl = URL(string: station.image) {
 			
 			channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
 				self?.channelImageView.image = image

@@ -40,7 +40,7 @@ class ProfileViewController: UIViewController {
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
         
-        self.view.addGestureRecognizer(tap)
+        self.profileView.addGestureRecognizer(tap)
         
         imagePicker.delegate = self
         profileView.delegate = self
@@ -96,8 +96,8 @@ class ProfileViewController: UIViewController {
     @objc func dismissKeyboard(_ sender: Any) {
         isKeyboardShown = false
         view.endEditing(true)
-        let height = sender is UITapGestureRecognizer ? 0 : 100
-        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
+//        let height = sender is UITapGestureRecognizer ? 0 : 100
+//        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
         UserSettings.name = self.profileView.profileNameLabel.text!
         self.profileView.updateText()
     }
@@ -147,7 +147,7 @@ class ProfileViewController: UIViewController {
 	func reloadData() {
 		let realm = try? Realm()
 		let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}).map({$0.detached()}) ?? []
 		self.tableView.reloadData()
 	}
 	
@@ -239,6 +239,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
 		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
 		cell.timeLabel.isHidden = true
+		cell.separator.isHidden = indexPath.item + 1 == self.tracks.count
 		return cell
 	}
 	

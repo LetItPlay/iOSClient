@@ -118,7 +118,7 @@ extension Track {
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
+		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: URL(string: self.image), length: self.length)
 	}
 	
 	func audiotrackId() -> String {

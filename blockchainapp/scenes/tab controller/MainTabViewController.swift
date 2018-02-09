@@ -50,12 +50,23 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		super.viewDidLayoutSubviews()
 	}
 	
+	var playerIsPresenting: Bool = false
+	
 	func playerTapped() {
 //		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
 //		UIView.animate(withDuration: 0.5) {
 //			self.view.layoutIfNeeded()
 //		}
-		self.present(playerController, animated: true, completion: nil)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
+			if !self.playerController.isBeingPresented {
+				UIApplication.shared.beginIgnoringInteractionEvents()
+				self.playerIsPresenting = true
+				self.present(self.playerController, animated: true) {
+					self.playerIsPresenting = false
+					UIApplication.shared.endIgnoringInteractionEvents()
+				}
+			}
+		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
@@ -77,8 +88,15 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func showPlaylist() {
-		self.present(playerController, animated: true, completion: nil)
 		self.playerController.showPlaylist()
+		if !self.playerController.isBeingPresented {
+			UIApplication.shared.beginIgnoringInteractionEvents()
+			self.playerIsPresenting = true
+			self.present(self.playerController, animated: true) {
+				self.playerIsPresenting = false
+				UIApplication.shared.endIgnoringInteractionEvents()
+			}
+		}
 	}
 	
     override func viewDidLoad() {

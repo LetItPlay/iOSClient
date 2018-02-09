@@ -72,7 +72,7 @@ class ChannelsCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsView.isHidden = true
 			}
-            if let urlString = channel?.image.buildImageURL() {
+			if let urlString = URL(string: channel?.image) {
                 iconImageView.sd_setImage(with: urlString)
             } else {
                 iconImageView.image = nil

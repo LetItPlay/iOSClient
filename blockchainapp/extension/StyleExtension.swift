@@ -125,3 +125,13 @@ extension String {
 		return NSLocalizedString(self, comment: "")
 	}
 }
+
+extension URL {
+	init?(string: String?) {
+		if let str = string {
+			self.init(string: str)
+			return
+		}
+		return nil
+	}
+}

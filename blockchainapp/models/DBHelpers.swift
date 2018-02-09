@@ -108,6 +108,7 @@ class DBManager {
             newTrack.listenCount = listenCount
 			newTrack.length = length
             newTrack.image = coverURL.buildImageURL()?.absoluteString ?? ""
+			newTrack.lang = lang
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
 				tags.forEach({ (tag) in

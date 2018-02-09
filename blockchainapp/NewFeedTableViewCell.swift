@@ -18,7 +18,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 				iconImageView.image = nil
 			}
 			
-			if let icon = track?.image, let url = URL(string: icon) {
+			if let url = URL(string: track?.image) {
 				mainPictureImageView.sd_setImage(with: url)
 			} else {
 				mainPictureImageView.image = nil

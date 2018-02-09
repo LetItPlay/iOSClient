@@ -102,7 +102,11 @@ SearchPresenterDelegate {
 		self.searchResultsTableView.reloadRows(at: tracks.map({IndexPath.init(row: $0, section: 1)}), with: .none)
 		self.searchResultsTableView.reloadRows(at: channels.map({IndexPath.init(row: $0, section: 0)}), with: .none)
 	}
-    
+	
+	func updatePlaylists() {
+		self.playlistTableView.reloadData()
+	}
+	
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -147,6 +151,11 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		
+		if self.presenter.playlists.count == 0 {
+			return nil
+		}
+		
 		let label = UILabel()
 		label.textColor = AppColor.Title.dark
 		label.font = AppFont.Title.section

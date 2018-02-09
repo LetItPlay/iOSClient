@@ -98,7 +98,7 @@ class ChannelTableViewCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsList.isHidden = true
 			}
-			if let urlString = channel?.image.buildImageURL() {
+			if let urlString = URL(string: channel?.image) {
 				channelImageView.sd_setImage(with: urlString)
 			} else {
 				channelImageView.image = nil
