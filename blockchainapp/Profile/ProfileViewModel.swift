@@ -13,18 +13,18 @@ enum ProfileUpdate {
 }
 
 protocol ProfileVMDelegate: class {
-    func reload(name: String, imageData: Data, language: String)
+    func reload(name: String, imageData: Data, language: Language)
     func make(updates: ProfileUpdate, data: Any)
 }
 
 class ProfileViewModel: ProfileModelDelegate {
     var name: String = ""
     var imageData: Data? = nil
-    var language: String = ""
+    var language: Language = .en
     
     weak var delegate: ProfileVMDelegate?
     
-    func reload(name: String = "name", image: Data, language: String = "en")
+    func reload(name: String = "name", image: Data, language: Language = .en)
     {
         self.name = name
         self.imageData = image
@@ -44,7 +44,7 @@ class ProfileViewModel: ProfileModelDelegate {
         self.delegate?.make(updates: .name, data: name)
     }
     
-    func update(language: String)
+    func update(language: Language)
     {
         self.language = language
         self.delegate?.make(updates: .language, data: language)

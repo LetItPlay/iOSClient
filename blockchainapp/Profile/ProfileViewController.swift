@@ -80,7 +80,7 @@ class ProfileViewController: UIViewController {
 
 		
 		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
-		self.profileView.logoutButton.isSelected = UserSettings.language == .en
+		self.profileView.logoutButton.isSelected = self.profileView.viewModel?.language == .en
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -92,15 +92,14 @@ class ProfileViewController: UIViewController {
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
         let name = self.profileView.profileNameLabel.text!
-        UserSettings.name = name
         self.profileView.emitter?.set(name: name)
     }
 	
 	@objc func langChanged(_: UIButton) {
 		if self.profileView.logoutButton.isSelected {
-			UserSettings.language = .ru
+            self.profileView.emitter?.set(language: .ru)
 		} else {
-			UserSettings.language = .en
+			self.profileView.emitter?.set(language: .en)
 		}
 		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
@@ -141,7 +140,7 @@ class ProfileViewController: UIViewController {
 	func reloadData() {
 		let realm = try? Realm()
 		let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+        self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == self.profileView.viewModel?.language.rawValue}) ?? []
 		self.tableView.reloadData()
 	}
 	
@@ -197,7 +196,6 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-            UserSettings.image = image
             self.profileView.emitter?.set(image: image)
         }
         
@@ -308,7 +306,7 @@ protocol ProfileViewDelegate {
 
 class ProfileTopView: UIView, ProfileVMDelegate {
     
-    func reload(name: String, imageData: Data, language: String) {
+    func reload(name: String, imageData: Data, language: Language) {
         self.setName(name: name)
         
         let image = UIImage.init(data: imageData)

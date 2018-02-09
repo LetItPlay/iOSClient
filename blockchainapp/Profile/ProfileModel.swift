@@ -12,15 +12,15 @@ import UIKit
 protocol ProfileModelProtocol {
     func change(image: Data)
     func change(name: String)
-    func change(language: String)
+    func change(language: Language)
     func getData()
 }
 
 protocol ProfileModelDelegate: class {
-    func reload(name: String, image: Data, language: String)
+    func reload(name: String, image: Data, language: Language)
     func update(image: Data)
     func update(name: String)
-    func update(language: String)
+    func update(language: Language)
 }
 
 class ProfileModel: ProfileModelProtocol {
@@ -28,7 +28,7 @@ class ProfileModel: ProfileModelProtocol {
     weak var delegate: ProfileModelDelegate?
     
     func getData() {
-        delegate?.reload(name: UserSettings.name, image: UserSettings.image, language: UserSettings.language.rawValue)
+        delegate?.reload(name: UserSettings.name, image: UserSettings.image, language: UserSettings.language)
     }
     
     func change(image: Data) {
@@ -41,15 +41,8 @@ class ProfileModel: ProfileModelProtocol {
         self.delegate?.update(name: UserSettings.name)
     }
     
-    func change(language: String) {
-        switch language {
-        case "ru":
-            UserSettings.language = .ru
-        case "en":
-            UserSettings.language = .en
-        default:
-            UserSettings.language = .none
-        }
-        self.delegate?.update(language: UserSettings.language.rawValue)
+    func change(language: Language) {
+        UserSettings.language = language
+        self.delegate?.update(language: UserSettings.language)
     }
 }

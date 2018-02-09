@@ -12,7 +12,7 @@ protocol ProfileEmitterProtocol {
     func state(_ state: ViewState)
     func set(name: String)
     func set(image: Data)
-    func set(language: String)
+    func set(language: Language)
 }
 
 class ProfileEmitter: ProfileEmitterProtocol {
@@ -32,7 +32,7 @@ class ProfileEmitter: ProfileEmitterProtocol {
         self.model.change(image: image)
     }
     
-    func set(language: String) {
+    func set(language: Language) {
         self.model.change(language: language)
     }
     
