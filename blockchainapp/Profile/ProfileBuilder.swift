@@ -10,17 +10,15 @@ import UIKit
 
 class ProfileBuilder: Builder {
     static func build() -> UIViewController {
-        let vc = ProfileViewController()
-        var model = ProfileModel()
+        let model = ProfileModel()
         let vm = ProfileViewModel()
         let emitter = ProfileEmitter.init(model: model)
         
         model.delegate = vm
-        vm.delegate = vc.profileView
-        vc.profileView.emitter = emitter
         emitter.model = model
         
-        model = ProfileModel.init()
+        let view = ProfileTopView.init(emitter: emitter, viewModel: vm)
+        let vc = ProfileViewController.init(view: view)
         
         return vc
     }

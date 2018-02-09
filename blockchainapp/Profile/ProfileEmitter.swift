@@ -9,6 +9,7 @@
 import Foundation
 
 protocol ProfileEmitterProtocol {
+    func state(_ state: ViewState)
     func set(name: String)
     func set(image: Data)
     func set(language: String)
@@ -33,5 +34,14 @@ class ProfileEmitter: ProfileEmitterProtocol {
     
     func set(language: String) {
         self.model.change(language: language)
+    }
+    
+    func state(_ state: ViewState) {
+        switch state {
+        case .initialize:
+            self.model.getData()
+        default:
+            break
+        }
     }
 }

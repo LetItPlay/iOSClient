@@ -13,14 +13,15 @@ import RealmSwift
 class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-	let profileView = ProfileTopView()
+    var profileView: ProfileTopView!
     let imagePicker = UIImagePickerController()
 	
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
 	
-	convenience init() {
+    convenience init(view: ProfileTopView) {
 		self.init(nibName: nil, bundle: nil)
+        self.profileView = view
 	}
 	
     override func viewDidLoad() {
@@ -308,35 +309,42 @@ protocol ProfileViewDelegate {
 class ProfileTopView: UIView, ProfileVMDelegate {
     
     func reload(name: String, imageData: Data, language: String) {
-        self.profileNameLabel.text = name
+        self.setName(name: name)
         
         let image = UIImage.init(data: imageData)
         self.bluredImageView.image = image
         self.profileImageView.image = image
     }
     
-    func make(updates: ProfileUpdate) {
+    func make(updates: ProfileUpdate, data: Any) {
         switch updates {
         case .image:
-            profileImageView.image = UIImage.init(data: UserSettings.image)
-            bluredImageView.image = UIImage.init(data: UserSettings.image)
+            let image = UIImage.init(data: data as! Data)
+            profileImageView.image = image
+            bluredImageView.image = image
         case .language:
             print("change lang")
         case .name:
-            if UserSettings.name != "name"
-            {
-                profileNameLabel.text = UserSettings.name
-            }
-            else
-            {
-                profileNameLabel.placeholder = "name"
-            }
+            self.setName(name: data as! String)
+        }
+    }
+    
+    func setName(name: String)
+    {
+        if name != "name"
+        {
+            profileNameLabel.text = name
+        }
+        else
+        {
+            profileNameLabel.placeholder = "name"
         }
     }
 	
     var delegate: ProfileViewDelegate?
     
     var emitter: ProfileEmitterProtocol?
+    var viewModel: ProfileViewModel?
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
@@ -344,8 +352,11 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 	let changePhotoButton: UIButton = UIButton()
 	let logoutButton: UIButton = UIButton()
 	
-	init() {
+    init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
         
 		bluredImageView.layer.cornerRadius = 140
 		bluredImageView.layer.masksToBounds = true
@@ -436,6 +447,8 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
+        
+        emitter.state(.initialize)
 	}
     
     @objc func changePhotoButtonTapped(_ sender: Any) {

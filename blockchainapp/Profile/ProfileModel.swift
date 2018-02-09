@@ -13,6 +13,7 @@ protocol ProfileModelProtocol {
     func change(image: Data)
     func change(name: String)
     func change(language: String)
+    func getData()
 }
 
 protocol ProfileModelDelegate: class {
@@ -26,17 +27,18 @@ class ProfileModel: ProfileModelProtocol {
     
     weak var delegate: ProfileModelDelegate?
     
-    init()
-    {
+    func getData() {
         delegate?.reload(name: UserSettings.name, image: UserSettings.image, language: UserSettings.language.rawValue)
     }
     
     func change(image: Data) {
         UserSettings.image = image
+        self.delegate?.update(image: UserSettings.image)
     }
     
     func change(name: String) {
         UserSettings.name = name
+        self.delegate?.update(name: UserSettings.name)
     }
     
     func change(language: String) {
@@ -48,5 +50,6 @@ class ProfileModel: ProfileModelProtocol {
         default:
             UserSettings.language = .none
         }
+        self.delegate?.update(language: UserSettings.language.rawValue)
     }
 }
