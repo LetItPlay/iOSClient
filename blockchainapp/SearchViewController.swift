@@ -86,6 +86,19 @@ SearchPresenterDelegate {
 		playlistTableView.backgroundColor = .white
 		
 		self.navigationItem.hidesSearchBarWhenScrolling = false
+        
+        let label = UILabel()
+        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.big
+        label.text = "Today playlists".localized
+        
+        self.view.addSubview(label)
+        label.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
+            make.centerX.equalToSuperview()
+        }
+        
+        label.isHidden = self.presenter.playlists.count == 0 ? false : true
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
@@ -138,31 +151,32 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 		return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.descr, width: tableView.frame.width)
 	}
 	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 41
-	}
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 41
+    }
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 0.01
 	}
 	
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		let label = UILabel()
-		label.textColor = AppColor.Title.dark
-		label.font = AppFont.Title.section
-		label.text = "Today playlists".localized
-		
-		let container = UIView()
-		container.backgroundColor = UIColor.white
-		container.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview()
-			make.bottom.equalToSuperview()
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-		}
-		return container
-	}
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.big
+        label.text = "Today playlists".localized
+
+        let container = UIView()
+        container.backgroundColor = UIColor.white
+        container.addSubview(label)
+        label.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
+//        return container
+        return nil
+    }
 }
 
 class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSource {
