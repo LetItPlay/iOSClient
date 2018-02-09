@@ -222,10 +222,12 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			}
 		} else {
 			if indexPath.item + way == self.playlist.tracks.count {
-				self.make(command: .pause)
-				self.currentTrackIndexPath = IndexPath.invalid
-				self.userPlaylist.tracks = []
-				self.playlist.tracks = []
+//				self.make(command: .pause)
+//				self.currentTrackIndexPath = IndexPath.invalid
+//				self.userPlaylist.tracks = []
+//				self.playlist.tracks = []
+//				self.popupDelegate?.hidePlayer()
+				return
 				// TODO: hide player
 			} else {
 				self.currentTrackIndexPath.item += way

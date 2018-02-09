@@ -83,6 +83,7 @@ protocol AudioControllerDelegate: class {
 protocol AudioControllerPresenter: class {
 	func popupPlayer(show: Bool, animated: Bool)
 	func showPlaylist()
+	func hidePlayer()
 }
 
 protocol AudioControllerProtocol: class {

@@ -31,6 +31,8 @@ SearchPresenterDelegate {
 	let searchResults = SearchResultsController()
 	let playlistsResults = PlaylistsController()
 	
+	var emptyLabel: UIView!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -90,13 +92,17 @@ SearchPresenterDelegate {
         let label = UILabel()
         label.textColor = AppColor.Title.dark
         label.font = AppFont.Title.big
-        label.text = "Today playlists".localized
+        label.text = "There are no playlists".localized
         
         self.view.addSubview(label)
         label.snp.makeConstraints { (make) in
             make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
             make.centerX.equalToSuperview()
         }
+		
+		self.emptyLabel = label
+		
+		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
@@ -116,6 +122,7 @@ SearchPresenterDelegate {
 	
 	func updatePlaylists() {
 		self.playlistTableView.reloadData()
+		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
 	}
 	
     override func viewWillDisappear(_ animated: Bool) {
