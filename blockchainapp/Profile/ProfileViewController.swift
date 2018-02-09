@@ -90,8 +90,9 @@ class ProfileViewController: UIViewController {
         view.endEditing(true)
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-        UserSettings.name = self.profileView.profileNameLabel.text!
-        self.profileView.updateData()
+        let name = self.profileView.profileNameLabel.text!
+        UserSettings.name = name
+        self.profileView.emitter?.set(name: name)
     }
 	
 	@objc func langChanged(_: UIButton) {
@@ -194,11 +195,12 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            UserSettings.image = UIImagePNGRepresentation(pickedImage)!
+            let image = UIImagePNGRepresentation(pickedImage)!
+            UserSettings.image = image
+            self.profileView.emitter?.set(image: image)
         }
         
         dismiss(animated: true, completion: nil)
-        self.profileView.updateData()
     }
 }
 
@@ -305,8 +307,12 @@ protocol ProfileViewDelegate {
 
 class ProfileTopView: UIView, ProfileVMDelegate {
     
-    func reload() {
-        print("reload data")
+    func reload(name: String, imageData: Data, language: String) {
+        self.profileNameLabel.text = name
+        
+        let image = UIImage.init(data: imageData)
+        self.bluredImageView.image = image
+        self.profileImageView.image = image
     }
     
     func make(updates: ProfileUpdate) {
@@ -330,7 +336,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 	
     var delegate: ProfileViewDelegate?
     
-    var viewModel: ProfileModelProtocol?
+    var emitter: ProfileEmitterProtocol?
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
@@ -340,7 +346,6 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 	
 	init() {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
-		self.updateData()
         
 		bluredImageView.layer.cornerRadius = 140
 		bluredImageView.layer.masksToBounds = true
@@ -431,14 +436,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
-		
-		
 	}
-    
-    func updateData()
-    {
-        
-    }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
         delegate?.addImage()

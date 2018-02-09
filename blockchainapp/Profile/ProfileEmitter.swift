@@ -16,7 +16,7 @@ protocol ProfileEmitterProtocol {
 
 class ProfileEmitter: ProfileEmitterProtocol {
     
-    private var model: ProfileModelProtocol!
+    var model: ProfileModelProtocol!
     
     init(model: ProfileModelProtocol)
     {
