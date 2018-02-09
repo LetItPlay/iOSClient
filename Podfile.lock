@@ -3,20 +3,20 @@ PODS:
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - AssistantKit (0.4.1)
-  - Crashlytics (3.9.3):
-    - Fabric (~> 1.7.2)
+  - Crashlytics (3.10.0):
+    - Fabric (~> 1.7.3)
   - DynamicBlurView (2.0.2)
-  - Fabric (1.7.2)
+  - Fabric (1.7.3)
   - MarqueeLabel/Swift (3.1.4)
   - ReachabilitySwift (4.1.0)
-  - Realm (3.1.0):
-    - Realm/Headers (= 3.1.0)
-  - Realm/Headers (3.1.0)
-  - RealmSwift (3.1.0):
-    - Realm (= 3.1.0)
-  - RxCocoa (4.1.1):
+  - Realm (3.1.1):
+    - Realm/Headers (= 3.1.1)
+  - Realm/Headers (3.1.1)
+  - RealmSwift (3.1.1):
+    - Realm (= 3.1.1)
+  - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
-  - RxSwift (4.1.1)
+  - RxSwift (4.1.2)
   - SDWebImage (4.3.0):
     - SDWebImage/Core (= 4.3.0)
   - SDWebImage/Core (4.3.0)
@@ -46,15 +46,15 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
-  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
+  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
-  Fabric: 9cd6a848efcf1b8b07497e0b6a2e7d336353ba15
+  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-  Realm: 09513d7c054678d65cd02ce09871f805b0d758ac
-  RealmSwift: e868fee9b10e5490ad94b6b6ecd9027944da1824
-  RxCocoa: fd0862fd2df95fa55562ad28ffd2522c25eb4a85
-  RxSwift: c6e3b1c7b325c7d121cd4327e9d98b7ed746b570
+  Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
+  RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
+  RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
+  RxSwift: e49536837d9901277638493ea537394d4b55f570
   SDWebImage: 6da6c8bca115addc4de8613362e1b15f66333825
   ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694

@@ -35,7 +35,7 @@ class ChannelsCollectionViewCell: UICollectionViewCell {
     
     func configureWith(image: String)
     {
-        if let urlString = image.buildImageURL() {
+		if let urlString = URL(string: image) {
             imageView.sd_setImage(with: urlString)
         } else {
             imageView.image = nil

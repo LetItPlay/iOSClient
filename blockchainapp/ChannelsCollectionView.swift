@@ -73,7 +73,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             self?.display(channels: channels)
         }
         
-        self.backgroundColor = AppColor.Element.backgroundColor
+        self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         
         seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
         self.addSubview(seeAlsoButton)
@@ -110,6 +110,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .seeAll))
         delegate?.showAllChannels()
     }
     
@@ -130,6 +131,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
         delegate?.showChannel(station: source[indexPath.row])
     }
 }

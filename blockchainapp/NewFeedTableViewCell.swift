@@ -3,7 +3,7 @@ import UIKit
 import SnapKit
 import SwipeCellKit
 
-class NewFeedTableViewCell: SwipeTableViewCell {
+class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
@@ -18,7 +18,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 				iconImageView.image = nil
 			}
 			
-			if let icon = track?.image, let url = URL(string: icon) {
+			if let url = URL(string: track?.image) {
 				mainPictureImageView.sd_setImage(with: url)
 			} else {
 				mainPictureImageView.image = nil
@@ -38,6 +38,9 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 			
 			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
 //			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
+            
+            infoTitle.text = track?.name
+            infoText.text = track?.desc
 		}
 	}
 	

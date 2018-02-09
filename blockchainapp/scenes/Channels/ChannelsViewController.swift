@@ -72,7 +72,7 @@ class ChannelsCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsView.isHidden = true
 			}
-            if let urlString = channel?.image.buildImageURL() {
+			if let urlString = URL(string: channel?.image) {
                 iconImageView.sd_setImage(with: urlString)
             } else {
                 iconImageView.image = nil
@@ -110,6 +110,11 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
+        
+        tableView.contentInset = UIEdgeInsets(top: 0,
+                                              left: 0,
+                                              bottom: 72,
+                                              right: 0)
 		
 		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
 		
@@ -188,6 +193,7 @@ extension ChannelsViewController {
 extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelSeeAll))
 		let station = self.source[indexPath.row]
 		let vc = ChannelViewController(station: station)
 		self.navigationController?.pushViewController(vc, animated: true)

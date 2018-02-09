@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-	var tModel: FeedModel!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
         setupAppearence()
@@ -25,9 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
-        
-		self.tModel = FeedModel(isFeed: false)
-		
+
+		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
+
 		var vc: UIViewController!
 		if UserSettings.language == .none {
 			vc = SettingsViewController()

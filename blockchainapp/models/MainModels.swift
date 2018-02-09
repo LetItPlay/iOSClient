@@ -28,6 +28,14 @@ class Station: Object {
         return "\(id)"
     }
 	
+	func tracksCount() -> Int64 {
+		guard let realm = try? Realm() else {
+			return 0
+		}
+		return Int64(realm.objects(Track.self).filter("station == \(id)").count)
+		
+	}
+	
 	convenience init?(json: JSON) {
 		if let id = json["Id"].int,
 			let name = json["Name"].string,
@@ -134,17 +142,21 @@ class Track: Object {
 }
 extension Track {
     public func findStationName() -> String? {
-        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+		
+        return (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.name
     }
     
     public func findChannelImage() -> URL? {
-        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+		if let image = (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.image, let url = URL(string: image) {
+			return url
+		}
+		return nil
     }
 }
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
+		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: URL(string: self.image), length: self.length)
 	}
 	
 	func audiotrackId() -> String {

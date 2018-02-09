@@ -55,17 +55,28 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 			make.centerX.equalToSuperview()
 		}
 		
+		let tap = UITapGestureRecognizer(target: self, action: #selector(arrowTapped))
+		ind.addGestureRecognizer(tap)
+		
 		audioController.delegate = self
+	}
+	
+	@objc func arrowTapped() {
+		self.dismiss(animated: true) {
+			print("Player dismissed")
+		}
 	}
 	
 	func updateTime(time: (current: Double, length: Double)) {
 		DispatchQueue.main.async {
-			self.miniPlayer.progressView.progress = Float(time.current / time.length)
-			if !self.mainPlayer.trackProgressView.slider.isHighlighted {
-				self.mainPlayer.trackProgressView.slider.value = Float(time.current / time.length)
+			if time.current >= 0 && time.length >= 0 {
+				self.miniPlayer.progressView.progress = Float(time.current / time.length)
+				if !self.mainPlayer.trackProgressView.slider.isHighlighted {
+					self.mainPlayer.trackProgressView.slider.value = Float(time.current / time.length)
+				}
+				self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
+				self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
 			}
-			self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
-			self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
 		}
 	}
 	
@@ -93,13 +104,15 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 			}
 			if self.audioController.status != .playing {
 				let info = self.audioController.info
-				UIView.animate(withDuration: 0.01, animations: {
-					self.mainPlayer.trackProgressView.slider.value = Float(info.current/info.length)
-					self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
-					self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
+				if info.current >= 0 && info.current >= 0 {
+					UIView.animate(withDuration: 0.01, animations: {
+						self.mainPlayer.trackProgressView.slider.value = Float(info.current/info.length)
+						self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
+						self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
 
-					self.miniPlayer.progressView.progress = Float(info.current/info.length)
-				})
+						self.miniPlayer.progressView.progress = Float(info.current/info.length)
+					})
+				}
 			}
 			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
 			self.playlist.tableView.reloadData()

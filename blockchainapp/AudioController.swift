@@ -112,10 +112,10 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		case .play(let id):
 			if let id = id {
 				if let indexPath = indexPath(id: id),
-					indexPath != self.currentTrackIndexPath {
+					indexPath != self.currentTrackIndexPath, let track = self[indexPath] {
 					self.currentTrackIndexPath = indexPath
 					let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
-					player.load(item: (indexPath.section == 0 ? self.userPlaylist.tracks : self.playlist.tracks)[indexPath.item])
+					player.load(item: track)
 					player.setTrack(index: index)
 					player.make(command: .play)
 				} else {
@@ -222,10 +222,12 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			}
 		} else {
 			if indexPath.item + way == self.playlist.tracks.count {
-				self.make(command: .pause)
-				self.currentTrackIndexPath = IndexPath.invalid
-				self.userPlaylist.tracks = []
-				self.playlist.tracks = []
+//				self.make(command: .pause)
+//				self.currentTrackIndexPath = IndexPath.invalid
+//				self.userPlaylist.tracks = []
+//				self.playlist.tracks = []
+//				self.popupDelegate?.hidePlayer()
+				return
 				// TODO: hide player
 			} else {
 				self.currentTrackIndexPath.item += way

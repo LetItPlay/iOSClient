@@ -41,7 +41,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 			channelNameLabel.text = channel?.name
 			dataLabels[.subs]?.setData(data: Int64(channel?.subscriptionCount ?? 0))
 			dataLabels[.listens]?.setData(data: 0)
-			if let urlString = channel?.image.buildImageURL() {
+			if let urlString = URL(string: channel?.image) {
 				channelImageView.sd_setImage(with: urlString)
 			} else {
 				channelImageView.image = nil

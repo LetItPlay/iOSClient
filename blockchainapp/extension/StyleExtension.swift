@@ -51,7 +51,7 @@ extension String {
     func buildImageURL() -> URL? {
 		
 		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-			return URL(string: self)
+			return URL(string: str)
 		}
 		
         var result = "https://manage.letitplay.io/"
@@ -123,5 +123,15 @@ extension String {
 	var localized: String {
 		//🖕Fuck the translators team, they don’t deserve comments
 		return NSLocalizedString(self, comment: "")
+	}
+}
+
+extension URL {
+	init?(string: String?) {
+		if let str = string {
+			self.init(string: str)
+			return
+		}
+		return nil
 	}
 }

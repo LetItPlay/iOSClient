@@ -28,7 +28,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
-                self?.view?.display(channels: items)
+                self?.view?.display(channels: items.map({$0.detached()}))
                 
 				let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                 if !indexes.isEmpty {
@@ -36,18 +36,19 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
                         self!.view?.select(rows: indexes)
                     }
                 }
-                
-			case .update(_, _, _, _):
+			case .update(_, let del, let ins, let mod):
                 // Query results have changed, so apply them to the UITableView
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
-                self?.view?.display(channels: items)
-                
-                let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
-                if !indexes.isEmpty {
-                    DispatchQueue.main.async {
-                        self!.view?.select(rows: indexes)
-                    }
-                }
+				if items.count != 0 && ins.count != 0 {
+                	self?.view?.display(channels: items.map({$0.detached()}))
+					
+					let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
+					if !indexes.isEmpty {
+						DispatchQueue.main.async {
+							self!.view?.select(rows: indexes)
+						}
+					}
+				}
                 
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread

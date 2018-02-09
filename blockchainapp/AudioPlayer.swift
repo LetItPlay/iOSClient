@@ -129,28 +129,31 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 	}
 	
 	func make(command: PlayerCommand) {
-		switch command {
-		case .play:
-			self.player.play()
-			self.status = .playing
-			if let id = self.player.currentTrack()?.id {
-				self.delegate?.update(status: .playing, id: id)
+			switch command {
+			case .play:
+				self.player.play()
+				self.status = .playing
+				if let id = self.player.currentTrack()?.id {
+					self.delegate?.update(status: .playing, id: id)
+				}
+				ListenManager.shared.add(id: Int((self.player.currentTrack()?.id)!)!)
+			case .pause:
+				self.player.pause()
+				self.status = .paused
+				if let id = self.player.currentTrack()?.id {
+					self.delegate?.update(status: .paused, id: id)
+				}
+			case .seek(let progress):
+				if let item = player.currentTrack(), item.canStepForward {
+					let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
+					let current = length * progress
+					let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
+					self.player.seek(to: time)
+					self.delegate?.update(time: (current: current, length: length))
+				}
+			default:
+				break
 			}
-		case .pause:
-			self.player.pause()
-			self.status = .paused
-			if let id = self.player.currentTrack()?.id {
-				self.delegate?.update(status: .paused, id: id)
-			}
-		case .seek(let progress):
-			let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
-			let current = length * progress
-			let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
-			self.player.seek(to: time)
-			self.delegate?.update(time: (current: current, length: length))
-		default:
-			break
-		}
 	}
 	
 	func load(item: AudioTrack) {
@@ -164,12 +167,12 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 						  forKeyPath: kErrorKey,
 						  options:  [.initial, .new],
 						  context: nil)
-		self.player.insert(item, after: self.player.currentItem)
+		self.player.removeAllItems()
+		self.player.insert(item, after: nil)
 		if let curr = player.currentTrack(), item.id != curr.id {
-			self.player.advanceToNextItem()
+			self.player.seek(to: CMTime.init(seconds: 0.0, preferredTimescale: 1))
 		}
 		self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
-		self.player.play()
 		self.showLockScreenData()
 //		= 0.0
 	}

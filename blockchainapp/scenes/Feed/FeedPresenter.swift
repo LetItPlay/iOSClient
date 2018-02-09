@@ -63,7 +63,7 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({$0})
+				}).map({$0.detached()})
 				
 				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
@@ -75,8 +75,8 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({$0})
-                
+				}).map({$0.detached()})
+				self?.view?.display()
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController && self?.isFeed == true {
                     let new = (self?.tracks.count ?? 0) - oldTracks
                     AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = new == 0 ? nil : "\(new)"
