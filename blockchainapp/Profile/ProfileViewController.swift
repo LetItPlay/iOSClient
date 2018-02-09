@@ -24,6 +24,8 @@ class ProfileViewController: UIViewController {
 	var currentIndex: Int = -1
     var isKeyboardShown = true
 	
+	let header: LikeHeader = LikeHeader()
+	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
 	}
@@ -250,52 +252,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		let view = UIView()
-		view.backgroundColor = .white
-		
-		let label = UILabel()
-		label.font = AppFont.Title.big
-		label.textColor = AppColor.Title.dark
-		label.text = "Tracks you’ve liked".localized
-		
-		let tracks = IconedLabel.init(type: .tracks)
-		tracks.setData(data: Int64(self.tracks.count))
-		
-		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
-		
-		view.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(12)
-			make.left.equalToSuperview().inset(16)
-		}
-		
-		view.addSubview(tracks)
-		tracks.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().inset(16)
-			make.top.equalTo(label.snp.bottom).inset(-7)
-		}
-		
-		view.addSubview(time)
-		time.snp.makeConstraints { (make) in
-			make.left.equalTo(tracks.snp.right).inset(-8)
-			make.centerY.equalTo(tracks)
-		}
-		
-		let line = UIView()
-		line.backgroundColor = AppColor.Element.redBlur
-		line.layer.cornerRadius = 1
-		line.layer.masksToBounds = true
-		
-		view.addSubview(line)
-		line.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-			make.bottom.equalToSuperview()
-			make.height.equalTo(2)
-		}
-		
-		return view
+		header.fill(count: Int64(self.tracks.count), length: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
+		return header
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -319,6 +277,64 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 protocol ProfileViewDelegate {
     func addImage()
     func setName()
+}
+
+class LikeHeader: UIView {
+	
+	let tracks = IconedLabel.init(type: .tracks)
+	let time = IconedLabel.init(type: .time)
+	
+	init() {
+		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 81)))
+		
+		self.backgroundColor = .white
+		
+		let label = UILabel()
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.dark
+		label.text = "Tracks you’ve liked".localized
+		
+		self.addSubview(label)
+		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().inset(12)
+			make.left.equalToSuperview().inset(16)
+		}
+		
+		self.addSubview(tracks)
+		tracks.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.top.equalTo(label.snp.bottom).inset(-7)
+		}
+		
+		self.addSubview(time)
+		time.snp.makeConstraints { (make) in
+			make.left.equalTo(tracks.snp.right).inset(-8)
+			make.centerY.equalTo(tracks)
+		}
+		
+		let line = UIView()
+		line.backgroundColor = AppColor.Element.redBlur
+		line.layer.cornerRadius = 1
+		line.layer.masksToBounds = true
+		
+		self.addSubview(line)
+		line.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+			make.bottom.equalToSuperview()
+			make.height.equalTo(2)
+		}
+	}
+	
+	func fill(count: Int64, length: Int64) {
+		tracks.setData(data: count)
+		time.setData(data: length)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
 }
 
 class ProfileTopView: UIView, UITextFieldDelegate {

@@ -12,6 +12,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
+	var playerIsShowed: Bool = false
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -70,17 +71,16 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
-//		if show {
-//			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
-//				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
-//			}
-//		} else {
-//			self.dismissPopupBar(animated: animated, completion: nil)
-//		}
-		if !show {
+		
+		self.view.layoutIfNeeded()
+		
+		if playerIsShowed && !show {
 			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
-		} else {
+			playerIsShowed = false
+		}
+		if !playerIsShowed && show {
 			miniPlayerBottomConstr?.constant = 0
+			playerIsShowed = true 
 		}
 		UIView.animate(withDuration: 0.5) {
 			self.view.layoutIfNeeded()
