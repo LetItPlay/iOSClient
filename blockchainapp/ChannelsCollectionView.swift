@@ -73,7 +73,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             self?.display(channels: channels)
         }
         
-        self.backgroundColor = AppColor.Element.backgroundColor
+        self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         
         seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
         self.addSubview(seeAlsoButton)
