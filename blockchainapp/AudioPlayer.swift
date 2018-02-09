@@ -129,7 +129,6 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 	}
 	
 	func make(command: PlayerCommand) {
-		if let item = player.currentTrack(), item.canStepForward {
 			switch command {
 			case .play:
 				self.player.play()
@@ -145,15 +144,16 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 					self.delegate?.update(status: .paused, id: id)
 				}
 			case .seek(let progress):
-				let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
-				let current = length * progress
-				let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
-				self.player.seek(to: time)
-				self.delegate?.update(time: (current: current, length: length))
+				if let item = player.currentTrack(), item.canStepForward {
+					let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
+					let current = length * progress
+					let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
+					self.player.seek(to: time)
+					self.delegate?.update(time: (current: current, length: length))
+				}
 			default:
 				break
 			}
-		}
 	}
 	
 	func load(item: AudioTrack) {
