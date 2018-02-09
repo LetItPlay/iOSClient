@@ -86,6 +86,17 @@ SearchPresenterDelegate {
 		playlistTableView.backgroundColor = .white
 		
 		self.navigationItem.hidesSearchBarWhenScrolling = false
+        
+        let label = UILabel()
+        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.big
+        label.text = "Today playlists".localized
+        
+        self.view.addSubview(label)
+        label.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
+            make.centerX.equalToSuperview()
+        }
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
@@ -142,9 +153,9 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 		return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.descr, width: tableView.frame.width)
 	}
 	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 41
-	}
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 41
+    }
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 0.01
