@@ -97,8 +97,6 @@ SearchPresenterDelegate {
             make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
             make.centerX.equalToSuperview()
         }
-        
-        label.isHidden = self.presenter.playlists.count == 0 ? false : true
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
