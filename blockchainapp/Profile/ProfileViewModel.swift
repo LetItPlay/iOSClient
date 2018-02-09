@@ -12,18 +12,12 @@ enum ProfileUpdate {
     case image, name, language
 }
 
-protocol ProfileVMProtocol {
-    func set(name: String)
-    func set(image: Data)
-    func set(language: String)
-}
-
 protocol ProfileVMDelegate: class {
     func reload()
     func make(updates: ProfileUpdate)
 }
 
-class ProfileViewModel: ProfileVMProtocol, ProfileModelDelegate {
+class ProfileViewModel: ProfileModelDelegate {
     var name: String = ""
     var imageData: Data? = nil
     var language: String = ""
@@ -59,17 +53,5 @@ class ProfileViewModel: ProfileVMProtocol, ProfileModelDelegate {
     {
         self.language = language
         self.delegate?.make(updates: .language)
-    }
-    
-    func set(name: String) {
-        self.model.change(name: name)
-    }
-    
-    func set(image: Data) {
-        self.model.change(image: image)
-    }
-    
-    func set(language: String) {
-        self.model.change(language: language)
     }
 }
