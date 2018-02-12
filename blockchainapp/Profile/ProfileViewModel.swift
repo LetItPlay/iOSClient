@@ -13,14 +13,17 @@ enum ProfileUpdate {
 }
 
 protocol ProfileVMDelegate: class {
-    func reload(name: String, imageData: Data, language: Language)
-    func make(updates: ProfileUpdate, data: Any)
+    func make(updates: [ProfileUpdate])
 }
 
 class ProfileViewModel: ProfileModelDelegate {
+    
     var name: String = ""
-    var imageData: Data? = nil
-    var language: Language = .en
+    var imageData: Data! = Data()
+    var languageString: String = ""
+    var language: Language = .none
+    
+    let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺"]
     
     weak var delegate: ProfileVMDelegate?
     
@@ -29,24 +32,38 @@ class ProfileViewModel: ProfileModelDelegate {
         self.name = name
         self.imageData = image
         self.language = language
-        self.delegate?.reload(name: name, imageData: image, language: language)
+        self.getLanguage(lang: language)
+        
+        self.delegate?.make(updates: [.name, .image, .language])
+    }
+    
+    func getLanguage(lang: Language)
+    {
+        switch lang {
+        case .ru:
+            self.languageString = languages[0]
+        case .en:
+            self.languageString = languages[1]
+        default:
+            self.languageString = ""
+        }
     }
     
     func update(image: Data)
     {
         self.imageData  = image
-        self.delegate?.make(updates: .image, data: image)
+        self.delegate?.make(updates: [.image])
     }
     
     func update(name: String)
     {
         self.name = name
-        self.delegate?.make(updates: .name, data: name)
+        self.delegate?.make(updates: [.name])
     }
     
     func update(language: Language)
     {
-        self.language = language
-        self.delegate?.make(updates: .language, data: language)
+        self.getLanguage(lang: language)
+        self.delegate?.make(updates: [.language])
     }
 }

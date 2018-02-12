@@ -87,7 +87,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
                 make.left.equalTo(0)
                 make.right.equalTo(0)
                 make.bottom.equalTo(0)
-                //            make.edges.equalTo(self.view)
+//            make.edges.equalTo(self.view)
             }
         }
 		

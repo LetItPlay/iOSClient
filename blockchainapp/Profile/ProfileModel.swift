@@ -12,7 +12,7 @@ import UIKit
 protocol ProfileModelProtocol {
     func change(image: Data)
     func change(name: String)
-    func change(language: Language)
+    func changeLanguage()
     func getData()
 }
 
@@ -41,8 +41,16 @@ class ProfileModel: ProfileModelProtocol {
         self.delegate?.update(name: UserSettings.name)
     }
     
-    func change(language: Language) {
-        UserSettings.language = language
+    func changeLanguage() {
+        switch UserSettings.language {
+        case .ru:
+            UserSettings.language = .en
+        case .en:
+            UserSettings.language = .ru
+        default:
+            UserSettings.language = .none
+        }
+        
         self.delegate?.update(language: UserSettings.language)
     }
 }

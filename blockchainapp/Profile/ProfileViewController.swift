@@ -79,8 +79,8 @@ class ProfileViewController: UIViewController {
 											   object: nil)
 
 		
-		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
-		self.profileView.logoutButton.isSelected = self.profileView.viewModel?.language == .en
+		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
+		self.profileView.languageButton.isSelected = self.profileView.viewModel?.language == .en
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -96,12 +96,13 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-		if self.profileView.logoutButton.isSelected {
-            self.profileView.emitter?.set(language: .ru)
-		} else {
-			self.profileView.emitter?.set(language: .en)
-		}
-		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
+//        if self.profileView.languageButton.isSelected {
+//            self.profileView.emitter?.set(language: .ru)
+//        } else {
+//            self.profileView.emitter?.set(language: .en)
+//        }
+//        self.profileView.languageButton.isSelected = !self.profileView.languageButton.isSelected
+        self.profileView.emitter?.setLanguage()
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		self.currentIndex = -1
 		self.reloadData()
@@ -306,24 +307,18 @@ protocol ProfileViewDelegate {
 
 class ProfileTopView: UIView, ProfileVMDelegate {
     
-    func reload(name: String, imageData: Data, language: Language) {
-        self.setName(name: name)
-        
-        let image = UIImage.init(data: imageData)
-        self.bluredImageView.image = image
-        self.profileImageView.image = image
-    }
-    
-    func make(updates: ProfileUpdate, data: Any) {
-        switch updates {
-        case .image:
-            let image = UIImage.init(data: data as! Data)
-            profileImageView.image = image
-            bluredImageView.image = image
-        case .language:
-            print("change lang")
-        case .name:
-            self.setName(name: data as! String)
+    func make(updates: [ProfileUpdate]) {
+        for data in updates {
+            switch data {
+            case .image:
+                let image = UIImage.init(data: self.viewModel.imageData!)
+                profileImageView.image = image
+                bluredImageView.image = image
+            case .language:
+                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+            case .name:
+                self.setName(name: self.viewModel.name)
+            }
         }
     }
     
@@ -342,13 +337,13 @@ class ProfileTopView: UIView, ProfileVMDelegate {
     var delegate: ProfileViewDelegate?
     
     var emitter: ProfileEmitterProtocol?
-    var viewModel: ProfileViewModel?
+    var viewModel: ProfileViewModel!
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
 	let profileNameLabel: UITextField = UITextField()
 	let changePhotoButton: UIButton = UIButton()
-	let logoutButton: UIButton = UIButton()
+	let languageButton: UIButton = UIButton()
 	
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
@@ -425,21 +420,19 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 			make.height.equalTo(14)
 		}
 
-		blur.contentView.addSubview(logoutButton)
-		logoutButton.snp.makeConstraints { (make) in
+		blur.contentView.addSubview(languageButton)
+		languageButton.snp.makeConstraints { (make) in
 			make.top.equalTo(highlight.snp.bottom).inset(-24)
 			make.centerX.equalToSuperview()
 		}
 		
-		logoutButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-		logoutButton.layer.cornerRadius = 6
-		logoutButton.layer.masksToBounds = true
-		logoutButton.setTitle("Switch to English 🇬🇧", for: .normal)
-		logoutButton.setTitle("Поменять на Русский 🇷🇺", for: .selected)
-		logoutButton.titleLabel?.font = AppFont.Button.mid
-		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-		logoutButton.semanticContentAttribute = .forceRightToLeft
+		languageButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
+		languageButton.layer.cornerRadius = 6
+		languageButton.layer.masksToBounds = true
+		languageButton.titleLabel?.font = AppFont.Button.mid
+		languageButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
+		languageButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
+		languageButton.semanticContentAttribute = .forceRightToLeft
 		
 		let bot = CALayer()
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
