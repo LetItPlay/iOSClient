@@ -45,6 +45,9 @@
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
+		365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B0A1B2031983A006458F9 /* LikesEmitter.swift */; };
+		365B0A1E20319844006458F9 /* LikesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B0A1D20319844006458F9 /* LikesModel.swift */; };
+		365B0A2020319851006458F9 /* LikesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B0A1F20319851006458F9 /* LikesViewModel.swift */; };
 		36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */; };
 		36952672202C610100F97E1E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36952671202C610100F97E1E /* ProfileModel.swift */; };
 		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
@@ -142,6 +145,9 @@
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		2CE07EF62028883C00B3D939 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
+		365B0A1B2031983A006458F9 /* LikesEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesEmitter.swift; sourceTree = "<group>"; };
+		365B0A1D20319844006458F9 /* LikesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesModel.swift; sourceTree = "<group>"; };
+		365B0A1F20319851006458F9 /* LikesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesViewModel.swift; sourceTree = "<group>"; };
 		3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		36952671202C610100F97E1E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
@@ -235,10 +241,9 @@
 			children = (
 				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
 				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
-				3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */,
-				36952671202C610100F97E1E /* ProfileModel.swift */,
-				36F613C9202D67C000661E48 /* ProfileEmitter.swift */,
 				36F613CB202D6E3200661E48 /* ProfileBuilder.swift */,
+				365B0A1A20319817006458F9 /* Likes */,
+				365B0A19203197D7006458F9 /* Profile */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -271,6 +276,26 @@
 				01FF376E201224CB007F57E0 /* Models.swift */,
 			);
 			name = AudioCore;
+			sourceTree = "<group>";
+		};
+		365B0A19203197D7006458F9 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */,
+				36952671202C610100F97E1E /* ProfileModel.swift */,
+				36F613C9202D67C000661E48 /* ProfileEmitter.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		365B0A1A20319817006458F9 /* Likes */ = {
+			isa = PBXGroup;
+			children = (
+				365B0A1F20319851006458F9 /* LikesViewModel.swift */,
+				365B0A1D20319844006458F9 /* LikesModel.swift */,
+				365B0A1B2031983A006458F9 /* LikesEmitter.swift */,
+			);
+			path = Likes;
 			sourceTree = "<group>";
 		};
 		36F7C399201AF71200F99A9A /* Channels */ = {
@@ -697,6 +722,7 @@
 				36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */,
 				014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
+				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
@@ -704,6 +730,7 @@
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */,
+				365B0A2020319851006458F9 /* LikesViewModel.swift in Sources */,
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
 				01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */,
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
@@ -731,6 +758,7 @@
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
+				365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */,

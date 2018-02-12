@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import UIKit
+//import UIKit
 
 protocol ProfileModelProtocol {
     func change(image: Data)
