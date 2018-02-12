@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import RealmSwift
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, LikesVMDelegate {
+    
+    var emitter: LikesEmitterProtocol?
+    var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var profileView: ProfileTopView!
@@ -19,9 +22,13 @@ class ProfileViewController: UIViewController {
 	var tracks: [Track] = []
 	var currentIndex: Int = -1
 	
-    convenience init(view: ProfileTopView) {
+    convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
         self.profileView = view
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
+        emitter.state(.initialize)
 	}
 	
     override func viewDidLoad() {
@@ -95,16 +102,11 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-//        if self.profileView.languageButton.isSelected {
-//            self.profileView.emitter?.set(language: .ru)
-//        } else {
-//            self.profileView.emitter?.set(language: .en)
-//        }
-//        self.profileView.languageButton.isSelected = !self.profileView.languageButton.isSelected
         self.profileView.emitter?.setLanguage()
+        self.emitter?.reloadTracks()
+        
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		self.currentIndex = -1
-		self.reloadData()
 		
 		AudioController.main.make(command: .pause)
 	}
@@ -114,7 +116,7 @@ class ProfileViewController: UIViewController {
 	}
 	
 	@objc func settingsChanged(notification: Notification) {
-		self.reloadData()
+		self.emitter?.reloadTracks()
 	}
 	
 	@objc func trackPlayed(notification: Notification) {
@@ -134,20 +136,18 @@ class ProfileViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		self.reloadData()
+		self.emitter?.reloadTracks()
 	}
-	
-	func reloadData() {
-		let realm = try? Realm()
-		let likeMan = LikeManager.shared
-        self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
-		self.tableView.reloadData()
-	}
-	
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func updateTracks() {
+        self.tracks = viewModel.tracks
+        
+        self.tableView.reloadData()
     }
 }
 

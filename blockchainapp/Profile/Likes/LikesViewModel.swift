@@ -12,9 +12,13 @@ protocol LikesVMDelegate: class {
     func updateTracks()
 }
 
-class LikesViewModel {
+class LikesViewModel: LikesModelDelegate {
     
     var tracks: [Track] = []
+    weak var delegate: LikesVMDelegate?
     
-    
+    func reloadTracks(newTracks: [Track]) {
+        self.tracks = newTracks
+        self.delegate?.updateTracks()
+    }
 }
