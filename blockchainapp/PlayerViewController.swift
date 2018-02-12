@@ -59,6 +59,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		ind.addGestureRecognizer(tap)
 		
 		audioController.delegate = self
+		
+		self.ind.setFlat(false)
 	}
 	
 	@objc func arrowTapped() {

@@ -379,7 +379,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if self.type == .popular
         {
-            channelsView = ChannelsCollectionView()
+			if channelsView == nil {
+            	channelsView = ChannelsCollectionView()
+			}
             channelsView.delegate = self
             return channelsView
         }

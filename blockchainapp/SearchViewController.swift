@@ -127,7 +127,9 @@ SearchPresenterDelegate {
 	
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+		
+		self.presenter.getData()
+		
         if self.presenter.currentSearchString != "" {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .search(text: self.presenter.currentSearchString)))
         }
