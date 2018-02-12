@@ -9,20 +9,21 @@
 import UIKit
 import SnapKit
 
-class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsViewProtocol {
+class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate { //} ChannelsViewProtocol {
     
     var delegate: ChannelProtocol?
     
-    func display(channels: [Station]) {
-        source = channels
-        channelsCollectionView.reloadData()
-        
-        refreshControl?.endRefreshing()
-    }
+    var emitter: ChannelsEmitterProtocol?
+    var viewModel: ChannelsViewModel!
     
-    func select(rows: [Int]) {
-        
-    }
+//    func display(channels: [Station]) {
+//        source = channels
+//        channelsCollectionView.reloadData()
+//    }
+//
+//    func select(rows: [Int]) {
+//
+//    }
     
     var source = [Station]()
     
@@ -59,19 +60,13 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         return cv
     }()
     
-    var presenter: ChannelsPresenter!
-    var refreshControl: UIRefreshControl!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
-        
-        presenter = ChannelsPresenter(view: self)
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
+//    var presenter: ChannelsPresenter!
+    convenience init(frame: CGRect, emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    {
+        self.init(frame: frame)
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
         
         self.backgroundColor = AppColor.Element.backgroundColor
         
@@ -100,13 +95,46 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             make.bottom.equalTo(self.snp.bottom).inset(6)
         }
         
-        channelsCollectionView.reloadData()
+        self.emitter?.state(.initialize)
+//        channelsCollectionView.reloadData()
     }
-    
-    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+//        presenter = ChannelsPresenter(view: self)
+//        presenter.getData { [weak self] (channels) in
+//            self?.display(channels: channels)
+//        }
+        
+//        self.backgroundColor = AppColor.Element.backgroundColor
+//
+//        seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
+//        self.addSubview(seeAlsoButton)
+//        seeAlsoButton.snp.makeConstraints { (make) in
+//            make.top.equalTo(2)
+//            make.right.equalTo(-10)
+//            make.width.equalTo(60)
+//            make.height.equalTo(39)
+//        }
+//
+//        self.addSubview(channelLabel)
+//        channelLabel.snp.makeConstraints { (make) in
+//            make.top.equalTo(0)
+//            make.left.equalTo(16)
+//            make.right.equalTo(seeAlsoButton.snp.left)
+//            make.height.equalTo(41)
+//        }
+//
+//        self.addSubview(channelsCollectionView)
+//        channelsCollectionView.snp.makeConstraints { (make) in
+//            make.top.equalTo(channelLabel.snp.bottom).inset(0)
+//            make.left.equalTo(0)
+//            make.right.equalTo(0)
+//            make.bottom.equalTo(self.snp.bottom).inset(6)
+//        }
+        
+//        channelsCollectionView.reloadData()
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
@@ -131,5 +159,10 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate?.showChannel(station: source[indexPath.row])
+    }
+    
+    func reloadChannels() {
+        self.source = self.viewModel.channels
+        self.channelsCollectionView.reloadData()
     }
 }

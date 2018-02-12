@@ -39,10 +39,11 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		return label
 	}()
 	
-	convenience init(type: FeedType) {
+    convenience init(type: FeedType, view: ChannelsCollectionView) {
 		self.init(nibName: nil, bundle: nil)
 		
 		self.type = type
+        self.channelsView = view
 	}
 	
     override func viewDidLoad() {
@@ -59,11 +60,11 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 //        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
 
-        channelsView = ChannelsCollectionView.init(frame: self.view.frame)
+//        channelsView = ChannelsCollectionView.init(frame: self.view.frame)
         
         self.view.addSubview(channelsView)
         channelsView.snp.makeConstraints { (make) in
-            make.top.equalTo((self.navigationController?.navigationBar.frame.origin.y)! + (self.navigationController?.navigationBar.frame.size.height)!)
+        make.top.equalTo((self.navigationController?.navigationBar.frame.origin.y)! + (self.navigationController?.navigationBar.frame.size.height)!)
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.height.equalTo(121)
