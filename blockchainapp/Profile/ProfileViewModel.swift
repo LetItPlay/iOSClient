@@ -21,7 +21,6 @@ class ProfileViewModel: ProfileModelDelegate {
     var name: String = ""
     var imageData: Data! = Data()
     var languageString: String = ""
-    var language: Language = .none
     
     let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺"]
     
@@ -31,7 +30,6 @@ class ProfileViewModel: ProfileModelDelegate {
     {
         self.name = name
         self.imageData = image
-        self.language = language
         self.getLanguage(lang: language)
         
         self.delegate?.make(updates: [.name, .image, .language])

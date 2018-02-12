@@ -80,7 +80,6 @@ class ProfileViewController: UIViewController {
 
 		
 		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
-		self.profileView.languageButton.isSelected = self.profileView.viewModel?.language == .en
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -141,7 +140,7 @@ class ProfileViewController: UIViewController {
 	func reloadData() {
 		let realm = try? Realm()
 		let likeMan = LikeManager.shared
-        self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == self.profileView.viewModel?.language.rawValue}) ?? []
+        self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
 		self.tableView.reloadData()
 	}
 	
