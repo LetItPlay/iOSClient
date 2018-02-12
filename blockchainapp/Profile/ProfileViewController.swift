@@ -11,7 +11,7 @@ import SnapKit
 import RealmSwift
 
 class ProfileViewController: UIViewController, LikesVMDelegate {
-    
+
     var emitter: LikesEmitterProtocol?
     var viewModel: LikesViewModel!
 
@@ -76,14 +76,14 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 			make.height.equalTo(20)
 		}
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPlayed(notification:)),
-											   name: AudioController.AudioStateNotification.playing.notification(),
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPaused(notification:)),
-											   name: AudioController.AudioStateNotification.paused.notification(),
-											   object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(trackPlayed(notification:)),
+//                                               name: AudioController.AudioStateNotification.playing.notification(),
+//                                               object: nil)
+//        NotificationCenter.default.addObserver(self,
+//                                               selector: #selector(trackPaused(notification:)),
+//                                               name: AudioController.AudioStateNotification.paused.notification(),
+//                                               object: nil)
 
 		
 		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
@@ -111,27 +111,27 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 		AudioController.main.make(command: .pause)
 	}
 	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-	}
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 	
-	@objc func settingsChanged(notification: Notification) {
-		self.emitter?.reloadTracks()
-	}
+//    @objc func settingsChanged(notification: Notification) {
+//        self.emitter?.reloadTracks()
+//    }
 	
-	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = index
-			self.tableView.reloadData()
-		}
-	}
+//    @objc func trackPlayed(notification: Notification) {
+//        if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
+//            self.currentIndex = index
+//            self.tableView.reloadData()
+//        }
+//    }
 	
-	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = -1
-			self.tableView.reloadData()
-		}
-	}
+//    @objc func trackPaused(notification: Notification) {
+//        if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
+//            self.currentIndex = -1
+//            self.tableView.reloadData()
+//        }
+//    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -144,9 +144,13 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func updateTracks() {
-        self.tracks = viewModel.tracks
+    func reload() {
+//        self.tracks = viewModel.tracks
         
+        self.tableView.reloadData()
+    }
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
         self.tableView.reloadData()
     }
 }

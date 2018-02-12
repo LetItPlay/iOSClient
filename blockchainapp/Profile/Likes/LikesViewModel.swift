@@ -9,16 +9,22 @@
 import Foundation
 
 protocol LikesVMDelegate: class {
-    func updateTracks()
+    func reload()
+    func make(updates: [CollectionUpdate: [Int]])
 }
 
 class LikesViewModel: LikesModelDelegate {
     
-    var tracks: [Track] = []
+    var tracks: [TrackViewModel] = []
+    var currentPlayingIndex: Int? = nil
     weak var delegate: LikesVMDelegate?
     
-    func reloadTracks(newTracks: [Track]) {
-        self.tracks = newTracks
-        self.delegate?.updateTracks()
+    func reload(tracks: [TrackViewModel]) {
+        self.tracks = tracks
+        self.delegate?.reload()
+    }
+    
+    func update(index: Int, track: TrackViewModel) {
+        self.delegate?.make(updates: [.update: [index]])
     }
 }
