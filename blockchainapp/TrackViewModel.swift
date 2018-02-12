@@ -10,8 +10,20 @@ struct TrackViewModel {
 	var listensCount: String = ""
 	var dateString: String = ""
 	
-	var liked: Bool = true
+	var isLiked: Bool = true
 	var isPlaying: Bool = false
+	
+	init(track: Track1, isPlaying: Bool = false, isLiked: Bool = false) {
+		self.name = track.name
+		self.imageURL = URL(string: track.image)
+		self.length = track.length.formatTime()
+		self.likesCount = Int64(track.likeCount).formatAmount()
+		self.listensCount = Int64(track.listenCount).formatAmount()
+		self.dateString = track.publishedAt.formatString()
+		
+		self.isPlaying = isPlaying
+		self.isLiked = isLiked
+	}
 	
 	init(track: Track, isPlaying: Bool = false, isLiked: Bool = false) {
 		self.name = track.name
