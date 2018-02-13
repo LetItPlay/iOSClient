@@ -132,13 +132,22 @@ class Track: Object {
         return "\(id)"
     }
 }
+//extension Track {
+//    public func findStationName() -> String? {
+//        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+//    }
+//
+//    public func findChannelImage() -> URL? {
+//        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+//    }
+//}
 extension Track {
     public func findStationName() -> String? {
-        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+        return (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.name
     }
     
     public func findChannelImage() -> URL? {
-        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+        return (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
     }
 }
 

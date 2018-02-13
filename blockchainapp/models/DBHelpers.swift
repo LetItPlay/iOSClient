@@ -99,7 +99,7 @@ class DBManager {
         } else {
             let newTrack = Track()
             newTrack.id = id
-            newTrack.station   = station
+            newTrack.station = station
             newTrack.name = name
             newTrack.url  = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
             newTrack.desc = description
@@ -107,6 +107,7 @@ class DBManager {
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
             newTrack.image = coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newTrack.length = length
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
 				tags.forEach({ (tag) in
