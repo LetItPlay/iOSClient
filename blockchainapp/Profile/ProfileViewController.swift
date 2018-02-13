@@ -19,7 +19,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     var profileView: ProfileTopView!
     let imagePicker = UIImagePickerController()
 	
-	var tracks: [Track] = []
+	var tracks: [TrackViewModel] = []
 	var currentIndex: Int = -1
 	
     convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
@@ -145,12 +145,8 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     }
     
     func reload() {
-//        self.tracks = viewModel.tracks
+        self.tracks = viewModel.tracks
         
-        self.tableView.reloadData()
-    }
-    
-    func make(updates: [CollectionUpdate : [Int]]) {
         self.tableView.reloadData()
     }
 }
@@ -225,7 +221,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
 		
 		let track = self.tracks[indexPath.item]
+        /*
 		cell.track = track
+        */
 		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
 		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
 		cell.timeLabel.isHidden = true
@@ -234,7 +232,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
+//        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
+        /*
+        contr.loadPlaylist(playlist: <#T##(String, [AudioTrack])#>, playId: "\(self.viewModel.currentPlayingIndex)")
+        */
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -250,7 +251,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		tracks.setData(data: Int64(self.tracks.count))
 		
 		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
+        /*
+        time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
+        */
 		
 		view.addSubview(label)
 		label.snp.makeConstraints { (make) in
