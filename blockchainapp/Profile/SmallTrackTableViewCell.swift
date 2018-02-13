@@ -44,21 +44,23 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
-	weak var track: Track? = nil {
+    var track: TrackViewModel? = nil {
 		didSet {
-			if let iconUrl = track?.image.buildImageURL() {
+			if let iconUrl = track?.imageURL {
 				trackImageView.sd_setImage(with: iconUrl)
 			} else {
 				trackImageView.image = nil
 			}
 			
 			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
-			channelNameLabel.text = track?.findStationName()
+            channelNameLabel.text = track?.author
 			
-			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
+			self.timeLabel.text = track?.dateString // (track?.publishedAt ?? Date()).formatString()
 			
-			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
+//            dataLabels[.listens]?.setData(data: track?.listensCount)
+//            dataLabels[.time]?.setData(data: track?.length)
+            dataLabels[.listens]?.setData(string: (track?.listensCount)!)
+            dataLabels[.time]?.setData(string: (track?.length)!)
 		}
 	}
 	

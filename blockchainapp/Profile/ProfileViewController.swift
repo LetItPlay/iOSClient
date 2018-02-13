@@ -76,16 +76,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 			make.height.equalTo(20)
 		}
 		
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(trackPlayed(notification:)),
-//                                               name: AudioController.AudioStateNotification.playing.notification(),
-//                                               object: nil)
-//        NotificationCenter.default.addObserver(self,
-//                                               selector: #selector(trackPaused(notification:)),
-//                                               name: AudioController.AudioStateNotification.paused.notification(),
-//                                               object: nil)
-
-		
 		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
 	}
     
@@ -114,24 +104,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-	
-//    @objc func settingsChanged(notification: Notification) {
-//        self.emitter?.reloadTracks()
-//    }
-	
-//    @objc func trackPlayed(notification: Notification) {
-//        if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-//            self.currentIndex = index
-//            self.tableView.reloadData()
-//        }
-//    }
-	
-//    @objc func trackPaused(notification: Notification) {
-//        if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-//            self.currentIndex = -1
-//            self.tableView.reloadData()
-//        }
-//    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -221,9 +193,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
 		
 		let track = self.tracks[indexPath.item]
-        /*
 		cell.track = track
-        */
 		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
 		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
 		cell.timeLabel.isHidden = true
@@ -233,9 +203,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
 //        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
-        /*
-        contr.loadPlaylist(playlist: <#T##(String, [AudioTrack])#>, playId: "\(self.viewModel.currentPlayingIndex)")
-        */
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

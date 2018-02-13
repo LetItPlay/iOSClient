@@ -28,7 +28,7 @@ class LikesModel: LikesModelProtocol {
     
     private let disposeBag = DisposeBag()
     
-    init() {        
+    init() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(trackPlayed(notification:)),
                                                name: AudioController.AudioStateNotification.playing.notification(),
@@ -37,19 +37,11 @@ class LikesModel: LikesModelProtocol {
                                                selector: #selector(trackPaused(notification:)),
                                                name: AudioController.AudioStateNotification.paused.notification(),
                                                object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(settingsChanged(notification:)),
-                                               name: SettingsNotfification.changed.notification(),
-                                               object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         token?.invalidate()
-    }
-    
-    @objc func settingsChanged(notification: Notification) {
-        self.getTracksViewModel()
     }
     
     @objc func trackPlayed(notification: Notification) {
