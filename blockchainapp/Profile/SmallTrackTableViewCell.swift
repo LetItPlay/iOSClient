@@ -46,23 +46,23 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
     var track: TrackViewModel? = nil {
 		didSet {
-			if let iconUrl = track?.imageURL {
-				trackImageView.sd_setImage(with: iconUrl)
-			} else {
-				trackImageView.image = nil
-			}
+            if let iconUrl = track?.imageURL {
+                trackImageView.sd_setImage(with: iconUrl)
+            } else {
+                trackImageView.image = nil
+            }
 			
 			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
             channelNameLabel.text = track?.author
 			
-			self.timeLabel.text = track?.dateString // (track?.publishedAt ?? Date()).formatString()
-			
-//            dataLabels[.listens]?.setData(data: track?.listensCount)
-//            dataLabels[.time]?.setData(data: track?.length)
+			self.timeLabel.text = track?.dateString
+
             dataLabels[.listens]?.setData(string: (track?.listensCount)!)
             dataLabels[.time]?.setData(string: (track?.length)!)
 		}
 	}
+    
+    var viewModel: SmallTrackViewModel?
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -139,13 +139,13 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 	}
 	
-	static func trackText(text: String) -> NSAttributedString {
-		let para = NSMutableParagraphStyle()
-		para.lineBreakMode = .byWordWrapping
-		para.minimumLineHeight = 22
-		para.maximumLineHeight = 22
-		return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-	}
+//    static func trackText(text: String) -> NSAttributedString {
+//        let para = NSMutableParagraphStyle()
+//        para.lineBreakMode = .byWordWrapping
+//        para.minimumLineHeight = 22
+//        para.maximumLineHeight = 22
+//        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
+//    }
 	
 	static func height(text: String, width: CGFloat) -> CGFloat {
 		let rect = self.trackText(text: text)
