@@ -12,14 +12,16 @@ protocol LikesVMDelegate: class {
     func reload()
 }
 
-class LikesViewModel: LikesModelDelegate {
+class LikesViewModel: LikesModelDelegate {    
     
     var tracks: [TrackViewModel] = []
     var currentPlayingIndex: Int? = nil
     weak var delegate: LikesVMDelegate?
+    var length: Int64 = 0
     
-    func reload(tracks: [TrackViewModel]) {
+    func reload(tracks: [TrackViewModel], length: Int64) {
         self.tracks = tracks
+        self.length = length
         self.delegate?.reload()
     }
 }

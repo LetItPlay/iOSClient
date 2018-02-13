@@ -15,7 +15,7 @@ protocol LikesModelProtocol {
 }
 
 protocol LikesModelDelegate: class {
-    func reload(tracks: [TrackViewModel])
+    func reload(tracks: [TrackViewModel], length: Int64)
 }
 
 class LikesModel: LikesModelProtocol {
@@ -66,12 +66,14 @@ class LikesModel: LikesModelProtocol {
     
     func getTracksViewModel()
     {
+        var length: Int64 = 0
         var tracksVMs = [TrackViewModel]()
         for i in 0..<tracks.count
         {
             tracksVMs.append(TrackViewModel.init(track: tracks[i], isPlaying: i == playingIndex ? true : false, isLiked: true))
+            length += tracks[i].length
         }
         
-        self.delegate?.reload(tracks: tracksVMs)
+        self.delegate?.reload(tracks: tracksVMs, length: length)
     }
 }
