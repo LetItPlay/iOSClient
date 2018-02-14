@@ -46,7 +46,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
-  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
+  Crashlytics: dbb07d01876c171c5ccbdf7826410380189e452c
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b

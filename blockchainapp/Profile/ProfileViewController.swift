@@ -16,7 +16,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-	let profileView = ProfileTopView()
+    var profileView: ProfileTopView!
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
@@ -37,7 +37,15 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         viewModel.delegate = self
         emitter.state(.initialize)
 	}
-	
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -221,7 +229,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		header.fill(count: Int64(self.tracks.count), length: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
+        header.fill(count: Int64(self.tracks.count), length: self.viewModel.length)
 		return header
 	}
 	
@@ -269,7 +277,7 @@ class LikeHeader: UIView {
 		let time = IconedLabel.init(type: .time)
         time.setData(data: self.viewModel.length)
 		
-		view.addSubview(label)
+		self.addSubview(label)
 		label.snp.makeConstraints { (make) in
 			make.top.equalToSuperview().inset(12)
 			make.left.equalToSuperview().inset(16)

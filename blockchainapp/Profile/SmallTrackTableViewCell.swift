@@ -4,6 +4,7 @@ import SnapKit
 class SmallTrackTableViewCell: UITableViewCell {
 
 	static let cellID: String = "LikeTrackCellID"
+    let separator = UIView()
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
