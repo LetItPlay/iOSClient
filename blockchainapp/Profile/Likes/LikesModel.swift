@@ -12,14 +12,16 @@ import RxSwift
 
 protocol LikesModelProtocol {
     func getTracks()
+    func selectedTrack(index: Int)
 }
 
 protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
+    func updateTrackAt(index: Int)
 }
 
 class LikesModel: LikesModelProtocol {
-    
+
     weak var delegate: LikesModelDelegate?
     private var token: NotificationToken?
     
@@ -47,12 +49,14 @@ class LikesModel: LikesModelProtocol {
     @objc func trackPlayed(notification: Notification) {
         if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
             self.playingIndex = index
+            self.delegate?.updateTrackAt(index: self.playingIndex!)
         }
     }
     
     @objc func trackPaused(notification: Notification) {
         if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
             self.playingIndex = -1
+            self.delegate?.updateTrackAt(index: self.playingIndex!)
         }
     }
     
@@ -62,6 +66,12 @@ class LikesModel: LikesModelProtocol {
         self.tracks = realm?.objects(Track.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
         
         self.getTracksViewModel()
+    }
+    
+    func selectedTrack(index: Int) {
+        self.playingIndex = index
+        let contr = AudioController.main
+        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].audiotrackId())
     }
     
     func getTracksViewModel()

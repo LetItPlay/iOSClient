@@ -35,7 +35,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
-        emitter.state(.initialize)
 	}
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -126,7 +125,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		self.emitter?.reloadTracks()
+        self.emitter?.reloadTracks()
 	}
 
     override func didReceiveMemoryWarning() {
@@ -137,6 +136,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     func reload() {
         self.tracks = viewModel.tracks
         
+        self.tableView.reloadData()
+    }
+    
+    func updateTracks() {
+        self.tracks = self.viewModel.tracks
         self.tableView.reloadData()
     }
 }
@@ -215,8 +219,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		
 		let track = self.tracks[indexPath.item]
 		cell.track = track
-		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
-		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
+		cell.dataLabels[.listens]?.isHidden = self.tracks[indexPath.row].isPlaying
+		cell.dataLabels[.playingIndicator]?.isHidden = !self.tracks[indexPath.row].isPlaying
 		cell.timeLabel.isHidden = true
 		cell.separator.isHidden = indexPath.item + 1 == self.tracks.count
 		return cell
@@ -224,8 +228,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
-		let contr = AudioController.main
-//        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
+        self.emitter?.make(action: .selected, index: indexPath.row)
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -421,7 +424,6 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
         profileNameLabel.returnKeyType = .done
-//        profileNameLabel.delegate = self
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)

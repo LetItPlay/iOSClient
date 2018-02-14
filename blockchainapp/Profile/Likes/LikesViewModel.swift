@@ -10,12 +10,13 @@ import Foundation
 
 protocol LikesVMDelegate: class {
     func reload()
+    func updateTracks()
 }
 
 class LikesViewModel: LikesModelDelegate {    
     
     var tracks: [TrackViewModel] = []
-    var currentPlayingIndex: Int? = nil
+    var currentPlayingIndex: Int = -1
     weak var delegate: LikesVMDelegate?
     var length: String = ""
     
@@ -23,5 +24,26 @@ class LikesViewModel: LikesModelDelegate {
         self.tracks = tracks
         self.length = length
         self.delegate?.reload()
+    }
+    
+    func updateTrackAt(index: Int) {
+        if index != -1
+        {
+            if currentPlayingIndex != -1
+            {
+                self.tracks[currentPlayingIndex].isPlaying = false
+            }
+            self.tracks[index].isPlaying = true
+        }
+        else
+        {
+            if currentPlayingIndex != -1
+            {
+                self.tracks[currentPlayingIndex].isPlaying = false
+            }
+        }
+        
+        self.currentPlayingIndex = index
+        self.delegate?.updateTracks()
     }
 }

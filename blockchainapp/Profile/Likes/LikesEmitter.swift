@@ -9,8 +9,8 @@
 import Foundation
 
 protocol LikesEmitterProtocol {
-    func state(_ state: ViewState)
     func reloadTracks()
+    func make(action: TrackAction, index: Int)
 }
 
 class LikesEmitter: LikesEmitterProtocol {
@@ -25,12 +25,13 @@ class LikesEmitter: LikesEmitterProtocol {
         self.model.getTracks()
     }
     
-    func state(_ state: ViewState) {
-        switch state {
-        case .initialize:
-            self.model.getTracks()
+    func make(action: TrackAction, index: Int) {
+        switch action {
+        case .selected:
+            self.model.selectedTrack(index: index)
         default:
             break
         }
     }
+    
 }
