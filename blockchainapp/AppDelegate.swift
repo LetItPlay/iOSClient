@@ -17,11 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-	
+	var tModel: FeedModel!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
         setupAppearence()
         migrate()
+		
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 

@@ -10,7 +10,10 @@ import UIKit
 import SnapKit
 import RealmSwift
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, LikesVMDelegate {
+
+    var emitter: LikesEmitterProtocol?
+    var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
 	let profileView = ProfileTopView()
@@ -20,14 +23,19 @@ class ProfileViewController: UIViewController {
         return imagePicker
     }()
 	
-	var tracks: [Track] = []
+	var tracks: [TrackViewModel] = []
 	var currentIndex: Int = -1
     var isKeyboardShown = true
 	
 	let header: LikeHeader = LikeHeader()
 	
-	convenience init() {
+    convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
+        self.profileView = view
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
+        emitter.state(.initialize)
 	}
 	
     override func viewDidLoad() {
@@ -75,18 +83,7 @@ class ProfileViewController: UIViewController {
 			make.height.equalTo(20)
 		}
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPlayed(notification:)),
-											   name: AudioController.AudioStateNotification.playing.notification(),
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPaused(notification:)),
-											   name: AudioController.AudioStateNotification.paused.notification(),
-											   object: nil)
-
-		
-		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
-		self.profileView.logoutButton.isSelected = UserSettings.language == .en
+		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -98,65 +95,41 @@ class ProfileViewController: UIViewController {
     @objc func dismissKeyboard(_ sender: Any) {
         isKeyboardShown = false
         view.endEditing(true)
-//        let height = sender is UITapGestureRecognizer ? 0 : 100
-//        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-        UserSettings.name = self.profileView.profileNameLabel.text!
-        self.profileView.updateText()
+        let height = sender is UITapGestureRecognizer ? 0 : 100
+        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
+        let name = self.profileView.profileNameLabel.text!
+        self.profileView.emitter?.set(name: name)
     }
 	
 	@objc func langChanged(_: UIButton) {
-		if self.profileView.logoutButton.isSelected {
-			UserSettings.language = .ru
-		} else {
-			UserSettings.language = .en
-		}
-		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
+        self.profileView.emitter?.setLanguage()
+        self.emitter?.reloadTracks()
+        
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		self.currentIndex = -1
-		self.reloadData()
 		
 		AudioController.main.make(command: .pause)
 	}
 	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-	}
-	
-	@objc func settingsChanged(notification: Notification) {
-		self.reloadData()
-	}
-	
-	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = index
-			self.tableView.reloadData()
-		}
-	}
-	
-	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = -1
-			self.tableView.reloadData()
-		}
-	}
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		self.reloadData()
+		self.emitter?.reloadTracks()
 	}
-	
-	func reloadData() {
-		let realm = try? Realm()
-		let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}).map({$0.detached()}) ?? []
-		self.tableView.reloadData()
-	}
-	
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func reload() {
+        self.tracks = viewModel.tracks
+        
+        self.tableView.reloadData()
     }
 }
 
@@ -204,16 +177,12 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if var pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            let compressionQuality: CGFloat = 0.5
-            let data = UIImageJPEGRepresentation(pickedImage, compressionQuality)
-            pickedImage = UIImage.init(data: data!)!
-            
-            UserSettings.image = UIImagePNGRepresentation(pickedImage)!
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            let image = UIImagePNGRepresentation(pickedImage)!
+            self.profileView.emitter?.set(image: image)
         }
         
         dismiss(animated: true, completion: nil)
-        self.profileView.updateImage()
     }
 }
 
@@ -248,7 +217,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
+//        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].audiotrackId())
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -294,7 +263,13 @@ class LikeHeader: UIView {
 		label.textColor = AppColor.Title.dark
 		label.text = "Tracks you’ve liked".localized
 		
-		self.addSubview(label)
+		let tracks = IconedLabel.init(type: .tracks)
+		tracks.setData(data: Int64(self.tracks.count))
+		
+		let time = IconedLabel.init(type: .time)
+        time.setData(data: self.viewModel.length)
+		
+		view.addSubview(label)
 		label.snp.makeConstraints { (make) in
 			make.top.equalToSuperview().inset(12)
 			make.left.equalToSuperview().inset(16)
@@ -337,20 +312,53 @@ class LikeHeader: UIView {
 	
 }
 
-class ProfileTopView: UIView, UITextFieldDelegate {
+
+class ProfileTopView: UIView, ProfileVMDelegate {
+    
+    func make(updates: [ProfileUpdate]) {
+        for data in updates {
+            switch data {
+            case .image:
+                let image = UIImage.init(data: self.viewModel.imageData!)
+                profileImageView.image = image
+                bluredImageView.image = image
+            case .language:
+                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+            case .name:
+                self.setName(name: self.viewModel.name)
+            }
+        }
+    }
+    
+    func setName(name: String)
+    {
+        if name != "name"
+        {
+            profileNameLabel.text = name
+        }
+        else
+        {
+            profileNameLabel.placeholder = "name"
+        }
+    }
 	
     var delegate: ProfileViewDelegate?
+    
+    var emitter: ProfileEmitterProtocol?
+    var viewModel: ProfileViewModel!
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
 	let profileNameLabel: UITextField = UITextField()
 	let changePhotoButton: UIButton = UIButton()
-	let logoutButton: UIButton = UIButton()
+	let languageButton: UIButton = UIButton()
 	
-	init() {
+    init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
-		self.updateText()
-		self.updateImage()
+
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
         
 		bluredImageView.layer.cornerRadius = 140
 		bluredImageView.layer.masksToBounds = true
@@ -423,51 +431,27 @@ class ProfileTopView: UIView, UITextFieldDelegate {
 			make.height.equalTo(14)
 		}
 
-		blur.contentView.addSubview(logoutButton)
-		logoutButton.snp.makeConstraints { (make) in
+		blur.contentView.addSubview(languageButton)
+		languageButton.snp.makeConstraints { (make) in
 			make.top.equalTo(highlight.snp.bottom).inset(-24)
 			make.centerX.equalToSuperview()
 		}
 		
-		logoutButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-		logoutButton.layer.cornerRadius = 6
-		logoutButton.layer.masksToBounds = true
-		logoutButton.setTitle("Switch to English 🇬🇧", for: .normal)
-		logoutButton.setTitle("Поменять на Русский 🇷🇺", for: .selected)
-		logoutButton.titleLabel?.font = AppFont.Button.mid
-		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-		logoutButton.semanticContentAttribute = .forceRightToLeft
+		languageButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
+		languageButton.layer.cornerRadius = 6
+		languageButton.layer.masksToBounds = true
+		languageButton.titleLabel?.font = AppFont.Button.mid
+		languageButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
+		languageButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
+		languageButton.semanticContentAttribute = .forceRightToLeft
 		
 		let bot = CALayer()
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
-		
-		
+
+        emitter.state(.initialize)
 	}
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        delegate?.setName()
-        return true
-    }
-	
-	func updateImage() {
-		profileImageView.image = UIImage.init(data: UserSettings.image)
-		bluredImageView.image = UIImage.init(data: UserSettings.image)
-	}
-	
-    func updateText()
-    {
-        if UserSettings.name != "name"
-        {
-            profileNameLabel.text = UserSettings.name
-        }
-        else
-        {
-            profileNameLabel.placeholder = "Name".localized
-        }
-    }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .avatar))

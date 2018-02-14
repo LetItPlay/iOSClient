@@ -99,7 +99,7 @@ class DBManager {
         } else {
             let newTrack = Track()
             newTrack.id = id
-            newTrack.station   = station
+            newTrack.station = station
             newTrack.name = name
             newTrack.url  = url.buildImageURL()?.absoluteString ?? ""
             newTrack.desc = description

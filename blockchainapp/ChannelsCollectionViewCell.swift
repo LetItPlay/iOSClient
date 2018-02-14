@@ -33,12 +33,13 @@ class ChannelsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureWith(image: String)
+    func configureWith(image: URL)
     {
-		if let urlString = URL(string: image) {
-            imageView.sd_setImage(with: urlString)
-        } else {
-            imageView.image = nil
-        }
+//        if let urlString = image.buildImageURL() {
+//            imageView.sd_setImage(with: urlString)
+//        } else {
+//            imageView.image = nil
+//        }
+        imageView.sd_setImage(with: image)
     }
 }

@@ -93,7 +93,45 @@ class Track: Object {
      * yyyy-mm-ddThh:mm:ss[.mmm]
      */
     @objc dynamic var publishedAt: Date = Date()
-    
+	
+	convenience init?(json: JSON) {
+		if let idInt = json["Id"].int,
+			let title = json["Title"].string,
+			let audioURL = json["AudioURL"].string,
+			let publishedAt = json["PublishedAt"].string,
+			let lang = json["Lang"].string,
+			let station = json["StationID"].int {
+			
+			self.init()
+			self.id = idInt
+			self.name = title
+			self.lang = lang
+			self.url = audioURL
+			self.station = station
+			
+			self.length = json["TotalLengthInSeconds"].int64 ?? 0
+			self.desc = json["Description"].string ?? ""
+			self.image = json["CoverURL"].string ?? ""
+			
+			self.likeCount = json["LikeCount"].int ?? 0
+			self.listenCount = json["ListenCount"].int ?? 0
+			
+			
+			if let tags = json["Tags"].array?.map({$0.string}) {
+				tags.forEach({ (tag) in
+					if let tag = tag {
+						let rlmTag = Tag()
+						rlmTag.value = tag
+						self.tags.append(rlmTag)
+					}
+				})
+			}
+			return
+		}
+		
+		return nil
+	}
+	
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -102,9 +140,17 @@ class Track: Object {
         return "\(id)"
     }
 }
+//extension Track {
+//    public func findStationName() -> String? {
+//        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+//    }
+//
+//    public func findChannelImage() -> URL? {
+//        return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+//    }
+//}
 extension Track {
     public func findStationName() -> String? {
-		
         return (try? Realm())?.object(ofType: Station.self, forPrimaryKey: station)?.name
     }
     

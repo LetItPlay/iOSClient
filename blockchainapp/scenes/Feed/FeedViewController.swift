@@ -53,10 +53,11 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     
     var tappedSideButton = false
 	
-	convenience init(type: FeedType) {
+    convenience init(type: FeedType, view: ChannelsCollectionView) {
 		self.init(nibName: nil, bundle: nil)
 		
 		self.type = type
+        self.channelsView = view
 	}
 	
     override func viewDidLoad() {
@@ -191,6 +192,10 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
       let vc = ChannelViewController(station: station)
       self.navigationController?.pushViewController(vc, animated: true)
   }
+    
+    func showChannel(_ channel: ChannelViewModel) {
+        // TODO: show channelViewModel
+    }
 
 //  func showChannels(up: Bool)
 //  {
