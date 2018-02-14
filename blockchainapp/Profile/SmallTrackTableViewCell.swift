@@ -43,26 +43,27 @@ class SmallTrackTableViewCell: UITableViewCell {
 	}()
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
+    var viewModel: SmallTrackViewModel?
 	
     var track: TrackViewModel? = nil {
 		didSet {
-            if let iconUrl = track?.imageURL {
+            self.viewModel = SmallTrackViewModel.init(track: track!)
+            
+            if let iconUrl = self.viewModel?.iconUrl {
                 trackImageView.sd_setImage(with: iconUrl)
             } else {
                 trackImageView.image = nil
             }
-			
-			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
-            channelNameLabel.text = track?.author
-			
-			self.timeLabel.text = track?.dateString
+            
+            trackNameLabel.attributedText = viewModel?.trackName
+            channelNameLabel.text = viewModel?.channelName
+            
+            self.timeLabel.text = viewModel?.time
 
-            dataLabels[.listens]?.setData(string: (track?.listensCount)!)
-            dataLabels[.time]?.setData(string: (track?.length)!)
+            dataLabels[.listens]?.setData(string: (viewModel?.listens)!)
+            dataLabels[.time]?.setData(string: (viewModel?.length)!)
 		}
 	}
-    
-    var viewModel: SmallTrackViewModel?
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -138,21 +139,21 @@ class SmallTrackTableViewCell: UITableViewCell {
 			make.height.equalTo(1)
 		}
 	}
-	
-//    static func trackText(text: String) -> NSAttributedString {
-//        let para = NSMutableParagraphStyle()
-//        para.lineBreakMode = .byWordWrapping
-//        para.minimumLineHeight = 22
-//        para.maximumLineHeight = 22
-//        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-//    }
+    
+    static func trackText(text: String) -> NSAttributedString {
+        let para = NSMutableParagraphStyle()
+        para.lineBreakMode = .byWordWrapping
+        para.minimumLineHeight = 22
+        para.maximumLineHeight = 22
+        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
+    }
 	
 	static func height(text: String, width: CGFloat) -> CGFloat {
-		let rect = self.trackText(text: text)
-			.boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
-						  options: .usesLineFragmentOrigin,
-						  context: nil)
-		return min(rect.height, 44) + 31 + 32
+        let rect = self.trackText(text: text)
+            .boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
+                          options: .usesLineFragmentOrigin,
+                          context: nil)
+        return min(rect.height, 44) + 31 + 32
 	}
 	
 	

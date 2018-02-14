@@ -32,7 +32,7 @@ class SmallTrackViewModel {
         self.length = track.length
     }
     
-    func trackText(text: String) -> NSAttributedString {
+    private func trackText(text: String) -> NSAttributedString {
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = .byWordWrapping
         para.minimumLineHeight = 22
