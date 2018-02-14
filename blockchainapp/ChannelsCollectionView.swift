@@ -16,7 +16,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
     
-    var source = [ChannelViewModel]()
+    var source = [SmallChannelViewModel]()
     
     let channelLabel: UILabel = {
         let label = UILabel()

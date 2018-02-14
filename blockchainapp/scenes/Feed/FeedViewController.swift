@@ -193,7 +193,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
       self.navigationController?.pushViewController(vc, animated: true)
   }
     
-    func showChannel(_ channel: ChannelViewModel) {
+    func showChannel(_ channel: SmallChannelViewModel) {
         // TODO: show channelViewModel
     }
 

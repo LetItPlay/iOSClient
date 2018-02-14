@@ -14,7 +14,7 @@ protocol ChannelsModelProtocol {
 }
 
 protocol ChannelsModelDelegate: class {
-    func reload(newChannels: [ChannelViewModel])
+    func reload(newChannels: [SmallChannelViewModel])
 }
 
 class ChannelsModel: ChannelsModelProtocol {
@@ -96,10 +96,10 @@ class ChannelsModel: ChannelsModelProtocol {
     
     func getChannelViewModels()
     {
-        var channelVMs = [ChannelViewModel]()
+        var channelVMs = [SmallChannelViewModel]()
         for channel in channels
         {
-            channelVMs.append(ChannelViewModel.init(channel: channel))
+            channelVMs.append(SmallChannelViewModel.init(channel: channel))
         }
         
         self.delegate?.reload(newChannels: channelVMs)
