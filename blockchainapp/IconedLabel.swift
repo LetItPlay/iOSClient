@@ -80,6 +80,10 @@ class IconedLabel: UIView {
 			self.textLabel.text = "\(data.formatAmount())"
 		}
 	}
+    
+    func set(text: String) {
+        self.textLabel.text = text
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil

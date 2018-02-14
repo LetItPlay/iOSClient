@@ -9,15 +9,21 @@
 import UIKit
 
 class FeedBuilder: Builder {
-	static func build() -> UIViewController {
-		let vc = FeedViewController(type: .feed)
+	static func build(params: [String: Any]?) -> UIViewController {
+        let model = FeedModel(isFeed: true)
+        let vm = FeedViewModel(model: model)
+        let emitter = FeedEmitter(model: model)
+		let vc = FeedViewController(vm: vm, emitter: emitter)
 		return vc
 	}
 }
 
 class PopularBuilder: Builder {
-	static func build() -> UIViewController {
-		let vc = FeedViewController(type: .popular)
-		return vc
+	static func build(params: [String: Any]?) -> UIViewController {
+        let model = FeedModel(isFeed: false)
+        let vm = FeedViewModel(model: model)
+        let emitter = FeedEmitter(model: model)
+        let vc = FeedViewController(vm: vm, emitter: emitter)
+        return vc
 	}
 }

@@ -2,8 +2,15 @@ import Foundation
 import RxSwift
 import Action
 
-protocol FeedModelProtocol {
-	
+protocol FeedModelProtocol: class, ModelProtocol {
+    weak var delegate: FeedModelDelegate? {get set}
+}
+
+protocol FeedEventHandler: class {
+    func trackSelected(index: Int)
+    func tarckLiked(index: Int)
+    func reload()
+    func trackShowed(index: Int)
 }
 
 protocol FeedModelDelegate: class {
@@ -11,7 +18,7 @@ protocol FeedModelDelegate: class {
 	func update(index: Int, track: TrackViewModel)
 }
 
-class FeedModel {
+class FeedModel: FeedModelProtocol, FeedEventHandler {
 	
 	private let isFeed: Bool
 	
@@ -32,6 +39,7 @@ class FeedModel {
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
 		
+        
 		dataAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.trends(7) : TracksRequest.feed(stations: SubscribeManager.shared.stations, offset: offset, count: 100))
 		})
@@ -48,14 +56,14 @@ class FeedModel {
 				var vm = TrackViewModel(track: track,
 										isPlaying: track.idString() == playingId ,
 										isLiked: LikeManager.shared.hasObject(id: track.id))
-				if let station = tuple.1.filter({$0.id == track.id}).first {
+				if let station = tuple.1.filter({$0.id == track.stationId}).first {
 					vm.authorImage = station.image
 					vm.author = station.name
 				}
 				return vm
 			})
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
-			self.delegate?.show(tracks: vms, isContinue: self.currentOffest == 0)
+			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
 			print("Track loaded")
@@ -92,6 +100,35 @@ class FeedModel {
 	@objc func settingsChanged(notification: Notification) {
 
 	}
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            self.dataAction?.execute(0)
+        case .appear:
+            break
+        case .disappear:
+            break
+        case .deinitialize:
+            break
+        }
+    }
+    
+    func trackSelected(index: Int) {
+        
+    }
+    
+    func tarckLiked(index: Int) {
+        
+    }
+    
+    func reload() {
+        self.dataAction?.execute(0)
+    }
+    
+    func trackShowed(index: Int) {
+        self.dataAction?.execute(self.tracks.count)
+    }
 
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
@@ -111,14 +148,6 @@ class FeedModel {
 
 	@objc func subscriptionChanged(notification: Notification) {
 		
-	}
-	
-	func reload() {
-		self.dataAction?.execute(0)
-	}
-	
-	func dataRequested() {
-		self.dataAction?.execute(self.tracks.count)
 	}
 }
 

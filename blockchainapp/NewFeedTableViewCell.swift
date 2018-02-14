@@ -7,65 +7,50 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
-	public var onPlay: ((Int) -> Void)?
 	public var onLike: ((Int) -> Void)?
 	
-	weak var track: Track? = nil {
-		didSet {
-			if let iconUrl = track?.findChannelImage() {
-				iconImageView.sd_setImage(with: iconUrl)
-			} else {
-				iconImageView.image = nil
-			}
-			
-			if let icon = track?.image, let url = URL(string: icon) {
-				mainPictureImageView.sd_setImage(with: url)
-			} else {
-				mainPictureImageView.image = nil
-			}
-			
-			trackTitleLabel.attributedText = type(of: self).title(text: track?.name ?? "")
-			infoTitle.text = track?.name ?? ""
-			infoText.text = track?.desc ?? ""
-//			trackTitleLabel.text = track?.name ?? ""
-			channelLabel.text = track?.findStationName()
-			
-			timeAgoLabel.text = track?.publishedAt.formatString()
-			
-			dataLabels[.likes]?.setData(data: Int64(track?.likeCount ?? 0))
-			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: track?.length ?? 0)
-			
-			likeButton.isSelected = LikeManager.shared.hasObject(id: track?.id ?? 0)
-//			playButton.isSelected = audioManager.isPlaying && audioManager.currentItemId == track?.uniqString()
-		}
-	}
+    func fill(vm: TrackViewModel) {
+        channelLabel.text = vm.author
+        if let authorImage = vm.authorImage {
+            iconImageView.sd_setImage(with: authorImage)
+        } else {
+            iconImageView.image = nil
+        }
+        
+        timeAgoLabel.text = vm.dateString
+        
+        trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
+        if let trackImage = vm.imageURL {
+            mainPictureImageView.sd_setImage(with: trackImage)
+        } else {
+            mainPictureImageView.image = nil
+        }
+        
+        infoTitle.text = vm.name
+        infoText.text = vm.description
+        
+        
+        dataLabels[.likes]?.set(text: vm.likesCount)
+        dataLabels[.listens]?.set(text: vm.listensCount)
+        dataLabels[.time]?.set(text: vm.length)
+        
+        likeButton.isSelected = vm.isLiked
+        
+        self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+        self.dataLabels[.listens]?.isHidden = !vm.isPlaying
+    }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		viewInitialize()
         
-//		self.playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
 		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
-	}
-	
-	@objc func playPressed(_: UIButton){
-//		if let id = track?.id {
-			onPlay?(0)
-//		}
 	}
 	
 	@objc func likePressed(_: UIButton) {
 		likeButton.isSelected = !likeButton.isSelected
-//		if let id = track?.id {
-			onLike?(0)
-//		}
-	}
-	
-	func set(isPlaying: Bool) {
-		self.dataLabels[.playingIndicator]?.isHidden = !isPlaying
-		self.dataLabels[.listens]?.isHidden = isPlaying
+        onLike?(0)
 	}
 	
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
@@ -76,22 +61,13 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		return NSAttributedString.init(string: text , attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .semibold), .foregroundColor: AppColor.Title.dark, .paragraphStyle: para])
 	}
 	
-	static func height(text: String, width: CGFloat) -> CGFloat {
+	static func height(vm: TrackViewModel, width: CGFloat) -> CGFloat {
 		let picHeight = ceil((width - 32)*9.0/16.0)
-		let textHeight = title(text: text, calc: true)
+		let textHeight = title(text: vm.name, calc: true)
 			.boundingRect(with: CGSize.init(width: width - 20 - 32, height: 999), options: .usesLineFragmentOrigin, context: nil)
 			.height
 		return min(66, ceil(textHeight)) + picHeight + 32 + 4 + 32 + 24 + 2
 	}
-	
-	// MARK: - AudioManager events
-//	@objc func audioManagerStartPlaying(_ notification: Notification) {
-//		playButton.isSelected = audioManager.currentItemId == track?.uniqString()
-//	}
-//
-//	@objc func audioManagerPaused(_ notification: Notification) {
-//		playButton.isSelected = false
-//	}
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
@@ -373,19 +349,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 	required init?(coder aDecoder: NSCoder) {
 		return nil
 	}
-	
-//	override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//		let likePoint = self.convert(point, to: likeButton)
-////		let playPoint = self.convert(point, to: playButton)
-//		if likeButton.frame.contains(likePoint) {
-//			return likeButton
-//		}
-////		if playButton.frame.contains(playPoint) {
-////			return playButton
-////		}
-//		return super.hitTest(point, with: event)
-//	}
-
+    
     func getInfo(toHide: Bool, animated: Bool)
     {
         if toHide

@@ -17,8 +17,8 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		self.init(nibName: nil, bundle: nil)
 		
 		let tabs: [(String, (UIImage?, UIViewController))] = [
-			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build())),
-			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build())),
+			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
+			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
 		
