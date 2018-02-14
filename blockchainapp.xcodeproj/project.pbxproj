@@ -65,6 +65,9 @@
 		9DA077C420343983002BF631 /* ChannelsVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C320343983002BF631 /* ChannelsVCModel.swift */; };
 		9DA077C720343D91002BF631 /* ChannelsVCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C620343D91002BF631 /* ChannelsVCViewModel.swift */; };
 		9DA077C920344527002BF631 /* ChannelsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C820344527002BF631 /* ChannelsCellViewModel.swift */; };
+		9DA077CB20345055002BF631 /* ChannelVCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelVCViewModel.swift */; };
+		9DA077CD2034505F002BF631 /* ChannelVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelVCModel.swift */; };
+		9DA077CF20345071002BF631 /* ChannelVCEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelVCEmitter.swift */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2715321F97EA810038C81C /* AboutViewController.swift */; };
@@ -177,6 +180,9 @@
 		9DA077C320343983002BF631 /* ChannelsVCModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsVCModel.swift; sourceTree = "<group>"; };
 		9DA077C620343D91002BF631 /* ChannelsVCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsVCViewModel.swift; sourceTree = "<group>"; };
 		9DA077C820344527002BF631 /* ChannelsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCellViewModel.swift; sourceTree = "<group>"; };
+		9DA077CA20345055002BF631 /* ChannelVCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelVCViewModel.swift; sourceTree = "<group>"; };
+		9DA077CC2034505F002BF631 /* ChannelVCModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelVCModel.swift; sourceTree = "<group>"; };
+		9DA077CE20345071002BF631 /* ChannelVCEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelVCEmitter.swift; sourceTree = "<group>"; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DBHelpers.swift; path = models/DBHelpers.swift; sourceTree = "<group>"; };
 		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
@@ -254,6 +260,9 @@
 				019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */,
 				013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */,
 				01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */,
+				9DA077CE20345071002BF631 /* ChannelVCEmitter.swift */,
+				9DA077CA20345055002BF631 /* ChannelVCViewModel.swift */,
+				9DA077CC2034505F002BF631 /* ChannelVCModel.swift */,
 				9DA077BE20343650002BF631 /* FullChannelViewModel.swift */,
 			);
 			name = "Channel Screen";
@@ -763,11 +772,13 @@
 				36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */,
 				014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */,
 				9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */,
+				9DA077CD2034505F002BF631 /* ChannelVCModel.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
+				9DA077CF20345071002BF631 /* ChannelVCEmitter.swift in Sources */,
 				015812A21FD80AF1002828F5 /* AudioController.swift in Sources */,
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
@@ -801,6 +812,7 @@
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
 				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,
 				01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */,
+				9DA077CB20345055002BF631 /* ChannelVCViewModel.swift in Sources */,
 				36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				9DA077C720343D91002BF631 /* ChannelsVCViewModel.swift in Sources */,
