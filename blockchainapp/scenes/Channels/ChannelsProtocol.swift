@@ -22,6 +22,5 @@ protocol ChannelsPresenterProtocol: class {
 
 protocol ChannelProtocol {
     func showChannel(station: Station)
-    func showChannel(_ channel: SmallChannelViewModel)
     func showAllChannels()
 }

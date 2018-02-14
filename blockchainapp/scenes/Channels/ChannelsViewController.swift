@@ -89,10 +89,24 @@ class ChannelsCell: UITableViewCell {
     
 }
 
-class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
+class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
+    //, ChannelsViewProtocol {
     
-    var presenter: ChannelsPresenter!
-    var source = [Station]()
+//    var presenter: ChannelsPresenter!
+    var source = [ChannelViewModel]()
+    
+    var emitter: ChannelsVCEmitterProtocol?
+    var viewModel: ChannelsVCViewModel!
+    
+    convenience init(emitter: ChannelsVCEmitterProtocol, viewModel: ChannelsVCViewModel)
+    {
+        self.init(nibName: nil, bundle: nil)
+        
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,7 +116,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        presenter = ChannelsPresenter(view: self)
+//        presenter = ChannelsPresenter(view: self)
         
         view.backgroundColor = UIColor.vaWhite
 
@@ -119,9 +133,9 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
 		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
 		
 		
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
+//        presenter.getData { [weak self] (channels) in
+//            self?.display(channels: channels)
+//        }
 //		refreshControl?.beginRefreshing()
     }
 	
@@ -130,32 +144,38 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
 	}
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
+//        presenter.getData { [weak self] (channels) in
+//            self?.display(channels: channels)
+//        }
+        self.emitter?.refreshData()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
-    func display(channels: [Station]) {
-        source = channels
-        tableView.reloadData()
+//    func display(channels: [Station]) {
+////        source = channels
+//        tableView.reloadData()
+//
+//        refreshControl?.endRefreshing()
+//    }
+
+//    func select(rows: [Int]) {
+//        for r in rows {
+//            tableView.selectRow(at: IndexPath(row: r, section: 0),
+//                                animated: false,
+//                                scrollPosition: .none)
+//        }
+//    }
+
+    func reloadChannels() {
+        self.source = viewModel.channels
+        self.tableView.reloadData()
         
         refreshControl?.endRefreshing()
     }
-    
-    func select(rows: [Int]) {
-        for r in rows {
-            tableView.selectRow(at: IndexPath(row: r, section: 0),
-                                animated: false,
-                                scrollPosition: .none)
-        }
-    }
-
 }
 
 extension ChannelsViewController {
@@ -174,10 +194,10 @@ extension ChannelsViewController {
         cell.channel = station
 		cell.subAction = {[weak self] channel in
 			if let ch = channel {
-				self?.presenter.select(station: ch)
+//                self?.presenter.select(station: station)
 			}
 		}
-		cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)
+//        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)
         return cell
     }
     
@@ -195,8 +215,8 @@ extension ChannelsViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelSeeAll))
 		let station = self.source[indexPath.row]
-		let vc = ChannelViewController(station: station)
-		self.navigationController?.pushViewController(vc, animated: true)
+//        let vc = ChannelViewController(station: station)
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

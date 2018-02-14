@@ -77,15 +77,19 @@ class ChannelTableViewCell: UITableViewCell {
 	let subs: IconedLabel = IconedLabel(type: IconLabelType.subs)
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	
-	var subAction: (_ channel: Station?) -> Void = { _ in }
+	var subAction: (_ channel: ChannelViewModel?) -> Void = { _ in }
+    var viewModel: ChannelsCellViewModel?
 	
-	weak var channel: Station? = nil {
+	weak var channel: ChannelViewModel? = nil {
 		didSet {
-			channelTitle.text = channel?.name
-			subs.setData(data: Int64(channel?.subscriptionCount ?? 0))
-			plays.setData(data: Int64(channel?.tracksCount() ?? 0))
+            self.viewModel = ChannelsCellViewModel.init(channel: channel!)
+            
+			channelTitle.text = self.viewModel?.channelName
+            subs.setData(string: (self.viewModel?.subscriptionCount)!)
+            plays.setData(string: (self.viewModel?.tracksCount)!)
+            
 			self.tagsList.removeAllTags()
-			if let tags = channel?.tags.map({$0.value}).prefix(4) {
+			if let tags = self.viewModel?.tags.map({$0.value}).prefix(4) {
 				if tags.count != 0 {
 					tagsList.addTags(tags.map({$0.uppercased()}))
 					self.noTagsView.isHidden = true
@@ -98,11 +102,11 @@ class ChannelTableViewCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsList.isHidden = true
 			}
-			if let urlString = URL(string: channel?.image) {
-				channelImageView.sd_setImage(with: urlString)
-			} else {
-				channelImageView.image = nil
-			}
+            if let urlString = self.viewModel?.imageUrl {
+                channelImageView.sd_setImage(with: urlString)
+            } else {
+                channelImageView.image = nil
+            }
 		}
 	}
 	

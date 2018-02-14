@@ -1,26 +1,27 @@
 //
-//  ChannelsModel.swift
+//  ChannelsVCModel.swift
 //  blockchainapp
 //
-//  Created by Polina Abrosimova on 12.02.18.
+//  Created by Polina Abrosimova on 14.02.2018.
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import Foundation
 import RealmSwift
 
-protocol ChannelsModelProtocol {
+protocol ChannelsVCModelProtocol {
     func showChannel(index: IndexPath)
+    func refreshChannels()
 }
 
-protocol ChannelsModelDelegate: class {
-    func reload(newChannels: [SmallChannelViewModel])
+protocol ChannelsVCModelDelegate: class {
+    func reload(newChannels: [ChannelViewModel])
     func showChannel(channel: FullChannelViewModel)
 }
 
-class ChannelsModel: ChannelsModelProtocol {
-
-    weak var delegate: ChannelsModelDelegate?
+class ChannelsVCModel: ChannelsVCModelProtocol {
+    
+    weak var delegate: ChannelsVCModelDelegate?
     var subManager = SubscribeManager.shared
     var token: NotificationToken?
     
@@ -41,7 +42,7 @@ class ChannelsModel: ChannelsModelProtocol {
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                 if !indexes.isEmpty {
                     DispatchQueue.main.async {
-//                        self!.view?.select(rows: indexes)
+                        //                        self!.view?.select(rows: indexes)
                     }
                 }
             case .update(_, _, let ins, _):
@@ -52,7 +53,7 @@ class ChannelsModel: ChannelsModelProtocol {
                     let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                     if !indexes.isEmpty {
                         DispatchQueue.main.async {
-//                            self!.view?.select(rows: indexes)
+                            //                            self!.view?.select(rows: indexes)
                         }
                     }
                 }
@@ -97,16 +98,22 @@ class ChannelsModel: ChannelsModelProtocol {
     {
         self.channels = channels
         
-        var channelVMs = [SmallChannelViewModel]()
+        var channelVMs = [ChannelViewModel]()
         for channel in channels
         {
-            channelVMs.append(SmallChannelViewModel.init(channel: channel))
+            channelVMs.append(ChannelViewModel.init(channel: channel))
         }
         
         self.delegate?.reload(newChannels: channelVMs)
     }
     
+    func refreshChannels() {
+        self.getData { [weak self] (channels) in
+            self?.getChannelViewModels(channels: channels.map({$0.detached()}))
+        }
+    }
+    
     func showChannel(index: IndexPath) {
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index.row]))
+        
     }
 }

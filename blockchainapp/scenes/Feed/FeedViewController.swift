@@ -138,11 +138,8 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         presenter.getData { (tracks) in
 			
         }
-		
-//        refreshingTable = true
-//        self.showChannels(up: false)
+
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()
-//            self?.refreshingTable = false
         })
     }
 
@@ -192,47 +189,6 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
       let vc = ChannelViewController(station: station)
       self.navigationController?.pushViewController(vc, animated: true)
   }
-    
-    func showChannel(_ channel: SmallChannelViewModel) {
-        // TODO: show channelViewModel
-    }
-
-//  func showChannels(up: Bool)
-//  {
-//      if animatedChannels && self.type == .popular
-//      {
-//        if ( up || refreshingTable) && !self.channelsView.isHidden
-//          {
-//              animatedChannels = false
-//              self.channelsConstraint?.constant -= 200
-//              UIView.animate(withDuration: 0.4, animations: {
-//                self.view.layoutIfNeeded()
-//                self.tableView.contentInset = UIEdgeInsets(top: 0,
-//                                                      left: 0,
-//                                                      bottom: 80,
-//                                                      right: 0)
-//              }, completion: { (value: Bool) in
-//                self.animatedChannels = true
-//                self.channelsView.isHidden = true
-//              })
-//          }
-//          if !up && self.channelsView.isHidden
-//          {
-//              animatedChannels = false
-//              self.channelsView.isHidden = false
-//              self.channelsConstraint?.constant += 200
-//              UIView.animate(withDuration: 0.4, animations: {
-//                self.view.layoutIfNeeded()
-//                self.tableView.contentInset = UIEdgeInsets(top: self.channelsViewHeight,
-//                                                      left: 0,
-//                                                      bottom: 80,
-//                                                      right: 0)
-//              }, completion: { (value: Bool) in
-//                  self.animatedChannels = true
-//              })
-//          }
-//      }
-//  }
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
         
@@ -353,25 +309,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
 //		return self.cellHeight
     }
-	
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let  height = scrollView.frame.size.height
-//        let distanceFromBottom = scrollView.contentSize.height - scrollView.contentOffset.y
-//        
-//        if scrollView.contentOffset.y > 0 && distanceFromBottom > height
-//        {
-//            if previousOffsetY + 60 < scrollView.contentOffset.y
-//            {
-//                previousOffsetY = scrollView.contentOffset.y
-//                self.showChannels(up: true)
-//            }
-//            if previousOffsetY - 60 > scrollView.contentOffset.y
-//            {
-//                previousOffsetY = scrollView.contentOffset.y
-//                self.showChannels(up: false)
-//            }
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if self.type == .popular

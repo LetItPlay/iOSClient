@@ -1,5 +1,5 @@
 //
-//  ChannelViewModel.swift
+//  SmallChannelViewModel.swift
 //  blockchainapp
 //
 //  Created by Polina Abrosimova on 14.02.18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SmallChannelViewModel {
+class SmallChannelViewModel {
     var imageURL: URL? = nil
     
     init(channel: Station)

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate { //} ChannelsViewProtocol {
+class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate {
     
     var delegate: ChannelProtocol?
     
@@ -84,8 +84,6 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             make.right.equalTo(0)
             make.bottom.equalTo(self.snp.bottom).inset(6)
         }
-        
-        self.emitter?.state(.initialize)
     }
 
     override init(frame: CGRect) {
@@ -115,8 +113,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
-//        delegate?.showChannel(station: source[indexPath.row])
-        delegate?.showChannel(source[indexPath.row])
+        self.emitter?.showChannel(index: indexPath)
     }
     
     func reloadChannels() {

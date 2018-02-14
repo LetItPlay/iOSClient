@@ -9,7 +9,7 @@
 import Foundation
 
 protocol ChannelsEmitterProtocol {
-    func state(_ state: ViewState)
+    func showChannel(index: IndexPath)
 }
 
 class ChannelsEmitter: ChannelsEmitterProtocol {
@@ -20,12 +20,7 @@ class ChannelsEmitter: ChannelsEmitterProtocol {
         self.model = model
     }
     
-    func state(_ state: ViewState) {
-        switch state {
-//        case .initialize:
-//            self.model.getChannels()
-        default:
-            break
-        }
+    func showChannel(index: IndexPath) {
+        self.model.showChannel(index: index)
     }
 }

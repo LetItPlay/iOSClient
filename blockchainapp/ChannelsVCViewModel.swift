@@ -1,23 +1,23 @@
 //
-//  ChannelsViewModel.swift
+//  ChannelsVCViewModel.swift
 //  blockchainapp
 //
-//  Created by Polina Abrosimova on 12.02.18.
+//  Created by Polina Abrosimova on 14.02.2018.
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import Foundation
 
-protocol ChannelsVMDelegate: class  {
+protocol ChannelsVCVMDelegate: class {
     func reloadChannels()
 }
 
-class ChannelsViewModel: ChannelsModelDelegate {
-
-    var channels: [SmallChannelViewModel] = []
-    weak var delegate: ChannelsVMDelegate?
+class ChannelsVCViewModel: ChannelsVCModelDelegate {
     
-    func reload(newChannels: [SmallChannelViewModel]) {
+    var channels: [ChannelViewModel] = []
+    weak var delegate: ChannelsVCVMDelegate?
+    
+    func reload(newChannels: [ChannelViewModel]) {
         self.channels = newChannels
         self.delegate?.reloadChannels()
     }
