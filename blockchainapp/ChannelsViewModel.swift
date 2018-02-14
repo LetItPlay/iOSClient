@@ -14,10 +14,10 @@ protocol ChannelsVMDelegate: class  {
 
 class ChannelsViewModel: ChannelsModelDelegate {
 
-    var channels: [Station] = []
+    var channels: [ChannelViewModel] = []
     weak var delegate: ChannelsVMDelegate?
     
-    func reloadChannels(newChannels: [Station]) {
+    func reload(newChannels: [ChannelViewModel]) {
         self.channels = newChannels
         self.delegate?.reloadChannels()
     }

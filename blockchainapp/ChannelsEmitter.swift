@@ -22,8 +22,8 @@ class ChannelsEmitter: ChannelsEmitterProtocol {
     
     func state(_ state: ViewState) {
         switch state {
-        case .initialize:
-            self.model.getChannels()
+//        case .initialize:
+//            self.model.getChannels()
         default:
             break
         }

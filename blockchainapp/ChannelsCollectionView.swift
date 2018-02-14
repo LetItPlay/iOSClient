@@ -16,16 +16,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
     
-//    func display(channels: [Station]) {
-//        source = channels
-//        channelsCollectionView.reloadData()
-//    }
-//
-//    func select(rows: [Int]) {
-//
-//    }
-    
-    var source = [Station]()
+    var source = [ChannelViewModel]()
     
     let channelLabel: UILabel = {
         let label = UILabel()
@@ -60,7 +51,6 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         return cv
     }()
     
-//    var presenter: ChannelsPresenter!
     convenience init(frame: CGRect, emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
     {
         self.init(frame: frame)
@@ -96,45 +86,10 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         }
         
         self.emitter?.state(.initialize)
-//        channelsCollectionView.reloadData()
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-//        presenter = ChannelsPresenter(view: self)
-//        presenter.getData { [weak self] (channels) in
-//            self?.display(channels: channels)
-//        }
-        
-//        self.backgroundColor = AppColor.Element.backgroundColor
-//
-//        seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
-//        self.addSubview(seeAlsoButton)
-//        seeAlsoButton.snp.makeConstraints { (make) in
-//            make.top.equalTo(2)
-//            make.right.equalTo(-10)
-//            make.width.equalTo(60)
-//            make.height.equalTo(39)
-//        }
-//
-//        self.addSubview(channelLabel)
-//        channelLabel.snp.makeConstraints { (make) in
-//            make.top.equalTo(0)
-//            make.left.equalTo(16)
-//            make.right.equalTo(seeAlsoButton.snp.left)
-//            make.height.equalTo(41)
-//        }
-//
-//        self.addSubview(channelsCollectionView)
-//        channelsCollectionView.snp.makeConstraints { (make) in
-//            make.top.equalTo(channelLabel.snp.bottom).inset(0)
-//            make.left.equalTo(0)
-//            make.right.equalTo(0)
-//            make.bottom.equalTo(self.snp.bottom).inset(6)
-//        }
-        
-//        channelsCollectionView.reloadData()
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
@@ -152,13 +107,13 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Channel", for: indexPath) as! ChannelsCollectionViewCell
         
-        cell.configureWith(image: source[indexPath.row].image)
+        cell.configureWith(image: source[indexPath.row].imageURL!)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.showChannel(station: source[indexPath.row])
+        delegate?.showChannel(source[indexPath.row])
     }
     
     func reloadChannels() {
