@@ -17,9 +17,9 @@ class LikesViewModel: LikesModelDelegate {
     var tracks: [TrackViewModel] = []
     var currentPlayingIndex: Int? = nil
     weak var delegate: LikesVMDelegate?
-    var length: Int64 = 0
+    var length: String = ""
     
-    func reload(tracks: [TrackViewModel], length: Int64) {
+    func reload(tracks: [TrackViewModel], length: String) {
         self.tracks = tracks
         self.length = length
         self.delegate?.reload()

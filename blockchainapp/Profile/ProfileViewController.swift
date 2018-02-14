@@ -229,7 +229,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        header.fill(count: Int64(self.tracks.count), length: self.viewModel.length)
+        header.fill(count: Int64(self.tracks.count).formatAmount(), length: self.viewModel.length)
 		return header
 	}
 	
@@ -270,13 +270,7 @@ class LikeHeader: UIView {
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
 		label.text = "Tracks you’ve liked".localized
-		
-		let tracks = IconedLabel.init(type: .tracks)
-		tracks.setData(data: Int64(self.tracks.count))
-		
-		let time = IconedLabel.init(type: .time)
-        time.setData(data: self.viewModel.length)
-		
+        
 		self.addSubview(label)
 		label.snp.makeConstraints { (make) in
 			make.top.equalToSuperview().inset(12)
@@ -309,9 +303,9 @@ class LikeHeader: UIView {
 		}
 	}
 	
-	func fill(count: Int64, length: Int64) {
-		tracks.setData(data: count)
-		time.setData(data: length)
+	func fill(count: String, length: String) {
+		tracks.setData(string: count)
+		time.setData(string: length)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -427,7 +421,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
         profileNameLabel.returnKeyType = .done
-        profileNameLabel.delegate = self
+//        profileNameLabel.delegate = self
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)

@@ -4,7 +4,7 @@ import SnapKit
 class SmallTrackTableViewCell: UITableViewCell {
 
 	static let cellID: String = "LikeTrackCellID"
-    let separator = UIView()
+    var separator = UIView()
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -43,7 +43,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		return label
 	}()
 	
-	var dataLabels: [IconLabelType: IconedLabel] = [:]
+    var dataLabels: [IconLabelType: IconedLabel] = [:]
     var viewModel: SmallTrackViewModel?
 	
     var track: TrackViewModel? = nil {
@@ -125,7 +125,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		playingIndicator.isHidden = true
 		
-		self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
+        self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		
 		self.separatorInset.left = 90
 		self.selectionStyle = .none
