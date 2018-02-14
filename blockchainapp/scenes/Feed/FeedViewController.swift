@@ -15,7 +15,7 @@ enum FeedType {
 	case feed, popular
 }
 
-class FeedViewController: UIViewController, ChannelProtocol, FeedVMDelegate {
+class FeedViewController: UIViewController, ChannelProtocol {
 	
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
@@ -150,28 +150,6 @@ class FeedViewController: UIViewController, ChannelProtocol, FeedVMDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func reload() {
-        self.tableView.reloadData()
-        self.tableView.refreshControl?.endRefreshing()
-    }
-    
-    func make(updates: [CollectionUpdate : [Int]]) {
-        tableView.beginUpdates()
-        for key in updates.keys {
-            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
-                switch key {
-                case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.automatic)
-                case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.automatic)
-                case .update:
-                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.automatic)
-                }
-            }
-        }
-        tableView.endUpdates()
-    }
-    
   func showAllChannels() {
       let vc = ChannelsBuilder.build(params: nil)
       self.navigationController?.pushViewController(vc, animated: true)
@@ -262,6 +240,34 @@ class FeedViewController: UIViewController, ChannelProtocol, FeedVMDelegate {
 //                cell.alertBlurView.alpha = 0
 //            })
 //        }
+    }
+}
+
+extension FeedViewController: FeedVMDelegate {
+    func reload() {
+        self.tableView.reloadData()
+        self.tableView.refreshControl?.endRefreshing()
+    }
+    
+    func updateTableState() {
+        
+    }
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
+        tableView.beginUpdates()
+        for key in updates.keys {
+            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+                switch key {
+                case .insert:
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                case .delete:
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                case .update:
+                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                }
+            }
+        }
+        tableView.endUpdates()
     }
 }
 

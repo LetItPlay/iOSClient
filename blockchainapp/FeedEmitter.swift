@@ -46,6 +46,15 @@ class FeedEmitter: Emitter, FeedEmitterProtocol {
     }
     
     func send(event: FeedEvent) {
-        
+        switch event {
+        case .refresh:
+            self.model?.reload()
+        case .showing(let index):
+            self.model?.trackShowed(index: index)
+        case .trackLiked(let index):
+            self.model?.trackLiked(index: index)
+        case .trackSelected(let index):
+            self.model?.trackSelected(index: index)
+        }
     }
 }

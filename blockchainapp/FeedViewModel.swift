@@ -16,6 +16,7 @@ protocol FeedVMProtocol {
 	var tracks: [TrackViewModel] {get}
     var showChannels: Bool {get}
     var showEmptyMessage: Bool {get}
+    var endReached: Bool {get}
 	
 	func make(action: TrackAction, index: Int)
 	func stateChanged(_ state: ViewState)
@@ -26,6 +27,7 @@ protocol FeedVMProtocol {
 protocol FeedVMDelegate: class {
 	func reload()
 	func make(updates: [CollectionUpdate: [Int]])
+    func updateTableState()
 }
 
 class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
@@ -35,6 +37,7 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     var model : FeedModelProtocol!
     var showChannels: Bool = false
     var showEmptyMessage: Bool = false
+    var endReached: Bool = false
 	
 	init(model: FeedModelProtocol) {
 		self.model = model
@@ -64,7 +67,6 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
             self.delegate?.reload()
         }
     }
-    
 	
 	func update(index: Int, track: TrackViewModel) {
 		if index < self.tracks.count {
@@ -72,4 +74,8 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
 			self.delegate?.make(updates: [.update : [index]])
 		}
 	}
+    
+    func noDataLeft() {
+        self.endReached = true
+    }
 }

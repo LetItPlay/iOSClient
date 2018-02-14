@@ -8,7 +8,7 @@ protocol FeedModelProtocol: class, ModelProtocol {
 
 protocol FeedEventHandler: class {
     func trackSelected(index: Int)
-    func tarckLiked(index: Int)
+    func trackLiked(index: Int)
     func reload()
     func trackShowed(index: Int)
 }
@@ -16,17 +16,15 @@ protocol FeedEventHandler: class {
 protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
 	func update(index: Int, track: TrackViewModel)
+    func noDataLeft()
 }
 
 class FeedModel: FeedModelProtocol, FeedEventHandler {
 	
 	private let isFeed: Bool
-	
 	private var currentOffest: Int = 0
-	
-	private var sort: (Track, Track) -> Bool? = {_,_ in return nil}
-	private let date = Date().addingTimeInterval(-60*60*24*7)
-	private var filter: (Track) -> Bool = {_ in return true}
+    private let amount: Int = 100
+    private var threshold: Bool = false
 	
 	weak var delegate: FeedModelDelegate?
 	
@@ -41,7 +39,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 		
         
 		dataAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
-			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.trends(7) : TracksRequest.feed(stations: SubscribeManager.shared.stations, offset: offset, count: 100))
+			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(stations: SubscribeManager.shared.stations, offset: offset, count: self.amount) : TracksRequest.trends(7))
 		})
 		
 		dataAction?.elements.do(onNext: { (tuple) in
@@ -66,6 +64,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
+            self.threshold = false
 			print("Track loaded")
 		}).disposed(by: self.disposeBag)
 		
@@ -118,7 +117,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
         
     }
     
-    func tarckLiked(index: Int) {
+    func trackLiked(index: Int) {
         
     }
     
@@ -127,7 +126,10 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     }
     
     func trackShowed(index: Int) {
-        self.dataAction?.execute(self.tracks.count)
+        if index > self.tracks.count - self.amount/10 && !self.threshold {
+            self.threshold = true
+            self.dataAction?.execute(self.tracks.count)
+        }
     }
 
 	@objc func trackPlayed(notification: Notification) {
