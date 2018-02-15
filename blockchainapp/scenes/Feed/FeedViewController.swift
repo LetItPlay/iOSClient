@@ -76,6 +76,7 @@ class FeedViewController: UIViewController, ChannelProtocol {
         
         self.view.addSubview(tableView)
         
+        self.channelsView = ChannelsCollectionView()
         if self.viewModel.showChannels {
             channelsView.delegate = self
             

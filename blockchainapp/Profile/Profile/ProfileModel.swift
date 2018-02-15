@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ProfileModelProtocol {
+protocol ProfileModelProtocol: class, ModelProtocol {
     func change(image: Data)
     func change(name: String)
     func changeLanguage()
@@ -23,7 +23,7 @@ protocol ProfileModelDelegate: class {
 }
 
 class ProfileModel: ProfileModelProtocol {
-    
+
     weak var delegate: ProfileModelDelegate?
     
     func getData() {
@@ -51,5 +51,14 @@ class ProfileModel: ProfileModelProtocol {
         }
         
         self.delegate?.update(language: UserSettings.language)
+    }
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            self.getData()
+        default:
+            break
+        }
     }
 }

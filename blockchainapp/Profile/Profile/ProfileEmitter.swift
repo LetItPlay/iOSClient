@@ -8,40 +8,34 @@
 
 import Foundation
 
-protocol ProfileEmitterProtocol {
-    func state(_ state: ViewState)
-    func set(name: String)
-    func set(image: Data)
-    func setLanguage()
+enum ProfileEvent {
+    case setName(String)
+    case setImage(Data)
+    case setLanguage
 }
 
-class ProfileEmitter: ProfileEmitterProtocol {
+protocol ProfileEmitterProtocol: LifeCycleHandlerProtocol {
+    func send(event: ProfileEvent)
+}
+
+class ProfileEmitter: Emitter, ProfileEmitterProtocol {
     
     var model: ProfileModelProtocol!
     
-    init(model: ProfileModelProtocol)
+    convenience init(model: ProfileModelProtocol)
     {
+        self.init(handler: model)
         self.model = model
     }
     
-    func set(name: String) {
-        self.model.change(name: name)
-    }
-    
-    func set(image: Data) {
-        self.model.change(image: image)
-    }
-    
-    func setLanguage() {
-        self.model.changeLanguage()
-    }
-    
-    func state(_ state: ViewState) {
-        switch state {
-        case .initialize:
-            self.model.getData()
-        default:
-            break
+    func send(event: ProfileEvent) {
+        switch event {
+        case .setImage(let image):
+            self.model.change(image: image)
+        case .setName(let name):
+            self.model.change(name: name)
+        case .setLanguage:
+            self.model.changeLanguage()
         }
     }
 }

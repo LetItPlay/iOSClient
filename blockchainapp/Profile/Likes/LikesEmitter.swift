@@ -8,21 +8,17 @@
 
 import Foundation
 
-protocol LikesEmitterProtocol {
-    func reloadTracks()
+protocol LikesEmitterProtocol: LifeCycleHandlerProtocol {
     func make(action: TrackAction, index: Int)
 }
 
-class LikesEmitter: LikesEmitterProtocol {
+class LikesEmitter: Emitter, LikesEmitterProtocol {
     
     var model: LikesModelProtocol!
     
-    init(model: LikesModelProtocol) {
+    convenience init(model: LikesModelProtocol) {
+        self.init(handler: model)
         self.model = model
-    }
-    
-    func reloadTracks() {
-        self.model.getTracks()
     }
     
     func make(action: TrackAction, index: Int) {
@@ -33,5 +29,4 @@ class LikesEmitter: LikesEmitterProtocol {
             break
         }
     }
-    
 }

@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-protocol LikesModelProtocol {
+protocol LikesModelProtocol: class, ModelProtocol {
     func getTracks()
     func selectedTrack(index: Int)
 }
@@ -61,7 +61,6 @@ class LikesModel: LikesModelProtocol {
     @objc func trackPaused(notification: Notification) {
         if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
             self.delegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: false, isLiked: true), atIndex: playingIndex)
-//            self.playingIndex = -1
         }
     }
     
@@ -90,4 +89,16 @@ class LikesModel: LikesModelProtocol {
         
         self.delegate?.reload(tracks: tracksVMs, length: length.formatTime())
     }
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            break
+        case .appear:
+            self.getTracks()
+        default:
+            break
+        }
+    }
+    
 }

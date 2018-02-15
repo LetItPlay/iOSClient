@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class SmallTrackViewModel {
-//    var trackViewModel: TrackViewModel!
     
     var iconUrl: URL? = nil
     var trackName: NSAttributedString? = nil
@@ -21,8 +20,6 @@ class SmallTrackViewModel {
     
     init(track: TrackViewModel)
     {
-//        self.trackViewModel = track
-        
         self.iconUrl = track.imageURL
         self.trackName = self.trackText(text: track.name)
         

@@ -105,12 +105,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
         let name = self.profileView.profileNameLabel.text!
-        self.profileView.emitter?.set(name: name)
+        self.profileView.emitter?.send(event: ProfileEvent.setName(name))
     }
 	
 	@objc func langChanged(_: UIButton) {
-        self.profileView.emitter?.setLanguage()
-        self.emitter?.reloadTracks()
+        self.profileView.emitter?.send(event: ProfileEvent.setLanguage)
         
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		self.currentIndex = -1
@@ -124,9 +123,17 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-        self.emitter?.reloadTracks()
+    
+        self.emitter?.send(event: LifeCycleEvent.appear)
+        self.profileView.emitter?.send(event: LifeCycleEvent.appear)
 	}
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.emitter?.send(event: LifeCycleEvent.disappear)
+        self.profileView.emitter?.send(event: LifeCycleEvent.disappear)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -191,7 +198,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-            self.profileView.emitter?.set(image: image)
+            self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
         }
         
         dismiss(animated: true, completion: nil)
@@ -454,7 +461,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
 
-        emitter.state(.initialize)
+        emitter.send(event: LifeCycleEvent.initialize)
 	}
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
