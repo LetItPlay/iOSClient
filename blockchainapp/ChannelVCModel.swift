@@ -9,8 +9,7 @@
 import Foundation
 import RealmSwift
 
-protocol ChannelVCModelProtocol {
-    func getTracks()
+protocol ChannelVCModelProtocol: class, ModelProtocol {
 }
 
 protocol ChannelVCModelDelegate {
@@ -140,7 +139,13 @@ class ChannelVCModel: ChannelVCModelProtocol {
         }
     }
     
-    func getTracks() {
-        
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            break
+        default:
+            break
+        }
     }
+    
 }

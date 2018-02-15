@@ -8,20 +8,16 @@
 
 import Foundation
 
-protocol ChannelVCEmitterProtocol {
-    func getTracks()
+protocol ChannelVCEmitterProtocol: LifeCycleHandlerProtocol {
 }
 
-class ChannelVCEmitter: ChannelVCEmitterProtocol {
+class ChannelVCEmitter: Emitter, ChannelVCEmitterProtocol {
     
     var model: ChannelVCModelProtocol!
     
-    init(model: ChannelVCModelProtocol)
+    convenience init(model: ChannelVCModelProtocol)
     {
+        self.init(handler: model)
         self.model = model
-    }
-    
-    func getTracks() {
-        self.model.getTracks()
     }
 }

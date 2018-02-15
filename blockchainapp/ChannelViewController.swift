@@ -64,6 +64,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
 		self.tableView.tableHeaderView = self.header
+        
     }
 	
 	@objc func followPressed() {
