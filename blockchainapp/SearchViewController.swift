@@ -29,9 +29,16 @@ SearchPresenterDelegate {
 	let presenter = SearchPresenter()
 	
 	let searchResults = SearchResultsController()
-	let playlistsResults = PlaylistsController()
+    var playlistsResults: PlaylistsController!
 	
 	var emptyLabel: UIView!
+    
+    convenience init(viewModel: PlaylistsVMProtocol, emitter: PlaylistsEmitterProtocol)
+    {
+        self.init(nibName: nil, bundle: nil)
+        
+        self.playlistsResults = PlaylistsController(viewModel: viewModel, emitter: emitter)
+    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +88,7 @@ SearchPresenterDelegate {
 		}
 		playlistTableView.delegate = self.playlistsResults
 		playlistTableView.dataSource = self.playlistsResults
-		self.playlistsResults.presenter = self.presenter
+//        self.playlistsResults.presenter = self.presenter
 		
 		playlistTableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
 		playlistTableView.separatorStyle = .none
@@ -134,64 +141,6 @@ SearchPresenterDelegate {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .search(text: self.presenter.currentSearchString)))
         }
     }
-}
-
-class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
-	weak var presenter: SearchPresenter!
-
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
-	}
-	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.presenter.playlists.count
-	}
-	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
-		cell.fill(tuple: self.presenter.playlists[indexPath.item])
-		return cell
-	}
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.presenter.formatPlaylists(index: indexPath.item)
-	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let playlist = self.presenter.playlists[indexPath.item]
-		return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.descr, width: tableView.frame.width)
-	}
-	
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 41
-    }
-	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		return 0.01
-	}
-	
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		
-		if self.presenter.playlists.count == 0 {
-			return nil
-		}
-		
-		let label = UILabel()
-		label.textColor = AppColor.Title.dark
-		label.font = AppFont.Title.section
-		label.text = "Today playlists".localized
-		
-		let container = UIView()
-		container.backgroundColor = UIColor.white
-		container.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview()
-			make.bottom.equalToSuperview()
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-		}
-		return container
-	}
 }
 
 class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSource {

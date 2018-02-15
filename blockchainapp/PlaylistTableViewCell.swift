@@ -84,6 +84,14 @@ class PlaylistTableViewCell: UITableViewCell {
 		self.playlistTitleLabel.attributedText = type(of: self).titleString(string: tuple.title)
 		self.descriptionLabel.attributedText = type(of: self).descrString(string: tuple.descr)
 	}
+    
+    func fill(playlist: PlaylistViewModel)
+    {
+//        self.playlistImageView.sd_setImage(with: playlist.imageURL)
+        self.playlistImageView.image = UIImage(data: playlist.imageURL!)
+        self.playlistTitleLabel.text = playlist.title
+        self.descriptionLabel.text = playlist.description
+    }
 	
 	static func titleString(string: String) -> NSAttributedString {
 		return NSAttributedString(string: string, attributes: [.font: AppFont.Title.mid, .foregroundColor: AppColor.Title.dark])
