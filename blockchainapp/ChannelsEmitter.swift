@@ -9,19 +9,18 @@
 import Foundation
 
 protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
-    func showChannel(index: IndexPath)
+    func showChannel(index: Int)
 }
 
 class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
+    weak var model: ChannelsEventHandler?
     
-    var model: ChannelsModelProtocol!
-    
-    convenience init(model: ChannelsModelProtocol) {
-        self.init(handler: model)
+    convenience init(model: ChannelsEventHandler) {
+        self.init(handler: model as! ModelProtocol)
         self.model = model
     }
     
-    func showChannel(index: IndexPath) {
-        self.model.showChannel(index: index)
+    func showChannel(index: Int) {
+        self.model?.showChannel(index: index)
     }
 }

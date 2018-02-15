@@ -10,7 +10,11 @@ import Foundation
 import RealmSwift
 
 protocol ChannelsModelProtocol: class, ModelProtocol {
-    func showChannel(index: IndexPath)
+    weak var delegate: ChannelsModelDelegate? {get set}
+}
+
+protocol ChannelsEventHandler: class {
+    func showChannel(index: Int)
 }
 
 protocol ChannelsModelDelegate: class {
@@ -18,7 +22,7 @@ protocol ChannelsModelDelegate: class {
     func showChannel(channel: FullChannelViewModel)
 }
 
-class ChannelsModel: ChannelsModelProtocol {
+class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
@@ -106,8 +110,8 @@ class ChannelsModel: ChannelsModelProtocol {
         self.delegate?.reload(newChannels: channelVMs)
     }
     
-    func showChannel(index: IndexPath) {
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index.row]))
+    func showChannel(index: Int) {
+        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
     }
     
     func send(event: LifeCycleEvent) {

@@ -54,13 +54,13 @@ class FeedViewController: UIViewController, ChannelProtocol {
     
     var tappedSideButton = false
     
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.viewModel.delegate = self
         
         self.emitter = emitter
-        
+        self.channelsView = channelsView
     }
 	
     override func viewDidLoad() {
@@ -75,25 +75,27 @@ class FeedViewController: UIViewController, ChannelProtocol {
         view.backgroundColor = UIColor.vaWhite
         
         self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
+            make.edges.equalTo(self.view)
+        }
         
-        self.channelsView = ChannelsCollectionView()
-        if self.viewModel.showChannels {
-            channelsView.delegate = self
-            
-            tableView.snp.makeConstraints { (make) in
-                make.top.equalTo(channelsView.snp.bottom)
-                make.left.equalTo(0)
-                make.right.equalTo(0)
-                make.bottom.equalTo(0)
-                //            make.edges.equalTo(self.view)
-            }
-        }
-        else {
-            channelsView.isHidden = true
-            tableView.snp.makeConstraints { (make) in
-                make.edges.equalTo(self.view)
-            }
-        }
+//        if self.viewModel.showChannels {
+//            channelsView.delegate = self
+//
+//            tableView.snp.makeConstraints { (make) in
+//                make.top.equalTo(channelsView.snp.bottom)
+//                make.left.equalTo(0)
+//                make.right.equalTo(0)
+//                make.bottom.equalTo(0)
+//                //            make.edges.equalTo(self.view)
+//            }
+//        }
+//        else {
+//            channelsView.isHidden = true
+//            tableView.snp.makeConstraints { (make) in
+//                make.edges.equalTo(self.view)
+//            }
+//        }
 		
         tableView.dataSource = self
         tableView.delegate   = self

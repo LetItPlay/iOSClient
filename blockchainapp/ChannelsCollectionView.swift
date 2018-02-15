@@ -115,7 +115,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
-        self.emitter?.showChannel(index: indexPath)
+        self.emitter?.showChannel(index: indexPath.row)
     }
     
     func reloadChannels() {
