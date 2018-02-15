@@ -8,15 +8,16 @@
 
 import Foundation
 
-protocol ChannelsEmitterProtocol {
+protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
     func showChannel(index: IndexPath)
 }
 
-class ChannelsEmitter: ChannelsEmitterProtocol {
+class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
     
     var model: ChannelsModelProtocol!
     
-    init(model: ChannelsModelProtocol) {
+    convenience init(model: ChannelsModelProtocol) {
+        self.init(handler: model)
         self.model = model
     }
     

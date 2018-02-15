@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-protocol ChannelsModelProtocol {
+protocol ChannelsModelProtocol: class, ModelProtocol {
     func showChannel(index: IndexPath)
 }
 
@@ -108,5 +108,14 @@ class ChannelsModel: ChannelsModelProtocol {
     
     func showChannel(index: IndexPath) {
         self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index.row]))
+    }
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            break
+        default:
+            break
+        }
     }
 }

@@ -140,15 +140,18 @@ class FeedViewController: UIViewController, ChannelProtocol {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.emitter.send(event: LifeCycleEvent.disappear)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.disappear)
     }
     
     deinit {
         self.emitter.send(event: LifeCycleEvent.deinitialize)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.deinitialize)
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {

@@ -58,6 +58,8 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         self.viewModel = viewModel
         viewModel.delegate = self
         
+        self.emitter?.send(event: LifeCycleEvent.initialize)
+        
         self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         
         seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
