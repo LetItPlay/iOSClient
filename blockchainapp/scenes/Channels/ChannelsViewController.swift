@@ -90,9 +90,7 @@ class ChannelsCell: UITableViewCell {
 }
 
 class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
-    //, ChannelsViewProtocol {
     
-//    var presenter: ChannelsPresenter!
     var source = [ChannelViewModel]()
     
     var emitter: ChannelsVCEmitterProtocol?
@@ -116,8 +114,6 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-//        presenter = ChannelsPresenter(view: self)
-        
         view.backgroundColor = UIColor.vaWhite
 
         tableView.dataSource = self
@@ -131,44 +127,32 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
                                               right: 0)
 		
 		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
-		
-		
-//        presenter.getData { [weak self] (channels) in
-//            self?.display(channels: channels)
-//        }
-//		refreshControl?.beginRefreshing()
+        
+        self.emitter?.send(event: LifeCycleEvent.initialize)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
+        self.viewWillAppear(animated)
+        self.emitter?.send(event: LifeCycleEvent.appear)
 		self.tableView.reloadData()
 	}
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.viewWillDisappear(animated)
+        self.emitter?.send(event: LifeCycleEvent.disappear)
+    }
+    deinit {
+        self.emitter?.send(event: LifeCycleEvent.deinitialize)
+    }
+    
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-//        presenter.getData { [weak self] (channels) in
-//            self?.display(channels: channels)
-//        }
-        self.emitter?.refreshData()
+        self.emitter?.send(event: ChannelsVCEvent.refreshData)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-//    func display(channels: [Station]) {
-////        source = channels
-//        tableView.reloadData()
-//
-//        refreshControl?.endRefreshing()
-//    }
-
-//    func select(rows: [Int]) {
-//        for r in rows {
-//            tableView.selectRow(at: IndexPath(row: r, section: 0),
-//                                animated: false,
-//                                scrollPosition: .none)
-//        }
-//    }
 
     func reloadChannels() {
         self.source = viewModel.channels
@@ -195,6 +179,7 @@ extension ChannelsViewController {
 		cell.subAction = {[weak self] channel in
 			if let ch = channel {
 //                self?.presenter.select(station: station)
+                self?.emitter?.send(event: ChannelsVCEvent.showChannel(index: indexPath))
 			}
 		}
 //        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)

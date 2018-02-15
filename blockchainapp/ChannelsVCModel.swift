@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-protocol ChannelsVCModelProtocol {
+protocol ChannelsVCModelProtocol: class, ModelProtocol {
     func showChannel(index: IndexPath)
     func refreshChannels()
 }
@@ -115,5 +115,14 @@ class ChannelsVCModel: ChannelsVCModelProtocol {
     
     func showChannel(index: IndexPath) {
         
+    }
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            break
+        default:
+            break
+        }
     }
 }

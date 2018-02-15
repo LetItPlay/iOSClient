@@ -8,24 +8,30 @@
 
 import Foundation
 
-protocol ChannelsVCEmitterProtocol {
-    func showChannel(index: IndexPath)
-    func refreshData()
+enum ChannelsVCEvent {
+    case showChannel(index: IndexPath)
+    case refreshData
 }
 
-class ChannelsVCEmitter: ChannelsVCEmitterProtocol {
+protocol ChannelsVCEmitterProtocol: LifeCycleHandlerProtocol {
+    func send(event: ChannelsVCEvent)
+}
+
+class ChannelsVCEmitter: Emitter, ChannelsVCEmitterProtocol {
     
     var model: ChannelsVCModelProtocol!
     
-    init(model: ChannelsVCModelProtocol) {
+    convenience init(model: ChannelsVCModelProtocol) {
+        self.init(handler: model)
         self.model = model
     }
     
-    func showChannel(index: IndexPath) {
-        self.model.showChannel(index: index)
-    }
-    
-    func refreshData() {
-        self.model.refreshChannels()
+    func send(event: ChannelsVCEvent) {
+        switch event {
+        case .refreshData:
+            self.model.refreshChannels()
+        case .showChannel(let index):
+            self.model.showChannel(index: index)
+        }
     }
 }
