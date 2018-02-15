@@ -61,18 +61,18 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
         if isContinue {
             let indexes = self.tracks.count..<(self.tracks.count + tracks.count)
             self.tracks += tracks
-            self.delegate?.make(updates: [CollectionUpdate.insert: Array(indexes)])
+            self.delegate?.make(updates: [.insert: Array(indexes)])
         } else {
             self.tracks = tracks
             self.delegate?.reload()
         }
     }
 	
-	func update(index: Int, track: TrackViewModel) {
-		if index < self.tracks.count {
-			self.tracks[index] = track
-			self.delegate?.make(updates: [.update : [index]])
-		}
+	func update(index: Int, fields: [TrackUpdateFields : Any]) {
+		var vm = self.tracks[index]
+		vm.update(fields: fields)
+		self.tracks[index] = vm
+		self.delegate?.make(updates: [.update: [index]])
 	}
     
     func noDataLeft() {

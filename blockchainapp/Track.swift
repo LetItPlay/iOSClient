@@ -15,7 +15,7 @@ struct Track1 {
 	var desc: String			= ""
 	var publishedAt: Date		= Date()
 	
-	var image: String			= ""
+	var image: URL?
 	var length: Int64			= 0
 	var url: URL?
 	
@@ -51,7 +51,7 @@ struct Track1 {
 			
 			self.length = json["TotalLengthInSeconds"].int64 ?? 0
 			self.desc = json["Description"].string ?? ""
-			self.image = json["CoverURL"].string ?? ""
+			self.image = json["CoverURL"].string?.url()
 			
 			self.likeCount = json["LikeCount"].int ?? 0
 			self.listenCount = json["ListenCount"].int ?? 0
@@ -61,6 +61,10 @@ struct Track1 {
 		}
 		
 		return nil
+	}
+	
+	func audioTrack(author: String) -> AudioTrack {
+		return PlayerTrack.init(id: self.idString(), trackURL: self.url!, name: self.name, author: author, imageURL: self.image, length: self.length)
 	}
 	
 	func idString() -> String {

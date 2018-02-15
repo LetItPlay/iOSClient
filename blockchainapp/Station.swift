@@ -4,7 +4,7 @@ import RealmSwift
 
 typealias ObjectInfo = (id: Int, name: String, image: URL?)
 
-struct Station1 {
+struct Station1: Hashable {
 	var id: Int					= 0
 	var name: String			= ""
 	var image: URL?
@@ -35,6 +35,14 @@ struct Station1 {
 		}
 		
 		return nil
+	}
+	
+	static func ==(f: Station1, s: Station1) -> Bool {
+		return f.id == s.id
+	}
+	
+	var hashValue: Int {
+		return self.id
 	}
 }
 

@@ -15,7 +15,7 @@ protocol FeedEventHandler: class {
 
 protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
-	func update(index: Int, track: TrackViewModel)
+	func update(index: Int, fields: [TrackUpdateFields: Any])
     func noDataLeft()
 }
 
@@ -29,6 +29,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	weak var delegate: FeedModelDelegate?
 	
 	private var tracks: [Track1] = []
+	private var channels: Set<Station1> = Set<Station1>()
 	private var playingIndex: Int? = nil
 	
 	private var dataAction: Action<Int, ([Track1],[Station1])>?
@@ -48,6 +49,9 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 			} else {
 				self.tracks += tuple.0
 			}
+			tuple.1.forEach({ (station) in
+				self.channels.insert(station)
+			})
 		}).map({ (tuple) -> [TrackViewModel] in
 			let playingId = AudioController.main.currentTrack?.id
 			return tuple.0.map({ (track) -> TrackViewModel in
@@ -114,7 +118,10 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     }
     
     func trackSelected(index: Int) {
-        
+		let tracks = self.tracks.map { (track) -> AudioTrack in
+			return track.audioTrack(author: channels.first(where: {$0.id == track.stationId})?.name ?? "")
+		}
+        AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].idString())
     }
     
     func trackLiked(index: Int) {
@@ -135,21 +142,22 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
 			if let curr = self.playingIndex {
-				let newVM = TrackViewModel(track: tracks[curr], isPlaying: false)
-				self.delegate?.update(index: curr, track: newVM)
+				self.delegate?.update(index: curr, fields: [TrackUpdateFields.isPlaying: false])
 			}
-			let newVM = TrackViewModel(track: tracks[index], isPlaying: false)
-			self.delegate?.update(index: index, track: newVM)
+			self.delegate?.update(index: index, fields: [TrackUpdateFields.isPlaying: true])
+			self.playingIndex = index
 		}
 	}
 
 	@objc func trackPaused(notification: Notification) {
-//		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-//		}
+		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
+			self.delegate?.update(index: self.playingIndex ?? index, fields: [TrackUpdateFields.isPlaying: false])
+			self.playingIndex = nil
+		}
 	}
 
 	@objc func subscriptionChanged(notification: Notification) {
-		
+		self.reload()
 	}
 }
 
