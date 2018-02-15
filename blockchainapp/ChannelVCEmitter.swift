@@ -13,11 +13,11 @@ protocol ChannelVCEmitterProtocol: LifeCycleHandlerProtocol {
 
 class ChannelVCEmitter: Emitter, ChannelVCEmitterProtocol {
     
-    var model: ChannelVCModelProtocol!
+    weak var model: ChannelVCEvenHandler?
     
-    convenience init(model: ChannelVCModelProtocol)
+    convenience init(model: ChannelVCEvenHandler)
     {
-        self.init(handler: model)
+        self.init(handler: model as! ModelProtocol)
         self.model = model
     }
 }

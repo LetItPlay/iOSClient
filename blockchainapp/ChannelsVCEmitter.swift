@@ -19,19 +19,19 @@ protocol ChannelsVCEmitterProtocol: LifeCycleHandlerProtocol {
 
 class ChannelsVCEmitter: Emitter, ChannelsVCEmitterProtocol {
     
-    var model: ChannelsVCModelProtocol!
+    weak var model: ChannelsVCEventHandler?
     
-    convenience init(model: ChannelsVCModelProtocol) {
-        self.init(handler: model)
+    convenience init(model: ChannelsVCEventHandler) {
+        self.init(handler: model as! ModelProtocol)
         self.model = model
     }
     
     func send(event: ChannelsVCEvent) {
         switch event {
         case .refreshData:
-            self.model.refreshChannels()
+            self.model?.refreshChannels()
         case .showChannel(let index):
-            self.model.showChannel(index: index)
+            self.model?.showChannel(index: index)
         }
     }
 }

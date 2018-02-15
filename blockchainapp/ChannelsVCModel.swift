@@ -10,6 +10,10 @@ import Foundation
 import RealmSwift
 
 protocol ChannelsVCModelProtocol: class, ModelProtocol {
+    weak var delegate: ChannelsVCModelDelegate? {get set}
+}
+
+protocol ChannelsVCEventHandler: class {
     func showChannel(index: IndexPath)
     func refreshChannels()
 }
@@ -19,7 +23,7 @@ protocol ChannelsVCModelDelegate: class {
     func showChannel(channel: FullChannelViewModel)
 }
 
-class ChannelsVCModel: ChannelsVCModelProtocol {
+class ChannelsVCModel: ChannelsVCModelProtocol, ChannelsVCEventHandler {
     
     weak var delegate: ChannelsVCModelDelegate?
     var subManager = SubscribeManager.shared

@@ -10,15 +10,20 @@ import Foundation
 import RealmSwift
 
 protocol ChannelVCModelProtocol: class, ModelProtocol {
+    weak var delegate: ChannelVCModelDelegate? {get set}
 }
 
-protocol ChannelVCModelDelegate {
+protocol ChannelVCEvenHandler: class {
+    
+}
+
+protocol ChannelVCModelDelegate: class {
     func reload(tracks: [TrackViewModel])
     func update(index: Int, track: TrackViewModel)
     func followUpdate(isSubscribed: Bool)
 }
 
-class ChannelVCModel: ChannelVCModelProtocol {
+class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
     
     var delegate: ChannelVCModelDelegate?
     

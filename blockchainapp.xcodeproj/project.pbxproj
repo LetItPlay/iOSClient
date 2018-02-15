@@ -354,7 +354,6 @@
 		36F7C399201AF71200F99A9A /* Channels */ = {
 			isa = PBXGroup;
 			children = (
-				9DA077C5203439A4002BF631 /* CollectionViewCell */,
 				36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */,
 				36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */,
 				36706D522031A801002097E7 /* ChannelsViewModel.swift */,
@@ -363,13 +362,6 @@
 				36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */,
 			);
 			name = Channels;
-			sourceTree = "<group>";
-		};
-		9DA077C5203439A4002BF631 /* CollectionViewCell */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = CollectionViewCell;
 			sourceTree = "<group>";
 		};
 		CF2715311F97EA560038C81C /* about */ = {

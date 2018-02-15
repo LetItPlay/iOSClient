@@ -8,6 +8,11 @@
 
 import Foundation
 
+protocol ChannelsVCVMProtocol {
+    var channels: [ChannelViewModel] {get}
+    weak var delegate: ChannelsVCVMDelegate? {get set}
+}
+
 protocol ChannelsVCVMDelegate: class {
     func reloadChannels()
 }
@@ -16,6 +21,13 @@ class ChannelsVCViewModel: ChannelsVCModelDelegate {
     
     var channels: [ChannelViewModel] = []
     weak var delegate: ChannelsVCVMDelegate?
+    var model: ChannelsVCModelProtocol!
+    
+    init(model: ChannelsVCModelProtocol)
+    {
+        self.model = model
+        self.model.delegate = self
+    }
     
     func reload(newChannels: [ChannelViewModel]) {
         self.channels = newChannels

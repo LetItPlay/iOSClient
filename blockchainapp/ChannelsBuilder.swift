@@ -16,11 +16,8 @@ class ChannelsBuilder: Builder {
     static func build(params: [String: Any]?) -> UIViewController {
 
         let model = ChannelsVCModel()
-        let vm = ChannelsVCViewModel()
+        let vm = ChannelsVCViewModel(model: model)
         let emitter = ChannelsVCEmitter.init(model: model)
-        
-        model.delegate = vm
-        emitter.model = model
         
 		let vc = ChannelsViewController.init(emitter: emitter, viewModel: vm)
 		return vc
