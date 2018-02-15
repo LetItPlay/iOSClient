@@ -16,7 +16,6 @@ protocol LikesVMDelegate: class {
 class LikesViewModel: LikesModelDelegate {    
     
     var tracks: [TrackViewModel] = []
-    var currentPlayingIndex: Int = -1
     weak var delegate: LikesVMDelegate?
     var length: String = ""
     
@@ -26,24 +25,8 @@ class LikesViewModel: LikesModelDelegate {
         self.delegate?.reload()
     }
     
-    func updateTrackAt(index: Int) {
-        if index != -1
-        {
-            if currentPlayingIndex != -1
-            {
-                self.tracks[currentPlayingIndex].isPlaying = false
-            }
-            self.tracks[index].isPlaying = true
-        }
-        else
-        {
-            if currentPlayingIndex != -1
-            {
-                self.tracks[currentPlayingIndex].isPlaying = false
-            }
-        }
-        
-        self.currentPlayingIndex = index
+    func update(track: TrackViewModel, atIndex: Int) {
+        self.tracks[atIndex] = track
         self.delegate?.updateTracks()
     }
 }

@@ -17,7 +17,7 @@ protocol LikesModelProtocol {
 
 protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
-    func updateTrackAt(index: Int)
+    func update(track: TrackViewModel, atIndex: Int)
 }
 
 class LikesModel: LikesModelProtocol {
@@ -26,7 +26,7 @@ class LikesModel: LikesModelProtocol {
     private var token: NotificationToken?
     
     private var tracks: [Track] = []
-    private var playingIndex: Int? = nil
+    private var playingIndex: Int = -1
     
     private let disposeBag = DisposeBag()
     
@@ -48,15 +48,20 @@ class LikesModel: LikesModelProtocol {
     
     @objc func trackPlayed(notification: Notification) {
         if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
+            if self.playingIndex != -1
+            {
+                self.delegate?.update(track: TrackViewModel.init(track: self.tracks[playingIndex], isPlaying: false, isLiked: true), atIndex: playingIndex)
+            }
+            
             self.playingIndex = index
-            self.delegate?.updateTrackAt(index: self.playingIndex!)
+            self.delegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: true, isLiked: true), atIndex: playingIndex)
         }
     }
     
     @objc func trackPaused(notification: Notification) {
-        if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-            self.playingIndex = -1
-            self.delegate?.updateTrackAt(index: self.playingIndex!)
+        if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
+            self.delegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: false, isLiked: true), atIndex: playingIndex)
+//            self.playingIndex = -1
         }
     }
     
@@ -69,7 +74,6 @@ class LikesModel: LikesModelProtocol {
     }
     
     func selectedTrack(index: Int) {
-        self.playingIndex = index
         let contr = AudioController.main
         contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].audiotrackId())
     }

@@ -22,5 +22,8 @@ struct TrackViewModel {
 		self.likesCount = Int64(track.likeCount).formatAmount()
 		self.listensCount = Int64(track.listenCount).formatAmount()
 		self.dateString = track.publishedAt.formatString()
+        
+        self.liked = isLiked
+        self.isPlaying = isPlaying
 	}
 }
