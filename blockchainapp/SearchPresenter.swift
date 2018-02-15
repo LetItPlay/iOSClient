@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import RxSwift
 
 enum SearchScreenState {
 	case search, recommendations
@@ -26,9 +27,11 @@ class SearchPresenter {
 	weak var delegate: SearchPresenterDelegate?
 	let realm: Realm? = try? Realm()
 	var currentPlayingIndex: Int = -1
-	var playlists: [(image: UIImage?, title: String, descr: String, tracks: [Track])] = []
+	var playlists: [(image: UIImage?, title: String, descr: String, tracks: [AudioTrack])] = []
 	var currentSearchString: String = ""
 	
+    let disposeBag = DisposeBag()
+    
 	init() {
 		NotificationCenter.default.addObserver(self,
 											   selector: #selector(subscriptionChanged(notification:)),
@@ -60,36 +63,42 @@ class SearchPresenter {
 	}
 	
 	func getData() {
-		let newsTag = "новости".localized
-		
-		if let channels = self.realm?.objects(Station.self).filter("ANY tags.value CONTAINS[cd] '\(newsTag)'").map({$0.id}){
-			var trackSelection = [Track]()
-			for id in channels {
-				if let tracks = self.realm?.objects(Track.self).filter("station = \(id)"){
-					trackSelection.append(contentsOf: tracks)
-				}
-			}
-			var maxlength: Int64 = 0
-			let filter: (Track) -> Bool = {$0.length <= Int64(4*60) && $0.length > 0 && $0.url != "" && $0.lang == UserSettings.language.rawValue}
-			trackSelection = trackSelection.filter(filter).sorted(by: {$0.publishedAt > $1.publishedAt})
-			var res = [Track]()
-			for track in trackSelection {
-				if maxlength + track.length < Int64(60*33) {
-					res.append(track.detached())
-					maxlength += track.length
-				} else {
-					break
-				}
-			}
-			if res.count > 0 {
-				playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: res)]
-			} else {
-				playlists = []
-			}
-			print("res = \(res.map({$0.name}))")
-		}
+//        let newsTag = "новости".localized
+//
+//        if let channels = self.realm?.objects(Station.self).filter("ANY tags.value CONTAINS[cd] '\(newsTag)'").map({$0.id}){
+//            var trackSelection = [Track]()
+//            for id in channels {
+//                if let tracks = self.realm?.objects(Track.self).filter("station = \(id)"){
+//                    trackSelection.append(contentsOf: tracks)
+//                }
+//            }
+//            var maxlength: Int64 = 0
+//            let filter: (Track) -> Bool = {$0.length <= Int64(4*60) && $0.length > 0 && $0.url != "" && $0.lang == UserSettings.language.rawValue}
+//            trackSelection = trackSelection.filter(filter).sorted(by: {$0.publishedAt > $1.publishedAt})
+//            var res = [Track]()
+//            for track in trackSelection {
+//                if maxlength + track.length < Int64(60*33) {
+//                    res.append(track.detached())
+//                    maxlength += track.length
+//                } else {
+//                    break
+//                }
+//            }
+//            if res.count > 0 {
+//                playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: res)]
+//            } else {
+//                playlists = []
+//            }
+//            print("res = \(res.map({$0.name}))")
+//        }
+        RequestManager.shared.tracks(req: .magic).subscribe(onNext: { (tuple) in
+            let tracklist = tuple.0.map({ (track) -> AudioTrack in
+                return PlayerTrack.init(id: track.idString(), trackURL: track.url!, name: track.name, author: tuple.1.filter({track.stationId == $0.id}).first?.name ?? "", imageURL: URL(string: track.image)!, length: track.length)
+            })
+            self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: tracklist)]
+            self.delegate?.updatePlaylists()
+        }).disposed(by: self.disposeBag)
 
-		self.delegate?.updatePlaylists()
 	}
 	
 	@objc func settingsChanged(notification: Notification) {
@@ -99,7 +108,7 @@ class SearchPresenter {
 	
 	func trackSelected(index: Int) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Searching".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].audiotrackId())
+		contr.loadPlaylist(playlist: ("Searching".localized, self.playlists[index].tracks), playId: self.playlists[index].tracks[0].id)
 	}
 	
 	func channelSubPressed(index: Int) {
@@ -112,7 +121,8 @@ class SearchPresenter {
 			self.tracks = []
 			self.channels = []
 		} else {
-			self.tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			let tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+            self.tracks = tracks
 			self.channels = self.realm?.objects(Station.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
 		}
 		self.delegate?.updateSearch()
@@ -122,7 +132,7 @@ class SearchPresenter {
 		
 		let playlist = self.playlists[index]
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0.audioTrack()})), playId: playlist.tracks[0].audiotrackId())
+		contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0})), playId: playlist.tracks[0].id)
 		contr.showPlaylist()
 	}
 	

@@ -79,7 +79,7 @@ class PlaylistTableViewCell: UITableViewCell {
 		
 	}
 	
-	func fill(tuple: (image: UIImage?, title: String, descr: String, _: [Track])) {
+	func fill(tuple: (image: UIImage?, title: String, descr: String, _: [AudioTrack])) {
 		self.playlistImageView.image = tuple.image
 		self.playlistTitleLabel.attributedText = type(of: self).titleString(string: tuple.title)
 		self.descriptionLabel.attributedText = type(of: self).descrString(string: tuple.descr)
