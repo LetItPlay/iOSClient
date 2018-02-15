@@ -25,8 +25,6 @@ class FeedViewController: UIViewController, ChannelProtocol {
     var alertLabel: UILabel!
 
     var channelsView: ChannelsCollectionView!
-    var refreshingTable: Bool = false
-    var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
     
 	let emptyLabel: UILabel = {
