@@ -9,12 +9,12 @@
 import UIKit
 
 protocol Builder {
-	static func build() -> UIViewController
+    static func build(params: [String: Any]?) -> UIViewController
 }
 
 class ChannelsBuilder: Builder {
-	static func build() -> UIViewController {
-        
+    static func build(params: [String: Any]?) -> UIViewController {
+
         let model = ChannelsVCModel()
         let vm = ChannelsVCViewModel()
         let emitter = ChannelsVCEmitter.init(model: model)

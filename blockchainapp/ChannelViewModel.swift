@@ -20,7 +20,7 @@ class ChannelViewModel: SmallChannelViewModel {
         
         self.name = channel.name
         self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
-        self.tracksCount = channel.tracksCount().formatAmount()
+        self.tracksCount = Int64(channel.trackCount).formatAmount()
         self.tags = channel.tags
     }
 }

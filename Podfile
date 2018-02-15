@@ -8,6 +8,7 @@ target 'blockchainapp' do
   pod "SwiftyJSON"
   
   pod "RealmSwift"
+  pod "Alamofire"
   
   pod "SDWebImage"
   pod "ShadowView"

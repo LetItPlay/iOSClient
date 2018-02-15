@@ -61,8 +61,8 @@ class SmallTrackTableViewCell: UITableViewCell {
             
             self.timeLabel.text = viewModel?.time
 
-            dataLabels[.listens]?.setData(string: (viewModel?.listens)!)
-            dataLabels[.time]?.setData(string: (viewModel?.length)!)
+            dataLabels[.listens]?.set(text: (viewModel?.listens)!)
+            dataLabels[.time]?.set(text: (viewModel?.length)!)
 		}
 	}
 	

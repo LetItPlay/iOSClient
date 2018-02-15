@@ -81,9 +81,8 @@ class IconedLabel: UIView {
 		}
 	}
     
-    func setData(string: String)
-    {
-        self.textLabel.text = string
+    func set(text: String) {
+        self.textLabel.text = text
     }
 	
 	required init?(coder aDecoder: NSCoder) {

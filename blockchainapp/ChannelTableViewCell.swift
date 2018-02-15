@@ -85,8 +85,8 @@ class ChannelTableViewCell: UITableViewCell {
             self.viewModel = ChannelsCellViewModel.init(channel: channel!)
             
 			channelTitle.text = self.viewModel?.channelName
-            subs.setData(string: (self.viewModel?.subscriptionCount)!)
-            plays.setData(string: (self.viewModel?.tracksCount)!)
+            subs.set(text: (self.viewModel?.subscriptionCount)!)
+            plays.set(text: (self.viewModel?.tracksCount)!)
             
 			self.tagsList.removeAllTags()
 			if let tags = self.viewModel?.tags.map({$0.value}).prefix(4) {

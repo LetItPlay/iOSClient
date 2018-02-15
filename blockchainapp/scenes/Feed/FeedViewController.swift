@@ -15,20 +15,20 @@ enum FeedType {
 	case feed, popular
 }
 
-class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
+class FeedViewController: UIViewController, ChannelProtocol {
+	
+	var viewModel: FeedVMProtocol!
+    var emitter: FeedEmitterProtocol!
     
-    var presenter: FeedPresenterProtocol!
-    fileprivate var source = [Track]()
-	var cellHeight: CGFloat = 343.0 + 24.0
     var previousCell: NewFeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
     var alertLabel: UILabel!
 
-	var type: FeedType = .feed
     var channelsView: ChannelsCollectionView!
     var refreshingTable: Bool = false
     var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+    
 	let emptyLabel: UILabel = {
 		let label = UILabel()
 		label.font = AppFont.Title.big
@@ -38,6 +38,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
 		return label
 	}()
+
     let emptyButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = AppFont.Title.section
@@ -52,13 +53,15 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     }()
     
     var tappedSideButton = false
-	
-    convenience init(type: FeedType, view: ChannelsCollectionView) {
-		self.init(nibName: nil, bundle: nil)
-		
-		self.type = type
-        self.channelsView = view
-	}
+    
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
+        self.init(nibName: nil, bundle: nil)
+        self.viewModel = vm
+        self.viewModel.delegate = self
+        
+        self.emitter = emitter
+        
+    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,20 +72,26 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        presenter = FeedPresenter(view: self, orderByListens: self.type == .popular)
-        
-//        navigationController?.isNavigationBarHidden = true
         view.backgroundColor = UIColor.vaWhite
         
         self.view.addSubview(tableView)
         
-        tableView.contentInset = UIEdgeInsets(top: 0,
-                                              left: 0,
-                                              bottom: 60,
-                                              right: 0)
-        
-        tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view)
+        if self.viewModel.showChannels {
+            channelsView.delegate = self
+            
+            tableView.snp.makeConstraints { (make) in
+                make.top.equalTo(channelsView.snp.bottom)
+                make.left.equalTo(0)
+                make.right.equalTo(0)
+                make.bottom.equalTo(0)
+                //            make.edges.equalTo(self.view)
+            }
+        }
+        else {
+            channelsView.isHidden = true
+            tableView.snp.makeConstraints { (make) in
+                make.edges.equalTo(self.view)
+            }
         }
 		
         tableView.dataSource = self
@@ -110,8 +119,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
-		emptyLabel.isHidden = self.type == .popular
-        
+
         self.view.addSubview(emptyButton)
         emptyButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
@@ -119,28 +127,31 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
-        emptyButton.isHidden = self.type == .popular
+        
+		emptyLabel.isHidden = !self.viewModel.showEmptyMessage
+        emptyButton.isHidden = !self.viewModel.showEmptyMessage
 		
-		presenter.getData { (tracks) in
-			
-		}
 		self.tableView.refreshControl?.beginRefreshing()
         
+        self.emitter.send(event: LifeCycleEvent.initialize)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-        self.view.layoutIfNeeded()
-		self.cellHeight = self.view.frame.width - 16 * 2 + 24 // side margins
+        self.emitter.send(event: LifeCycleEvent.appear)
 	}
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.emitter.send(event: LifeCycleEvent.disappear)
+    }
+    
+    deinit {
+        self.emitter.send(event: LifeCycleEvent.deinitialize)
+    }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { (tracks) in
-			
-        }
-
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()
-        })
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 
     override func didReceiveMemoryWarning() {
@@ -148,40 +159,9 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         // Dispose of any resources that can be recreated.
     }
     
-    func display() {
-//        source = tracks
-        tableView.reloadData()
-        self.tableView.refreshControl?.endRefreshing()
-		if self.type == .feed {
-			self.emptyLabel.isHidden = presenter.tracks.count != 0
-			self.emptyButton.isHidden = presenter.tracks.count != 0
-		}
-    }
-	
-	func reload(update: [Int], delete: [Int], insert: [Int]) {
-//		UIView.setAnimationsEnabled(false)
-//		tableView.beginUpdates()
-//		if self.view.window != nil {
-//			tableView.insertRows(at: insert.map({IndexPath(row: $0, section: 0)}), with: .none)
-//			tableView.deleteRows(at: delete.map({IndexPath(row: $0, section: 0)}), with: .none)
-//			tableView.reloadRows(at: update.map({IndexPath(row: $0, section: 0)}), with: .none)
-//		} else {
-			tableView.reloadData()
-//		}
-//		tableView.endUpdates()
-		self.tableView.refreshControl?.endRefreshing()
-//		UIView.setAnimationsEnabled(true)
-		if self.type == .feed {
-			self.emptyLabel.isHidden = presenter.tracks.count != 0
-			self.emptyButton.isHidden = presenter.tracks.count != 0
-		}
-        else {
-            
-        }
-	}
     
-    @objc func showAllChannels() {
-      let vc = ChannelsBuilder.build()
+  func showAllChannels() {
+      let vc = ChannelsBuilder.build(params: nil)
       self.navigationController?.pushViewController(vc, animated: true)
   }
     
@@ -219,35 +199,49 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-        if tappedSideButton {
-            if toBegining {
-                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .left))
-            } else {
-                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .right))
-            }
-            tappedSideButton = false
-        } else {
-            if toBegining {
-                AnalyticsEngine.sendEvent(event: .swipe(direction: .left))
-            } else {
-                AnalyticsEngine.sendEvent(event: .swipe(direction: .right))
-            }
-        }
-        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
-        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
+//        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
+//        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
+//
+//        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+//
+//        UIView.animate(withDuration: 0.3, animations: {
+//            cell.alertBlurView.alpha = 1
+//        })
+//
+//        let when = DispatchTime.now() + 1
+//        DispatchQueue.main.asyncAfter(deadline: when){
+//            UIView.animate(withDuration: 0.3, animations:{
+//                cell.alertBlurView.alpha = 0
+//            })
+//        }
+    }
+}
+
+extension FeedViewController: FeedVMDelegate {
+    func reload() {
+        self.tableView.reloadData()
+        self.tableView.refreshControl?.endRefreshing()
+    }
+    
+    func updateTableState() {
         
-        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
-
-        UIView.animate(withDuration: 0.3, animations: {
-            cell.alertBlurView.alpha = 1
-        })
-
-        let when = DispatchTime.now() + 1
-        DispatchQueue.main.asyncAfter(deadline: when){
-            UIView.animate(withDuration: 0.3, animations:{
-                cell.alertBlurView.alpha = 0
-            })
+    }
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
+        tableView.beginUpdates()
+        for key in updates.keys {
+            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+                switch key {
+                case .insert:
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                case .delete:
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                case .update:
+                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                }
+            }
         }
+        tableView.endUpdates()
     }
 }
 
@@ -258,60 +252,55 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.presenter.tracks.count
+        return self.viewModel.tracks.count
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
-		
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if self.type == .feed {
-            AnalyticsEngine.sendEvent(event: .feedCardSelected)
-        }
-        else {
-            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
-        }
-		self.presenter.play(index: indexPath.item)
+        self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
+//        if self.type == .feed {
+//            AnalyticsEngine.sendEvent(event: .feedCardSelected)
+//        }
+//        else {
+//            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
+//        }
+//        self.presenter.play(index: indexPath.item)
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
+        //for swipes
 //        cell?.delegate = self
-		let track = self.presenter.tracks[indexPath.item]
-		cell?.track = track
-		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
+        
+        self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
+        
+        let vm = self.viewModel.tracks[indexPath.item]
+        cell?.fill(vm: vm)
         
         cell?.getInfo(toHide: true, animated: false)
         cell?.alertBlurView.alpha = 0
 		
-		cell?.onPlay = { [weak self] _ in
-			let index = indexPath.item
-			self?.presenter.play(index: index)
-		}
-		
 		cell?.onLike = { [weak self] track in
-			let index = indexPath.item
-			self?.presenter.like(index: index)
+            self?.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
 		}
     }
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.presenter.tracks[indexPath.item]
-		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
-//		return self.cellHeight
+        let vm = self.viewModel.tracks[indexPath.item]
+		return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
 	
 	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.presenter.tracks[indexPath.item]
-		return NewFeedTableViewCell.height(text: track.name, width: tableView.frame.width)
-//		return self.cellHeight
+        let vm = self.viewModel.tracks[indexPath.item]
+        return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.type == .popular
+        if self.viewModel.showChannels
         {
             return 121
         }
@@ -319,7 +308,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.type == .popular
+        if self.viewModel.showChannels
         {
 			if channelsView == nil {
             	channelsView = ChannelsCollectionView()

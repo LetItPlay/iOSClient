@@ -25,7 +25,7 @@ class DBManager {
             _ = updateIfNeeded(property: &station.image, new: image.buildImageURL()?.absoluteString ?? "")
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
 			_ = updateIfNeeded(property: &station.lang, new: lang)
-			_ = updateIfNeeded(property: &station.trackCount, new: inRealm.objects(Track.self).filter("station == \(id)").count)
+			_ = updateIfNeeded(property: &station.trackCount, new: Int64(inRealm.objects(Track.self).filter("station == \(id)").count))
 			if let tags = tags {
 				tags.forEach({ (tag) in
 					if let tagString = tag, !station.tags.contains(where: {$0.value == tagString}) {
@@ -53,7 +53,7 @@ class DBManager {
 				})
 			}
 			newStat.lang = lang
-			newStat.trackCount = inRealm.objects(Track.self).filter("station == \(id)").count
+			newStat.trackCount = Int64(inRealm.objects(Track.self).filter("station == \(id)").count)
 			
             
             inRealm.add(newStat)

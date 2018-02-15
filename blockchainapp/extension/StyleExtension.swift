@@ -48,6 +48,22 @@ extension UIFont {
 // string
 
 extension String {
+	
+	func url() -> URL? {
+		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
+			return URL(string: str)
+		}
+		
+		var result = "https://manage.letitplay.io/"
+		if !self.contains("uploads") {
+			result += "uploads/"
+		}
+		if let path = (result + self).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
+			return URL(string: path)
+		}
+		return nil
+	}
+	
     func buildImageURL() -> URL? {
 		
 		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {

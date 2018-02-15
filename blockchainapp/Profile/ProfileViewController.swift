@@ -307,8 +307,8 @@ class LikeHeader: UIView {
 	}
 	
 	func fill(count: String, length: String) {
-		tracks.setData(string: count)
-		time.setData(string: length)
+		tracks.set(text: count)
+		time.set(text: length)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
