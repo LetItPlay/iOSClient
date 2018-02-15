@@ -38,6 +38,8 @@ SearchPresenterDelegate {
         self.init(nibName: nil, bundle: nil)
         
         self.playlistsResults = PlaylistsController(viewModel: viewModel, emitter: emitter)
+        self.playlistTableView = self.playlistsResults.tableView
+        self.playlistTableView.refreshControl?.beginRefreshing()
     }
 	
     override func viewDidLoad() {
@@ -84,11 +86,16 @@ SearchPresenterDelegate {
 		
 		self.view.addSubview(playlistTableView)
 		playlistTableView.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
+            make.edges.equalToSuperview()
+//            make.edges.top.equalTo((self.navigationController?.navigationBar.frame.size.height)!)
+//            make.edges.left.equalTo(0)
+//            make.edges.right.equalTo(0)
+//            make.edges.bottom.equalTo(0)
 		}
+        
+        
 		playlistTableView.delegate = self.playlistsResults
 		playlistTableView.dataSource = self.playlistsResults
-//        self.playlistsResults.presenter = self.presenter
 		
 		playlistTableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
 		playlistTableView.separatorStyle = .none
@@ -110,6 +117,8 @@ SearchPresenterDelegate {
 		self.emptyLabel = label
 		
 		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
+        
+        self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {

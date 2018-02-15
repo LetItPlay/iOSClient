@@ -8,8 +8,13 @@
 
 import Foundation
 
+enum PlaylistsEvent {
+    case formatPlaylists(index: Int)
+    case refresh
+}
+
 protocol PlaylistsEmitterProtocol: LifeCycleHandlerProtocol {
-    func formatPlaylists(index: Int)
+    func send(event: PlaylistsEvent)
 }
 
 class PlaylistsEmitter: Emitter, PlaylistsEmitterProtocol {
@@ -22,7 +27,12 @@ class PlaylistsEmitter: Emitter, PlaylistsEmitterProtocol {
         self.model = model
     }
     
-    func formatPlaylists(index: Int) {
-        self.model?.formatPlaylists(index: index)
+    func send(event: PlaylistsEvent) {
+        switch event {
+        case .formatPlaylists(let index):
+            self.model?.formatPlaylists(index: index)
+        case .refresh:
+            self.model?.refresh()
+        }
     }
 }

@@ -16,6 +16,7 @@ protocol PlaylistsModelProtocol: class, ModelProtocol {
 
 protocol PlaylistsEventHandler: class {
     func formatPlaylists(index: Int)
+    func refresh()
 }
 
 protocol PlaylistsModelDelegate: class {
@@ -101,6 +102,10 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
         default:
             break
         }
+    }
+    
+    func refresh() {
+        self.getData()
     }
     
     func getPlaylistViewModels()
