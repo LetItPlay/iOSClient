@@ -9,7 +9,9 @@
 import Foundation
 import UIKit
 
-class PlaylistsController: UITableViewController, PlaylistsVMDelegate {
+class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource, PlaylistsVMDelegate {
+    
+    var tableView: UITableView!
     
     var playlists: [PlaylistViewModel] = []
     
@@ -32,6 +34,10 @@ class PlaylistsController: UITableViewController, PlaylistsVMDelegate {
         
         self.emitter = emitter
         
+        self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
@@ -39,42 +45,43 @@ class PlaylistsController: UITableViewController, PlaylistsVMDelegate {
     }
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+        print("REFRESH")
         self.emitter.send(event: PlaylistsEvent.refresh)
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.playlists.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
         cell.fill(playlist: playlists[indexPath.item])
         
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let playlist = self.playlists[indexPath.item]
         return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 41
     }
     
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if self.playlists.count == 0 {
             return nil
