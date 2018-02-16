@@ -182,32 +182,61 @@ class ChannelHeaderView: UIView {
 		infoLabel.text = "123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23123 123123 123 123123123 123123123 123 23"
 	}
 	
-	func fill(station: Station, width: CGFloat) -> CGFloat {
-		channelTitleView.text = station.name
-		infoLabel.text = "No description for this channel"
-		subsView.setData(data: Int64(station.subscriptionCount))
-		if let iconUrl = URL(string: station.image) {
-			
-			channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
-				self?.channelImageView.image = image
-			})
-			channelIconView.backgroundColor = .white
-			channelImageView.snp.makeConstraints { (make) in
-				make.height.equalTo(width*CGFloat(6)/CGFloat(16))
-			}
-		} else {
-			channelImageView.snp.makeConstraints { (make) in
-				make.height.equalTo(0)//width*CGFloat(9)/CGFloat(16))
-			}
-			channelImageView.image = nil
-			channelIconView.image = nil
-			channelIconView.backgroundColor = .white
-		}
-		
-		self.tagListView.removeAllTags()
-		self.tagListView.addTags(station.tags.map({$0.value.uppercased()}))
-//		self.layoutIfNeeded()
-		
-		return self.frame.origin.y + self.frame.height
-	}
+//    func fill(station: Station, width: CGFloat) -> CGFloat {
+//        channelTitleView.text = station.name
+//        infoLabel.text = "No description for this channel"
+//        subsView.setData(data: Int64(station.subscriptionCount))
+//        if let iconUrl = URL(string: station.image) {
+//
+//            channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
+//                self?.channelImageView.image = image
+//            })
+//            channelIconView.backgroundColor = .white
+//            channelImageView.snp.makeConstraints { (make) in
+//                make.height.equalTo(width*CGFloat(6)/CGFloat(16))
+//            }
+//        } else {
+//            channelImageView.snp.makeConstraints { (make) in
+//                make.height.equalTo(0)//width*CGFloat(9)/CGFloat(16))
+//            }
+//            channelImageView.image = nil
+//            channelIconView.image = nil
+//            channelIconView.backgroundColor = .white
+//        }
+//
+//        self.tagListView.removeAllTags()
+//        self.tagListView.addTags(station.tags.map({$0.value.uppercased()}))
+////        self.layoutIfNeeded()
+//
+//        return self.frame.origin.y + self.frame.height
+//    }
+    
+    func fill(station: FullChannelViewModel, width: CGFloat) -> CGFloat {
+        channelTitleView.text = station.name
+        infoLabel.text = "No description for this channel"
+        subsView.set(text: station.subscriptionCount)
+        if let iconUrl = station.imageURL {
+            
+            channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
+                self?.channelImageView.image = image
+            })
+            channelIconView.backgroundColor = .white
+            channelImageView.snp.makeConstraints { (make) in
+                make.height.equalTo(width*CGFloat(6)/CGFloat(16))
+            }
+        } else {
+            channelImageView.snp.makeConstraints { (make) in
+                make.height.equalTo(0)//width*CGFloat(9)/CGFloat(16))
+            }
+            channelImageView.image = nil
+            channelIconView.image = nil
+            channelIconView.backgroundColor = .white
+        }
+        
+        self.tagListView.removeAllTags()
+        self.tagListView.addTags(station.tags.map({$0.value.uppercased()}))
+        //        self.layoutIfNeeded()
+        
+        return self.frame.origin.y + self.frame.height
+    }
 }

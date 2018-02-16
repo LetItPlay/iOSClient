@@ -172,8 +172,8 @@ class FeedViewController: UIViewController, ChannelProtocol {
   }
     
   func showChannel(station: Station) {
-      let vc = ChannelViewController(station: station)
-      self.navigationController?.pushViewController(vc, animated: true)
+//      let vc = ChannelViewController(station: station)
+//      self.navigationController?.pushViewController(vc, animated: true)
   }
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
