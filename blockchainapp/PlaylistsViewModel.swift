@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 protocol PlaylistsVMProtocol {
     weak var delegate: PlaylistsVMDelegate? {get set}

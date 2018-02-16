@@ -45,7 +45,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
     }
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        print("REFRESH")
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
         self.emitter.send(event: PlaylistsEvent.refresh)
     }
     
@@ -65,6 +65,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        AnalyticsEngine.sendEvent(event: .searchEvent(event: .playlistTapped))
         self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
     }
     
