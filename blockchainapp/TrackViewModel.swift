@@ -10,6 +10,7 @@ struct TrackViewModel {
 	var listensCount: String = ""
 	var dateString: String = ""
 	
+    var description: String = ""
 	var liked: Bool = true
 	var isPlaying: Bool = false
 	
@@ -22,5 +23,6 @@ struct TrackViewModel {
 		self.likesCount = Int64(track.likeCount).formatAmount()
 		self.listensCount = Int64(track.listenCount).formatAmount()
 		self.dateString = track.publishedAt.formatString()
+        self.description = track.desc
 	}
 }

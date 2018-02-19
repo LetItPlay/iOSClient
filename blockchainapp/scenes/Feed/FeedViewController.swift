@@ -26,6 +26,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 
 	var type: FeedType = .feed
     var channelsView: ChannelsCollectionView!
+    var trackInfoView: TrackInfoBlurView!
     var refreshingTable: Bool = false
     var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
@@ -126,6 +127,12 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
 		}
 		self.tableView.refreshControl?.beginRefreshing()
         
+        self.trackInfoView = TrackInfoBlurView()
+        self.view.addSubview(self.trackInfoView)
+        
+        self.trackInfoView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -243,19 +250,19 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
                 if self.previousCell != nil,
                    self.previousCell != cell
                 {
-                    previousCell?.getInfo(toHide: true, animated: true)
+//                    previousCell?.getInfo(toHide: true, animated: true)
                 }
                 if self.previousCell == cell
                 {
                     previousCell = nil
                     AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+//                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
                     previousCell = cell as? NewFeedTableViewCell
                     AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+//                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
         }
@@ -328,7 +335,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 		cell?.track = track
 		cell?.set(isPlaying: indexPath.item == self.presenter.playingIndex)
         
-        cell?.getInfo(toHide: true, animated: false)
+//        cell?.getInfo(toHide: true, animated: false)
         cell?.alertBlurView.alpha = 0
 		
 		cell?.onPlay = { [weak self] _ in
