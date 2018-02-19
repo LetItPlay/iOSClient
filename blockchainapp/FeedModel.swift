@@ -137,6 +137,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler, SettingsUpdateProtocol {
     }
     
     func reload() {
+        self.currentOffest = 0
         self.dataAction?.execute(0)
     }
     

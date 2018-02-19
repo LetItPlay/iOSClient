@@ -25,9 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
-        
-		self.tModel = FeedModel(isFeed: false)
-		
+
 		var vc: UIViewController!
 		if UserSettings.language == .none {
 			vc = SettingsViewController()
