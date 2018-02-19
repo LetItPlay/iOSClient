@@ -300,28 +300,27 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 			make.bottom.equalToSuperview().inset(32)
 			make.right.equalToSuperview().inset(10)
 		}
-		
-		let likeBlurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .extraLight))
-		likeBlurView.contentView.addSubview(self.likeButton)
-		self.likeButton.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
-		}
-		cellContentView.addSubview(likeBlurView)
-		likeBlurView.snp.makeConstraints { (make) in
-			make.bottom.equalTo(mainPictureImageView).inset(10)
-			make.right.equalTo(mainPictureImageView).inset(10)
-			make.width.equalTo(36)
-			make.height.equalTo(36)
-		}
-		likeBlurView.layer.masksToBounds = true
-		likeBlurView.layer.cornerRadius = 18
+        
+        let likeBlurView = UIVisualEffectView(effect: UIBlurEffect.init(style: .extraLight))
+        likeBlurView.contentView.addSubview(self.likeButton)
+        self.likeButton.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        cellContentView.addSubview(likeBlurView)
+        likeBlurView.snp.makeConstraints { (make) in
+            make.bottom.equalTo(mainPictureImageView).inset(10)
+            make.right.equalTo(mainPictureImageView).inset(10)
+            make.width.equalTo(36)
+            make.height.equalTo(36)
+        }
+        likeBlurView.layer.masksToBounds = true
+        likeBlurView.layer.cornerRadius = 18
         
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in
             make.top.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
-//            make.height.equalTo(infoTitle.frame.size.height)
         }
         
         self.infoBlurView.contentView.addSubview(infoText)
