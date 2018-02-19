@@ -131,7 +131,10 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         self.view.addSubview(self.trackInfoView)
         
         self.trackInfoView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 10)
+            make.left.equalTo(10)
+            make.right.equalTo(-10)
+            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
         }
     }
 	
@@ -246,24 +249,28 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         if longPressGestureRecognizer.state == .began {
             let touchPoint = longPressGestureRecognizer.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
+                let track = self.presenter.tracks[indexPath.item]
                 let cell = tableView.cellForRow(at: indexPath)
-                if self.previousCell != nil,
-                   self.previousCell != cell
-                {
-//                    previousCell?.getInfo(toHide: true, animated: true)
-                }
-                if self.previousCell == cell
-                {
-                    previousCell = nil
-                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
-//                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
-                }
-                else
-                {
-                    previousCell = cell as? NewFeedTableViewCell
-                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
-//                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
-                }
+                self.trackInfoView.set(title: track.name, infoText: track.desc)
+//                if self.previousCell != nil,
+//                   self.previousCell != cell
+//                {
+////                    previousCell?.getInfo(toHide: true, animated: true)
+//                    self.trackInfoView.set(title: track.name, infoText: track.desc)
+//                }
+//                if self.previousCell == cell
+//                {
+//                    previousCell = nil
+//                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
+////                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+//                }
+//                else
+//                {
+//                    previousCell = cell as? NewFeedTableViewCell
+//                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
+//                    self.trackInfoView.set(title: track.name, infoText: track.desc)
+////                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+//                }
             }
         }
     }

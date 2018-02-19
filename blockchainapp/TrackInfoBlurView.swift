@@ -29,6 +29,7 @@ class TrackInfoBlurView: UIVisualEffectView {
         textView.backgroundColor = .clear
         textView.isEditable = false
         textView.isSelectable = false
+        textView.isScrollEnabled = false
         textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
@@ -38,7 +39,6 @@ class TrackInfoBlurView: UIVisualEffectView {
         self.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
         
         self.commonInit()
-        self.getInfo(toHide: false, animated: true)
     }
     
     func commonInit()
@@ -46,22 +46,11 @@ class TrackInfoBlurView: UIVisualEffectView {
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.clipsToBounds = true
         self.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        self.layer.cornerRadius = 5
         
         self.contentView.addSubview(infoTitle)
-        infoTitle.snp.makeConstraints { (make) in
-            make.top.equalTo((superview?.snp.top)!).inset(10)
-            make.left.equalTo((superview?.snp.left)!).inset(10)
-            make.right.equalTo((superview?.snp.right)!).inset(10)
-            //            make.height.equalTo(infoTitle.frame.size.height)
-        }
-        
         self.contentView.addSubview(infoText)
-        infoText.snp.makeConstraints { (make) in
-            make.top.equalTo(infoTitle.snp.bottom).inset(-12)
-            make.bottom.equalTo((superview?.snp.bottom)!).inset(10)
-            make.left.equalTo((superview?.snp.left)!).inset(10)
-            make.right.equalTo((superview?.snp.right)!).inset(10)
-        }
+
         infoText.setContentHuggingPriority(.init(999), for: .vertical)
         
         self.alpha = 0
@@ -71,6 +60,31 @@ class TrackInfoBlurView: UIVisualEffectView {
     {
         self.infoTitle.text = track.name
         self.infoText.text = track.description
+    }
+    
+    func set(title: String, infoText: String)
+    {
+        self.infoTitle.text = title
+        self.infoText.text = infoText
+        
+        self.setConstraints()
+        self.getInfo(toHide: false, animated: true)
+    }
+    
+    func setConstraints()
+    {
+        infoTitle.snp.makeConstraints { (make) in
+            make.top.equalTo(self.frame.origin.y).inset(50)
+            make.left.equalTo((superview?.snp.left)!).inset(20)
+            make.right.equalTo((superview?.snp.right)!).inset(10)
+        }
+
+        infoText.snp.makeConstraints { (make) in
+            make.top.equalTo(infoTitle.snp.bottom).inset(-12)
+            make.bottom.equalTo(self.frame.size.height - self.frame.origin.y).inset(-10)
+            make.left.equalTo((superview?.snp.left)!).inset(10)
+            make.right.equalTo((superview?.snp.right)!).inset(10)
+        }
     }
     
     func getInfo(toHide: Bool, animated: Bool)
