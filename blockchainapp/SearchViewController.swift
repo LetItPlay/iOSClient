@@ -60,8 +60,8 @@ UISearchBarDelegate {//,
 //        self.presenter.delegate = self
 		
 //        self.searchResults.presenter = self.presenter
-        self.searchResults.searchController = self.searchController
-		self.searchResults.parent = self
+//        self.searchResults.searchController = self.searchController
+//        self.searchResults.parent = self
 		
 		self.navigationController?.navigationBar.prefersLargeTitles = true
 		self.navigationItem.largeTitleDisplayMode = .always
