@@ -63,7 +63,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         imagePicker.delegate = self
         profileView.delegate = self
 		tableView.tableHeaderView = profileView
-		tableView.contentInset.bottom = 72
+		tableView.contentInset.bottom = 50
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		

@@ -48,10 +48,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
             make.edges.equalToSuperview()
 		}
         
-        tableView.contentInset = UIEdgeInsets(top: 0,
-                                              left: 0,
-                                              bottom: 70,
-                                              right: 0)
+        tableView.contentInset.bottom = 70
 		
 		self.header = ChannelHeaderView(frame: self.view.frame)
 		header.translatesAutoresizingMaskIntoConstraints = false

@@ -79,6 +79,9 @@ SearchPresenterDelegate {
 		playlistTableView.snp.makeConstraints { (make) in
 			make.edges.equalToSuperview()
 		}
+        
+        playlistTableView.contentInset.bottom = 40
+            
 		playlistTableView.delegate = self.playlistsResults
 		playlistTableView.dataSource = self.playlistsResults
 		self.playlistsResults.presenter = self.presenter

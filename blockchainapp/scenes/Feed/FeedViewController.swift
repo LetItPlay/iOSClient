@@ -76,10 +76,7 @@ class FeedViewController: UIViewController, FeedViewProtocol, ChannelProtocol {
         
         self.view.addSubview(tableView)
         
-        tableView.contentInset = UIEdgeInsets(top: 0,
-                                              left: 0,
-                                              bottom: 60,
-                                              right: 0)
+        tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view)
