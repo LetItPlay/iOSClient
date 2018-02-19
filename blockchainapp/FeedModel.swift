@@ -20,7 +20,8 @@ protocol FeedModelDelegate: class {
     func noDataLeft()
 }
 
-class FeedModel: FeedModelProtocol, FeedEventHandler, SettingsUpdateProtocol {
+class FeedModel: FeedModelProtocol,
+FeedEventHandler {
 	
 	private let isFeed: Bool
 	private var currentOffest: Int = 0
@@ -72,40 +73,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler, SettingsUpdateProtocol {
 			print("Track loaded")
 		}).disposed(by: self.disposeBag)
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(subscriptionChanged(notification:)),
-											   name: SubscribeManager.NotificationName.added.notification,
-											   object: nil)
-		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(subscriptionChanged(notification:)),
-											   name: SubscribeManager.NotificationName.deleted.notification,
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPlayed(notification:)),
-											   name: AudioController.AudioStateNotification.playing.notification(),
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPaused(notification:)),
-											   name: AudioController.AudioStateNotification.paused.notification(),
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(settingsChanged(notification:)),
-											   name: SettingsNotfification.changed.notification(),
-											   object: nil)
         InAppUpdateManager.shared.subscribe(self)
-	}
-
-    func settingsUpdated() {
-        self.reload()
-    }
-
-    deinit {
-		NotificationCenter.default.removeObserver(self)
-	}
-
-	@objc func settingsChanged(notification: Notification) {
-		self.reload()
 	}
     
     func send(event: LifeCycleEvent) {
@@ -147,21 +115,33 @@ class FeedModel: FeedModelProtocol, FeedEventHandler, SettingsUpdateProtocol {
             self.dataAction?.execute(self.tracks.count)
         }
     }
+}
 
-	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
-			self.playingIndex.value = index
-		}
-	}
-
-	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.idString() == id}) {
-			self.playingIndex.value = nil
-		}
-	}
-
-	@objc func subscriptionChanged(notification: Notification) {
-		self.reload()
-	}
+extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+    func stationSubscriptionUpdated() {
+        self.reload()
+    }
+    
+    func settingsUpdated() {
+        self.reload()
+    }
+    
+    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
+        if isPlaying {
+            if let index = self.tracks.index(where: {$0.id == id}) {
+                self.playingIndex.value = index
+            }
+        } else {
+            self.playingIndex.value = nil
+        }
+    }
+    
+    func trackUpdated(track: Track1) {
+        if let index = self.tracks.index(where: {$0.id == track.id}) {
+            let vm = TrackViewModel(track: track)
+            self.delegate?.trackUpdate(index: index, vm: vm)
+        }
+        
+    }
 }
 

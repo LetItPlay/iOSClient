@@ -13,6 +13,8 @@ struct Station1: Hashable {
 	var trackCount: Int			= 0
 	var descr: String			= ""
 	
+    var isSubscribed: Bool      = false
+    
 	var lang: String			= Language.ru.rawValue
 	var tags: [String]			= []
 	

@@ -16,6 +16,12 @@ enum TracksRequest {
     case tag(String)
 }
 
+enum TrackUpdateRequest {
+    case listen
+    case like(count: Int)
+    case report(msg: String)
+}
+
 fileprivate extension TracksRequest {
     func urlQuery(lang: String) -> String {
         switch self {
@@ -93,8 +99,95 @@ class RequestManager {
                 }
             }
         }
-
         return Observable.error(RequestError.invalidURL)
     }
-
+    
+    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Station1]> {
+        let urlString = RequestManager.server + "/stations?offset=\(offset)&count=\(count)&lang=\(UserSettings.language.rawValue)"
+        if let url = URL(string: urlString) {
+            return Observable<[Station1]>.create({ (observer) -> Disposable in
+                
+                    Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
+                        .responseData { (response: DataResponse<Data>) in
+                            
+                            if let _ = response.error {
+                                observer.onError(RequestError.noConnection)
+                                observer.onCompleted()
+                                return
+                            }
+                            
+                            if let resp = response.response, let data = response.data {
+                                if resp.statusCode == 200 {
+                                    do {
+                                        let json = try JSON(data: data)
+                                        let stations: [Station1] = json.array?
+                                            .map({Station1(json: $0)})
+                                            .filter({$0 != nil}).map({station in
+                                                var station = station!
+                                                station.isSubscribed = SubscribeManager.shared.hasStation(id: station.id)
+                                                return station
+                                            }) ?? []
+                                        observer.onNext(stations)
+                                    } catch {
+                                        observer.onError(RequestError.invalidJSON)
+                                    }
+                                } else {
+                                    observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
+                                }
+                            } else {
+                                observer.onError(RequestError.noConnection)
+                            }
+                            observer.onCompleted()
+                    }
+                return Disposables.create {
+                    print("Channels signal disposed")
+                }
+            })
+        }
+        return Observable.error(RequestError.invalidURL)
+    }
+    
+    func trackUpdate(id: Int, type: TrackUpdateRequest) -> Observable<Track1> {
+        return Observable<Track1>.create({ (observer) -> Disposable in
+            if let str = String(format: "https://manage.letitplay.io/api/tracks/%d/counts/", id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                let url = URL(string: str) {
+                
+                var request = URLRequest(url: url)
+                request.httpMethod = "POST"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                
+                var elements: [String: Int] = [:]
+                elements["report_count"] = 0
+                elements["like_count"]   = 0
+                elements["listen_count"] = 0
+                switch type {
+                    case .like(let count):
+                        elements["like_count"]   = count
+                    case .report(let msg):
+                        elements["report_count"] = 1
+                    case .listen:
+                        elements["listen_count"] = 1
+                }
+                
+                request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
+                
+                let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+                    
+                    guard error == nil else { return }
+                    guard let data = data else { return }
+                    
+                    do {
+                        let json  = try JSON(data: data)
+                    } catch(let error) {
+                        print(error)
+                    }
+                    
+                })
+                task.resume()
+            }
+            return Disposables.create {
+                print("Track update signal disposed")
+            }
+        })
+    }
 }

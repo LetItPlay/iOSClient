@@ -2,17 +2,14 @@ import Foundation
 
 enum InAppUpdateNotification: String {
 	case track = "TrackUpdate"
-	case channel = "ChannelUpdate"
+	case station = "StationUpdate"
 	case playing = "PlayingStateUpdate"
 	case setting = "SettingUpdate"
+    case subscription = "SubscriptionChanged"
 
 	func notification() -> NSNotification.Name {
 		return NSNotification.Name.init("InAppUpdateNotification"+self.rawValue)
 	}
-}
-
-enum UpdateType {
-	case track, station, subscription
 }
 
 protocol TrackUpdateProtocol: class {
@@ -37,7 +34,6 @@ protocol SettingsUpdateProtocol: class {
 
 fileprivate class Box {
 	weak var value: AnyObject?
-
 	init(_ t: AnyObject) {
 		value = t
 	}
@@ -46,79 +42,90 @@ fileprivate class Box {
 class InAppUpdateManager {
 	static let shared = InAppUpdateManager()
 
-	private var trackObservers: [Box] = []
-	private var stationObservers: [Box] = []
-	private var subscriptionObservers: [Box] = []
-	private var playingObservers: [Box] = []
-	private var settingsObservers: [Box] = []
-
+    private var observers: [InAppUpdateNotification: [Box]] = [.station: [],
+                                                               .track: [],
+                                                               .playing: [],
+                                                               .setting: [],
+                                                               .subscription: []]
+    
 	init() {
-
 		NotificationCenter.default.addObserver(self,
-				selector: #selector(subscriptionChanged(notification:)),
-				name: SubscribeManager.NotificationName.added.notification,
-				object: nil)
+                                               selector: #selector(trackPlayed(notification:)),
+                                               name: AudioController.AudioStateNotification.playing.notification(),
+                                               object: nil)
 		NotificationCenter.default.addObserver(self,
-				selector: #selector(trackPlayed(notification:)),
-				name: AudioController.AudioStateNotification.playing.notification(),
-				object: nil)
+                                               selector: #selector(trackPaused(notification:)),
+                                               name: AudioController.AudioStateNotification.paused.notification(),
+                                               object: nil)
+        
 		NotificationCenter.default.addObserver(self,
-				selector: #selector(trackPaused(notification:)),
-				name: AudioController.AudioStateNotification.paused.notification(),
-				object: nil)
-		NotificationCenter.default.addObserver(self,
-				selector: #selector(settingsChanged(notification:)),
-				name: InAppUpdateNotification.setting.notification(),
-				object: nil)
+                                               selector: #selector(settingsChanged(notification:)),
+                                               name: InAppUpdateNotification.setting.notification(),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(stationChanged(notification:)),
+                                               name: InAppUpdateNotification.station.notification(),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(trackChanged(notification:)),
+                                               name: InAppUpdateNotification.track.notification(),
+                                               object: nil)
 
 	}
 
 	func subscribe(_ model: AnyObject) -> Bool {
 		var result = false
 		if let _ = model as? TrackUpdateProtocol {
-			self.trackObservers.append(Box.init(model))
+            self.observers[.track]?.append(Box.init(model))
 			result = result || true
 		}
 		if let _ = model as? StationUpdateProtocol {
-			self.stationObservers.append(Box.init(model))
+            self.observers[.station]?.append(Box.init(model))
 			result = result || true
 		}
 		if let _ = model as? SubscriptionUpdateProtocol {
-			self.subscriptionObservers.append(Box.init(model))
+            self.observers[.subscription]?.append(Box.init(model))
 			result = result || true
 		}
 		if let _ = model as? PlayingStateUpdateProtocol {
-			self.playingObservers.append(Box.init(model))
+            self.observers[.playing]?.append(Box.init(model))
 			result = result || true
 		}
 		if let _ = model as? SettingsUpdateProtocol {
-			self.settingsObservers.append(Box.init(model))
+            self.observers[.setting]?.append(Box.init(model))
 			result = result || true
 		}
 		return result
 	}
 	
 	@objc func settingsChanged(notification: Notification) {
-		for box in self.settingsObservers {
+		for box in self.observers[.setting] ?? [] {
 			(box.value as? SettingsUpdateProtocol)?.settingsUpdated()
 		}
 	}
 
-	@objc func subscriptionChanged(notification: Notification) {
-		if let station = notification.userInfo?["Station"] as? Station1 {
-			for box in self.subscriptionObservers {
+	@objc func stationChanged(notification: Notification) {
+		if let station = notification.userInfo?["station"] as? Station1 {
+			for box in self.observers[.station] ?? [] {
 				(box.value as? StationUpdateProtocol)?.stationUpdated(station: station)
 			}
-
-			for box in self.subscriptionObservers {
+			for box in self.observers[.subscription] ?? [] {
 				(box.value as? SubscriptionUpdateProtocol)?.stationSubscriptionUpdated()
 			}
 		}
 	}
+    
+    @objc func trackChanged(notification: Notification) {
+        if let track = notification.userInfo?["track"] as? Track1 {
+            for box in self.observers[.station] ?? [] {
+                (box.value as? TrackUpdateProtocol)?.trackUpdated(track: track)
+            }
+        }
+    }
 
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["id"] as? Int {
-			for box in self.settingsObservers {
+			for box in self.observers[.playing] ?? [] {
 				(box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: true)
 			}
 		}
@@ -126,7 +133,7 @@ class InAppUpdateManager {
 
 	@objc func trackPaused(notification: Notification) {
 		if let id = notification.userInfo?["id"] as? Int {
-			for box in self.settingsObservers {
+            for box in self.observers[.playing] ?? [] {
 				(box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: false)
 			}
 		}
