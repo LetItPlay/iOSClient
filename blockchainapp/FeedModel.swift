@@ -20,7 +20,7 @@ protocol FeedModelDelegate: class {
     func noDataLeft()
 }
 
-class FeedModel: FeedModelProtocol, FeedEventHandler {
+class FeedModel: FeedModelProtocol, FeedEventHandler, SettingsUpdateProtocol {
 	
 	private let isFeed: Bool
 	private var currentOffest: Int = 0
@@ -93,9 +93,14 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 											   selector: #selector(settingsChanged(notification:)),
 											   name: SettingsNotfification.changed.notification(),
 											   object: nil)
+        InAppUpdateManager.shared.subscribe(self)
 	}
-	
-	deinit {
+
+    func settingsUpdated() {
+        self.reload()
+    }
+
+    deinit {
 		NotificationCenter.default.removeObserver(self)
 	}
 

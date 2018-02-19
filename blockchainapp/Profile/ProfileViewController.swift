@@ -102,6 +102,7 @@ class ProfileViewController: UIViewController {
 		}
 		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
+		NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil)
 		self.currentIndex = -1
 		self.reloadData()
 		

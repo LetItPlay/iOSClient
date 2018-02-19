@@ -68,7 +68,7 @@ class InAppUpdateManager {
 				object: nil)
 		NotificationCenter.default.addObserver(self,
 				selector: #selector(settingsChanged(notification:)),
-				name: SettingsNotfification.changed.notification(),
+				name: InAppUpdateNotification.setting.notification(),
 				object: nil)
 
 	}
