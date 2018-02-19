@@ -979,9 +979,9 @@
         <image name="pauseInacteive" width="24" height="24"/>
         <image name="play" width="48" height="48"/>
         <image name="playInacteive" width="24" height="24"/>
-        <image name="playInactive" width="73" height="73"/>
+        <image name="playInactive" width="40" height="40"/>
         <image name="redTriangle" width="512" height="512"/>
-        <image name="stopInactive" width="40" height="40"/>
+        <image name="stopInactive" width="70" height="70"/>
         <image name="tb_channels" width="24" height="24"/>
         <image name="tb_feed" width="24" height="24"/>
         <image name="tb_profile" width="24" height="24"/>

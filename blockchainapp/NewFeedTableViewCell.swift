@@ -2,12 +2,14 @@
 import UIKit
 import SnapKit
 import SwipeCellKit
+import RxSwift
 
 class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
 	public var onLike: ((Int) -> Void)?
+	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
         channelLabel.text = vm.author
@@ -28,16 +30,20 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         
         infoTitle.text = vm.name
         infoText.text = vm.description
-        
-        
-        dataLabels[.likes]?.set(text: vm.likesCount)
-        dataLabels[.listens]?.set(text: vm.listensCount)
+		
+		self.disposeBag = DisposeBag()
+		
+		self.dataLabels[.likes]?.set(text: vm.likesCount)
+		
+		self.dataLabels[.listens]?.set(text: vm.listensCount)
+		
+		self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+		self.dataLabels[.listens]?.isHidden = vm.isPlaying
+		
+		self.likeButton.isSelected = vm.isLiked
+		
         dataLabels[.time]?.set(text: vm.length)
-        
-        likeButton.isSelected = vm.isLiked
-        
-        self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
-        self.dataLabels[.listens]?.isHidden = !vm.isPlaying
+		
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

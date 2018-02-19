@@ -10,6 +10,7 @@
 		01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */; };
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
 		014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014761132010620F006E3373 /* PlayerTableViewCell.swift */; };
+		014913852036ECBF004058CB /* InAppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014913842036ECBF004058CB /* InAppUpdateManager.swift */; };
 		015088842006472200E42F7D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015088832006472200E42F7D /* AudioPlayer.swift */; };
 		01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAC1FDED922003AC116 /* RealmExtension.swift */; };
 		01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */; };
@@ -107,6 +108,7 @@
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
 		014761132010620F006E3373 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
+		014913842036ECBF004058CB /* InAppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppUpdateManager.swift; sourceTree = "<group>"; };
 		015088832006472200E42F7D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		01510EAC1FDED922003AC116 /* RealmExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
 		01510EAE1FDFFD4C003AC116 /* ChannelTrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelTrackCell.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				CF4453741F666BB800660474 /* DBModels.swift */,
 				CF1E04821F82273D00D8812F /* DBHelpers.swift */,
 				FD10BE55E82F75A804CA6B47 /* RequestManager.swift */,
+				014913842036ECBF004058CB /* InAppUpdateManager.swift */,
 			);
 			name = managers;
 			sourceTree = "<group>";
@@ -400,8 +403,8 @@
 			children = (
 				CF4453631F56CA5800660474 /* FeedPresenter.swift */,
 				CF4453651F56CB4600660474 /* FeedProtocols.swift */,
-				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
 				36F7C399201AF71200F99A9A /* Channels */,
+				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
 				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
 				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
 				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
@@ -731,6 +734,7 @@
 				01510EB21FE0E907003AC116 /* SearchPresenter.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
+				014913852036ECBF004058CB /* InAppUpdateManager.swift in Sources */,
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
 				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,
 				01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */,

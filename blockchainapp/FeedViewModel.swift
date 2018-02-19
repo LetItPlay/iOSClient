@@ -1,15 +1,8 @@
 import Foundation
+import RxSwift
 
 enum CollectionUpdate {
 	case insert, update, delete
-}
-
-enum TrackAction {
-	case selected, liked, reported
-}
-
-enum ViewState {
-	case initialize, show, dismiss, destroyed
 }
 
 protocol FeedVMProtocol {
@@ -17,9 +10,6 @@ protocol FeedVMProtocol {
     var showChannels: Bool {get}
     var showEmptyMessage: Bool {get}
     var endReached: Bool {get}
-	
-	func make(action: TrackAction, index: Int)
-	func stateChanged(_ state: ViewState)
     
     weak var delegate: FeedVMDelegate? {get set}
 }
@@ -39,17 +29,32 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     var showEmptyMessage: Bool = false
     var endReached: Bool = false
 	
+	let disposeBag = DisposeBag()
+	
 	init(model: FeedModelProtocol) {
 		self.model = model
         self.model.delegate = self
-	}
-	
-	func make(action: TrackAction, index: Int) {
 		
-	}
-	
-	func stateChanged(_ state: ViewState) {
-		
+		self.model.playingIndex.asObservable().scan(nil) { (res, index) -> (Int?, Int?) in
+			return (res?.1, index)
+			}.subscribe(onNext: { (tuple) in
+				if let tuple = tuple {
+					var indexes = [Int]()
+					if let old = tuple.0 {
+						var vm = self.tracks[old]
+						vm.isPlaying = false
+						self.tracks[old] = vm
+						indexes.append(old)
+					}
+					if let new = tuple.1 {
+						var vm = self.tracks[new]
+						vm.isPlaying = true
+						self.tracks[new] = vm
+						indexes.append(new)
+					}
+					self.delegate?.make(updates: [.update: indexes])
+				}
+			}).disposed(by: disposeBag)
 	}
 	
 	func reload(tracks: [TrackViewModel]) {
@@ -68,9 +73,9 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
         }
     }
 	
-	func update(index: Int, fields: [TrackUpdateFields : Any]) {
+	func trackUpdate(index: Int, vm: TrackViewModel) {
 		var vm = self.tracks[index]
-		vm.update(fields: fields)
+		vm.update(vm: vm)
 		self.tracks[index] = vm
 		self.delegate?.make(updates: [.update: [index]])
 	}

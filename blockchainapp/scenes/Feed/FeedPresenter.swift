@@ -175,7 +175,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	
 	func play(index: Int) {
 		if index < self.tracks.count {
-			let trackUID = self.tracks[index].audiotrackId()
+			let trackUID = self.tracks[index].id
 			let name = self.isFeed ? "Feed".localized : "Trends".localized
 			AudioController.main.loadPlaylist(playlist: (name, self.tracks.map({$0.audioTrack()})), playId: trackUID)
 		}

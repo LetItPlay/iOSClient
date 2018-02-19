@@ -67,7 +67,7 @@ class SearchPresenter {
 	
 	func trackSelected(index: Int) {
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Searching".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].audiotrackId())
+		contr.loadPlaylist(playlist: ("Searching".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].id)
 	}
 	
 	func channelSubPressed(index: Int) {
@@ -112,7 +112,7 @@ class SearchPresenter {
 			}
 			if res.count > 0 {
 				let contr = AudioController.main
-				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res.map({$0.audioTrack()})), playId: res[0].audiotrackId())
+				contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(tags[index])\"", res.map({$0.audioTrack()})), playId: res[0].id)
 				contr.showPlaylist()
 			}
 			print("res = \(res.map({$0.name}))")

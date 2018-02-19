@@ -4,6 +4,7 @@ import Action
 
 protocol FeedModelProtocol: class, ModelProtocol {
     weak var delegate: FeedModelDelegate? {get set}
+	var playingIndex: Variable<Int?> {get}
 }
 
 protocol FeedEventHandler: class {
@@ -15,7 +16,7 @@ protocol FeedEventHandler: class {
 
 protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
-	func update(index: Int, fields: [TrackUpdateFields: Any])
+	func trackUpdate(index: Int, vm: TrackViewModel)
     func noDataLeft()
 }
 
@@ -30,7 +31,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	
 	private var tracks: [Track1] = []
 	private var channels: Set<Station1> = Set<Station1>()
-	private var playingIndex: Int? = nil
+	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
 	private var dataAction: Action<Int, ([Track1],[Station1])>?
 	private let disposeBag = DisposeBag()
@@ -56,8 +57,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 			let playingId = AudioController.main.currentTrack?.id
 			return tuple.0.map({ (track) -> TrackViewModel in
 				var vm = TrackViewModel(track: track,
-										isPlaying: track.idString() == playingId ,
-										isLiked: LikeManager.shared.hasObject(id: track.id))
+										isPlaying: track.id == playingId)
 				if let station = tuple.1.filter({$0.id == track.stationId}).first {
 					vm.authorImage = station.image
 					vm.author = station.name
@@ -93,7 +93,6 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 											   selector: #selector(settingsChanged(notification:)),
 											   name: SettingsNotfification.changed.notification(),
 											   object: nil)
-		
 	}
 	
 	deinit {
@@ -101,7 +100,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	}
 
 	@objc func settingsChanged(notification: Notification) {
-
+		self.reload()
 	}
     
     func send(event: LifeCycleEvent) {
@@ -121,11 +120,15 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 		let tracks = self.tracks.map { (track) -> AudioTrack in
 			return track.audioTrack(author: channels.first(where: {$0.id == track.stationId})?.name ?? "")
 		}
-        AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].idString())
+        AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
     }
     
     func trackLiked(index: Int) {
-        
+        let track = self.tracks[index]
+		track.likeCount += track.isLiked ? -1 : 1
+		LikeManager.shared.addOrDelete(id: track.id)
+		track.isLiked = LikeManager.shared.hasObject(id: track.id)
+		self.tracks[index] = track
     }
     
     func reload() {
@@ -141,18 +144,13 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 
 	@objc func trackPlayed(notification: Notification) {
 		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
-			if let curr = self.playingIndex {
-				self.delegate?.update(index: curr, fields: [TrackUpdateFields.isPlaying: false])
-			}
-			self.delegate?.update(index: index, fields: [TrackUpdateFields.isPlaying: true])
-			self.playingIndex = index
+			self.playingIndex.value = index
 		}
 	}
 
 	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.idString() == id}) {
-			self.delegate?.update(index: self.playingIndex ?? index, fields: [TrackUpdateFields.isPlaying: false])
-			self.playingIndex = nil
+		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.idString() == id}) {
+			self.playingIndex.value = nil
 		}
 	}
 

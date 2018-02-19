@@ -259,11 +259,11 @@ extension FeedViewController: FeedVMDelegate {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
                 case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
-                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.automatic)
+                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
                 }
             }
         }
@@ -294,7 +294,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 //        else {
 //            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
 //        }
-//        self.presenter.play(index: indexPath.item)
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

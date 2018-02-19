@@ -15,7 +15,7 @@ enum AudioStatus {
 }
 
 enum AudioCommand {
-	case play(id: String?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
+	case play(id: Int?), pause, next, prev, seekForward, seekBackward, seek(progress: Double), volume(value: Double)
 }
 
 // MARK: - Player Enums
@@ -42,25 +42,25 @@ class AudioPlaylist {
 }
 
 protocol AudioTrack: class {
-	var id: String {get}
+	var id: Int {get}
 	var name: String {get}
 	var author: String {get}
 	var imageURL: URL? {get}
 	var length: Int64 {get}
 	var audioURL: URL {get}
 	
-	init(id: String, trackURL: URL, name: String, author: String, imageURL: URL?, length: Int64)
+	init(id: Int, trackURL: URL, name: String, author: String, imageURL: URL?, length: Int64)
 }
 
 class PlayerTrack: AudioTrack {
 	var audioURL: URL = URL(fileURLWithPath: "")
-	var id: String = UUID.init().uuidString
+	var id: Int = -1
 	var name: String = ""
 	var author: String = ""
 	var imageURL: URL?
 	var length: Int64 = 0
 	
-	required convenience init(id: String, trackURL: URL , name: String, author: String, imageURL: URL?, length: Int64) {
+	required convenience init(id: Int, trackURL: URL , name: String, author: String, imageURL: URL?, length: Int64) {
 		self.init()
 		self.id = id
 		self.audioURL = trackURL
@@ -96,9 +96,9 @@ protocol AudioControllerProtocol: class {
 	
 	func make(command: AudioCommand)
 	
-	func setCurrentTrack(id: String)
+	func setCurrentTrack(id: Int)
 	
-	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?)
+	func loadPlaylist(playlist:(String, [AudioTrack]), playId: Int?)
 }
 
 //MARK: - Audio Player Protocols
@@ -116,7 +116,7 @@ protocol AudioPlayerProto {
 }
 
 protocol AudioPlayerDelegate: class {
-	func update(status: PlayerStatus, id: String)
+	func update(status: PlayerStatus, id: Int)
 	func update(time: AudioTime)
-	func itemFinishedPlaying(id: String)
+	func itemFinishedPlaying(id: Int)
 }

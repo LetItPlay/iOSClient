@@ -7,7 +7,7 @@ import MediaPlayer
 fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	
 	var audioURL: URL = URL(fileURLWithPath: "")
-	var id: String = UUID.init().uuidString
+	var id: Int = -1
 	var name: String = ""
 	var author: String = ""
 	var imageURL: URL?
@@ -17,7 +17,7 @@ fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 		super.init(asset: asset, automaticallyLoadedAssetKeys: automaticallyLoadedAssetKeys)
 	}
 	
-	required convenience init(id: String, trackURL: URL , name: String, author: String, imageURL: URL?, length: Int64) {
+	required convenience init(id: Int, trackURL: URL , name: String, author: String, imageURL: URL?, length: Int64) {
 		self.init(url: trackURL)
 		self.id = id
 		self.audioURL = trackURL

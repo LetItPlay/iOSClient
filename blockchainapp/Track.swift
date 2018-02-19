@@ -3,7 +3,7 @@ import RealmSwift
 import SwiftyJSON
 
 
-struct Track1 {
+class Track1 {
 	static let formatter: DateFormatter = {
 		let form = DateFormatter()
 		form.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -28,6 +28,8 @@ struct Track1 {
 	var tags: [String]			= []
 	
 	var lang: String			= Language.ru.rawValue
+	
+	var isLiked: Bool			= false
 	
 	init?(json: JSON) {
 		if 	let stationId = json["StationID"].int,
@@ -64,7 +66,7 @@ struct Track1 {
 	}
 	
 	func audioTrack(author: String) -> AudioTrack {
-		return PlayerTrack.init(id: self.idString(), trackURL: self.url!, name: self.name, author: author, imageURL: self.image, length: self.length)
+		return PlayerTrack.init(id: self.id, trackURL: self.url!, name: self.name, author: author, imageURL: self.image, length: self.length)
 	}
 	
 	func idString() -> String {
@@ -156,7 +158,7 @@ extension Track {
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.audiotrackId(), trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
+		return PlayerTrack.init(id: self.id, trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}
 	
 	func audiotrackId() -> String {

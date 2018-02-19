@@ -67,13 +67,15 @@ class RequestManager {
 							if let resp = response.response, let data = response.data {
                                 if resp.statusCode == 200 {
                                     do {
+										let lm = LikeManager.shared
                                         let json = try JSON(data: data)
-                                        let stations = json["Stations"].array?
+										let stations: [Station1] = json["Stations"].array?
                                                 .map({Station1(json: $0)})
                                                 .filter({$0 != nil}).map({$0!}) ?? []
-                                        let tracks = json["Tracks"].array?
-                                                .map({Track1(json: $0)})
-                                                .filter({$0 != nil}).map({$0!}) ?? []
+										let tracks: [Track1] = json["Tracks"].array?
+											.map({Track1(json: $0)})
+											.filter({$0 != nil}).map({$0!})
+											.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
                                         observer.onNext((tracks, stations))
                                     } catch {
                                         observer.onError(RequestError.invalidJSON)

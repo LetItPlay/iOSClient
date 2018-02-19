@@ -17,9 +17,8 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	
 	enum AudioStateNotification: String {
 		case playing = "Playing",
-		paused = "Paused",
-		loading = "Loading"
-		
+		paused = "Paused"
+
 		func notification() -> NSNotification.Name {
 			return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
 		}
@@ -179,7 +178,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
         }
 	}
 	
-	func loadPlaylist(playlist:(String, [AudioTrack]), playId: String?) {
+	func loadPlaylist(playlist:(String, [AudioTrack]), playId: Int?) {
 			if self.playlistName != playlist.0 {
 				self.currentTrackIndexPath = IndexPath.invalid
 				let newPlaylist = AudioPlaylist()
@@ -200,14 +199,14 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		}
 	}
 	
-	func setCurrentTrack(id: String) {
+	func setCurrentTrack(id: Int) {
 		if let indexPath = indexPath(id: id) {
 			let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
 			self.player.setTrack(index: index)
 		}
 	}
 	
-	func itemFinishedPlaying(id: String) {
+	func itemFinishedPlaying(id: Int) {
 		self.play(id: id)
 	}
 	
@@ -237,7 +236,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		}
 	}
 	
-	func play(id: String, next: Bool = true) {
+	func play(id: Int, next: Bool = true) {
 		guard let indexPath = indexPath(id: id) else {
 			return
 		}
@@ -252,7 +251,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		}
 	}
 	
-	func update(status: PlayerStatus, id: String) {
+	func update(status: PlayerStatus, id: Int) {
 		DispatchQueue.main.async {
 			if let indexPath = self.indexPath(id: id) {
 				switch status {
@@ -272,7 +271,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		}
 	}
 	
-	private func indexPath(id: String) -> IndexPath? {
+	private func indexPath(id: Int) -> IndexPath? {
 		if let mainIndex = self.playlist.tracks.index(where: {$0.id == id}) {
 			return IndexPath.init(row: mainIndex, section: 1)
 		}
