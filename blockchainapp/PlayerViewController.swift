@@ -45,7 +45,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         
         for scroll in pageController.view.subviews{
             if scroll.isKind(of: UIScrollView.self){
-                scroll.setContentHuggingPriority(.init(300), for: .horizontal)
+                scroll.setContentHuggingPriority(.init(100), for: .horizontal)
             }
         }
 		
