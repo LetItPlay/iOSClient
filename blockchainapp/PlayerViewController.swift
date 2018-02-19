@@ -26,6 +26,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		super.init(nibName: nil, bundle: nil)
 		
 		pageController.delegate = self
+
+        let appearance = UIPageControl.appearance()
+        appearance.pageIndicatorTintColor = .red
+        appearance.currentPageIndicatorTintColor = .blue
+//        var appearance = UIPageControl.appearanceWhenContainedIn(UIPageViewController.self, nil)
+//        appearance.pageIndicatorTintColor = UIColor.red
+//        appearance.currentPageIndicatorTintColor = UIColor.red
 				
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
