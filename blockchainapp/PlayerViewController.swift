@@ -28,11 +28,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		pageController.delegate = self
 
         let appearance = UIPageControl.appearance()
-        appearance.pageIndicatorTintColor = .red
-        appearance.currentPageIndicatorTintColor = .blue
-//        var appearance = UIPageControl.appearanceWhenContainedIn(UIPageViewController.self, nil)
-//        appearance.pageIndicatorTintColor = UIColor.red
-//        appearance.currentPageIndicatorTintColor = UIColor.red
+        appearance.pageIndicatorTintColor = .gray
+        appearance.currentPageIndicatorTintColor = .red
 				
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
@@ -215,6 +212,14 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		
 		return nil
 	}
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return 2
+    }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
 }
 
 extension PlayerViewController: UIViewControllerTransitioningDelegate {

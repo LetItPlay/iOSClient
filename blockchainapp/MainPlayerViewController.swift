@@ -81,7 +81,7 @@ class MainPlayerViewController: UIViewController {
 			button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
             button.imageView?.contentMode = .scaleAspectFit
 //            button.layer.masksToBounds = true
-			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
+//            button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
 			button.snp.makeConstraints({ (make) in
 				make.width.equalTo(button.snp.height)
 			})
@@ -99,7 +99,7 @@ class MainPlayerViewController: UIViewController {
             button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
             button.imageView?.contentMode = .scaleAspectFit
 //            button.layer.masksToBounds = true
-			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
+//            button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
 			button.snp.makeConstraints({ (make) in
 				make.width.equalTo(button.snp.height)
 			})
