@@ -181,7 +181,7 @@ class MainPlayerViewController: UIViewController {
 		
 		blur.contentView.addSubview(volumeSlider)
 		volumeSlider.snp.makeConstraints { (make) in
-			make.bottom.equalToSuperview().inset(Device.screen == .inches_4_0 ? 40 : 56)
+			make.bottom.equalToSuperview().inset(Device.screen == .inches_4_0 ? 10 : 26)
 			make.left.equalTo(minVol.snp.right).inset(-8)
 			make.centerY.equalTo(minVol)
 			make.height.equalTo(20)
@@ -206,7 +206,7 @@ class MainPlayerViewController: UIViewController {
 		blur.contentView.addSubview(trackSeekButtons.backw)
 		trackSeekButtons.backw.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.right.equalTo(playButton.snp.left).inset(-12)//Device.screen == .inches_4_0 ? -8 : -12)
+			make.right.equalTo(playButton.snp.left).inset(-12)
 			
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
@@ -214,21 +214,21 @@ class MainPlayerViewController: UIViewController {
 		blur.contentView.addSubview(trackSeekButtons.forw)
 		trackSeekButtons.forw.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.left.equalTo(playButton.snp.right).inset(-12)//Device.screen == .inches_4_0 ? -8 : -12)
+			make.left.equalTo(playButton.snp.right).inset(-12)
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
 		
 		blur.contentView.addSubview(trackChangeButtons.next)
 		trackChangeButtons.next.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)//Device.screen == .inches_4_0 ? -8 : -2)
+			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
 		
 		blur.contentView.addSubview(trackChangeButtons.prev)
 		trackChangeButtons.prev.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)//Device.screen == .inches_4_0 ? -8 : -2)
+			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
 		

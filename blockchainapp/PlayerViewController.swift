@@ -42,6 +42,12 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		pageController.delegate = self
 		pageController.dataSource = self
 		pageController.setViewControllers([mainPlayer], direction: .forward, animated: false, completion: nil)
+        
+        for scroll in pageController.view.subviews{
+            if scroll.isKind(of: UIScrollView.self){
+                scroll.setContentHuggingPriority(.init(300), for: .horizontal)
+            }
+        }
 		
 		self.mask = CAShapeLayer.init()
 		self.view.layer.mask = self.mask
