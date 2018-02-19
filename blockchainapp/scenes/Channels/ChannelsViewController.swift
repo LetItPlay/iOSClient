@@ -104,7 +104,7 @@ class ChannelsViewController: UITableViewController, ChannelsViewProtocol {
         
         presenter = ChannelsPresenter(view: self)
         
-        view.backgroundColor = UIColor.vaWhite
+        self.view.backgroundColor = .white
 
         tableView.dataSource = self
         tableView.delegate   = self
