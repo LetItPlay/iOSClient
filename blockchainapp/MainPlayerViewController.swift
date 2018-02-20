@@ -253,6 +253,7 @@ class MainPlayerViewController: UIViewController {
 			make.right.equalToSuperview().inset(33)
 			make.bottom.equalTo(channelNameLabel.snp.top).inset(-7)
 		}
+        trackProgressView.setContentHuggingPriority(.init(999), for: .horizontal)
 		
 		trackProgressView.addTarget(self, action: #selector(seek), for: .valueChanged)
 		playButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
