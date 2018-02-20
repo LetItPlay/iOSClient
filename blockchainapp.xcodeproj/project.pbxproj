@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */; };
 		013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */; };
+		01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01418561203C41EA004C69F0 /* ServerUpdateManager.swift */; };
 		014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014761132010620F006E3373 /* PlayerTableViewCell.swift */; };
 		014913852036ECBF004058CB /* InAppUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014913842036ECBF004058CB /* InAppUpdateManager.swift */; };
 		015088842006472200E42F7D /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015088832006472200E42F7D /* AudioPlayer.swift */; };
@@ -107,6 +108,7 @@
 /* Begin PBXFileReference section */
 		01321B651FCDADF7009BFE62 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		013D2EC81FDDC2A3006F095B /* ChannelPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPresenter.swift; sourceTree = "<group>"; };
+		01418561203C41EA004C69F0 /* ServerUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerUpdateManager.swift; sourceTree = "<group>"; };
 		014761132010620F006E3373 /* PlayerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTableViewCell.swift; sourceTree = "<group>"; };
 		014913842036ECBF004058CB /* InAppUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppUpdateManager.swift; sourceTree = "<group>"; };
 		015088832006472200E42F7D /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				CF1E04821F82273D00D8812F /* DBHelpers.swift */,
 				FD10BE55E82F75A804CA6B47 /* RequestManager.swift */,
 				014913842036ECBF004058CB /* InAppUpdateManager.swift */,
+				01418561203C41EA004C69F0 /* ServerUpdateManager.swift */,
 			);
 			name = managers;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				CF4453641F56CA5800660474 /* FeedPresenter.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
+				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
 				2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */,
 				013D2EC91FDDC2A3006F095B /* ChannelPresenter.swift in Sources */,
 				01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */,

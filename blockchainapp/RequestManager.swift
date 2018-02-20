@@ -60,7 +60,6 @@ class RequestManager {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
             return Observable<([Track1],[Station1])>.create { observer in
-
                 Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
                         .responseData { (response: DataResponse<Data>) in
 
@@ -163,28 +162,48 @@ class RequestManager {
                 switch type {
                     case .like(let count):
                         elements["like_count"]   = count
-                    case .report(let msg):
+                    case .report(let _):
                         elements["report_count"] = 1
                     case .listen:
                         elements["listen_count"] = 1
                 }
                 
                 request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
-                
-                let task = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-                    
-                    guard error == nil else { return }
-                    guard let data = data else { return }
-                    
-                    do {
-                        let json  = try JSON(data: data)
-                    } catch(let error) {
-                        print(error)
-                    }
-                    
-                })
-                task.resume()
-            }
+				
+				Alamofire.request(url, method: .post, parameters: elements, encoding: URLEncoding.default, headers: nil)
+					.responseData { (response: DataResponse<Data>) in
+						
+						if let _ = response.error {
+							observer.onError(RequestError.noConnection)
+							observer.onCompleted()
+							return
+						}
+						
+						if let resp = response.response, let data = response.data {
+							if resp.statusCode == 200 {
+								do {
+									let json  = try JSON(data: data)
+									if let track = Track1.init(json: json) {
+										observer.onNext(track)
+									} else {
+										observer.onError(RequestError.invalidJSON)
+									}
+								} catch(let error) {
+									print(error)
+									observer.onError(RequestError.invalidJSON)
+								}
+							} else {
+								observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
+							}
+						} else {
+							observer.onError(RequestError.noConnection)
+						}
+						observer.onCompleted()
+				}
+			} else {
+				observer.onError(RequestError.invalidURL)
+			}
+			
             return Disposables.create {
                 print("Track update signal disposed")
             }
