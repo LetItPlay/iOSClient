@@ -179,28 +179,28 @@ class FeedViewController: UIViewController, ChannelProtocol {
         if longPressGestureRecognizer.state == .began {
             let touchPoint = longPressGestureRecognizer.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-                let track = self.presenter.tracks[indexPath.item]
+//                let track = self.viewModel.tracks[indexPath.item]
                 let cell = tableView.cellForRow(at: indexPath)
-                self.trackInfoView.set(title: track.name, infoText: track.desc)
-//                if self.previousCell != nil,
-//                   self.previousCell != cell
-//                {
-////                    previousCell?.getInfo(toHide: true, animated: true)
+//                self.trackInfoView.set(title: track.name, infoText: track.description)
+                if self.previousCell != nil,
+                   self.previousCell != cell
+                {
+                    previousCell?.getInfo(toHide: true, animated: true)
 //                    self.trackInfoView.set(title: track.name, infoText: track.desc)
-//                }
-//                if self.previousCell == cell
-//                {
-//                    previousCell = nil
-//                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
-////                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
-//                }
-//                else
-//                {
-//                    previousCell = cell as? NewFeedTableViewCell
-//                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
+                }
+                if self.previousCell == cell
+                {
+                    previousCell = nil
+                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+                }
+                else
+                {
+                    previousCell = cell as? NewFeedTableViewCell
+                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
 //                    self.trackInfoView.set(title: track.name, infoText: track.desc)
-////                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
-//                }
+                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+                }
             }
         }
     }
@@ -288,7 +288,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         let vm = self.viewModel.tracks[indexPath.item]
         cell?.fill(vm: vm)
         
-//        cell?.getInfo(toHide: true, animated: false)
+        cell?.getInfo(toHide: true, animated: false)
         cell?.alertBlurView.alpha = 0
 		
 		cell?.onLike = { [weak self] track in

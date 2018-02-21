@@ -74,7 +74,7 @@ class LikesModel: LikesModelProtocol {
     
     func selectedTrack(index: Int) {
         let contr = AudioController.main
-        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].audiotrackId())
+        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].id)
     }
     
     func getTracksViewModel()

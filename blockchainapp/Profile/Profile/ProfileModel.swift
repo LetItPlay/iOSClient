@@ -50,6 +50,7 @@ class ProfileModel: ProfileModelProtocol {
             UserSettings.language = .none
         }
         
+        //TODO: update tracks
         self.delegate?.update(language: UserSettings.language)
     }
     

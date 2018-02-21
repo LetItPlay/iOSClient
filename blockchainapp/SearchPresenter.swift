@@ -65,7 +65,7 @@ class SearchPresenter {
 	func getData() {
         RequestManager.shared.tracks(req: .magic).subscribe(onNext: { (tuple) in
             let tracklist = tuple.0.map({ (track) -> AudioTrack in
-                return PlayerTrack.init(id: track.idString(), trackURL: track.url!, name: track.name, author: tuple.1.filter({track.stationId == $0.id}).first?.name ?? "", imageURL: URL(string: track.image)!, length: track.length)
+                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.stationId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
             })
             self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: tracklist)]
             self.delegate?.updatePlaylists()
@@ -103,7 +103,7 @@ class SearchPresenter {
 	func formatPlaylists(index: Int) {
 		let playlist = self.playlists[index]
 		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0.audioTrack()})), playId: playlist.tracks[0].id)
+//        contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0.audioTrack()})), playId: playlist.tracks[0].id)
 		contr.showPlaylist()
 	}
 	

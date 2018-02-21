@@ -8,8 +8,12 @@
 
 import Foundation
 
+enum LikeTrackAction {
+    case selected
+}
+
 protocol LikesEmitterProtocol: LifeCycleHandlerProtocol {
-    func make(action: TrackAction, index: Int)
+    func make(action: LikeTrackAction, index: Int)
 }
 
 class LikesEmitter: Emitter, LikesEmitterProtocol {
@@ -28,7 +32,7 @@ class LikesEmitter: Emitter, LikesEmitterProtocol {
 		default: break
 		}
 	}
-	func make(action: TrackAction, index: Int) {
+	func make(action: LikeTrackAction, index: Int) {
         switch action {
         case .selected:
             self.model.selectedTrack(index: index)
