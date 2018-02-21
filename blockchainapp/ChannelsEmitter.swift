@@ -7,15 +7,15 @@
 
 import Foundation
 
-protocol ChannelsEmitterProtocol {
-    func state(_ state: LifeCycleEvent)
+protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
+    func showChannel(index: Int)
 }
 
-class ChannelsEmitter: ChannelsEmitterProtocol {
+class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
+    weak var model: ChannelsEventHandler?
     
-    var model: ChannelsModelProtocol!
-    
-    init(model: ChannelsModelProtocol) {
+    convenience init(model: ChannelsEventHandler) {
+        self.init(handler: model as! ModelProtocol)
         self.model = model
     }
     
@@ -26,5 +26,8 @@ class ChannelsEmitter: ChannelsEmitterProtocol {
         default:
             break
         }
+	}
+    func showChannel(index: Int) {
+        self.model?.showChannel(index: index)
     }
 }

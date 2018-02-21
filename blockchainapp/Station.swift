@@ -54,7 +54,7 @@ class Station: Object {
 	@objc dynamic var image: String = ""
 	@objc dynamic var sourceURL: String = ""
 	@objc dynamic var subscriptionCount: Int = 0
-	@objc dynamic var trackCount: Int = 0
+	@objc dynamic var trackCount: Int64 = 0
 	@objc dynamic var lang: String     		= ""
 	var tags: List<Tag> = List<Tag>()
 	

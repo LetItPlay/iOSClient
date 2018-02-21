@@ -19,8 +19,6 @@ class FeedViewController: UIViewController, ChannelProtocol {
 	
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
-	
-    let tableView: UITableView = UITableView()
     
     var previousCell: NewFeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
@@ -31,6 +29,7 @@ class FeedViewController: UIViewController, ChannelProtocol {
     var refreshingTable: Bool = false
     var previousOffsetY: CGFloat = 0
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+
 	let emptyLabel: UILabel = {
 		let label = UILabel()
 		label.font = AppFont.Title.big
@@ -40,14 +39,7 @@ class FeedViewController: UIViewController, ChannelProtocol {
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
 		return label
 	}()
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
-        self.init(nibName: nil, bundle: nil)
-        self.viewModel = vm
-        self.viewModel.delegate = self
-        
-        self.emitter = emitter
-        
-    }
+
     let emptyButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = AppFont.Title.section
@@ -62,13 +54,15 @@ class FeedViewController: UIViewController, ChannelProtocol {
     }()
     
     var tappedSideButton = false
-	
-    convenience init(type: FeedType, view: ChannelsCollectionView) {
-		self.init(nibName: nil, bundle: nil)
-		
-		self.type = type
-        self.channelsView = view
-	}
+    
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
+        self.init(nibName: nil, bundle: nil)
+        self.viewModel = vm
+        self.viewModel.delegate = self
+        
+        self.emitter = emitter
+        self.channelsView = channelsView
+    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -114,8 +108,6 @@ class FeedViewController: UIViewController, ChannelProtocol {
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
-		emptyLabel.isHidden = !self.viewModel.showEmptyMessage
-        
         self.view.addSubview(emptyButton)
         emptyButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
@@ -123,7 +115,12 @@ class FeedViewController: UIViewController, ChannelProtocol {
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
-        emptyButton.isHidden = self.type == .popular
+        
+		emptyLabel.isHidden = !self.viewModel.showEmptyMessage
+        emptyButton.isHidden = !self.viewModel.showEmptyMessage
+		
+		self.tableView.refreshControl?.beginRefreshing()
+        
         self.emitter.send(event: LifeCycleEvent.initialize)
 			
 //        self.trackInfoView = TrackInfoBlurView()
@@ -140,24 +137,22 @@ class FeedViewController: UIViewController, ChannelProtocol {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.emitter.send(event: LifeCycleEvent.disappear)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.disappear)
     }
     
     deinit {
         self.emitter.send(event: LifeCycleEvent.deinitialize)
+        self.channelsView.emitter?.send(event: LifeCycleEvent.deinitialize)
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-		
-//        refreshingTable = true
-//        self.showChannels(up: false)
-		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()
-//            self?.refreshingTable = false
-        })
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 
     override func didReceiveMemoryWarning() {
@@ -171,51 +166,13 @@ class FeedViewController: UIViewController, ChannelProtocol {
   }
     
   func showChannel(station: Station) {
-      let vc = ChannelViewController(station: station)
-      self.navigationController?.pushViewController(vc, animated: true)
+//      let vc = ChannelViewController(station: station)
+//      self.navigationController?.pushViewController(vc, animated: true)
   }
     
     func showChannel(_ channel: ChannelViewModel) {
         // TODO: show channelViewModel
     }
-
-//  func showChannels(up: Bool)
-//  {
-//      if animatedChannels && self.viewModel.showChannels
-//      {
-//          if up, self.channelsView.frame.origin.y != -136
-//          {
-//              var tableFrame = self.tableView.frame
-//              tableFrame.size.height += self.channelsView.frame.height
-//              tableFrame.origin.y -= self.channelsView.frame.height
-//              animatedChannels = false
-//              var frame = self.channelsView.frame
-//              frame.origin.y -= 200
-//              UIView.animate(withDuration: 0.4, animations: {
-//                  self.channelsView.frame = frame
-//                  self.tableView.frame = tableFrame
-//              }, completion: { (value: Bool) in
-//                  self.animatedChannels = true
-//                  })
-//          }
-//          if !up, self.channelsView.frame.origin.y != 64
-//          {
-//              var tableFrame = self.tableView.frame
-//              tableFrame.size.height -= self.channelsView.frame.height
-//              tableFrame.origin.y += self.channelsView.frame.height
-//              animatedChannels = false
-//              var frame = self.channelsView.frame
-//              frame.origin.y += 200
-//              UIView.animate(withDuration: 0.4, animations: {
-//                  self.channelsView.frame = frame
-//                  self.tableView.frame = tableFrame
-//              }, completion: { (value: Bool) in
-//                  self.animatedChannels = true
-//              })
-//          }
-//      }
-//  }
-
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
         
@@ -250,29 +207,22 @@ class FeedViewController: UIViewController, ChannelProtocol {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-        if tappedSideButton {
-            if toBegining {
-                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .left))
-            } else {
-                AnalyticsEngine.sendEvent(event: .tapAfterSwipe(direction: .right))
-            }
-            tappedSideButton = false
-        } else {
-            if toBegining {
-                AnalyticsEngine.sendEvent(event: .swipe(direction: .left))
-            } else {
-                AnalyticsEngine.sendEvent(event: .swipe(direction: .right))
-            }
-        }
-        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
-        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
-        
-        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
-
-        UIView.animate(withDuration: 0.3, animations: {
-            cell.alertBlurView.alpha = 1
-        })
-	}
+//        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
+//        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
+//
+//        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+//
+//        UIView.animate(withDuration: 0.3, animations: {
+//            cell.alertBlurView.alpha = 1
+//        })
+//
+//        let when = DispatchTime.now() + 1
+//        DispatchQueue.main.asyncAfter(deadline: when){
+//            UIView.animate(withDuration: 0.3, animations:{
+//                cell.alertBlurView.alpha = 0
+//            })
+//        }
+    }
 }
 
 extension FeedViewController: FeedVMDelegate {
@@ -330,8 +280,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
-        cell?.delegate = self
-        
+        //for swipes
+//        cell?.delegate = self
+
         self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
         
         let vm = self.viewModel.tracks[indexPath.item]
@@ -354,28 +305,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         let vm = self.viewModel.tracks[indexPath.item]
         return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
-	
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let  height = scrollView.frame.size.height
-//        let distanceFromBottom = scrollView.contentSize.height - scrollView.contentOffset.y
-//        
-//        if scrollView.contentOffset.y > 0 && distanceFromBottom > height
-//        {
-//            if previousOffsetY + 60 < scrollView.contentOffset.y
-//            {
-//                previousOffsetY = scrollView.contentOffset.y
-//                self.showChannels(up: true)
-//            }
-//            if previousOffsetY - 60 > scrollView.contentOffset.y
-//            {
-//                previousOffsetY = scrollView.contentOffset.y
-//                self.showChannels(up: false)
-//            }
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.type == .popular
+        if self.viewModel.showChannels
         {
             return 121
         }
@@ -383,7 +315,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.type == .popular
+        if self.viewModel.showChannels
         {
 			if channelsView == nil {
             	channelsView = ChannelsCollectionView()

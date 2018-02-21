@@ -13,8 +13,13 @@ protocol Builder {
 }
 
 class ChannelsBuilder: Builder {
-	static func build(params: [String: Any]?) -> UIViewController {
-		let vc = ChannelsViewController()
+    static func build(params: [String: Any]?) -> UIViewController {
+
+        let model = ChannelsVCModel()
+        let vm = ChannelsVCViewModel(model: model)
+        let emitter = ChannelsVCEmitter.init(model: model)
+        
+		let vc = ChannelsViewController.init(emitter: emitter, viewModel: vm)
 		return vc
 	}
 }

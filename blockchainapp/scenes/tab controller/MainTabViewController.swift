@@ -20,8 +20,8 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		let tabs: [(String, (UIImage?, UIViewController))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
-			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build()))]
+            ("Search".localized, (UIImage.init(named: "searchTab"), SearchBuilder.build(params: nil))),
+            ("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1)

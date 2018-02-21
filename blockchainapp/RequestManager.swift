@@ -14,6 +14,7 @@ enum TracksRequest {
     case likes
     case channel(Int)
     case tag(String)
+    case magic
 }
 
 enum TrackUpdateRequest {
@@ -39,6 +40,8 @@ fileprivate extension TracksRequest {
             return "stations/\(id)/tracks"
         case .tag(let tag):
             return "tags/\(tag)"
+        case .magic:
+            return "abrakadabra?lang=\(lang)"
         default: return "tracks"
         }
     }

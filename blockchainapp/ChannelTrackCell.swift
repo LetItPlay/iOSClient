@@ -38,9 +38,9 @@ class ChannelTrackCell: UITableViewCell {
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
-	weak var track: Track? = nil {
+    var track: TrackViewModel? = nil {
 		didSet {
-			if let iconUrl = URL(string: track?.image) {
+            if let iconUrl = track?.imageURL {
 				trackImageView.sd_setImage(with: iconUrl)
 			} else {
 				trackImageView.image = nil
@@ -48,10 +48,11 @@ class ChannelTrackCell: UITableViewCell {
 			
 			trackNameLabel.attributedText = type(of: self).trackText(text: track?.name ?? "")
 
-			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
+            //TODO: publishedAt
+//            self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
 			
-			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
+            dataLabels[.listens]?.set(text: (track?.listensCount)!)
+            dataLabels[.time]?.set(text: (track?.length)!)
 		}
 	}
 	

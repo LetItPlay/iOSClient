@@ -35,7 +35,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
-        emitter.state(.initialize)
 	}
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -106,12 +105,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
         let name = self.profileView.profileNameLabel.text!
-        self.profileView.emitter?.set(name: name)
+        self.profileView.emitter?.send(event: ProfileEvent.setName(name))
     }
 	
 	@objc func langChanged(_: UIButton) {
-        self.profileView.emitter?.setLanguage()
-        self.emitter?.reloadTracks()
+        self.profileView.emitter?.send(event: ProfileEvent.setLanguage)
         
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil)
@@ -126,9 +124,17 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
-		
-		self.emitter?.reloadTracks()
+    
+        self.emitter?.send(event: LifeCycleEvent.appear)
+        self.profileView.emitter?.send(event: LifeCycleEvent.appear)
 	}
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.emitter?.send(event: LifeCycleEvent.disappear)
+        self.profileView.emitter?.send(event: LifeCycleEvent.disappear)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -138,6 +144,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     func reload() {
         self.tracks = viewModel.tracks
         
+        self.tableView.reloadData()
+    }
+    
+    func updateTracks() {
+        self.tracks = self.viewModel.tracks
         self.tableView.reloadData()
     }
 }
@@ -188,7 +199,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-            self.profileView.emitter?.set(image: image)
+            self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
         }
         
         dismiss(animated: true, completion: nil)
@@ -216,8 +227,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		
 		let track = self.tracks[indexPath.item]
 		cell.track = track
-		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
-		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
+		cell.dataLabels[.listens]?.isHidden = self.tracks[indexPath.row].isPlaying
+		cell.dataLabels[.playingIndicator]?.isHidden = !self.tracks[indexPath.row].isPlaying
 		cell.timeLabel.isHidden = true
 		cell.separator.isHidden = indexPath.item + 1 == self.tracks.count
 		return cell
@@ -225,8 +236,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
-//		let contr = AudioController.main
-//		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].id)
+        self.emitter?.make(action: .selected, index: indexPath.row)
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -422,7 +432,6 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
         profileNameLabel.returnKeyType = .done
-//        profileNameLabel.delegate = self
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
@@ -453,7 +462,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
 
-        emitter.state(.initialize)
+        emitter.send(event: LifeCycleEvent.initialize)
 	}
     
     @objc func changePhotoButtonTapped(_ sender: Any) {

@@ -36,17 +36,17 @@ class SmallChannelTableViewCell: UITableViewCell {
 	
 	var onSub: (() -> Void)? = nil
 	
-	weak var channel: Station? = nil {
+	weak var channel: SearchChannelViewModel? = nil {
 		didSet {
 			channelNameLabel.text = channel?.name
-			dataLabels[.subs]?.setData(data: Int64(channel?.subscriptionCount ?? 0))
+            dataLabels[.subs]?.set(text: (channel?.subscriptionCount)!)
 			dataLabels[.listens]?.setData(data: 0)
-			if let urlString = URL(string: channel?.image) {
+            if let urlString = channel?.imageURL {
 				channelImageView.sd_setImage(with: urlString)
 			} else {
 				channelImageView.image = nil
 			}
-			self.followButton.isSelected = SubscribeManager.shared.hasStation(id: channel?.id ?? -1)
+//            self.followButton.isSelected = SubscribeManager.shared.hasStation(id: channel?.id ?? -1)
 		}
 	}
 	

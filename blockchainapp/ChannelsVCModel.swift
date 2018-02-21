@@ -1,29 +1,31 @@
 //
-//  ChannelsModel.swift
+//  ChannelsVCModel.swift
 //  blockchainapp
 //
+//  Created by Polina Abrosimova on 14.02.2018.
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import Foundation
 import RealmSwift
 
-protocol ChannelsModelProtocol: class, ModelProtocol {
-    weak var delegate: ChannelsModelDelegate? {get set}
+protocol ChannelsVCModelProtocol: class, ModelProtocol {
+    weak var delegate: ChannelsVCModelDelegate? {get set}
 }
 
-protocol ChannelsEventHandler: class {
-    func showChannel(index: Int)
+protocol ChannelsVCEventHandler: class {
+    func showChannel(index: IndexPath)
+    func refreshChannels()
 }
 
-protocol ChannelsModelDelegate: class {
-    func reload(newChannels: [SmallChannelViewModel])
+protocol ChannelsVCModelDelegate: class {
+    func reload(newChannels: [ChannelViewModel])
     func showChannel(channel: FullChannelViewModel)
 }
 
-class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
-
-    weak var delegate: ChannelsModelDelegate?
+class ChannelsVCModel: ChannelsVCModelProtocol, ChannelsVCEventHandler {
+    
+    weak var delegate: ChannelsVCModelDelegate?
     var subManager = SubscribeManager.shared
     var token: NotificationToken?
     
@@ -44,7 +46,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                 if !indexes.isEmpty {
                     DispatchQueue.main.async {
-//                        self!.view?.select(rows: indexes)
+                        //                        self!.view?.select(rows: indexes)
                     }
                 }
             case .update(_, _, let ins, _):
@@ -55,7 +57,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                     let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                     if !indexes.isEmpty {
                         DispatchQueue.main.async {
-//                            self!.view?.select(rows: indexes)
+                            //                            self!.view?.select(rows: indexes)
                         }
                     }
                 }
@@ -100,17 +102,23 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     {
         self.channels = channels
         
-        var channelVMs = [SmallChannelViewModel]()
+        var channelVMs = [ChannelViewModel]()
         for channel in channels
         {
-            channelVMs.append(SmallChannelViewModel.init(channel: channel))
+            channelVMs.append(ChannelViewModel.init(channel: channel))
         }
         
         self.delegate?.reload(newChannels: channelVMs)
     }
     
-    func showChannel(index: Int) {
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
+    func refreshChannels() {
+        self.getData { [weak self] (channels) in
+            self?.getChannelViewModels(channels: channels.map({$0.detached()}))
+        }
+    }
+    
+    func showChannel(index: IndexPath) {
+        
     }
     
     func send(event: LifeCycleEvent) {

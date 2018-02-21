@@ -9,26 +9,51 @@
 import UIKit
 import SnapKit
 
-class ChannelViewController: UIViewController, ChannelPresenterDelegate {
+class ChannelViewController: UIViewController, ChannelVCVMDelegate {
+    //} ChannelPresenterDelegate {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 	
-	weak var station: Station!
-	var presenter: ChannelPresenter!
+//    weak var station: Station!
+    weak var channel: FullChannelViewModel!
+    var tracks: [[TrackViewModel]] = []
+    
+    var viewModel: ChannelVCVMProtocol!
+    var emitter: ChannelVCEmitterProtocol!
+//    var presenter: ChannelPresenter!
 	var header: ChannelHeaderView = ChannelHeaderView()
 	var currentIndex: Int = -1
 	
-	init(station: Station) {
-		super.init(nibName: nil, bundle: nil)
-		
-		self.station = station
-		self.presenter = ChannelPresenter(station: station)
-		self.presenter.view = self
-	}
+    init(channel: FullChannelViewModel, viewModel: ChannelVCVMProtocol, emitter: ChannelVCEmitterProtocol) {
+        super.init(nibName: nil, bundle: nil)
+        
+        self.channel = channel
+        
+        self.viewModel = viewModel
+        self.viewModel.delegate = self
+        
+        self.emitter = emitter
+    }
+    
+//    init(station: Station) {
+//        super.init(nibName: nil, bundle: nil)
+//
+//        self.station = station
+//        self.presenter = ChannelPresenter(station: station)
+//        self.presenter.view = self
+//    }
 	
-	func followUpdate() {
-		self.header.followButton.isSelected = SubscribeManager.shared.stations.contains(self.presenter.station.id)
-	}
+    func followUpdate() {
+         //SubscribeManager.shared.stations.contains(self.presenter.station.id)
+    }
+    
+    func reloadTracks() {
+        self.tableView.reloadData()
+    }
+    
+    func updateSubscription() {
+        self.header.followButton.isSelected = self.viewModel.isSubscribed
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -57,15 +82,17 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		tableView.dataSource = self
 		
 		tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
-		self.header.followButton.isSelected = SubscribeManager.shared.stations.contains(self.presenter.station.id)
+		self.header.followButton.isSelected = self.viewModel.isSubscribed //SubscribeManager.shared.stations.contains(self.presenter.station.id)
 		
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
 		self.tableView.tableHeaderView = self.header
+        
     }
 	
 	@objc func followPressed() {
-		self.presenter.followPressed()
+//        self.presenter.followPressed()
+        self.emitter.send(event: ChannelVCEvent.followPressed)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +103,7 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 			make.width.equalTo(self.view.frame.width)
 		}
 		
-		let height = self.header.fill(station: self.station, width: self.view.frame.width)
+		let height = self.header.fill(station: self.channel, width: self.view.frame.width)
 		self.header.frame.size.height = height
 	}
 
@@ -85,21 +112,21 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
         // Dispose of any resources that can be recreated.
     }
 	
-	func update() {
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
-		}
-	}
+    func update() {
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//        }
+    }
 	
 }
 
 extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return self.presenter.tracks.count
+		return self.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.presenter.tracks[section].count
+		return self.tracks[section].count
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -133,14 +160,14 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Channel".localized + " \(self.station.id)", self.presenter.tracks[indexPath.section].map({$0.audioTrack()})),
-						   playId: self.presenter.tracks[indexPath.section][indexPath.item].id)
+//        let contr = AudioController.main
+//        contr.loadPlaylist(playlist: ("Channel".localized + " \(self.station.id)", self.presenter.tracks[indexPath.section].map({$0.audioTrack()})),
+//                           playId: self.presenter.tracks[indexPath.section][indexPath.item].audiotrackId())
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
-		let track = self.presenter.tracks[indexPath.section][indexPath.item]
+		let track = self.tracks[indexPath.section][indexPath.item]
 		cell.track = track
 		let hideListens = indexPath.item == self.currentIndex
 		cell.dataLabels[.listens]?.isHidden = hideListens
@@ -149,7 +176,7 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.presenter.tracks[indexPath.section][indexPath.item]
+		let track = self.tracks[indexPath.section][indexPath.item]
 		return ChannelTrackCell.height(text: track.name, width: tableView.frame.width)
 	}
 }
