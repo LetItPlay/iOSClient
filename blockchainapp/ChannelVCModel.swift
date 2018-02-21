@@ -14,7 +14,7 @@ protocol ChannelVCModelProtocol: class, ModelProtocol {
 }
 
 protocol ChannelVCEvenHandler: class {
-    
+    func followPressed()
 }
 
 protocol ChannelVCModelDelegate: class {

@@ -8,7 +8,12 @@
 
 import Foundation
 
+enum ChannelVCEvent {
+    case followPressed
+}
+
 protocol ChannelVCEmitterProtocol: LifeCycleHandlerProtocol {
+    func send(event: ChannelVCEvent)
 }
 
 class ChannelVCEmitter: Emitter, ChannelVCEmitterProtocol {
@@ -19,5 +24,12 @@ class ChannelVCEmitter: Emitter, ChannelVCEmitterProtocol {
     {
         self.init(handler: model as! ModelProtocol)
         self.model = model
+    }
+    
+    func send(event: ChannelVCEvent) {
+        switch event {
+        case .followPressed:
+            self.model?.followPressed()
+        }
     }
 }
