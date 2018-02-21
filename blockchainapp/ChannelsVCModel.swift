@@ -120,7 +120,11 @@ class ChannelsVCModel: ChannelsVCModelProtocol, ChannelsVCEventHandler {
     }
 }
 
-extension ChannelsVCModel: SettingsUpdateProtocol {
+extension ChannelsVCModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
+    func stationSubscriptionUpdated() {
+        self.refreshChannels()
+    }
+    
     func settingsUpdated() {
         self.getData { _ in
             

@@ -35,24 +35,15 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     var delegate: PlaylistsModelDelegate?
     var playlists: [(image: UIImage?, title: String, descr: String, tracks: [AudioTrack])] = []
     
+    var playingIndex: Variable<Int?> = Variable<Int?>(nil)
+    
     let disposeBag = DisposeBag()
     
     init()
     {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPlayed(notification:)),
-                                               name: AudioController.AudioStateNotification.playing.notification(),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPaused(notification:)),
-                                               name: AudioController.AudioStateNotification.paused.notification(),
-                                               object: nil)
-        
         self.getData()
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+        
+        InAppUpdateManager.shared.subscribe(self)
     }
     
     func getData() {
@@ -70,29 +61,6 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
         let contr = AudioController.main
         contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0})), playId: playlist.tracks[0].id)
         contr.showPlaylist()
-    }
-    
-    @objc func trackPlayed(notification: Notification) {
-        if let id = notification.userInfo?["ItemID"] as? String,
-            let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-            var reload = [Int]()
-            if currentPlayingIndex != -1 {
-                reload.append(self.currentPlayingIndex)
-            }
-            self.currentPlayingIndex = index
-            reload.append(index)
-            self.delegate?.update(tracks: reload, channels: [])
-        }
-    }
-    
-    @objc func trackPaused(notification: Notification) {
-
-        if let id = notification.userInfo?["ItemID"] as? String,
-            let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-            let reload = [self.currentPlayingIndex]
-            self.currentPlayingIndex = -1
-            self.delegate?.update(tracks: reload, channels: [])
-        }
     }
     
     func send(event: LifeCycleEvent) {
@@ -116,5 +84,17 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
             playlistVMs.append(PlaylistViewModel.init(image: UIImagePNGRepresentation(playlist.image!)!, title: playlist.title, description: playlist.descr))
         }
         self.delegate?.update(playlists: playlistVMs)
+    }
+}
+
+extension PlaylistsModel: PlayingStateUpdateProtocol {
+    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
+        if isPlaying {
+            if let index = self.tracks.index(where: {$0.id == id}) {
+                self.playingIndex.value = index
+            }
+        } else {
+            self.playingIndex.value = nil
+        }
     }
 }
