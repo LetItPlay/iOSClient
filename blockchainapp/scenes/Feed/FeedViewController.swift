@@ -82,11 +82,8 @@ class FeedViewController: UIViewController, ChannelProtocol {
         view.backgroundColor = UIColor.vaWhite
         
         self.view.addSubview(tableView)
-		
-        tableView.contentInset = UIEdgeInsets(top: 0,
-                                              left: 0,
-                                              bottom: 60,
-                                              right: 0)
+
+        tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view)
@@ -113,7 +110,7 @@ class FeedViewController: UIViewController, ChannelProtocol {
 		
 		self.view.addSubview(emptyLabel)
 		emptyLabel.snp.makeConstraints { (make) in
-			make.center.equalTo(self.view).inset(-40)
+			make.center.equalTo(self.view.center)
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}

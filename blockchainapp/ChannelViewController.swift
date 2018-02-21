@@ -45,12 +45,10 @@ class ChannelViewController: UIViewController, ChannelPresenterDelegate {
 		
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
-			make.edges.equalToSuperview()
-            make.top.equalToSuperview()
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalTo(72)
+            make.edges.equalToSuperview()
 		}
+        
+        tableView.contentInset.bottom = 70
 		
 		self.header = ChannelHeaderView(frame: self.view.frame)
 		header.translatesAutoresizingMaskIntoConstraints = false

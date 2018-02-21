@@ -60,7 +60,7 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
 	func reload(tracks: [TrackViewModel]) {
 		self.tracks = tracks
 		self.delegate?.reload()
-	}
+    }
     
     func show(tracks: [TrackViewModel], isContinue: Bool) {
         if isContinue {

@@ -68,7 +68,7 @@ class MainPlayerViewController: UIViewController {
 		button.setImage(UIImage(named: "playerPlay"), for: .normal)
 		button.setImage(UIImage(named: "playerPause"), for: .selected)
 		button.adjustsImageWhenHighlighted = false
-		button.layer.cornerRadius = 35
+		button.layer.cornerRadius = Device.screen == .inches_4_0 ? 27.5 : 35
 		button.layer.masksToBounds = true
 		button.snp.makeConstraints({ (make) in
 			make.width.equalTo(button.snp.height)
@@ -78,9 +78,10 @@ class MainPlayerViewController: UIViewController {
 	let trackChangeButtons: (next: UIButton, prev: UIButton) = {
 		let arr = [UIButton(), UIButton()]
 		arr.forEach({ (button) in
-			button.layer.cornerRadius = 30
-			button.layer.masksToBounds = true
-			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
+			button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
+            button.imageView?.contentMode = .scaleAspectFit
+//            button.layer.masksToBounds = true
+//            button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
 			button.snp.makeConstraints({ (make) in
 				make.width.equalTo(button.snp.height)
 			})
@@ -95,9 +96,10 @@ class MainPlayerViewController: UIViewController {
 	let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
 		let arr = [UIButton(), UIButton()]
 		arr.forEach({ (button) in
-			button.layer.cornerRadius = 30
-			button.layer.masksToBounds = true
-			button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
+            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
+            button.imageView?.contentMode = .scaleAspectFit
+//            button.layer.masksToBounds = true
+//            button.setBackgroundImage(AppColor.Element.tomato.withAlphaComponent(0.1).img(), for: .highlighted)
 			button.snp.makeConstraints({ (make) in
 				make.width.equalTo(button.snp.height)
 			})
@@ -144,6 +146,7 @@ class MainPlayerViewController: UIViewController {
 			make.right.equalToSuperview()
 			make.bottom.equalTo(self.trackProgressView.snp.top)
 		}
+        trackProgressView.setContentHuggingPriority(.init(999), for: .horizontal)
 		
 		imageSpacer.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
@@ -178,11 +181,12 @@ class MainPlayerViewController: UIViewController {
 		
 		blur.contentView.addSubview(volumeSlider)
 		volumeSlider.snp.makeConstraints { (make) in
-			make.bottom.equalToSuperview().inset(Device.screen == .inches_4_0 ? 16 : 56)
+			make.bottom.equalToSuperview().inset(Device.screen == .inches_4_0 ? 10 : 26)
 			make.left.equalTo(minVol.snp.right).inset(-8)
 			make.centerY.equalTo(minVol)
 			make.height.equalTo(20)
 		}
+        volumeSlider.setContentHuggingPriority(.init(999), for: .horizontal)
 		
 		blur.contentView.addSubview(maxVol)
 		maxVol.snp.makeConstraints { (make) in
@@ -194,9 +198,9 @@ class MainPlayerViewController: UIViewController {
 		blur.contentView.addSubview(playButton)
 		playButton.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()
-			make.bottom.equalTo(volumeSlider.snp.top).inset(-20)
+			make.bottom.equalTo(volumeSlider.snp.top).inset(Device.screen == .inches_4_0 ? -15 : -20)
 			
-			make.width.equalTo(/*Device.screen == .inches_4_0 ? 50 :*/ 70)
+			make.width.equalTo(Device.screen == .inches_4_0 ? 55 : 70)
 		}
 		
 		blur.contentView.addSubview(trackSeekButtons.backw)
@@ -217,20 +221,20 @@ class MainPlayerViewController: UIViewController {
 		blur.contentView.addSubview(trackChangeButtons.next)
 		trackChangeButtons.next.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-2)
+			make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
 		
 		blur.contentView.addSubview(trackChangeButtons.prev)
 		trackChangeButtons.prev.snp.makeConstraints { (make) in
 			make.centerY.equalTo(playButton)
-			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-2)
+			make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)
 			make.width.equalTo(playButton.snp.width).inset(10)
 		}
 		
 		blur.contentView.addSubview(trackNameLabel)
 		trackNameLabel.snp.makeConstraints { (make) in
-			make.bottom.equalTo(playButton.snp.top).inset(-20)
+			make.bottom.equalTo(playButton.snp.top).inset(Device.screen == .inches_4_0 ? -10 : -20)
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
@@ -249,6 +253,7 @@ class MainPlayerViewController: UIViewController {
 			make.right.equalToSuperview().inset(33)
 			make.bottom.equalTo(channelNameLabel.snp.top).inset(-7)
 		}
+        trackProgressView.setContentHuggingPriority(.init(999), for: .horizontal)
 		
 		trackProgressView.addTarget(self, action: #selector(seek), for: .valueChanged)
 		playButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)

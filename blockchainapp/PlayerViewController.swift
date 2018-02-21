@@ -26,6 +26,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		super.init(nibName: nil, bundle: nil)
 		
 		pageController.delegate = self
+
+        let appearance = UIPageControl.appearance()
+        appearance.pageIndicatorTintColor = .gray
+        appearance.currentPageIndicatorTintColor = .red
 				
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
@@ -38,6 +42,12 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		pageController.delegate = self
 		pageController.dataSource = self
 		pageController.setViewControllers([mainPlayer], direction: .forward, animated: false, completion: nil)
+        
+        for scroll in pageController.view.subviews{
+            if scroll.isKind(of: UIScrollView.self){
+                scroll.setContentHuggingPriority(.init(100), for: .horizontal)
+            }
+        }
 		
 		self.mask = CAShapeLayer.init()
 		self.view.layer.mask = self.mask
@@ -208,6 +218,14 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		
 		return nil
 	}
+    
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return 2
+    }
+    
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
 }
 
 extension PlayerViewController: UIViewControllerTransitioningDelegate {
