@@ -12,6 +12,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
+	var playerIsShowed: Bool = false
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -20,7 +21,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchViewController())),
-			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileViewController.init()))]
+			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build()))]
 		
 		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1)
@@ -50,26 +51,36 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		super.viewDidLayoutSubviews()
 	}
 	
+	var playerIsPresenting: Bool = false
+	
 	func playerTapped() {
 //		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
 //		UIView.animate(withDuration: 0.5) {
 //			self.view.layoutIfNeeded()
 //		}
-		self.present(playerController, animated: true, completion: nil)
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
+			if !self.playerController.isBeingPresented {
+				UIApplication.shared.beginIgnoringInteractionEvents()
+				self.playerIsPresenting = true
+				self.present(self.playerController, animated: true) {
+					self.playerIsPresenting = false
+					UIApplication.shared.endIgnoringInteractionEvents()
+				}
+			}
+		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
-//		if show {
-//			if vc.popupPresentationState == .hidden && vc.popupPresentationContainer == nil {
-//				self.presentPopupBar(withContentViewController: vc, animated: animated, completion: nil)
-//			}
-//		} else {
-//			self.dismissPopupBar(animated: animated, completion: nil)
-//		}
-		if !show {
+		
+		self.view.layoutIfNeeded()
+		
+		if playerIsShowed && !show {
 			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
-		} else {
+			playerIsShowed = false
+		}
+		if !playerIsShowed && show {
 			miniPlayerBottomConstr?.constant = 0
+			playerIsShowed = true 
 		}
 		UIView.animate(withDuration: 0.5) {
 			self.view.layoutIfNeeded()
@@ -77,8 +88,21 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func showPlaylist() {
-		self.present(playerController, animated: true, completion: nil)
 		self.playerController.showPlaylist()
+		if !self.playerController.isBeingPresented {
+			UIApplication.shared.beginIgnoringInteractionEvents()
+			self.playerIsPresenting = true
+			self.present(self.playerController, animated: true) {
+				self.playerIsPresenting = false
+				UIApplication.shared.endIgnoringInteractionEvents()
+			}
+		}
+	}
+	
+	func hidePlayer() {
+		self.playerController.dismiss(animated: true) {
+			print("player dismissed")
+		}
 	}
 	
     override func viewDidLoad() {
@@ -124,11 +148,10 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
 //                && !AppManager.shared.audioManager.isPlaying {
 //                AppManager.shared.audioPlayer?.hidePlayer()
 //            }
-            
         }
     }
     
-    let controllersNames = ["Feed", "Trends", "Search", "Channels", "Profile"]
+    let controllersNames = ["Feed", "Trends", "Search", "Profile"]
     
     func tabSelected(controller: String)
     {

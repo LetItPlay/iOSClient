@@ -40,7 +40,7 @@ class ChannelTrackCell: UITableViewCell {
 	
 	weak var track: Track? = nil {
 		didSet {
-			if let iconUrl = track?.image.buildImageURL() {
+			if let iconUrl = URL(string: track?.image) {
 				trackImageView.sd_setImage(with: iconUrl)
 			} else {
 				trackImageView.image = nil

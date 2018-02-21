@@ -4,6 +4,7 @@ import SnapKit
 class SmallTrackTableViewCell: UITableViewCell {
 
 	static let cellID: String = "LikeTrackCellID"
+    var separator = UIView()
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -42,23 +43,26 @@ class SmallTrackTableViewCell: UITableViewCell {
 		return label
 	}()
 	
-	var dataLabels: [IconLabelType: IconedLabel] = [:]
+    var dataLabels: [IconLabelType: IconedLabel] = [:]
+    var viewModel: SmallTrackViewModel?
 	
-	weak var track: Track? = nil {
+    var track: TrackViewModel? = nil {
 		didSet {
-			if let iconUrl = track?.image.buildImageURL() {
-				trackImageView.sd_setImage(with: iconUrl)
-			} else {
-				trackImageView.image = nil
-			}
-			
-			trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: track?.name ?? "")
-			channelNameLabel.text = track?.findStationName()
-			
-			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
-			
-			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
-			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
+            self.viewModel = SmallTrackViewModel.init(track: track!)
+            
+            if let iconUrl = self.viewModel?.iconUrl {
+                trackImageView.sd_setImage(with: iconUrl)
+            } else {
+                trackImageView.image = nil
+            }
+            
+            trackNameLabel.attributedText = viewModel?.trackName
+            channelNameLabel.text = viewModel?.channelName
+            
+            self.timeLabel.text = viewModel?.time
+
+            dataLabels[.listens]?.set(text: (viewModel?.listens)!)
+            dataLabels[.time]?.set(text: (viewModel?.length)!)
 		}
 	}
 	
@@ -121,7 +125,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		playingIndicator.isHidden = true
 		
-		self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
+        self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		
 		self.separatorInset.left = 90
 		self.selectionStyle = .none
@@ -135,22 +139,23 @@ class SmallTrackTableViewCell: UITableViewCell {
 			make.bottom.equalToSuperview()
 			make.height.equalTo(1)
 		}
+		self.separator = view
 	}
-	
-	static func trackText(text: String) -> NSAttributedString {
-		let para = NSMutableParagraphStyle()
-		para.lineBreakMode = .byWordWrapping
-		para.minimumLineHeight = 22
-		para.maximumLineHeight = 22
-		return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-	}
+    
+    static func trackText(text: String) -> NSAttributedString {
+        let para = NSMutableParagraphStyle()
+        para.lineBreakMode = .byWordWrapping
+        para.minimumLineHeight = 22
+        para.maximumLineHeight = 22
+        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
+    }
 	
 	static func height(text: String, width: CGFloat) -> CGFloat {
-		let rect = self.trackText(text: text)
-			.boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
-						  options: .usesLineFragmentOrigin,
-						  context: nil)
-		return min(rect.height, 44) + 31 + 32
+        let rect = self.trackText(text: text)
+            .boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
+                          options: .usesLineFragmentOrigin,
+                          context: nil)
+        return min(rect.height, 44) + 31 + 32
 	}
 	
 	

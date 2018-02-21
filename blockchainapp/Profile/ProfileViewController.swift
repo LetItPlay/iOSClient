@@ -10,19 +10,42 @@ import UIKit
 import SnapKit
 import RealmSwift
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: UIViewController, LikesVMDelegate {
+
+    var emitter: LikesEmitterProtocol?
+    var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-	let profileView = ProfileTopView()
-    let imagePicker = UIImagePickerController()
+    var profileView: ProfileTopView!
+    let imagePicker: UIImagePickerController = {
+        var imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        return imagePicker
+    }()
 	
-	var tracks: [Track] = []
+	var tracks: [TrackViewModel] = []
 	var currentIndex: Int = -1
+    var isKeyboardShown = true
 	
-	convenience init() {
+	let header: LikeHeader = LikeHeader()
+	
+    convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
+        self.profileView = view
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
+        emitter.state(.initialize)
 	}
-	
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -35,7 +58,7 @@ class ProfileViewController: UIViewController {
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
         
-        self.view.addGestureRecognizer(tap)
+        self.profileView.addGestureRecognizer(tap)
         
         imagePicker.delegate = self
         profileView.delegate = self
@@ -68,91 +91,62 @@ class ProfileViewController: UIViewController {
 			make.height.equalTo(20)
 		}
 		
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPlayed(notification:)),
-											   name: AudioController.AudioStateNotification.playing.notification(),
-											   object: nil)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(trackPaused(notification:)),
-											   name: AudioController.AudioStateNotification.paused.notification(),
-											   object: nil)
-
-		
-		self.profileView.logoutButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
-		self.profileView.logoutButton.isSelected = UserSettings.language == .en
+		self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
 	}
     
     @objc func keyboardWillShow(notification: NSNotification) {
+        isKeyboardShown = true
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .name))
         tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
+        isKeyboardShown = false
         view.endEditing(true)
         let height = sender is UITapGestureRecognizer ? 0 : 100
         tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-        UserSettings.name = self.profileView.profileNameLabel.text!
-        self.profileView.updateData()
+        let name = self.profileView.profileNameLabel.text!
+        self.profileView.emitter?.set(name: name)
     }
 	
 	@objc func langChanged(_: UIButton) {
-		if self.profileView.logoutButton.isSelected {
-			UserSettings.language = .ru
-		} else {
-			UserSettings.language = .en
-		}
-		self.profileView.logoutButton.isSelected = !self.profileView.logoutButton.isSelected
+        self.profileView.emitter?.setLanguage()
+        self.emitter?.reloadTracks()
+        
 		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
 		NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil)
 		self.currentIndex = -1
-		self.reloadData()
 		
 		AudioController.main.make(command: .pause)
 	}
 	
-	deinit {
-		NotificationCenter.default.removeObserver(self)
-	}
-	
-	@objc func settingsChanged(notification: Notification) {
-		self.reloadData()
-	}
-	
-	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = index
-			self.tableView.reloadData()
-		}
-	}
-	
-	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-			self.currentIndex = -1
-			self.tableView.reloadData()
-		}
-	}
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		self.reloadData()
+		self.emitter?.reloadTracks()
 	}
-	
-	func reloadData() {
-		let realm = try? Realm()
-		let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(Track.self).map({$0}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
-		self.tableView.reloadData()
-	}
-	
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func reload() {
+        self.tracks = viewModel.tracks
+        
+        self.tableView.reloadData()
+    }
 }
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
+    func setName() {
+        self.dismissKeyboard(UITapGestureRecognizer.init())
+    }
     
     func addImage() {
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
@@ -173,8 +167,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     {
         if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
         {
-            imagePicker.sourceType = UIImagePickerControllerSourceType.camera
-//            imagePicker.allowsEditing = true
+            imagePicker.sourceType = .camera
             self.present(imagePicker, animated: true, completion: nil)
         }
         else
@@ -187,26 +180,27 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     
     func openGallery()
     {
-        imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
-//        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
         present(imagePicker, animated: true, completion: {
         })
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            UserSettings.image = UIImagePNGRepresentation(pickedImage)!
+            let image = UIImagePNGRepresentation(pickedImage)!
+            self.profileView.emitter?.set(image: image)
         }
         
         dismiss(animated: true, completion: nil)
-        self.profileView.updateData()
     }
 }
 
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.dismissKeyboard(scrollView)
+        if isKeyboardShown {
+            self.dismissKeyboard(scrollView)
+        }
     }
     
 	func numberOfSections(in tableView: UITableView) -> Int {
@@ -225,61 +219,19 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 		cell.dataLabels[.listens]?.isHidden = self.currentIndex == indexPath.item
 		cell.dataLabels[.playingIndicator]?.isHidden = self.currentIndex != indexPath.item
 		cell.timeLabel.isHidden = true
+		cell.separator.isHidden = indexPath.item + 1 == self.tracks.count
 		return cell
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let contr = AudioController.main
-		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].id)
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
+//		let contr = AudioController.main
+//		contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[indexPath.item].id)
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		let view = UIView()
-		view.backgroundColor = .white
-		
-		let label = UILabel()
-		label.font = AppFont.Title.big
-		label.textColor = AppColor.Title.dark
-		label.text = "Tracks you’ve liked".localized
-		
-		let tracks = IconedLabel.init(type: .tracks)
-		tracks.setData(data: Int64(self.tracks.count))
-		
-		let time = IconedLabel.init(type: .time)
-		time.setData(data: Int64(self.tracks.map({$0.length}).reduce(0, {$0 + $1})))
-		
-		view.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(12)
-			make.left.equalToSuperview().inset(16)
-		}
-		
-		view.addSubview(tracks)
-		tracks.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().inset(16)
-			make.top.equalTo(label.snp.bottom).inset(-7)
-		}
-		
-		view.addSubview(time)
-		time.snp.makeConstraints { (make) in
-			make.left.equalTo(tracks.snp.right).inset(-8)
-			make.centerY.equalTo(tracks)
-		}
-		
-		let line = UIView()
-		line.backgroundColor = AppColor.Element.redBlur
-		line.layer.cornerRadius = 1
-		line.layer.masksToBounds = true
-		
-		view.addSubview(line)
-		line.snp.makeConstraints { (make) in
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-			make.bottom.equalToSuperview()
-			make.height.equalTo(2)
-		}
-		
-		return view
+        header.fill(count: Int64(self.tracks.count).formatAmount(), length: self.viewModel.length)
+		return header
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -302,21 +254,114 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 
 protocol ProfileViewDelegate {
     func addImage()
+    func setName()
 }
 
-class ProfileTopView: UIView {
+class LikeHeader: UIView {
+	
+	let tracks = IconedLabel.init(type: .tracks)
+	let time = IconedLabel.init(type: .time)
+	
+	init() {
+		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 81)))
+		
+		self.backgroundColor = .white
+		
+		let label = UILabel()
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.dark
+		label.text = "Tracks you’ve liked".localized
+        
+		self.addSubview(label)
+		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview().inset(12)
+			make.left.equalToSuperview().inset(16)
+		}
+		
+		self.addSubview(tracks)
+		tracks.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.top.equalTo(label.snp.bottom).inset(-7)
+		}
+		
+		self.addSubview(time)
+		time.snp.makeConstraints { (make) in
+			make.left.equalTo(tracks.snp.right).inset(-8)
+			make.centerY.equalTo(tracks)
+		}
+		
+		let line = UIView()
+		line.backgroundColor = AppColor.Element.redBlur
+		line.layer.cornerRadius = 1
+		line.layer.masksToBounds = true
+		
+		self.addSubview(line)
+		line.snp.makeConstraints { (make) in
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+			make.bottom.equalToSuperview()
+			make.height.equalTo(2)
+		}
+	}
+	
+	func fill(count: String, length: String) {
+		tracks.set(text: count)
+		time.set(text: length)
+	}
+	
+	required init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+}
+
+
+class ProfileTopView: UIView, ProfileVMDelegate {
+    
+    func make(updates: [ProfileUpdate]) {
+        for data in updates {
+            switch data {
+            case .image:
+                let image = UIImage.init(data: self.viewModel.imageData!)
+                profileImageView.image = image
+                bluredImageView.image = image
+            case .language:
+                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+            case .name:
+                self.setName(name: self.viewModel.name)
+            }
+        }
+    }
+    
+    func setName(name: String)
+    {
+        if name != "name"
+        {
+            profileNameLabel.text = name
+        }
+        else
+        {
+            profileNameLabel.placeholder = "name"
+        }
+    }
 	
     var delegate: ProfileViewDelegate?
+    
+    var emitter: ProfileEmitterProtocol?
+    var viewModel: ProfileViewModel!
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
 	let profileNameLabel: UITextField = UITextField()
 	let changePhotoButton: UIButton = UIButton()
-	let logoutButton: UIButton = UIButton()
+	let languageButton: UIButton = UIButton()
 	
-	init() {
+    init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
 		super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
-		self.updateData()
+
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
         
 		bluredImageView.layer.cornerRadius = 140
 		bluredImageView.layer.masksToBounds = true
@@ -376,6 +421,8 @@ class ProfileTopView: UIView {
 		
 		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
 		profileNameLabel.textAlignment = .center
+        profileNameLabel.returnKeyType = .done
+//        profileNameLabel.delegate = self
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
@@ -387,46 +434,30 @@ class ProfileTopView: UIView {
 			make.height.equalTo(14)
 		}
 
-		blur.contentView.addSubview(logoutButton)
-		logoutButton.snp.makeConstraints { (make) in
+		blur.contentView.addSubview(languageButton)
+		languageButton.snp.makeConstraints { (make) in
 			make.top.equalTo(highlight.snp.bottom).inset(-24)
 			make.centerX.equalToSuperview()
 		}
 		
-		logoutButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-		logoutButton.layer.cornerRadius = 6
-		logoutButton.layer.masksToBounds = true
-		logoutButton.setTitle("Switch to English 🇬🇧", for: .normal)
-		logoutButton.setTitle("Поменять на Русский 🇷🇺", for: .selected)
-		logoutButton.titleLabel?.font = AppFont.Button.mid
-		logoutButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-		logoutButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-		logoutButton.semanticContentAttribute = .forceRightToLeft
+		languageButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
+		languageButton.layer.cornerRadius = 6
+		languageButton.layer.masksToBounds = true
+		languageButton.titleLabel?.font = AppFont.Button.mid
+		languageButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
+		languageButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
+		languageButton.semanticContentAttribute = .forceRightToLeft
 		
 		let bot = CALayer()
 		bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
 		bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
 		blur.contentView.layer.addSublayer(bot)
-		
-		
+
+        emitter.state(.initialize)
 	}
     
-    func updateData()
-    {
-        if UserSettings.name != "name"
-        {
-            profileNameLabel.text = UserSettings.name
-        }
-        else
-        {
-            profileNameLabel.placeholder = "name"
-        }
-        
-        profileImageView.image = UIImage.init(data: UserSettings.image)
-        bluredImageView.image = UIImage.init(data: UserSettings.image)
-    }
-    
     @objc func changePhotoButtonTapped(_ sender: Any) {
+        AnalyticsEngine.sendEvent(event: .profileEvent(on: .avatar))
         delegate?.addImage()
     }
 	

@@ -83,7 +83,7 @@ class ChannelTableViewCell: UITableViewCell {
 		didSet {
 			channelTitle.text = channel?.name
 			subs.setData(data: Int64(channel?.subscriptionCount ?? 0))
-			plays.setData(data: Int64(channel?.trackCount ?? 0))
+			plays.setData(data: Int64(channel?.tracksCount() ?? 0))
 			self.tagsList.removeAllTags()
 			if let tags = channel?.tags.map({$0.value}).prefix(4) {
 				if tags.count != 0 {
@@ -98,7 +98,7 @@ class ChannelTableViewCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsList.isHidden = true
 			}
-			if let urlString = channel?.image.buildImageURL() {
+			if let urlString = URL(string: channel?.image) {
 				channelImageView.sd_setImage(with: urlString)
 			} else {
 				channelImageView.image = nil

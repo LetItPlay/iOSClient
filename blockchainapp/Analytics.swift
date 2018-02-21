@@ -22,7 +22,7 @@ enum AnalyticsEvent {
     case profileEvent(on: ProfileEvent)
     case trackInPlaylistTapped
     case channelTegTapped
-
+    case feedBrowseChannelseTapped
     
     enum ProfileEvent: String {
         case avatar = "avatarTapped"
@@ -83,6 +83,8 @@ enum AnalyticsEvent {
             return "Playlist"
         case .channelTegTapped:
             return "Cannel Tab"
+        case .feedBrowseChannelseTapped:
+            return "Feed Event"
         }
     }
     
@@ -116,6 +118,8 @@ enum AnalyticsEvent {
             return ["event" : "trackTapped"]
         case .channelTegTapped:
             return ["event" :  "tegTapped"]
+        case .feedBrowseChannelseTapped:
+            return ["event" : "browse channels"]
         }
     }
 }

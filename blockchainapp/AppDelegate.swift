@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 
+		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
 		var vc: UIViewController!
 		if UserSettings.language == .none {
 			vc = SettingsViewController()

@@ -63,7 +63,7 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({$0})
+				}).map({$0.detached()})
 				
 				self?.view?.display()
             case .update(_, let deletions, let insertions, let modifications):
@@ -75,22 +75,22 @@ class FeedPresenter: FeedPresenterProtocol {
 					} else {
 						return first.name < second.name
 					}
-				}).map({$0})
-                
+				}).map({$0.detached()})
+				self?.view?.display()
                 if AppManager.shared.rootTabBarController?.selectedViewController !== (self!.view as! UIViewController).navigationController && self?.isFeed == true {
                     let new = (self?.tracks.count ?? 0) - oldTracks
                     AppManager.shared.rootTabBarController?.tabBar.items?[0].badgeValue = new == 0 ? nil : "\(new)"
                 }
-				let update = modifications.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.id == results[index].id})
-				}).filter({$0 != nil}).map({$0!})
-				let delete = deletions.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.id == results[index].id})
-				}).filter({$0 != nil}).map({$0!})
-				let insert = insertions.map({ (index) -> Int? in
-					return self?.tracks.index(where: {$0.id == results[index].id})
-				}).filter({$0 != nil}).map({$0!})
-				self?.view?.reload(update: update, delete: delete, insert: insert)
+//				let update = modifications.map({ (index) -> Int? in
+//					return self?.tracks.index(where: {$0.id == results[index].id})
+//				}).filter({$0 != nil}).map({$0!})
+//				let delete = deletions.map({ (index) -> Int? in
+//					return self?.tracks.index(where: {$0.id == results[index].id})
+//				}).filter({$0 != nil}).map({$0!})
+//				let insert = insertions.map({ (index) -> Int? in
+//					return self?.tracks.index(where: {$0.id == results[index].id})
+//				}).filter({$0 != nil}).map({$0!})
+				self?.view?.reload(update: [], delete: [], insert: [])
 				
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
@@ -127,9 +127,7 @@ class FeedPresenter: FeedPresenterProtocol {
 	
 	@objc func settingsChanged(notification: Notification) {
 		self.playingIndex = -1
-		self.getData { _ in
-
-		}
+		getTracks()
 	}
 	
 	@objc func trackPlayed(notification: Notification) {
@@ -156,20 +154,24 @@ class FeedPresenter: FeedPresenterProtocol {
 	}
     
     @objc func subscriptionChanged(notification: Notification) {
-        getData { (result) in
-			
-        }
+		getTracks()
     }
 	
 	let disposeBag = DisposeBag()
 	
-    func getData(onComplete: @escaping TrackResult) {
-		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).subscribe( onCompleted: {
+	func getTracks() {
+		DispatchQueue.global(qos: .background).async {
 			DownloadManager.shared.requestTracks(all: !self.isFeed, success: { (feed) in
 				
 			}) { (err) in
 				
 			}
+		}
+	}
+	
+    func getData(onComplete: @escaping TrackResult) {
+		DownloadManager.shared.channelsSignal().observeOn(MainScheduler.init()).subscribe( onCompleted: {
+			self.getTracks()
 		}).disposed(by: self.disposeBag)
     }
 	

@@ -9,22 +9,14 @@
 import UIKit
 import SnapKit
 
-class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsViewProtocol {
+class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate { //} ChannelsViewProtocol {
     
     var delegate: ChannelProtocol?
     
-    func display(channels: [Station]) {
-        source = channels
-        channelsCollectionView.reloadData()
-        
-        refreshControl?.endRefreshing()
-    }
+    var emitter: ChannelsEmitterProtocol?
+    var viewModel: ChannelsViewModel!
     
-    func select(rows: [Int]) {
-        
-    }
-    
-    var source = [Station]()
+    var source = [ChannelViewModel]()
     
     let channelLabel: UILabel = {
         let label = UILabel()
@@ -59,21 +51,14 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         return cv
     }()
     
-    var presenter: ChannelsPresenter!
-    var refreshControl: UIRefreshControl!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    convenience init(frame: CGRect, emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    {
+        self.init(frame: frame)
+        self.emitter = emitter
+        self.viewModel = viewModel
+        viewModel.delegate = self
         
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
-        
-        presenter = ChannelsPresenter(view: self)
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
-        
-        self.backgroundColor = AppColor.Element.backgroundColor
+        self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         
         seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
         self.addSubview(seeAlsoButton)
@@ -100,16 +85,15 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
             make.bottom.equalTo(self.snp.bottom).inset(6)
         }
         
-        channelsCollectionView.reloadData()
+        self.emitter?.state(.initialize)
     }
-    
-    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        presenter.getData { [weak self] (channels) in
-            self?.display(channels: channels)
-        }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .seeAll))
         delegate?.showAllChannels()
     }
     
@@ -124,12 +108,19 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Channel", for: indexPath) as! ChannelsCollectionViewCell
         
-        cell.configureWith(image: source[indexPath.row].image)
+        cell.configureWith(image: source[indexPath.row].imageURL!)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.showChannel(station: source[indexPath.row])
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
+//        delegate?.showChannel(station: source[indexPath.row])
+        delegate?.showChannel(source[indexPath.row])
+    }
+    
+    func reloadChannels() {
+        self.source = self.viewModel.channels
+        self.channelsCollectionView.reloadData()
     }
 }

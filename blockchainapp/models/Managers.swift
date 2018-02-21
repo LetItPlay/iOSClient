@@ -75,7 +75,7 @@ class DownloadManager {
 							observer.onNext(stations)
 							let realm = try Realm()
 							try realm.write {
-                                realm.delete(realm.objects(Station.self))
+								realm.delete(realm.objects(Station.self))
 								realm.add(stations, update: true)
 //								for jStation in json.array ?? [] {
 //									if let idInt = jStation["Id"].int {
@@ -128,10 +128,8 @@ class DownloadManager {
                 do {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
-					try realm.write {
-						realm.delete(realm.objects(Station.self))
-					}
                     try realm.write {
+						realm.delete(realm.objects(Station.self))
                         for jStation in json.array ?? [] {
                             if let idInt = jStation["Id"].int {
                                 DBManager.shared.addOrUpdateStation(inRealm: realm,
@@ -279,16 +277,17 @@ class DownloadManager {
                 
                 guard error == nil else { return }
                 guard let data = data else { return }
-
-                do {
-					let json  = try JSON(data: data)
-					let realm = try Realm()
-                    try realm.write {
-                        DBManager.shared.track(fromJSON: json, realm: realm)
-                    }
-                } catch(let error) {
-                    print(error)
-                }
+				if listen != 1 {
+					do {
+						let json  = try JSON(data: data)
+						let realm = try Realm()
+						try realm.write {
+							DBManager.shared.track(fromJSON: json, realm: realm)
+						}
+					} catch(let error) {
+						print(error)
+					}
+				}
                 
             })
             task.resume()
@@ -446,3 +445,33 @@ class LikeManager {
     }
 }
 
+class ListenManager {
+    static let shared = ListenManager()
+    
+    private var stations = [Int]()
+    
+    init() {
+        stations = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
+    }
+    
+    public func add(id: Int) {
+        if !hasObject(id: id) {
+            listened(id: id)
+            UserDefaults.standard.set(stations, forKey: "array_listened")
+        }
+    }
+    
+    public func hasObject(id: Int) -> Bool {
+        return stations.contains(id)
+    }
+    
+    private func listened(id: Int) {
+        objc_sync_enter(stations)
+        stations.append(id)
+        objc_sync_exit(stations)
+        
+        debugPrint("user listened \(id)")
+        
+        DownloadManager.shared.track(id: id, listen: 1)
+    }
+}

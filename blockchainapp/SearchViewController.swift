@@ -31,6 +31,8 @@ SearchPresenterDelegate {
 	let searchResults = SearchResultsController()
 	let playlistsResults = PlaylistsController()
 	
+	var emptyLabel: UIView!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -86,6 +88,21 @@ SearchPresenterDelegate {
 		playlistTableView.backgroundColor = .white
 		
 		self.navigationItem.hidesSearchBarWhenScrolling = false
+        
+        let label = UILabel()
+        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.big
+        label.text = "There are no playlists".localized
+        
+        self.view.addSubview(label)
+        label.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
+            make.centerX.equalToSuperview()
+        }
+		
+		self.emptyLabel = label
+		
+		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
     }
 	
 	func updateSearchResults(for searchController: UISearchController) {
@@ -102,10 +119,17 @@ SearchPresenterDelegate {
 		self.searchResultsTableView.reloadRows(at: tracks.map({IndexPath.init(row: $0, section: 1)}), with: .none)
 		self.searchResultsTableView.reloadRows(at: channels.map({IndexPath.init(row: $0, section: 0)}), with: .none)
 	}
-    
+	
+	func updatePlaylists() {
+		self.playlistTableView.reloadData()
+		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
+	}
+	
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
+		
+		self.presenter.getData()
+		
         if self.presenter.currentSearchString != "" {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .search(text: self.presenter.currentSearchString)))
         }
@@ -138,15 +162,20 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 		return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.descr, width: tableView.frame.width)
 	}
 	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 41
-	}
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 41
+    }
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 0.01
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+		
+		if self.presenter.playlists.count == 0 {
+			return nil
+		}
+		
 		let label = UILabel()
 		label.textColor = AppColor.Title.dark
 		label.font = AppFont.Title.section
@@ -186,10 +215,12 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		if indexPath.section != 0 {
 			let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
-			cell.track = self.presenter.tracks[indexPath.item]
+            
+            
+//            cell.track = self.presenter.tracks[indexPath.item]
 			let isPlaying = self.presenter.currentPlayingIndex == indexPath.item
-			cell.dataLabels[.listens]?.isHidden = isPlaying
-			cell.dataLabels[.playingIndicator]?.isHidden = !isPlaying
+//            cell.dataLabels[.listens]?.isHidden = isPlaying
+//            cell.dataLabels[.playingIndicator]?.isHidden = !isPlaying
 			return cell
 		} else {
 			let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell

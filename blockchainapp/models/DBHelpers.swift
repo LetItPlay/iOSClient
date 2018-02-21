@@ -22,7 +22,7 @@ class DBManager {
 	func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
         if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &station.name, new: name)
-            _ = updateIfNeeded(property: &station.image, new: image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+            _ = updateIfNeeded(property: &station.image, new: image.buildImageURL()?.absoluteString ?? "")
             _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
 			_ = updateIfNeeded(property: &station.lang, new: lang)
 			_ = updateIfNeeded(property: &station.trackCount, new: inRealm.objects(Track.self).filter("station == \(id)").count)
@@ -40,7 +40,7 @@ class DBManager {
             let newStat = Station()
             newStat.id = id
             newStat.name = name
-            newStat.image = image.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newStat.image = image.buildImageURL()?.absoluteString ?? ""
             newStat.subscriptionCount = subscriptionCount
 			if let tags = tags {
 				tags.forEach({ (tag) in
@@ -75,8 +75,8 @@ class DBManager {
             changeCounter += updateIfNeeded(property: &track.likeCount, new: likeCount)
             changeCounter += updateIfNeeded(property: &track.reportCount, new: reportCount)
             changeCounter += updateIfNeeded(property: &track.listenCount, new: listenCount)
-			changeCounter += updateIfNeeded(property: &track.url, new: url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-			changeCounter += updateIfNeeded(property: &track.image, new: coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
+			changeCounter += updateIfNeeded(property: &track.url, new: url.buildImageURL()?.absoluteString ?? "")
+			changeCounter += updateIfNeeded(property: &track.image, new: coverURL.buildImageURL()?.absoluteString ?? "")
 			changeCounter += updateIfNeeded(property: &track.length, new: length)
 
 			changeCounter += updateIfNeeded(property: &track.lang, new: lang)
@@ -99,14 +99,16 @@ class DBManager {
         } else {
             let newTrack = Track()
             newTrack.id = id
-            newTrack.station   = station
+            newTrack.station = station
             newTrack.name = name
-            newTrack.url  = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            newTrack.url  = url.buildImageURL()?.absoluteString ?? ""
             newTrack.desc = description
             newTrack.likeCount = likeCount
             newTrack.reportCount = reportCount
             newTrack.listenCount = listenCount
-            newTrack.image = coverURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+			newTrack.length = length
+            newTrack.image = coverURL.buildImageURL()?.absoluteString ?? ""
+			newTrack.lang = lang
 //            newTrack.tagString   = tags ?? ""
 			if let tags = tags {
 				tags.forEach({ (tag) in
@@ -147,34 +149,35 @@ extension DBManager {
 			let lang = fromJSON["Lang"].string,
 			let station = fromJSON["StationID"].int {
 			
-//            addOrUpdateTrack(inRealm: realm,
-//                             id: idInt,
-//                             station: fromJSON["station"].int ?? 0,
-//                             audiofile: audioFile,
-//                             name: fromJSON["name"].string ?? "",
-//                             url: fromJSON["url"].string ?? "",
-//                             description: fromJSON["description"].string ?? "",
-//                             image: fromJSON["image"].string ?? "",
-//                             likeCount: fromJSON["like_count"].int ?? 0,
-//                             reportCount: fromJSON["report_count"].int ?? 0,
-//                             listenCount: fromJSON["listen_count"].int ?? 0,
-//                             tags: fromJSON["Tags"].array?.map({$0.string}),
-//                             publishDate: fromJSON["published_at"].string ?? "",
-//							 lang: fromJSON["lang"].string ?? "ru")
 			addOrUpdateTrack(inRealm: realm,
 							 id: idInt,
 							 station: station,
 							 name: title,
 							 url: audioURL,
 							 length: fromJSON["TotalLengthInSeconds"].int64 ?? 0,
-							 description: fromJSON["Description"].string ?? "",
+							 description: fromJSON["Description"].string ?? "No Description",
 							 coverURL: fromJSON["CoverURL"].string ?? "",
 							 likeCount: fromJSON["LikeCount"].int ?? 0,
 							 reportCount: 0,
-							 listenCount: fromJSON["ListensCount"].int ?? 0,
+							 listenCount: fromJSON["ListenCount"].int ?? 0,
 							 tags: fromJSON["Tags"].array?.map({$0.string}),
 							 publishDate: publishedAt,
 							 lang: lang)
+        } else if let idInt = fromJSON["id"].int {
+            addOrUpdateTrack(inRealm: realm,
+                             id: idInt,
+                             station: fromJSON["station"].int ?? 0,
+                             name: fromJSON["name"].string ?? "",
+                             url: fromJSON["audio_file"]["file"].string ?? "",
+                             length: fromJSON["audio_file"]["length_seconds"].int64 ?? 0,
+                             description: fromJSON["description"].string ?? "No Description",
+                             coverURL: fromJSON["image"].string ?? "",
+                             likeCount: fromJSON["like_count"].int ?? 0,
+                             reportCount: 0,
+                             listenCount: fromJSON["listen_count"].int ?? 0,
+                             tags: fromJSON["tags"].string?.components(separatedBy: ","),
+                             publishDate: fromJSON["published_at"].string ?? "",
+                             lang: fromJSON["lang"].string ?? "ru")
         }
     }
 }
