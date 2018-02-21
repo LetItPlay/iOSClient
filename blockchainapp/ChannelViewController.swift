@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 
 class ChannelViewController: UIViewController, ChannelVCVMDelegate {
-    //} ChannelPresenterDelegate {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 	
@@ -117,7 +116,23 @@ class ChannelViewController: UIViewController, ChannelVCVMDelegate {
 //            self.tableView.reloadData()
 //        }
     }
-	
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
+        tableView.beginUpdates()
+        for key in updates.keys {
+            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+                switch key {
+                case .insert:
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .delete:
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .update:
+                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                }
+            }
+        }
+        tableView.endUpdates()
+    }
 }
 
 extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {

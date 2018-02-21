@@ -14,6 +14,7 @@ protocol ChannelsModelProtocol: class, ModelProtocol {
 
 protocol ChannelsEventHandler: class {
     func showChannel(index: Int)
+    func refreshChannels()
 }
 
 protocol ChannelsModelDelegate: class {
@@ -66,22 +67,11 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
             }
             
         })
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(settingsChanged(notification:)),
-                                               name: SettingsNotfification.changed.notification(),
-                                               object: nil)
-        
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         token?.invalidate()
-    }
-    
-    @objc func settingsChanged(notification: Notification) {
-        self.getData { _ in
-            
-        }
     }
     
     func getData(onComplete: @escaping StationResult) {
@@ -109,6 +99,12 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         self.delegate?.reload(newChannels: channelVMs)
     }
     
+    func refreshChannels() {
+        self.getData { [weak self] (channels) in
+            self?.getChannelViewModels(channels: channels.map({$0.detached()}))
+        }
+    }
+    
     func showChannel(index: Int) {
         self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
     }
@@ -119,6 +115,14 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
             break
         default:
             break
+        }
+    }
+}
+
+extension ChannelsModel: SettingsUpdateProtocol {
+    func settingsUpdated() {
+        self.getData { _ in
+            
         }
     }
 }

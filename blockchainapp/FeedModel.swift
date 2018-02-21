@@ -98,10 +98,13 @@ FeedEventHandler {
     
     func trackLiked(index: Int) {
         let track = self.tracks[index]
-		track.likeCount += track.isLiked ? -1 : 1
-		LikeManager.shared.addOrDelete(id: track.id)
-		track.isLiked = LikeManager.shared.hasObject(id: track.id)
-		self.tracks[index] = track
+        let action: TrackAction = track.isLiked ? TrackAction.unlike : TrackAction.like
+        ServerUpdateManager.shared.makeTrack(id: track.id, action: action)
+//        let track = self.tracks[index]
+//        track.likeCount += track.isLiked ? -1 : 1
+//        LikeManager.shared.addOrDelete(id: track.id)
+//        track.isLiked = LikeManager.shared.hasObject(id: track.id)
+//        self.tracks[index] = track
     }
     
     func reload() {
@@ -141,7 +144,6 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)
         }
-        
     }
 }
 

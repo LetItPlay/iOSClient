@@ -26,6 +26,11 @@ class ProfileModel: ProfileModelProtocol {
 
     weak var delegate: ProfileModelDelegate?
     
+    init()
+    {
+        InAppUpdateManager.shared.subscribe(self)
+    }
+    
     func getData() {
         delegate?.reload(name: UserSettings.name, image: UserSettings.image, language: UserSettings.language)
     }
@@ -41,17 +46,7 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func changeLanguage() {
-        switch UserSettings.language {
-        case .ru:
-            UserSettings.language = .en
-        case .en:
-            UserSettings.language = .ru
-        default:
-            UserSettings.language = .none
-        }
-        
-        //TODO: update tracks
-        self.delegate?.update(language: UserSettings.language)
+        ServerUpdateManager.shared.updateLanguage()
     }
     
     func send(event: LifeCycleEvent) {
@@ -61,5 +56,11 @@ class ProfileModel: ProfileModelProtocol {
         default:
             break
         }
+    }
+}
+
+extension ProfileModel: SettingsUpdateProtocol {
+    func settingsUpdated() {
+        self.delegate?.update(language: UserSettings.language)
     }
 }

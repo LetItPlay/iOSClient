@@ -58,4 +58,18 @@ class ServerUpdateManager {
             NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["id": track])
         }).disposed(by: disposeBag)
 	}
+    
+    func updateLanguage()
+    {
+        switch UserSettings.language {
+        case .ru:
+            UserSettings.language = .en
+        case .en:
+            UserSettings.language = .ru
+        default:
+            UserSettings.language = .none
+        }
+        
+        NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil, userInfo: ["lang" : UserSettings.language])
+    }
 }
