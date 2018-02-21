@@ -18,6 +18,7 @@ protocol ChannelVCVMProtocol {
 
 protocol ChannelVCVMDelegate: class {
     func reloadTracks()
+    func make(updates: [CollectionUpdate: [Int]])
     func updateSubscription()
 }
 
@@ -46,7 +47,10 @@ class ChannelVCViewModel: ChannelVCVMProtocol, ChannelVCModelDelegate {
         self.delegate?.reloadTracks()
     }
     
-    func update(index: Int, track: TrackViewModel) {
-        
+    func trackUpdate(index: Int, vm: TrackViewModel) {
+        var vm = self.tracks[index]
+        vm.update(vm: vm)
+        self.tracks[index] = vm
+        self.delegate?.make(updates: [.update: [index]])
     }
 }

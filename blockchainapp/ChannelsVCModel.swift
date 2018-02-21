@@ -68,22 +68,11 @@ class ChannelsVCModel: ChannelsVCModelProtocol, ChannelsVCEventHandler {
             }
             
         })
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(settingsChanged(notification:)),
-                                               name: SettingsNotfification.changed.notification(),
-                                               object: nil)
-        
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         token?.invalidate()
-    }
-    
-    @objc func settingsChanged(notification: Notification) {
-        self.getData { _ in
-            
-        }
     }
     
     func getData(onComplete: @escaping StationResult) {
@@ -127,6 +116,14 @@ class ChannelsVCModel: ChannelsVCModelProtocol, ChannelsVCEventHandler {
             break
         default:
             break
+        }
+    }
+}
+
+extension ChannelsVCModel: SettingsUpdateProtocol {
+    func settingsUpdated() {
+        self.getData { _ in
+            
         }
     }
 }

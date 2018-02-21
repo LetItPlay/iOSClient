@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import RxSwift
 
 protocol ChannelVCModelProtocol: class, ModelProtocol {
     weak var delegate: ChannelVCModelDelegate? {get set}
@@ -19,7 +20,7 @@ protocol ChannelVCEvenHandler: class {
 
 protocol ChannelVCModelDelegate: class {
     func reload(tracks: [TrackViewModel])
-    func update(index: Int, track: TrackViewModel)
+    func trackUpdate(index: Int, vm: TrackViewModel)
     func followUpdate(isSubscribed: Bool)
 }
 
@@ -31,6 +32,8 @@ class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
     var token: NotificationToken?
     var channel: Station!
     var currentTrackID: Int?
+    
+    var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     var subManager = SubscribeManager.shared
     
@@ -59,24 +62,8 @@ class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
             }
             self?.getTrackViewModels()
         })
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPlayed(notification:)),
-                                               name: AudioController.AudioStateNotification.playing.notification(),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPaused(notification:)),
-                                               name: AudioController.AudioStateNotification.paused.notification(),
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(subscribed(notification:)),
-                                               name: SubscribeManager.NotificationName.added.notification,
-                                               object: nil)
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(unsubscribed(notification:)),
-                                               name: SubscribeManager.NotificationName.deleted.notification,
-                                               object: nil)
+
+        InAppUpdateManager.shared.subscribe(self)
         
         self.getData()
     }
@@ -98,43 +85,6 @@ class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
         subManager.addOrDelete(station: self.channel.id)
     }
     
-    @objc func trackPlayed(notification: Notification) {
-        if let id = notification.userInfo?["ItemID"] as? String, let index = self.tracks.index(where: {$0.audiotrackId() == id}) {
-            if let curr = self.currentTrackID {
-                let newVM = TrackViewModel(track: tracks[curr], isPlaying: false)
-                self.delegate?.update(index: curr, track: newVM)
-            }
-            let newVM = TrackViewModel(track: tracks[index], isPlaying: false)
-            self.delegate?.update(index: index, track: newVM)
-            //            var reload = [Int]()
-            //            if playingIndex != -1 {
-            //                reload.append(playingIndex)
-            //            }
-            //            reload.append(index)
-            //            self.playingIndex = index
-            //            self.view?.reload(update: reload, delete: [], insert: [])
-        }
-    }
-    
-    @objc func trackPaused(notification: Notification) {
-        if let id = notification.userInfo?["ItemID"] as? String, let _ = self.tracks.index(where: {$0.audiotrackId() == id}) {
-            //            var reload = [Int]()
-            //            if playingIndex != -1 {
-            //                reload.append(playingIndex)
-            //            }
-            //            self.playingIndex = -1
-            //            self.view?.reload(update: reload, delete: [], insert: [])
-        }
-    }
-    
-    @objc func subscribed(notification: Notification) {
-        self.delegate?.followUpdate(isSubscribed: true)
-    }
-    
-    @objc func unsubscribed(notification: Notification) {
-        self.delegate?.followUpdate(isSubscribed: false)
-    }
-    
     func getTrackViewModels()
     {
         var trackVMs = [TrackViewModel]()
@@ -152,5 +102,31 @@ class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
             break
         }
     }
+}
+
+extension ChannelVCModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+    func settingsUpdated() {
+        
+    }
     
+    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
+        if isPlaying {
+            if let index = self.tracks.index(where: {$0.id == id}) {
+                self.playingIndex.value = index
+            }
+        } else {
+            self.playingIndex.value = nil
+        }
+    }
+    
+    func stationSubscriptionUpdated() {
+        
+    }
+    
+    func trackUpdated(track: Track1) {
+        if let index = self.tracks.index(where: {$0.id == track.id}) {
+            let vm = TrackViewModel(track: track)
+            self.delegate?.trackUpdate(index: index, vm: vm)
+        }
+    }
 }

@@ -292,7 +292,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         cell?.alertBlurView.alpha = 0
 		
 		cell?.onLike = { [weak self] track in
-            self?.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
+            self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
 		}
     }
 	

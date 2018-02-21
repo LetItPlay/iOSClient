@@ -43,7 +43,6 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 		self.likeButton.isSelected = vm.isLiked
 		
         dataLabels[.time]?.set(text: vm.length)
-		
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -55,7 +54,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 	}
 	
 	@objc func likePressed(_: UIButton) {
-		likeButton.isSelected = !likeButton.isSelected
+        likeButton.isSelected = !likeButton.isSelected
         onLike?(0)
 	}
 	

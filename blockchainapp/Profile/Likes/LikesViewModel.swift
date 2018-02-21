@@ -10,7 +10,7 @@ import Foundation
 
 protocol LikesVMDelegate: class {
     func reload()
-    func updateTracks()
+    func make(updates: [CollectionUpdate: [Int]])
 }
 
 class LikesViewModel: LikesModelDelegate {    
@@ -25,8 +25,10 @@ class LikesViewModel: LikesModelDelegate {
         self.delegate?.reload()
     }
     
-    func update(track: TrackViewModel, atIndex: Int) {
-        self.tracks[atIndex] = track
-        self.delegate?.updateTracks()
+    func trackUpdate(index: Int, vm: TrackViewModel) {
+        var vm = self.tracks[index]
+        vm.update(vm: vm)
+        self.tracks[index] = vm
+        self.delegate?.make(updates: [.update: [index]])
     }
 }

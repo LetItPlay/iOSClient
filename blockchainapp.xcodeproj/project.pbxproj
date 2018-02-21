@@ -56,6 +56,7 @@
 		3626C8D02036A6790016772B /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CF2036A6790016772B /* SearchModel.swift */; };
 		3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D12036A6800016772B /* SearchEmitter.swift */; };
 		3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */; };
+		3626F8DF203D6579000AA386 /* ChannelsVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626F8DE203D6578000AA386 /* ChannelsVCModel.swift */; };
 		365653F920358F980072087F /* PlaylistsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653F820358F980072087F /* PlaylistsModel.swift */; };
 		365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FA20358FA10072087F /* PlaylistsViewModel.swift */; };
 		365653FD20358FA90072087F /* PlaylistsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FC20358FA90072087F /* PlaylistsEmitter.swift */; };
@@ -74,13 +75,11 @@
 		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
 		36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613C9202D67C000661E48 /* ProfileEmitter.swift */; };
 		36F613CC202D6E3200661E48 /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613CB202D6E3200661E48 /* ProfileBuilder.swift */; };
-		36F613D0202DA7C300661E48 /* ChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613CF202DA7C300661E48 /* ChannelsEmitter.swift */; };
+		36F613D0202DA7C300661E48 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
-		9DA077BD203434EC002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BC203434EC002BF631 /* ChannelViewModel.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
 		9DA077C22034396E002BF631 /* ChannelsVCEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C12034396E002BF631 /* ChannelsVCEmitter.swift */; };
-		9DA077C420343983002BF631 /* ChannelsVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C320343983002BF631 /* ChannelsVCModel.swift */; };
 		9DA077C720343D91002BF631 /* ChannelsVCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C620343D91002BF631 /* ChannelsVCViewModel.swift */; };
 		9DA077C920344527002BF631 /* ChannelsCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077C820344527002BF631 /* ChannelsCellViewModel.swift */; };
 		9DA077CB20345055002BF631 /* ChannelVCViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelVCViewModel.swift */; };
@@ -189,6 +188,7 @@
 		3626C8CF2036A6790016772B /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		3626C8D12036A6800016772B /* SearchEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEmitter.swift; sourceTree = "<group>"; };
 		3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchChannelViewModel.swift; sourceTree = "<group>"; };
+		3626F8DE203D6578000AA386 /* ChannelsVCModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsVCModel.swift; sourceTree = "<group>"; };
 		365653F820358F980072087F /* PlaylistsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsModel.swift; sourceTree = "<group>"; };
 		365653FA20358FA10072087F /* PlaylistsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewModel.swift; sourceTree = "<group>"; };
 		365653FC20358FA90072087F /* PlaylistsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsEmitter.swift; sourceTree = "<group>"; };
@@ -207,15 +207,11 @@
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		36F613C9202D67C000661E48 /* ProfileEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEmitter.swift; sourceTree = "<group>"; };
 		36F613CB202D6E3200661E48 /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
-		36F613CD202DA6DD00661E48 /* ChannelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsModel.swift; sourceTree = "<group>"; };
-		36F613D1202DA8D800661E48 /* ChannelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewModel.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9DA077BC203434EC002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077C12034396E002BF631 /* ChannelsVCEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsVCEmitter.swift; sourceTree = "<group>"; };
-		9DA077C320343983002BF631 /* ChannelsVCModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsVCModel.swift; sourceTree = "<group>"; };
 		9DA077C620343D91002BF631 /* ChannelsVCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsVCViewModel.swift; sourceTree = "<group>"; };
 		9DA077C820344527002BF631 /* ChannelsCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCellViewModel.swift; sourceTree = "<group>"; };
 		9DA077CA20345055002BF631 /* ChannelVCViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelVCViewModel.swift; sourceTree = "<group>"; };
@@ -556,13 +552,9 @@
 				CF44536A1F57F50300660474 /* ChannelsPresenter.swift */,
 				CF44536C1F57F53100660474 /* ChannelsProtocol.swift */,
 				0158129B1FD70561002828F5 /* ChannelsBuilder.swift */,
-				36F613CD202DA6DD00661E48 /* ChannelsModel.swift */,
-				36F613CF202DA7C300661E48 /* ChannelsEmitter.swift */,
-				36F613D1202DA8D800661E48 /* ChannelsViewModel.swift */,
-				9DA077C320343983002BF631 /* ChannelsVCModel.swift */,
+				3626F8DE203D6578000AA386 /* ChannelsVCModel.swift */,
 				9DA077C12034396E002BF631 /* ChannelsVCEmitter.swift */,
 				9DA077C620343D91002BF631 /* ChannelsVCViewModel.swift */,
-				9DA077BC203434EC002BF631 /* ChannelViewModel.swift */,
 			);
 			name = Channels;
 			sourceTree = "<group>";
@@ -854,7 +846,6 @@
 				9DA077CD2034505F002BF631 /* ChannelVCModel.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
-				36F613D2202DA8D800661E48 /* ChannelsViewModel.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
 				CF44536B1F57F50300660474 /* ChannelsPresenter.swift in Sources */,
@@ -867,12 +858,10 @@
 				CF4453661F56CB4600660474 /* FeedProtocols.swift in Sources */,
 				01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */,
 				36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */,
-				9DA077C420343983002BF631 /* ChannelsVCModel.swift in Sources */,
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
-				36F613CE202DA6DD00661E48 /* ChannelsModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
 				01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */,
@@ -896,6 +885,7 @@
 				01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */,
 				9DA077CB20345055002BF631 /* ChannelVCViewModel.swift in Sources */,
 				36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */,
+				3626F8DF203D6579000AA386 /* ChannelsVCModel.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				9DA077C720343D91002BF631 /* ChannelsVCViewModel.swift in Sources */,
 				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,
@@ -913,7 +903,7 @@
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
-				36F613D0202DA7C300661E48 /* ChannelsEmitter.swift in Sources */,
+				36F613D0202DA7C300661E48 /* (null) in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
 				3626C8CB2036A6200016772B /* SearchController.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
@@ -933,7 +923,6 @@
 				365653FF203592DD0072087F /* SearchBuilder.swift in Sources */,
 				01EFC873201A21D6005321B9 /* PlayerViewController.swift in Sources */,
 				CF2715331F97EA810038C81C /* AboutViewController.swift in Sources */,
-				9DA077BD203434EC002BF631 /* ChannelViewModel.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
 				CF44536D1F57F53100660474 /* ChannelsProtocol.swift in Sources */,
 				3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */,
