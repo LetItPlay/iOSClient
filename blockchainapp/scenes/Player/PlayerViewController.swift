@@ -224,6 +224,9 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        if pageViewController.viewControllers![0] is PlaylistViewController {
+            return 1
+        }
         return 0
     }
 }
