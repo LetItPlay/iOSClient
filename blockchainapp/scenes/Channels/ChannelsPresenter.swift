@@ -36,7 +36,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
                         self!.view?.select(rows: indexes)
                     }
                 }
-			case .update(_, let del, let ins, let mod):
+			case .update(_, _, let ins, _):
                 // Query results have changed, so apply them to the UITableView
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
 				if items.count != 0 && ins.count != 0 {

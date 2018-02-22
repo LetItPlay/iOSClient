@@ -87,7 +87,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
             
             
             //            cell.track = self.presenter.tracks[indexPath.item]
-            let isPlaying = self.viewModel.currentPlayingIndex == indexPath.item
+            let _ = self.viewModel.currentPlayingIndex == indexPath.item
             //            cell.dataLabels[.listens]?.isHidden = isPlaying
             //            cell.dataLabels[.playingIndicator]?.isHidden = !isPlaying
             return cell

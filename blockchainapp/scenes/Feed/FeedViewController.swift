@@ -160,7 +160,7 @@ class FeedViewController: UIViewController, ChannelProtocol {
         // Dispose of any resources that can be recreated.
     }
     
-  func showAllChannels() {
+  @objc func showAllChannels() {
       let vc = ChannelsBuilder.build(params: nil)
       self.navigationController?.pushViewController(vc, animated: true)
   }

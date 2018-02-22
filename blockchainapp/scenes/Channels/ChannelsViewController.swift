@@ -174,7 +174,7 @@ extension ChannelsViewController {
 		let station = source[indexPath.row]
         cell.channel = station
 		cell.subAction = {[weak self] channel in
-			if let ch = channel {
+			if let _ = channel {
 //                self?.presenter.select(station: station)
                 self?.emitter?.send(event: ChannelsVCEvent.showChannel(index: indexPath))
 			}
@@ -196,7 +196,7 @@ extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelSeeAll))
-		let station = self.source[indexPath.row]
+		let _ = self.source[indexPath.row]
 //        let vc = ChannelViewController(station: station)
 //        self.navigationController?.pushViewController(vc, animated: true)
     }

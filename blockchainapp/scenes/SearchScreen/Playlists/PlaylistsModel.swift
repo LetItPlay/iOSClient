@@ -10,7 +10,7 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-protocol PlaylistsModelProtocol: class, ModelProtocol {
+protocol PlaylistsModelProtocol: ModelProtocol {
     weak var delegate: PlaylistsModelDelegate? {get set}
 }
 

@@ -170,7 +170,7 @@ class RequestManager {
                 switch type {
                 case .subscribe(let count):
                     elements["subscription_count"] = count
-                case .report(let _):
+                case .report(_):
                     elements["report_count"] = 1
                 }
                 
@@ -232,7 +232,7 @@ class RequestManager {
                 switch type {
                     case .like(let count):
                         elements["like_count"]   = count
-                    case .report(let _):
+                    case .report(_):
                         elements["report_count"] = 1
                     case .listen:
                         elements["listen_count"] = 1

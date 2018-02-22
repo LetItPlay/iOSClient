@@ -101,7 +101,7 @@ class SearchPresenter {
 	}
 	
 	func formatPlaylists(index: Int) {
-		let playlist = self.playlists[index]
+		let _ = self.playlists[index]
 		let contr = AudioController.main
 //        contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0.audioTrack()})), playId: playlist.tracks[0].id)
 		contr.showPlaylist()
