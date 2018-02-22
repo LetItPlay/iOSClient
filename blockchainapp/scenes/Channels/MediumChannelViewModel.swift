@@ -13,9 +13,19 @@ class MediumChannelViewModel: SmallChannelViewModel {
     var subscriptionCount: String = ""
     var tracksCount: String = ""
     var tags: [Tag] = []
-    var isSubsribed: Bool = false
+    var isSubscribed: Bool = false
     
-    override init(channel: Station){//}, isSubscribed: Bool) {
+    override init(channel: Station){
+        super.init(channel: channel)
+        
+        self.name = channel.name
+        self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
+        self.tracksCount = Int64(channel.trackCount).formatAmount()
+        self.tags = channel.tags.map({$0})
+    }
+    
+    init(channel: Station, isSubscribed: Bool)
+    {
         super.init(channel: channel)
         
         self.name = channel.name
@@ -23,6 +33,6 @@ class MediumChannelViewModel: SmallChannelViewModel {
         self.tracksCount = Int64(channel.trackCount).formatAmount()
         self.tags = channel.tags.map({$0})
         
-//        self.isSubsribed = isSubsribed
+        self.isSubscribed = isSubscribed
     }
 }

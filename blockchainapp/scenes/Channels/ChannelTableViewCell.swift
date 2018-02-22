@@ -88,6 +88,8 @@ class ChannelTableViewCell: UITableViewCell {
             subs.set(text: (self.viewModel?.subscriptionCount)!)
             plays.set(text: (self.viewModel?.tracksCount)!)
             
+            self.subButton.isSelected = (self.viewModel?.isSubscribed)!
+            
 			self.tagsList.removeAllTags()
 			if let tags = self.viewModel?.tags.map({$0.value}).prefix(4) {
 				if tags.count != 0 {

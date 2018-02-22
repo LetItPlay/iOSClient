@@ -91,10 +91,6 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         }
     }
     
-    func select(station: Station) {
-        subManager.addOrDelete(station: station.id)
-    }
-    
     func getChannelViewModels(channels: [Station])
     {
         self.channels = channels
@@ -108,9 +104,11 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                 channelVMs.append(SmallChannelViewModel.init(channel: channel))
             }
         case .medium:
+            let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+            
             for channel in channels
             {
-                channelVMs.append(MediumChannelViewModel.init(channel: channel))
+                channelVMs.append(MediumChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
             }
         default:
             break
@@ -119,7 +117,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         self.delegate?.reload(newChannels: channelVMs)
     }
     
-    func refreshChannels() {
+    func refreshChannels(){
         self.getData { [weak self] (channels) in
             self?.getChannelViewModels(channels: channels.map({$0.detached()}))
         }
@@ -129,6 +127,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         let channel = self.channels[index]
 //        let action: StationAction = channel.isSubscribed ? Station.unlike : TrackAction.like
 //        ServerUpdateManager.shared.makeStation(id: channel.id, action: .subscribe)
+        subManager.addOrDelete(station: channel.id)
     }
     
     func showChannel(index: Int) {
