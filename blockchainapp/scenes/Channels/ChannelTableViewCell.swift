@@ -91,7 +91,7 @@ class ChannelTableViewCell: UITableViewCell {
             self.subButton.isSelected = (self.viewModel?.isSubscribed)!
             
 			self.tagsList.removeAllTags()
-			if let tags = self.viewModel?.tags.map({$0.value}).prefix(4) {
+            if let tags = self.viewModel?.tags1 {//.map({$0.value}).prefix(4) {
 				if tags.count != 0 {
 					tagsList.addTags(tags.map({$0.uppercased()}))
 					self.noTagsView.isHidden = true

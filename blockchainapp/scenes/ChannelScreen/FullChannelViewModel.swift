@@ -11,15 +11,15 @@ import Foundation
 class FullChannelViewModel: MediumChannelViewModel {
     var description: String = ""
     
-    override init(channel: Station) {
+    override init(channel: Station1) {
         super.init(channel: channel)
         
-        self.description = channel.description
+        self.description = channel.descr
     }
     
-    override init(channel: Station, isSubscribed: Bool) {
+    override init(channel: Station1, isSubscribed: Bool) {
         super.init(channel: channel, isSubscribed: isSubscribed)
         
-        self.description = channel.description
+        self.description = channel.descr
     }
 }

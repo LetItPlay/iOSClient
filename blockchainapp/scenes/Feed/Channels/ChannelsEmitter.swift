@@ -28,7 +28,7 @@ class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
     func send(event: ChannelsEvent) {
         switch event {
         case .refreshData:
-            self.model?.refreshChannels()
+            self.model?.getData()
         case .showChannel(let index):
             self.model?.showChannel(index: index)
         case .subscribe(let index):

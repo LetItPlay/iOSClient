@@ -14,7 +14,7 @@ class SearchChannelViewModel: SmallChannelViewModel {
     var subscriptionCount: String = ""
     var tracksCount: String = ""
     
-    override init(channel: Station) {
+    override init(channel: Station1) {
         super.init(channel: channel)
         
         self.name = channel.name

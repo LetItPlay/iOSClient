@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import RxSwift
 
 enum ViewModels {
     case channels, tracks, all
@@ -31,8 +32,8 @@ protocol SearchModelDelegate: class {
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
     
-    var tracks: [Track] = []
-    var channels: [Station] = []
+    var tracks: [Track1] = []
+    var channels: [Station1] = []
     
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""
@@ -40,6 +41,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     let realm: Realm? = try? Realm()
     
     var delegate: SearchModelDelegate?
+    
+    let disposeBag = DisposeBag()
     
     init()
     {
@@ -56,15 +59,43 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     
     func searchChanged(string: String) {
-        self.currentSearchString = string
+        self.currentSearchString = string.lowercased()
         if string.count == 0 {
             self.tracks = []
             self.channels = []
         } else {
-//            self.tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
-//            self.channels = self.realm?.objects(Station.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+            RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: {(tuple) in
+                self.tracks = tuple.0.filter({ track in
+                    if track.name.lowercased().range(of: self.currentSearchString) != nil
+                    {
+                        return true
+                    }
+                    
+                    return false
+                })
+                self.get(viewModels: .tracks)
+            }).disposed(by: self.disposeBag)
+            
+            RequestManager.shared.channels().subscribe(onNext: { (stations) in
+                self.channels = stations.filter({ channel in
+                    if channel.name.lowercased().range(of: self.currentSearchString) != nil
+                    {
+                        return true
+                    }
+                    
+                    for tag in channel.tags
+                    {
+                        if tag.contains(self.currentSearchString)
+                        {
+                            return true
+                        }
+                    }
+                    
+                    return false
+                })
+                self.get(viewModels: .channels)
+            }).disposed(by: self.disposeBag)
         }
-        self.get(viewModels: .all)
     }
     
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int) {

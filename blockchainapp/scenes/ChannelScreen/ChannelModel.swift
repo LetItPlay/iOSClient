@@ -16,7 +16,7 @@ protocol ChannelModelProtocol: class, ModelProtocol {
 
 protocol ChannelEvenHandler: class {
     func followPressed()
-    func set(station: Station)
+    func set(station: Station1)
 }
 
 protocol ChannelModelDelegate: class {
@@ -30,53 +30,27 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var delegate: ChannelModelDelegate?
     
-    var tracks: [Track] = []
+    var tracks: [Track1] = []
     var token: NotificationToken?
-    var channel: Station!
+    var channel: Station1!
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     var subManager = SubscribeManager.shared
     
+    let disposeBag = DisposeBag()
+    
     init(channelID: Int)
     {
-        let realm = try! Realm()
-        let stationResults = realm.objects(Station.self).filter("id == \(channelID)")
-        self.channel = stationResults[0]
-        
-        let results = realm.objects(Track.self).filter("station == \(channel.id)").sorted(byKeyPath: "publishedAt", ascending: false)
-        token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-            let filter: (Track) -> Bool = {$0.station == self?.channel.id}
-            switch changes {
-            case .initial:
-                // Results are now populated and can be accessed without blocking the UI
-//                self?.tracks = [Array(results)]
-                break
-            case .update(_, _, _, _):
-                // Query results have changed, so apply them to the UITableView
-//                self?.tracks = [Array(results).filter(filter)]
-                break
-                
-            case .error(let error):
-                // An error occurred while opening the Realm file on the background worker thread
-                fatalError("\(error)")
-            }
-            self?.getTrackViewModels()
-        })
-
         InAppUpdateManager.shared.subscribe(self)
-        
-        self.getData()
     }
     
     func getData() {
-        DownloadManager.shared.requestTracks(all: true, success: { (feed) in
-            self.tracks = feed
+        RequestManager.shared.tracks(req: .channel(channel.id)).subscribe(onNext: { (tuple) in
+            self.tracks = tuple.0
             self.getTrackViewModels()
-        }) { (err) in
-
-        }
+        }).disposed(by: self.disposeBag)
     }
     
     deinit {
@@ -84,7 +58,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         token?.invalidate()
     }
     
-    func set(station: Station) {
+    func set(station: Station1) {
         self.channel = station
         
         let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
@@ -133,6 +107,7 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
     
     func stationSubscriptionUpdated() {
         // TODO: change button title
+        
     }
     
     func trackUpdated(track: Track1) {

@@ -56,6 +56,7 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     
     func getChannel(channel: FullChannelViewModel) {
         self.channel = channel
+        self.isSubscribed = channel.isSubscribed
     }
 }
 

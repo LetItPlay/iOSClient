@@ -20,7 +20,7 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
     
     weak var model: ChannelEvenHandler?
     
-    convenience init(model: ChannelEvenHandler, station: Station)
+    convenience init(model: ChannelEvenHandler, station: Station1)
     {
         self.init(handler: model as! ModelProtocol)
         self.model = model

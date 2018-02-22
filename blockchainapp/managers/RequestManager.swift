@@ -15,6 +15,7 @@ enum TracksRequest {
     case channel(Int)
     case tag(String)
     case magic
+    case allTracks
 }
 
 enum TrackUpdateRequest {
