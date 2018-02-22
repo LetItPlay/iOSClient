@@ -8,30 +8,41 @@
 import Foundation
 import RealmSwift
 
+enum ChannelScreen {
+    case small, medium, full
+}
+
 protocol ChannelsModelProtocol: class, ModelProtocol {
     weak var delegate: ChannelsModelDelegate? {get set}
 }
 
 protocol ChannelsEventHandler: class {
-    func showChannel(index: Int)
+//    func showChannel(index: Int)
     func refreshChannels()
+    func followPressed()
 }
 
 protocol ChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
-    func showChannel(channel: FullChannelViewModel)
+    func followUpdate(isSubscribed: Bool)
+//    func showChannel(channel: FullChannelViewModel)
 }
 
 class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 
+    var channelScreen: ChannelScreen!
+    
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
     var token: NotificationToken?
     
     var channels = [Station]()
+    var currentChannelIndex: Int?
     
-    init()
+    init(channelScreen: ChannelScreen)
     {
+        self.channelScreen = channelScreen
+        
         let realm = try! Realm()
         let results = realm.objects(Station.self)
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
@@ -91,9 +102,25 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         self.channels = channels
         
         var channelVMs = [SmallChannelViewModel]()
-        for channel in channels
-        {
-            channelVMs.append(SmallChannelViewModel.init(channel: channel))
+        
+        switch channelScreen {
+        case .small:
+            for channel in channels
+            {
+                channelVMs.append(SmallChannelViewModel.init(channel: channel))
+            }
+        case .medium:
+            for channel in channels
+            {
+                channelVMs.append(ChannelViewModel.init(channel: channel))
+            }
+        case .full:
+            for channel in channels
+            {
+                channelVMs.append(FullChannelViewModel.init(channel: channel))
+            }
+        default:
+            break
         }
         
         self.delegate?.reload(newChannels: channelVMs)
@@ -105,9 +132,9 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         }
     }
     
-    func showChannel(index: Int) {
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
-    }
+//    func showChannel(index: Int) {
+//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
+//    }
     
     func send(event: LifeCycleEvent) {
         switch event {
@@ -117,12 +144,27 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
             break
         }
     }
+    
+    func followPressed() {
+        subManager.addOrDelete(station: self.channels[currentChannelIndex!].id)
+    }
 }
 
-extension ChannelsModel: SettingsUpdateProtocol {
+extension ChannelsModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
     func settingsUpdated() {
         self.getData { _ in
             
+        }
+    }
+    
+    func stationSubscriptionUpdated() {
+        if self.channelScreen == .medium
+        {
+            self.refreshChannels()
+        }
+        else if self.channelScreen == .full
+        {
+            // TODO: change button title?
         }
     }
 }

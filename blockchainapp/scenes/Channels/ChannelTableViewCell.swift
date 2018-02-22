@@ -78,13 +78,13 @@ class ChannelTableViewCell: UITableViewCell {
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	
 	var subAction: (_ channel: ChannelViewModel?) -> Void = { _ in }
-    var viewModel: ChannelsCellViewModel?
+    var viewModel: ChannelViewModel?
 	
 	weak var channel: ChannelViewModel? = nil {
 		didSet {
-            self.viewModel = ChannelsCellViewModel.init(channel: channel!)
+            self.viewModel = channel
             
-			channelTitle.text = self.viewModel?.channelName
+			channelTitle.text = self.viewModel?.name
             subs.set(text: (self.viewModel?.subscriptionCount)!)
             plays.set(text: (self.viewModel?.tracksCount)!)
             
@@ -102,7 +102,7 @@ class ChannelTableViewCell: UITableViewCell {
 				self.noTagsView.isHidden = false
 				self.tagsList.isHidden = true
 			}
-            if let urlString = self.viewModel?.imageUrl {
+            if let urlString = self.viewModel?.imageURL {
                 channelImageView.sd_setImage(with: urlString)
             } else {
                 channelImageView.image = nil

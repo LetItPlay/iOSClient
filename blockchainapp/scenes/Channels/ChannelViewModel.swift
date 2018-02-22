@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import RealmSwift
 
 class ChannelViewModel: SmallChannelViewModel {
     var name: String = ""
     var subscriptionCount: String = ""
     var tracksCount: String = ""
-    var tags: List<Tag> = List<Tag>()
+    var tags: [Tag] = []
     
     override init(channel: Station) {
         super.init(channel: channel)
@@ -21,6 +20,6 @@ class ChannelViewModel: SmallChannelViewModel {
         self.name = channel.name
         self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
         self.tracksCount = Int64(channel.trackCount).formatAmount()
-        self.tags = channel.tags
+        self.tags = channel.tags.map({$0})
     }
 }

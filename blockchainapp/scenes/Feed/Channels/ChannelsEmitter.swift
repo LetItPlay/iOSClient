@@ -7,8 +7,14 @@
 
 import Foundation
 
+enum ChannelsEvent {
+    case showChannel(index: Int)
+    case refreshData
+    case followPressed
+}
+
 protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
-    func showChannel(index: Int)
+    func send(event: ChannelsEvent)
 }
 
 class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
@@ -27,7 +33,16 @@ class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
             break
         }
 	}
-    func showChannel(index: Int) {
-        self.model?.showChannel(index: index)
+    
+    func send(event: ChannelsEvent) {
+        switch event {
+        case .refreshData:
+            self.model?.refreshChannels()
+        case .showChannel(let index):
+            break
+//            self.model?.showChannel(index: index)
+        case .followPressed:
+            self.model?.followPressed()
+        }
     }
 }

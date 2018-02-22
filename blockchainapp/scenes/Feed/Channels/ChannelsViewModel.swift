@@ -9,16 +9,19 @@ import Foundation
 
 protocol ChannelsVMProtocol {
     var channels: [SmallChannelViewModel] {get}
+    var isSubscribed: Bool {get set}
     
     weak var delegate: ChannelsVMDelegate? {get set}
 }
 
 protocol ChannelsVMDelegate: class  {
     func reloadChannels()
+//    func updateSubscription()
 }
 
-class ChannelsViewModel: ChannelsModelDelegate {
-
+class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
+    
+    var isSubscribed: Bool = false
     var channels: [SmallChannelViewModel] = []
     weak var delegate: ChannelsVMDelegate?
     var model: ChannelsModelProtocol!
@@ -33,7 +36,12 @@ class ChannelsViewModel: ChannelsModelDelegate {
         self.delegate?.reloadChannels()
     }
     
-    func showChannel(channel: FullChannelViewModel) {
+//    func showChannel(channel: FullChannelViewModel) {
         // TODO: to router
+//    }
+    
+    func followUpdate(isSubscribed: Bool) {
+        self.isSubscribed = isSubscribed
+//        self.delegate?.updateSubscription()
     }
 }

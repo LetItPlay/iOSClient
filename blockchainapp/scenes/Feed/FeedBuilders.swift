@@ -22,7 +22,7 @@ class FeedBuilder: Builder {
 class PopularBuilder: Builder {
 	static func build(params: [String: Any]?) -> UIViewController {
         // for channels
-        let channelsModel = ChannelsModel()
+        let channelsModel = ChannelsModel(channelScreen: .small)
         let channelsVM = ChannelsViewModel(model: channelsModel)
         let channelsEmitter = ChannelsEmitter(model: channelsModel)
         let channelsView = ChannelsCollectionView.init(frame: CGRect.zero, emitter: channelsEmitter, viewModel: channelsVM)

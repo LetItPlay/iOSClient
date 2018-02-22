@@ -89,14 +89,14 @@ class ChannelsCell: UITableViewCell {
     
 }
 
-class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
+class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     
     var source = [ChannelViewModel]()
     
-    var emitter: ChannelsVCEmitterProtocol?
-    var viewModel: ChannelsVCViewModel!
+    var emitter: ChannelsEmitterProtocol?
+    var viewModel: ChannelsViewModel!
     
-    convenience init(emitter: ChannelsVCEmitterProtocol, viewModel: ChannelsVCViewModel)
+    convenience init(emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
     {
         self.init(nibName: nil, bundle: nil)
         
@@ -143,7 +143,7 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
     }
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        self.emitter?.send(event: ChannelsVCEvent.refreshData)
+        self.emitter?.send(event: ChannelsEvent.refreshData)
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,10 +152,12 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
     }
 
     func reloadChannels() {
-        self.source = viewModel.channels
-        self.tableView.reloadData()
-        
-        refreshControl?.endRefreshing()
+        if self.viewModel.channels is ChannelViewModel {
+            self.source = viewModel.channels as! [ChannelViewModel]
+            self.tableView.reloadData()
+            
+            refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -176,7 +178,7 @@ extension ChannelsViewController {
 		cell.subAction = {[weak self] channel in
 			if let _ = channel {
 //                self?.presenter.select(station: station)
-                self?.emitter?.send(event: ChannelsVCEvent.showChannel(index: indexPath))
+                self?.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
 			}
 		}
 //        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)

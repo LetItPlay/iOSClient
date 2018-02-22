@@ -9,7 +9,10 @@
 import UIKit
 import SnapKit
 
-class ChannelViewController: UIViewController, ChannelVCVMDelegate {
+class ChannelViewController: UIViewController, ChannelsVMDelegate {
+    func reloadChannels() {
+        
+    }
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 	
@@ -17,13 +20,13 @@ class ChannelViewController: UIViewController, ChannelVCVMDelegate {
     weak var channel: FullChannelViewModel!
     var tracks: [[TrackViewModel]] = []
     
-    var viewModel: ChannelVCVMProtocol!
-    var emitter: ChannelVCEmitterProtocol!
+    var viewModel: ChannelsVMProtocol!
+    var emitter: ChannelsEmitterProtocol!
 //    var presenter: ChannelPresenter!
 	var header: ChannelHeaderView = ChannelHeaderView()
 	var currentIndex: Int = -1
 	
-    init(channel: FullChannelViewModel, viewModel: ChannelVCVMProtocol, emitter: ChannelVCEmitterProtocol) {
+    init(channel: FullChannelViewModel, viewModel: ChannelsVMProtocol, emitter: ChannelsEmitterProtocol) {
         super.init(nibName: nil, bundle: nil)
         
         self.channel = channel
@@ -91,7 +94,7 @@ class ChannelViewController: UIViewController, ChannelVCVMDelegate {
 	
 	@objc func followPressed() {
 //        self.presenter.followPressed()
-        self.emitter.send(event: ChannelVCEvent.followPressed)
+        self.emitter.send(event: ChannelsEvent.followPressed)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
