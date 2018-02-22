@@ -10,7 +10,7 @@ import Foundation
 enum ChannelsEvent {
     case showChannel(index: Int)
     case refreshData
-    case followPressed
+    case subscribe(index: Int)
 }
 
 protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
@@ -24,25 +24,15 @@ class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
         self.init(handler: model as! ModelProtocol)
         self.model = model
     }
-    
-    func state(_ state: LifeCycleEvent) {
-        switch state {
-//        case .initialize:
-//            self.model.getChannels()
-        default:
-            break
-        }
-	}
-    
+        
     func send(event: ChannelsEvent) {
         switch event {
         case .refreshData:
             self.model?.refreshChannels()
         case .showChannel(let index):
-            break
-//            self.model?.showChannel(index: index)
-        case .followPressed:
-            self.model?.followPressed()
+            self.model?.showChannel(index: index)
+        case .subscribe(let index):
+            self.model?.subscribeAt(index: index)
         }
     }
 }

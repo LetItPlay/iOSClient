@@ -83,7 +83,7 @@ class ChannelsCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         subscribeButton.isSelected = selected
-        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
+//        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
         subscribeButton.backgroundColor = selected ? UIColor.clear : UIColor.vaActive
     }
     
@@ -91,7 +91,7 @@ class ChannelsCell: UITableViewCell {
 
 class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     
-    var source = [ChannelViewModel]()
+    var source = [MediumChannelViewModel]()
     
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
@@ -129,13 +129,13 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-        self.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         self.emitter?.send(event: LifeCycleEvent.appear)
 		self.tableView.reloadData()
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
         self.emitter?.send(event: LifeCycleEvent.disappear)
     }
     deinit {
@@ -152,8 +152,8 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     }
 
     func reloadChannels() {
-        if self.viewModel.channels is ChannelViewModel {
-            self.source = viewModel.channels as! [ChannelViewModel]
+        if let source: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
+            self.source = source
             self.tableView.reloadData()
             
             refreshControl?.endRefreshing()
@@ -178,7 +178,7 @@ extension ChannelsViewController {
 		cell.subAction = {[weak self] channel in
 			if let _ = channel {
 //                self?.presenter.select(station: station)
-                self?.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
+                self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
 			}
 		}
 //        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)

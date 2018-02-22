@@ -10,23 +10,23 @@ import Foundation
 import RealmSwift
 import RxSwift
 
-protocol ChannelVCModelProtocol: class, ModelProtocol {
-    weak var delegate: ChannelVCModelDelegate? {get set}
+protocol ChannelModelProtocol: class, ModelProtocol {
+    weak var delegate: ChannelModelDelegate? {get set}
 }
 
-protocol ChannelVCEvenHandler: class {
+protocol ChannelEvenHandler: class {
     func followPressed()
 }
 
-protocol ChannelVCModelDelegate: class {
+protocol ChannelModelDelegate: class {
     func reload(tracks: [TrackViewModel])
     func trackUpdate(index: Int, vm: TrackViewModel)
     func followUpdate(isSubscribed: Bool)
 }
 
-class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
+class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
-    var delegate: ChannelVCModelDelegate?
+    var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
     var token: NotificationToken?
@@ -104,7 +104,7 @@ class ChannelVCModel: ChannelVCModelProtocol, ChannelVCEvenHandler {
     }
 }
 
-extension ChannelVCModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
     func settingsUpdated() {
         
     }

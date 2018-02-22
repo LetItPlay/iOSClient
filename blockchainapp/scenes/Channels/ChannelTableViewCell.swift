@@ -77,10 +77,10 @@ class ChannelTableViewCell: UITableViewCell {
 	let subs: IconedLabel = IconedLabel(type: IconLabelType.subs)
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	
-	var subAction: (_ channel: ChannelViewModel?) -> Void = { _ in }
-    var viewModel: ChannelViewModel?
+	var subAction: (_ channel: MediumChannelViewModel?) -> Void = { _ in }
+    var viewModel: MediumChannelViewModel?
 	
-	weak var channel: ChannelViewModel? = nil {
+	weak var channel: MediumChannelViewModel? = nil {
 		didSet {
             self.viewModel = channel
             

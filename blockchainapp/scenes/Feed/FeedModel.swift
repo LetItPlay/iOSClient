@@ -18,6 +18,7 @@ protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
 	func trackUpdate(index: Int, vm: TrackViewModel)
     func noDataLeft()
+    func showChannels(_ show: Bool)
 }
 
 class FeedModel: FeedModelProtocol,
@@ -39,7 +40,6 @@ FeedEventHandler {
 	
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
-		
         
 		dataAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(stations: SubscribeManager.shared.stations, offset: offset, count: self.amount) : TracksRequest.trends(7))
@@ -72,6 +72,8 @@ FeedEventHandler {
             self.threshold = false
 			print("Track loaded")
 		}).disposed(by: self.disposeBag)
+        
+        
 		
         InAppUpdateManager.shared.subscribe(self)
 	}
@@ -81,7 +83,7 @@ FeedEventHandler {
         case .initialize:
             self.dataAction?.execute(0)
         case .appear:
-            break
+            self.delegate?.showChannels(!isFeed)
         case .disappear:
             break
         case .deinitialize:
@@ -100,11 +102,6 @@ FeedEventHandler {
         let track = self.tracks[index]
         let action: TrackAction = track.isLiked ? TrackAction.unlike : TrackAction.like
         ServerUpdateManager.shared.makeTrack(id: track.id, action: action)
-//        let track = self.tracks[index]
-//        track.likeCount += track.isLiked ? -1 : 1
-//        LikeManager.shared.addOrDelete(id: track.id)
-//        track.isLiked = LikeManager.shared.hasObject(id: track.id)
-//        self.tracks[index] = track
     }
     
     func reload() {

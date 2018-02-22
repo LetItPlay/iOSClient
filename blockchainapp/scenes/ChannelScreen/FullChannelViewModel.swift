@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FullChannelViewModel: ChannelViewModel {
+class FullChannelViewModel: MediumChannelViewModel {
     var description: String = ""
     
     override init(channel: Station) {

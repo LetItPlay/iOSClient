@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 enum ChannelScreen {
-    case small, medium, full
+    case small, medium
 }
 
 protocol ChannelsModelProtocol: class, ModelProtocol {
@@ -17,15 +17,14 @@ protocol ChannelsModelProtocol: class, ModelProtocol {
 }
 
 protocol ChannelsEventHandler: class {
-//    func showChannel(index: Int)
+    func showChannel(index: Int)
     func refreshChannels()
-    func followPressed()
+    func subscribeAt(index: Int)
 }
 
 protocol ChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
-    func followUpdate(isSubscribed: Bool)
-//    func showChannel(channel: FullChannelViewModel)
+    func showChannel(channel: FullChannelViewModel)
 }
 
 class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
@@ -37,7 +36,6 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     var token: NotificationToken?
     
     var channels = [Station]()
-    var currentChannelIndex: Int?
     
     init(channelScreen: ChannelScreen)
     {
@@ -46,13 +44,13 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         let realm = try! Realm()
         let results = realm.objects(Station.self)
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-            
+
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
                 self?.getChannelViewModels(channels: items.map({$0.detached()}))
-                
+
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                 if !indexes.isEmpty {
                     DispatchQueue.main.async {
@@ -71,12 +69,12 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                         }
                     }
                 }
-                
+
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
             }
-            
+
         })
     }
     
@@ -112,12 +110,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         case .medium:
             for channel in channels
             {
-                channelVMs.append(ChannelViewModel.init(channel: channel))
-            }
-        case .full:
-            for channel in channels
-            {
-                channelVMs.append(FullChannelViewModel.init(channel: channel))
+                channelVMs.append(MediumChannelViewModel.init(channel: channel))
             }
         default:
             break
@@ -132,21 +125,25 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         }
     }
     
-//    func showChannel(index: Int) {
+    func subscribeAt(index: Int) {
+        let channel = self.channels[index]
+//        let action: StationAction = channel.isSubscribed ? Station.unlike : TrackAction.like
+//        ServerUpdateManager.shared.makeStation(id: channel.id, action: .subscribe)
+    }
+    
+    func showChannel(index: Int) {
 //        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
-//    }
+    }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.refreshChannels()
+        case .appear:
+            self.refreshChannels()
         default:
             break
         }
-    }
-    
-    func followPressed() {
-        subManager.addOrDelete(station: self.channels[currentChannelIndex!].id)
     }
 }
 
@@ -161,10 +158,6 @@ extension ChannelsModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
         if self.channelScreen == .medium
         {
             self.refreshChannels()
-        }
-        else if self.channelScreen == .full
-        {
-            // TODO: change button title?
         }
     }
 }
