@@ -15,7 +15,6 @@ protocol ChannelsVMProtocol {
 
 protocol ChannelsVMDelegate: class  {
     func reloadChannels()
-//    func updateSubscription()
 }
 
 class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
@@ -36,10 +35,6 @@ class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
     
     func showChannel(channel: FullChannelViewModel) {
 //         TODO: to router
+        
     }
-    
-//    func followUpdate(isSubscribed: Bool) {
-//        self.isSubscribed = isSubscribed
-//        self.delegate?.updateSubscription()
-//    }
 }

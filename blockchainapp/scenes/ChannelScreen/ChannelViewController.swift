@@ -14,7 +14,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 	
 //    weak var station: Station!
-    weak var channel: FullChannelViewModel!
     var tracks: [[TrackViewModel]] = []
     
     var viewModel: ChannelVMProtocol!
@@ -23,10 +22,8 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 	var header: ChannelHeaderView = ChannelHeaderView()
 	var currentIndex: Int = -1
 	
-    init(channel: FullChannelViewModel, viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
+    init(viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
         super.init(nibName: nil, bundle: nil)
-        
-        self.channel = channel
         
         self.viewModel = viewModel
         self.viewModel.delegate = self
@@ -102,7 +99,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 			make.width.equalTo(self.view.frame.width)
 		}
 		
-		let height = self.header.fill(station: self.channel, width: self.view.frame.width)
+        let height = self.header.fill(station: self.viewModel.channel!, width: self.view.frame.width)
 		self.header.frame.size.height = height
 	}
 

@@ -16,4 +16,10 @@ class FullChannelViewModel: MediumChannelViewModel {
         
         self.description = channel.description
     }
+    
+    override init(channel: Station, isSubscribed: Bool) {
+        super.init(channel: channel, isSubscribed: isSubscribed)
+        
+        self.description = channel.description
+    }
 }

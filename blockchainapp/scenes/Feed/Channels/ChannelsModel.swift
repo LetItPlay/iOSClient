@@ -74,7 +74,6 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
             }
-
         })
     }
     
@@ -131,7 +130,8 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     }
     
     func showChannel(index: Int) {
-//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index], isSubscribed: stations.contains(channels[index].id)))
     }
     
     func send(event: LifeCycleEvent) {
@@ -148,9 +148,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 
 extension ChannelsModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
     func settingsUpdated() {
-        self.getData { _ in
-            
-        }
+        self.refreshChannels()
     }
     
     func stationSubscriptionUpdated() {
