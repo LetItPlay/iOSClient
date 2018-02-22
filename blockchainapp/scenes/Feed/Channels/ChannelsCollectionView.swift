@@ -122,4 +122,8 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         self.source = self.viewModel.channels
         self.channelsCollectionView.reloadData()
     }
+    
+    func showChannel(station: Station) {
+        self.delegate?.showChannel(station: station)
+    }
 }

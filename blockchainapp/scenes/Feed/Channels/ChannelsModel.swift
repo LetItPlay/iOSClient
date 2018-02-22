@@ -25,6 +25,7 @@ protocol ChannelsEventHandler: class {
 protocol ChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
     func showChannel(channel: FullChannelViewModel)
+    func showChannel(station: Station)
 }
 
 class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
@@ -131,7 +132,8 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     
     func showChannel(index: Int) {
         let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index], isSubscribed: stations.contains(channels[index].id)))
+//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index], isSubscribed: stations.contains(channels[index].id)))
+        self.delegate?.showChannel(station: channels[index])
     }
     
     func send(event: LifeCycleEvent) {

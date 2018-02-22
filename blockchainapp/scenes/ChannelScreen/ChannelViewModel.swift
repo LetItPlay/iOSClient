@@ -53,5 +53,9 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
         self.tracks[index] = vm
         self.delegate?.make(updates: [.update: [index]])
     }
+    
+    func getChannel(channel: FullChannelViewModel) {
+        self.channel = channel
+    }
 }
 

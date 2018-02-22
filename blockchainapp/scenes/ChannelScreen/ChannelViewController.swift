@@ -33,7 +33,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     
 //    init(station: Station) {
 //        super.init(nibName: nil, bundle: nil)
-//
 //        self.station = station
 //        self.presenter = ChannelPresenter(station: station)
 //        self.presenter.view = self
@@ -83,7 +82,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
 		self.tableView.tableHeaderView = self.header
-        
     }
 	
 	@objc func followPressed() {
@@ -95,12 +93,13 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		super.viewWillAppear(animated)
 		
 		self.header.snp.makeConstraints { (make) in
-//			make.height.equalTo(height)
+//            make.height.equalTo(height)
 			make.width.equalTo(self.view.frame.width)
 		}
 		
         let height = self.header.fill(station: self.viewModel.channel!, width: self.view.frame.width)
 		self.header.frame.size.height = height
+        self.emitter.send(event: LifeCycleEvent.appear)
 	}
 
     override func didReceiveMemoryWarning() {

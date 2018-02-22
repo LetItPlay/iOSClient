@@ -167,11 +167,12 @@ class FeedViewController: UIViewController, ChannelProtocol {
   }
     
   func showChannel(station: Station) {
-//      let vc = ChannelViewController(station: station)
-//      self.navigationController?.pushViewController(vc, animated: true)
+    
+      let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station])
+      self.navigationController?.pushViewController(vc, animated: true)
   }
     
-    func showChannel(_ channel: ChannelViewModel) {
+    func showChannel(_ channel: FullChannelViewModel) {
         // TODO: show channelViewModel
     }
 

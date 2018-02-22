@@ -16,12 +16,14 @@ protocol ChannelModelProtocol: class, ModelProtocol {
 
 protocol ChannelEvenHandler: class {
     func followPressed()
+    func set(station: Station)
 }
 
 protocol ChannelModelDelegate: class {
     func reload(tracks: [TrackViewModel])
     func trackUpdate(index: Int, vm: TrackViewModel)
     func followUpdate(isSubscribed: Bool)
+    func getChannel(channel: FullChannelViewModel)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -70,15 +72,23 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     func getData() {
         DownloadManager.shared.requestTracks(all: true, success: { (feed) in
-            
+            self.tracks = feed
+            self.getTrackViewModels()
         }) { (err) in
-            
+
         }
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
         token?.invalidate()
+    }
+    
+    func set(station: Station) {
+        self.channel = station
+        
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        self.delegate?.getChannel(channel: FullChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
     }
     
     func followPressed() {
@@ -98,6 +108,8 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         switch event {
         case .initialize:
             break
+        case .appear:
+            self.getData()
         default:
             break
         }
@@ -120,7 +132,7 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
     }
     
     func stationSubscriptionUpdated() {
-        
+        // TODO: change button title
     }
     
     func trackUpdated(track: Track1) {

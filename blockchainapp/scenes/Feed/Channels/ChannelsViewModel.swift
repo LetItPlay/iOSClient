@@ -15,6 +15,7 @@ protocol ChannelsVMProtocol {
 
 protocol ChannelsVMDelegate: class  {
     func reloadChannels()
+    func showChannel(station: Station)
 }
 
 class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
@@ -36,5 +37,9 @@ class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
     func showChannel(channel: FullChannelViewModel) {
 //         TODO: to router
         
+    }
+    
+    func showChannel(station: Station) {
+        self.delegate?.showChannel(station: station)
     }
 }
