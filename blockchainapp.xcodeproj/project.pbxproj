@@ -25,6 +25,7 @@
 		0160BB2520315AA400D7C3CB /* Station.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160BB2420315AA400D7C3CB /* Station.swift */; };
 		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
 		0195E8FB203E95D2005AC202 /* ChannelsVCModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195E8FA203E95D1005AC202 /* ChannelsVCModel.swift */; };
+		0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195E8FC203EE0ED005AC202 /* MainRouter.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
 		019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */; };
@@ -158,6 +159,7 @@
 		0160BB2420315AA400D7C3CB /* Station.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Station.swift; sourceTree = "<group>"; };
 		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
 		0195E8FA203E95D1005AC202 /* ChannelsVCModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelsVCModel.swift; sourceTree = "<group>"; };
+		0195E8FC203EE0ED005AC202 /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
 		019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelTableViewCell.swift; sourceTree = "<group>"; };
@@ -452,6 +454,7 @@
 				CF4453571F553FE400660474 /* models */,
 				CF44535F1F56C9D700660474 /* scenes */,
 				CF4453291F54139900660474 /* AppDelegate.swift */,
+				0195E8FC203EE0ED005AC202 /* MainRouter.swift */,
 				01FF31661FD16FBA00FB2B9E /* Assets.xcassets */,
 				CF4453351F54139900660474 /* Info.plist */,
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
@@ -901,6 +904,7 @@
 				36F613D0202DA7C300661E48 /* (null) in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
 				3626C8CB2036A6200016772B /* SearchController.swift in Sources */,
+				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				365654022035A4550072087F /* PlaylistViewModel.swift in Sources */,
 				0160BB2520315AA400D7C3CB /* Station.swift in Sources */,

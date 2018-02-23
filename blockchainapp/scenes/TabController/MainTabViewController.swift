@@ -9,7 +9,9 @@
 import UIKit
 
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
-		
+	
+	let router: MainRouter = MainRouter()
+	
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
 	var playerIsShowed: Bool = false
@@ -17,18 +19,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
 		
-		let tabs: [(String, (UIImage?, UIViewController))] = [
-			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
-			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-            ("Search".localized, (UIImage.init(named: "searchTab"), SearchBuilder.build(params: nil))),
-            ("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
-		
-		self.viewControllers = tabs.map({ (tuple) -> UINavigationController in
-			let nvc = UINavigationController(rootViewController: tuple.1.1)
-			tuple.1.1.title = tuple.0
-			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
-			return nvc
-		})
+		self.viewControllers = router.initialViewControllers
 		
 		self.playerController.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
@@ -117,7 +108,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
     }
 }
 
-class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
+extension MainTabViewController: UITabBarControllerDelegate {
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if let nc = viewController as? UINavigationController,
@@ -136,23 +127,15 @@ class MainTabBarDelegate: NSObject, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        self.tabSelected(controller: controllersNames[tabBarController.selectedIndex])
+		if let title = self.viewControllers?[self.selectedIndex].tabBarItem.title {
+			self.tabSelected(controller: title)
+		}
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
-        if let nc = viewController as? UINavigationController,
-            let root = nc.viewControllers.first {
-            if root is FeedViewController {
-//                AppManager.shared.audioPlayer?.showPlayer()
-            }
-            
-//            if (root is ChannelsViewController || root is AboutViewController)
-//                && !AppManager.shared.audioManager.isPlaying {
-//                AppManager.shared.audioPlayer?.hidePlayer()
-//            }
+        if let nc = viewController as? UINavigationController {
+			self.router.currentNavigationController = nc
         }
     }
-    
-    let controllersNames = ["Feed", "Trends", "Search", "Profile"]
-    
+	
     func tabSelected(controller: String)
     {
         AnalyticsEngine.sendEvent(event: .tabSelected(controller: controller))

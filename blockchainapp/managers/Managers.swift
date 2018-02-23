@@ -23,11 +23,9 @@ class AppManager {
     
 //    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
 	
-    private let tabDelegate = MainTabBarDelegate()
     public var rootTabBarController: MainTabViewController? {
         didSet {
             if rootTabBarController != nil {
-                rootTabBarController?.delegate = tabDelegate
             }
         }
     }
