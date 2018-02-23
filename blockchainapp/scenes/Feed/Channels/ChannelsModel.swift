@@ -8,6 +8,10 @@
 import Foundation
 import RealmSwift
 
+enum ChannelScreen {
+    case small, medium
+}
+
 protocol ChannelsModelProtocol: class, ModelProtocol {
     weak var delegate: ChannelsModelDelegate? {get set}
 }
@@ -15,6 +19,7 @@ protocol ChannelsModelProtocol: class, ModelProtocol {
 protocol ChannelsEventHandler: class {
     func showChannel(index: Int)
     func refreshChannels()
+    func subscribeAt(index: Int)
 }
 
 protocol ChannelsModelDelegate: class {
@@ -24,24 +29,28 @@ protocol ChannelsModelDelegate: class {
 
 class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 
+    var channelScreen: ChannelScreen!
+    
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
     var token: NotificationToken?
     
     var channels = [Station]()
     
-    init()
+    init(channelScreen: ChannelScreen)
     {
+        self.channelScreen = channelScreen
+        
         let realm = try! Realm()
         let results = realm.objects(Station.self)
         token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-            
+
             switch changes {
             case .initial:
                 // Results are now populated and can be accessed without blocking the UI
                 let items = Array(results.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})).filter({$0.lang == UserSettings.language.rawValue})
                 self?.getChannelViewModels(channels: items.map({$0.detached()}))
-                
+
                 let indexes = items.enumerated().flatMap({ (n, e) in return self!.subManager.hasStation(id: e.id) ? n : nil })
                 if !indexes.isEmpty {
                     DispatchQueue.main.async {
@@ -60,12 +69,12 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
                         }
                     }
                 }
-                
+
             case .error(let error):
                 // An error occurred while opening the Realm file on the background worker thread
                 fatalError("\(error)")
             }
-            
+
         })
     }
     
@@ -82,47 +91,72 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         }
     }
     
-    func select(station: Station) {
-        subManager.addOrDelete(station: station.id)
-    }
-    
     func getChannelViewModels(channels: [Station])
     {
         self.channels = channels
         
         var channelVMs = [SmallChannelViewModel]()
-        for channel in channels
-        {
-            channelVMs.append(SmallChannelViewModel.init(channel: channel))
+        
+        switch channelScreen {
+        case .small:
+            for channel in channels
+            {
+                channelVMs.append(SmallChannelViewModel.init(channel: channel))
+            }
+        case .medium:
+            let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+            
+            for channel in channels
+            {
+                channelVMs.append(MediumChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
+            }
+        default:
+            break
         }
         
         self.delegate?.reload(newChannels: channelVMs)
     }
     
-    func refreshChannels() {
+    func refreshChannels(){
         self.getData { [weak self] (channels) in
             self?.getChannelViewModels(channels: channels.map({$0.detached()}))
         }
     }
     
+    func subscribeAt(index: Int) {
+        let channel = self.channels[index]
+//        let action: StationAction = channel.isSubscribed ? Station.unlike : TrackAction.like
+//        ServerUpdateManager.shared.makeStation(id: channel.id, action: .subscribe)
+        subManager.addOrDelete(station: channel.id)
+    }
+    
     func showChannel(index: Int) {
-        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
+//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index]))
     }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.refreshChannels()
+        case .appear:
+            self.refreshChannels()
         default:
             break
         }
     }
 }
 
-extension ChannelsModel: SettingsUpdateProtocol {
+extension ChannelsModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
     func settingsUpdated() {
         self.getData { _ in
             
+        }
+    }
+    
+    func stationSubscriptionUpdated() {
+        if self.channelScreen == .medium
+        {
+            self.refreshChannels()
         }
     }
 }

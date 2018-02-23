@@ -83,4 +83,8 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     func noDataLeft() {
         self.endReached = true
     }
+    
+    func showChannels(_ show: Bool) {
+        self.showChannels = show
+    }
 }

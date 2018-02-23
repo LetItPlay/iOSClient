@@ -83,20 +83,20 @@ class ChannelsCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         subscribeButton.isSelected = selected
-        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
+//        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
         subscribeButton.backgroundColor = selected ? UIColor.clear : UIColor.vaActive
     }
     
 }
 
-class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
+class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     
-    var source = [ChannelViewModel]()
+    var source = [MediumChannelViewModel]()
     
-    var emitter: ChannelsVCEmitterProtocol?
-    var viewModel: ChannelsVCViewModel!
+    var emitter: ChannelsEmitterProtocol?
+    var viewModel: ChannelsViewModel!
     
-    convenience init(emitter: ChannelsVCEmitterProtocol, viewModel: ChannelsVCViewModel)
+    convenience init(emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
     {
         self.init(nibName: nil, bundle: nil)
         
@@ -129,13 +129,13 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
-        self.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         self.emitter?.send(event: LifeCycleEvent.appear)
 		self.tableView.reloadData()
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
         self.emitter?.send(event: LifeCycleEvent.disappear)
     }
     deinit {
@@ -143,7 +143,7 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
     }
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-        self.emitter?.send(event: ChannelsVCEvent.refreshData)
+        self.emitter?.send(event: ChannelsEvent.refreshData)
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,10 +152,12 @@ class ChannelsViewController: UITableViewController, ChannelsVCVMDelegate {
     }
 
     func reloadChannels() {
-        self.source = viewModel.channels
-        self.tableView.reloadData()
-        
-        refreshControl?.endRefreshing()
+        if let source: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
+            self.source = source
+            self.tableView.reloadData()
+            
+            refreshControl?.endRefreshing()
+        }
     }
 }
 
@@ -176,7 +178,7 @@ extension ChannelsViewController {
 		cell.subAction = {[weak self] channel in
 			if let _ = channel {
 //                self?.presenter.select(station: station)
-                self?.emitter?.send(event: ChannelsVCEvent.showChannel(index: indexPath))
+                self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
 			}
 		}
 //        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)

@@ -8,30 +8,30 @@
 
 import Foundation
 
-protocol ChannelVCVMProtocol {
+protocol ChannelVMProtocol {
     var channel: FullChannelViewModel? {get}
     var isSubscribed: Bool {get set}
     var tracks: [TrackViewModel] {get}
     
-    weak var delegate: ChannelVCVMDelegate? {get set}
+    weak var delegate: ChannelVMDelegate? {get set}
 }
 
-protocol ChannelVCVMDelegate: class {
+protocol ChannelVMDelegate: class {
     func reloadTracks()
     func make(updates: [CollectionUpdate: [Int]])
     func updateSubscription()
 }
 
-class ChannelVCViewModel: ChannelVCVMProtocol, ChannelVCModelDelegate {
+class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
 
     var channel: FullChannelViewModel?
     var isSubscribed: Bool = false
     var tracks: [TrackViewModel] = []
     
-    weak var delegate: ChannelVCVMDelegate?
-    var model: ChannelVCModelProtocol!
+    weak var delegate: ChannelVMDelegate?
+    var model: ChannelModelProtocol!
     
-    init(model: ChannelVCModelProtocol)
+    init(model: ChannelModelProtocol)
     {
         self.model = model
         self.model.delegate = self
@@ -54,3 +54,4 @@ class ChannelVCViewModel: ChannelVCVMProtocol, ChannelVCModelDelegate {
         self.delegate?.make(updates: [.update: [index]])
     }
 }
+

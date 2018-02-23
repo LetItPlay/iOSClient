@@ -8,28 +8,29 @@
 
 import Foundation
 
-enum ChannelVCEvent {
+enum ChannelEvent {
     case followPressed
 }
 
-protocol ChannelVCEmitterProtocol: LifeCycleHandlerProtocol {
-    func send(event: ChannelVCEvent)
+protocol ChannelEmitterProtocol: LifeCycleHandlerProtocol {
+    func send(event: ChannelEvent)
 }
 
-class ChannelVCEmitter: Emitter, ChannelVCEmitterProtocol {
+class ChannelEmitter: Emitter, ChannelEmitterProtocol {
     
-    weak var model: ChannelVCEvenHandler?
+    weak var model: ChannelEvenHandler?
     
-    convenience init(model: ChannelVCEvenHandler)
+    convenience init(model: ChannelEvenHandler)
     {
         self.init(handler: model as! ModelProtocol)
         self.model = model
     }
     
-    func send(event: ChannelVCEvent) {
+    func send(event: ChannelEvent) {
         switch event {
         case .followPressed:
             self.model?.followPressed()
         }
     }
 }
+

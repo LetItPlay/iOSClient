@@ -7,8 +7,14 @@
 
 import Foundation
 
+enum ChannelsEvent {
+    case showChannel(index: Int)
+    case refreshData
+    case subscribe(index: Int)
+}
+
 protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
-    func showChannel(index: Int)
+    func send(event: ChannelsEvent)
 }
 
 class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
@@ -18,16 +24,15 @@ class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
         self.init(handler: model as! ModelProtocol)
         self.model = model
     }
-    
-    func state(_ state: LifeCycleEvent) {
-        switch state {
-//        case .initialize:
-//            self.model.getChannels()
-        default:
-            break
+        
+    func send(event: ChannelsEvent) {
+        switch event {
+        case .refreshData:
+            self.model?.refreshChannels()
+        case .showChannel(let index):
+            self.model?.showChannel(index: index)
+        case .subscribe(let index):
+            self.model?.subscribeAt(index: index)
         }
-	}
-    func showChannel(index: Int) {
-        self.model?.showChannel(index: index)
     }
 }

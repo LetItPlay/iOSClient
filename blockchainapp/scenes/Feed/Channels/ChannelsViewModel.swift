@@ -15,10 +15,11 @@ protocol ChannelsVMProtocol {
 
 protocol ChannelsVMDelegate: class  {
     func reloadChannels()
+//    func updateSubscription()
 }
 
-class ChannelsViewModel: ChannelsModelDelegate {
-
+class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
+    
     var channels: [SmallChannelViewModel] = []
     weak var delegate: ChannelsVMDelegate?
     var model: ChannelsModelProtocol!
@@ -34,6 +35,11 @@ class ChannelsViewModel: ChannelsModelDelegate {
     }
     
     func showChannel(channel: FullChannelViewModel) {
-        // TODO: to router
+//         TODO: to router
     }
+    
+//    func followUpdate(isSubscribed: Bool) {
+//        self.isSubscribed = isSubscribed
+//        self.delegate?.updateSubscription()
+//    }
 }
