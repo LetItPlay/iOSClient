@@ -101,7 +101,7 @@ FeedEventHandler {
     func trackLiked(index: Int) {
         let track = self.tracks[index]
         let action: TrackAction = track.isLiked ? TrackAction.unlike : TrackAction.like
-        ServerUpdateManager.shared.makeTrack(id: track.id, action: action)
+        ServerUpdateManager.shared.make(track: track, action: action)
     }
     
     func reload() {

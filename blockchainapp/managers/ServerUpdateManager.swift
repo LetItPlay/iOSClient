@@ -27,7 +27,7 @@ class ServerUpdateManager {
     
     let disposeBag = DisposeBag()
 	
-	func makeStation(id: Int, action: StationAction) {
+	func make(channel: Station1, action: StationAction) {
         let type: ChannelUpdateRequest
         switch action {
         case .subscribe:
@@ -37,12 +37,12 @@ class ServerUpdateManager {
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.channelUpdate(id: id, type: type).subscribe(onNext: { (channel) in
+        RequestManager.shared.update(channel: channel, type: type).subscribe(onNext: { (channel) in
             NotificationCenter.default.post(name: InAppUpdateNotification.station.notification(), object: nil, userInfo: ["id" : channel])
         }).disposed(by: disposeBag)
 	}
 	
-	func makeTrack(id: Int, action: TrackAction) {
+	func make(track: Track1, action: TrackAction) {
         let type: TrackUpdateRequest
         switch action {
         case .listen:
@@ -54,8 +54,12 @@ class ServerUpdateManager {
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.trackUpdate(id: id, type: type).subscribe(onNext: { (track) in
-            NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["id": track])
+        RequestManager.shared.update(track: track, type: type).subscribe(onNext: { (tuple) in
+            var track = track
+            track.likeCount = tuple.0
+            track.reportCount = tuple.1
+            track.listenCount = tuple.2
+            NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["track": track])
         }).disposed(by: disposeBag)
 	}
     

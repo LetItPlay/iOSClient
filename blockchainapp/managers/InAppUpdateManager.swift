@@ -117,7 +117,7 @@ class InAppUpdateManager {
     
     @objc func trackChanged(notification: Notification) {
         if let track = notification.userInfo?["track"] as? Track1 {
-            for box in self.observers[.station] ?? [] {
+            for box in self.observers[.track] ?? [] {
                 (box.value as? TrackUpdateProtocol)?.trackUpdated(track: track)
             }
         }

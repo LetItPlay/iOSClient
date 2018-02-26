@@ -266,7 +266,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
+        cell.onLike = {[weak self] track in
+            self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+        }
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
 	
