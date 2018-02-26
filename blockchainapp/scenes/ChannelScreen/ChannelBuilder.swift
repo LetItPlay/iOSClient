@@ -10,7 +10,7 @@ import UIKit
 
 class ChannelBuilder: Builder {
 	static func build(params: [String : Any]?) -> UIViewController? {
-		if let id = params?["id"] as? Int, let station = params?["station"] as? Station1 {
+		if let id = params?["id"] as? Int {
 			let model = ChannelModel(channelID: id)
 			let cvm = ChannelViewModel(model: model)
 			let fcvm = FullChannelViewModel(channel: station)

@@ -52,7 +52,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 		
 		self.getChannelsAction.elements.subscribe(onNext: { stations in
 			self.channels = stations
-			self.delegate?.reload(newChannels: self.channels.map({SmallChannelViewModel.init(channel: $0)}))
+			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
 		}).disposed(by: disposeBag)
 		
     }

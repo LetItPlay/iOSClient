@@ -64,6 +64,29 @@ class RequestManager {
     static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
+	func channel(id: Int) -> Observable<Station1> {
+		let urlString = RequestManager.server + "/stations/\(id)"
+		if let url = URL(string: urlString) {
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<Station1> in
+				switch result {
+				case .value(let data):
+					if let json = try? JSON(data: data), var station: Station1 = Station1(json: json) {
+						let lm = LikeManager.shared
+						station.isSubscribed = lm.hasObject(id: station.id)
+						return Observable.just(station)
+					} else {
+						return Observable.error(RequestError.invalidJSON)
+					}
+				case .error(let error):
+					return Observable.error(error)
+				}
+			})
+		}
+		return Observable.error(RequestError.invalidURL)
+	}
+	
     func tracks(req: TracksRequest) -> Observable<([Track1],[Station1])> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {

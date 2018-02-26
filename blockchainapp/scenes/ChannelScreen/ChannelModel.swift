@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import RxSwift
+import Action
 
 protocol ChannelModelProtocol: class, ModelProtocol {
     weak var delegate: ChannelModelDelegate? {get set}
@@ -29,56 +30,50 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
-    var token: NotificationToken?
     var channel: Station!
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     var subManager = SubscribeManager.shared
+	
+	let getTracksAction: Action<Int, ([Track1],[Station1])>!
+	let disposeBag = DisposeBag()
     
     init(channelID: Int)
     {
-        let realm = try! Realm()
-        let stationResults = realm.objects(Station.self).filter("id == \(channelID)")
-        self.channel = stationResults[0]
-        
-        let results = realm.objects(Track.self).filter("station == \(channel.id)").sorted(byKeyPath: "publishedAt", ascending: false)
-        token = results.observe({ [weak self] (changes: RealmCollectionChange) in
-            let filter: (Track) -> Bool = {$0.station == self?.channel.id}
-            switch changes {
-            case .initial:
-                // Results are now populated and can be accessed without blocking the UI
-//                self?.tracks = [Array(results)]
-                break
-            case .update(_, _, _, _):
-                // Query results have changed, so apply them to the UITableView
-//                self?.tracks = [Array(results).filter(filter)]
-                break
-                
-            case .error(let error):
-                // An error occurred while opening the Realm file on the background worker thread
-                fatalError("\(error)")
-            }
-            self?.getTrackViewModels()
-        })
+		getTracksAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
+			return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
+		})
+		
+		getTracksAction.elements
+			.map({ (tuple) -> [TrackViewModel] in
+				let playingId = AudioController.main.currentTrack?.id
+				return tuple.0.map({ (track) -> TrackViewModel in
+					var vm = TrackViewModel(track: track,
+											isPlaying: track.id == playingId)
+					if let station = tuple.1.filter({$0.id == track.stationId}).first {
+						vm.authorImage = station.image
+						vm.author = station.name
+					}
+					return vm
+				})
+			}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
+				self.delegate?.reload(tracks: vms)
+			}, onCompleted: {
+				print("Track loaded")
+			}).disposed(by: self.disposeBag)
 
         InAppUpdateManager.shared.subscribe(self)
-        
-        self.getData()
+		
+		self.getData()
     }
     
     func getData() {
-        DownloadManager.shared.requestTracks(all: true, success: { (feed) in
-            
-        }) { (err) in
-            
-        }
+        self.getTracksAction.execute(0)
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self)
-        token?.invalidate()
     }
     
     func followPressed() {
