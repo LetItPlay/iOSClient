@@ -54,7 +54,7 @@ class ChannelsCell: UITableViewCell {
         return 164/* image */ + 13/* pad */ + 13/* pad */
     }
     
-    weak var channel: Station? = nil {
+    weak var channel: Channel? = nil {
         didSet {
             nameLabel.text = channel?.name
             subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
@@ -160,8 +160,8 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
         }
     }
     
-    func showChannel(station: Station1) {
-		if let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station]){
+    func showChannel(channel: Channel1) {
+		if let vc = ChannelBuilder.build(params: ["id" : channel.id, "station" : channel]){
         	self.navigationController?.pushViewController(vc, animated: true)
 		}
     }
@@ -179,8 +179,8 @@ extension ChannelsViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
-		let station = source[indexPath.row]
-        cell.channel = station
+		let channel = source[indexPath.row]
+        cell.channel = channel
 		cell.subAction = {[weak self] channel in
 			if let _ = channel {
 //                self?.presenter.select(station: station)

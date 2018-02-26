@@ -20,11 +20,10 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
     
     weak var model: ChannelEvenHandler?
     
-    convenience init(model: ChannelEvenHandler, station: Station1)
+    convenience init(model: ChannelEvenHandler)
     {
         self.init(handler: model as! ModelProtocol)
         self.model = model
-        self.model?.set(station: station)
     }
     
     func send(event: ChannelEvent) {
@@ -32,7 +31,7 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
         case .followPressed:
             self.model?.followPressed()
 //        case .station(let station):
-//            self.model?.set(station: station)
+//            self.model?.set(station: channel)
         }
     }
 }

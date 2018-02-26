@@ -19,25 +19,25 @@ class DBManager {
         return realm.object(ofType: Track.self, forPrimaryKey: byId)
     }
     
-	func addOrUpdateStation(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
-        if let station = inRealm.object(ofType: Station.self, forPrimaryKey: id) {
-            _ = updateIfNeeded(property: &station.name, new: name)
-            _ = updateIfNeeded(property: &station.image, new: image.buildImageURL()?.absoluteString ?? "")
-            _ = updateIfNeeded(property: &station.subscriptionCount, new: subscriptionCount)
-			_ = updateIfNeeded(property: &station.lang, new: lang)
-			_ = updateIfNeeded(property: &station.trackCount, new: Int64(inRealm.objects(Track.self).filter("station == \(id)").count))
+	func addOrUpdateChannel(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
+        if let channel = inRealm.object(ofType: Channel.self, forPrimaryKey: id) {
+            _ = updateIfNeeded(property: &channel.name, new: name)
+            _ = updateIfNeeded(property: &channel.image, new: image.buildImageURL()?.absoluteString ?? "")
+            _ = updateIfNeeded(property: &channel.subscriptionCount, new: subscriptionCount)
+			_ = updateIfNeeded(property: &channel.lang, new: lang)
+			_ = updateIfNeeded(property: &channel.trackCount, new: Int64(inRealm.objects(Track.self).filter("station == \(id)").count))
 			if let tags = tags {
 				tags.forEach({ (tag) in
-					if let tagString = tag, !station.tags.contains(where: {$0.value == tagString}) {
+					if let tagString = tag, !channel.tags.contains(where: {$0.value == tagString}) {
 						let tag = Tag.init()
 						tag.value = tagString
 						let rlmTag = inRealm.create(Tag.self, value: tag, update: true)
-						station.tags.append(rlmTag)
+						channel.tags.append(rlmTag)
 					}
 				})
 			}
         } else {
-            let newStat = Station()
+            let newStat = Channel()
             newStat.id = id
             newStat.name = name
             newStat.image = image.buildImageURL()?.absoluteString ?? ""
@@ -60,7 +60,7 @@ class DBManager {
         }
     }
     
-	func addOrUpdateTrack(inRealm: Realm, id: Int, station: Int, name: String, url: String, length: Int64, description: String, coverURL: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: [String?]?, publishDate: String, lang: String) {
+	func addOrUpdateTrack(inRealm: Realm, id: Int, channel: Int, name: String, url: String, length: Int64, description: String, coverURL: String, likeCount: Int, reportCount: Int, listenCount: Int, tags: [String?]?, publishDate: String, lang: String) {
 		
 		let formatter = DateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -69,7 +69,7 @@ class DBManager {
 		
         if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
             var changeCounter = 0
-            changeCounter += updateIfNeeded(property: &track.station, new: station)
+            changeCounter += updateIfNeeded(property: &track.channel, new: channel)
             changeCounter += updateIfNeeded(property: &track.name, new: name)
             changeCounter += updateIfNeeded(property: &track.desc, new: description)
             changeCounter += updateIfNeeded(property: &track.likeCount, new: likeCount)
@@ -99,7 +99,7 @@ class DBManager {
         } else {
             let newTrack = Track()
             newTrack.id = id
-            newTrack.station = station
+            newTrack.channel = channel
             newTrack.name = name
             newTrack.url  = url.buildImageURL()?.absoluteString ?? ""
             newTrack.desc = description
@@ -147,11 +147,11 @@ extension DBManager {
 			let audioURL = fromJSON["AudioURL"].string,
 			let publishedAt = fromJSON["PublishedAt"].string,
 			let lang = fromJSON["Lang"].string,
-			let station = fromJSON["StationID"].int {
+			let channel = fromJSON["StationID"].int {
 			
 			addOrUpdateTrack(inRealm: realm,
 							 id: idInt,
-							 station: station,
+							 channel: channel,
 							 name: title,
 							 url: audioURL,
 							 length: fromJSON["TotalLengthInSeconds"].int64 ?? 0,
@@ -166,7 +166,7 @@ extension DBManager {
         } else if let idInt = fromJSON["id"].int {
             addOrUpdateTrack(inRealm: realm,
                              id: idInt,
-                             station: fromJSON["station"].int ?? 0,
+                             channel: fromJSON["station"].int ?? 0,
                              name: fromJSON["name"].string ?? "",
                              url: fromJSON["audio_file"]["file"].string ?? "",
                              length: fromJSON["audio_file"]["length_seconds"].int64 ?? 0,

@@ -26,7 +26,7 @@ protocol PlaylistsModelDelegate: class {
 
 class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     var tracks: [Track] = []
-    var channels: [Station] = []
+    var channels: [Channel] = []
     
     let realm: Realm? = try? Realm()
     
@@ -49,7 +49,7 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     func getData() {
         RequestManager.shared.tracks(req: .magic).subscribe(onNext: { (tuple) in
             let tracklist = tuple.0.map({ (track) -> AudioTrack in
-                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.stationId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
+                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.channelId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
             })
             self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: tracklist)]
             self.getPlaylistViewModels()

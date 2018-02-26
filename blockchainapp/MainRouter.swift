@@ -42,7 +42,7 @@ class MainRouter: Router {
 		var vc: UIViewController?
 		switch id {
 		case "channel":
-			
+			vc = ChannelBuilder.build(params: params)
 			break
 		case "allChannels":
 			vc = ChannelsBuilder.build(params: params)

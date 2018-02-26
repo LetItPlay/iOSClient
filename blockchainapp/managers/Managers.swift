@@ -14,7 +14,7 @@ import RealmSwift
 import RxSwift
 import Action
 
-typealias ChannelsLoaderSuccess = ([Station]) -> Void
+typealias ChannelsLoaderSuccess = ([Channel]) -> Void
 typealias TracksLoaderSuccess = ([Track]) -> Void
 typealias ChannelsLoaderFail = (Error?) -> Void
 
@@ -38,19 +38,19 @@ class DownloadManager {
     
     enum urlServices: String {
         case audiofiles = "https://manage.letitplay.io/api/audiofiles/"
-        case stations = "https://api.letitplay.io/stations"
+        case channels = "https://api.letitplay.io/stations"
         case tracks = "https://api.letitplay.io/tracks"
-        case tracksForStations = "https://api.letitplay.io/tracks/stations/"
-        case subForStations = "https://manage.letitplay.io/api/stations/%d/counts/"
+        case tracksForChannels = "https://api.letitplay.io/tracks/stations/"
+        case subForChannels = "https://manage.letitplay.io/api/stations/%d/counts/"
         case forTracks = "https://manage.letitplay.io/api/tracks/%d/counts/"
     }
     
     static let shared = DownloadManager()
 	
-	func channelsSignal() -> Observable<[Station]> {
-		return Observable<[Station]>.create { (observer) -> Disposable in
+	func channelsSignal() -> Observable<[Channel]> {
+		return Observable<[Channel]>.create { (observer) -> Disposable in
 			
-			if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+			if let str = urlServices.channels.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
 				let url = URL(string: str) {
 				
 				let request = URLRequest(url: url)
@@ -69,12 +69,12 @@ class DownloadManager {
 					do {
 						let json  = try JSON(data: data)
 						if let array = json.array {
-							let stations = array.map({ Station.init(json: $0) }).filter({$0 != nil}).map({$0!})
-							observer.onNext(stations)
+							let channels = array.map({ Channel.init(json: $0) }).filter({$0 != nil}).map({$0!})
+							observer.onNext(channels)
 							let realm = try Realm()
 							try realm.write {
-								realm.delete(realm.objects(Station.self))
-								realm.add(stations, update: true)
+								realm.delete(realm.objects(Channel.self))
+								realm.add(channels, update: true)
 //								for jStation in json.array ?? [] {
 //									if let idInt = jStation["Id"].int {
 //										DBManager.shared.addOrUpdateStation(inRealm: realm,
@@ -107,7 +107,7 @@ class DownloadManager {
 	}
 	
     func requestChannels(success: @escaping ChannelsLoaderSuccess, fail: @escaping ChannelsLoaderFail) {
-        if let str = urlServices.stations.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+        if let str = urlServices.channels.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
             
             let request = URLRequest(url: url)
@@ -127,18 +127,18 @@ class DownloadManager {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
                     try realm.write {
-						realm.delete(realm.objects(Station.self))
-                        for jStation in json.array ?? [] {
-                            if let idInt = jStation["Id"].int {
-                                DBManager.shared.addOrUpdateStation(inRealm: realm,
+						realm.delete(realm.objects(Channel.self))
+                        for jChannel in json.array ?? [] {
+                            if let idInt = jChannel["Id"].int {
+                                DBManager.shared.addOrUpdateChannel(inRealm: realm,
                                                                     id: idInt,
-                                                                    name: jStation["Name"].string ?? "",
-                                                                    image: jStation["ImageURL"].string ?? "",
-                                                                    subscriptionCount: jStation["SubscriptionCount"].int ?? 0,
-                                                                    tags: jStation["Tags"].array?.map({$0.string}),
-																	lang: jStation["Lang"].string ?? "ru")
+                                                                    name: jChannel["Name"].string ?? "",
+                                                                    image: jChannel["ImageURL"].string ?? "",
+                                                                    subscriptionCount: jChannel["SubscriptionCount"].int ?? 0,
+                                                                    tags: jChannel["Tags"].array?.map({$0.string}),
+																	lang: jChannel["Lang"].string ?? "ru")
                             } else {
-                                print("ERROR: no id in \(jStation)")
+                                print("ERROR: no id in \(jChannel)")
                             }
                         }
                     }
@@ -229,8 +229,8 @@ class DownloadManager {
         }
     }
     
-    func subscribe(onStation: Int, withCount: Int = 1) {
-        if let str = String(format: urlServices.subForStations.rawValue, onStation).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+    func subscribe(onChannel: Int, withCount: Int = 1) {
+        if let str = String(format: urlServices.subForChannels.rawValue, onChannel).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) {
             
             var request = URLRequest(url: url)
@@ -308,7 +308,7 @@ class SubscribeManager {
     }
     
     init() {
-        stations = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        channels = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
         listenedTracks = (UserDefaults.standard.array(forKey: "listen_tracks") as? [Int]) ?? []
         
 //        NotificationCenter.default.addObserver(self,
@@ -341,46 +341,46 @@ class SubscribeManager {
     
     static let shared = SubscribeManager()
     
-	private (set) internal var stations = [Int]()
+	private (set) internal var channels = [Int]()
     private var listenedTracks = [Int]()
     
     public func requestString() -> String {
-        return stations.map{ "\($0)" }.joined(separator: ",")
+        return channels.map{ "\($0)" }.joined(separator: ",")
     }
     
-    public func addOrDelete(station: Int) {
-        if hasStation(id: station) {
-            removeStation(id: station)
+    public func addOrDelete(channel: Int) {
+        if hasChannel(id: channel) {
+            removeChannel(id: channel)
         } else {
-            addStation(id: station)
+            addChannel(id: channel)
         }
         
-        UserDefaults.standard.set(stations, forKey: "array_sub")
+        UserDefaults.standard.set(channels, forKey: "array_sub")
     }
     
-    public func hasStation(id: Int) -> Bool {
-        return stations.contains(id)
+    public func hasChannel(id: Int) -> Bool {
+        return channels.contains(id)
     }
     
-    private func addStation(id: Int) {
-        objc_sync_enter(stations)
-        stations.append(id)
-        objc_sync_exit(stations)
+    private func addChannel(id: Int) {
+        objc_sync_enter(channels)
+        channels.append(id)
+        objc_sync_exit(channels)
         
         debugPrint("user subscribed on \(id)")
         NotificationCenter.default.post(name: NotificationName.added.notification,
                                         object: nil,
                                         userInfo: ["id": id])
         
-        DownloadManager.shared.subscribe(onStation: id)
+        DownloadManager.shared.subscribe(onChannel: id)
     }
     
-    private func removeStation(id: Int) {
-        objc_sync_enter(stations)
-        if let index = stations.index(of: id) {
-            stations.remove(at: index)
+    private func removeChannel(id: Int) {
+        objc_sync_enter(channels)
+        if let index = channels.index(of: id) {
+            channels.remove(at: index)
         }
-        objc_sync_exit(stations)
+        objc_sync_exit(channels)
         
 //        let realm = try! Realm()
 //        try? realm.write {
@@ -392,7 +392,7 @@ class SubscribeManager {
                                         object: nil,
                                         userInfo: ["id": id])
         
-        DownloadManager.shared.subscribe(onStation: id, withCount: -1)
+        DownloadManager.shared.subscribe(onChannel: id, withCount: -1)
     }
     
 }
@@ -400,10 +400,10 @@ class SubscribeManager {
 class LikeManager {
     static let shared = LikeManager()
     
-    private var stations = [Int]()
+    private var channels = [Int]()
     
     init() {
-        stations = (UserDefaults.standard.array(forKey: "array_like") as? [Int]) ?? []
+        channels = (UserDefaults.standard.array(forKey: "array_like") as? [Int]) ?? []
     }
     
     public func addOrDelete(id: Int) {
@@ -413,17 +413,17 @@ class LikeManager {
             like(id: id)
         }
         
-        UserDefaults.standard.set(stations, forKey: "array_like")
+        UserDefaults.standard.set(channels, forKey: "array_like")
     }
     
     public func hasObject(id: Int) -> Bool {
-        return stations.contains(id)
+        return channels.contains(id)
     }
     
     private func like(id: Int) {
-        objc_sync_enter(stations)
-        stations.append(id)
-        objc_sync_exit(stations)
+        objc_sync_enter(channels)
+        channels.append(id)
+        objc_sync_exit(channels)
         
         debugPrint("user like on \(id)")
         
@@ -431,11 +431,11 @@ class LikeManager {
     }
     
     private func dislike(id: Int) {
-        objc_sync_enter(stations)
-        if let index = stations.index(of: id) {
-            stations.remove(at: index)
+        objc_sync_enter(channels)
+        if let index = channels.index(of: id) {
+            channels.remove(at: index)
         }
-        objc_sync_exit(stations)
+        objc_sync_exit(channels)
         
         debugPrint("user dislike on \(id)")
         
@@ -446,27 +446,27 @@ class LikeManager {
 class ListenManager {
     static let shared = ListenManager()
     
-    private var stations = [Int]()
+    private var channels = [Int]()
     
     init() {
-        stations = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
+        channels = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
     }
     
     public func add(id: Int) {
         if !hasObject(id: id) {
             listened(id: id)
-            UserDefaults.standard.set(stations, forKey: "array_listened")
+            UserDefaults.standard.set(channels, forKey: "array_listened")
         }
     }
     
     public func hasObject(id: Int) -> Bool {
-        return stations.contains(id)
+        return channels.contains(id)
     }
     
     private func listened(id: Int) {
-        objc_sync_enter(stations)
-        stations.append(id)
-        objc_sync_exit(stations)
+        objc_sync_enter(channels)
+        channels.append(id)
+        objc_sync_exit(channels)
         
         debugPrint("user listened \(id)")
         

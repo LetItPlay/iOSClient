@@ -29,6 +29,7 @@ protocol ChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
     func showChannel(id: Int)
 	func showAllChannels()
+    func update(index: Int, vm: SmallChannelViewModel)
 }
 
 class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
@@ -37,66 +38,38 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
-	var channels: [Station1] = []
+	var channels: [Channel1] = []
 	
-	let getChannelsAction: Action<Bool, [Station1]>!
+	let getChannelsAction: Action<Bool, [Channel1]>!
 	let disposeBag = DisposeBag()
     
     init(channelScreen: ChannelScreen)
     {
         self.channelScreen = channelScreen
 	
-		self.getChannelsAction = Action<Bool, [Station1]>.init(workFactory: { (_) -> Observable<[Station1]> in
+		self.getChannelsAction = Action<Bool, [Channel1]>.init(workFactory: { (_) -> Observable<[Channel1]> in
 			return RequestManager.shared.channels()
 		})
 		
-		self.getChannelsAction.elements.subscribe(onNext: { stations in
-			self.channels = stations
+		self.getChannelsAction.elements.subscribe(onNext: { channels in
+			self.channels = channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
 			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
 		}).disposed(by: disposeBag)
 		
-    }
-	
-    func getChannelViewModels(channels: [Station1])
-    {
-        self.channels = channels
-        
-        var channelVMs = [SmallChannelViewModel]()
-        
-        switch channelScreen {
-        case .small:
-            for channel in channels
-            {
-                channelVMs.append(SmallChannelViewModel.init(channel: channel))
-            }
-        case .medium:
-            let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-            
-            for channel in channels
-            {
-                channelVMs.append(MediumChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
-            }
-        default:
-            break
-        }
-        
-        self.delegate?.reload(newChannels: channelVMs)
+        InAppUpdateManager.shared.subscribe(self)
     }
 	
 	func subscribeAt(index: Int) {
         let channel = self.channels[index]
-        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         
         // while in User Settings
-        subManager.addOrDelete(station: self.channels[index].id)
-        self.channels[index].isSubscribed = !self.channels[index].isSubscribed
+        subManager.addOrDelete(channel: self.channels[index].id)
     }
     
     func showChannel(index: Int) {
-        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index], isSubscribed: stations.contains(channels[index].id)))
-		self.delegate?.showChannel(id: channels[index].id)
+        self.delegate?.showChannel(id: channels[index].id)
     }
 	
 	func showAllChannels() {
@@ -117,15 +90,15 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     }
 }
 
-extension ChannelsModel: SettingsUpdateProtocol, SubscriptionUpdateProtocol {
+extension ChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
     func settingsUpdated() {
         self.getChannelsAction.execute(true)
     }
     
-    func stationSubscriptionUpdated() {
-        if self.channelScreen == .medium
-        {
-            self.refreshChannels()
+    func channelUpdated(channel: Channel1) {
+        if let index = self.channels.index(where: {$0.id == channel.id}) {
+            self.channels[index] = channel
+            self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
         }
     }
 }

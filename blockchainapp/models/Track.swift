@@ -19,7 +19,7 @@ class Track1 {
 	var length: Int64			= 0
 	var url: URL?
 	
-	var stationId: Int			= 0
+	var channelId: Int			= 0
 	
 	var likeCount: Int			= 0
 	var reportCount: Int		= 0
@@ -32,7 +32,7 @@ class Track1 {
 	var isLiked: Bool			= false
 	
 	init?(json: JSON) {
-		if 	let stationId = json["StationID"].int,
+		if 	let channelId = json["StationID"].int,
 			let idInt = json["Id"].int,
 			let title = json["Title"].string,
 			let audioURL = json["AudioURL"].string?.url(),
@@ -47,7 +47,7 @@ class Track1 {
 			self.publishedAt = publishedAt
 			
 			self.lang = lang
-			self.stationId = stationId
+			self.channelId = channelId
 			
 			self.tags = json["Tags"].array?.map({$0.string}).filter({$0 != nil}).map({$0!}) ?? []
 			
@@ -77,7 +77,7 @@ class Track1 {
 
 class Track: Object {
 	@objc dynamic var id: Int               = 0
-	@objc dynamic var station: Int          = 0
+	@objc dynamic var channel: Int          = 0
 	@objc dynamic var name: String          = ""
 	@objc dynamic var desc: String          = ""
 	
@@ -106,14 +106,14 @@ class Track: Object {
 			let audioURL = json["AudioURL"].string,
 			let publishedAt = json["PublishedAt"].string,
 			let lang = json["Lang"].string,
-			let station = json["StationID"].int {
+			let channel = json["StationID"].int {
 			
 			self.init()
 			self.id = idInt
 			self.name = title
 			self.lang = lang
 			self.url = audioURL
-			self.station = station
+			self.channel = channel
 			
 			self.length = json["TotalLengthInSeconds"].int64 ?? 0
 			self.desc = json["Description"].string ?? ""
@@ -147,18 +147,18 @@ class Track: Object {
 	}
 }
 extension Track {
-	public func findStationName() -> String? {
-		return realm?.object(ofType: Station.self, forPrimaryKey: station)?.name
+	public func findChannelName() -> String? {
+		return realm?.object(ofType: Channel.self, forPrimaryKey: channel)?.name
 	}
 	
 	public func findChannelImage() -> URL? {
-		return realm?.object(ofType: Station.self, forPrimaryKey: station)?.image.buildImageURL()
+		return realm?.object(ofType: Channel.self, forPrimaryKey: channel)?.image.buildImageURL()
 	}
 }
 
 extension Track {
 	func audioTrack() -> AudioTrack {
-		return PlayerTrack.init(id: self.id, trackURL: URL(string: url)!, name: self.name, author: self.findStationName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
+		return PlayerTrack.init(id: self.id, trackURL: URL(string: url)!, name: self.name, author: self.findChannelName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}
 	
 	func audiotrackId() -> String {

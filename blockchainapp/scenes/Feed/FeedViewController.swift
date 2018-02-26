@@ -162,12 +162,12 @@ class FeedViewController: UIViewController, ChannelProtocol {
     }
     
   @objc func showAllChannels() {
-	if let vc = ChannelsBuilder.build(params: nil){
-		self.navigationController?.pushViewController(vc, animated: true)
-	}
+    if let vc = ChannelsBuilder.build(params: nil){
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
   }
     
-  func showChannel(station: Station1) {
+  func showChannel(channel: Channel1) {
 	//    TODO:
 //      let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station])
 //      self.navigationController?.pushViewController(vc, animated: true)
@@ -276,12 +276,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
-//        if self.type == .feed {
-//            AnalyticsEngine.sendEvent(event: .feedCardSelected)
-//        }
-//        else {
-//            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
-//        }
+        if self.viewModel.showChannels {
+            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
+        }
+        else {
+            AnalyticsEngine.sendEvent(event: .feedCardSelected)
+        }
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

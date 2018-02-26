@@ -16,7 +16,7 @@ enum TrackAction {
 	case report(msg: String)
 }
 
-enum StationAction {
+enum ChannelAction {
 	case subscribe
 	case unsubscribe
 	case report(msg: String)
@@ -27,7 +27,7 @@ class ServerUpdateManager {
     
     let disposeBag = DisposeBag()
 	
-	func make(channel: Station1, action: StationAction) {
+	func make(channel: Channel1, action: ChannelAction) {
         let type: ChannelUpdateRequest
         switch action {
         case .subscribe:
@@ -37,8 +37,12 @@ class ServerUpdateManager {
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (isSubscribed) in
-            NotificationCenter.default.post(name: InAppUpdateNotification.station.notification(), object: nil, userInfo: ["id" : channel])
+        RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (isSub) in
+            
+        }, onCompleted: {
+            var channel = channel
+            channel.isSubscribed = !channel.isSubscribed
+            NotificationCenter.default.post(name: InAppUpdateNotification.channel.notification(), object: nil, userInfo: ["station" : channel])
         }).disposed(by: disposeBag)
 	}
 	

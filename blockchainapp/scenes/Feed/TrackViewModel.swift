@@ -36,7 +36,7 @@ struct TrackViewModel {
 	
 	init(track: Track, isPlaying: Bool = false, isLiked: Bool = false) {
 		self.name = track.name
-		self.author = track.findStationName() ?? ""
+		self.author = track.findChannelName() ?? ""
 		self.authorImage = track.findChannelImage()
 		self.imageURL = URL(string: track.image)
 		self.length = track.length.formatTime()

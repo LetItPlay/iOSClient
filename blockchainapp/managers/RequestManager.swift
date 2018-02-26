@@ -9,7 +9,7 @@ import Alamofire
 import SwiftyJSON
 
 enum TracksRequest {
-    case feed(stations: [Int], offset: Int, count: Int)
+    case feed(channels: [Int], offset: Int, count: Int)
     case trends(Int)
     case likes
     case channel(Int)
@@ -32,9 +32,9 @@ enum ChannelUpdateRequest {
 fileprivate extension TracksRequest {
     func urlQuery(lang: String) -> String {
         switch self {
-        case .feed(let stations, let offset, let count):
-            let stationsString = stations.map({"\($0)"}).joined(separator: ",")
-            return "feed?stIds=\(stationsString)&offset=\(offset)&limit=\(count)&lang=\(lang)"
+        case .feed(let channels, let offset, let count):
+            let channelsString = channels.map({"\($0)"}).joined(separator: ",")
+            return "feed?stIds=\(channelsString)&offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .trends(let days):
             return "trends/\(days)?lang=\(lang)"
         case .channel(let id):
@@ -65,18 +65,18 @@ class RequestManager {
     static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
-	func channel(id: Int) -> Observable<Station1> {
+	func channel(id: Int) -> Observable<Channel1> {
 		let urlString = RequestManager.server + "/stations/\(id)"
 		if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<Station1> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<Channel1> in
 				switch result {
 				case .value(let data):
-					if let json = try? JSON(data: data), var station: Station1 = Station1(json: json) {
+					if let json = try? JSON(data: data), var channel: Channel1 = Channel1(json: json) {
 						let lm = LikeManager.shared
-						station.isSubscribed = lm.hasObject(id: station.id)
-						return Observable.just(station)
+						channel.isSubscribed = lm.hasObject(id: channel.id)
+						return Observable.just(channel)
 					} else {
 						return Observable.error(RequestError.invalidJSON)
 					}
@@ -88,25 +88,25 @@ class RequestManager {
 		return Observable.error(RequestError.invalidURL)
 	}
 	
-    func tracks(req: TracksRequest) -> Observable<([Track1],[Station1])> {
+    func tracks(req: TracksRequest) -> Observable<([Track1],[Channel1])> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track1],[Station1])> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track1],[Channel1])> in
 				switch result {
 				case .value(let data):
 					do {
 						let lm = LikeManager.shared
 						let json = try JSON(data: data)
-						let stations: [Station1] = json["Stations"].array?
-							.map({Station1(json: $0)})
+						let channels: [Channel1] = json["Stations"].array?
+							.map({Channel1(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
 						let tracks: [Track1] = json["Tracks"].array?
 							.map({Track1(json: $0)})
 							.filter({$0 != nil}).map({$0!})
 							.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
-						return Observable.just((tracks, stations))
+						return Observable.just((tracks, channels))
 					} catch {
 						return Observable.error(RequestError.invalidJSON)
 					}
@@ -118,25 +118,25 @@ class RequestManager {
         return Observable.error(RequestError.invalidURL)
     }
     
-    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Station1]> {
+    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Channel1]> {
         let urlString = RequestManager.server + "/stations?offset=\(offset)&count=\(count)&lang=\(UserSettings.language.rawValue)"
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Station1]> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel1]> in
 				switch result {
 				case .value(let data):
 					do {
 						let subMan = SubscribeManager.shared
 						let json = try JSON(data: data)
-						let stations: [Station1] = json.array?
-							.map({Station1(json: $0)})
-							.filter({$0 != nil}).map({station in
-								var station = station!
-								station.isSubscribed = subMan.hasStation(id: station.id)
-								return station
+						let channels: [Channel1] = json.array?
+							.map({Channel1(json: $0)})
+							.filter({$0 != nil}).map({channel in
+								var channel = channel!
+								channel.isSubscribed = subMan.hasChannel(id: channel.id)
+								return channel
 							}) ?? []
-						return Observable.just(stations)
+						return Observable.just(channels)
 					} catch {
 						return Observable.error(RequestError.invalidJSON)
 					}
@@ -183,11 +183,12 @@ class RequestManager {
                             if resp.statusCode == 200 {
                                 do {
                                     let json  = try JSON(data: data)
-                                    if let channel = Station1.init(json: json) {
-                                        observer.onNext(channel.isSubscribed)
-                                    } else {
-                                        observer.onError(RequestError.invalidJSON)
-                                    }
+//                                    if let channel = Station1.init(json: json) {
+//                                        observer.onNext(channel.isSubscribed)
+//                                    } else {
+//                                        observer.onError(RequestError.invalidJSON)
+//                                    }
+                                    observer.onNext(true)
                                 } catch(let error) {
                                     print(error)
                                     observer.onError(RequestError.invalidJSON)

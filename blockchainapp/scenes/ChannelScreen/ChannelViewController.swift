@@ -75,6 +75,8 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
 		self.tableView.tableHeaderView = self.header
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
     }
 	
 	@objc func followPressed() {
@@ -90,7 +92,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 			make.width.equalTo(self.view.frame.width)
 		}
 		
-        let height = self.header.fill(station: self.viewModel.channel!, width: self.view.frame.width)
+        let height = self.header.fill(channel: self.viewModel.channel!, width: self.view.frame.width)
 		self.header.frame.size.height = height
         self.emitter.send(event: LifeCycleEvent.appear)
 	}

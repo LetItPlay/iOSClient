@@ -2,7 +2,7 @@ import Foundation
 
 enum InAppUpdateNotification: String {
 	case track = "TrackUpdate"
-	case station = "StationUpdate"
+	case channel = "StationUpdate"
 	case playing = "PlayingStateUpdate"
 	case setting = "SettingUpdate"
     case subscription = "SubscriptionChanged"
@@ -16,12 +16,12 @@ protocol TrackUpdateProtocol: class {
 	func trackUpdated(track: Track1)
 }
 
-protocol StationUpdateProtocol: class {
-	func stationUpdated(station: Station1)
+protocol ChannelUpdateProtocol: class {
+	func channelUpdated(channel: Channel1)
 }
 
 protocol SubscriptionUpdateProtocol: class {
-	func stationSubscriptionUpdated()
+	func channelSubscriptionUpdated()
 }
 
 protocol PlayingStateUpdateProtocol: class {
@@ -42,7 +42,7 @@ fileprivate class Box {
 class InAppUpdateManager {
 	static let shared = InAppUpdateManager()
 
-    private var observers: [InAppUpdateNotification: [Box]] = [.station: [],
+    private var observers: [InAppUpdateNotification: [Box]] = [.channel: [],
                                                                .track: [],
                                                                .playing: [],
                                                                .setting: [],
@@ -63,8 +63,8 @@ class InAppUpdateManager {
                                                name: InAppUpdateNotification.setting.notification(),
                                                object: nil)
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(stationChanged(notification:)),
-                                               name: InAppUpdateNotification.station.notification(),
+                                               selector: #selector(channelChanged(notification:)),
+                                               name: InAppUpdateNotification.channel.notification(),
                                                object: nil)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(trackChanged(notification:)),
@@ -79,8 +79,8 @@ class InAppUpdateManager {
             self.observers[.track]?.append(Box.init(model))
 			result = result || true
 		}
-		if let _ = model as? StationUpdateProtocol {
-            self.observers[.station]?.append(Box.init(model))
+		if let _ = model as? ChannelUpdateProtocol {
+            self.observers[.channel]?.append(Box.init(model))
 			result = result || true
 		}
 		if let _ = model as? SubscriptionUpdateProtocol {
@@ -104,13 +104,13 @@ class InAppUpdateManager {
 		}
 	}
 
-	@objc func stationChanged(notification: Notification) {
-		if let station = notification.userInfo?["station"] as? Station1 {
-			for box in self.observers[.station] ?? [] {
-				(box.value as? StationUpdateProtocol)?.stationUpdated(station: station)
+	@objc func channelChanged(notification: Notification) {
+		if let channel = notification.userInfo?["station"] as? Channel1 {
+			for box in self.observers[.channel] ?? [] {
+				(box.value as? ChannelUpdateProtocol)?.channelUpdated(channel: channel)
 			}
 			for box in self.observers[.subscription] ?? [] {
-				(box.value as? SubscriptionUpdateProtocol)?.stationSubscriptionUpdated()
+				(box.value as? SubscriptionUpdateProtocol)?.channelSubscriptionUpdated()
 			}
 		}
 	}

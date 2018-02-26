@@ -23,7 +23,7 @@ protocol SearchPresenterDelegate: class {
 class SearchPresenter {
 	
 	var tracks: [Track] = []
-	var channels: [Station] = []
+	var channels: [Channel] = []
 	weak var delegate: SearchPresenterDelegate?
 	let realm: Realm? = try? Realm()
 	var currentPlayingIndex: Int = -1
@@ -65,7 +65,7 @@ class SearchPresenter {
 	func getData() {
         RequestManager.shared.tracks(req: .magic).subscribe(onNext: { (tuple) in
             let tracklist = tuple.0.map({ (track) -> AudioTrack in
-                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.stationId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
+                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.channelId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
             })
             self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: tracklist)]
             self.delegate?.updatePlaylists()
@@ -84,7 +84,7 @@ class SearchPresenter {
 	}
 	
 	func channelSubPressed(index: Int) {
-		SubscribeManager.shared.addOrDelete(station: self.channels[index].id)
+		SubscribeManager.shared.addOrDelete(channel: self.channels[index].id)
 	}
 	
 	func searchChanged(string: String) {
@@ -95,7 +95,7 @@ class SearchPresenter {
 		} else {
 			let tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
             self.tracks = tracks
-			self.channels = self.realm?.objects(Station.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			self.channels = self.realm?.objects(Channel.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
 		}
 		self.delegate?.updateSearch()
 	}

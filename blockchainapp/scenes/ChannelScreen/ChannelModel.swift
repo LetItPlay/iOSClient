@@ -17,7 +17,7 @@ protocol ChannelModelProtocol: class, ModelProtocol {
 
 protocol ChannelEvenHandler: class {
     func followPressed()
-    func set(station: Station1)
+    func set(channel: Channel1)
 }
 
 protocol ChannelModelDelegate: class {
@@ -32,19 +32,19 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
-    var channel: Station1!
+    var channel: Channel1!
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     var subManager = SubscribeManager.shared
 	
-	let getTracksAction: Action<Int, ([Track1],[Station1])>!
+	let getTracksAction: Action<Int, ([Track1],[Channel1])>!
 	let disposeBag = DisposeBag()
         
     init(channelID: Int)
     {
-		getTracksAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
+		getTracksAction = Action<Int, ([Track1],[Channel1])>.init(workFactory: { (offset) -> Observable<([Track1],[Channel1])> in
 			return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
 		})
 		
@@ -54,9 +54,9 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
 				return tuple.0.map({ (track) -> TrackViewModel in
 					var vm = TrackViewModel(track: track,
 											isPlaying: track.id == playingId)
-					if let station = tuple.1.filter({$0.id == track.stationId}).first {
-						vm.authorImage = station.image
-						vm.author = station.name
+					if let channel = tuple.1.filter({$0.id == track.channelId}).first {
+						vm.authorImage = channel.image
+						vm.author = channel.name
 					}
 					return vm
 				})
@@ -66,6 +66,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
 				print("Track loaded")
 			}).disposed(by: self.disposeBag)
 
+        RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
+            self.channel = channel
+        }).disposed(by: disposeBag)
+        
         InAppUpdateManager.shared.subscribe(self)
 		
 		self.getData()
@@ -78,19 +82,19 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     deinit {
     }
     
-    func set(station: Station1) {
-        self.channel = station
+    func set(channel: Channel1) {
+        self.channel = channel
         
-        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        self.delegate?.getChannel(channel: FullChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
+        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        self.delegate?.getChannel(channel: FullChannelViewModel.init(channel: channel))
     }
     
     func followPressed() {
         // to server
-        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         // while in User Setting
-        subManager.addOrDelete(station: self.channel.id)
+        subManager.addOrDelete(channel: self.channel.id)
         channel.isSubscribed = !channel.isSubscribed
         self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
@@ -107,7 +111,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
         case .appear:
             self.getData()
         default:
@@ -131,9 +135,9 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
     
-    func stationSubscriptionUpdated() {
-        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        channel.isSubscribed = stations.contains(channel.id)
+    func channelSubscriptionUpdated() {
+        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        channel.isSubscribed = channels.contains(channel.id)
         
         self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }

@@ -33,9 +33,9 @@ protocol SearchModelDelegate: class {
 class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     var tracks: [Track1] = []
-    var channels: [Station1] = []
+    var channels: [Channel1] = []
     var searchTracks: [Track1] = []
-    var searchChannels: [Station1] = []
+    var searchChannels: [Channel1] = []
     
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""
@@ -52,8 +52,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
             self.tracks = tuple.0
         }).disposed(by: self.disposeBag)
         
-        RequestManager.shared.channels().subscribe(onNext: { (stations) in
-            self.channels = stations
+        RequestManager.shared.channels().subscribe(onNext: { (channels) in
+            self.channels = channels
         }).disposed(by: self.disposeBag)
     }
     
@@ -115,15 +115,15 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     func channelSubPressedAt(index: Int) {
         let channel = self.searchChannels[index]
-        SubscribeManager.shared.addOrDelete(station: channel.id)
+        SubscribeManager.shared.addOrDelete(channel: channel.id)
         self.update(viewModels: self.searchChannels)
     }
     
     func update(viewModels: [Any])
     {
-        if viewModels is [Station1]
+        if viewModels is [Channel1]
         {
-            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Station1]))
+            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Channel1]))
         }
         else
         {
@@ -140,14 +140,14 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         return trackVMs
     }
     
-    func getChannelVMs(for channels: [Station1]) -> [SearchChannelViewModel]
+    func getChannelVMs(for channels: [Channel1]) -> [SearchChannelViewModel]
     {
-        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        let channelsId: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
         
         var channelVMs: [SearchChannelViewModel] = []
         for channel in channels
         {
-            channelVMs.append(SearchChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
+            channelVMs.append(SearchChannelViewModel.init(channel: channel, isSubscribed: channelsId.contains(channel.id)))
         }
         return channelVMs
     }

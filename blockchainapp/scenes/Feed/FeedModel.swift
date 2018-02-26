@@ -32,17 +32,17 @@ FeedEventHandler {
 	weak var delegate: FeedModelDelegate?
 	
 	private var tracks: [Track1] = []
-	private var channels: Set<Station1> = Set<Station1>()
+	private var channels: Set<Channel1> = Set<Channel1>()
 	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	private var dataAction: Action<Int, ([Track1],[Station1])>?
+	private var dataAction: Action<Int, ([Track1],[Channel1])>?
 	private let disposeBag = DisposeBag()
 	
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
         
-		dataAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
-			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(stations: SubscribeManager.shared.stations, offset: offset, count: self.amount) : TracksRequest.trends(7))
+		dataAction = Action<Int, ([Track1],[Channel1])>.init(workFactory: { (offset) -> Observable<([Track1],[Channel1])> in
+			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(7))
 		})
 		
 		dataAction?.elements.do(onNext: { (tuple) in
@@ -51,17 +51,17 @@ FeedEventHandler {
 			} else {
 				self.tracks += tuple.0
 			}
-			tuple.1.forEach({ (station) in
-				self.channels.insert(station)
+			tuple.1.forEach({ (channel) in
+				self.channels.insert(channel)
 			})
 		}).map({ (tuple) -> [TrackViewModel] in
 			let playingId = AudioController.main.currentTrack?.id
 			return tuple.0.map({ (track) -> TrackViewModel in
 				var vm = TrackViewModel(track: track,
 										isPlaying: track.id == playingId)
-				if let station = tuple.1.filter({$0.id == track.stationId}).first {
-					vm.authorImage = station.image
-					vm.author = station.name
+				if let channel = tuple.1.filter({$0.id == track.channelId}).first {
+					vm.authorImage = channel.image
+					vm.author = channel.name
 				}
 				return vm
 			})
@@ -93,7 +93,7 @@ FeedEventHandler {
     
     func trackSelected(index: Int) {
 		let tracks = self.tracks.map { (track) -> AudioTrack in
-			return track.audioTrack(author: channels.first(where: {$0.id == track.stationId})?.name ?? "")
+			return track.audioTrack(author: channels.first(where: {$0.id == track.channelId})?.name ?? "")
 		}
         AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
     }
@@ -118,7 +118,7 @@ FeedEventHandler {
 }
 
 extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
-    func stationSubscriptionUpdated() {
+    func channelSubscriptionUpdated() {
         self.reload()
     }
     

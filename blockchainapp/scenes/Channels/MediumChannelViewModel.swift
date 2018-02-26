@@ -15,16 +15,17 @@ class MediumChannelViewModel: SmallChannelViewModel {
     var tags: [String] = []
     var isSubscribed: Bool = false
     
-    override init(channel: Station1){
+    override init(channel: Channel1){
         super.init(channel: channel)
         
         self.name = channel.name
         self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
         self.tracksCount = Int64(channel.trackCount).formatAmount()
         self.tags = channel.tags
+        self.isSubscribed = channel.isSubscribed
     }
     
-    init(channel: Station1, isSubscribed: Bool)
+    init(channel: Channel1, isSubscribed: Bool)
     {
         super.init(channel: channel)
         

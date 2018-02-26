@@ -77,7 +77,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
 	
     
     //
-    func getData(onComplete: @escaping StationResult) {
+    func getData(onComplete: @escaping ChannelResult) {
         DownloadManager.shared.requestChannels(success: { (channels) in
             
         }) { (err) in
@@ -85,7 +85,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
         }
     }
     
-    func select(station: Station1) {
-        subManager.addOrDelete(station: station.id)
+    func select(channel: Channel1) {
+        subManager.addOrDelete(channel: channel.id)
     }
 }

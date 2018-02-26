@@ -211,11 +211,11 @@ class ChannelHeaderView: UIView {
 //        return self.frame.origin.y + self.frame.height
 //    }
     
-    func fill(station: FullChannelViewModel, width: CGFloat) -> CGFloat {
-        channelTitleView.text = station.name
+    func fill(channel: FullChannelViewModel, width: CGFloat) -> CGFloat {
+        channelTitleView.text = channel.name
         infoLabel.text = "No description for this channel"
-        subsView.set(text: station.subscriptionCount)
-        if let iconUrl = station.imageURL {
+        subsView.set(text: channel.subscriptionCount)
+        if let iconUrl = channel.imageURL {
             
             channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
                 self?.channelImageView.image = image
@@ -234,7 +234,7 @@ class ChannelHeaderView: UIView {
         }
         
         self.tagListView.removeAllTags()
-        self.tagListView.addTags(station.tags.map({$0.uppercased()}))
+        self.tagListView.addTags(channel.tags.map({$0.uppercased()}))
         
         return self.frame.origin.y + self.frame.height
     }

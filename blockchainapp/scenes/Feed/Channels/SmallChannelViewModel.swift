@@ -11,7 +11,7 @@ import Foundation
 class SmallChannelViewModel {
     var imageURL: URL? = nil
     
-    init(channel: Station1)
+    init(channel: Channel1)
     {
         self.imageURL = channel.image
     }
