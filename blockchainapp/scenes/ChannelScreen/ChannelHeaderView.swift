@@ -235,7 +235,6 @@ class ChannelHeaderView: UIView {
         
         self.tagListView.removeAllTags()
         self.tagListView.addTags(station.tags.map({$0.uppercased()}))
-        //        self.layoutIfNeeded()
         
         return self.frame.origin.y + self.frame.height
     }

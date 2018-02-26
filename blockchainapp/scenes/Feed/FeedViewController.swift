@@ -167,12 +167,13 @@ class FeedViewController: UIViewController, ChannelProtocol {
 	}
   }
     
-  func showChannel(station: Station) {
-//      let vc = ChannelViewController(station: station)
+  func showChannel(station: Station1) {
+	//    TODO:
+//      let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station])
 //      self.navigationController?.pushViewController(vc, animated: true)
   }
     
-    func showChannel(_ channel: ChannelViewModel) {
+    func showChannel(_ channel: FullChannelViewModel) {
         // TODO: show channelViewModel
     }
 
@@ -266,7 +267,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID)
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
+        cell.onLike = {[weak self] track in
+            self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+        }
         return cell ?? UITableViewCell.init(frame: CGRect.zero)
     }
 	

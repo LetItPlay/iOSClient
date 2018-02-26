@@ -14,7 +14,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 	
 //    weak var station: Station!
-    weak var channel: FullChannelViewModel!
     var tracks: [[TrackViewModel]] = []
     
     var viewModel: ChannelVMProtocol!
@@ -23,24 +22,14 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 	var header: ChannelHeaderView = ChannelHeaderView()
 	var currentIndex: Int = -1
 	
-    init(channel: FullChannelViewModel, viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
+    init(viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
         super.init(nibName: nil, bundle: nil)
-        
-        self.channel = channel
         
         self.viewModel = viewModel
         self.viewModel.delegate = self
         
         self.emitter = emitter
     }
-    
-//    init(station: Station) {
-//        super.init(nibName: nil, bundle: nil)
-//
-//        self.station = station
-//        self.presenter = ChannelPresenter(station: station)
-//        self.presenter.view = self
-//    }
 	
     func followUpdate() {
          //SubscribeManager.shared.stations.contains(self.presenter.station.id)
@@ -86,7 +75,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
 		self.tableView.tableHeaderView = self.header
-        
     }
 	
 	@objc func followPressed() {
@@ -98,12 +86,13 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		super.viewWillAppear(animated)
 		
 		self.header.snp.makeConstraints { (make) in
-//			make.height.equalTo(height)
+//            make.height.equalTo(height)
 			make.width.equalTo(self.view.frame.width)
 		}
 		
-		let height = self.header.fill(station: self.channel, width: self.view.frame.width)
+        let height = self.header.fill(station: self.viewModel.channel!, width: self.view.frame.width)
 		self.header.frame.size.height = height
+        self.emitter.send(event: LifeCycleEvent.appear)
 	}
 
     override func didReceiveMemoryWarning() {

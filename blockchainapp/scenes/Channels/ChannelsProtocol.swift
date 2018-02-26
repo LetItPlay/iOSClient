@@ -8,19 +8,19 @@
 
 import Foundation
 
-typealias StationResult = ([Station]) -> Void
+typealias StationResult = ([Station1]) -> Void
 
 protocol ChannelsViewProtocol: class {
-    func display(channels: [Station])
+    func display(channels: [Station1])
     func select(rows: [Int])
 }
 
 protocol ChannelsPresenterProtocol: class {
     func getData(onComplete: @escaping StationResult)
-    func select(station: Station)
+    func select(station: Station1)
 }
 
 protocol ChannelProtocol {
-    func showChannel(station: Station)
+    func showChannel(station: Station1)
     func showAllChannels()
 }

@@ -48,12 +48,7 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         self.delegate?.update(data: .channels)
     }
     
-    func update(tracks: [TrackViewModel], channels: [SearchChannelViewModel]) {
-        self.channels = channels
-        self.tracks = tracks
-        self.delegate?.update(data: .all)
-    }
-    
+    // for emitter
     func getTypeFor(section: Int) -> ViewModels {
         switch section {
         case 0:
@@ -61,7 +56,7 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         case 1:
             return ViewModels.tracks
         default:
-            return ViewModels.all
+            return ViewModels.channels
         }
     }
 }

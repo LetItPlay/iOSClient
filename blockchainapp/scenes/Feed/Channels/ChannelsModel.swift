@@ -20,8 +20,8 @@ protocol ChannelsModelProtocol: class, ModelProtocol {
 
 protocol ChannelsEventHandler: class {
     func showChannel(index: Int)
-    func refreshChannels()
     func subscribeAt(index: Int)
+	func refreshChannels()
 	func showAllChannels()
 }
 
@@ -37,15 +37,15 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
+	var channels: [Station1] = []
 	
 	let getChannelsAction: Action<Bool, [Station1]>!
 	let disposeBag = DisposeBag()
-    var channels = [Station1]()
     
     init(channelScreen: ChannelScreen)
     {
         self.channelScreen = channelScreen
-		
+	
 		self.getChannelsAction = Action<Bool, [Station1]>.init(workFactory: { (_) -> Observable<[Station1]> in
 			return RequestManager.shared.channels()
 		})
@@ -56,7 +56,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 		}).disposed(by: disposeBag)
 		
     }
-    
+	
     func getChannelViewModels(channels: [Station1])
     {
         self.channels = channels
@@ -82,30 +82,35 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
         
         self.delegate?.reload(newChannels: channelVMs)
     }
-    
-    func refreshChannels(){
-        self.getChannelsAction.execute(true)
-    }
-    
-    func subscribeAt(index: Int) {
+	
+	func subscribeAt(index: Int) {
         let channel = self.channels[index]
-        subManager.addOrDelete(station: channel.id)
+        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
+        
+        // while in User Settings
+        subManager.addOrDelete(station: self.channels[index].id)
+        self.channels[index].isSubscribed = !self.channels[index].isSubscribed
     }
     
     func showChannel(index: Int) {
-        self.delegate?.showChannel(id: self.channels[index].id)
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+//        self.delegate?.showChannel(channel: FullChannelViewModel.init(channel: channels[index], isSubscribed: stations.contains(channels[index].id)))
+		self.delegate?.showChannel(id: channels[index].id)
     }
 	
 	func showAllChannels() {
 		self.delegate?.showAllChannels()
 	}
+	
+	func refreshChannels() {
+		self.getChannelsAction.execute(true)
+	}
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.refreshChannels()
-        case .appear:
-            self.refreshChannels()
+            self.getChannelsAction.execute(true)
         default:
             break
         }

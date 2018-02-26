@@ -159,6 +159,12 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
             refreshControl?.endRefreshing()
         }
     }
+    
+    func showChannel(station: Station1) {
+		if let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station]){
+        	self.navigationController?.pushViewController(vc, animated: true)
+		}
+    }
 }
 
 extension ChannelsViewController {
@@ -201,6 +207,7 @@ extension ChannelsViewController {
 		let _ = self.source[indexPath.row]
 //        let vc = ChannelViewController(station: station)
 //        self.navigationController?.pushViewController(vc, animated: true)
+        self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

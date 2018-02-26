@@ -17,12 +17,14 @@ protocol ChannelModelProtocol: class, ModelProtocol {
 
 protocol ChannelEvenHandler: class {
     func followPressed()
+    func set(station: Station1)
 }
 
 protocol ChannelModelDelegate: class {
     func reload(tracks: [TrackViewModel])
     func trackUpdate(index: Int, vm: TrackViewModel)
     func followUpdate(isSubscribed: Bool)
+    func getChannel(channel: FullChannelViewModel)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -30,7 +32,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
-    var channel: Station!
+    var channel: Station1!
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
@@ -39,7 +41,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
 	
 	let getTracksAction: Action<Int, ([Track1],[Station1])>!
 	let disposeBag = DisposeBag()
-    
+        
     init(channelID: Int)
     {
 		getTracksAction = Action<Int, ([Track1],[Station1])>.init(workFactory: { (offset) -> Observable<([Track1],[Station1])> in
@@ -76,8 +78,21 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     deinit {
     }
     
+    func set(station: Station1) {
+        self.channel = station
+        
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        self.delegate?.getChannel(channel: FullChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
+    }
+    
     func followPressed() {
+        // to server
+        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
+        // while in User Setting
         subManager.addOrDelete(station: self.channel.id)
+        channel.isSubscribed = !channel.isSubscribed
+        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
     
     func getTrackViewModels()
@@ -93,6 +108,8 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         switch event {
         case .initialize:
             break
+        case .appear:
+            self.getData()
         default:
             break
         }
@@ -115,7 +132,10 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
     }
     
     func stationSubscriptionUpdated() {
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        channel.isSubscribed = stations.contains(channel.id)
         
+        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
     
     func trackUpdated(track: Track1) {

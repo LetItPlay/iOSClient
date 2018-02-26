@@ -46,7 +46,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 			} else {
 				channelImageView.image = nil
 			}
-//            self.followButton.isSelected = SubscribeManager.shared.hasStation(id: channel?.id ?? -1)
+            self.followButton.isSelected = (channel?.isSubscribed)!
 		}
 	}
 	

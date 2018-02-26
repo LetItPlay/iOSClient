@@ -52,21 +52,18 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
     }
     
     func update(data: ViewModels) {
         switch data {
-        case .all:
-            self.tracks = self.viewModel.tracks
-            self.channels = self.viewModel.channels
-            self.tableView.reloadData()
         case .channels:
             self.channels = self.viewModel.channels
-            self.tableView.reloadData()
         case .tracks:
             self.tracks = self.viewModel.tracks
-            self.tableView.reloadData()
         }
+        self.tableView.reloadData()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -94,7 +91,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
             cell.channel = self.channels[indexPath.item]
-            cell.onSub = { self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row)) }
+            cell.onSub = { self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row)) }
             return cell
         }
     }
@@ -102,9 +99,6 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
-//            let station = self.channels[indexPath.row]
-//            let vc = ChannelViewController(station: station)
-//            self.parent?.navigationController?.pushViewController(vc, animated: true)
         } else {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
         }
