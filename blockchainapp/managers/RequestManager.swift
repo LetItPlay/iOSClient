@@ -67,44 +67,29 @@ class RequestManager {
     func tracks(req: TracksRequest) -> Observable<([Track1],[Station1])> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
-            return Observable<([Track1],[Station1])>.create { observer in
-                Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
-                        .responseData { (response: DataResponse<Data>) in
-
-                            if let _ = response.error {
-                                observer.onError(RequestError.noConnection)
-                                observer.onCompleted()
-                                return
-                            }
-
-							if let resp = response.response, let data = response.data {
-                                if resp.statusCode == 200 {
-                                    do {
-										let lm = LikeManager.shared
-                                        let json = try JSON(data: data)
-										let stations: [Station1] = json["Stations"].array?
-                                                .map({Station1(json: $0)})
-                                                .filter({$0 != nil}).map({$0!}) ?? []
-										let tracks: [Track1] = json["Tracks"].array?
-											.map({Track1(json: $0)})
-											.filter({$0 != nil}).map({$0!})
-											.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
-                                        observer.onNext((tracks, stations))
-                                    } catch {
-                                        observer.onError(RequestError.invalidJSON)
-                                    }
-                                } else {
-                                    observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
-                                }
-                            } else {
-                                observer.onError(RequestError.noConnection)
-                            }
-                            observer.onCompleted()
-                        }
-                return Disposables.create {
-                    print("Track signal \(req) disposed")
-                }
-            }
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track1],[Station1])> in
+				switch result {
+				case .value(let data):
+					do {
+						let lm = LikeManager.shared
+						let json = try JSON(data: data)
+						let stations: [Station1] = json["Stations"].array?
+							.map({Station1(json: $0)})
+							.filter({$0 != nil}).map({$0!}) ?? []
+						let tracks: [Track1] = json["Tracks"].array?
+							.map({Track1(json: $0)})
+							.filter({$0 != nil}).map({$0!})
+							.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
+						return Observable.just((tracks, stations))
+					} catch {
+						return Observable.error(RequestError.invalidJSON)
+					}
+				case .error(let error):
+					return Observable.error(error)
+				}
+			})
         }
         return Observable.error(RequestError.invalidURL)
     }
@@ -112,45 +97,30 @@ class RequestManager {
     func channels(offset: Int = 0, count: Int = 100) -> Observable<[Station1]> {
         let urlString = RequestManager.server + "/stations?offset=\(offset)&count=\(count)&lang=\(UserSettings.language.rawValue)"
         if let url = URL(string: urlString) {
-            return Observable<[Station1]>.create({ (observer) -> Disposable in
-                
-                    Alamofire.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: nil)
-                        .responseData { (response: DataResponse<Data>) in
-                            
-                            if let _ = response.error {
-                                observer.onError(RequestError.noConnection)
-                                observer.onCompleted()
-                                return
-                            }
-                            
-                            if let resp = response.response, let data = response.data {
-                                if resp.statusCode == 200 {
-                                    do {
-                                        let json = try JSON(data: data)
-                                        let stations: [Station1] = json.array?
-                                            .map({Station1(json: $0)})
-                                            .filter({$0 != nil}).map({station in
-                                                var station = station!
-                                                station.isSubscribed = SubscribeManager.shared.hasStation(id: station.id)
-                                                return station
-                                            }) ?? []
-                                        observer.onNext(stations)
-                                    } catch {
-                                        observer.onError(RequestError.invalidJSON)
-                                    }
-                                } else {
-                                    observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
-                                }
-                            } else {
-                                observer.onError(RequestError.noConnection)
-                            }
-                            observer.onCompleted()
-                    }
-                return Disposables.create {
-                    print("Channels signal disposed")
-                }
-            })
-        }
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Station1]> in
+				switch result {
+				case .value(let data):
+					do {
+						let subMan = SubscribeManager.shared
+						let json = try JSON(data: data)
+						let stations: [Station1] = json.array?
+							.map({Station1(json: $0)})
+							.filter({$0 != nil}).map({station in
+								var station = station!
+								station.isSubscribed = subMan.hasStation(id: station.id)
+								return station
+							}) ?? []
+						return Observable.just(stations)
+					} catch {
+						return Observable.error(RequestError.invalidJSON)
+					}
+				case .error(let error):
+					return Observable.error(error)
+				}
+			})
+		}
         return Observable.error(RequestError.invalidURL)
     }
     
@@ -279,4 +249,30 @@ class RequestManager {
             }
         })
     }
+	
+	func request(request: URLRequest) -> Observable<Result<Data>>{
+		return Observable<Result<Data>>.create({ (observer) -> Disposable in
+			Alamofire.request(request).responseData { (response: DataResponse<Data>) in
+				if let _ = response.error {
+					observer.onError(RequestError.noConnection)
+					observer.onCompleted()
+					return
+				}
+				if let resp = response.response, let data = response.data {
+					if resp.statusCode == 200 {
+						observer.onNext(.value(data))
+					} else {
+						observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+					}
+				} else {
+					observer.onError(RequestError.noConnection)
+				}
+				observer.onCompleted()
+			}
+			return Disposables.create {
+				let empty = "without url"
+				print("Request \(request.url?.absoluteString ?? empty) signal disposed")
+			}
+		})
+	}
 }

@@ -9,11 +9,11 @@
 import UIKit
 
 protocol Builder {
-    static func build(params: [String: Any]?) -> UIViewController
+    static func build(params: [String: Any]?) -> UIViewController?
 }
 
 class ChannelsBuilder: Builder {
-    static func build(params: [String: Any]?) -> UIViewController {
+    static func build(params: [String: Any]?) -> UIViewController? {
 
         let model = ChannelsModel(channelScreen: .medium)
         let vm = ChannelsViewModel(model: model)

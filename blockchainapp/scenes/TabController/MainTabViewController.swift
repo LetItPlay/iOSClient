@@ -10,7 +10,7 @@ import UIKit
 
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 	
-	let router: MainRouter = MainRouter()
+	let router: MainRouter = MainRouter.shared
 	
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?

@@ -9,7 +9,7 @@
 import UIKit
 
 class ProfileBuilder: Builder {
-    static func build(params: [String : Any]?) -> UIViewController {
+    static func build(params: [String : Any]?) -> UIViewController? {
         
         // for profile view
         let model = ProfileModel()

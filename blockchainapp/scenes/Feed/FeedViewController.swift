@@ -162,8 +162,9 @@ class FeedViewController: UIViewController, ChannelProtocol {
     }
     
   @objc func showAllChannels() {
-      let vc = ChannelsBuilder.build(params: nil)
-      self.navigationController?.pushViewController(vc, animated: true)
+	if let vc = ChannelsBuilder.build(params: nil){
+		self.navigationController?.pushViewController(vc, animated: true)
+	}
   }
     
   func showChannel(station: Station) {

@@ -34,9 +34,13 @@ class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
         self.delegate?.reloadChannels()
     }
     
-    func showChannel(channel: FullChannelViewModel) {
-//         TODO: to router
-    }
+	func showChannel(id: Int) {
+		MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
+	}
+	
+	func showAllChannels() {
+		MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
+	}
     
 //    func followUpdate(isSubscribed: Bool) {
 //        self.isSubscribed = isSubscribed

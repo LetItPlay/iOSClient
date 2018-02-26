@@ -14,6 +14,8 @@ protocol Router {
 }
 
 class MainRouter: Router {
+	static let shared: MainRouter = MainRouter()
+	
 	weak var currentNavigationController: UINavigationController?
 	let initialViewControllers: [UIViewController]
 	
@@ -21,15 +23,15 @@ class MainRouter: Router {
 	
 	init() {
 		
-		let tabs: [(String, (UIImage?, UIViewController))] = [
+		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		self.initialViewControllers = tabs.map({ (tuple) -> UINavigationController in
-			let nvc = UINavigationController(rootViewController: tuple.1.1)
-			tuple.1.1.title = tuple.0
+			let nvc = UINavigationController(rootViewController: tuple.1.1!)
+			tuple.1.1!.title = tuple.0
 			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})

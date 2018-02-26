@@ -31,8 +31,8 @@ protocol SearchModelDelegate: class {
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
     
-    var tracks: [Track] = []
-    var channels: [Station] = []
+    var tracks: [Track1] = []
+    var channels: [Station1] = []
     
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""

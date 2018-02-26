@@ -11,9 +11,9 @@ import Foundation
 class FullChannelViewModel: MediumChannelViewModel {
     var description: String = ""
     
-    override init(channel: Station) {
+    override init(channel: Station1) {
         super.init(channel: channel)
         
-        self.description = channel.description
+        self.description = channel.descr
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 class SearchBuilder: Builder {
-    static func build(params: [String: Any]?) -> UIViewController {
+    static func build(params: [String: Any]?) -> UIViewController? {
         // for playlist
         let model = PlaylistsModel()
         let vm = PlaylistsViewModel(model: model)
