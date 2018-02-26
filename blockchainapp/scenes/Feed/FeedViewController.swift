@@ -67,6 +67,8 @@ class FeedViewController: UIViewController, ChannelProtocol {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
 		
 		navigationController?.navigationBar.prefersLargeTitles = false
 		self.navigationItem.largeTitleDisplayMode = .automatic
@@ -116,13 +118,8 @@ class FeedViewController: UIViewController, ChannelProtocol {
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
-        
-		emptyLabel.isHidden = !self.viewModel.showEmptyMessage
-        emptyButton.isHidden = !self.viewModel.showEmptyMessage
-		
+        		
 		self.tableView.refreshControl?.beginRefreshing()
-        
-        self.emitter.send(event: LifeCycleEvent.initialize)
 			
 //        self.trackInfoView = TrackInfoBlurView()
 //        self.view.addSubview(self.trackInfoView)
@@ -139,6 +136,9 @@ class FeedViewController: UIViewController, ChannelProtocol {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
         self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
+        
+        emptyLabel.isHidden = !self.viewModel.showEmptyMessage
+        emptyButton.isHidden = !self.viewModel.showEmptyMessage
 	}
     
     override func viewWillDisappear(_ animated: Bool) {

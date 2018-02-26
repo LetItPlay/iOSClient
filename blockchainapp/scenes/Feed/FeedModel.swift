@@ -19,6 +19,7 @@ protocol FeedModelDelegate: class {
 	func trackUpdate(index: Int, vm: TrackViewModel)
     func noDataLeft()
     func showChannels(_ show: Bool)
+    func showEmptyMessage(_ show: Bool)
 }
 
 class FeedModel: FeedModelProtocol,
@@ -84,6 +85,7 @@ FeedEventHandler {
             self.dataAction?.execute(0)
         case .appear:
             self.delegate?.showChannels(!isFeed)
+            self.delegate?.showEmptyMessage(isFeed)
         case .disappear:
             break
         case .deinitialize:

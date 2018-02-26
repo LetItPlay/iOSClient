@@ -87,4 +87,8 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     func showChannels(_ show: Bool) {
         self.showChannels = show
     }
+    
+    func showEmptyMessage(_ show: Bool) {
+        self.showEmptyMessage = show
+    }
 }
