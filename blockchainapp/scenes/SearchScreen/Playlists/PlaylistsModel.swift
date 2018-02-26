@@ -25,8 +25,8 @@ protocol PlaylistsModelDelegate: class {
 }
 
 class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
-    var tracks: [Track] = []
-    var channels: [Channel] = []
+    var tracks: [TrackObject] = []
+    var channels: [ChannelObject] = []
     
     let realm: Realm? = try? Realm()
     

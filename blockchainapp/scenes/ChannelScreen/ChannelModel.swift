@@ -17,7 +17,7 @@ protocol ChannelModelProtocol: class, ModelProtocol {
 
 protocol ChannelEvenHandler: class {
     func followPressed()
-    func set(channel: Channel1)
+    func set(channel: Channel)
 }
 
 protocol ChannelModelDelegate: class {
@@ -31,20 +31,20 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var delegate: ChannelModelDelegate?
     
-    var tracks: [Track] = []
-    var channel: Channel1!
+    var tracks: [TrackObject] = []
+    var channel: Channel!
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     var subManager = SubscribeManager.shared
 	
-	let getTracksAction: Action<Int, ([Track1],[Channel1])>!
+	let getTracksAction: Action<Int, ([Track],[Channel])>!
 	let disposeBag = DisposeBag()
         
     init(channelID: Int)
     {
-		getTracksAction = Action<Int, ([Track1],[Channel1])>.init(workFactory: { (offset) -> Observable<([Track1],[Channel1])> in
+		getTracksAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
 			return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
 		})
 		
@@ -82,7 +82,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     deinit {
     }
     
-    func set(channel: Channel1) {
+    func set(channel: Channel) {
         self.channel = channel
         
         let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
@@ -142,7 +142,7 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
     
-    func trackUpdated(track: Track1) {
+    func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)

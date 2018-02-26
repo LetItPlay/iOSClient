@@ -32,17 +32,17 @@ FeedEventHandler {
 	
 	weak var delegate: FeedModelDelegate?
 	
-	private var tracks: [Track1] = []
-	private var channels: Set<Channel1> = Set<Channel1>()
+	private var tracks: [Track] = []
+	private var channels: Set<Channel> = Set<Channel>()
 	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	private var dataAction: Action<Int, ([Track1],[Channel1])>?
+	private var dataAction: Action<Int, ([Track],[Channel])>?
 	private let disposeBag = DisposeBag()
 	
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
         
-		dataAction = Action<Int, ([Track1],[Channel1])>.init(workFactory: { (offset) -> Observable<([Track1],[Channel1])> in
+		dataAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(7))
 		})
 		
@@ -138,7 +138,7 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
         }
     }
     
-    func trackUpdated(track: Track1) {
+    func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)

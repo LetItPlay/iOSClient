@@ -8,12 +8,12 @@
 
 import Foundation
 
-typealias TrackResult = ([Track]) -> Void
+typealias TrackResult = ([TrackObject]) -> Void
 
 protocol FeedPresenterProtocol: class {
     func getData(onComplete: @escaping TrackResult)
 	
-	var tracks: [Track] {get}
+	var tracks: [TrackObject] {get}
 	var playingIndex: Int {get}
 	
     func like(trackUID: Int)

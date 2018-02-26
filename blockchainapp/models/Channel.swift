@@ -4,7 +4,7 @@ import RealmSwift
 
 typealias ObjectInfo = (id: Int, name: String, image: URL?)
 
-struct Channel1: Hashable {
+struct Channel: Hashable {
 	var id: Int					= 0
 	var name: String			= ""
 	var image: URL?
@@ -39,7 +39,11 @@ struct Channel1: Hashable {
 		return nil
 	}
 	
-	static func ==(f: Channel1, s: Channel1) -> Bool {
+	fileprivate init() {
+		
+	}
+	
+	static func ==(f: Channel, s: Channel) -> Bool {
 		return f.id == s.id
 	}
 	
@@ -48,7 +52,7 @@ struct Channel1: Hashable {
 	}
 }
 
-class Channel: Object {
+class ChannelObject: Object {
 	@objc dynamic var id: Int = 0
 	@objc dynamic var name: String = ""
 	@objc dynamic var image: String = ""
@@ -64,6 +68,20 @@ class Channel: Object {
 	
 	func uniqString() -> String {
 		return "\(id)"
+	}
+	
+	func plain() -> Channel {
+		var channel = Channel.init()
+		channel.id = self.id
+		channel.name = self.name
+		channel.image = URL(string: self.image)
+		channel.sourceURL = URL(string: self.sourceURL)
+		channel.subscriptionCount = self.subscriptionCount
+		channel.trackCount = Int(self.trackCount)
+		channel.lang = self.lang
+		channel.tags = self.tags.map({$0.value})
+		
+		return channel
 	}
 	
 	convenience init?(json: JSON) {

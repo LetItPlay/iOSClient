@@ -14,18 +14,18 @@ class DBManager {
     
     static let shared = DBManager()
     
-    func track(byId: Int) -> Track? {
+    func track(byId: Int) -> TrackObject? {
         let realm = try! Realm()
-        return realm.object(ofType: Track.self, forPrimaryKey: byId)
+        return realm.object(ofType: TrackObject.self, forPrimaryKey: byId)
     }
     
 	func addOrUpdateChannel(inRealm: Realm, id: Int, name: String, image: String, subscriptionCount: Int, tags: [String?]?, lang: String) {
-        if let channel = inRealm.object(ofType: Channel.self, forPrimaryKey: id) {
+        if let channel = inRealm.object(ofType: ChannelObject.self, forPrimaryKey: id) {
             _ = updateIfNeeded(property: &channel.name, new: name)
             _ = updateIfNeeded(property: &channel.image, new: image.buildImageURL()?.absoluteString ?? "")
             _ = updateIfNeeded(property: &channel.subscriptionCount, new: subscriptionCount)
 			_ = updateIfNeeded(property: &channel.lang, new: lang)
-			_ = updateIfNeeded(property: &channel.trackCount, new: Int64(inRealm.objects(Track.self).filter("station == \(id)").count))
+			_ = updateIfNeeded(property: &channel.trackCount, new: Int64(inRealm.objects(TrackObject.self).filter("station == \(id)").count))
 			if let tags = tags {
 				tags.forEach({ (tag) in
 					if let tagString = tag, !channel.tags.contains(where: {$0.value == tagString}) {
@@ -37,7 +37,7 @@ class DBManager {
 				})
 			}
         } else {
-            let newStat = Channel()
+            let newStat = ChannelObject()
             newStat.id = id
             newStat.name = name
             newStat.image = image.buildImageURL()?.absoluteString ?? ""
@@ -53,7 +53,7 @@ class DBManager {
 				})
 			}
 			newStat.lang = lang
-			newStat.trackCount = Int64(inRealm.objects(Track.self).filter("station == \(id)").count)
+			newStat.trackCount = Int64(inRealm.objects(TrackObject.self).filter("station == \(id)").count)
 			
             
             inRealm.add(newStat)
@@ -67,7 +67,7 @@ class DBManager {
 		
 		let description = description == "" ? "No description" : description
 		
-        if let track = inRealm.object(ofType: Track.self, forPrimaryKey: id) {
+        if let track = inRealm.object(ofType: TrackObject.self, forPrimaryKey: id) {
             var changeCounter = 0
             changeCounter += updateIfNeeded(property: &track.channel, new: channel)
             changeCounter += updateIfNeeded(property: &track.name, new: name)
@@ -97,7 +97,7 @@ class DBManager {
             
             debugPrint("track \(id) counter=\(changeCounter)")
         } else {
-            let newTrack = Track()
+            let newTrack = TrackObject()
             newTrack.id = id
             newTrack.channel = channel
             newTrack.name = name

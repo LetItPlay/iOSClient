@@ -22,8 +22,8 @@ protocol SearchPresenterDelegate: class {
 
 class SearchPresenter {
 	
-	var tracks: [Track] = []
-	var channels: [Channel] = []
+	var tracks: [TrackObject] = []
+	var channels: [ChannelObject] = []
 	weak var delegate: SearchPresenterDelegate?
 	let realm: Realm? = try? Realm()
 	var currentPlayingIndex: Int = -1
@@ -93,9 +93,9 @@ class SearchPresenter {
 			self.tracks = []
 			self.channels = []
 		} else {
-			let tracks = self.realm?.objects(Track.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			let tracks = self.realm?.objects(TrackObject.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
             self.tracks = tracks
-			self.channels = self.realm?.objects(Channel.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
+			self.channels = self.realm?.objects(ChannelObject.self).filter("name contains[cd] '\(string.lowercased())' OR ANY tags.value CONTAINS[cd] '\(string.lowercased())'").filter({$0.lang == UserSettings.language.rawValue}).map({$0}) ?? []
 		}
 		self.delegate?.updateSearch()
 	}

@@ -14,8 +14,8 @@ import RealmSwift
 import RxSwift
 import Action
 
-typealias ChannelsLoaderSuccess = ([Channel]) -> Void
-typealias TracksLoaderSuccess = ([Track]) -> Void
+typealias ChannelsLoaderSuccess = ([ChannelObject]) -> Void
+typealias TracksLoaderSuccess = ([TrackObject]) -> Void
 typealias ChannelsLoaderFail = (Error?) -> Void
 
 class AppManager {
@@ -47,8 +47,8 @@ class DownloadManager {
     
     static let shared = DownloadManager()
 	
-	func channelsSignal() -> Observable<[Channel]> {
-		return Observable<[Channel]>.create { (observer) -> Disposable in
+	func channelsSignal() -> Observable<[ChannelObject]> {
+		return Observable<[ChannelObject]>.create { (observer) -> Disposable in
 			
 			if let str = urlServices.channels.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
 				let url = URL(string: str) {
@@ -69,11 +69,11 @@ class DownloadManager {
 					do {
 						let json  = try JSON(data: data)
 						if let array = json.array {
-							let channels = array.map({ Channel.init(json: $0) }).filter({$0 != nil}).map({$0!})
+							let channels = array.map({ ChannelObject.init(json: $0) }).filter({$0 != nil}).map({$0!})
 							observer.onNext(channels)
 							let realm = try Realm()
 							try realm.write {
-								realm.delete(realm.objects(Channel.self))
+								realm.delete(realm.objects(ChannelObject.self))
 								realm.add(channels, update: true)
 //								for jStation in json.array ?? [] {
 //									if let idInt = jStation["Id"].int {
@@ -127,7 +127,7 @@ class DownloadManager {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
                     try realm.write {
-						realm.delete(realm.objects(Channel.self))
+						realm.delete(realm.objects(ChannelObject.self))
                         for jChannel in json.array ?? [] {
                             if let idInt = jChannel["Id"].int {
                                 DBManager.shared.addOrUpdateChannel(inRealm: realm,
@@ -151,10 +151,10 @@ class DownloadManager {
         }
     }
 	
-	func requestTracks(all: Bool = false) -> Observable<[Track]> {
+	func requestTracks(all: Bool = false) -> Observable<[TrackObject]> {
 		let path = /*all ?*/ urlServices.tracks.rawValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) /* :
 		urlServices.tracksForStations.rawValue.appending(SubscribeManager.shared.requestString()).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)*/
-		return Observable<[Track]>.create({ (observer) -> Disposable in
+		return Observable<[TrackObject]>.create({ (observer) -> Disposable in
 			if let path = path, let url = URL(string: path) {
 				
 				let request = URLRequest(url: url)
@@ -172,9 +172,9 @@ class DownloadManager {
 					do {
 						let json  = try JSON(data: data)
 						let realm = try Realm()
-						if let tracks = json.array?.map({Track.init(json: $0)}).filter({$0 != nil}).map({$0!}) {
+						if let tracks = json.array?.map({TrackObject.init(json: $0)}).filter({$0 != nil}).map({$0!}) {
 							try realm.write {
-								realm.delete(realm.objects(Track.self))
+								realm.delete(realm.objects(TrackObject.self))
 								realm.add(tracks, update: true)
 							}
 						}
@@ -214,7 +214,7 @@ class DownloadManager {
 					let json  = try JSON(data: data)
 					let realm = try Realm()
                     try realm.write {
-                        realm.delete(realm.objects(Track.self))
+                        realm.delete(realm.objects(TrackObject.self))
                         for jTrack in json.array ?? [] {
 							DBManager.shared.track(fromJSON: jTrack, realm: realm)
                         }

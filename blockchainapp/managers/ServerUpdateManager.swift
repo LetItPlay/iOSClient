@@ -27,7 +27,7 @@ class ServerUpdateManager {
     
     let disposeBag = DisposeBag()
 	
-	func make(channel: Channel1, action: ChannelAction) {
+	func make(channel: Channel, action: ChannelAction) {
         let type: ChannelUpdateRequest
         switch action {
         case .subscribe:
@@ -46,7 +46,7 @@ class ServerUpdateManager {
         }).disposed(by: disposeBag)
 	}
 	
-	func make(track: Track1, action: TrackAction) {
+	func make(track: Track, action: TrackAction) {
         let type: TrackUpdateRequest
         switch action {
         case .listen:

@@ -54,7 +54,7 @@ class ChannelsCell: UITableViewCell {
         return 164/* image */ + 13/* pad */ + 13/* pad */
     }
     
-    weak var channel: Channel? = nil {
+    weak var channel: ChannelObject? = nil {
         didSet {
             nameLabel.text = channel?.name
             subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
@@ -160,7 +160,7 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
         }
     }
     
-    func showChannel(channel: Channel1) {
+    func showChannel(channel: Channel) {
 		if let vc = ChannelBuilder.build(params: ["id" : channel.id, "station" : channel]){
         	self.navigationController?.pushViewController(vc, animated: true)
 		}

@@ -3,7 +3,7 @@ import RealmSwift
 import SwiftyJSON
 
 
-class Track1 {
+class Track {
 	static let formatter: DateFormatter = {
 		let form = DateFormatter()
 		form.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -37,7 +37,7 @@ class Track1 {
 			let title = json["Title"].string,
 			let audioURL = json["AudioURL"].string?.url(),
 			let publishedAtString = json["PublishedAt"].string,
-			let publishedAt = Track1.formatter.date(from: publishedAtString),
+			let publishedAt = Track.formatter.date(from: publishedAtString),
 			let lang = json["Lang"].string {
 			
 			self.id = idInt
@@ -75,7 +75,7 @@ class Track1 {
 }
 
 
-class Track: Object {
+class TrackObject: Object {
 	@objc dynamic var id: Int               = 0
 	@objc dynamic var channel: Int          = 0
 	@objc dynamic var name: String          = ""
@@ -138,6 +138,25 @@ class Track: Object {
 		return nil
 	}
 	
+	convenience init(track: Track) {
+		self.init()
+		self.id = track.id
+		self.name = track.name
+		self.channel = track.channelId
+		self.lang = track.lang
+		self.url = track.url?.absoluteString ?? ""
+		self.length = track.length
+		self.desc = track.desc
+		self.image = track.image?.absoluteString ?? ""
+		self.likeCount = track.likeCount
+		self.listenCount = track.listenCount
+		track.tags.forEach { (tag) in
+			let tagO = Tag()
+			tagO.value = tag
+			self.tags.append(tagO)
+		}
+	}
+	
 	override static func primaryKey() -> String? {
 		return "id"
 	}
@@ -146,17 +165,17 @@ class Track: Object {
 		return "\(id)"
 	}
 }
-extension Track {
+extension TrackObject {
 	public func findChannelName() -> String? {
-		return realm?.object(ofType: Channel.self, forPrimaryKey: channel)?.name
+		return realm?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.name
 	}
 	
 	public func findChannelImage() -> URL? {
-		return realm?.object(ofType: Channel.self, forPrimaryKey: channel)?.image.buildImageURL()
+		return realm?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.image.buildImageURL()
 	}
 }
 
-extension Track {
+extension TrackObject {
 	func audioTrack() -> AudioTrack {
 		return PlayerTrack.init(id: self.id, trackURL: URL(string: url)!, name: self.name, author: self.findChannelName() ?? "", imageURL: self.image.buildImageURL(), length: self.length)
 	}

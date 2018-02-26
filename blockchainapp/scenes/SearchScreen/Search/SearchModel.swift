@@ -32,10 +32,10 @@ protocol SearchModelDelegate: class {
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
     
-    var tracks: [Track1] = []
-    var channels: [Channel1] = []
-    var searchTracks: [Track1] = []
-    var searchChannels: [Channel1] = []
+    var tracks: [Track] = []
+    var channels: [Channel] = []
+    var searchTracks: [Track] = []
+    var searchChannels: [Channel] = []
     
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""
@@ -121,17 +121,17 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     func update(viewModels: [Any])
     {
-        if viewModels is [Channel1]
+        if viewModels is [Channel]
         {
-            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Channel1]))
+            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Channel]))
         }
         else
         {
-            self.delegate?.update(tracks: self.getTrackVMs(for: viewModels as! [Track1]))
+            self.delegate?.update(tracks: self.getTrackVMs(for: viewModels as! [Track]))
         }
     }
     
-    func getTrackVMs(for tracks: [Track1]) -> [TrackViewModel] {
+    func getTrackVMs(for tracks: [Track]) -> [TrackViewModel] {
         var trackVMs = [TrackViewModel]()
         for track in tracks
         {
@@ -140,7 +140,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         return trackVMs
     }
     
-    func getChannelVMs(for channels: [Channel1]) -> [SearchChannelViewModel]
+    func getChannelVMs(for channels: [Channel]) -> [SearchChannelViewModel]
     {
         let channelsId: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
         

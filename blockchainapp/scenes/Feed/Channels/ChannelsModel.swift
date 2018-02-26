@@ -38,16 +38,16 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     
     weak var delegate: ChannelsModelDelegate?
     var subManager = SubscribeManager.shared
-	var channels: [Channel1] = []
+	var channels: [Channel] = []
 	
-	let getChannelsAction: Action<Bool, [Channel1]>!
+	let getChannelsAction: Action<Bool, [Channel]>!
 	let disposeBag = DisposeBag()
     
     init(channelScreen: ChannelScreen)
     {
         self.channelScreen = channelScreen
 	
-		self.getChannelsAction = Action<Bool, [Channel1]>.init(workFactory: { (_) -> Observable<[Channel1]> in
+		self.getChannelsAction = Action<Bool, [Channel]>.init(workFactory: { (_) -> Observable<[Channel]> in
 			return RequestManager.shared.channels()
 		})
 		
@@ -95,7 +95,7 @@ extension ChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
         self.getChannelsAction.execute(true)
     }
     
-    func channelUpdated(channel: Channel1) {
+    func channelUpdated(channel: Channel) {
         if let index = self.channels.index(where: {$0.id == channel.id}) {
             self.channels[index] = channel
             self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))

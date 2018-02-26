@@ -85,7 +85,7 @@ class ChannelsPresenter: ChannelsPresenterProtocol {
         }
     }
     
-    func select(channel: Channel1) {
+    func select(channel: Channel) {
         subManager.addOrDelete(channel: channel.id)
     }
 }

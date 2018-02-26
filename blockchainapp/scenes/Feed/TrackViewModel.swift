@@ -21,7 +21,7 @@ struct TrackViewModel {
 	var isLiked: Bool = false
 	var isPlaying: Bool = false
 	
-	init(track: Track1, isPlaying: Bool = false) {
+	init(track: Track, isPlaying: Bool = false) {
 		self.name = track.name
 		self.imageURL = track.image
 		self.length = track.length.formatTime()
@@ -34,7 +34,7 @@ struct TrackViewModel {
 		self.isPlaying = isPlaying
 	}
 	
-	init(track: Track, isPlaying: Bool = false, isLiked: Bool = false) {
+	init(track: TrackObject, isPlaying: Bool = false, isLiked: Bool = false) {
 		self.name = track.name
 		self.author = track.findChannelName() ?? ""
 		self.authorImage = track.findChannelImage()

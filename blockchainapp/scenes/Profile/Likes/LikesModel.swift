@@ -25,7 +25,7 @@ class LikesModel: LikesModelProtocol {
     weak var delegate: LikesModelDelegate?
     private var token: NotificationToken?
     
-    private var tracks: [Track] = []
+    private var tracks: [TrackObject] = []
     private var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     private let disposeBag = DisposeBag()
@@ -42,7 +42,7 @@ class LikesModel: LikesModelProtocol {
     func getTracks() {
         let realm = try? Realm()
         let likeMan = LikeManager.shared
-        self.tracks = realm?.objects(Track.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+        self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
         
         self.getTracksViewModel()
     }
@@ -92,7 +92,7 @@ extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsU
         }
     }
     
-    func trackUpdated(track: Track1) {
+    func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)

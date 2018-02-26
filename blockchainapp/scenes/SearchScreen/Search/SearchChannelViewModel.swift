@@ -16,7 +16,7 @@ class SearchChannelViewModel: SmallChannelViewModel {
 
     var isSubscribed: Bool = false
 
-    override init(channel: Channel1) {
+    override init(channel: Channel) {
         super.init(channel: channel)
         
         self.name = channel.name
@@ -24,7 +24,7 @@ class SearchChannelViewModel: SmallChannelViewModel {
         self.tracksCount = Int64(channel.trackCount).formatAmount()
     }
     
-    init(channel: Channel1, isSubscribed: Bool)
+    init(channel: Channel, isSubscribed: Bool)
     {
         super.init(channel: channel)
         

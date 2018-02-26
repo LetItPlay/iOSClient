@@ -15,7 +15,7 @@ class MediumChannelViewModel: SmallChannelViewModel {
     var tags: [String] = []
     var isSubscribed: Bool = false
     
-    override init(channel: Channel1){
+    override init(channel: Channel){
         super.init(channel: channel)
         
         self.name = channel.name
@@ -25,7 +25,7 @@ class MediumChannelViewModel: SmallChannelViewModel {
         self.isSubscribed = channel.isSubscribed
     }
     
-    init(channel: Channel1, isSubscribed: Bool)
+    init(channel: Channel, isSubscribed: Bool)
     {
         super.init(channel: channel)
         

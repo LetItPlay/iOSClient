@@ -7,6 +7,7 @@ import Foundation
 import RxSwift
 import Alamofire
 import SwiftyJSON
+import RealmSwift
 
 enum TracksRequest {
     case feed(channels: [Int], offset: Int, count: Int)
@@ -65,15 +66,15 @@ class RequestManager {
     static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
-	func channel(id: Int) -> Observable<Channel1> {
+	func channel(id: Int) -> Observable<Channel> {
 		let urlString = RequestManager.server + "/stations/\(id)"
 		if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<Channel1> in
+			let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Channel> in
 				switch result {
 				case .value(let data):
-					if let json = try? JSON(data: data), var channel: Channel1 = Channel1(json: json) {
+					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
 						let lm = LikeManager.shared
 						channel.isSubscribed = lm.hasObject(id: channel.id)
 						return Observable.just(channel)
@@ -84,28 +85,41 @@ class RequestManager {
 					return Observable.error(error)
 				}
 			})
+			
+			if let channel = (try? Realm())?.object(ofType: ChannelObject.self, forPrimaryKey: id)?.plain() {
+				return Observable.from([Observable.just(channel), getSignal]).flatMap({$0})
+			} else {
+				return getSignal
+			}
 		}
 		return Observable.error(RequestError.invalidURL)
 	}
 	
-    func tracks(req: TracksRequest) -> Observable<([Track1],[Channel1])> {
+    func tracks(req: TracksRequest) -> Observable<([Track],[Channel])> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track1],[Channel1])> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
 				switch result {
 				case .value(let data):
 					do {
 						let lm = LikeManager.shared
 						let json = try JSON(data: data)
-						let channels: [Channel1] = json["Stations"].array?
-							.map({Channel1(json: $0)})
+						let channels: [Channel] = json["Stations"].array?
+							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
-						let tracks: [Track1] = json["Tracks"].array?
-							.map({Track1(json: $0)})
+						let tracks: [Track] = json["Tracks"].array?
+							.map({Track(json: $0)})
 							.filter({$0 != nil}).map({$0!})
 							.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
+						let objs = json["Stations"].array?.map({ (json) -> ChannelObject? in
+							return ChannelObject.init(json: json)
+						}).filter({$0 != nil}).map({$0!}) ?? []
+						let realm = try? Realm()
+						try? realm?.write {
+							realm?.add(objs, update: true)
+						}
 						return Observable.just((tracks, channels))
 					} catch {
 						return Observable.error(RequestError.invalidJSON)
@@ -118,24 +132,31 @@ class RequestManager {
         return Observable.error(RequestError.invalidURL)
     }
     
-    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Channel1]> {
+    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Channel]> {
         let urlString = RequestManager.server + "/stations?offset=\(offset)&count=\(count)&lang=\(UserSettings.language.rawValue)"
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel1]> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel]> in
 				switch result {
 				case .value(let data):
 					do {
 						let subMan = SubscribeManager.shared
 						let json = try JSON(data: data)
-						let channels: [Channel1] = json.array?
-							.map({Channel1(json: $0)})
+						let channels: [Channel] = json.array?
+							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({channel in
 								var channel = channel!
 								channel.isSubscribed = subMan.hasChannel(id: channel.id)
 								return channel
 							}) ?? []
+						let objs = json.array?.map({ (json) -> ChannelObject? in
+							return ChannelObject.init(json: json)
+						}).filter({$0 != nil}).map({$0!}) ?? []
+						let realm = try? Realm()
+						try? realm?.write {
+							realm?.add(objs, update: true)
+						}
 						return Observable.just(channels)
 					} catch {
 						return Observable.error(RequestError.invalidJSON)

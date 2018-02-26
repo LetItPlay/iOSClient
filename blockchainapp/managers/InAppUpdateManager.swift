@@ -13,11 +13,11 @@ enum InAppUpdateNotification: String {
 }
 
 protocol TrackUpdateProtocol: class {
-	func trackUpdated(track: Track1)
+	func trackUpdated(track: Track)
 }
 
 protocol ChannelUpdateProtocol: class {
-	func channelUpdated(channel: Channel1)
+	func channelUpdated(channel: Channel)
 }
 
 protocol SubscriptionUpdateProtocol: class {
@@ -105,7 +105,7 @@ class InAppUpdateManager {
 	}
 
 	@objc func channelChanged(notification: Notification) {
-		if let channel = notification.userInfo?["station"] as? Channel1 {
+		if let channel = notification.userInfo?["station"] as? Channel {
 			for box in self.observers[.channel] ?? [] {
 				(box.value as? ChannelUpdateProtocol)?.channelUpdated(channel: channel)
 			}
@@ -116,7 +116,7 @@ class InAppUpdateManager {
 	}
     
     @objc func trackChanged(notification: Notification) {
-        if let track = notification.userInfo?["track"] as? Track1 {
+        if let track = notification.userInfo?["track"] as? Track {
             for box in self.observers[.track] ?? [] {
                 (box.value as? TrackUpdateProtocol)?.trackUpdated(track: track)
             }
