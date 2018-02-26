@@ -11,7 +11,7 @@ import RealmSwift
 import RxSwift
 
 enum ViewModels {
-    case channels, tracks, all
+    case channels, tracks
 }
 
 protocol SearchModelProtocol: class, ModelProtocol {
@@ -27,13 +27,16 @@ protocol SearchEventHandler: class {
 protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
-    func update(tracks: [TrackViewModel], channels: [SearchChannelViewModel])
+//    func update(tracks: [TrackViewModel], channels: [SearchChannelViewModel])
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     var tracks: [Track1] = []
     var channels: [Station1] = []
+    
+    var searchTracks: [Track1] = []
+    var searchChannels: [Station1] = []
     
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""
@@ -46,93 +49,106 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     init()
     {
+        RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: {(tuple) in
+            self.tracks = tuple.0
+        }).disposed(by: self.disposeBag)
         
+        RequestManager.shared.channels().subscribe(onNext: { (stations) in
+            self.channels = stations
+        }).disposed(by: self.disposeBag)
     }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.update(viewModels: self.tracks)
+            self.update(viewModels: self.channels)
         default:
             break
         }
     }
-    
     func searchChanged(string: String) {
         self.currentSearchString = string.lowercased()
         if string.count == 0 {
-            self.tracks = []
-            self.channels = []
+            self.searchChannels = []
+            self.searchTracks = []
         } else {
-            RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: {(tuple) in
-                self.tracks = tuple.0.filter({ track in
-                    if track.name.lowercased().range(of: self.currentSearchString) != nil
-                    {
-                        return true
-                    }
-                    
-                    return false
-                })
-                self.get(viewModels: .tracks)
-            }).disposed(by: self.disposeBag)
             
-            RequestManager.shared.channels().subscribe(onNext: { (stations) in
-                self.channels = stations.filter({ channel in
-                    if channel.name.lowercased().range(of: self.currentSearchString) != nil
+            self.searchTracks = self.tracks.filter({ track in
+                if track.name.lowercased().range(of: self.currentSearchString) != nil
+                {
+                    return true
+                }
+                
+                for tag in track.tags
+                {
+                    if tag.lowercased().range(of: self.currentSearchString) != nil
                     {
                         return true
                     }
-                    
-                    for tag in channel.tags
+                }
+                return false
+            })
+            self.update(viewModels: self.searchTracks)
+            
+            self.searchChannels = self.channels.filter({ channel in
+                if channel.name.lowercased().range(of: self.currentSearchString) != nil
+                {
+                    return true
+                }
+                
+                for tag in channel.tags
+                {
+                    if tag.contains(self.currentSearchString)
                     {
-                        if tag.contains(self.currentSearchString)
-                        {
-                            return true
-                        }
+                        return true
                     }
-                    
-                    return false
-                })
-                self.get(viewModels: .channels)
-            }).disposed(by: self.disposeBag)
+                }
+                return false
+            })
+            self.update(viewModels: self.searchChannels)
         }
     }
     
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int) {
-        // to connector
+        // to router
     }
     
     func channelSubPressedAt(index: Int) {
-        
+        let channel = self.searchChannels[index]
+        SubscribeManager.shared.addOrDelete(station: channel.id)
+        self.update(viewModels: self.searchChannels)
     }
     
-    func get(viewModels: ViewModels)
+    func update(viewModels: [Any])
     {
-        switch viewModels {
-        case .channels:
-            self.delegate?.update(channels: self.getChannelVMs())
-        case .tracks:
-            self.delegate?.update(tracks: self.getTrackVMs())
-        case .all:
-            self.delegate?.update(tracks: self.getTrackVMs(), channels: self.getChannelVMs())
+        if viewModels is [Station1]
+        {
+            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Station1]))
+        }
+        else
+        {
+            self.delegate?.update(tracks: self.getTrackVMs(for: viewModels as! [Track1]))
         }
     }
     
-    func getTrackVMs() -> [TrackViewModel] {
+    func getTrackVMs(for tracks: [Track1]) -> [TrackViewModel] {
         var trackVMs = [TrackViewModel]()
-        for track in self.tracks
+        for track in tracks
         {
             trackVMs.append(TrackViewModel.init(track: track, isPlaying: false))
         }
         return trackVMs
     }
     
-    func getChannelVMs() -> [SearchChannelViewModel]
+    func getChannelVMs(for channels: [Station1]) -> [SearchChannelViewModel]
     {
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        
         var channelVMs: [SearchChannelViewModel] = []
-        for channel in self.channels
+        for channel in channels
         {
-            channelVMs.append(SearchChannelViewModel.init(channel: channel))
+            channelVMs.append(SearchChannelViewModel.init(channel: channel, isSubscribed: stations.contains(channel.id)))
         }
         return channelVMs
     }

@@ -14,11 +14,24 @@ class SearchChannelViewModel: SmallChannelViewModel {
     var subscriptionCount: String = ""
     var tracksCount: String = ""
     
+    var isSubscribed: Bool = false
+    
     override init(channel: Station1) {
         super.init(channel: channel)
         
         self.name = channel.name
         self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
         self.tracksCount = Int64(channel.trackCount).formatAmount()
+    }
+    
+    init(channel: Station1, isSubscribed: Bool)
+    {
+        super.init(channel: channel)
+        
+        self.name = channel.name
+        self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
+        self.tracksCount = Int64(channel.trackCount).formatAmount()
+        
+        self.isSubscribed = isSubscribed
     }
 }
