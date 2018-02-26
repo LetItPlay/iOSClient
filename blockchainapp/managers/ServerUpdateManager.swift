@@ -37,7 +37,7 @@ class ServerUpdateManager {
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.update(channel: channel, type: type).subscribe(onNext: { (channel) in
+        RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (isSubscribed) in
             NotificationCenter.default.post(name: InAppUpdateNotification.station.notification(), object: nil, userInfo: ["id" : channel])
         }).disposed(by: disposeBag)
 	}
@@ -54,7 +54,7 @@ class ServerUpdateManager {
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.update(track: track, type: type).subscribe(onNext: { (tuple) in
+        RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
             var track = track
             track.likeCount = tuple.0
             track.reportCount = tuple.1

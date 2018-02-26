@@ -66,7 +66,13 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     }
     
     func followPressed() {
+        // while in User Setting
         subManager.addOrDelete(station: self.channel.id)
+        channel.isSubscribed = !channel.isSubscribed
+        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+        // to server
+        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
     }
     
     func getTrackViewModels()
@@ -106,8 +112,10 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
     }
     
     func stationSubscriptionUpdated() {
-        // TODO: change button title
+        let stations: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        channel.isSubscribed = stations.contains(channel.id)
         
+        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
     
     func trackUpdated(track: Track1) {

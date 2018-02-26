@@ -155,9 +155,9 @@ class RequestManager {
         return Observable.error(RequestError.invalidURL)
     }
     
-    func update(channel: Station1, type: ChannelUpdateRequest) -> Observable<Station1> {
-        return Observable<Station1>.create({ (observer) -> Disposable in
-            if let str = String(format: "https://manage.letitplay.io/api/stations/%d/counts/", channel.id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+    func updateChannel(id: Int, type: ChannelUpdateRequest) -> Observable<Bool> {
+        return Observable<Bool>.create({ (observer) -> Disposable in
+            if let str = String(format: "https://manage.letitplay.io/api/stations/%d/counts/", id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                 let url = URL(string: str) {
                 
                 var request = URLRequest(url: url)
@@ -177,7 +177,7 @@ class RequestManager {
                 
                 request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
                 
-                Alamofire.request(url, method: .post, parameters: elements, encoding: URLEncoding.default, headers: nil)
+                Alamofire.request(request)
                     .responseData { (response: DataResponse<Data>) in
                         
                         if let _ = response.error {
@@ -191,7 +191,7 @@ class RequestManager {
                                 do {
                                     let json  = try JSON(data: data)
                                     if let channel = Station1.init(json: json) {
-                                        observer.onNext(channel)
+                                        observer.onNext(channel.isSubscribed)
                                     } else {
                                         observer.onError(RequestError.invalidJSON)
                                     }
@@ -217,9 +217,9 @@ class RequestManager {
         })
     }
     
-    func update(track: Track1, type: TrackUpdateRequest) -> Observable<(Int, Int, Int)> {
+    func updateTrack(id: Int, type: TrackUpdateRequest) -> Observable<(Int, Int, Int)> {
         return Observable<(Int, Int, Int)>.create({ (observer) -> Disposable in
-            if let str = String(format: "https://manage.letitplay.io/api/tracks/%d/counts/", track.id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            if let str = String(format: "https://manage.letitplay.io/api/tracks/%d/counts/", id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
                 let url = URL(string: str) {
                 
                 var request = URLRequest(url: url)
@@ -242,7 +242,6 @@ class RequestManager {
                 request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
 				
                 Alamofire.request(request)
-//                Alamofire.request(url, method: .post, parameters: elements, encoding: URLEncoding.default, headers: nil)
 					.responseData { (response: DataResponse<Data>) in
 						
 						if let _ = response.error {
@@ -260,9 +259,6 @@ class RequestManager {
                                        let listens = json["listen_count"].int
                                     {
                                         observer.onNext((likes, reports, listens))
-//                                    if let track = Track1.init(json: json) {
-//                                        observer.onNext(track)
-//                                        observer.onNext((elements["like_count"]!, elements["report_count"]!, elements["listen_count"]!))
 									} else {
 										observer.onError(RequestError.invalidJSON)
 									}

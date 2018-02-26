@@ -87,9 +87,13 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     
     func subscribeAt(index: Int) {
         let channel = self.channels[index]
-//        let action: StationAction = channel.isSubscribed ? Station.unlike : TrackAction.like
-//        ServerUpdateManager.shared.makeStation(id: channel.id, action: .subscribe)
-        subManager.addOrDelete(station: channel.id)
+        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
+        
+        // while in User Settings
+        subManager.addOrDelete(station: self.channels[index].id)
+        self.channels[index].isSubscribed = !self.channels[index].isSubscribed
+        self.getData()
     }
     
     func showChannel(index: Int) {

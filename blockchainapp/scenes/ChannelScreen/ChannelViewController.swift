@@ -30,13 +30,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         
         self.emitter = emitter
     }
-    
-//    init(station: Station) {
-//        super.init(nibName: nil, bundle: nil)
-//        self.station = station
-//        self.presenter = ChannelPresenter(station: station)
-//        self.presenter.view = self
-//    }
 	
     func followUpdate() {
          //SubscribeManager.shared.stations.contains(self.presenter.station.id)
