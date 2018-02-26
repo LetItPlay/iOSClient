@@ -368,11 +368,11 @@ class SubscribeManager {
         objc_sync_exit(channels)
         
         debugPrint("user subscribed on \(id)")
-        NotificationCenter.default.post(name: NotificationName.added.notification,
-                                        object: nil,
-                                        userInfo: ["id": id])
-        
-        DownloadManager.shared.subscribe(onChannel: id)
+//        NotificationCenter.default.post(name: NotificationName.added.notification,
+//                                        object: nil,
+//                                        userInfo: ["id": id])
+//
+//        DownloadManager.shared.subscribe(onChannel: id)
     }
     
     private func removeChannel(id: Int) {
@@ -388,11 +388,11 @@ class SubscribeManager {
 //        }
 		
         debugPrint("user unsubscribed on \(id)")
-        NotificationCenter.default.post(name: NotificationName.deleted.notification,
-                                        object: nil,
-                                        userInfo: ["id": id])
+//        NotificationCenter.default.post(name: NotificationName.deleted.notification,
+//                                        object: nil,
+//                                        userInfo: ["id": id])
         
-        DownloadManager.shared.subscribe(onChannel: id, withCount: -1)
+//        DownloadManager.shared.subscribe(onChannel: id, withCount: -1)
     }
     
 }
@@ -427,7 +427,7 @@ class LikeManager {
         
         debugPrint("user like on \(id)")
         
-        DownloadManager.shared.track(id: id, like: 1)
+//        DownloadManager.shared.track(id: id, like: 1)
     }
     
     private func dislike(id: Int) {
@@ -439,7 +439,7 @@ class LikeManager {
         
         debugPrint("user dislike on \(id)")
         
-        DownloadManager.shared.track(id: id, like: -1)
+//        DownloadManager.shared.track(id: id, like: -1)
     }
 }
 
@@ -470,6 +470,6 @@ class ListenManager {
         
         debugPrint("user listened \(id)")
         
-        DownloadManager.shared.track(id: id, listen: 1)
+//        DownloadManager.shared.track(id: id, listen: 1)
     }
 }

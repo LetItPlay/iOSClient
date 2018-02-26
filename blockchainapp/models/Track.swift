@@ -3,7 +3,7 @@ import RealmSwift
 import SwiftyJSON
 
 
-class Track {
+struct Track {
 	static let formatter: DateFormatter = {
 		let form = DateFormatter()
 		form.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
@@ -167,11 +167,11 @@ class TrackObject: Object {
 }
 extension TrackObject {
 	public func findChannelName() -> String? {
-		return realm?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.name
+		return (try? Realm())?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.name
 	}
 	
 	public func findChannelImage() -> URL? {
-		return realm?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.image.buildImageURL()
+		return (try? Realm())?.object(ofType: ChannelObject.self, forPrimaryKey: channel)?.image.buildImageURL()
 	}
 }
 

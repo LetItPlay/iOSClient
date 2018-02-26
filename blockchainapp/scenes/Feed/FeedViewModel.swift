@@ -74,9 +74,9 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     }
 	
 	func trackUpdate(index: Int, vm: TrackViewModel) {
-		var vm = self.tracks[index]
-		vm.update(vm: vm)
-		self.tracks[index] = vm
+		var old = self.tracks[index]
+		old.update(vm: vm)
+		self.tracks[index] = old
 		self.delegate?.make(updates: [.update: [index]])
 	}
     

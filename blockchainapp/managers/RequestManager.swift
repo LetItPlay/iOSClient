@@ -112,7 +112,10 @@ class RequestManager {
 						let tracks: [Track] = json["Tracks"].array?
 							.map({Track(json: $0)})
 							.filter({$0 != nil}).map({$0!})
-							.map({track in track.isLiked = lm.hasObject(id: track.id); return track}) ?? []
+							.map({track in
+								var track = track
+								track.isLiked = lm.hasObject(id: track.id)
+								return track}) ?? []
 						let objs = json["Stations"].array?.map({ (json) -> ChannelObject? in
 							return ChannelObject.init(json: json)
 						}).filter({$0 != nil}).map({$0!}) ?? []

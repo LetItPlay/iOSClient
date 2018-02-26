@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
 enum TrackAction {
 	case like
@@ -51,18 +52,27 @@ class ServerUpdateManager {
         switch action {
         case .listen:
             type = .listen
+			ListenManager.shared.add(id: track.id)
         case .like:
             type = .like(count: 1)
+			LikeManager.shared.addOrDelete(id: track.id)
         case .unlike:
             type = .like(count: -1)
+			LikeManager.shared.addOrDelete(id: track.id)
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
+		let realm = try? Realm()
+		try? realm?.write {
+			let obj = TrackObject(track: track)
+			realm?.add(obj, update: true)
+		}
+		RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
             var track = track
             track.likeCount = tuple.0
             track.reportCount = tuple.1
             track.listenCount = tuple.2
+			track.isLiked = LikeManager.shared.hasObject(id: track.id)
             NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["track": track])
         }).disposed(by: disposeBag)
 	}
