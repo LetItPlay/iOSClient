@@ -38,6 +38,7 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     }
     
     func followUpdate(isSubscribed: Bool) {
+        self.channel?.isSubscribed = isSubscribed
         self.isSubscribed = isSubscribed
         self.delegate?.updateSubscription()
     }

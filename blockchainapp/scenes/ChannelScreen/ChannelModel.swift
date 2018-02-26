@@ -66,13 +66,13 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     }
     
     func followPressed() {
+        // to server
+        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
         // while in User Setting
         subManager.addOrDelete(station: self.channel.id)
         channel.isSubscribed = !channel.isSubscribed
         self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
-        // to server
-        let action: StationAction = channel.isSubscribed ? StationAction.unsubscribe : StationAction.subscribe
-        ServerUpdateManager.shared.make(channel: channel, action: action)
     }
     
     func getTrackViewModels()
