@@ -36,7 +36,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     var channels: [Channel] = []
     var searchTracks: [Track] = []
     var searchChannels: [Channel] = []
-    
+	
     var currentPlayingIndex: Int = -1
     var currentSearchString: String = ""
     
@@ -50,10 +50,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     {
         RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: {(tuple) in
             self.tracks = tuple.0
-        }).disposed(by: self.disposeBag)
-        
-        RequestManager.shared.channels().subscribe(onNext: { (channels) in
-            self.channels = channels
+			self.channels = tuple.1
+			self.searchChanged(string: self.currentSearchString)
         }).disposed(by: self.disposeBag)
     }
     
