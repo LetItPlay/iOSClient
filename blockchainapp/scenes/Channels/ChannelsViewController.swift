@@ -183,11 +183,9 @@ extension ChannelsViewController {
         cell.channel = channel
 		cell.subAction = {[weak self] channel in
 			if let _ = channel {
-//                self?.presenter.select(station: station)
                 self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
 			}
 		}
-//        cell.subButton.isSelected = presenter.subManager.hasStation(id: station.id)
         return cell
     }
     

@@ -12,12 +12,9 @@ import SnapKit
 class ChannelViewController: UIViewController, ChannelVMDelegate {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
-	
-//    weak var station: Station!
     
     var viewModel: ChannelVMProtocol!
     var emitter: ChannelEmitterProtocol!
-//    var presenter: ChannelPresenter!
 	var header: ChannelHeaderView = ChannelHeaderView()
 	var currentIndex: Int = -1
 	
@@ -39,7 +36,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     }
     
     func updateSubscription() {
-        self.header.followButton.isSelected = self.viewModel.isSubscribed
+//        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
     }
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -69,7 +66,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		tableView.dataSource = self
 		
 		tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
-		self.header.followButton.isSelected = self.viewModel.isSubscribed //SubscribeManager.shared.stations.contains(self.presenter.station.id)
+		self.header.followButton.isSelected = self.viewModel.isSubscribed
 		
 		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
 		
@@ -79,7 +76,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     }
 	
 	@objc func followPressed() {
-//        self.presenter.followPressed()
+        self.header.followButton.isSelected = !self.header.followButton.isSelected
         self.emitter.send(event: ChannelEvent.followPressed)
 	}
 	

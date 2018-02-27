@@ -23,8 +23,8 @@ protocol ChannelEvenHandler: class {
 protocol ChannelModelDelegate: class {
     func reload(tracks: [TrackViewModel])
     func trackUpdate(index: Int, vm: TrackViewModel)
-    func followUpdate(isSubscribed: Bool)
     func getChannel(channel: FullChannelViewModel)
+    func followUpdate(isSubscribed: Bool)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -87,7 +87,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     func set(channel: Channel) {
         self.channel = channel
         
-        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
         self.delegate?.getChannel(channel: FullChannelViewModel.init(channel: channel))
     }
     
@@ -97,8 +96,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         ServerUpdateManager.shared.make(channel: channel, action: action)
         // while in User Setting
         subManager.addOrDelete(channel: self.channel.id)
-        channel.isSubscribed = !channel.isSubscribed
-        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
     
     func getTrackViewModels()
