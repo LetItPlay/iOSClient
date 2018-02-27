@@ -87,7 +87,7 @@ FeedEventHandler {
             self.dataAction?.execute(0)
         case .appear:
             self.delegate?.showChannels(!isFeed)
-            self.delegate?.showEmptyMessage(isFeed)
+            self.delegate?.showEmptyMessage(SubscribeManager.shared.channels.count == 0 && isFeed ? true : false)
         case .disappear:
             break
         case .deinitialize:

@@ -141,9 +141,6 @@ class FeedViewController: UIViewController {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
         self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
-        
-        emptyLabel.isHidden = !self.viewModel.showEmptyMessage
-        emptyButton.isHidden = !self.viewModel.showEmptyMessage
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -225,6 +222,11 @@ extension FeedViewController: FeedVMDelegate {
     
     func updateTableState() {
         
+    }
+    
+    func updateEmptyMessage() {
+        emptyLabel.isHidden = !self.viewModel.showEmptyMessage
+        emptyButton.isHidden = !self.viewModel.showEmptyMessage
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {

@@ -18,6 +18,7 @@ protocol FeedVMDelegate: class {
 	func reload()
 	func make(updates: [CollectionUpdate: [Int]])
     func updateTableState()
+    func updateEmptyMessage()
 }
 
 class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
@@ -90,6 +91,7 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     
     func showEmptyMessage(_ show: Bool) {
         self.showEmptyMessage = show
+        self.delegate?.updateEmptyMessage()
     }
     
     func showAllChannels() {
