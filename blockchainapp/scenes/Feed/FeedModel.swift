@@ -12,6 +12,7 @@ protocol FeedEventHandler: class {
     func trackLiked(index: Int)
     func reload()
     func trackShowed(index: Int)
+    func showAllChannels()
 }
 
 protocol FeedModelDelegate: class {
@@ -20,6 +21,7 @@ protocol FeedModelDelegate: class {
     func noDataLeft()
     func showChannels(_ show: Bool)
     func showEmptyMessage(_ show: Bool)
+    func showAllChannels()
 }
 
 class FeedModel: FeedModelProtocol,
@@ -143,6 +145,10 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)
         }
+    }
+    
+    func showAllChannels() {
+        self.delegate?.showAllChannels()
     }
 }
 

@@ -20,6 +20,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		self.init(nibName: nil, bundle: nil)
 		
 		self.viewControllers = router.initialViewControllers
+        self.router.currentNavigationController = self.viewControllers?.first as? UINavigationController
 		
 		self.playerController.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)

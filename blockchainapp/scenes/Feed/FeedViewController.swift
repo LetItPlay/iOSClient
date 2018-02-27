@@ -15,7 +15,7 @@ enum FeedType {
 	case feed, popular
 }
 
-class FeedViewController: UIViewController, ChannelProtocol {
+class FeedViewController: UIViewController {
 	
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
@@ -117,8 +117,8 @@ class FeedViewController: UIViewController, ChannelProtocol {
 			make.height.equalTo(32)
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
-        emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
-        		
+        emptyButton.addTarget(self, action: #selector(self.showAllChannels), for: .touchUpInside)
+        
 		self.tableView.refreshControl?.beginRefreshing()
 			
 //        self.trackInfoView = TrackInfoBlurView()
@@ -131,6 +131,11 @@ class FeedViewController: UIViewController, ChannelProtocol {
 //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
 //        }
 	}
+    
+    @objc func showAllChannels()
+    {
+        emitter.send(event: FeedEvent.showAllChannels())
+    }
 
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -159,22 +164,6 @@ class FeedViewController: UIViewController, ChannelProtocol {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-  @objc func showAllChannels() {
-    if let vc = ChannelsBuilder.build(params: nil){
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-  }
-    
-  func showChannel(channel: Channel) {
-	//    TODO:
-//      let vc = ChannelBuilder.build(params: ["id" : station.id, "station" : station])
-//      self.navigationController?.pushViewController(vc, animated: true)
-  }
-    
-    func showChannel(_ channel: FullChannelViewModel) {
-        // TODO: show channelViewModel
     }
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -326,7 +315,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 			if channelsView == nil {
             	channelsView = ChannelsCollectionView()
 			}
-            channelsView.delegate = self
             return channelsView
         }
         return nil

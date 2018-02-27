@@ -91,4 +91,8 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     func showEmptyMessage(_ show: Bool) {
         self.showEmptyMessage = show
     }
+    
+    func showAllChannels() {
+        MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
+    }
 }
