@@ -66,6 +66,26 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 	}
 	
+	func fill(vm: TrackViewModel) {
+		if let iconUrl = vm.imageURL {
+			trackImageView.sd_setImage(with: iconUrl)
+		} else {
+			trackImageView.image = nil
+		}
+		
+		trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: vm.name)
+		channelNameLabel.text = vm.author
+		
+		self.timeLabel.text = vm.dateString
+		
+		dataLabels[.listens]?.set(text: vm.listensCount)
+		dataLabels[.time]?.set(text: vm.length)
+		
+		dataLabels[.listens]?.isHidden = vm.isPlaying
+		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+	}
+
+	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		

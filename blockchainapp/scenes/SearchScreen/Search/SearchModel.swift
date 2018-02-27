@@ -48,11 +48,13 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     init()
     {
-        RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: {(tuple) in
-            self.tracks = tuple.0
-			self.channels = tuple.1
-			self.searchChanged(string: self.currentSearchString)
-        }).disposed(by: self.disposeBag)
+		Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
+			return (tracksTuple.0, channels)
+			}.subscribe(onNext: {(tuple) in
+				self.tracks = tuple.0
+				self.channels = tuple.1
+				self.searchChanged(string: self.currentSearchString)
+			}).disposed(by: self.disposeBag)
     }
     
     func send(event: LifeCycleEvent) {
@@ -133,7 +135,12 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         var trackVMs = [TrackViewModel]()
         for track in tracks
         {
-            trackVMs.append(TrackViewModel.init(track: track, isPlaying: false))
+			var vm = TrackViewModel.init(track: track, isPlaying: false)
+			if let channel = self.channels.first(where: {$0.id == track.channelId}) {
+				vm.author = channel.name
+				vm.authorImage = channel.image
+			}
+            trackVMs.append(vm)
         }
         return trackVMs
     }
