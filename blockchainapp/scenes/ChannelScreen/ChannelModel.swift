@@ -31,7 +31,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var delegate: ChannelModelDelegate?
     
-    var tracks: [TrackObject] = []
+    var tracks: [Track] = []
     var channel: Channel!
     var currentTrackID: Int?
     
@@ -44,27 +44,29 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         
     init(channelID: Int)
     {
-		getTracksAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
-			return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
-		})
-		
-		getTracksAction.elements
-			.map({ (tuple) -> [TrackViewModel] in
-				let playingId = AudioController.main.currentTrack?.id
-				return tuple.0.map({ (track) -> TrackViewModel in
-					var vm = TrackViewModel(track: track,
-											isPlaying: track.id == playingId)
-					if let channel = tuple.1.filter({$0.id == track.channelId}).first {
-						vm.authorImage = channel.image
-						vm.author = channel.name
-					}
-					return vm
-				})
-			}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
-				self.delegate?.reload(tracks: vms)
-			}, onCompleted: {
-				print("Track loaded")
-			}).disposed(by: self.disposeBag)
+        getTracksAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
+            return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
+        })
+        
+        getTracksAction.elements
+            .map({ (tuple) -> [TrackViewModel] in
+                let playingId = AudioController.main.currentTrack?.id
+                return tuple.0.map({ (track) -> TrackViewModel in
+                    var vm = TrackViewModel(track: track,
+                                            isPlaying: track.id == playingId)
+//                    if let channel = tuple.1.filter({$0.id == track.channelId}).first {
+                    if let _ = self.channel
+                    {
+                        vm.authorImage = self.channel.image
+                        vm.author = self.channel.name
+                    }
+                    return vm
+                })
+            }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
+                self.delegate?.reload(tracks: vms)
+            }, onCompleted: {
+                print("Track loaded")
+            }).disposed(by: self.disposeBag)
 
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
@@ -113,7 +115,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         case .initialize:
             self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
         case .appear:
-            self.getData()
+            break
         default:
             break
         }
