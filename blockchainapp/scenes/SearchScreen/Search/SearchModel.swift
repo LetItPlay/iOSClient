@@ -86,13 +86,26 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                     return true
                 }
                 
-                for tag in track.tags
-                {
-                    if tag.lowercased().range(of: self.currentSearchString) != nil
+                if track.tags.count != 0 {
+                    for tag in track.tags
                     {
-                        return true
+                        if tag.lowercased().range(of: self.currentSearchString) != nil
+                        {
+                            return true
+                        }
                     }
                 }
+                else
+                {
+                    for tag in (channels.filter({$0.id == track.channelId}).first?.tags)!
+                    {
+                        if tag.lowercased().range(of: self.currentSearchString) != nil
+                        {
+                            return true
+                        }
+                    }
+                }
+                
                 return false
             })
             
