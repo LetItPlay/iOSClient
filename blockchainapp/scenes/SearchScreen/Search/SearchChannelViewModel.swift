@@ -22,16 +22,7 @@ class SearchChannelViewModel: SmallChannelViewModel {
         self.name = channel.name
         self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
         self.tracksCount = Int64(channel.trackCount).formatAmount()
-    }
-    
-    init(channel: Channel, isSubscribed: Bool)
-    {
-        super.init(channel: channel)
         
-        self.name = channel.name
-        self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
-        self.tracksCount = Int64(channel.trackCount).formatAmount()
-        
-        self.isSubscribed = isSubscribed
+        self.isSubscribed = channel.isSubscribed
     }
 }

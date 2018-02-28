@@ -20,7 +20,8 @@ protocol SearchVMEmitterProtocol: class {
 }
 
 protocol SearchVMDelegate: class {
-    func update(data: ViewModels)
+    func reloadTracks()
+    func reloadChannels()
 }
 
 class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterProtocol {
@@ -40,12 +41,19 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
     
     func update(tracks: [TrackViewModel]) {
         self.tracks = tracks
-        self.delegate?.update(data: .tracks)
+        self.delegate?.reloadTracks()
     }
     
     func update(channels: [SearchChannelViewModel]) {
         self.channels = channels
-        self.delegate?.update(data: .channels)
+        self.delegate?.reloadChannels()
+    }
+    
+    func update(index: Int, vm: SearchChannelViewModel) {
+        if channels.count > index {
+            self.channels[index] = vm
+            self.delegate?.reloadChannels()
+        }
     }
     
     func showChannel(id: Int) {

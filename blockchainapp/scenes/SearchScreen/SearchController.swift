@@ -56,13 +56,14 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         self.emitter.send(event: LifeCycleEvent.initialize)
     }
     
-    func update(data: ViewModels) {
-        switch data {
-        case .channels:
-            self.channels = self.viewModel.channels
-        case .tracks:
-            self.tracks = self.viewModel.tracks
-        }
+    func reloadChannels() {
+        self.channels = self.viewModel.channels
+        self.tableView.reloadData()
+    }
+    
+    func reloadTracks()
+    {
+        self.tracks = self.viewModel.tracks
         self.tableView.reloadData()
     }
     

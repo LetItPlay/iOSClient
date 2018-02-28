@@ -27,6 +27,7 @@ protocol SearchEventHandler: class {
 protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
+    func update(index: Int, vm: SearchChannelViewModel)
     func showChannel(id: Int)
 }
 
@@ -55,6 +56,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
 				self.channels = tuple.1
 				self.searchChanged(string: self.currentSearchString)
 			}).disposed(by: self.disposeBag)
+        
+        InAppUpdateManager.shared.subscribe(self)
     }
     
     func send(event: LifeCycleEvent) {
@@ -71,6 +74,9 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         if string.count == 0 {
             self.searchChannels = []
             self.searchTracks = []
+            
+            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
+            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
         } else {
             
             self.searchTracks = self.tracks.filter({ track in
@@ -113,16 +119,19 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         switch viewModels {
         case .channels:
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
-            self.delegate?.showChannel(id: self.searchChannels[atIndex].id)
+            self.delegate?.showChannel(id: self.searchChannels.count != 0 ? self.searchChannels[atIndex].id : self.channels[atIndex].id)
         case .tracks:
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
         }
     }
     
     func channelSubscriptionPressedAt(index: Int) {
-        let channel = self.searchChannels[index]
+        let channel = self.searchChannels.count != 0 ? self.searchChannels[index] : self.channels[index]
+        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
+        
+        // while in User Settings
         SubscribeManager.shared.addOrDelete(channel: channel.id)
-        self.update(viewModels: self.searchChannels)
     }
     
     func update(viewModels: [Any])
@@ -158,8 +167,31 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         var channelVMs: [SearchChannelViewModel] = []
         for channel in channels
         {
-            channelVMs.append(SearchChannelViewModel.init(channel: channel, isSubscribed: channelsId.contains(channel.id)))
+            channelVMs.append(SearchChannelViewModel.init(channel: channel))
         }
         return channelVMs
+    }
+}
+
+extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
+    func settingsUpdated() {
+        
+    }
+    
+    func channelUpdated(channel: Channel) {
+        if let index = self.channels.index(where: {$0.id == channel.id}) {
+            self.channels[index] = channel
+            var oldChannel = channel
+            oldChannel.isSubscribed = !oldChannel.isSubscribed
+            var searchIndex = index
+            
+            if self.searchChannels.count != 0
+            {
+                searchIndex = self.searchChannels.index(of: oldChannel)!
+                self.searchChannels[searchIndex] = channel
+            }
+            
+            self.delegate?.update(index: searchIndex, vm: SearchChannelViewModel(channel: channel))
+        }
     }
 }
