@@ -34,6 +34,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
     private var token: NotificationToken?
     
     private var channels: Set<Channel> = Set<Channel>()
+    private var trackChannels: [Channel] = []
     private var tracks: [TrackObject] = []
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     private var currentOffest: Int = 0
@@ -84,11 +85,8 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
         self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
 
         self.getTracksViewModel()
-    }
-
-    func selectedTrack(index: Int) {
-        let contr = AudioController.main
-        contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].id)
+        
+        
     }
     
     func getTracksViewModel()
@@ -97,7 +95,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
         var tracksVMs = [TrackViewModel]()
         for i in 0..<tracks.count
         {
-            tracksVMs.append(TrackViewModel.init(track: tracks[i], isPlaying: i == playingIndex.value ? true : false, isLiked: true))
+            tracksVMs.append(TrackViewModel(track: tracks[i], isPlaying: self.tracks[i].id == AudioController.main.currentTrack?.id ? true : false))
             length += tracks[i].length
         }
         
@@ -121,7 +119,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
         let tracks = self.tracks.map { (track) -> AudioTrack in
             return track.audioTrack()
         }
-        AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
+        AudioController.main.loadPlaylist(playlist: ("Like".localized, tracks), playId: self.tracks[index].id)
     }
 }
 

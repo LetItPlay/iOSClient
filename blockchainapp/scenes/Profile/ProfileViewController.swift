@@ -23,7 +23,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         return imagePicker
     }()
 	
-	var tracks: [TrackViewModel] = []
 	var currentIndex: Int = -1
     var isKeyboardShown = true
 	
@@ -142,7 +141,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     }
     
     func reload() {
-        self.tracks = viewModel.tracks
         self.tableView.reloadData()
     }
     
@@ -230,18 +228,14 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.tracks.count
+		return self.viewModel.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
 		
-		let track = self.tracks[indexPath.item]
-		cell.track = track
-		cell.dataLabels[.listens]?.isHidden = self.tracks[indexPath.row].isPlaying
-		cell.dataLabels[.playingIndicator]?.isHidden = !self.tracks[indexPath.row].isPlaying
-		cell.timeLabel.isHidden = true
-		cell.separator.isHidden = indexPath.item + 1 == self.tracks.count
+		let track = self.viewModel.tracks[indexPath.item]
+        cell.fill(vm: track)
 		return cell
 	}
 	
@@ -251,7 +245,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        header.fill(count: Int64(self.tracks.count).formatAmount(), length: self.viewModel.length)
+        header.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
 		return header
 	}
 	
@@ -268,7 +262,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.tracks[indexPath.item]
+		let track = self.viewModel.tracks[indexPath.item]
 		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
 	}
 }

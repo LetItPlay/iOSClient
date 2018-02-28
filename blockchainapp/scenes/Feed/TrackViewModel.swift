@@ -44,6 +44,7 @@ struct TrackViewModel {
 		self.listensCount = Int64(track.listenCount).formatAmount()
 		self.dateString = track.publishedAt.formatString()
         self.description = track.desc
+        self.isPlaying = isPlaying
 	}
 	
 	mutating func update(vm: TrackViewModel) {

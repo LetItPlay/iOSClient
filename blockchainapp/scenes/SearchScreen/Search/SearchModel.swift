@@ -95,8 +95,15 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 return false
             })
+            
             self.delegate?.update(tracks: self.searchTracks.map({ (track) -> TrackViewModel in
                 var vm = TrackViewModel(track: track)
+                
+                if track.id == AudioController.main.currentTrack?.id
+                {
+                    vm.isPlaying = true
+                }
+                
                 if let channel = self.channels.first(where: {$0.id == track.channelId}) {
                     vm.author = channel.name
                     vm.authorImage = channel.image

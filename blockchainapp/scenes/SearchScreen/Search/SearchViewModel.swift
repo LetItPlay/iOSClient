@@ -45,15 +45,17 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         self.model.playingIndex.asObservable().scan(nil) { (res, index) -> (Int?, Int?) in
             return (res?.1, index)
             }.subscribe(onNext: { (tuple) in
-                if self.channels.count != 0 || self.tracks.count != 0
+                if self.tracks.count != 0
                 {
                     if let tuple = tuple {
                         var indexes = [Int]()
                         if let old = tuple.0 {
-                            var vm = self.tracks[old]
-                            vm.isPlaying = false
-                            self.tracks[old] = vm
-                            indexes.append(old)
+                            if self.tracks.count > old {
+                                var vm = self.tracks[old]
+                                vm.isPlaying = false
+                                self.tracks[old] = vm
+                                indexes.append(old)
+                            }
                         }
                         if let new = tuple.1 {
                             var vm = self.tracks[new]
