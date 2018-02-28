@@ -220,12 +220,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 				self.currentTrackIndexPath.item += way
 			}
 		} else {
-			if indexPath.item + way == self.playlist.tracks.count {
-//				self.make(command: .pause)
-//				self.currentTrackIndexPath = IndexPath.invalid
-//				self.userPlaylist.tracks = []
-//				self.playlist.tracks = []
-//				self.popupDelegate?.hidePlayer()
+			if indexPath.item + way >= self.playlist.tracks.count ||  indexPath.item + way < 0 {
 				return
 				// TODO: hide player
 			} else {

@@ -63,8 +63,4 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
             return ViewModels.channels
         }
     }
-    
-    func showChannel(id: Int) {
-        MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
-    }
 }
