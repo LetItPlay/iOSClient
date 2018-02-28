@@ -169,9 +169,9 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
 		let track = self.viewModel.tracks[indexPath.item]
 		cell.track = track
-		let hideListens = indexPath.item == self.currentIndex
-		cell.dataLabels[.listens]?.isHidden = hideListens
-		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+//        let hideListens = indexPath.item == self.currentIndex
+		cell.dataLabels[.listens]?.isHidden = track.isPlaying //hideListens
+		cell.dataLabels[.playingIndicator]?.isHidden = !track.isPlaying //!hideListens
 		return cell
 	}
 	
