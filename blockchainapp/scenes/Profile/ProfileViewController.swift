@@ -99,12 +99,14 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
-        isKeyboardShown = false
-        view.endEditing(true)
-        let height = sender is UITapGestureRecognizer ? 0 : 100
-        tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-        let name = self.profileView.profileNameLabel.text!
-        self.profileView.emitter?.send(event: ProfileEvent.setName(name))
+        if isKeyboardShown {
+            isKeyboardShown = false
+            view.endEditing(true)
+            let height = sender is UITapGestureRecognizer ? 0 : 100
+            tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
+            let name = self.profileView.profileNameLabel.text!
+            self.profileView.emitter?.send(event: ProfileEvent.setName(name))
+        }
     }
 	
 	@objc func langChanged(_: UIButton) {
