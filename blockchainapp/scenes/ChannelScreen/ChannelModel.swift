@@ -13,9 +13,11 @@ import Action
 
 protocol ChannelModelProtocol: class, ModelProtocol {
     weak var delegate: ChannelModelDelegate? {get set}
+    var playingIndex: Variable<Int?> {get}
 }
 
 protocol ChannelEvenHandler: class {
+    func trackSelected(index: Int)
     func followPressed()
     func set(channel: Channel)
 }
@@ -31,7 +33,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var delegate: ChannelModelDelegate?
     
-    var tracks: [Track] = []
+    var tracks: [TrackObject] = []
     var channel: Channel!
     var currentTrackID: Int?
     
@@ -48,8 +50,9 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
             return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
         })
         
-        getTracksAction.elements
-            .map({ (tuple) -> [TrackViewModel] in
+        getTracksAction.elements.do(onNext: { (tuple) in
+            self.tracks = tuple.0.map({TrackObject.init(track: $0)})
+        }).map({ (tuple) -> [TrackViewModel] in
                 let playingId = AudioController.main.currentTrack?.id
                 return tuple.0.map({ (track) -> TrackViewModel in
                     var vm = TrackViewModel(track: track,
@@ -116,6 +119,13 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         default:
             break
         }
+    }
+    
+    func trackSelected(index: Int) {
+        let tracks = self.tracks.map { (track) -> AudioTrack in
+            return track.audioTrack()
+        }
+        AudioController.main.loadPlaylist(playlist: ("Channel".localized, tracks), playId: self.tracks[index].id)
     }
 }
 

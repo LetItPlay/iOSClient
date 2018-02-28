@@ -18,9 +18,7 @@ class Custom: UIViewController {
 
 class SearchViewController: UIViewController,
 UISearchControllerDelegate,
-//UISearchResultsUpdating,
-UISearchBarDelegate {//,
-//SearchPresenterDelegate {
+UISearchBarDelegate {
 
     var searchController: UISearchController!
 	var searchResultsTableView: UITableView = UITableView()
@@ -43,57 +41,20 @@ UISearchBarDelegate {//,
         self.searchResults = SearchResultsController(viewModel: searchViewModel, emitter: searchEmitter)
         self.searchResultsTableView = self.searchResults.tableView
         self.searchController = self.searchResults.searchController
-        
-//        self.searchController.hidesNavigationBarDuringPresentation = true
-//        self.searchController.dimsBackgroundDuringPresentation = true
-        
-//        self.searchController.view.addSubview(searchResultsTableView)
-//        searchResultsTableView.snp.makeConstraints { (make) in
-//            make.edges.equalToSuperview()
-//        }
     }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 
 		self.title = "Search".localized
-//        self.presenter.delegate = self
-		
-//        self.searchResults.presenter = self.presenter
-//        self.searchResults.searchController = self.searchController
-//        self.searchResults.parent = self
 		
 		self.navigationController?.navigationBar.prefersLargeTitles = true
 		self.navigationItem.largeTitleDisplayMode = .always
 		self.view.backgroundColor = .white
-		
-//        self.searchController = UISearchController(searchResultsController:  nil)
-//
-//        self.searchController.searchResultsUpdater = self
-//        self.searchController.delegate = self
-//        self.searchController.searchBar.delegate = self
-//
-//        self.searchController.hidesNavigationBarDuringPresentation = true
-//        self.searchController.dimsBackgroundDuringPresentation = true
+        
 		self.definesPresentationContext = true
 
 		self.navigationItem.searchController = self.searchController
-		
-//        self.searchController.view.addSubview(searchResultsTableView)
-//        searchResultsTableView.snp.makeConstraints { (make) in
-//            make.edges.equalToSuperview()
-//        }
-		
-//        self.searchResultsTableView.delegate = self.searchResults
-//        self.searchResultsTableView.dataSource = self.searchResults
-//        self.searchResultsTableView.tableFooterView = nil
-		
-        // Do any additional setup after loading the view.
-		
-//        self.searchResultsTableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
-//        self.searchResultsTableView.register(SmallChannelTableViewCell.self, forCellReuseIdentifier: SmallChannelTableViewCell.cellID)
-//		self.presenter.formatPlaylists()
-		
 		
 		self.view.addSubview(playlistTableView)
 		playlistTableView.snp.makeConstraints { (make) in
@@ -128,33 +89,7 @@ UISearchBarDelegate {//,
         self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
 	
-//    func updateSearchResults(for searchController: UISearchController) {
-//        if let text = searchController.searchBar.text {
-//            self.presenter.searchChanged(string: text)
-//        }
-//    }
-	
-//    func updateSearch() {
-//        self.searchResultsTableView.reloadData()
-//    }
-//
-//    func update(tracks: [Int], channels: [Int]) {
-//        self.searchResultsTableView.reloadRows(at: tracks.map({IndexPath.init(row: $0, section: 1)}), with: .none)
-//        self.searchResultsTableView.reloadRows(at: channels.map({IndexPath.init(row: $0, section: 0)}), with: .none)
-//    }
-//
-//    func updatePlaylists() {
-//        self.playlistTableView.reloadData()
-//        self.emptyLabel.isHidden = self.presenter.playlists.count != 0
-//    }
-	
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-		
-//        self.presenter.getData()
-		
-//        if self.presenter.currentSearchString != "" {
-//            AnalyticsEngine.sendEvent(event: .searchEvent(event: .search(text: self.presenter.currentSearchString)))
-//        }
     }
 }

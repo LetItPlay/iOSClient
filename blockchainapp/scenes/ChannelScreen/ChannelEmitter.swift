@@ -9,6 +9,7 @@
 import Foundation
 
 enum ChannelEvent {
+    case trackSelected(index: Int)
     case followPressed
 }
 
@@ -30,8 +31,8 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
         switch event {
         case .followPressed:
             self.model?.followPressed()
-//        case .station(let station):
-//            self.model?.set(station: channel)
+        case .trackSelected(let index):
+            self.model?.trackSelected(index: index)
         }
     }
 }

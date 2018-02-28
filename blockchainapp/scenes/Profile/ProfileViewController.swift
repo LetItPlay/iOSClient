@@ -247,7 +247,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
-        self.emitter?.make(action: .selected, index: indexPath.row)
+        self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

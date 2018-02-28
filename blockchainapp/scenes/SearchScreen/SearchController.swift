@@ -82,8 +82,6 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
             
-            
-            //            cell.track = self.presenter.tracks[indexPath.item]
             let _ = self.viewModel.currentPlayingIndex == indexPath.item
             //            cell.dataLabels[.listens]?.isHidden = isPlaying
             //            cell.dataLabels[.playingIndicator]?.isHidden = !isPlaying
