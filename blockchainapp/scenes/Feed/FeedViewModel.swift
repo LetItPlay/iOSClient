@@ -39,7 +39,7 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
 		self.model.playingIndex.asObservable().scan(nil) { (res, index) -> (Int?, Int?) in
 			return (res?.1, index)
 			}.subscribe(onNext: { (tuple) in
-				if let tuple = tuple {
+				if let tuple = tuple, self.tracks.count != 0 {
 					var indexes = [Int]()
 					if let old = tuple.0 {
 						var vm = self.tracks[old]

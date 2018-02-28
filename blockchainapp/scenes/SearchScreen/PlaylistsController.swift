@@ -42,12 +42,19 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         self.tableView.refreshControl = refreshControl
+		refreshControl.beginRefreshing()
     }
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
-        self.emitter.send(event: PlaylistsEvent.refresh)
+//        self.emitter.send(event: PlaylistsEvent.refresh)
     }
+	
+	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+		if self.tableView.refreshControl?.isRefreshing == true {
+			self.emitter.send(event: PlaylistsEvent.refresh)
+		}
+	}
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -81,27 +88,32 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
-    
+	
+	let header: UIView = {
+		let label = UILabel()
+		label.textColor = AppColor.Title.dark
+		label.font = AppFont.Title.section
+		label.text = "Today playlists".localized
+		
+		let container = UIView()
+		container.backgroundColor = UIColor.white
+		container.addSubview(label)
+		label.snp.makeConstraints { (make) in
+			make.top.equalToSuperview()
+			make.bottom.equalToSuperview()
+			make.left.equalToSuperview().inset(16)
+			make.right.equalToSuperview().inset(16)
+		}
+		return container
+	}()
+	
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if self.playlists.count == 0 {
             return nil
         }
-        
-        let label = UILabel()
-        label.textColor = AppColor.Title.dark
-        label.font = AppFont.Title.section
-        label.text = "Today playlists".localized
-        
-        let container = UIView()
-        container.backgroundColor = UIColor.white
-        container.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
-        }
-        return container
+		
+		return header
+
     }
 }

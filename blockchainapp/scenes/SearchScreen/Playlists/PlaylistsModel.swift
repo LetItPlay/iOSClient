@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 import RxSwift
+import Action
 
 protocol PlaylistsModelProtocol: ModelProtocol {
     weak var delegate: PlaylistsModelDelegate? {get set}
@@ -36,24 +37,32 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     var playlists: [(image: UIImage?, title: String, descr: String, tracks: [AudioTrack])] = []
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
-    
+	
+	var dataAction: Action<Bool,[AudioTrack]>!
     let disposeBag = DisposeBag()
     
     init()
     {
-        self.getData()
-        
+		self.dataAction = Action<Bool,[AudioTrack]>.init(workFactory: { (_) -> Observable<[AudioTrack]> in
+			return RequestManager.shared.tracks(req: .magic).map({ (tuple) -> [AudioTrack] in
+				return tuple.0.map({ (track) -> AudioTrack in
+					return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.first(where: {track.channelId == $0.id})?.name ?? "", imageURL: track.image, length: track.length)
+				})
+			})
+		})
+		
+		self.dataAction.elements.subscribe(onNext: { (audio) in
+			self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: audio)]
+			self.getPlaylistViewModels()
+		}).disposed(by: disposeBag)
+		
         InAppUpdateManager.shared.subscribe(self)
+		
+		self.getData()
     }
-    
+	
     func getData() {
-        RequestManager.shared.tracks(req: .magic).subscribe(onNext: { (tuple) in
-            let tracklist = tuple.0.map({ (track) -> AudioTrack in
-                return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.filter({track.channelId == $0.id}).first?.name ?? "", imageURL: track.image, length: track.length)
-            })
-            self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: tracklist)]
-            self.getPlaylistViewModels()
-        }).disposed(by: self.disposeBag)
+		self.dataAction.execute(true)
     }
     
     func formatPlaylists(index: Int) {
