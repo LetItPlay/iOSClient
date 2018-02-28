@@ -63,8 +63,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.update(viewModels: self.tracks)
-            self.update(viewModels: self.channels)
+            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
+            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
         default:
             break
         }
@@ -94,7 +94,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 return false
             })
-            self.update(viewModels: self.searchTracks)
+            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
             
             self.searchChannels = self.channels.filter({ channel in
                 if channel.name.lowercased().range(of: self.currentSearchString) != nil
@@ -111,7 +111,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 return false
             })
-            self.update(viewModels: self.searchChannels)
+            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
         }
     }
     
@@ -122,7 +122,16 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
             self.delegate?.showChannel(id: self.searchChannels.count != 0 ? self.searchChannels[atIndex].id : self.channels[atIndex].id)
         case .tracks:
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
+            self.trackSelected(index: atIndex)
         }
+    }
+    
+    func trackSelected(index: Int) {
+        let tracksToPlay = self.searchTracks.count != 0 ? self.searchTracks : self.tracks
+        let tracks = tracksToPlay.map { (track) -> AudioTrack in
+            return track.audioTrack(author: self.channels.first(where: {$0.id == track.channelId})?.name ?? "")
+        }
+        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: tracksToPlay[index].id)
     }
     
     func channelSubscriptionPressedAt(index: Int) {
@@ -132,44 +141,6 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         
         // while in User Settings
         SubscribeManager.shared.addOrDelete(channel: channel.id)
-    }
-    
-    func update(viewModels: [Any])
-    {
-        if viewModels is [Channel]
-        {
-            self.delegate?.update(channels: self.getChannelVMs(for: viewModels as! [Channel]))
-        }
-        else
-        {
-            self.delegate?.update(tracks: self.getTrackVMs(for: viewModels as! [Track]))
-        }
-    }
-    
-    func getTrackVMs(for tracks: [Track]) -> [TrackViewModel] {
-        var trackVMs = [TrackViewModel]()
-        for track in tracks
-        {
-			var vm = TrackViewModel.init(track: track, isPlaying: false)
-			if let channel = self.channels.first(where: {$0.id == track.channelId}) {
-				vm.author = channel.name
-				vm.authorImage = channel.image
-			}
-            trackVMs.append(vm)
-        }
-        return trackVMs
-    }
-    
-    func getChannelVMs(for channels: [Channel]) -> [SearchChannelViewModel]
-    {
-        let channelsId: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        
-        var channelVMs: [SearchChannelViewModel] = []
-        for channel in channels
-        {
-            channelVMs.append(SearchChannelViewModel.init(channel: channel))
-        }
-        return channelVMs
     }
 }
 
