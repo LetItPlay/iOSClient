@@ -95,6 +95,12 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	func playState(isPlaying: Bool) {
 		self.miniPlayer.playButton.isSelected = isPlaying
 		self.mainPlayer.playButton.isSelected = isPlaying
+		if isPlaying {
+			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
+		} else {
+			self.playlist.currentIndex = IndexPath.invalid
+		}
+		self.playlist.tableView.reloadData()
 	}
 	
 	func trackUpdate() {
@@ -126,8 +132,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 					})
 				}
 			}
-			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
-			self.playlist.tableView.reloadData()
+//			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
+//			self.playlist.tableView.reloadData()
 //			self.playlist.isHidden = false
 
 		}

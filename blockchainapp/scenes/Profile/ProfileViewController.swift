@@ -99,7 +99,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
-        if isKeyboardShown {
+        if isKeyboardShown && self.profileView.profileNameLabel.isFirstResponder {
             isKeyboardShown = false
             view.endEditing(true)
             let height = sender is UITapGestureRecognizer ? 0 : 100

@@ -207,7 +207,11 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	}
 	
 	func itemFinishedPlaying(id: Int) {
-		self.play(id: id)
+		if self.playlist.tracks.last?.id == id {
+			self.delegate?.playState(isPlaying: false)
+		} else {
+			self.play(id: id)
+		}
 	}
 	
 	func play(indexPath: IndexPath, next: Bool) {
@@ -221,6 +225,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			}
 		} else {
 			if indexPath.item + way >= self.playlist.tracks.count ||  indexPath.item + way < 0 {
+				self.delegate?.playState(isPlaying: false)
 				return
 				// TODO: hide player
 			} else {
@@ -263,8 +268,8 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 					break
 				}
 			}
-			self.delegate?.playState(isPlaying: self.player.status == .playing)
 			self.delegate?.trackUpdate()
+			self.delegate?.playState(isPlaying: status == .playing)
 		}
 	}
 	
