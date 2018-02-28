@@ -208,8 +208,10 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+		print("\(info)")
+        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
+//			self.profileView.profileImageView.image = pickedImage
             self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
         }
         
