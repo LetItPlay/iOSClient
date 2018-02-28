@@ -36,7 +36,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     }
     
     func updateSubscription() {
-//        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
+        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
     }
 	
 	required init?(coder aDecoder: NSCoder) {

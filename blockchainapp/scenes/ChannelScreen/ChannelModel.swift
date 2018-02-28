@@ -73,6 +73,9 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
 
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
+            let subscriptions = self.subManager.channels
+            self.channel.isSubscribed = subscriptions.contains(channel.id)
+            self.delegate?.followUpdate(isSubscribed: self.channel.isSubscribed)
         }).disposed(by: disposeBag)
         
         InAppUpdateManager.shared.subscribe(self)
