@@ -43,47 +43,47 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
     private let disposeBag = DisposeBag()
     
     init() {
-        getTrackAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
-            return RequestManager.shared.tracks(req: TracksRequest.likes)
-        })
-        
-        getTrackAction?.elements.do(onNext: { (tuple) in
-            if self.currentOffest == 0 {
-                self.tracks = tuple.0.map({TrackObject.init(track: $0)})
-            } else {
-                self.tracks += tuple.0.map({TrackObject.init(track: $0)})
-            }
-            tuple.1.forEach({ (channel) in
-                self.channels.insert(channel)
-            })
-        }).map({ (tuple) -> [TrackViewModel] in
-            let playingId = AudioController.main.currentTrack?.id
-            return tuple.0.map({ (track) -> TrackViewModel in
-                var vm = TrackViewModel(track: track,
-                                        isPlaying: track.id == playingId)
-                if let channel = tuple.1.filter({$0.id == track.channelId}).first {
-                    vm.authorImage = channel.image
-                    vm.author = channel.name
-                }
-                return vm
-            })
-        }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
-            self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
-            self.currentOffest = self.tracks.count
-        }, onCompleted: {
-            print("Track loaded")
-        }).disposed(by: self.disposeBag)
+//        getTrackAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
+//            return RequestManager.shared.tracks(req: TracksRequest.likes)
+//        })
+//
+//        getTrackAction?.elements.do(onNext: { (tuple) in
+//            if self.currentOffest == 0 {
+//                self.tracks = tuple.0.map({TrackObject.init(track: $0)})
+//            } else {
+//                self.tracks += tuple.0.map({TrackObject.init(track: $0)})
+//            }
+//            tuple.1.forEach({ (channel) in
+//                self.channels.insert(channel)
+//            })
+//        }).map({ (tuple) -> [TrackViewModel] in
+//            let playingId = AudioController.main.currentTrack?.id
+//            return tuple.0.map({ (track) -> TrackViewModel in
+//                var vm = TrackViewModel(track: track,
+//                                        isPlaying: track.id == playingId)
+//                if let channel = tuple.1.filter({$0.id == track.channelId}).first {
+//                    vm.authorImage = channel.image
+//                    vm.author = channel.name
+//                }
+//                return vm
+//            })
+//        }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
+//            self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
+//            self.currentOffest = self.tracks.count
+//        }, onCompleted: {
+//            print("Track loaded")
+//        }).disposed(by: self.disposeBag)
         
         
         InAppUpdateManager.shared.subscribe(self)
     }
     
     func getTracks() {
-//        let realm = try? Realm()
-//        let likeMan = LikeManager.shared
-//        self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
-//
-//        self.getTracksViewModel()
+        let realm = try? Realm()
+        let likeMan = LikeManager.shared
+        self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+
+        self.getTracksViewModel()
     }
 
     func selectedTrack(index: Int) {
@@ -91,25 +91,26 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
         contr.loadPlaylist(playlist: ("Liked".localized, self.tracks.map({$0.audioTrack()})), playId: self.tracks[index].id)
     }
     
-//    func getTracksViewModel()
-//    {
-//        var length: Int64 = 0
-//        var tracksVMs = [TrackViewModel]()
-//        for i in 0..<tracks.count
-//        {
-//            tracksVMs.append(TrackViewModel.init(track: tracks[i], isPlaying: i == playingIndex.value ? true : false, isLiked: true))
-//            length += tracks[i].length
-//        }
-//        
-//        self.delegate?.reload(tracks: tracksVMs, length: length.formatTime())
-//    }
+    func getTracksViewModel()
+    {
+        var length: Int64 = 0
+        var tracksVMs = [TrackViewModel]()
+        for i in 0..<tracks.count
+        {
+            tracksVMs.append(TrackViewModel.init(track: tracks[i], isPlaying: i == playingIndex.value ? true : false, isLiked: true))
+            length += tracks[i].length
+        }
+        
+        self.delegate?.reload(tracks: tracksVMs, length: length.formatTime())
+    }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.getTrackAction?.execute(0)
+//            self.getTrackAction?.execute(0)
+            break
         case .appear:
-//            self.getTracks()
+            self.getTracks()
             break
         default:
             break
