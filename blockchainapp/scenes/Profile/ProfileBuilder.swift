@@ -21,7 +21,7 @@ class ProfileBuilder: Builder {
         
         // for like tracks
         let likeModel = LikesModel()
-        let likeVM = LikesViewModel()
+        let likeVM = LikesViewModel(model: likeModel)
         let likeEmitter = LikesEmitter.init(model: likeModel)
         
         likeModel.delegate = likeVM

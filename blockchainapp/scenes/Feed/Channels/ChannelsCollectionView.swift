@@ -11,8 +11,6 @@ import SnapKit
 
 class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate {
     
-    var delegate: ChannelProtocol?
-    
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
     
@@ -94,7 +92,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
         AnalyticsEngine.sendEvent(event: .trendEvent(event: .seeAll))
-        delegate?.showAllChannels()
+        self.emitter?.send(event: ChannelsEvent.showAllChannels)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -123,7 +121,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         self.channelsCollectionView.reloadData()
     }
     
-    func showChannel(channel: Channel) {
-        self.delegate?.showChannel(channel: channel)
-    }
+//    func showChannel(channel: Channel) {
+//        self.delegate?.showChannel(channel: channel)
+//    }
 }

@@ -5,6 +5,7 @@ enum FeedEvent {
     case trackLiked(index: Int)
     case refresh
     case showing(index: Int)
+    case showAllChannels()
 }
 
 enum LifeCycleEvent {
@@ -55,6 +56,8 @@ class FeedEmitter: Emitter, FeedEmitterProtocol {
             self.model?.trackLiked(index: index)
         case .trackSelected(let index):
             self.model?.trackSelected(index: index)
+        case .showAllChannels():
+            self.model?.showAllChannels()
         }
     }
 }

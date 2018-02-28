@@ -19,8 +19,3 @@ protocol ChannelsPresenterProtocol: class {
     func getData(onComplete: @escaping ChannelResult)
     func select(channel: Channel)
 }
-
-protocol ChannelProtocol {
-    func showChannel(channel: Channel)
-    func showAllChannels()
-}

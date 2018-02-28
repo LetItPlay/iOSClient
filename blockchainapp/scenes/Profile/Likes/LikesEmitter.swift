@@ -8,36 +8,35 @@
 
 import Foundation
 
-enum LikeTrackAction {
-    case selected
+enum LikesTrackEvent {
+    case trackSelected(index: Int)
 }
 
 protocol LikesEmitterProtocol: LifeCycleHandlerProtocol {
-    func make(action: LikeTrackAction, index: Int)
+    func send(event: LikesTrackEvent)
 }
 
 class LikesEmitter: Emitter, LikesEmitterProtocol {
     
-    var model: LikesModelProtocol!
+    var model: LikesEventHandler?
     
-    convenience init(model: LikesModelProtocol) {
-        self.init(handler: model)
+    convenience init(model: LikesEventHandler) {
+        self.init(handler: model as! ModelProtocol)
         self.model = model
     }
 	
     func state(_ state: LifeCycleEvent) {
         switch state {
         case .initialize:
-            self.model.getTracks()
+            break
 		default: break
 		}
 	}
-	func make(action: LikeTrackAction, index: Int) {
-        switch action {
-        case .selected:
-            self.model.selectedTrack(index: index)
-        default:
-            break
+	
+    func send(event: LikesTrackEvent) {
+        switch event {
+        case .trackSelected(let index):
+            self.model?.trackSelected(index: index)
         }
-	}
+    }
 }
