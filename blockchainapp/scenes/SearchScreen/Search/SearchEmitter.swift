@@ -35,7 +35,7 @@ class SearchEmitter: Emitter, SearchEmitterProtocol {
         case .cellDidSelect(let section, let index):
             self.model?.cellDidSelectFor(viewModels: (self.viewModel?.getTypeFor(section: section))!, atIndex: index)
         case .channelSubPressed(let index):
-            self.model?.channelSubPressedAt(index: index)
+            self.model?.channelSubscriptionPressedAt(index: index)
         case .searchChanged(let string):
             self.model?.searchChanged(string: string)
         }

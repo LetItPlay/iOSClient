@@ -117,7 +117,7 @@ class FeedViewController: UIViewController {
 			make.height.equalTo(32)
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
-        emptyButton.addTarget(self, action: #selector(self.showAllChannels), for: .touchUpInside)
+        emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
         
 		self.tableView.refreshControl?.beginRefreshing()
 			

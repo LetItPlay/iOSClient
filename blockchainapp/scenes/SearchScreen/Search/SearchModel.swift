@@ -20,7 +20,7 @@ protocol SearchModelProtocol: class, ModelProtocol {
 
 protocol SearchEventHandler: class {
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int)
-    func channelSubPressedAt(index: Int)
+    func channelSubscriptionPressedAt(index: Int)
     func searchChanged(string: String)
 }
 
@@ -28,7 +28,6 @@ protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
     func showChannel(id: Int)
-//    func update(tracks: [TrackViewModel], channels: [SearchChannelViewModel])
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
@@ -120,7 +119,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         }
     }
     
-    func channelSubPressedAt(index: Int) {
+    func channelSubscriptionPressedAt(index: Int) {
         let channel = self.searchChannels[index]
         SubscribeManager.shared.addOrDelete(channel: channel.id)
         self.update(viewModels: self.searchChannels)
