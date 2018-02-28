@@ -33,7 +33,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var delegate: ChannelModelDelegate?
     
-    var tracks: [TrackObject] = []
+    var tracks: [Track] = []
     var channel: Channel!
     var currentTrackID: Int?
     
@@ -51,7 +51,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         })
         
         getTracksAction.elements.do(onNext: { (tuple) in
-            self.tracks = tuple.0.map({TrackObject.init(track: $0)})
+            self.tracks = tuple.0
         }).map({ (tuple) -> [TrackViewModel] in
                 let playingId = AudioController.main.currentTrack?.id
                 return tuple.0.map({ (track) -> TrackViewModel in
@@ -123,7 +123,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     func trackSelected(index: Int) {
         let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
+            return track.audioTrack(author: self.channel.name)
         }
         AudioController.main.loadPlaylist(playlist: ("Channel".localized, tracks), playId: self.tracks[index].id)
     }
