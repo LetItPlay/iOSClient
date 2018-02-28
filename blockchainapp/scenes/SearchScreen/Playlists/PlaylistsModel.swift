@@ -87,7 +87,7 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     }
 }
 
-extension PlaylistsModel: PlayingStateUpdateProtocol {
+extension PlaylistsModel: PlayingStateUpdateProtocol, SettingsUpdateProtocol {
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
         if isPlaying {
             if let index = self.tracks.index(where: {$0.id == id}) {
@@ -97,4 +97,8 @@ extension PlaylistsModel: PlayingStateUpdateProtocol {
             self.playingIndex.value = nil
         }
     }
+	
+	func settingsUpdated() {
+		self.refresh()
+	}
 }

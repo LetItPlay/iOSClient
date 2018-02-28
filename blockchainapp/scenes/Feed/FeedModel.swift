@@ -70,6 +70,7 @@ FeedEventHandler {
 			})
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
+			self.delegate?.showEmptyMessage(vms.count == 0)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
             self.threshold = false
