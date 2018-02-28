@@ -27,6 +27,7 @@ protocol SearchEventHandler: class {
 protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
+    func showChannel(id: Int)
 //    func update(tracks: [TrackViewModel], channels: [SearchChannelViewModel])
 }
 
@@ -110,7 +111,13 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int) {
-        // to router
+        switch viewModels {
+        case .channels:
+            AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
+            self.delegate?.showChannel(id: self.searchChannels[atIndex].id)
+        case .tracks:
+            AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
+        }
     }
     
     func channelSubPressedAt(index: Int) {

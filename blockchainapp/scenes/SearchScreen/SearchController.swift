@@ -93,12 +93,6 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
-        } else {
-            AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
-        }
-        
         self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
     }
     

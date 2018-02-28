@@ -48,6 +48,10 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         self.delegate?.update(data: .channels)
     }
     
+    func showChannel(id: Int) {
+        MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
+    }
+    
     // for emitter
     func getTypeFor(section: Int) -> ViewModels {
         switch section {
