@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import RxSwift
 
 protocol SearchVMProtocol {
     weak var delegate: SearchVMDelegate? {get set}
@@ -20,6 +21,7 @@ protocol SearchVMEmitterProtocol: class {
 }
 
 protocol SearchVMDelegate: class {
+    func make(updates: [CollectionUpdate: [Int]])
     func reloadTracks()
     func reloadChannels()
 }
@@ -32,11 +34,37 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
     var tracks: [TrackViewModel] = []
     var channels: [SearchChannelViewModel] = []
     
+    var disposeBag = DisposeBag()
+    
     var currentPlayingIndex: Int = -1
     
     init(model: SearchModelProtocol) {
         self.model = model
         self.model.delegate = self
+        
+        self.model.playingIndex.asObservable().scan(nil) { (res, index) -> (Int?, Int?) in
+            return (res?.1, index)
+            }.subscribe(onNext: { (tuple) in
+                if self.channels.count != 0 || self.tracks.count != 0
+                {
+                    if let tuple = tuple {
+                        var indexes = [Int]()
+                        if let old = tuple.0 {
+                            var vm = self.tracks[old]
+                            vm.isPlaying = false
+                            self.tracks[old] = vm
+                            indexes.append(old)
+                        }
+                        if let new = tuple.1 {
+                            var vm = self.tracks[new]
+                            vm.isPlaying = true
+                            self.tracks[new] = vm
+                            indexes.append(new)
+                        }
+                        self.delegate?.make(updates: [.update: indexes])
+                    }
+                }
+            }).disposed(by: disposeBag)
     }
     
     func update(tracks: [TrackViewModel]) {

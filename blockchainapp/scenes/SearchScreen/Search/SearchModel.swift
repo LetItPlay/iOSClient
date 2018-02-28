@@ -16,6 +16,7 @@ enum ViewModels {
 
 protocol SearchModelProtocol: class, ModelProtocol {
     weak var delegate: SearchModelDelegate? {get set}
+    var playingIndex: Variable<Int?> {get}
 }
 
 protocol SearchEventHandler: class {
@@ -38,7 +39,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     var searchTracks: [Track] = []
     var searchChannels: [Channel] = []
 	
-    var currentPlayingIndex: Int = -1
+    var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     var currentSearchString: String = ""
     
     let realm: Realm? = try? Realm()
@@ -94,7 +95,14 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 return false
             })
-            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
+            self.delegate?.update(tracks: self.searchTracks.map({ (track) -> TrackViewModel in
+                var vm = TrackViewModel(track: track)
+                if let channel = self.channels.first(where: {$0.id == track.channelId}) {
+                    vm.author = channel.name
+                    vm.authorImage = channel.image
+                }
+                return vm
+            }))
             
             self.searchChannels = self.channels.filter({ channel in
                 if channel.name.lowercased().range(of: self.currentSearchString) != nil
@@ -144,7 +152,18 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
 }
 
-extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
+extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol, PlayingStateUpdateProtocol {
+    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
+        if isPlaying {
+            if let index = self.searchTracks.count != 0 ? self.searchTracks.index(where: {$0.id == id}) : self.tracks.index(where: {$0.id == id})
+            {
+                self.playingIndex.value = index
+            }
+        } else {
+            self.playingIndex.value = nil
+        }
+    }
+    
     func settingsUpdated() {
         
     }

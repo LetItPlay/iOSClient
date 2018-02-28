@@ -14,9 +14,6 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     var tableView: UITableView!
     var searchController: UISearchController!
     
-    var tracks: [TrackViewModel] = []
-    var channels: [SearchChannelViewModel] = []
-    
     var viewModel: SearchVMProtocol!
     var emitter: SearchEmitterProtocol!
     
@@ -57,14 +54,34 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     }
     
     func reloadChannels() {
-        self.channels = self.viewModel.channels
         self.tableView.reloadData()
     }
     
     func reloadTracks()
     {
-        self.tracks = self.viewModel.tracks
         self.tableView.reloadData()
+    }
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
+        tableView.beginUpdates()
+        for key in updates.keys {
+            if var indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+                switch key {
+                case .insert:
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .delete:
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .update:
+                    var newIndexes: [IndexPath] = []
+                    for index in indexes
+                    {
+                        newIndexes.append(IndexPath(row: index.row, section: 1))
+                    }
+                    tableView.reloadRows(at: newIndexes, with: UITableViewRowAnimation.none)
+                }
+            }
+        }
+        tableView.endUpdates()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -76,17 +93,17 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? self.channels.count : self.tracks.count
+        return section == 0 ? self.viewModel.channels.count : self.viewModel.tracks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell            
-            cell.fill(vm: self.tracks[indexPath.item])
+            cell.fill(vm: self.viewModel.tracks[indexPath.item])
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
-            cell.channel = self.channels[indexPath.item]
+            cell.channel = self.viewModel.channels[indexPath.item]
             cell.onSub = { self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row)) }
             return cell
         }
@@ -98,7 +115,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
-            let track = self.tracks[indexPath.item]
+            let track = self.viewModel.tracks[indexPath.item]
             return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
         } else {
             return SmallChannelTableViewCell.height
