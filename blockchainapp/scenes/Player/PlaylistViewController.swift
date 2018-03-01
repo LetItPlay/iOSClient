@@ -34,7 +34,6 @@ class PlaylistViewController: UIViewController {
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		
 		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

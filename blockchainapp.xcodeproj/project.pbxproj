@@ -50,6 +50,8 @@
 		2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EFA2034418900B3D939 /* FeedEmitter.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
 		3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */; };
+		361CD016204814A60097F8E9 /* ProfileTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD015204814A60097F8E9 /* ProfileTopView.swift */; };
+		361CD018204815140097F8E9 /* LikeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD017204815140097F8E9 /* LikeHeader.swift */; };
 		3626C8CB2036A6200016772B /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CA2036A6200016772B /* SearchController.swift */; };
 		3626C8CE2036A6730016772B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CD2036A6730016772B /* SearchViewModel.swift */; };
 		3626C8D02036A6790016772B /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CF2036A6790016772B /* SearchModel.swift */; };
@@ -176,6 +178,8 @@
 		2CE07EFA2034418900B3D939 /* FeedEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEmitter.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackViewModel.swift; sourceTree = "<group>"; };
+		361CD015204814A60097F8E9 /* ProfileTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTopView.swift; sourceTree = "<group>"; };
+		361CD017204815140097F8E9 /* LikeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHeader.swift; sourceTree = "<group>"; };
 		3626C8CA2036A6200016772B /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		3626C8CD2036A6730016772B /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3626C8CF2036A6790016772B /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
@@ -267,14 +271,14 @@
 		01510EB01FE0E8EC003AC116 /* SearchScreen */ = {
 			isa = PBXGroup;
 			children = (
+				365653FE203592DD0072087F /* SearchBuilder.swift */,
+				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
+				365654032035A7400072087F /* PlaylistsController.swift */,
+				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
+				3626C8CA2036A6200016772B /* SearchController.swift */,
+				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
 				365654002035987A0072087F /* Playlists */,
 				3626C8CC2036A6600016772B /* Search */,
-				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
-				365654032035A7400072087F /* PlaylistsController.swift */,
-				365653FE203592DD0072087F /* SearchBuilder.swift */,
-				3626C8CA2036A6200016772B /* SearchController.swift */,
-				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
-				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
 			);
 			path = SearchScreen;
 			sourceTree = "<group>";
@@ -311,12 +315,14 @@
 		01AA891F1FC5610500D50C13 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				365B0A1A20319817006458F9 /* Likes */,
-				365B0A19203197D7006458F9 /* Profile */,
 				36F613CB202D6E3200661E48 /* ProfileBuilder.swift */,
 				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
+				361CD015204814A60097F8E9 /* ProfileTopView.swift */,
+				361CD017204815140097F8E9 /* LikeHeader.swift */,
 				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
 				3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */,
+				365B0A1A20319817006458F9 /* Likes */,
+				365B0A19203197D7006458F9 /* Profile */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -354,10 +360,10 @@
 		3626C8CC2036A6600016772B /* Search */ = {
 			isa = PBXGroup;
 			children = (
-				3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */,
 				3626C8D12036A6800016772B /* SearchEmitter.swift */,
 				3626C8CF2036A6790016772B /* SearchModel.swift */,
 				3626C8CD2036A6730016772B /* SearchViewModel.swift */,
+				3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -365,10 +371,10 @@
 		365654002035987A0072087F /* Playlists */ = {
 			isa = PBXGroup;
 			children = (
-				365654012035A4550072087F /* PlaylistViewModel.swift */,
 				365653FC20358FA90072087F /* PlaylistsEmitter.swift */,
 				365653F820358F980072087F /* PlaylistsModel.swift */,
 				365653FA20358FA10072087F /* PlaylistsViewModel.swift */,
+				365654012035A4550072087F /* PlaylistViewModel.swift */,
 			);
 			path = Playlists;
 			sourceTree = "<group>";
@@ -491,11 +497,11 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
-				019B3DC41FCC4599008C3B76 /* ChannelScreen */,
-				CF4453671F57F42800660474 /* Channels */,
 				CF4453601F56C9E600660474 /* Feed */,
-				01AA891F1FC5610500D50C13 /* Profile */,
+				CF4453671F57F42800660474 /* Channels */,
+				019B3DC41FCC4599008C3B76 /* ChannelScreen */,
 				01510EB01FE0E8EC003AC116 /* SearchScreen */,
+				01AA891F1FC5610500D50C13 /* Profile */,
 				01E1991D1FE8FBF30016060E /* Settings */,
 				CF44536E1F5D787A00660474 /* Player */,
 				CF4453711F5D8E8600660474 /* TabController */,
@@ -523,9 +529,9 @@
 			isa = PBXGroup;
 			children = (
 				0158129B1FD70561002828F5 /* ChannelsBuilder.swift */,
+				CF4453681F57F4D200660474 /* ChannelsViewController.swift */,
 				015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */,
 				9DA077C820344527002BF631 /* ChannelsCellViewModel.swift */,
-				CF4453681F57F4D200660474 /* ChannelsViewController.swift */,
 				36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */,
 			);
 			path = Channels;
@@ -830,6 +836,7 @@
 				36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */,
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
+				361CD016204814A60097F8E9 /* ProfileTopView.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
@@ -891,6 +898,7 @@
 				365653FF203592DD0072087F /* SearchBuilder.swift in Sources */,
 				01EFC873201A21D6005321B9 /* PlayerViewController.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
+				361CD018204815140097F8E9 /* LikeHeader.swift in Sources */,
 				3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,
 				FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */,
