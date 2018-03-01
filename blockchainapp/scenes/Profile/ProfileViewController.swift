@@ -21,6 +21,8 @@ class ProfileViewController: UIViewController {
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var profileView: ProfileTopView!
+    let header: LikeHeader = LikeHeader()
+    
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
@@ -28,10 +30,7 @@ class ProfileViewController: UIViewController {
         return imagePicker
     }()
 	
-	var currentIndex: Int = -1
     var isKeyboardShown = true
-	
-	let header: LikeHeader = LikeHeader()
 	
     convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
@@ -59,37 +58,32 @@ class ProfileViewController: UIViewController {
     
     func commonInit()
     {
-        self.view.addSubview(tableView)
-        tableView.snp.makeConstraints { (make) in
+        self.view.addSubview(self.tableView)
+        self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
-        
         self.profileView.addGestureRecognizer(tap)
         
         imagePicker.delegate = self
         profileView.delegate = self
         
-        tableView.tableHeaderView = profileView
-        tableView.contentInset.bottom = 50
+        self.tableView.tableHeaderView = profileView
+        self.tableView.contentInset.bottom = 50
         
-        self.tableView.separatorColor = self.tableView.backgroundColor
-        
+        self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
         self.tableView.separatorStyle = .none
-        
-        self.tableView.reloadData()
-        
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
+        self.tableView.reloadData()
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         let view = UIView()
         self.view.addSubview(view)
@@ -124,10 +118,6 @@ class ProfileViewController: UIViewController {
 	@objc func langChanged(_: UIButton) {
         self.profileView.emitter?.send(event: ProfileEvent.setLanguage)
         
-		NotificationCenter.default.post(name: SettingsNotfification.changed.notification() , object: nil, userInfo: nil)
-		NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil)
-		self.currentIndex = -1
-		
 		AudioController.main.make(command: .pause)
 	}
 	
