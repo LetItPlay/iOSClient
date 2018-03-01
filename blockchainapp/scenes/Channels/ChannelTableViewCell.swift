@@ -14,6 +14,8 @@ class ChannelTableViewCell: UITableViewCell {
 	
 	static let cellID: String = "ChannelCellID"
 	static let height: CGFloat = 188.0
+    
+    var tagsConstraint: NSLayoutConstraint!
 	
 	let channelImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -148,7 +150,7 @@ class ChannelTableViewCell: UITableViewCell {
 		
 		self.contentView.addSubview(tagsList)
 		tagsList.snp.makeConstraints { (make) in
-			make.top.equalTo(subButton.snp.bottom).inset(-8)
+            self.tagsConstraint = make.top.equalTo(subButton.snp.bottom).inset(-8).constraint.layoutConstraints.first!
 			make.left.equalTo(channelTitle)
 			make.right.equalToSuperview().inset(16)
 		}
@@ -166,6 +168,16 @@ class ChannelTableViewCell: UITableViewCell {
 			make.bottom.equalTo(channelImageView).inset(4)
 		}
 	}
+    
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        
+        // for 3 lines of text in title
+        if self.subButton.frame.origin.y > 70
+        {
+            self.tagsConstraint.constant = 9
+        }
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -175,5 +187,4 @@ class ChannelTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
     }
-
 }
