@@ -17,6 +17,11 @@ class LikeHeader: UIView {
     init() {
         super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 81)))
         
+        self.commonInit()
+    }
+    
+    func commonInit()
+    {
         self.backgroundColor = .white
         
         let label = UILabel()

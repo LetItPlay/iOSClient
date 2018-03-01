@@ -259,9 +259,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
-		
-		let track = self.viewModel.tracks[indexPath.item]
-        cell.fill(vm: track)
+        cell.fill(vm: self.viewModel.tracks[indexPath.item])
 		return cell
 	}
 	
@@ -289,6 +287,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.viewModel.tracks[indexPath.item]
-		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
+		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }

@@ -137,6 +137,6 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.tracks[indexPath]
-		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
+		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }

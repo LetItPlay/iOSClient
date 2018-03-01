@@ -7,12 +7,11 @@
 //
 
 import Foundation
-import UIKit
 
 class SmallTrackViewModel {
     
     var iconUrl: URL? = nil
-    var trackName: NSAttributedString? = nil
+    var trackName: String = ""
     var channelName: String = ""
     var time: String = ""
     var listens: String = ""
@@ -21,7 +20,7 @@ class SmallTrackViewModel {
     init(track: TrackViewModel)
     {
         self.iconUrl = track.imageURL
-        self.trackName = self.trackText(text: track.name)
+        self.trackName = track.name
         
         self.channelName = track.author
         self.time = track.dateString
@@ -29,11 +28,4 @@ class SmallTrackViewModel {
         self.length = track.length
     }
     
-    private func trackText(text: String) -> NSAttributedString {
-        let para = NSMutableParagraphStyle()
-        para.lineBreakMode = .byWordWrapping
-        para.minimumLineHeight = 22
-        para.maximumLineHeight = 22
-        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-    }
 }

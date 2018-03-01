@@ -56,10 +56,10 @@ class SmallTrackTableViewCell: UITableViewCell {
                 trackImageView.image = nil
             }
             
-            trackNameLabel.attributedText = viewModel?.trackName
+            trackNameLabel.attributedText = Common.trackText(text: (viewModel?.trackName)!)
             channelNameLabel.text = viewModel?.channelName
             
-            self.timeLabel.text = viewModel?.time
+            timeLabel.text = viewModel?.time
 
             dataLabels[.listens]?.set(text: (viewModel?.listens)!)
             dataLabels[.time]?.set(text: (viewModel?.length)!)
@@ -73,10 +73,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 			trackImageView.image = nil
 		}
 		
-		trackNameLabel.attributedText = SmallTrackTableViewCell.trackText(text: vm.name)
+		trackNameLabel.attributedText = Common.trackText(text: vm.name)
 		channelNameLabel.text = vm.author
 		
-		self.timeLabel.text = vm.dateString
+		timeLabel.text = vm.dateString
 		
 		dataLabels[.listens]?.set(text: vm.listensCount)
 		dataLabels[.time]?.set(text: vm.length)
@@ -84,7 +84,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
 	}
-
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -161,23 +160,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 		self.separator = view
 	}
-    
-    static func trackText(text: String) -> NSAttributedString {
-        let para = NSMutableParagraphStyle()
-        para.lineBreakMode = .byWordWrapping
-        para.minimumLineHeight = 22
-        para.maximumLineHeight = 22
-        return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-    }
-	
-	static func height(text: String, width: CGFloat) -> CGFloat {
-        let rect = self.trackText(text: text)
-            .boundingRect(with: CGSize.init(width: width - 60 - 14 - 16 - 16, height: 9999),
-                          options: .usesLineFragmentOrigin,
-                          context: nil)
-        return min(rect.height, 44) + 31 + 32
-	}
-	
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -188,5 +170,4 @@ class SmallTrackTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
 }

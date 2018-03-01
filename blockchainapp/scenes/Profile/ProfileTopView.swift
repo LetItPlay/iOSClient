@@ -9,34 +9,7 @@
 import Foundation
 import UIKit
 
-class ProfileTopView: UIView, ProfileVMDelegate {
-    
-    func make(updates: [ProfileUpdate]) {
-        for data in updates {
-            switch data {
-            case .image:
-                let image = UIImage.init(data: self.viewModel.imageData!)
-                profileImageView.image = image
-                bluredImageView.image = image
-            case .language:
-                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
-            case .name:
-                self.setName(name: self.viewModel.name)
-            }
-        }
-    }
-    
-    func setName(name: String)
-    {
-        if name != "name"
-        {
-            profileNameTextField.text = name
-        }
-        else
-        {
-            profileNameTextField.placeholder = "name"
-        }
-    }
+class ProfileTopView: UIView {
     
     var delegate: ProfileViewDelegate?
     
@@ -56,6 +29,13 @@ class ProfileTopView: UIView, ProfileVMDelegate {
         self.viewModel = viewModel
         viewModel.delegate = self
         
+        self.commonInit()
+        
+        emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func commonInit()
+    {
         bluredImageView.layer.cornerRadius = 140
         bluredImageView.layer.masksToBounds = true
         
@@ -144,8 +124,10 @@ class ProfileTopView: UIView, ProfileVMDelegate {
         bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
         bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
         blur.contentView.layer.addSublayer(bot)
-        
-        emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
@@ -153,7 +135,33 @@ class ProfileTopView: UIView, ProfileVMDelegate {
         delegate?.addImage()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func setName(name: String)
+    {
+        if name != "name"
+        {
+            profileNameTextField.text = name
+        }
+        else
+        {
+            profileNameTextField.placeholder = "name"
+        }
+    }
+}
+
+extension ProfileTopView: ProfileVMDelegate
+{
+    func make(updates: [ProfileUpdate]) {
+        for data in updates {
+            switch data {
+            case .image:
+                let image = UIImage.init(data: self.viewModel.imageData!)
+                profileImageView.image = image
+                bluredImageView.image = image
+            case .language:
+                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+            case .name:
+                self.setName(name: self.viewModel.name)
+            }
+        }
     }
 }

@@ -118,7 +118,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 {
             let track = self.viewModel.tracks[indexPath.item]
-            return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
+            return Common.height(text: track.name, width: tableView.frame.width)
         } else {
             return SmallChannelTableViewCell.height
         }
