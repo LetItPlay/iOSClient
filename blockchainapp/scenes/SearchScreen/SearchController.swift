@@ -32,6 +32,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         self.tableView.dataSource = self
         
         self.tableView.tableFooterView = nil
+        self.tableView.contentInset.bottom = 33
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
         self.tableView.register(SmallChannelTableViewCell.self, forCellReuseIdentifier: SmallChannelTableViewCell.cellID)
