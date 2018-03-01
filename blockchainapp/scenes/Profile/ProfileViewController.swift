@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
+        imagePicker.view.tintColor = .red
         return imagePicker
     }()
 	
@@ -34,6 +35,8 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
+        
+        self.navigationItem.setHidesBackButton(true, animated: false)
 	}
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -46,6 +49,9 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
 		
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
@@ -132,6 +138,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        if !animated {
+            let BarButtonItemAppearance = UIBarButtonItem.appearance()
+            BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        }
         
         self.emitter?.send(event: LifeCycleEvent.disappear)
         self.profileView.emitter?.send(event: LifeCycleEvent.disappear)
