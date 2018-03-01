@@ -88,6 +88,9 @@ FeedEventHandler {
             self.dataAction?.execute(0)
         case .appear:
             self.delegate?.showChannels(!isFeed)
+            if !self.isFeed {
+                self.delegate?.showEmptyMessage(false)
+            }
         case .disappear:
             break
         case .deinitialize:
