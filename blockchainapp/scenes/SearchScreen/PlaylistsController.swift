@@ -38,17 +38,17 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
-        self.tableView.refreshControl = refreshControl
-		refreshControl.beginRefreshing()
+//        self.tableView.refreshControl = refreshControl
+//        refreshControl.beginRefreshing()
     }
     
-    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
-//        self.emitter.send(event: PlaylistsEvent.refresh)
-    }
+//    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+////        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
+////        self.emitter.send(event: PlaylistsEvent.refresh)
+//    }
 	
 	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 		if self.tableView.refreshControl?.isRefreshing == true {
