@@ -171,8 +171,11 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
 //                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                    tableView.reloadData()
-//                    break
+                    if indexes.count != 0 {
+                        tableView.reloadData()
+                        
+                    }
+                    break
                 }
             }
         }

@@ -239,7 +239,10 @@ extension FeedViewController: FeedVMDelegate {
                 case .delete:
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
-                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                    if indexes.count != 0 {
+//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                        tableView.reloadData()
+                    }
                 }
             }
         }

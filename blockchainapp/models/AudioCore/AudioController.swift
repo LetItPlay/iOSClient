@@ -263,7 +263,9 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			if let indexPath = self.indexPath(id: id) {
 				switch status {
 				case .paused:
-					NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["id": id])
+                    if self.playlist.tracks.filter({$0.id == id}).count != 0 {
+                        NotificationCenter.default.post(name: AudioStateNotification.paused.notification(), object: nil, userInfo: ["id": id])
+                    }
 					break
 				case .playing:
 					self.currentTrackIndexPath = indexPath
