@@ -47,13 +47,13 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
             }.subscribe(onNext: { (tuple) in
                 if let thisTuple = tuple, self.tracks.count != 0 {
                     var indexes = [Int]()
-                    if let old = thisTuple.0 {
+                    if let old = thisTuple.0, old != -1 {
                         var vm = self.tracks[old]
                         vm.isPlaying = false
                         self.tracks[old] = vm
                         indexes.append(old)
                     }
-                    if let new = thisTuple.1 {
+                    if let new = thisTuple.1, new != -1 {
                         var vm = self.tracks[new]
                         vm.isPlaying = true
                         self.tracks[new] = vm

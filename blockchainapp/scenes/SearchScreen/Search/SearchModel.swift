@@ -198,13 +198,16 @@ extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol, PlayingSta
             var oldChannel = channel
             oldChannel.isSubscribed = !oldChannel.isSubscribed
             var searchIndex = index
-            
+
             if self.searchChannels.count != 0
             {
-                searchIndex = self.searchChannels.index(of: oldChannel)!
-                self.searchChannels[searchIndex] = channel
+                if let someIndex: Int = self.searchChannels.index(of: oldChannel)
+                {
+                    searchIndex = someIndex
+                    self.searchChannels[searchIndex] = channel
+                }
             }
-            
+
             self.delegate?.update(index: searchIndex, vm: SearchChannelViewModel(channel: channel))
         }
     }

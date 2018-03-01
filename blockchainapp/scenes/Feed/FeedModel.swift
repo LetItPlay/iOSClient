@@ -70,7 +70,7 @@ FeedEventHandler {
 			})
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
-			self.delegate?.showEmptyMessage(vms.count == 0)
+            self.delegate?.showEmptyMessage(self.tracks.count == 0)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
             self.threshold = false
@@ -88,7 +88,6 @@ FeedEventHandler {
             self.dataAction?.execute(0)
         case .appear:
             self.delegate?.showChannels(!isFeed)
-            self.delegate?.showEmptyMessage(SubscribeManager.shared.channels.count == 0 && isFeed ? true : false)
         case .disappear:
             break
         case .deinitialize:
