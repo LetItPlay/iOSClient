@@ -64,7 +64,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-        tableView.beginUpdates()
+//        tableView.beginUpdates()
         for key in updates.keys {
             if var indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -73,16 +73,17 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
                 case .delete:
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
-                    var newIndexes: [IndexPath] = []
-                    for index in indexes
-                    {
-                        newIndexes.append(IndexPath(row: index.row, section: 1))
-                    }
-                    tableView.reloadRows(at: newIndexes, with: UITableViewRowAnimation.none)
+//                    var newIndexes: [IndexPath] = []
+//                    for index in indexes
+//                    {
+//                        newIndexes.append(IndexPath(row: index.row, section: 1))
+//                    }
+//                    tableView.reloadRows(at: newIndexes, with: UITableViewRowAnimation.none)
+                    self.tableView.reloadData()
                 }
             }
         }
-        tableView.endUpdates()
+//        tableView.endUpdates()
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
