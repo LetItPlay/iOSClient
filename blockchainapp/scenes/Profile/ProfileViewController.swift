@@ -63,6 +63,7 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         
         imagePicker.delegate = self
         profileView.delegate = self
+        
 		tableView.tableHeaderView = profileView
 		tableView.contentInset.bottom = 50
 		
@@ -102,12 +103,12 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
-        if isKeyboardShown && self.profileView.profileNameLabel.isFirstResponder {
+        if isKeyboardShown && self.profileView.profileNameTextField.isFirstResponder {
             isKeyboardShown = false
             view.endEditing(true)
             let height = sender is UITapGestureRecognizer ? 0 : 100
             tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-            let name = self.profileView.profileNameLabel.text!
+            let name = self.profileView.profileNameTextField.text!
             self.profileView.emitter?.send(event: ProfileEvent.setName(name))
         }
     }
@@ -132,6 +133,8 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
     
+        profileView.profileNameTextField.delegate = self
+        
         self.emitter?.send(event: LifeCycleEvent.appear)
         self.profileView.emitter?.send(event: LifeCycleEvent.appear)
 	}
@@ -229,6 +232,14 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
         }
         
         dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ProfileViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.dismissKeyboard(textField)
+        return true
     }
 }
 
@@ -369,11 +380,11 @@ class ProfileTopView: UIView, ProfileVMDelegate {
     {
         if name != "name"
         {
-            profileNameLabel.text = name
+            profileNameTextField.text = name
         }
         else
         {
-            profileNameLabel.placeholder = "name"
+            profileNameTextField.placeholder = "name"
         }
     }
 	
@@ -384,7 +395,7 @@ class ProfileTopView: UIView, ProfileVMDelegate {
     
 	let profileImageView: UIImageView = UIImageView()
 	let bluredImageView: UIImageView = UIImageView()
-	let profileNameLabel: UITextField = UITextField()
+	let profileNameTextField: UITextField = UITextField()
 	let changePhotoButton: UIButton = UIButton()
 	let languageButton: UIButton = UIButton()
 	
@@ -443,25 +454,25 @@ class ProfileTopView: UIView, ProfileVMDelegate {
         changePhotoButton.backgroundColor = .red
         changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
 
-		blur.contentView.addSubview(profileNameLabel)
-		profileNameLabel.snp.makeConstraints { (make) in
+		blur.contentView.addSubview(profileNameTextField)
+		profileNameTextField.snp.makeConstraints { (make) in
 //			make.centerX.equalTo(profileImageView)
 			make.top.equalTo(profileImageView.snp.bottom).inset(-52)
 			make.right.equalTo(profileImageView.snp.right)
 			make.left.equalTo(profileImageView.snp.left)
 		}
 		
-		profileNameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-		profileNameLabel.textAlignment = .center
-        profileNameLabel.returnKeyType = .done
+		profileNameTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+		profileNameTextField.textAlignment = .center
+        profileNameTextField.returnKeyType = .done
 
 		let highlight = UIView()
 		highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
 		blur.contentView.addSubview(highlight)
 		highlight.snp.makeConstraints { (make) in
-			make.bottom.equalTo(profileNameLabel).inset(-1)
-			make.left.equalTo(profileNameLabel).inset(-14)
-			make.right.equalTo(profileNameLabel).inset(-14)
+			make.bottom.equalTo(profileNameTextField).inset(-1)
+			make.left.equalTo(profileNameTextField).inset(-14)
+			make.right.equalTo(profileNameTextField).inset(-14)
 			make.height.equalTo(14)
 		}
 
@@ -494,6 +505,5 @@ class ProfileTopView: UIView, ProfileVMDelegate {
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
-	}
-	
+    }
 }
