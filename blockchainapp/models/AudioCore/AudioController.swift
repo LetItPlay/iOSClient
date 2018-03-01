@@ -133,7 +133,12 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 		case .pause:
 			player.make(command: .pause)
 		case .next:
-			self.play(indexPath: self.currentTrackIndexPath, next: true)
+            if self.playlist.tracks.count == self.currentTrackIndexPath.row + 1 {
+                player.make(command: .pause)
+            }
+            else {
+                self.play(indexPath: self.currentTrackIndexPath, next: true)
+            }
 		case .prev:
 			self.play(indexPath: self.currentTrackIndexPath, next: false)
 		case .seekForward:
