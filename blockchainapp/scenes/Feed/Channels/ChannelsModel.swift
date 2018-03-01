@@ -52,7 +52,8 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 		})
 		
 		self.getChannelsAction.elements.subscribe(onNext: { channels in
-			self.channels = channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
+            self.channels = channels.filter({$0.lang == UserSettings.language.rawValue})
+			self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
 			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
 		}).disposed(by: disposeBag)
 		
