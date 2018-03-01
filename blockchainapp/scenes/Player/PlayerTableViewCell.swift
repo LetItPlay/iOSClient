@@ -130,14 +130,6 @@ class PlayerTableViewCell: UITableViewCell {
 		}
 	}
 	
-	static func trackText(text: String) -> NSAttributedString {
-		let para = NSMutableParagraphStyle()
-		para.lineBreakMode = .byWordWrapping
-		para.minimumLineHeight = 22
-		para.maximumLineHeight = 22
-		return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-	}
-	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

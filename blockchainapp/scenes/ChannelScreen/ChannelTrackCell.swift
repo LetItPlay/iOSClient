@@ -52,7 +52,7 @@ class ChannelTrackCell: UITableViewCell {
 				trackImageView.image = nil
 			}
 			
-			trackNameLabel.attributedText = type(of: self).trackText(text: track?.name ?? "")
+			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
             channelNameLabel.text = track?.author
 
             //TODO: publishedAt
@@ -138,23 +138,6 @@ class ChannelTrackCell: UITableViewCell {
             make.height.equalTo(1)
         }
 	}
-	
-	static func trackText(text: String) -> NSAttributedString {
-		let para = NSMutableParagraphStyle()
-		para.lineBreakMode = .byWordWrapping
-		para.minimumLineHeight = 22
-		para.maximumLineHeight = 22
-		return NSAttributedString.init(string: text, attributes: [.font: UIFont.systemFont(ofSize: 14, weight: .medium), .paragraphStyle: para])
-	}
-	
-	static func height(text: String, width: CGFloat) -> CGFloat {
-		let rect = self.trackText(text: text)
-			.boundingRect(with: CGSize.init(width: width - 16 - 60 - 16 - 60, height: 9999),
-						  options: .usesLineFragmentOrigin,
-						  context: nil)
-		return round(min(rect.height, 44)) + 31 + 32
-	}
-	
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

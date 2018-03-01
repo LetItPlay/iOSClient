@@ -167,6 +167,6 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.viewModel.tracks[indexPath.item]
-		return ChannelTrackCell.height(text: track.name, width: tableView.frame.width)
+		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }
