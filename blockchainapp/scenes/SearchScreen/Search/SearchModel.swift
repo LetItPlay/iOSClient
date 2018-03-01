@@ -29,6 +29,7 @@ protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
     func update(index: Int, vm: SearchChannelViewModel)
+    func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
 }
 
@@ -71,6 +72,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         }
     }
     func searchChanged(string: String) {
+        self.playingIndex.value = nil
         self.currentSearchString = string.lowercased()
         if string.count == 0 {
             self.searchChannels = []
@@ -109,12 +111,14 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 return false
             })
             
+            var trackPlayingIndex: Int = -1
             self.delegate?.update(tracks: self.searchTracks.map({ (track) -> TrackViewModel in
                 var vm = TrackViewModel(track: track)
                 
                 if track.id == AudioController.main.currentTrack?.id
                 {
                     vm.isPlaying = true
+                    trackPlayingIndex = self.searchTracks.index(where: {$0.id == track.id})!
                 }
                 
                 if let channel = self.channels.first(where: {$0.id == track.channelId}) {
@@ -123,6 +127,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 return vm
             }))
+            self.playingIndex.value = trackPlayingIndex
             
             self.searchChannels = self.channels.filter({ channel in
                 if channel.name.lowercased().range(of: self.currentSearchString) != nil
@@ -155,11 +160,10 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     
     func trackSelected(index: Int) {
-        let tracksToPlay = self.searchTracks.count != 0 ? self.searchTracks : self.tracks
-        let tracks = tracksToPlay.map { (track) -> AudioTrack in
+        let tracks = self.searchTracks.map { (track) -> AudioTrack in
             return track.audioTrack(author: self.channels.first(where: {$0.id == track.channelId})?.name ?? "")
         }
-        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: tracksToPlay[index].id)
+        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.searchTracks[index].id)
     }
     
     func channelSubscriptionPressedAt(index: Int) {
@@ -175,7 +179,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
 extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol, PlayingStateUpdateProtocol {
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
         if isPlaying {
-            if let index = self.searchTracks.count != 0 ? self.searchTracks.index(where: {$0.id == id}) : self.tracks.index(where: {$0.id == id})
+            if let index = self.searchTracks.index(where: {$0.id == id})
             {
                 self.playingIndex.value = index
             }

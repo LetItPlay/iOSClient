@@ -45,26 +45,21 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         self.model.playingIndex.asObservable().scan(nil) { (res, index) -> (Int?, Int?) in
             return (res?.1, index)
             }.subscribe(onNext: { (tuple) in
-                if self.tracks.count != 0
-                {
-                    if let tuple = tuple {
-                        var indexes = [Int]()
-                        if let old = tuple.0 {
-                            if self.tracks.count > old {
-                                var vm = self.tracks[old]
-                                vm.isPlaying = false
-                                self.tracks[old] = vm
-                                indexes.append(old)
-                            }
-                        }
-                        if let new = tuple.1 {
-                            var vm = self.tracks[new]
-                            vm.isPlaying = true
-                            self.tracks[new] = vm
-                            indexes.append(new)
-                        }
-                        self.delegate?.make(updates: [.update: indexes])
+                if let thisTuple = tuple, self.tracks.count != 0 {
+                    var indexes = [Int]()
+                    if let old = thisTuple.0 {
+                        var vm = self.tracks[old]
+                        vm.isPlaying = false
+                        self.tracks[old] = vm
+                        indexes.append(old)
                     }
+                    if let new = thisTuple.1 {
+                        var vm = self.tracks[new]
+                        vm.isPlaying = true
+                        self.tracks[new] = vm
+                        indexes.append(new)
+                    }
+                    self.delegate?.make(updates: [.update: indexes])
                 }
             }).disposed(by: disposeBag)
     }
@@ -83,6 +78,13 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         if channels.count > index {
             self.channels[index] = vm
             self.delegate?.reloadChannels()
+        }
+    }
+    
+    func update(index: Int, vm: TrackViewModel) {
+        if tracks.count > index {
+            self.tracks[index] = vm
+            self.delegate?.reloadTracks()
         }
     }
     
