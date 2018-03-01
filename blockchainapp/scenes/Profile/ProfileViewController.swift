@@ -49,9 +49,6 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let BarButtonItemAppearance = UIBarButtonItem.appearance()
-        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
 		
 		self.view.addSubview(tableView)
 		tableView.snp.makeConstraints { (make) in
@@ -131,6 +128,9 @@ class ProfileViewController: UIViewController, LikesVMDelegate {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        
+        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
     
         self.emitter?.send(event: LifeCycleEvent.appear)
         self.profileView.emitter?.send(event: LifeCycleEvent.appear)
