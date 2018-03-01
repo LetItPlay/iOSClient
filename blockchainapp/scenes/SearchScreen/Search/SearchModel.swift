@@ -42,6 +42,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
 	
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     var currentSearchString: String = ""
+    var prevSearchString: String = ""
     
     let realm: Realm? = try? Realm()
     
@@ -73,6 +74,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     func searchChanged(string: String) {
         self.playingIndex.value = nil
+        self.prevSearchString = self.currentSearchString
         self.currentSearchString = string.lowercased()
         if string.count == 0 {
             self.searchChannels = []
@@ -81,8 +83,11 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
             self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
             self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
         } else {
-            
-            self.searchTracks = self.tracks.filter({ track in
+            var tracksPool = self.tracks
+            if prevSearchString != "" && currentSearchString.contains(prevSearchString) {
+                tracksPool = self.searchTracks
+            }
+            self.searchTracks = tracksPool.filter({ track in
                 if track.name.lowercased().range(of: self.currentSearchString) != nil
                 {
                     return true
