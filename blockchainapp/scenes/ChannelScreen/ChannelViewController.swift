@@ -26,10 +26,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         
         self.emitter = emitter
     }
-	
-    func followUpdate() {
-         //SubscribeManager.shared.stations.contains(self.presenter.station.id)
-    }
     
     func reloadTracks() {
         self.tableView.reloadData()
@@ -96,12 +92,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-	
-    func update() {
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//        }
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {

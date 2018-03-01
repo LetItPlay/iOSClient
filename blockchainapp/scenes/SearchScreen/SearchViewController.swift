@@ -24,8 +24,6 @@ UISearchBarDelegate {
 	var searchResultsTableView: UITableView = UITableView()
 	var playlistTableView: UITableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
-	let presenter = SearchPresenter()
-	
     var searchResults = SearchResultsController()
     var playlistsResults: PlaylistsController!
 	
@@ -83,8 +81,8 @@ UISearchBarDelegate {
         }
 		
 		self.emptyLabel = label
-		
-		self.emptyLabel.isHidden = self.presenter.playlists.count != 0
+        
+        self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
         
         self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
