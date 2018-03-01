@@ -15,6 +15,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
 	var playerIsShowed: Bool = false
+    var playerWasShowed: Bool = false
 	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
@@ -82,15 +83,18 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func showPlaylist() {
-		self.playerController.showPlaylist()
-		if !self.playerController.isBeingPresented {
-			UIApplication.shared.beginIgnoringInteractionEvents()
-			self.playerIsPresenting = true
-			self.present(self.playerController, animated: true) {
-				self.playerIsPresenting = false
-				UIApplication.shared.endIgnoringInteractionEvents()
-			}
-		}
+        if !self.playerIsPresenting && !self.playerWasShowed {
+            self.playerController.showPlaylist()
+            if !self.playerController.isBeingPresented {
+                UIApplication.shared.beginIgnoringInteractionEvents()
+                self.playerIsPresenting = true
+                self.present(self.playerController, animated: true) {
+                    self.playerIsPresenting = false
+                    self.playerWasShowed = true
+                    UIApplication.shared.endIgnoringInteractionEvents()
+                }
+            }
+        }
 	}
 	
 	func hidePlayer() {
