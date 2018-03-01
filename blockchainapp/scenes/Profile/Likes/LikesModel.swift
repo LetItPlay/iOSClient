@@ -85,17 +85,22 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
         self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
 
         self.getTracksViewModel()
-        
-        
     }
     
     func getTracksViewModel()
     {
+        let playingID = AudioController.main.currentTrack?.id
+        
         var length: Int64 = 0
         var tracksVMs = [TrackViewModel]()
         for i in 0..<tracks.count
         {
-            tracksVMs.append(TrackViewModel(track: tracks[i], isPlaying: self.tracks[i].id == AudioController.main.currentTrack?.id ? true : false))
+            let playingResult = self.tracks[i].id == playingID
+            
+            tracksVMs.append(TrackViewModel(track: tracks[i], isPlaying: playingResult))
+            
+            self.playingIndex.value = playingResult ? i : self.playingIndex.value
+            
             length += tracks[i].length
         }
         
