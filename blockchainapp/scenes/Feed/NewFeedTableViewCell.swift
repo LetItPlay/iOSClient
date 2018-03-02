@@ -29,7 +29,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         }
         
         infoTitle.text = vm.name
-        infoText.text = vm.description
+        infoTextView.text = vm.description
 		
 		self.disposeBag = DisposeBag()
 		
@@ -162,13 +162,16 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         return label
     }()
     
-    let infoText: UITextView = {
+    let infoTextView: UITextView = {
         let textView = UITextView()
         textView.font = AppFont.Title.info
         textView.textColor = .black
         textView.backgroundColor = .clear
         textView.isEditable = false
-        textView.isSelectable = false
+        textView.isSelectable = true
+        textView.isUserInteractionEnabled = true
+        textView.dataDetectorTypes = UIDataDetectorTypes.link
+        textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
         textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
@@ -302,14 +305,18 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 //            make.height.equalTo(infoTitle.frame.size.height)
         }
 
-        self.infoBlurView.contentView.addSubview(infoText)
-        infoText.snp.makeConstraints { (make) in
+        self.infoBlurView.contentView.addSubview(infoTextView)
+        infoTextView.snp.makeConstraints { (make) in
             make.top.equalTo(infoTitle.snp.bottom).inset(-12)
             make.bottom.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
         }
-        infoText.setContentHuggingPriority(.init(999), for: .vertical)
+        infoTextView.setContentHuggingPriority(.init(999), for: .vertical)
+        
+        
+        
+        
 
         cellContentView.addSubview(infoBlurView)
         infoBlurView.snp.makeConstraints { (make) in
@@ -374,10 +381,17 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         else
         {
             // scroll text to begining
-            self.infoText.setContentOffset(.zero, animated: false)
+            self.infoTextView.setContentOffset(.zero, animated: false)
             UIView.animate(withDuration: 0.5, animations: {
                 self.infoBlurView.alpha = 1
             })
         }
+    }
+}
+
+extension NewFeedTableViewCell: UITextViewDelegate
+{
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        return true
     }
 }
