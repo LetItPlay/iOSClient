@@ -55,11 +55,13 @@ class ChannelTrackCell: UITableViewCell {
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
             channelNameLabel.text = track?.author
 
-            //TODO: publishedAt
-//            self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
+            self.timeLabel.text = track?.dateString
 			
             dataLabels[.listens]?.set(text: (track?.listensCount)!)
             dataLabels[.time]?.set(text: (track?.length)!)
+            
+            dataLabels[.listens]?.isHidden = (track?.isPlaying)!
+            dataLabels[.playingIndicator]?.isHidden = !(track?.isPlaying)!
 		}
 	}
 	
@@ -80,7 +82,6 @@ class ChannelTrackCell: UITableViewCell {
             make.left.equalTo(trackImageView.snp.right).inset(-14)
             make.top.equalTo(trackImageView)
             make.height.equalTo(18)
-            make.right.equalTo(-10)
         }
         
         self.contentView.addSubview(timeLabel)

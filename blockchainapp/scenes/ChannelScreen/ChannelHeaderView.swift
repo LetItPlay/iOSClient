@@ -10,13 +10,7 @@ import UIKit
 import SnapKit
 import TagListView
 
-protocol ChannelsHeaderDelegate: class {
-	func set(height: CGFloat)
-}
-
 class ChannelHeaderView: UIView {
-
-	weak var delegate: ChannelsHeaderDelegate?
 	
 	let channelImageView: UIImageView = {
 		let imgView = UIImageView()
@@ -99,7 +93,6 @@ class ChannelHeaderView: UIView {
 		super.init(frame: frame)
 		
 		self.viewInitialize(width: frame.width)
-		self.backgroundColor = .white		
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -115,6 +108,8 @@ class ChannelHeaderView: UIView {
 //			make.height.equalTo(width*CGFloat(9)/CGFloat(16))
 		}
 		
+        self.backgroundColor = .white
+        
 		let view = UIView()
 		view.backgroundColor = AppColor.Element.redBlur.withAlphaComponent(0.09)
 		self.addSubview(view)
@@ -184,9 +179,11 @@ class ChannelHeaderView: UIView {
 	}
     
     func fill(channel: FullChannelViewModel, width: CGFloat) -> CGFloat {
+        
         channelTitleView.text = channel.name
         infoLabel.text = "No description for this channel"
         subsView.set(text: channel.subscriptionCount)
+        
         if let iconUrl = channel.imageURL {
             
             channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
