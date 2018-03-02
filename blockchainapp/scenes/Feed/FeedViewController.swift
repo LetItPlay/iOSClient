@@ -28,7 +28,7 @@ class FeedViewController: UIViewController {
     
 //    var trackInfoView: TrackInfoBlurView!
     var refreshingTable: Bool = false
-    var previousOffsetY: CGFloat = 0
+
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
 
 	let emptyLabel: UILabel = {
@@ -54,7 +54,7 @@ class FeedViewController: UIViewController {
         return button
     }()
     
-    var tappedSideButton = false
+//    var tappedSideButton = false
     
     convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
         self.init(nibName: nil, bundle: nil)
@@ -68,69 +68,74 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.viewInitialize()
+        
         self.emitter.send(event: LifeCycleEvent.initialize)
-		
-		navigationController?.navigationBar.prefersLargeTitles = false
-		self.navigationItem.largeTitleDisplayMode = .automatic
-		
+	}
+    
+    func viewInitialize()
+    {
+        navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationItem.largeTitleDisplayMode = .automatic
+        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         view.backgroundColor = UIColor.vaWhite
         
         self.view.addSubview(tableView)
-
+        
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view)
-		}
-		
+        }
+        
         tableView.dataSource = self
         tableView.delegate   = self
         tableView.refreshControl = refreshControl
-		tableView.separatorStyle = .none
-		
-		tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
-		tableView.backgroundColor = .white
-		tableView.backgroundView?.backgroundColor = .clear
-		tableView.sectionIndexBackgroundColor = .clear
-
+        tableView.separatorStyle = .none
+        
+        tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
+        tableView.backgroundColor = .white
+        tableView.backgroundView?.backgroundColor = .clear
+        tableView.sectionIndexBackgroundColor = .clear
+        
         self.view.backgroundColor = .white
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressRecognizer)
         
-		refreshControl.beginRefreshing()
-
-		tableView.tableFooterView = UIView()
-		
-		self.view.addSubview(emptyLabel)
-		emptyLabel.snp.makeConstraints { (make) in
-			make.center.equalTo(self.view.center)
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-		}
+        refreshControl.beginRefreshing()
+        
+        tableView.tableFooterView = UIView()
+        
+        self.view.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view.center)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
         self.view.addSubview(emptyButton)
         emptyButton.snp.makeConstraints { (make) in
             make.centerX.equalTo(self.view)
-			make.height.equalTo(32)
+            make.height.equalTo(32)
             make.top.equalTo(emptyLabel.snp.bottom).inset(-51)
         }
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
         
-		self.tableView.refreshControl?.beginRefreshing()
-			
-//        self.trackInfoView = TrackInfoBlurView()
-//        self.view.addSubview(self.trackInfoView)
-//
-//        self.trackInfoView.snp.makeConstraints { (make) in
-//            make.top.equalTo((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 10)
-//            make.left.equalTo(10)
-//            make.right.equalTo(-10)
-//            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
-//        }
-	}
+        self.tableView.refreshControl?.beginRefreshing()
+        
+        //        self.trackInfoView = TrackInfoBlurView()
+        //        self.view.addSubview(self.trackInfoView)
+        //
+        //        self.trackInfoView.snp.makeConstraints { (make) in
+        //            make.top.equalTo((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 10)
+        //            make.left.equalTo(10)
+        //            make.right.equalTo(-10)
+        //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
+        //        }
+    }
     
     @objc func showAllChannels()
     {
@@ -168,14 +173,11 @@ class FeedViewController: UIViewController {
         if longPressGestureRecognizer.state == .began {
             let touchPoint = longPressGestureRecognizer.location(in: tableView)
             if let indexPath = tableView.indexPathForRow(at: touchPoint) {
-//                let track = self.viewModel.tracks[indexPath.item]
                 let cell = tableView.cellForRow(at: indexPath)
-//                self.trackInfoView.set(title: track.name, infoText: track.description)
                 if self.previousCell != nil,
                    self.previousCell != cell
                 {
                     previousCell?.getInfo(toHide: true, animated: true)
-//                    self.trackInfoView.set(title: track.name, infoText: track.desc)
                 }
                 if self.previousCell == cell
                 {
@@ -187,7 +189,6 @@ class FeedViewController: UIViewController {
                 {
                     previousCell = cell as? NewFeedTableViewCell
                     AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
-//                    self.trackInfoView.set(title: track.name, infoText: track.desc)
                     (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
@@ -265,7 +266,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         cell.onLike = {[weak self] track in
             self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
         }
-        return cell ?? UITableViewCell.init(frame: CGRect.zero)
+        return cell
     }
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -289,7 +290,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         cell?.fill(vm: vm)
         
         cell?.getInfo(toHide: true, animated: false)
-        cell?.alertBlurView.alpha = 0
 		
 		cell?.onLike = { [weak self] track in
             self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
@@ -377,6 +377,6 @@ extension FeedViewController: SwipeDelegate
 {
     func buttonTapped()
     {
-        tappedSideButton = true
+//        tappedSideButton = true
     }
 }

@@ -10,88 +10,7 @@ import UIKit
 import SDWebImage
 import TagListView
 
-class ChannelsCell: UITableViewCell {
-    
-    @IBOutlet weak var iconImageView: UIImageView!
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var subscribersLabel: UILabel!
-    @IBOutlet weak var listensLabel: UILabel!
-    @IBOutlet weak var heartImageView: UIImageView!
-    
-	@IBOutlet weak var noTagsView: UILabel!
-	@IBOutlet weak var tagsView: TagListView!
-	@IBOutlet weak var subscribeButton: UIButton!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        iconImageView.clipsToBounds = true
-        iconImageView.layer.cornerRadius = 9
-        
-        subscribeButton.layer.cornerRadius = 6
-        subscribeButton.layer.borderWidth  = 1
-        subscribeButton.layer.borderColor  = UIColor.vaRed.cgColor
-        subscribeButton.titleLabel?.font = UIFont(name: ".SFUIText-Medium", size: 16)
-        subscribeButton.titleLabel?.minimumScaleFactor = 0.1
-        subscribeButton.titleLabel?.adjustsFontSizeToFitWidth = true
-        
-        nameLabel.font = UIFont(name: ".SFUIText-Medium", size: 18)!
-        subscribersLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
-        listensLabel.font = UIFont(name: ".SFUIText-Medium", size: 12)!
-        
-        nameLabel.textColor = UIColor.vaCharcoalGrey
-		
-		tagsView.textFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
-		tagsView.tagLineBreakMode = .byTruncatingTail
-		
-		for _ in 0..<4 {
-			self.tagsView.addTag(" ")
-		}
-    }
-    
-    class func recommendedHeight() -> CGFloat {
-        return 164/* image */ + 13/* pad */ + 13/* pad */
-    }
-    
-    weak var channel: ChannelObject? = nil {
-        didSet {
-            nameLabel.text = channel?.name
-            subscribersLabel.text = "\(channel?.subscriptionCount ?? 0)"
-			self.tagsView.removeAllTags()
-			if let tags = channel?.tags.map({$0.value}).prefix(4) {
-				if tags.count != 0 {
-					self.tagsView.addTags(tags.map({$0.uppercased()}))
-					self.noTagsView.isHidden = true
-					tagsView.isHidden = false
-				} else {
-					self.noTagsView.isHidden = false
-					self.tagsView.isHidden = true
-				}
-			} else {
-				self.noTagsView.isHidden = false
-				self.tagsView.isHidden = true
-			}
-			if let urlString = URL(string: channel?.image) {
-                iconImageView.sd_setImage(with: urlString)
-            } else {
-                iconImageView.image = nil
-            }
-        }
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        subscribeButton.isSelected = selected
-//        heartImageView.image = selected ? #imageLiteral(resourceName: "heartActive") : #imageLiteral(resourceName: "heartInactive")
-        subscribeButton.backgroundColor = selected ? UIColor.clear : UIColor.vaActive
-    }
-    
-}
-
-class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
-    
-    var source = [MediumChannelViewModel]()
+class ChannelsViewController: UITableViewController {
     
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
@@ -109,23 +28,28 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+        self.viewInitialize()
+        
+        self.emitter?.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func viewInitialize()
+    {
         navigationController?.navigationBar.prefersLargeTitles = false
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         self.view.backgroundColor = .white
-
+        
         tableView.dataSource = self
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
         
         tableView.contentInset.bottom = 72
-		
-		tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
         
-        self.emitter?.send(event: LifeCycleEvent.initialize)
+        tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -138,6 +62,7 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
         super.viewWillDisappear(animated)
         self.emitter?.send(event: LifeCycleEvent.disappear)
     }
+    
     deinit {
         self.emitter?.send(event: LifeCycleEvent.deinitialize)
     }
@@ -150,20 +75,16 @@ class ChannelsViewController: UITableViewController, ChannelsVMDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+}
 
+extension ChannelsViewController: ChannelsVMDelegate {
     func reloadChannels() {
         if let source: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
-            self.source = source
+//            self.source = source
             self.tableView.reloadData()
             
             refreshControl?.endRefreshing()
         }
-    }
-    
-    func showChannel(channel: Channel) {
-		if let vc = ChannelBuilder.build(params: ["id" : channel.id, "station" : channel]){
-        	self.navigationController?.pushViewController(vc, animated: true)
-		}
     }
 }
 
@@ -174,42 +95,31 @@ extension ChannelsViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return source.count
+        return self.viewModel.channels.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
-		let channel = source[indexPath.row]
+        let channel = self.viewModel.channels[indexPath.row] as! MediumChannelViewModel
         cell.channel = channel
-		cell.subAction = {[weak self] channel in
-			if let _ = channel {
+        cell.subAction = {[weak self] channel in
+            if let _ = channel {
                 self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
-			}
-		}
+            }
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChannelTableViewCell.height//ChannelsCell.recommendedHeight()
+        return ChannelTableViewCell.height
     }
-	
-	override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-		return ChannelTableViewCell.height//ChannelsCell.recommendedHeight()
-	}
-}
-
-extension ChannelsViewController {
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return ChannelTableViewCell.height
+    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelSeeAll))
-		let _ = self.source[indexPath.row]
-//        let vc = ChannelViewController(station: station)
-//        self.navigationController?.pushViewController(vc, animated: true)
+        AnalyticsEngine.sendEvent(event: .channelCellTapped)
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
     }
-    
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-
-    }
-    
 }

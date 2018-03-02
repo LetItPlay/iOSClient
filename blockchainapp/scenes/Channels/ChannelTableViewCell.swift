@@ -13,7 +13,7 @@ import SnapKit
 class ChannelTableViewCell: UITableViewCell {
 	
 	static let cellID: String = "ChannelCellID"
-	static let height: CGFloat = 188.0
+    static let height: CGFloat = 188.0
     
     var tagsConstraint: NSLayoutConstraint!
 	
@@ -76,6 +76,7 @@ class ChannelTableViewCell: UITableViewCell {
 		label.textColor = AppColor.Title.light
 		return label
 	}()
+    
 	let subs: IconedLabel = IconedLabel(type: IconLabelType.subs)
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	

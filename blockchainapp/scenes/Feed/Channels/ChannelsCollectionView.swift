@@ -9,12 +9,10 @@
 import UIKit
 import SnapKit
 
-class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionViewDelegate, ChannelsVMDelegate {
+class ChannelsCollectionView: UIView {
     
     var emitter: ChannelsEmitterProtocol?
     var viewModel: ChannelsViewModel!
-    
-    var source = [SmallChannelViewModel]()
     
     let channelLabel: UILabel = {
         let label = UILabel()
@@ -24,7 +22,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         return label
     }()
     
-    let seeAlsoButton: UIButton = {
+    let seeAllButton: UIButton = {
         let button = UIButton()
         button.setTitle("see all", for: .normal)
         button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
@@ -56,13 +54,18 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         self.viewModel = viewModel
         viewModel.delegate = self
         
-        self.emitter?.send(event: LifeCycleEvent.initialize)
+        self.viewInitialize()
         
+        self.emitter?.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func viewInitialize()
+    {
         self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         
-        seeAlsoButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
-        self.addSubview(seeAlsoButton)
-        seeAlsoButton.snp.makeConstraints { (make) in
+        seeAllButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
+        self.addSubview(seeAllButton)
+        seeAllButton.snp.makeConstraints { (make) in
             make.top.equalTo(2)
             make.right.equalTo(-10)
             make.width.equalTo(60)
@@ -73,7 +76,7 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
         channelLabel.snp.makeConstraints { (make) in
             make.top.equalTo(0)
             make.left.equalTo(16)
-            make.right.equalTo(seeAlsoButton.snp.left)
+            make.right.equalTo(seeAllButton.snp.left)
             make.height.equalTo(41)
         }
         
@@ -98,30 +101,29 @@ class ChannelsCollectionView: UIView, UICollectionViewDataSource, UICollectionVi
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+extension ChannelsCollectionView: ChannelsVMDelegate
+{
+    func reloadChannels() {
+        self.channelsCollectionView.reloadData()
+    }
+}
+
+extension ChannelsCollectionView: UICollectionViewDataSource, UICollectionViewDelegate
+{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return source.count
+        return self.viewModel.channels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Channel", for: indexPath) as! ChannelsCollectionViewCell
-        
-        cell.configureWith(image: source[indexPath.row].imageURL!)
-        
+        cell.configureWith(image: self.viewModel.channels[indexPath.row].imageURL!)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
+        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
     }
-    
-    func reloadChannels() {
-        self.source = self.viewModel.channels
-        self.channelsCollectionView.reloadData()
-    }
-    
-//    func showChannel(channel: Channel) {
-//        self.delegate?.showChannel(channel: channel)
-//    }
 }

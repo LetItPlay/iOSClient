@@ -34,7 +34,6 @@ class PlaylistViewController: UIViewController {
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		
 		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
-        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {
@@ -138,6 +137,6 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.tracks[indexPath]
-		return SmallTrackTableViewCell.height(text: track.name, width: tableView.frame.width)
+		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }

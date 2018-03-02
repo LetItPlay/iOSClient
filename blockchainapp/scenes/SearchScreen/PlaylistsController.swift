@@ -9,21 +9,30 @@
 import Foundation
 import UIKit
 
-class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource, PlaylistsVMDelegate {
+class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     var tableView: UITableView!
-    
-    var playlists: [PlaylistViewModel] = []
     
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
-    
-    func update() {
-        self.playlists = self.viewModel.playlists
-        self.tableView.reloadData()
-        self.tableView.refreshControl?.endRefreshing()
-    }
+    let header: UIView = {
+        let label = UILabel()
+        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.section
+        label.text = "Today playlists".localized
+        
+        let container = UIView()
+        container.backgroundColor = UIColor.white
+        container.addSubview(label)
+        label.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
+        return container
+    }()
     
     convenience init(viewModel: PlaylistsVMProtocol, emitter: PlaylistsEmitterProtocol)
     {
@@ -34,9 +43,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
         
         self.emitter = emitter
         
-        self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        self.viewInitialize()
         
 //        let refreshControl = UIRefreshControl()
 //        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
@@ -45,15 +52,22 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
 //        refreshControl.beginRefreshing()
     }
     
+    func viewInitialize()
+    {
+        self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+    }
+    
 //    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
 ////        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
 ////        self.emitter.send(event: PlaylistsEvent.refresh)
 //    }
 	
 	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-		if self.tableView.refreshControl?.isRefreshing == true {
-			self.emitter.send(event: PlaylistsEvent.refresh)
-		}
+//        if self.tableView.refreshControl?.isRefreshing == true {
+//            self.emitter.send(event: PlaylistsEvent.refresh)
+//        }
 	}
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,13 +75,12 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.playlists.count
+        return self.viewModel.playlists.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
-        cell.fill(playlist: playlists[indexPath.item])
-        
+        cell.fill(playlist: self.viewModel.playlists[indexPath.item])
         return cell
     }
     
@@ -77,7 +90,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let playlist = self.playlists[indexPath.item]
+        let playlist = self.viewModel.playlists[indexPath.item]
         return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
     }
     
@@ -89,31 +102,20 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource,
         return 0.01
     }
 	
-	let header: UIView = {
-		let label = UILabel()
-		label.textColor = AppColor.Title.dark
-		label.font = AppFont.Title.section
-		label.text = "Today playlists".localized
-		
-		let container = UIView()
-		container.backgroundColor = UIColor.white
-		container.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview()
-			make.bottom.equalToSuperview()
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-		}
-		return container
-	}()
-	
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        if self.playlists.count == 0 {
+        if self.viewModel.playlists.count == 0 {
             return nil
         }
 		
 		return header
+    }
+}
 
+extension PlaylistsController: PlaylistsVMDelegate
+{
+    func update() {
+        self.tableView.reloadData()
+        self.tableView.refreshControl?.endRefreshing()
     }
 }

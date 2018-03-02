@@ -15,8 +15,8 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     
     var viewModel: ChannelVMProtocol!
     var emitter: ChannelEmitterProtocol!
+    
 	var header: ChannelHeaderView = ChannelHeaderView()
-	var currentIndex: Int = -1
 	
     init(viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
         super.init(nibName: nil, bundle: nil)
@@ -25,10 +25,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         self.viewModel.delegate = self
         
         self.emitter = emitter
-    }
-	
-    func followUpdate() {
-         //SubscribeManager.shared.stations.contains(self.presenter.station.id)
     }
     
     func reloadTracks() {
@@ -46,33 +42,38 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.title = "Channel".localized
-		
-		self.view.backgroundColor = UIColor.white
-		self.tableView.backgroundColor = .white
-		self.tableView.separatorColor = self.tableView.backgroundColor
-		
-		self.view.addSubview(tableView)
-		tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-		}
-        
-        tableView.contentInset.bottom = 70
-		
-		self.header = ChannelHeaderView(frame: self.view.frame)
-		header.translatesAutoresizingMaskIntoConstraints = false
-		
-		tableView.delegate = self
-		tableView.dataSource = self
-		
-		tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
-		self.header.followButton.isSelected = self.viewModel.isSubscribed
-		
-		self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
-		
-		self.tableView.tableHeaderView = self.header
+		self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func viewInitialize()
+    {
+        self.title = "Channel".localized
+        
+        self.view.backgroundColor = UIColor.white
+        self.tableView.backgroundColor = .white
+        self.tableView.separatorColor = self.tableView.backgroundColor
+        
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
+        tableView.contentInset.bottom = 70
+        
+        self.header = ChannelHeaderView(frame: self.view.frame)
+        header.translatesAutoresizingMaskIntoConstraints = false
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+        tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
+        
+        self.header.followButton.isSelected = self.viewModel.isSubscribed
+        self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
+        
+        self.tableView.tableHeaderView = self.header
     }
 	
 	@objc func followPressed() {
@@ -84,24 +85,18 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
 		super.viewWillAppear(animated)
 		
 		self.header.snp.makeConstraints { (make) in
-//            make.height.equalTo(height)
-			make.width.equalTo(self.view.frame.width)
+            make.width.equalTo(self.view.frame.width)
 		}
 		
         let height = self.header.fill(channel: self.viewModel.channel!, width: self.view.frame.width)
 		self.header.frame.size.height = height
+        
         self.emitter.send(event: LifeCycleEvent.appear)
 	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-	
-    func update() {
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//        }
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
@@ -167,16 +162,12 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
-		let track = self.viewModel.tracks[indexPath.item]
-		cell.track = track
-//        let hideListens = indexPath.item == self.currentIndex
-		cell.dataLabels[.listens]?.isHidden = track.isPlaying //hideListens
-		cell.dataLabels[.playingIndicator]?.isHidden = !track.isPlaying //!hideListens
+		cell.track = self.viewModel.tracks[indexPath.item]
 		return cell
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 		let track = self.viewModel.tracks[indexPath.item]
-		return ChannelTrackCell.height(text: track.name, width: tableView.frame.width)
+		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }

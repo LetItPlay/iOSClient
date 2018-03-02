@@ -24,10 +24,10 @@ protocol LikesVMDelegate: class {
 class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
     
     var tracks: [TrackViewModel] = []
+    var length: String = ""
     weak var delegate: LikesVMDelegate?
     
     var model : LikesModelProtocol!
-    var length: String = ""
     
     let disposeBag = DisposeBag()
     

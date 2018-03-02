@@ -13,6 +13,7 @@ enum IconLabelType: String {
 
 class IconedLabel: UIView {
 	var type: IconLabelType = .likes
+    
 	private var textLabel: UILabel = {
 		let label = UILabel()
 		label.textColor = AppColor.Title.gray

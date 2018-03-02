@@ -76,18 +76,10 @@ class PlaylistTableViewCell: UITableViewCell {
 		playlistImageView.backgroundColor = .red
 		playlistTitleLabel.attributedText = PlaylistTableViewCell.titleString(string: "Fresh IT news")
 		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
-		
-	}
-	
-	func fill(tuple: (image: UIImage?, title: String, descr: String, _: [AudioTrack])) {
-		self.playlistImageView.image = tuple.image
-		self.playlistTitleLabel.attributedText = type(of: self).titleString(string: tuple.title)
-		self.descriptionLabel.attributedText = type(of: self).descrString(string: tuple.descr)
 	}
     
     func fill(playlist: PlaylistViewModel)
     {
-//        self.playlistImageView.sd_setImage(with: playlist.imageURL)
         self.playlistImageView.image = UIImage(data: playlist.imageURL!)
         self.playlistTitleLabel.text = playlist.title
         self.descriptionLabel.text = playlist.description

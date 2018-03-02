@@ -15,7 +15,6 @@ protocol ChannelsVMProtocol {
 
 protocol ChannelsVMDelegate: class  {
     func reloadChannels()
-//    func showChannel(channel: Channel)
 }
 
 class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {

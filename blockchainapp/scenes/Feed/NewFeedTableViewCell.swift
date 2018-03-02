@@ -43,15 +43,15 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 		self.likeButton.isSelected = vm.isLiked
 		
         dataLabels[.time]?.set(text: vm.length)
+        
+        self.alertBlurView.alpha = 0
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
-		viewInitialize()
-        
-		self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
-	}
+		self.viewInitialize()
+    }
 	
 	@objc func likePressed(_: UIButton) {
         likeButton.isSelected = !likeButton.isSelected
@@ -321,7 +321,6 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
 
         infoBlurView.alpha = 0
         
-//        let sizeOfText = yourText sizeWithFont:yourFont constrainedToSize:CGSizeMake(constrainedWidth, CGFLOAT_MAX) lineBreakMode:UILineBreakModeWordWrap
         let sizeOfText: CGSize = alertLabel.text!.size(withAttributes: [NSAttributedStringKey.font: AppFont.Title.big])
         
         cellContentView.addSubview(alertBlurView)
@@ -349,6 +348,8 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         }
         
         alertBlurView.alpha = 0
+        
+        self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

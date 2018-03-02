@@ -38,10 +38,10 @@ class TrackInfoBlurView: UIVisualEffectView {
     {
         self.init(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
         
-        self.commonInit()
+        self.viewInitialize()
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.clipsToBounds = true
