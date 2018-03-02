@@ -12,7 +12,7 @@ import SnapKit
 class SmallChannelTableViewCell: UITableViewCell {
 
 	static let cellID = "SmallChannelCellID"
-	static let height: CGFloat = 86.0
+    static let height: CGFloat = 86.0
 	
 	let channelImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -31,6 +31,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 		label.font = AppFont.Title.mid
 		return label
 	}()
+    
 	var followButton: UIButton = FollowButton()
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	

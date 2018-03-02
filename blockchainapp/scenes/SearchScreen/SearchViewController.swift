@@ -9,20 +9,9 @@
 import UIKit
 import SnapKit
 
-class Custom: UIViewController {
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		self.view.backgroundColor = .red
-	}
-}
-
-class SearchViewController: UIViewController,
-UISearchControllerDelegate,
-UISearchBarDelegate {
+class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
 
     var searchController: UISearchController!
-	var searchResultsTableView: UITableView = UITableView()
-	var playlistTableView: UITableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
     var searchResults = SearchResultsController()
     var playlistsResults: PlaylistsController!
@@ -34,40 +23,45 @@ UISearchBarDelegate {
         self.init(nibName: nil, bundle: nil)
         
         self.playlistsResults = PlaylistsController(viewModel: playlistViewModel, emitter: playlistEmitter)
-        self.playlistTableView = self.playlistsResults.tableView
         
         self.searchResults = SearchResultsController(viewModel: searchViewModel, emitter: searchEmitter)
-        self.searchResultsTableView = self.searchResults.tableView
         self.searchController = self.searchResults.searchController
     }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		self.title = "Search".localized
-		
-		self.navigationController?.navigationBar.prefersLargeTitles = true
-		self.navigationItem.largeTitleDisplayMode = .always
-		self.view.backgroundColor = .white
+		self.commonInit()
         
-		self.definesPresentationContext = true
-
-		self.navigationItem.searchController = self.searchController
-		
-		self.view.addSubview(playlistTableView)
-		playlistTableView.snp.makeConstraints { (make) in
+        self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func commonInit()
+    {
+        self.title = "Search".localized
+        
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+        self.view.backgroundColor = .white
+        
+        self.definesPresentationContext = true
+        
+        self.navigationItem.searchController = self.searchController
+        
+        self.view.addSubview(self.playlistsResults.tableView)
+        self.playlistsResults.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-		}
+        }
         
-        playlistTableView.contentInset.bottom = 40
-		playlistTableView.delegate = self.playlistsResults
-		playlistTableView.dataSource = self.playlistsResults
-		
-		playlistTableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
-		playlistTableView.separatorStyle = .none
-		playlistTableView.backgroundColor = .white
-		
-		self.navigationItem.hidesSearchBarWhenScrolling = false
+        self.playlistsResults.tableView.contentInset.bottom = 40
+        self.playlistsResults.tableView.delegate = self.playlistsResults
+        self.playlistsResults.tableView.dataSource = self.playlistsResults
+        
+        self.playlistsResults.tableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
+        self.playlistsResults.tableView.separatorStyle = .none
+        self.playlistsResults.tableView.backgroundColor = .white
+        
+        self.navigationItem.hidesSearchBarWhenScrolling = false
         
         let label = UILabel()
         label.textColor = AppColor.Title.dark
@@ -79,12 +73,10 @@ UISearchBarDelegate {
             make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
             make.centerX.equalToSuperview()
         }
-		
-		self.emptyLabel = label
+        
+        self.emptyLabel = label
         
         self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
-        
-        self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
 	
     override func viewWillDisappear(_ animated: Bool) {
