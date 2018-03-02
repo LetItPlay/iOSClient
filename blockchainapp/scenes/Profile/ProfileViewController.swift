@@ -53,10 +53,10 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.commonInit()
+		self.viewInitialize()
 	}
     
-    func commonInit()
+    func viewInitialize()
     {
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in

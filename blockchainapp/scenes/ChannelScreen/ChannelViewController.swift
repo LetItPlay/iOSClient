@@ -42,12 +42,12 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.commonInit()
+		self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.title = "Channel".localized
         

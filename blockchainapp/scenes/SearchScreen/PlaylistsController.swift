@@ -43,7 +43,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
         
         self.emitter = emitter
         
-        self.commonInit()
+        self.viewInitialize()
         
 //        let refreshControl = UIRefreshControl()
 //        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
@@ -52,7 +52,7 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 //        refreshControl.beginRefreshing()
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
         self.tableView.delegate = self

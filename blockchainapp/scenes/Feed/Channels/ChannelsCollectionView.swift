@@ -54,12 +54,12 @@ class ChannelsCollectionView: UIView {
         self.viewModel = viewModel
         viewModel.delegate = self
         
-        self.commonInit()
+        self.viewInitialize()
         
         self.emitter?.send(event: LifeCycleEvent.initialize)
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
         

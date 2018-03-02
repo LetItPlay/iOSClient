@@ -31,12 +31,12 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		self.commonInit()
+		self.viewInitialize()
         
         self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.title = "Search".localized
         

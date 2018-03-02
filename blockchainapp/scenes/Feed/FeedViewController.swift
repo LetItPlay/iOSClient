@@ -68,12 +68,12 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.commonInit()
+        self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
 	}
     
-    func commonInit()
+    func viewInitialize()
     {
         navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.largeTitleDisplayMode = .automatic

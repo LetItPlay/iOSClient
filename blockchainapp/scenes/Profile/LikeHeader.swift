@@ -17,10 +17,10 @@ class LikeHeader: UIView {
     init() {
         super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 81)))
         
-        self.commonInit()
+        self.viewInitialize()
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         self.backgroundColor = .white
         

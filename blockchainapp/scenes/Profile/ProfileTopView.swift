@@ -29,12 +29,12 @@ class ProfileTopView: UIView {
         self.viewModel = viewModel
         viewModel.delegate = self
         
-        self.commonInit()
+        self.viewInitialize()
         
         emitter.send(event: LifeCycleEvent.initialize)
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         bluredImageView.layer.cornerRadius = 140
         bluredImageView.layer.masksToBounds = true

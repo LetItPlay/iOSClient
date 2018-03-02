@@ -28,12 +28,12 @@ class ChannelsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-        self.commonInit()
+        self.viewInitialize()
         
         self.emitter?.send(event: LifeCycleEvent.initialize)
     }
     
-    func commonInit()
+    func viewInitialize()
     {
         navigationController?.navigationBar.prefersLargeTitles = false
         
