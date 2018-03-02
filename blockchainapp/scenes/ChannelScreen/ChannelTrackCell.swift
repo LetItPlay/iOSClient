@@ -89,7 +89,7 @@ class ChannelTrackCell: UITableViewCell {
             make.right.equalToSuperview().inset(16)
             make.centerY.equalTo(channelNameLabel)
             make.left.equalTo(channelNameLabel.snp.right).inset(-10)
-            make.width.equalTo(80)
+            make.width.equalTo(60)
         }
         
         self.contentView.addSubview(trackNameLabel)
