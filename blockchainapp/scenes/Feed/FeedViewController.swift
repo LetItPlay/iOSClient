@@ -197,21 +197,20 @@ class FeedViewController: UIViewController {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-//        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
-//        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
-//
-//        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
-//
-//        UIView.animate(withDuration: 0.3, animations: {
-//            cell.alertBlurView.alpha = 1
-//        })
-//
-//        let when = DispatchTime.now() + 1
-//        DispatchQueue.main.asyncAfter(deadline: when){
-//            UIView.animate(withDuration: 0.3, animations:{
-//                cell.alertBlurView.alpha = 0
-//            })
-//        }
+        self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
+        
+        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+
+        UIView.animate(withDuration: 0.3, animations: {
+            cell.alertBlurView.alpha = 1
+        })
+
+        let when = DispatchTime.now() + 1
+        DispatchQueue.main.asyncAfter(deadline: when){
+            UIView.animate(withDuration: 0.3, animations:{
+                cell.alertBlurView.alpha = 0
+            })
+        }
     }
 }
 

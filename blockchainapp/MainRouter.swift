@@ -27,7 +27,7 @@ class MainRouter: Router {
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
 			("Search".localized, (UIImage.init(named: "searchTab"), SearchBuilder.build(params: nil))),
-            ("Playlists".localized, (UIImage.init(named: "channelsTab"), PlaylistsViewController())),
+            ("Playlist".localized, (UIImage.init(named: "channelsTab"), UserPlaylistBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		self.initialViewControllers = tabs.map({ (tuple) -> UINavigationController in
