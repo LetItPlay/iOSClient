@@ -17,14 +17,14 @@ class ChannelsCollectionView: UIView {
     let channelLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
-        label.text = "Channels"
+        label.text = "Channels".localized
         label.textAlignment = .left
         return label
     }()
     
     let seeAllButton: UIButton = {
         let button = UIButton()
-        button.setTitle("see all", for: .normal)
+        button.setTitle("see all".localized, for: .normal)
         button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = AppFont.Button.mid
