@@ -31,6 +31,8 @@ class UserPlaylistViewController: UIViewController {
         super.viewDidLoad()
         
         self.viewInitialize()
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
     }
     
     func viewInitialize()
@@ -50,6 +52,8 @@ class UserPlaylistViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        self.tableView.contentInset.bottom = 65
+        
         self.tableView.separatorColor = self.tableView.backgroundColor
         
         tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
@@ -57,6 +61,7 @@ class UserPlaylistViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.emitter.send(event: LifeCycleEvent.appear)
         
         self.tableView.reloadData()
         
@@ -66,6 +71,8 @@ class UserPlaylistViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        self.emitter.send(event: LifeCycleEvent.disappear)
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
@@ -164,9 +171,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-//        let contr = AudioController.main
-//        contr.make(command: .play(id: UserPlaylistManager.shared.tracks[indexPath.row].id))
+        self.emitter.send(event: PlaylistEvent.trackSelected(index: indexPath.row))
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

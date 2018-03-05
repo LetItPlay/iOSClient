@@ -30,7 +30,7 @@ class UserPlaylistEmitter: Emitter, UserPlaylistEmitterProtocol
     func send(event: PlaylistEvent) {
         switch event {
         case .trackSelected(let index):
-            break
+            self.model?.trackSelected(index: index)
         }
     }
 }
