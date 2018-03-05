@@ -22,7 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupAppearence()
         migrate()
 		
-		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 
 		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
@@ -127,5 +126,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		try? AVAudioSession.sharedInstance().setActive(true)
 	}
 	
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == .pad
+        {
+            return UIInterfaceOrientationMask.all
+        }
+        return UIInterfaceOrientationMask.portrait
+    }
 }
 
