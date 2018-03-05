@@ -17,6 +17,30 @@ class UserPlaylistViewController: UIViewController {
     var tracks: [[AudioTrack]] = [[]]
     var currentIndex: IndexPath = IndexPath.invalid
     
+    let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.Title.big
+        label.textColor = AppColor.Title.dark
+        label.textAlignment = .center
+        label.numberOfLines = 0
+//        label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
+        label.text = "У Вас ещё нет треков. Насвайпайте их из фида или трендов, пжлст"
+        return label
+    }()
+    
+//    let emptyButton: UIButton = {
+//        let button = UIButton()
+//        button.titleLabel?.font = AppFont.Title.section
+//        button.setTitle("Browse channels list".localized, for: .normal)
+//        button.setTitleColor(.red, for: .normal)
+//        button.titleLabel?.textAlignment = .center
+//        button.layer.cornerRadius = 5
+//        button.layer.borderColor = UIColor.red.cgColor
+//        button.layer.borderWidth = 1
+//        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
+//        return button
+//    }()
+    
     convenience init(vm: UserPlaylistVMProtocol, emitter: UserPlaylistEmitterProtocol)
     {
         self.init(nibName: nil, bundle: nil)
@@ -37,9 +61,16 @@ class UserPlaylistViewController: UIViewController {
     
     func viewInitialize()
     {
+        self.view.backgroundColor = UIColor.vaWhite
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "clear".localized, style: .plain, target: self, action: #selector(clearPlaylist))
         
-        self.view.backgroundColor = .white
+        self.tableView.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view.center)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -48,6 +79,9 @@ class UserPlaylistViewController: UIViewController {
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        
+        tableView.backgroundView?.backgroundColor = .clear
+        tableView.sectionIndexBackgroundColor = .clear
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -86,7 +120,35 @@ class UserPlaylistViewController: UIViewController {
     @objc func clearPlaylist()
     {
         UserPlaylistManager.shared.clearPlaylist()
+        self.emitter.send(event: PlaylistEvent.clearPlaylist)
         self.tableView.reloadData()
+    }
+}
+
+extension UserPlaylistViewController: UserPlaylistVMDelegate
+{
+    func updateEmptyMessage() {
+        self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
+    }
+    
+    func make(updates: [CollectionUpdate : [Int]]) {
+        tableView.beginUpdates()
+        for key in updates.keys {
+            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+                switch key {
+                case .insert:
+                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .delete:
+                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                case .update:
+                    if indexes.count != 0 {
+                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                        //                        tableView.reloadData()
+                    }
+                }
+            }
+        }
+        tableView.endUpdates()
     }
 }
 
@@ -190,25 +252,3 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
 }
 
-extension UserPlaylistViewController: UserPlaylistVMDelegate
-{
-    func make(updates: [CollectionUpdate : [Int]]) {
-        tableView.beginUpdates()
-        for key in updates.keys {
-            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
-                switch key {
-                case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .update:
-                    if indexes.count != 0 {
-                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-//                        tableView.reloadData()
-                    }
-                }
-            }
-        }
-        tableView.endUpdates()
-    }
-}

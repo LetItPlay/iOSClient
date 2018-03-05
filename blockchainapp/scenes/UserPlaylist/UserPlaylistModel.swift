@@ -17,10 +17,12 @@ protocol UserPlaylistModelProtocol: class, ModelProtocol {
 
 protocol UserPlaylistEventHandler: class {
     func trackSelected(index: Int)
+    func clearPlaylist()
 }
 
 protocol UserPlaylistModelDelegate: class {
 //    func show(tracks: [TrackViewModel])
+    func emptyMessage(show: Bool)
 }
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler
@@ -39,11 +41,17 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler
     func reload()
     {
         self.tracks = UserPlaylistManager.shared.tracks
+        self.delegate?.emptyMessage(show: self.tracks.count == 0 ? true : false)
     }
     
     func trackSelected(index: Int) {
         let track = self.tracks[index]
         AudioController.main.loadPlaylist(playlist: ("Playlist".localized, self.tracks), playId: track.id)
+    }
+    
+    func clearPlaylist() {
+        UserPlaylistManager.shared.tracks.removeAll()
+        self.delegate?.emptyMessage(show: true)
     }
     
     func send(event: LifeCycleEvent) {

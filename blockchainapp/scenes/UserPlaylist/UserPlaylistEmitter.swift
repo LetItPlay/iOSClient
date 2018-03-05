@@ -11,6 +11,7 @@ import Foundation
 enum PlaylistEvent
 {
     case trackSelected(index: Int)
+    case clearPlaylist
 }
 
 protocol UserPlaylistEmitterProtocol: LifeCycleHandlerProtocol {
@@ -31,6 +32,8 @@ class UserPlaylistEmitter: Emitter, UserPlaylistEmitterProtocol
         switch event {
         case .trackSelected(let index):
             self.model?.trackSelected(index: index)
+        case .clearPlaylist:
+            self.model?.clearPlaylist()
         }
     }
 }

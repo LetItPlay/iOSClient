@@ -11,18 +11,22 @@ import RxSwift
 
 protocol UserPlaylistVMProtocol {
     var tracks: [TrackViewModel] {get}
+    var hideEmptyMessage: Bool {get set}
     
     weak var delegate: UserPlaylistVMDelegate? {get set}
 }
 
 protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
+    func updateEmptyMessage()
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
 {
     var delegate: UserPlaylistVMDelegate?
     var tracks: [TrackViewModel] = []
+    
+    var hideEmptyMessage: Bool = true
     
     var model: UserPlaylistModelProtocol!
     
@@ -53,5 +57,10 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
                     self.delegate?.make(updates: [.update: indexes])
                 }
             }).disposed(by: disposeBag)
+    }
+    
+    func emptyMessage(show: Bool) {
+        self.hideEmptyMessage = show
+        self.delegate?.updateEmptyMessage()
     }
 }
