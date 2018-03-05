@@ -163,7 +163,7 @@ extension ProfileViewController: LikesVMDelegate
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-        //        tableView.beginUpdates()
+//                tableView.beginUpdates()
         for key in updates.keys {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -175,16 +175,15 @@ extension ProfileViewController: LikesVMDelegate
 //                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
                     if indexes.count != 0 {
                         tableView.reloadData()
-                        
+
                     }
                     break
-                    //                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
 //                    tableView.reloadData()
                     //                    break
                 }
             }
         }
-        //        tableView.endUpdates()
+//                tableView.endUpdates()
     }
 }
 

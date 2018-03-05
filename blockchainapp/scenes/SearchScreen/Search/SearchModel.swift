@@ -72,6 +72,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
             break
         }
     }
+    
     func searchChanged(string: String) {
         self.playingIndex.value = nil
         self.prevSearchString = self.currentSearchString
@@ -181,7 +182,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
 }
 
-extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol, PlayingStateUpdateProtocol {
+extension SearchModel: ChannelUpdateProtocol, PlayingStateUpdateProtocol {
+    
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
         if isPlaying {
             if let index = self.searchTracks.index(where: {$0.id == id})
@@ -191,10 +193,6 @@ extension SearchModel: SettingsUpdateProtocol, ChannelUpdateProtocol, PlayingSta
         } else {
             self.playingIndex.value = nil
         }
-    }
-    
-    func settingsUpdated() {
-        
     }
     
     func channelUpdated(channel: Channel) {
