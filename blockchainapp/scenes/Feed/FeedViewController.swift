@@ -282,7 +282,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
         //for swipes
-//        cell?.delegate = self
+        cell?.delegate = self
 
         self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
         

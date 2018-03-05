@@ -4,7 +4,7 @@ import SnapKit
 import SwipeCellKit
 import RxSwift
 
-class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
+class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
