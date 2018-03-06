@@ -12,9 +12,9 @@ class UserPlaylistManager
 {
     static let shared: UserPlaylistManager = UserPlaylistManager()
     
-    var tracks: [PlayerTrack] = []
+    var tracks: [Track] = []
         
-    func add(track: PlayerTrack, toBegining: Bool)
+    func add(track: Track, toBegining: Bool)
     {
         if toBegining
         {

@@ -34,12 +34,14 @@
 
 "Today playlists"="Сегодняшняя подборка";
 "There are no playlists" = "Плейлисты отсутствуют";
+"There are no tracks" = "Треки отсутствуют";
 
 "Playlist"="Плейлист";
+"Playlists"="Плейлисты";
 "Liked"="Понравившиеся";
 "Player"="Плеер";
 "Name" = "Имя";
-"User playlist" = "Пользовательский плейлист";
-"clear" = "очистить";
+"My playlist" = "Мой плейлист";
+"Clear all" = "Очистить";
 
 "see all" = "см. все";

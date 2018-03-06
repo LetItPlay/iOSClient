@@ -19,27 +19,13 @@ class UserPlaylistViewController: UIViewController {
     
     let emptyLabel: UILabel = {
         let label = UILabel()
-        label.font = AppFont.Title.big
-        label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.sectionNotBold
+        label.textColor = AppColor.Element.emptyMessage
         label.textAlignment = .center
         label.numberOfLines = 0
-//        label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
-        label.text = "У Вас ещё нет треков. Насвайпайте их из фида или трендов, пжлст"
+        label.text = "There are no tracks".localized
         return label
     }()
-    
-//    let emptyButton: UIButton = {
-//        let button = UIButton()
-//        button.titleLabel?.font = AppFont.Title.section
-//        button.setTitle("Browse channels list".localized, for: .normal)
-//        button.setTitleColor(.red, for: .normal)
-//        button.titleLabel?.textAlignment = .center
-//        button.layer.cornerRadius = 5
-//        button.layer.borderColor = UIColor.red.cgColor
-//        button.layer.borderWidth = 1
-//        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
-//        return button
-//    }()
     
     convenience init(vm: UserPlaylistVMProtocol, emitter: UserPlaylistEmitterProtocol)
     {
@@ -63,7 +49,7 @@ class UserPlaylistViewController: UIViewController {
     {
         self.view.backgroundColor = UIColor.vaWhite
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "clear".localized, style: .plain, target: self, action: #selector(clearPlaylist))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Clear all".localized, style: .plain, target: self, action: #selector(clearPlaylist))
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -90,7 +76,7 @@ class UserPlaylistViewController: UIViewController {
         
         self.tableView.separatorColor = self.tableView.backgroundColor
         
-        tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
+        tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -127,8 +113,10 @@ class UserPlaylistViewController: UIViewController {
 
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
-    func updateEmptyMessage() {
+    
+    func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
+        self.tableView.reloadData()
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
@@ -174,7 +162,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         label.font = AppFont.Title.big
         label.textColor = AppColor.Title.dark
         label.numberOfLines = 1
-        label.text = "User playlist".localized
+        label.text = "My playlist".localized
         
         let tracks = IconedLabel.init(type: .tracks)
         tracks.setData(data: Int64(UserPlaylistManager.shared.tracks.count))
@@ -237,12 +225,16 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-        let track = UserPlaylistManager.shared.tracks[indexPath.row]
-        cell.track = track
-        let hideListens = indexPath == currentIndex
-        //        cell.dataLabels[.listens]?.isHidden = hideListens
-        cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+//        let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
+//        let track = UserPlaylistManager.shared.tracks[indexPath.row]
+//        cell.track = track
+//        let hideListens = indexPath == currentIndex
+//        //        cell.dataLabels[.listens]?.isHidden = hideListens
+//        cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
+        cell.track = self.viewModel.tracks[indexPath.item]
+        
         return cell
     }
     

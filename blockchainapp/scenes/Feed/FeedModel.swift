@@ -126,7 +126,7 @@ FeedEventHandler {
     
     func addTrack(atIndex: Int, toBegining: Bool) {
         let track = self.tracks[atIndex]
-        UserPlaylistManager.shared.add(track: PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: (self.channels.filter({$0.id == track.channelId}).first?.name)!, imageURL: track.image, length: track.length), toBegining: toBegining)
+        UserPlaylistManager.shared.add(track: track, toBegining: toBegining)
     }
 }
 

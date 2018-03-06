@@ -21,7 +21,7 @@ protocol UserPlaylistEventHandler: class {
 }
 
 protocol UserPlaylistModelDelegate: class {
-//    func show(tracks: [TrackViewModel])
+    func show(tracks: [TrackViewModel])
     func emptyMessage(show: Bool)
 }
 
@@ -30,7 +30,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler
     var delegate: UserPlaylistModelDelegate?
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
-    private var tracks: [PlayerTrack] = []
+    private var tracks: [Track] = []
     
     init()
     {
@@ -41,17 +41,24 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler
     func reload()
     {
         self.tracks = UserPlaylistManager.shared.tracks
+        
         self.delegate?.emptyMessage(show: self.tracks.count == 0 ? true : false)
+        self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
     }
     
     func trackSelected(index: Int) {
-        let track = self.tracks[index]
-        AudioController.main.loadPlaylist(playlist: ("Playlist".localized, self.tracks), playId: track.id)
+        let tracks = self.tracks.map { (track) -> AudioTrack in
+            return track.audioTrack(author: "")
+//            return track.audioTrack(author: channels.first(where: {$0.id == track.channelId})?.name ?? "")
+        }
+        AudioController.main.loadPlaylist(playlist: ("My playlist".localized, tracks), playId: self.tracks[index].id)
     }
     
     func clearPlaylist() {
         UserPlaylistManager.shared.tracks.removeAll()
         self.delegate?.emptyMessage(show: true)
+        self.tracks = UserPlaylistManager.shared.tracks
+        self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
     }
     
     func send(event: LifeCycleEvent) {
