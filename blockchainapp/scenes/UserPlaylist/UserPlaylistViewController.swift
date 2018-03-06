@@ -116,6 +116,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     
     func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
+        self.navigationItem.rightBarButtonItem?.isEnabled = !self.viewModel.hideEmptyMessage
         self.tableView.reloadData()
     }
     
