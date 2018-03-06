@@ -65,19 +65,19 @@ class UserPlaylistViewController: UIViewController {
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "clear".localized, style: .plain, target: self, action: #selector(clearPlaylist))
         
-        self.tableView.addSubview(emptyLabel)
-        emptyLabel.snp.makeConstraints { (make) in
-            make.center.equalTo(self.view.center)
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
-        }
-        
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(60)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
+        }
+        
+        self.view.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view.center)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
         }
         
         tableView.backgroundView?.backgroundColor = .clear
