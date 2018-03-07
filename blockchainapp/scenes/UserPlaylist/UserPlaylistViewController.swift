@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwipeCellKit
 
 class UserPlaylistViewController: UIViewController {
     
@@ -77,6 +78,8 @@ class UserPlaylistViewController: UIViewController {
         self.tableView.separatorColor = self.tableView.backgroundColor
         
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
+
+        tableView.allowsMultipleSelectionDuringEditing = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -139,20 +142,40 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
         }
         tableView.endUpdates()
     }
+
+    func delete(index: Int) {
+        tableView.deleteRows(at: [IndexPath.init(item: index, section: 0)], with: .automatic)
+    }
 }
 
-extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return UserPlaylistManager.shared.tracks.count
+        return self.viewModel.tracks.count
     }
-    
+
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+            self.emitter.send(event: .trackDelete(index: indexPath.item))
+        }
+//        deleteAction.backgroundColor = .white
+//        deleteAction.textColor = AppColor.Element.tomato
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "delete")
+
+        return [deleteAction]
+    }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if UserPlaylistManager.shared.tracks.count == 0 {
+        if self.viewModel.tracks.count == 0 {
             return nil
         }
         
@@ -234,11 +257,12 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
 //        cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
+        cell.delegate = self
         cell.track = self.viewModel.tracks[indexPath.item]
         
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let track = UserPlaylistManager.shared.tracks[indexPath.row]
         return Common.height(text: track.name, width: tableView.frame.width)

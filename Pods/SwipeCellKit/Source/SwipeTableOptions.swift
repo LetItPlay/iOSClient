@@ -41,6 +41,8 @@ public struct SwipeTableOptions {
     
     /// The amount of space, in points, between the button image and the button title.
     public var buttonSpacing: CGFloat?
+
+    public var showGradient: Bool = false
     
     /// Constructs a new `SwipeTableOptions` instance with default options.
     public init() {}

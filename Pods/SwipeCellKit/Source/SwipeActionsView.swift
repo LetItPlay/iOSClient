@@ -97,6 +97,9 @@ class SwipeActionsView: UIView {
         backgroundColor = options.backgroundColor ?? #colorLiteral(red: 0.862745098, green: 0.862745098, blue: 0.862745098, alpha: 1)
         
         buttons = addButtons(for: self.actions, withMaximum: maxSize)
+        buttons.forEach { button in
+            button.gradientLayer.isHidden = !options.showGradient
+         }
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -19,6 +19,7 @@ protocol UserPlaylistVMProtocol {
 protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reload()
+    func delete(index: Int)
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
@@ -63,7 +64,12 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
         self.tracks = tracks
         self.delegate?.reload()
     }
-    
+
+    func delete(index: Int) {
+        self.tracks.remove(at: index)
+        self.delegate?.delete(index: index)
+    }
+
     func emptyMessage(show: Bool) {
         self.hideEmptyMessage = show
     }

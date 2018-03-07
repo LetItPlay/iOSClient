@@ -86,6 +86,11 @@ protocol AudioControllerPresenter: class {
 	func hidePlayer()
 }
 
+enum AudioControllerUpdate {
+    case reload(tracks: [AudioTrack])
+    case remove(id: Int)
+}
+
 protocol AudioControllerProtocol: class {
 	weak var delegate: AudioControllerDelegate? {get set}
 	
@@ -100,6 +105,8 @@ protocol AudioControllerProtocol: class {
 	func setCurrentTrack(id: Int)
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: Int?)
+
+    func update(_ update: AudioControllerUpdate)
 }
 
 //MARK: - Audio Player Protocols
