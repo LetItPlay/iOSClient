@@ -60,9 +60,10 @@ FeedEventHandler {
 			})
 		}).map({ (tuple) -> [TrackViewModel] in
 			let playingId = AudioController.main.currentTrack?.id
+			let isPlaying = AudioController.main.status == .playing
 			return tuple.0.map({ (track) -> TrackViewModel in
 				var vm = TrackViewModel(track: track,
-										isPlaying: track.id == playingId)
+										isPlaying: track.id == playingId && isPlaying)
 				if let channel = tuple.1.filter({$0.id == track.channelId}).first {
 					vm.authorImage = channel.image
 					vm.author = channel.name

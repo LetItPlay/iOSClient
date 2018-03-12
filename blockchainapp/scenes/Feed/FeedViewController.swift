@@ -160,6 +160,7 @@ class FeedViewController: UIViewController {
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+		self.emitter.send(event: .refresh)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 
@@ -339,20 +340,21 @@ extension FeedViewController: SwipeTableViewCellDelegate
         {
             image = UIImage(named: "topIcon")
             toBeginning = true
-            addTo = "up"
+            addTo = "top"
         }
         else
         {
             image = UIImage(named: "downIcon")
             toBeginning = false
-            addTo = "down"
+            addTo = "bottom"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
+        let addToPlaylistAction = SwipeAction(style: .default, title: "Add to\nthe \(addTo)\nof the\nplaylist", handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
+//        addToPlaylistAction.title = nil
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
-        
+
         addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
         addToPlaylistAction.font = AppFont.Title.big
         addToPlaylistAction.delegate = self
@@ -367,6 +369,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.maximumButtonWidth = 300
         options.minimumButtonWidth = 150
         options.backgroundColor = .white
+        options.showGradient = true
         
         return options
     }
