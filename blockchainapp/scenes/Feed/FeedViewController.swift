@@ -371,7 +371,18 @@ extension FeedViewController: SwipeTableViewCellDelegate
         let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
         let toColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0 : 0.9).cgColor
         
-        options.showGradient = (CGRect(x: 0, y: 25, width: 150, height: 278-25), cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        var frame: CGRect!
+        
+        if orientation == .right
+        {
+            frame = CGRect(x: 0, y: 25, width: 200, height: 278-25)
+        }
+        else
+        {
+            frame = CGRect(x: -50, y: 25, width: 200, height: 278-25)
+        }
+        
+        options.showGradient = (frame, cornerRadius: 10, fromColor: fromColor, toColor: toColor)
         
         return options
     }

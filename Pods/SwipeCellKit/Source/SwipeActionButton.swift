@@ -63,11 +63,11 @@ class SwipeActionButton: UIButton {
         if action.title?.range(of: "top") != nil
         {
             imageView.frame = CGRect(x: 50, y: 47, width: 90, height: 278-71)
-            title.frame = CGRect(x: 45, y: 50, width: 87, height: 200)
+            title.frame = CGRect(x: 35, y: 50, width: 87, height: 200)
         }
         else {
             imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
-            title.frame = CGRect(x: 20, y: 55, width: 87, height: 200)
+            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
         }
         
         self.addSubview(imageView)
