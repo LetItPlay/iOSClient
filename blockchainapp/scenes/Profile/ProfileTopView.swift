@@ -143,7 +143,7 @@ class ProfileTopView: UIView {
         }
         else
         {
-            profileNameTextField.placeholder = "name"
+            profileNameTextField.placeholder = "name".localized
         }
     }
 }
