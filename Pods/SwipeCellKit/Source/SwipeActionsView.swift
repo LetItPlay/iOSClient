@@ -24,7 +24,7 @@ class SwipeActionsView: UIView {
     var expansionDelegate: SwipeExpanding? {
         return options.expansionDelegate ?? (expandableAction?.hasBackgroundColor == false ? ScaleAndAlphaExpansion.default : nil)
     }
-    
+
     let orientation: SwipeActionsOrientation
     let actions: [SwipeAction]
     let options: SwipeTableOptions
@@ -110,6 +110,18 @@ class SwipeActionsView: UIView {
             actionButton.autoresizingMask = [.flexibleHeight, orientation == .right ? .flexibleRightMargin : .flexibleLeftMargin]
             actionButton.spacing = options.buttonSpacing ?? 8
             actionButton.contentEdgeInsets = buttonEdgeInsets(fromOptions: options)
+            
+            if options.showGradient != nil {
+                let gradientLayer = CAGradientLayer()
+                gradientLayer.colors = [options.showGradient!.fromColor, options.showGradient!.toColor]
+                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
+                gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
+                gradientLayer.frame = options.showGradient!.frame
+                gradientLayer.cornerRadius = options.showGradient!.cornerRadius
+                
+                actionButton.layer.insertSublayer(gradientLayer, at: 0)
+            }
+                
             return actionButton
         })
         
@@ -144,7 +156,7 @@ class SwipeActionsView: UIView {
     
     @objc func actionTapped(button: SwipeActionButton) {
         guard let index = buttons.index(of: button) else { return }
-        actions[index].delegate?.buttonTapped()
+
         delegate?.swipeActionsView(self, didSelect: actions[index])
     }
     
@@ -236,10 +248,8 @@ class SwipeActionButtonWrapperView: UIView {
         switch orientation {
         case .left:
             contentRect = CGRect(x: frame.width - contentWidth, y: 0, width: contentWidth, height: frame.height)
-            isLeft = true
         case .right:
             contentRect = CGRect(x: 0, y: 0, width: contentWidth, height: frame.height)
-            isLeft = false
         }
         
         super.init(frame: frame)

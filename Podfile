@@ -22,7 +22,7 @@ target 'blockchainapp' do
   pod "RxSwift"
   pod "Action"
   
-  pod 'SwipeCellKit', :inhibit_warnings => true
+  pod 'SwipeCellKit', :git=> ‘git@github.com:psabrosimova/SwipeCellKit.git’, :commit => '965b6ac3cedc1568dcd9fdbca02cd195211af501’, :inhibit_warnings => true
 
   #Crashlytics
   pod 'Fabric'

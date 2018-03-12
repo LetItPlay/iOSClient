@@ -415,10 +415,10 @@
 		CF44531D1F54139900660474 = {
 			isa = PBXGroup;
 			children = (
+				CF4453281F54139900660474 /* blockchainapp */,
 				FA0295970B9760974875F641 /* Frameworks */,
 				D6466F373F64D97EFA77D614 /* Pods */,
 				CF4453271F54139900660474 /* Products */,
-				CF4453281F54139900660474 /* blockchainapp */,
 				CF44533D1F54139900660474 /* blockchainappTests */,
 				CF4453481F54139900660474 /* blockchainappUITests */,
 			);

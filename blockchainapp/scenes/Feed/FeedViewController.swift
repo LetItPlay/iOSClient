@@ -282,7 +282,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
         //for swipes
-//        cell?.delegate = self
+        cell?.delegate = self
 
         self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
         
@@ -338,25 +338,24 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var addTo = ""
         if orientation == .left
         {
-            image = UIImage(named: "topIcon")
+            image = UIImage(named: "illustrationTop")
             toBeginning = true
-            addTo = "up"
+            addTo = "To the\ntop"
         }
         else
         {
-            image = UIImage(named: "downIcon")
+            image = UIImage(named: "illustrationBottom")
             toBeginning = false
-            addTo = "down"
+            addTo = "Bottom"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
+        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist", handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
         
-        addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
+        addToPlaylistAction.textColor = .white
         addToPlaylistAction.font = AppFont.Title.big
-        addToPlaylistAction.delegate = self
         
         return [addToPlaylistAction]
     }
@@ -369,14 +368,12 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.minimumButtonWidth = 150
         options.backgroundColor = .white
         
+        let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
+        let toColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0 : 0.9).cgColor
+        
+        options.showGradient = (CGRect(x: 0, y: 25, width: 150, height: 278-25), cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        
         return options
     }
 }
 
-extension FeedViewController: SwipeDelegate
-{
-    func buttonTapped()
-    {
-//        tappedSideButton = true
-    }
-}
