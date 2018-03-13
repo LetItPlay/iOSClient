@@ -348,7 +348,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             toBeginning = false
             addTo = "Bottom"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist", handler: { action, indexPath in
+        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
         addToPlaylistAction.image = image
