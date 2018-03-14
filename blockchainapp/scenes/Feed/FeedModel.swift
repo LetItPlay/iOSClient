@@ -45,7 +45,7 @@ FeedEventHandler {
 		self.isFeed = isFeed
         
 		dataAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
-			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(7))
+			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
 		})
 		
 		dataAction?.elements.do(onNext: { (tuple) in
@@ -62,7 +62,7 @@ FeedEventHandler {
 			return tuple.0.map({ (track) -> TrackViewModel in
 				var vm = TrackViewModel(track: track,
 										isPlaying: track.id == playingId)
-				if let channel = tuple.1.filter({$0.id == track.channelId}).first {
+				if let channel = tuple.1.filter({$0.id == track.channel.id}).first {
 					vm.authorImage = channel.image
 					vm.author = channel.name
 				}
@@ -100,7 +100,7 @@ FeedEventHandler {
     
     func trackSelected(index: Int) {
 		let tracks = self.tracks.map { (track) -> AudioTrack in
-			return track.audioTrack(author: channels.first(where: {$0.id == track.channelId})?.name ?? "")
+            return track.audioTrack(author: channels.first(where: {$0.id == track.channel.id})?.name ?? "")
 		}
         AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
     }

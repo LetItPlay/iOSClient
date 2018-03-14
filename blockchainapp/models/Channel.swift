@@ -5,8 +5,8 @@ import RealmSwift
 typealias ObjectInfo = (id: Int, name: String, image: URL?)
 
 struct Channel: Hashable {
-	var id: Int					= 0
-	var name: String			= ""
+	var id: Int = 0
+	var name: String = ""
 	var image: URL?
 	var sourceURL: URL?
 	var subscriptionCount: Int	= 0
@@ -20,14 +20,13 @@ struct Channel: Hashable {
 	
 	init?(json: JSON) {
 		if let id = json["Id"].int,
-			let name = json["Name"].string,
-			let image = json["ImageURL"].string?.url(),
-			let subscriptionCount = json["SubscriptionCount"].int,
+		   let name = json["Name"].string,
+		   let subscriptionCount = json["SubscriptionCount"].int,
 			let lang = json["Lang"].string{
 			
 			self.id = id
 			self.name = name
-			self.image = image
+			self.image = json["ImageURL"].string?.url()
 			self.subscriptionCount = subscriptionCount
 			self.sourceURL = json["YouTubeURL"].string?.url()
 			self.descr = json["Description"].string ?? ""

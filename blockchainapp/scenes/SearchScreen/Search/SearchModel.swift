@@ -52,13 +52,13 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     init()
     {
-		Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
-			return (tracksTuple.0, channels)
-			}.subscribe(onNext: {(tuple) in
-				self.tracks = tuple.0
-				self.channels = tuple.1
-				self.searchChanged(string: self.currentSearchString)
-			}).disposed(by: self.disposeBag)
+//        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
+//            return (tracksTuple.0, channels)
+//            }.subscribe(onNext: {(tuple) in
+//                self.tracks = tuple.0
+//                self.channels = tuple.1
+//                self.searchChanged(string: self.currentSearchString)
+//            }).disposed(by: self.disposeBag)
         
         InAppUpdateManager.shared.subscribe(self)
     }
@@ -105,7 +105,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                 }
                 else
                 {
-                    for tag in (channels.filter({$0.id == track.channelId}).first?.tags)!
+                    for tag in (channels.filter({$0.id == track.channel.id}).first?.tags)!
                     {
                         if tag.lowercased().range(of: self.currentSearchString) != nil
                         {
@@ -127,7 +127,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
                     trackPlayingIndex = self.searchTracks.index(where: {$0.id == track.id})!
                 }
                 
-                if let channel = self.channels.first(where: {$0.id == track.channelId}) {
+                if let channel = self.channels.first(where: {$0.id == track.channel.id}) {
                     vm.author = channel.name
                     vm.authorImage = channel.image
                 }
@@ -167,7 +167,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     func trackSelected(index: Int) {
         let tracks = self.searchTracks.map { (track) -> AudioTrack in
-            return track.audioTrack(author: self.channels.first(where: {$0.id == track.channelId})?.name ?? "")
+            return track.audioTrack(author: self.channels.first(where: {$0.id == track.channel.id})?.name ?? "")
         }
         AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.searchTracks[index].id)
     }

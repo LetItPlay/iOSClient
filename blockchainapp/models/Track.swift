@@ -2,6 +2,7 @@ import Foundation
 import RealmSwift
 import SwiftyJSON
 
+typealias ChannelInfo = (id: Int, name: String, image: URL?)
 
 struct Track {
 	static let formatter: DateFormatter = {
@@ -19,7 +20,7 @@ struct Track {
 	var length: Int64			= 0
 	var url: URL?
 	
-	var channelId: Int			= 0
+	var channel: ChannelInfo!
 	
 	var likeCount: Int			= 0
 	var reportCount: Int		= 0
@@ -32,14 +33,14 @@ struct Track {
 	var isLiked: Bool			= false
 	
 	init?(json: JSON) {
-		if 	let channelId = json["StationID"].int,
-			let idInt = json["Id"].int,
-			let title = json["Title"].string,
-			let audioURL = json["AudioURL"].string?.url(),
-			let publishedAtString = json["PublishedAt"].string,
-			let publishedAt = Track.formatter.date(from: publishedAtString),
-			let lang = json["Lang"].string {
-			
+		if 	let channelId = json["station"]["Id"].int,
+			  let channelName = json["station"]["Name"].string,
+			  let idInt = json["Id"].int,
+			  let title = json["Title"].string,
+			  let audioURL = json["AudioURL"].string?.url(),
+			  let publishedAtString = json["PublishedAt"].string,
+			  let publishedAt = Track.formatter.date(from: publishedAtString),
+			  let lang = json["Lang"].string {
 			self.id = idInt
 			self.name = title
 			self.url = audioURL
@@ -47,7 +48,7 @@ struct Track {
 			self.publishedAt = publishedAt
 			
 			self.lang = lang
-			self.channelId = channelId
+			self.channel = ChannelInfo(id: channelId, name: channelName, image: json["station"]["ImageURL"].string?.url())
 			
 			self.tags = json["Tags"].array?.map({$0.string}).filter({$0 != nil}).map({$0!}) ?? []
 			
@@ -142,7 +143,7 @@ class TrackObject: Object {
 		self.init()
 		self.id = track.id
 		self.name = track.name
-		self.channel = track.channelId
+		self.channel = track.channel.id
 		self.lang = track.lang
 		self.url = track.url?.absoluteString ?? ""
 		self.length = track.length
