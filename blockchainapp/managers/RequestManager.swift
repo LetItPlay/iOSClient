@@ -11,12 +11,12 @@ import RealmSwift
 
 enum TracksRequest {
     case feed(channels: [Int], offset: Int, count: Int)
-    case trends(Int)
+    case trends(offset: Int, count: Int)
     case likes
     case channel(Int)
     case tag(String)
     case magic
-    case allTracks
+	case search(text: String, offset: Int, count: Int)
 }
 
 enum TrackUpdateRequest {
@@ -36,14 +36,16 @@ fileprivate extension TracksRequest {
         case .feed(let channels, let offset, let count):
             let channelsString = channels.map({"\($0)"}).joined(separator: ",")
             return "feed?stIds=\(channelsString)&offset=\(offset)&limit=\(count)&lang=\(lang)"
-        case .trends(let days):
-            return "trends/\(days)?lang=\(lang)"
+        case .trends(let offset, let count):
+            return "feed?offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .channel(let id):
             return "stations/\(id)/tracks"
         case .tag(let tag):
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
+		case .search(let text, let offset, let count):
+			return "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(lang)"
         default: return "tracks"
         }
     }
@@ -106,16 +108,11 @@ class RequestManager {
 					do {
 						let lm = LikeManager.shared
 						let json = try JSON(data: data)
+						
 						let channels: [Channel] = json["Stations"].array?
 							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
 						var tracksJSON: JSON!
-						switch req {
-						case .channel(_), .allTracks:
-							tracksJSON = json
-						default:
-							tracksJSON = json["Tracks"]
-						}
 						let tracks: [Track] = tracksJSON.array?
 							.map({Track(json: $0)})
 							.filter({$0 != nil}).map({$0!})
