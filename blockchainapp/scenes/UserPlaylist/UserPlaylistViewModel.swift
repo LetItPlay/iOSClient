@@ -72,5 +72,6 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
 
     func emptyMessage(show: Bool) {
         self.hideEmptyMessage = show
+		self.delegate?.reload()
     }
 }

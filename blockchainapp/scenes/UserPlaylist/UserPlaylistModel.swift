@@ -99,6 +99,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         self.delegate?.emptyMessage(show: true)
         self.tracks = UserPlaylistManager.shared.tracks
         self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
+		AudioController.main.update(.clearAll)
     }
     
     func send(event: LifeCycleEvent) {

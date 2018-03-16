@@ -174,9 +174,16 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
                     }
                     self.playlist.tracks.remove(at: index)
                 }
+		case .clearAll:
+			self.make(command: .pause)
+			self.playlist.tracks = []
         }
         self.delegate?.playlistChanged()
         self.delegate?.trackUpdate()
+		
+		if self.playlist.tracks.count == 0 {
+			self.popupDelegate?.popupPlayer(show: false, animated: true)
+		}
     }
 
     func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {

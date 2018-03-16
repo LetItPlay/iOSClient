@@ -89,6 +89,7 @@ protocol AudioControllerPresenter: class {
 enum AudioControllerUpdate {
     case reload(tracks: [AudioTrack])
     case remove(id: Int)
+	case clearAll
 }
 
 protocol AudioControllerProtocol: class {
