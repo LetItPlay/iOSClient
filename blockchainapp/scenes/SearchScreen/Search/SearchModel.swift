@@ -14,7 +14,7 @@ enum ViewModels {
     case channels, tracks
 }
 
-protocol SearchModelProtocol: class, ModelProtocol {
+protocol SearchModelProtocol: ModelProtocol {
     weak var delegate: SearchModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
@@ -60,7 +60,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
 //                self.searchChanged(string: self.currentSearchString)
 //            }).disposed(by: self.disposeBag)
         
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func send(event: LifeCycleEvent) {
@@ -167,7 +167,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     func trackSelected(index: Int) {
         let tracks = self.searchTracks.map { (track) -> AudioTrack in
-            return track.audioTrack(author: self.channels.first(where: {$0.id == track.channel.id})?.name ?? "")
+            return track.audioTrack()
         }
         AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.searchTracks[index].id)
     }

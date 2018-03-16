@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import RxSwift
 
-protocol ProfileModelProtocol: class, ModelProtocol {
+protocol ProfileModelProtocol: ModelProtocol {
     func change(image: Data)
     func change(name: String)
     func changeLanguage()
@@ -34,7 +34,7 @@ class ProfileModel: ProfileModelProtocol {
     
     init()
     {
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func getData() {

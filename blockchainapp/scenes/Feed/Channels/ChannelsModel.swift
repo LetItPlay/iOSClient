@@ -14,7 +14,7 @@ enum ChannelScreen {
     case small, medium
 }
 
-protocol ChannelsModelProtocol: class, ModelProtocol {
+protocol ChannelsModelProtocol: ModelProtocol {
     weak var delegate: ChannelsModelDelegate? {get set}
 }
 
@@ -57,7 +57,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
 		}).disposed(by: disposeBag)
 		
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
 	
 	func subscribeAt(index: Int) {

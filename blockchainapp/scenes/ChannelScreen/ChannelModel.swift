@@ -11,7 +11,7 @@ import RealmSwift
 import RxSwift
 import Action
 
-protocol ChannelModelProtocol: class, ModelProtocol {
+protocol ChannelModelProtocol: ModelProtocol {
     weak var delegate: ChannelModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
@@ -41,30 +41,20 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     var subManager = SubscribeManager.shared
 	
-	let getTracksAction: Action<Int, ([Track],[Channel])>!
+	let getTracksAction: Action<Int, [Track]>!
 	let disposeBag = DisposeBag()
         
     init(channelID: Int)
     {
-        getTracksAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
+        getTracksAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
             return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
         })
         
-        getTracksAction.elements.do(onNext: { (tuple) in
-            self.tracks = tuple.0
-        }).map({ (tuple) -> [TrackViewModel] in
+        getTracksAction.elements.do(onNext: { (tracks) in
+            self.tracks = tracks
+        }).map({ (tracks) -> [TrackViewModel] in
                 let playingId = AudioController.main.currentTrack?.id
-                return tuple.0.map({ (track) -> TrackViewModel in
-                    var vm = TrackViewModel(track: track,
-                                            isPlaying: track.id == playingId)
-//                    if let channel = tuple.1.filter({$0.id == track.channelId}).first {
-                    if let _ = self.channel
-                    {
-                        vm.authorImage = self.channel.image
-                        vm.author = self.channel.name
-                    }
-                    return vm
-                })
+                return tracks.map({ return TrackViewModel(track: $0, isPlaying: $0.id == playingId)})
             }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
                 self.delegate?.reload(tracks: vms)
             }, onCompleted: {
@@ -78,7 +68,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
             self.delegate?.followUpdate(isSubscribed: self.channel.isSubscribed)
         }).disposed(by: disposeBag)
         
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
 		
 		self.getData()
     }
@@ -126,7 +116,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     func trackSelected(index: Int) {
         let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack(author: self.channel.name)
+            return track.audioTrack()
         }
         AudioController.main.loadPlaylist(playlist: ("Channel".localized, tracks), playId: self.tracks[index].id)
     }

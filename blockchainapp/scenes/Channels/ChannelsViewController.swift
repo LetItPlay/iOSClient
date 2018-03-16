@@ -79,7 +79,7 @@ class ChannelsViewController: UITableViewController {
 
 extension ChannelsViewController: ChannelsVMDelegate {
     func reloadChannels() {
-        if let source: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
+        if let _: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
 //            self.source = source
             self.tableView.reloadData()
             

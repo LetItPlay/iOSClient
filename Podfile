@@ -27,4 +27,12 @@ target 'blockchainapp' do
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'
+  
+  target 'blockchainappTests' do
+	  inherit! :search_paths
+  end
+  
+  target 'blockchainappUITests' do
+	  inherit! :search_paths
+  end
 end

@@ -66,8 +66,8 @@ struct Track {
 		return nil
 	}
 	
-	func audioTrack(author: String) -> AudioTrack {
-		return PlayerTrack.init(id: self.id, trackURL: self.url!, name: self.name, author: author, imageURL: self.image, length: self.length)
+	func audioTrack() -> AudioTrack {
+		return PlayerTrack.init(id: self.id, trackURL: self.url!, name: self.name, author: self.channel.name, imageURL: self.image, length: self.length)
 	}
 	
 	func idString() -> String {
@@ -122,6 +122,7 @@ class TrackObject: Object {
 			
 			self.likeCount = json["LikeCount"].int ?? 0
 			self.listenCount = json["ListenCount"].int ?? 0
+			self.publishedAt = Track.formatter.date(from: publishedAt) ?? Date()
 			
 			
 			if let tags = json["Tags"].array?.map({$0.string}) {

@@ -11,7 +11,7 @@ import RealmSwift
 import RxSwift
 import Action
 
-protocol LikesModelProtocol: class, ModelProtocol {
+protocol LikesModelProtocol: ModelProtocol {
     weak var delegate: LikesModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
@@ -76,7 +76,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
 //        }).disposed(by: self.disposeBag)
         
         
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func getTracks() {
