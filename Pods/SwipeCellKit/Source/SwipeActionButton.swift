@@ -7,11 +7,6 @@
 
 import UIKit
 
-public var isLeft = false
-
-public var fromColor: UIColor = UIColor.init(red: 240.0 / 255, green: 240.0 / 255, blue: 240.0 / 255, alpha: 0.8)
-public var toColor: UIColor = UIColor.init(red: 240.0 / 255, green: 240.0 / 255, blue: 240.0 / 255, alpha: 0)
-
 class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
@@ -23,15 +18,6 @@ class SwipeActionButton: UIButton {
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
     }
-    
-    var gradientLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [fromColor.cgColor, toColor.cgColor]
-        layer.startPoint = CGPoint.init(x: 0, y: 0.5)
-        layer.endPoint = CGPoint.init(x: 1, y: 0.5)
-        layer.bounds = CGRect.init(x: 0, y: 0, width: 50, height: 50)
-        return layer
-    }()
     
     var alignmentRect: CGRect {
         let contentRect = self.contentRect(forBounds: bounds)
@@ -55,31 +41,37 @@ class SwipeActionButton: UIButton {
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
         
+        titleLabel?.textColor = action.textColor ?? .white
+        
+        let title = UILabel()
+        title.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        title.textAlignment = .center
+        title.lineBreakMode = .byWordWrapping
+        title.numberOfLines = 0
+        title.textColor = .white
+        title.text = action.title
+        
         accessibilityLabel = action.accessibilityLabel
         
-        setTitle(action.title, for: .normal)
-        setTitleColor(tintColor, for: .normal)
-        setTitleColor(highlightedTextColor, for: .highlighted)
-        setImage(action.image, for: .normal)
-        setImage(action.highlightedImage ?? action.image, for: .highlighted)
+//        setTitle(action.title, for: .normal)
+//        setTitleColor(tintColor, for: .normal)
+//        setTitleColor(highlightedTextColor, for: .highlighted)
+//        setImage(action.image, for: .normal)
+//        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
-        self.layer.insertSublayer(gradientLayer, at: 0)
-        self.layer.cornerRadius = 10
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
+        let imageView = UIImageView(image: action.image)
+        if action.title?.range(of: "top") != nil
+        {
+            imageView.frame = CGRect(x: 50, y: 47, width: 90, height: 278-71)
+            title.frame = CGRect(x: 35, y: 50, width: 87, height: 200)
+        }
+        else {
+            imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
+            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
+        }
         
-        gradientLayer.frame = CGRect.init(x: 0, y: 24, width: 150, height: self.frame.height - 24)
-        gradientLayer.cornerRadius = 10
-        if !isLeft
-        {
-            gradientLayer.colors = [fromColor.cgColor, toColor.cgColor]
-        }
-        else
-        {
-            gradientLayer.colors = [toColor.cgColor, fromColor.cgColor]
-        }
+        self.addSubview(imageView)
+        self.addSubview(title)
     }
     
     override var isHighlighted: Bool {

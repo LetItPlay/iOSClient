@@ -338,26 +338,26 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var addTo = ""
         if orientation == .left
         {
-            image = UIImage(named: "topIcon")
+            image = UIImage(named: "illustrationTop")
             toBeginning = true
             addTo = "top"
         }
         else
         {
-            image = UIImage(named: "downIcon")
+            image = UIImage(named: "illustrationBottom")
             toBeginning = false
             addTo = "bottom"
         }
         let addToPlaylistAction = SwipeAction(style: .default, title: "Add to\nthe \(addTo)\nof the\nplaylist", handler: { action, indexPath in
-            self.addTrack(toBegining: toBeginning, for: indexPath)
+			self.addTrack(toBegining: toBeginning, for: indexPath)
         })
 //        addToPlaylistAction.title = nil
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
 
         addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
+
         addToPlaylistAction.font = AppFont.Title.big
-        addToPlaylistAction.delegate = self
         
         return [addToPlaylistAction]
     }
@@ -371,14 +371,23 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.backgroundColor = .white
         options.showGradient = true
         
+        let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
+        let toColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0 : 0.9).cgColor
+        
+        var frame: CGRect!
+        
+        if orientation == .right
+        {
+            frame = CGRect(x: 0, y: 25, width: 200, height: 278-25)
+        }
+        else
+        {
+            frame = CGRect(x: -50, y: 25, width: 200, height: 278-25)
+        }
+        
+        options.showGradient = (frame, cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        
         return options
     }
 }
 
-extension FeedViewController: SwipeDelegate
-{
-    func buttonTapped()
-    {
-//        tappedSideButton = true
-    }
-}

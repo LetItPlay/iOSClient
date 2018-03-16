@@ -103,7 +103,6 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
     public func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters {
         var timingParameters = SwipeExpansionAnimationTimingParameters.default
         timingParameters.delay = expanding ? interButtonDelay : 0
-        
         return timingParameters
     }
     
