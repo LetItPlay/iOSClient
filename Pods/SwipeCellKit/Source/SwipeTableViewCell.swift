@@ -54,7 +54,7 @@ open class SwipeTableViewCell: UITableViewCell {
         set { super.frame = state.isActive ? CGRect(origin: CGPoint(x: frame.minX, y: newValue.minY), size: newValue.size) : newValue }
         get { return super.frame }
     }
-
+    
     /// :nodoc:
     override public init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -85,12 +85,6 @@ open class SwipeTableViewCell: UITableViewCell {
         super.prepareForReuse()
         
         reset()
-    }
-
-    open func gradient(isHidden: Bool) {
-        self.actionsView?.buttons.forEach { button in
-            button.gradientLayer.isHidden = isHidden
-         }
     }
     
     /// :nodoc:

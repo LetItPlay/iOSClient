@@ -33,8 +33,8 @@ class FeedViewController: UIViewController {
 
 	let emptyLabel: UILabel = {
 		let label = UILabel()
-        label.font = AppFont.Title.sectionNotBold
-        label.textColor = AppColor.Element.emptyMessage
+		label.font = AppFont.Title.big
+		label.textColor = AppColor.Title.dark
 		label.textAlignment = .center
 		label.numberOfLines = 0
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
@@ -160,7 +160,6 @@ class FeedViewController: UIViewController {
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-		self.emitter.send(event: .refresh)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 
@@ -198,20 +197,20 @@ class FeedViewController: UIViewController {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-        self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
-        
-        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
-
-        UIView.animate(withDuration: 0.3, animations: {
-            cell.alertBlurView.alpha = 1
-        })
-
-        let when = DispatchTime.now() + 1
-        DispatchQueue.main.asyncAfter(deadline: when){
-            UIView.animate(withDuration: 0.3, animations:{
-                cell.alertBlurView.alpha = 0
-            })
-        }
+		self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
+		
+		let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+		
+		UIView.animate(withDuration: 0.3, animations: {
+			cell.alertBlurView.alpha = 1
+		})
+		
+		let when = DispatchTime.now() + 1
+		DispatchQueue.main.asyncAfter(deadline: when){
+			UIView.animate(withDuration: 0.3, animations:{
+				cell.alertBlurView.alpha = 0
+			})
+		}
     }
 }
 
@@ -340,23 +339,21 @@ extension FeedViewController: SwipeTableViewCellDelegate
         {
             image = UIImage(named: "illustrationTop")
             toBeginning = true
-            addTo = "top"
+            addTo = "To the\ntop"
         }
         else
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
-            addTo = "bottom"
+            addTo = "Bottom"
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add to\nthe \(addTo)\nof the\nplaylist", handler: { action, indexPath in
-			self.addTrack(toBegining: toBeginning, for: indexPath)
+        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
+            self.addTrack(toBegining: toBeginning, for: indexPath)
         })
-//        addToPlaylistAction.title = nil
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
-
-        addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
-
+        
+        addToPlaylistAction.textColor = .white
         addToPlaylistAction.font = AppFont.Title.big
         
         return [addToPlaylistAction]
@@ -369,7 +366,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.maximumButtonWidth = 300
         options.minimumButtonWidth = 150
         options.backgroundColor = .white
-        options.showGradient = true
         
         let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
         let toColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0 : 0.9).cgColor
