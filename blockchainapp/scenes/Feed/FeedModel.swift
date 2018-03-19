@@ -89,10 +89,6 @@ FeedEventHandler {
         case .initialize:
             if self.isFeed
             {
-                if UserSettings.token == "" {
-                    UserSettings.token = UUID.init().uuidString
-                }
-                
                 UserSettings.session = UUID.init().uuidString
             }
                 

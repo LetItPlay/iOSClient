@@ -21,13 +21,9 @@ class UserSettings {
             if let token = def.value(forKey: "token") as? String {
                 return token
             }
-            
-            return ""
-        }
-        set(newToken) {
-            let def = UserDefaults.standard
-            def.setValue(newToken, forKey: "token")
-            def.synchronize()
+            else {
+                return UUID.init().uuidString
+            }
         }
     }
     
