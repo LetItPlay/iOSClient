@@ -14,11 +14,28 @@ enum Language: String {
 }
 
 class UserSettings {
-    static var token: UUID {
+    static var token: String {
         get {
             let def = UserDefaults.standard
-            var res: UUID = UUID()
-            if let token = def.value(forKey: "token") as? UUID {
+            
+            if let token = def.value(forKey: "token") as? String {
+                return token
+            }
+            
+            return ""
+        }
+        set(newToken) {
+            let def = UserDefaults.standard
+            def.setValue(newToken, forKey: "token")
+            def.synchronize()
+        }
+    }
+    
+    static var session: String {
+        get {
+            let def = UserDefaults.standard
+            var res: String = ""
+            if let token = def.value(forKey: "session") as? String {
                 res = token
             }
             
@@ -26,7 +43,7 @@ class UserSettings {
         }
         set(newToken) {
             let def = UserDefaults.standard
-            def.setValue(newToken, forKey: "token")
+            def.setValue(newToken, forKey: "session")
             def.synchronize()
         }
     }
