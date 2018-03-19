@@ -14,8 +14,8 @@ class SwipeActionButton: UIButton {
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
-	var customTitleLabel: UILabel!
-	var customImageView: UIImageView!
+    var customTitleLabel: UILabel!
+    var customImageView: UIImageView!
     
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
@@ -52,16 +52,16 @@ class SwipeActionButton: UIButton {
         title.numberOfLines = 0
         title.textColor = .white
         title.text = action.title
-		
-		self.customTitleLabel = title
-		
+        
+        self.customTitleLabel = title
+        
         accessibilityLabel = action.accessibilityLabel
         
-//        setTitle(action.title, for: .normal)
-//        setTitleColor(tintColor, for: .normal)
-//        setTitleColor(highlightedTextColor, for: .highlighted)
-//        setImage(action.image, for: .normal)
-//        setImage(action.highlightedImage ?? action.image, for: .highlighted)
+        //        setTitle(action.title, for: .normal)
+        //        setTitleColor(tintColor, for: .normal)
+        //        setTitleColor(highlightedTextColor, for: .highlighted)
+        //        setImage(action.image, for: .normal)
+        //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
         let imageView = UIImageView(image: action.image)
         if action.title?.range(of: "top") != nil
@@ -73,8 +73,8 @@ class SwipeActionButton: UIButton {
             imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
             title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
         }
-		
-		customImageView = imageView
+        
+        customImageView = imageView
         
         self.addSubview(imageView)
         self.addSubview(title)
@@ -104,14 +104,6 @@ class SwipeActionButton: UIButton {
                                   attributes: [NSAttributedStringKey.font: font],
                                   context: nil).integral
     }
-	
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		self.customTitleLabel.sizeToFit()
-		self.customTitleLabel.center.y = self.frame.height/2 + 12
-		self.customImageView.center.y = self.frame.height/2 + 12
-		print(self.frame)
-	}
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
