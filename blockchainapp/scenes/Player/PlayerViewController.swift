@@ -19,6 +19,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let mainPlayer: MainPlayerViewController = MainPlayerViewController()
 	let playlist: PlaylistViewController = PlaylistViewController()
     var trackInfo: TrackInfoViewController!
+    
+    var trackSpeedButton: UIButton = UIButton()
+    var trackLikeButton: UIButton = UIButton()
 	
 	var mask: CAShapeLayer!
 	let ind = ArrowView()
@@ -74,6 +77,24 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		audioController.delegate = self
 		
 		self.ind.setFlat(false)
+        
+        self.view.addSubview(trackLikeButton)
+        trackLikeButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(self.view.frame.width / 10 - 12)
+            make.bottom.equalTo(-8)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        })
+        trackLikeButton.setImage(UIImage(named: "heartActive"), for: .normal)
+        
+        self.view.addSubview(trackSpeedButton)
+        trackSpeedButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(self.view.frame.width / 4)
+            make.bottom.equalTo(-8)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        })
+        trackSpeedButton.setImage(UIImage(named: "timespeedInactive"), for: .normal)
 	}
 	
 	@objc func arrowTapped() {
