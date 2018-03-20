@@ -18,9 +18,12 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let pageController: UIPageViewController = UIPageViewController(transitionStyle: UIPageViewControllerTransitionStyle.scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.horizontal, options: [:])
 	let mainPlayer: MainPlayerViewController = MainPlayerViewController()
 	let playlist: PlaylistViewController = PlaylistViewController()
+    var trackInfo: TrackInfoViewController!
 	
 	var mask: CAShapeLayer!
 	let ind = ArrowView()
+    
+    var currentTrackID: Int = -1
     
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -106,6 +109,18 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	func trackUpdate() {
 		DispatchQueue.main.async {
 			if let ob = self.audioController.currentTrack {
+                
+                if self.currentTrackID == -1 {
+                    self.currentTrackID = ob.id
+                    self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
+                }
+                
+                if self.currentTrackID != ob.id {
+                    self.currentTrackID = ob.id
+                    self.trackInfo.trackInfo.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
+                }
+                
+                
 				let channel = ob.author
 				let title = ob.name
 
@@ -135,7 +150,6 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 //			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
 //			self.playlist.tableView.reloadData()
 //			self.playlist.isHidden = false
-
 		}
 //		self.playButton.isSelected = audioController.status == .playing
 //		self.playerView.playButton.isSelected = audioController.status == .playing
@@ -213,6 +227,10 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		if viewController is PlaylistViewController {
 			return mainPlayer
 		}
+        
+        if viewController is MainPlayerViewController {
+            return trackInfo
+        }
 		
 		return nil
 	}
@@ -221,19 +239,26 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		if viewController is MainPlayerViewController {
 			return playlist
 		}
+        
+        if viewController is TrackInfoViewController {
+            return mainPlayer
+        }
 		
 		return nil
 	}
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 2
+        return 3
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         if pageViewController.viewControllers![0] is PlaylistViewController {
-            return 1
+            return 2
         }
-        return 0
+        if pageController.viewControllers![0] is TrackInfoViewController {
+            return 0
+        }
+        return 1
     }
 }
 
