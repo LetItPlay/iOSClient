@@ -26,7 +26,7 @@ struct AppFont {
         static let sectionNotBold = UIFont.systemFont(ofSize: 20, weight: .medium)
 		static let mid = UIFont.systemFont(ofSize: 18, weight: .medium)
 		static let midBold = UIFont.systemFont(ofSize: 18, weight: .bold)
-		static let sml = UIFont.systemFont(ofSize: 14, weight: .bold)
+		static let small = UIFont.systemFont(ofSize: 14, weight: .bold)
 		static let info = UIFont.systemFont(ofSize: 12, weight: .medium)
 	}
 	struct Button {

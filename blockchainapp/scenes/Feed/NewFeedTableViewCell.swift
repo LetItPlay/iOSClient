@@ -152,7 +152,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     
     let infoTitle: UILabel = {
        let label = UILabel()
-        label.font = AppFont.Title.sml
+        label.font = AppFont.Title.small
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping

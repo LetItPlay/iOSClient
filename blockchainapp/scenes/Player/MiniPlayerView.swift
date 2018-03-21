@@ -35,7 +35,7 @@ class MiniPlayerView: UITabBar {
 	let trackNameLabel: MarqueeLabel = {
 		let label = MarqueeLabel(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 120, height: 40)), rate: 20.0, fadeLength: 16)
 		label.textColor = AppColor.Title.dark
-		label.font = AppFont.Title.sml
+		label.font = AppFont.Title.small
 		return label
 	}()
 	
