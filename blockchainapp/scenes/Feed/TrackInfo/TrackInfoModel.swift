@@ -29,12 +29,20 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     var channel: Channel!
     var track: Track!
     
+    var tracks: [Track]!
+    
     var disposeBag = DisposeBag()
     
     
     init(trackId: Int)
     {
-        self.updateTrack(id: trackId)
+        RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: { (tuple) in
+            self.tracks = tuple.0
+            self.track = tuple.0.filter({$0.id == trackId}).first
+            print(tuple.1.count)
+            self.delegate?.reload(track: TrackViewModel(track: self.track))
+            self.getChannel()
+        }).disposed(by: disposeBag)
     }
     
     func getChannel()
@@ -48,11 +56,9 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     }
     
     func updateTrack(id: Int) {
-        RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: { (tuple) in
-            self.track = tuple.0.filter({$0.id == id}).first
-            self.delegate?.reload(track: TrackViewModel(track: self.track))
-            self.getChannel()
-        }).disposed(by: disposeBag)
+        self.track = self.tracks.filter({$0.id == id}).first
+        self.delegate?.reload(track: TrackViewModel(track: self.track))
+        self.getChannel()
     }
     
     func send(event: LifeCycleEvent) {

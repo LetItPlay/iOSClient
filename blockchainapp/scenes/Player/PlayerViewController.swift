@@ -10,6 +10,10 @@ import UIKit
 import SnapKit
 import SDWebImage
 
+protocol TrackLikedDelegate {
+    func track(liked: Bool)
+}
+
 class PlayerViewController: UIViewController, AudioControllerDelegate {
 	
 	let miniPlayer: MiniPlayerView = MiniPlayerView()
@@ -20,7 +24,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let playlist: PlaylistViewController = PlaylistViewController()
     var trackInfo: TrackInfoViewController!
     
-    var trackLikeButton: UIButton = UIButton()
+    var trackLikeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "likeInactiveFeed"), for: .normal)
+        button.addTarget(self, action: #selector(trackLikeButtonTouched), for: .touchUpInside)
+        return button
+    }()
+    
     var trackSpeedButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "timespeedInactive"), for: .normal)
@@ -92,7 +102,6 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         })
-        trackLikeButton.setImage(UIImage(named: "heartActive"), for: .normal)
         
         self.view.addSubview(trackSpeedButton)
         trackSpeedButton.snp.makeConstraints({ (make) in
@@ -140,6 +149,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
                 if self.currentTrackID == -1 {
                     self.currentTrackID = ob.id
                     self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
+                    self.trackInfo.trackInfo.delegate = self
                 }
                 
                 if self.currentTrackID != ob.id {
@@ -244,6 +254,11 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
     
+    @objc func trackLikeButtonTouched()
+    {
+        
+    }
+    
     @objc func trackSpeedButtonTouched()
     {
         let speedAlert = UIAlertController(title: "The playback speed of audio".localized, message: nil, preferredStyle: .actionSheet)
@@ -268,6 +283,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	required init?(coder aDecoder: NSCoder) {
 		return nil
 	}
+}
+
+extension PlayerViewController: TrackLikedDelegate
+{
+    func track(liked: Bool) {
+        trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
+    }
 }
 
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {

@@ -13,6 +13,8 @@ class TrackInfoHeaderView: UIView {
     var emitter: TrackInfoEmitterProtocol?
     var viewModel: TrackInfoViewModel!
     
+    var delegate: TrackLikedDelegate?
+    
     let _channelIconView: UIImageView = {
         let imgView = UIImageView()
         imgView.layer.cornerRadius = 20
@@ -155,10 +157,13 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             _infoTitle.text = viewModel.track.name
             _infoTextView.text = viewModel.track.description
             
+            delegate?.track(liked: viewModel.track.isLiked)
+            
         case .channel:
             _channelIconView.sd_setImage(with: viewModel.channel.imageURL)
             _channelTitleLabel.text = viewModel.channel.name
             _channelFollowLabel.text = viewModel.channel.subscriptionCount
+            
             _followButton.isSelected = viewModel.channel.isSubscribed
         }
         
