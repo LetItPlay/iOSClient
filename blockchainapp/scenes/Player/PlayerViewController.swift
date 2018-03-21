@@ -20,8 +20,15 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let playlist: PlaylistViewController = PlaylistViewController()
     var trackInfo: TrackInfoViewController!
     
-    var trackSpeedButton: UIButton = UIButton()
     var trackLikeButton: UIButton = UIButton()
+    var trackSpeedButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "timespeedInactive"), for: .normal)
+        button.addTarget(self, action: #selector(trackSpeedButtonTouched), for: .touchUpInside)
+        return button
+    }()
+    
+    var speeds = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 	
 	var mask: CAShapeLayer!
 	let ind = ArrowView()
@@ -94,7 +101,6 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         })
-        trackSpeedButton.setImage(UIImage(named: "timespeedInactive"), for: .normal)
 	}
 	
 	@objc func arrowTapped() {
@@ -237,6 +243,27 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
+    
+    @objc func trackSpeedButtonTouched()
+    {
+        let speedAlert = UIAlertController(title: "The playback speed of audio".localized, message: nil, preferredStyle: .actionSheet)
+        speedAlert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
+
+        for speed in speeds {
+            speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
+                self.change(speed: speed.value)
+            }))
+        }
+
+        speedAlert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+
+        self.present(speedAlert, animated: true, completion: nil)
+    }
+    
+    func change(speed: Double) {
+        // TODO: change audio speed
+        
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil

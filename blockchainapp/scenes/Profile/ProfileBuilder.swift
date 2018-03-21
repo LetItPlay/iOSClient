@@ -27,7 +27,7 @@ class ProfileBuilder: Builder {
         likeModel.delegate = likeVM
         likeEmitter.model = likeModel
         
-        let view = ProfileTopView.init(emitter: emitter, viewModel: vm)
+        let view = ProfileHeaderView.init(emitter: emitter, viewModel: vm)
         let vc = ProfileViewController.init(view: view, emitter: likeEmitter, viewModel: likeVM)
         
         return vc

@@ -54,7 +54,7 @@
 		36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36045FAB204D8347003C7406 /* UserPlaylistEmitter.swift */; };
 		36045FAE204D8A87003C7406 /* UserPlaylistBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36045FAD204D8A87003C7406 /* UserPlaylistBuilder.swift */; };
 		3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */; };
-		361CD016204814A60097F8E9 /* ProfileTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD015204814A60097F8E9 /* ProfileTopView.swift */; };
+		361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD015204814A60097F8E9 /* ProfileHeaderView.swift */; };
 		361CD018204815140097F8E9 /* LikeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD017204815140097F8E9 /* LikeHeader.swift */; };
 		361CD01A20482A410097F8E9 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD01920482A410097F8E9 /* Common.swift */; };
 		3626C8CB2036A6200016772B /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CA2036A6200016772B /* SearchController.swift */; };
@@ -194,7 +194,7 @@
 		36045FAB204D8347003C7406 /* UserPlaylistEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistEmitter.swift; sourceTree = "<group>"; };
 		36045FAD204D8A87003C7406 /* UserPlaylistBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistBuilder.swift; sourceTree = "<group>"; };
 		3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackViewModel.swift; sourceTree = "<group>"; };
-		361CD015204814A60097F8E9 /* ProfileTopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTopView.swift; sourceTree = "<group>"; };
+		361CD015204814A60097F8E9 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		361CD017204815140097F8E9 /* LikeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHeader.swift; sourceTree = "<group>"; };
 		361CD01920482A410097F8E9 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
 		3626C8CA2036A6200016772B /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
@@ -341,7 +341,7 @@
 			children = (
 				36F613CB202D6E3200661E48 /* ProfileBuilder.swift */,
 				01AA89201FC5612500D50C13 /* ProfileViewController.swift */,
-				361CD015204814A60097F8E9 /* ProfileTopView.swift */,
+				361CD015204814A60097F8E9 /* ProfileHeaderView.swift */,
 				361CD017204815140097F8E9 /* LikeHeader.swift */,
 				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
 				3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */,
@@ -891,7 +891,7 @@
 				01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */,
 				36E155A5204D7C0E00C65DBE /* UserPlaylistManager.swift in Sources */,
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
-				361CD016204814A60097F8E9 /* ProfileTopView.swift in Sources */,
+				361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,

@@ -1,5 +1,5 @@
 //
-//  ProfileTopView.swift
+//  ProfileHeaderView.swift
 //  blockchainapp
 //
 //  Created by Polina Abrosimova on 01.03.18.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class ProfileTopView: UIView {
+class ProfileHeaderView: UIView {
     
     var delegate: ProfileViewDelegate?
     
@@ -148,7 +148,7 @@ class ProfileTopView: UIView {
     }
 }
 
-extension ProfileTopView: ProfileVMDelegate
+extension ProfileHeaderView: ProfileVMDelegate
 {
     func make(updates: [ProfileUpdate]) {
         for data in updates {

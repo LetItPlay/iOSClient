@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController {
     var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-    var profileView: ProfileTopView!
+    var profileView: ProfileHeaderView!
     let header: LikeHeader = LikeHeader()
     
     let imagePicker: UIImagePickerController = {
@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
 	
     var isKeyboardShown = true
 	
-    convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
+    convenience init(view: ProfileHeaderView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
         self.profileView = view
         self.emitter = emitter
