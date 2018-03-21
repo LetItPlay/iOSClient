@@ -191,6 +191,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
 {
     func addImage() {
         let alert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
         
         let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
         let messageAttrString = NSMutableAttributedString(string: "Choose Image".localized, attributes: messageFont)
