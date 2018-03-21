@@ -14,6 +14,7 @@ class SwipeActionButton: UIButton {
 
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
+    
 	var customTitleLabel: UILabel!
 	var customImageView: UIImageView!
     
@@ -64,7 +65,7 @@ class SwipeActionButton: UIButton {
 //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
         let imageView = UIImageView(image: action.image)
-        if action.title?.range(of: "top") != nil
+        if action.title?.range(of: "top") != nil || action.title?.range(of: "начало") != nil
         {
             imageView.frame = CGRect(x: 50, y: 47, width: 90, height: 278-71)
             title.frame = CGRect(x: 35, y: 50, width: 87, height: 200)
