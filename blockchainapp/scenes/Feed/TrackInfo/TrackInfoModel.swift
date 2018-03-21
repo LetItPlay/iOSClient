@@ -59,9 +59,11 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     }
     
     func updateTrack(id: Int) {
-        self.track = self.tracks.filter({$0.id == id}).first
-        self.delegate?.reload(track: TrackViewModel(track: self.track))
-        self.getChannel()
+        if self.tracks != nil {
+            self.track = self.tracks.filter({$0.id == id}).first
+            self.delegate?.reload(track: TrackViewModel(track: self.track))
+            self.getChannel()
+        }
     }
     
     func trackLiked(id: Int) {
