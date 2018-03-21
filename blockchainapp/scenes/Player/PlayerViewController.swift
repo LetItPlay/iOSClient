@@ -51,7 +51,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		pageController.delegate = self
 
         let appearance = UIPageControl.appearance()
-        appearance.pageIndicatorTintColor = .gray
+        appearance.pageIndicatorTintColor = AppColor.Title.lightGray
         appearance.currentPageIndicatorTintColor = .red
 				
 		self.view.addSubview(pageController.view)
@@ -258,24 +258,37 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     {
         self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfo.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
         let id = self.audioController.currentTrack?.id
-
         self.trackInfo.trackInfo.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
     }
     
     @objc func trackSpeedButtonTouched()
     {
-        let speedAlert = UIAlertController(title: "The playback speed of audio".localized, message: nil, preferredStyle: .actionSheet)
-        speedAlert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
+        let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        
+        speedAlert.view.tintColor = AppColor.Title.lightGray
+        
+        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
+        speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
 
         for speed in speeds {
-            speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
-                self.change(speed: speed.value)
-            }))
+            if speed.value == 1 {
+                speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
+                    self.change(speed: speed.value)
+                }))
+            }
+            else {
+                speedAlert.addAction(UIAlertAction(title: speed.text, style: .destructive, handler: { _ in
+                    self.change(speed: speed.value)
+                }))
+            }
         }
 
-        speedAlert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
 
         self.present(speedAlert, animated: true, completion: nil)
+        
+        
     }
     
     func change(speed: Double) {

@@ -190,16 +190,22 @@ extension ProfileViewController: LikesVMDelegate
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     func addImage() {
-        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+        let alert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        
+        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+        let messageAttrString = NSMutableAttributedString(string: "Choose Image".localized, attributes: messageFont)
+        alert.setValue(messageAttrString, forKey: "attributedTitle")
+        
+        
+        alert.addAction(UIAlertAction(title: "Camera".localized, style: .default, handler: { _ in
             self.openCamera()
         }))
         
-        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Gallery".localized, style: .default, handler: { _ in
             self.openGallery()
         }))
         
-        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
     }

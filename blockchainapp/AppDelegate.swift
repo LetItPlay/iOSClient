@@ -43,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func setupAppearence() {
         UITabBar.appearance().tintColor = UIColor.vaActive
         
+//        UIView.appearance(whenContainedInInstancesOf: [UIAlertController.self]).tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
+        
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
 //        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
 //        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .highlighted)
