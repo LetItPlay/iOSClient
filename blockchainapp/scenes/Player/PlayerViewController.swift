@@ -256,7 +256,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     @objc func trackLikeButtonTouched()
     {
-        
+        self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfo.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
+        let id = self.audioController.currentTrack?.id
+
+        self.trackInfo.trackInfo.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
     }
     
     @objc func trackSpeedButtonTouched()

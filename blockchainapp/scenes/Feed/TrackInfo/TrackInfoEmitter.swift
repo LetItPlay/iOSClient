@@ -10,6 +10,7 @@ import Foundation
 
 enum TrackInfoEvent {
     case updateTrack(id: Int)
+    case trackLiked(index: Int)
 }
 
 protocol TrackInfoEmitterProtocol: LifeCycleHandlerProtocol {
@@ -29,6 +30,8 @@ class TrackInfoEmitter: Emitter, TrackInfoEmitterProtocol {
         switch event {
         case .updateTrack(let id):
             self.model.updateTrack(id: id)
+        case .trackLiked(let index):
+            self.model.trackLiked(id: index)
         }
     }
 }

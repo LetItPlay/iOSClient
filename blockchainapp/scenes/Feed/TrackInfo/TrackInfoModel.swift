@@ -15,6 +15,7 @@ protocol TrackInfoModelProtocol: class, ModelProtocol {
 
 protocol TrackInfoEventHandler {
     func updateTrack(id: Int)
+    func trackLiked(id: Int)
 }
 
 protocol TrackInfoModelDelegate: class {
@@ -43,6 +44,8 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
             self.delegate?.reload(track: TrackViewModel(track: self.track))
             self.getChannel()
         }).disposed(by: disposeBag)
+        
+        InAppUpdateManager.shared.subscribe(self)
     }
     
     func getChannel()
@@ -61,12 +64,28 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
         self.getChannel()
     }
     
+    func trackLiked(id: Int) {
+        let track = self.tracks.filter({$0.id == id}).first
+        let action: TrackAction = track!.isLiked ? TrackAction.unlike : TrackAction.like
+        ServerUpdateManager.shared.make(track: track!, action: action)
+    }
+    
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
             break
         default:
             break
+        }
+    }
+}
+
+extension TrackInfoModel: TrackUpdateProtocol
+{
+    func trackUpdated(track: Track) {
+        if self.track.id == track.id {
+            let vm = TrackViewModel(track: track)
+            self.delegate?.reload(track: vm)
         }
     }
 }
