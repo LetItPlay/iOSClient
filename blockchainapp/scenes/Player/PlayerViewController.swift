@@ -38,7 +38,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         return button
     }()
     
-    var speeds = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
+    var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 	
 	var mask: CAShapeLayer!
 	let ind = ArrowView()
@@ -291,9 +291,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         
     }
     
-    func change(speed: Double) {
+    func change(speed: Float) {
         // TODO: change audio speed
-        
+        self.audioController.player.set(rate: speed)
     }
 	
 	required init?(coder aDecoder: NSCoder) {
