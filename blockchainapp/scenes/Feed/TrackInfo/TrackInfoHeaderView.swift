@@ -89,39 +89,58 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
-        self.addSubview(_channelIconView)
-        _channelIconView.snp.makeConstraints({ (make) in
+        let upperView = UIView()
+        self.addSubview(upperView)
+        upperView.snp.makeConstraints({ (make) in
             make.top.equalTo(50)
+            make.left.equalTo(8)
+            make.right.equalTo(-8)
+            make.height.equalTo(90)
+        })
+        
+        upperView.addSubview(_channelIconView)
+        _channelIconView.snp.makeConstraints({ (make) in
             make.left.equalTo(16)
             make.width.equalTo(100)
             make.height.equalTo(100)
+            make.centerY.equalToSuperview()
         })
         
-        self.addSubview(_followButton)
+        upperView.addSubview(_followButton)
         _followButton.snp.makeConstraints({ (make) in
-            make.top.equalTo(50)
-            make.right.equalTo(-16)
+            make.right.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
             make.height.equalTo(32)
         })
         
-        self.addSubview(_channelTitleLabel)
+        let titlesView = UIView()
+        upperView.addSubview(titlesView)
+        titlesView.snp.makeConstraints({ (make) in
+            make.left.equalTo(_channelIconView.snp.right).inset(8)
+            make.right.equalTo(_followButton.snp.left).inset(-8)
+            make.height.equalTo(50)
+            make.centerY.equalToSuperview()
+        })
+        
+        titlesView.addSubview(_channelTitleLabel)
         _channelTitleLabel.snp.makeConstraints({ (make) in
-            make.top.equalTo(60)
+            make.top.equalTo(8)
             make.left.equalTo(_channelIconView.snp.right)
             make.right.equalTo(_followButton.snp.left).inset(-10)
         })
         
-        self.addSubview(_channelFollowLabel)
+        titlesView.addSubview(_channelFollowLabel)
         _channelFollowLabel.snp.makeConstraints({ (make) in
-            make.top.equalTo(_channelTitleLabel.snp.bottom).inset(-10)
+            make.top.equalTo(_channelTitleLabel.snp.bottom).inset(-5)
             make.left.equalTo(_channelTitleLabel)
+            make.right.equalTo(_followButton.snp.left).inset(-8)
         })
         
         let view = UIView()
         view.backgroundColor = .red
-        self.addSubview(view)
+        upperView.addSubview(view)
         view.snp.makeConstraints({ (make) in
-            make.top.equalTo(_channelIconView.snp.bottom).inset(-16)
+            make.bottom.equalToSuperview()
             make.left.equalTo(16)
             make.right.equalTo(-16)
             make.height.equalTo(1)
@@ -130,7 +149,7 @@ class TrackInfoHeaderView: UIView {
         
         self.addSubview(_infoTitle)
         _infoTitle.snp.makeConstraints({ (make) in
-            make.top.equalTo(view.snp.bottom).inset(-20)
+            make.top.equalTo(upperView.snp.bottom).inset(-20)
             make.left.equalTo(16)
             make.right.equalTo(-16)
         })
@@ -162,7 +181,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
         case .channel:
             _channelIconView.sd_setImage(with: viewModel.channel.imageURL)
             _channelTitleLabel.text = viewModel.channel.name
-            _channelFollowLabel.text = viewModel.channel.subscriptionCount
+            _channelFollowLabel.text = viewModel.channel.subscriptionCount + " followers".localized
             
             _followButton.isSelected = viewModel.channel.isSubscribed
         }
