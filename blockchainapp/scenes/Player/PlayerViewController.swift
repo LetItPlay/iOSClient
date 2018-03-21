@@ -313,9 +313,9 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 			return mainPlayer
 		}
         
-        if viewController is MainPlayerViewController {
-            return trackInfo
-        }
+//        if viewController is MainPlayerViewController {
+//            return trackInfo
+//        }
 		
 		return nil
 	}
@@ -325,25 +325,25 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 			return playlist
 		}
         
-        if viewController is TrackInfoViewController {
-            return mainPlayer
-        }
+//        if viewController is TrackInfoViewController {
+//            return mainPlayer
+//        }
 		
 		return nil
 	}
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 3
+        return 2//3
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         if pageViewController.viewControllers![0] is PlaylistViewController {
-            return 2
+            return 1//2
         }
-        if pageController.viewControllers![0] is TrackInfoViewController {
-            return 0
-        }
-        return 1
+//        if pageController.viewControllers![0] is TrackInfoViewController {
+//            return 0
+//        }
+        return 0//1
     }
 }
 
