@@ -22,7 +22,8 @@ class ProfileViewModel: ProfileModelDelegate {
     var imageData: Data! = Data()
     var languageString: String = ""
     
-    let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺"]
+    let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺", "Changer en Français 🇫🇷"]
+    var currentLanguage = ""
     
     weak var delegate: ProfileVMDelegate?
     
@@ -39,9 +40,11 @@ class ProfileViewModel: ProfileModelDelegate {
     {
         switch lang {
         case .ru:
-            self.languageString = languages[0]
+            self.currentLanguage = "Язык: Русский"
         case .en:
-            self.languageString = languages[1]
+            self.currentLanguage = "Language: English"
+        case .fr:
+            self.currentLanguage = "Langue: Français"
         default:
             self.languageString = ""
         }

@@ -221,6 +221,9 @@
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		36E155A2204D6F1800C65DBE /* UserPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistViewController.swift; sourceTree = "<group>"; };
 		36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistManager.swift; sourceTree = "<group>"; };
+		36F32E84206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		36F32E85206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		36F32E86206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		36F613C9202D67C000661E48 /* ProfileEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEmitter.swift; sourceTree = "<group>"; };
 		36F613CB202D6E3200661E48 /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -726,6 +729,7 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = CF44531D1F54139900660474;
 			productRefGroup = CF4453271F54139900660474 /* Products */;
@@ -1009,6 +1013,7 @@
 			children = (
 				CF2715301F97C79F0038C81C /* en */,
 				CF27152E1F97C79A0038C81C /* ru */,
+				36F32E86206257E400F67A76 /* fr */,
 			);
 			name = Localizable.strings;
 			path = .;
@@ -1019,6 +1024,7 @@
 			children = (
 				CF44532E1F54139900660474 /* Base */,
 				CF2715291F97BA370038C81C /* ru */,
+				36F32E85206257E400F67A76 /* fr */,
 			);
 			name = Main.storyboard;
 			path = .;
@@ -1029,6 +1035,7 @@
 			children = (
 				CF4453331F54139900660474 /* Base */,
 				CF27152A1F97BA370038C81C /* ru */,
+				36F32E84206257E400F67A76 /* fr */,
 			);
 			name = LaunchScreen.storyboard;
 			path = .;

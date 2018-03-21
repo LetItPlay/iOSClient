@@ -13,7 +13,7 @@ import RxSwift
 protocol ProfileModelProtocol: class, ModelProtocol {
     func change(image: Data)
     func change(name: String)
-    func changeLanguage()
+    func change(language: String)
     func getData()
 }
 
@@ -93,8 +93,22 @@ class ProfileModel: ProfileModelProtocol {
         self.delegate?.update(name: UserSettings.name)
     }
     
-    func changeLanguage() {
-        ServerUpdateManager.shared.updateLanguage()
+    func change(language: String) {
+//        ServerUpdateManager.shared.updateLanguage()
+        var newLanguage: Language = .none
+        switch language {
+        case "Русский":
+            newLanguage = .ru
+        case "English":
+            newLanguage = .en
+        case "Français":
+            newLanguage = .fr
+        default:
+            break
+        }
+        
+        ServerUpdateManager.shared.update(language: newLanguage)
+//        self.delegate?.update(language: newLanguage)
     }
     
     func send(event: LifeCycleEvent) {

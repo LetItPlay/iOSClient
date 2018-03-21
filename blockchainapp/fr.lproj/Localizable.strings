@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  blockchainapp
+
+  Created by Ivan Gorbulin on 18/10/2017.
+  Copyright © 2017 Ivan Gorbulin. All rights reserved.
+*/
+
+"likes"="likes";
+"listening"="listening";
+"comments"="comments";
+"follow"="follow";
+"following"="following";
+
+"Select your language" = "Sélectionnez la langue du contenu";
+"Feed" = "FR";
