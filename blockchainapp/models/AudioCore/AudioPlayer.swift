@@ -256,7 +256,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 			return
 		}
         
-        if self.chosenRate != -1, self.player.rate != self.chosenRate {
+        if self.chosenRate != -1, self.player.rate != 0, self.player.rate != self.chosenRate {
             self.player.rate = self.chosenRate
         }
 		

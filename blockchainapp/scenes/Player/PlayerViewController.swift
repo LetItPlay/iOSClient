@@ -263,6 +263,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     @objc func trackSpeedButtonTouched()
     {
+        let currentSpeed = self.audioController.player.chosenRate == -1 ? 1 : self.audioController.player.chosenRate
+        
         let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         
         speedAlert.view.tintColor = AppColor.Title.lightGray
@@ -272,7 +274,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
 
         for speed in speeds {
-            if speed.value == 1 {
+            if speed.value == currentSpeed {
                 speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
                     self.change(speed: speed.value)
                 }))
@@ -287,12 +289,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
 
         self.present(speedAlert, animated: true, completion: nil)
-        
-        
     }
     
     func change(speed: Float) {
-        // TODO: change audio speed
         self.audioController.player.set(rate: speed)
     }
 	
