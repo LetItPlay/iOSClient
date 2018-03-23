@@ -47,11 +47,13 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     let realm: Realm? = try? Realm()
     
     var delegate: SearchModelDelegate?
-    
+	
+	let searchState: Variable<(text: String?, offset: Int)> = Variable<(text: String?, offset: Int)>((nil,0))
     let disposeBag = DisposeBag()
     
     init()
     {
+		searchState.asObservable()
 //        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
 //            return (tracksTuple.0, channels)
 //            }.subscribe(onNext: {(tuple) in

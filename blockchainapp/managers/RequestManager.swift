@@ -5,7 +5,7 @@
 
 import Foundation
 import RxSwift
-import Alamofire
+import Alamofire.Swift
 import SwiftyJSON
 import RealmSwift
 
@@ -44,8 +44,6 @@ fileprivate extension TracksRequest {
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
-		case .search(let text, let offset, let count):
-			return "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(lang)"
         default: return "tracks"
         }
     }
@@ -96,6 +94,11 @@ class RequestManager {
 		}
 		return Observable.error(RequestError.invalidURL)
 	}
+	
+//	func search(text: String, offset: Int, count: Int) -> Observable<LIPModel> {
+//		let urlString = RequestManager.server + "/" + "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
+//
+//	}
 	
     func tracks(req: TracksRequest) -> Observable<[Track]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)

@@ -4,7 +4,7 @@ import SwiftyJSON
 
 typealias ChannelInfo = (id: Int, name: String, image: URL?)
 
-struct Track {
+struct Track: LIPModel {
 	static let formatter: DateFormatter = {
 		let form = DateFormatter()
 		form.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"

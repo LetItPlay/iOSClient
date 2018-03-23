@@ -4,7 +4,7 @@ import RealmSwift
 
 typealias ObjectInfo = (id: Int, name: String, image: URL?)
 
-struct Channel: Hashable {
+struct Channel: LIPModel, Hashable {
 	var id: Int = 0
 	var name: String = ""
 	var image: URL?

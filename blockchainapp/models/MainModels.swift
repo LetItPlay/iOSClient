@@ -13,3 +13,11 @@ import SwiftyJSON
 class Tag: RealmString {
 	
 }
+
+protocol LIPModel {
+	var id: Int {get}
+	var name: String {get}
+	var image: URL? {get}
+	var lang: String {get}
+	var tags: [String] {get}
+}
