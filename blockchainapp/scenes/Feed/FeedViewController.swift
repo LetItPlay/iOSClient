@@ -26,6 +26,9 @@ class FeedViewController: UIViewController {
 
     var channelsView: ChannelsCollectionView!
     
+    var searchController: UISearchController!
+    var searchResults = SearchResultsController()
+    
 //    var trackInfoView: TrackInfoBlurView!
     var refreshingTable: Bool = false
 
@@ -56,13 +59,16 @@ class FeedViewController: UIViewController {
     
 //    var tappedSideButton = false
     
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView, searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.viewModel.delegate = self
         
         self.emitter = emitter
         self.channelsView = channelsView
+        
+        self.searchResults = SearchResultsController(viewModel: searchViewModel, emitter: searchEmitter)
+        self.searchController = self.searchResults.searchController
     }
 	
     override func viewDidLoad() {
@@ -135,6 +141,9 @@ class FeedViewController: UIViewController {
         //            make.right.equalTo(-10)
         //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
         //        }
+        
+        let searchItem = UIBarButtonItem(customView: self.searchController.view)
+        self.navigationItem.leftBarButtonItem = searchItem
     }
     
     @objc func showAllChannels()
