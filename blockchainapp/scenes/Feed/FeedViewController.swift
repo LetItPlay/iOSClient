@@ -343,14 +343,14 @@ extension FeedViewController: SwipeTableViewCellDelegate
             image = UIImage(named: "illustrationTop")
             toBeginning = true
             addTo = "To the\ntop"
-            frameForTitleLabel = CGRect(x: 35, y: 50, width: 87, height: 200)
+            frameForTitleLabel = CGRect(x: 55, y: 55, width: 87, height: 200)
             frameForImageView = CGRect(x: 50, y: 47, width: 90, height: 278-71)
         }
         else
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
-            addTo = "Bottom"
+            addTo = "To the\nbottom"
             frameForTitleLabel = CGRect(x: 30, y: 55, width: 87, height: 200)
             frameForImageView = CGRect(x: 10, y: 47, width: 90, height: 278-71)
         }
@@ -368,6 +368,10 @@ extension FeedViewController: SwipeTableViewCellDelegate
         addToPlaylistAction.frameForTitleLabel = frameForTitleLabel
         addToPlaylistAction.frameForImageView = frameForImageView
         addToPlaylistAction.fixCenterForItems = 12
+        
+        if addTo.range(of: "top") == nil {
+            addToPlaylistAction.textAlignmentForTitleLabel = .left
+        }
         
         return [addToPlaylistAction]
     }

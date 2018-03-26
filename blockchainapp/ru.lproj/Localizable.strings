@@ -47,8 +47,8 @@
 "see all" = "см. все";
 
 "To the\ntop\nof the\nplaylist" = "Добавить\nв начало\nплейлиста";
-"Bottom\nof the\nplaylist" = "Добавить\nв конец\nплейлиста";
-"The playback speed of audio" = "Скорость воспроизведения аудио";
+"To the\ntop\nof the\nplaylist" = "Вверх\nплей-\nлиста";
+"To the\nbottom\nof the\nplaylist" = "Вниз\nплей-\nлиста";
 
 "Choose Image" = "Выбрать фото";
 "Camera" = "Камера";

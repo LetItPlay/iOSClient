@@ -263,7 +263,7 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         }
         deleteAction.backgroundColor = .white
         
-        deleteAction.frameForTitleLabel = CGRect(x: 15, y: 50, width: 50, height: 50)
+        deleteAction.frameForTitleLabel = CGRect(x: 8, y: 50, width: 150, height: 50)
         
         return [deleteAction]
     }
