@@ -97,4 +97,8 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     func showAllChannels() {
         MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
     }
+    
+    func showSearch() {
+        MainRouter.shared.show(screen: "search", params: [:], present: false)
+    }
 }

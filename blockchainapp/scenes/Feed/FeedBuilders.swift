@@ -15,12 +15,7 @@ class FeedBuilder: Builder {
         let vm = FeedViewModel(model: model)
         let emitter = FeedEmitter(model: model)
         
-        // for search
-        let searchModel = SearchModel()
-        let searchVM = SearchViewModel(model: searchModel)
-        let searchEmitter = SearchEmitter(model: searchModel, viewModel: searchVM)
-        
-        let vc = FeedViewController(vm: vm, emitter: emitter, channelsView: ChannelsCollectionView(), searchViewModel: searchVM, searchEmitter: searchEmitter)
+        let vc = FeedViewController(vm: vm, emitter: emitter, channelsView: ChannelsCollectionView())
 		return vc
 	}
 }
@@ -38,12 +33,7 @@ class PopularBuilder: Builder {
         let vm = FeedViewModel(model: model)
         let emitter = FeedEmitter(model: model)
         
-        // for search
-        let searchModel = SearchModel()
-        let searchVM = SearchViewModel(model: searchModel)
-        let searchEmitter = SearchEmitter(model: searchModel, viewModel: searchVM)
-        
-        let vc = FeedViewController(vm: vm, emitter: emitter, channelsView: channelsView, searchViewModel: searchVM, searchEmitter: searchEmitter)
+        let vc = FeedViewController(vm: vm, emitter: emitter, channelsView: channelsView)
         return vc
 	}
 }

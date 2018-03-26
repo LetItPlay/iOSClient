@@ -7,6 +7,7 @@ enum FeedEvent {
     case showing(index: Int)
     case showAllChannels()
     case addTrack(atIndex: Int, toBeginig: Bool)
+    case showSearch
 }
 
 enum LifeCycleEvent {
@@ -61,6 +62,8 @@ class FeedEmitter: Emitter, FeedEmitterProtocol {
             self.model?.showAllChannels()
         case .addTrack(let index, let toBeginig):
             self.model?.addTrack(atIndex: index, toBegining: toBeginig)
+        case .showSearch:
+            self.model?.showSearch()
         }
     }
 }

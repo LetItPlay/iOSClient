@@ -48,6 +48,8 @@ class MainRouter: Router {
 		case "allChannels":
 			vc = ChannelsBuilder.build(params: params)
 			break
+        case "search":
+            vc = SearchBuilder.build(params: params)
 		default:
 			print("did nothing right/wrong")
 		}
@@ -60,7 +62,7 @@ class MainRouter: Router {
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
 			} else {
-				self.currentNavigationController?.pushViewController(vc, animated: true)
+                self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
 	}

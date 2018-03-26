@@ -57,7 +57,7 @@
 		361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD015204814A60097F8E9 /* ProfileHeaderView.swift */; };
 		361CD018204815140097F8E9 /* LikeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD017204815140097F8E9 /* LikeHeader.swift */; };
 		361CD01A20482A410097F8E9 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD01920482A410097F8E9 /* Common.swift */; };
-		3626C8CB2036A6200016772B /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CA2036A6200016772B /* SearchController.swift */; };
+		3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CA2036A6200016772B /* SearchResultsController.swift */; };
 		3626C8CE2036A6730016772B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CD2036A6730016772B /* SearchViewModel.swift */; };
 		3626C8D02036A6790016772B /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CF2036A6790016772B /* SearchModel.swift */; };
 		3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D12036A6800016772B /* SearchEmitter.swift */; };
@@ -197,7 +197,7 @@
 		361CD015204814A60097F8E9 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		361CD017204815140097F8E9 /* LikeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHeader.swift; sourceTree = "<group>"; };
 		361CD01920482A410097F8E9 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
-		3626C8CA2036A6200016772B /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
+		3626C8CA2036A6200016772B /* SearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
 		3626C8CD2036A6730016772B /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3626C8CF2036A6790016772B /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		3626C8D12036A6800016772B /* SearchEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEmitter.swift; sourceTree = "<group>"; };
@@ -302,7 +302,7 @@
 				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
 				365654032035A7400072087F /* PlaylistsController.swift */,
 				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
-				3626C8CA2036A6200016772B /* SearchController.swift */,
+				3626C8CA2036A6200016772B /* SearchResultsController.swift */,
 				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
 				365654002035987A0072087F /* Playlists */,
 				3626C8CC2036A6600016772B /* Search */,
@@ -943,7 +943,7 @@
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,
 				36F613D0202DA7C300661E48 /* (null) in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
-				3626C8CB2036A6200016772B /* SearchController.swift in Sources */,
+				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
 				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,

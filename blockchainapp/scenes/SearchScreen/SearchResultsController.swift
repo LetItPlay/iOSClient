@@ -1,5 +1,5 @@
 //
-//  SearchController.swift
+//  SearchResultsController.swift
 //  blockchainapp
 //
 //  Created by Polina Abrosimova on 16.02.18.
@@ -16,6 +16,8 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     
     var viewModel: SearchVMProtocol!
     var emitter: SearchEmitterProtocol!
+    
+    var delegate: SearchControllerDelegate?
     
     weak var parent: UIViewController?
     
@@ -42,9 +44,13 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         self.searchController.searchResultsUpdater = self
         self.searchController.delegate = self
         self.searchController.searchBar.delegate = self
+        self.searchController.view.tintColor = .white
         
         self.searchController.hidesNavigationBarDuringPresentation = true
-        self.searchController.dimsBackgroundDuringPresentation = true
+        self.searchController.definesPresentationContext = true
+//        self.searchController.dimsBackgroundDuringPresentation = true
+        
+        self.searchController.isActive = true
         
         self.searchController.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -86,9 +92,9 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
 //        tableView.endUpdates()
     }
     
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.searchController?.searchBar.resignFirstResponder()
-    }
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        self.searchController?.searchBar.resignFirstResponder()
+//    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -132,4 +138,11 @@ extension SearchResultsController: UISearchResultsUpdating, UISearchControllerDe
         }
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.delegate?.close()
+    }
+}
+
+protocol SearchControllerDelegate {
+    func close()
 }
