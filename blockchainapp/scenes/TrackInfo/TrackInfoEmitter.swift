@@ -11,6 +11,7 @@ import Foundation
 enum TrackInfoEvent {
     case updateTrack(id: Int)
     case trackLiked(index: Int)
+    case channelFollowButtonPressed
 }
 
 protocol TrackInfoEmitterProtocol: LifeCycleHandlerProtocol {
@@ -32,6 +33,8 @@ class TrackInfoEmitter: Emitter, TrackInfoEmitterProtocol {
             self.model.updateTrack(id: id)
         case .trackLiked(let index):
             self.model.trackLiked(id: index)
+        case .channelFollowButtonPressed:
+            self.model.channelFollowButtonTyped()
         }
     }
 }

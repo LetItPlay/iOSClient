@@ -45,6 +45,7 @@ class TrackInfoHeaderView: UIView {
         button.contentEdgeInsets.left = 12
         button.contentEdgeInsets.right = 12
         button.titleLabel?.font = AppFont.Button.mid
+        button.addTarget(self, action: #selector(followButtonTouched), for: .touchUpInside)
         return button
     }()
     
@@ -164,6 +165,11 @@ class TrackInfoHeaderView: UIView {
         })
     }
     
+    @objc func followButtonTouched() {
+        _followButton.isSelected = !_followButton.isSelected
+        self.emitter?.send(event: TrackInfoEvent.channelFollowButtonPressed)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -184,8 +190,9 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             _channelFollowLabel.text = viewModel.channel.subscriptionCount + " followers".localized
             
             _followButton.isSelected = viewModel.channel.isSubscribed
+            
+        case .channelSubscription:
+            _followButton.isSelected = viewModel.channel.isSubscribed
         }
-        
-        
     }
 }

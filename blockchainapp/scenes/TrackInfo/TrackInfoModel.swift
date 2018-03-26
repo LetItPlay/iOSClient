@@ -16,11 +16,13 @@ protocol TrackInfoModelProtocol: class, ModelProtocol {
 protocol TrackInfoEventHandler {
     func updateTrack(id: Int)
     func trackLiked(id: Int)
+    func channelFollowButtonTyped()
 }
 
 protocol TrackInfoModelDelegate: class {
     func reload(track: TrackViewModel)
     func reload(channel: SearchChannelViewModel)
+    func followUpdate(isSubscribed: Bool)
 }
 
 class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
@@ -72,6 +74,14 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
         ServerUpdateManager.shared.make(track: track!, action: action)
     }
     
+    func channelFollowButtonTyped() {
+        // to server
+        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        ServerUpdateManager.shared.make(channel: channel, action: action)
+        // while in User Setting
+        SubscribeManager.shared.addOrDelete(channel: self.channel.id)
+    }
+    
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
@@ -82,12 +92,18 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     }
 }
 
-extension TrackInfoModel: TrackUpdateProtocol
-{
+extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
     func trackUpdated(track: Track) {
         if self.track.id == track.id {
             let vm = TrackViewModel(track: track)
             self.delegate?.reload(track: vm)
         }
+    }
+    
+    func channelSubscriptionUpdated() {
+        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+        channel.isSubscribed = channels.contains(channel.id)
+        
+        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
     }
 }

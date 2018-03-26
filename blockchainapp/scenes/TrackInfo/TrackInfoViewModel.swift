@@ -9,7 +9,7 @@
 import Foundation
 
 enum TrackInfoResultUpdate {
-    case track, channel
+    case track, channel, channelSubscription
 }
 
 protocol TrackInfoVMDelegate: class {
@@ -33,5 +33,10 @@ class TrackInfoViewModel: TrackInfoModelDelegate {
         self.channel = channel
         
         delegate?.update(data: .channel)
+    }
+    
+    func followUpdate(isSubscribed: Bool) {
+        self.channel?.isSubscribed = isSubscribed
+        self.delegate?.update(data: .channelSubscription)
     }
 }
