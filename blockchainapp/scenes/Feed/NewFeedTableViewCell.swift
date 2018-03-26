@@ -168,7 +168,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         textView.textColor = .black
         textView.backgroundColor = .clear
         textView.isEditable = false
-        textView.isSelectable = true
+        textView.isSelectable = false
         textView.isUserInteractionEnabled = true
         textView.dataDetectorTypes = UIDataDetectorTypes.link
         textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
