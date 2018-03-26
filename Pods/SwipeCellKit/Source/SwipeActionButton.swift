@@ -70,6 +70,9 @@ class SwipeActionButton: UIButton {
             imageView.frame = CGRect(x: 50, y: 47, width: 90, height: 278-71)
             title.frame = CGRect(x: 35, y: 50, width: 87, height: 200)
         }
+        else if action.title?.range(of: "Delete") != nil || action.title?.range(of: "Удалить") != nil {
+            title.frame = CGRect(x: 15, y: 50, width: 50, height: 50)
+        }
         else {
             imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
             title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
@@ -109,7 +112,8 @@ class SwipeActionButton: UIButton {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.customTitleLabel.sizeToFit()
-		self.customTitleLabel.center.y = self.frame.height/2 + 12
+        let fixCenter: CGFloat = self.customTitleLabel.text?.range(of: "Delete") != nil || self.customTitleLabel.text?.range(of: "Удалить") != nil ? 0 : 12
+        self.customTitleLabel.center.y = self.frame.height/2 + fixCenter
 		self.customImageView.center.y = self.frame.height/2 + 12
 		print(self.frame)
 	}

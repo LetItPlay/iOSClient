@@ -113,7 +113,7 @@ class SwipeActionsView: UIView {
             
             if options.showGradient != nil {
                 let gradientLayer = CAGradientLayer()
-                gradientLayer.colors = [options.showGradient!.fromColor, UIColor.red.withAlphaComponent(0.5).cgColor, options.showGradient!.toColor]
+                gradientLayer.colors = [options.showGradient!.fromColor, options.showGradient!.toColor]
                 gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
                 gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
                 gradientLayer.frame = options.showGradient!.frame

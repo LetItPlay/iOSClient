@@ -148,7 +148,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     }
 }
 
-extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
+extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -156,22 +156,6 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.tracks.count
-    }
-
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-            self.emitter.send(event: .trackDelete(index: indexPath.item))
-        }
-//        deleteAction.backgroundColor = .white
-//        deleteAction.textColor = AppColor.Element.tomato
-
-        // customize the action appearance
-        deleteAction.image = UIImage(named: "delete")
-
-        return [deleteAction]
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -266,6 +250,38 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let track = UserPlaylistManager.shared.tracks[indexPath.row]
         return Common.height(text: track.name, width: tableView.frame.width)
+    }
+}
+
+extension UserPlaylistViewController: SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+        
+        let deleteAction = SwipeAction(style: .default, title: "Delete".localized) { action, indexPath in
+            // handle action by updating model with deletion
+            self.emitter.send(event: .trackDelete(index: indexPath.item))
+        }
+        deleteAction.backgroundColor = .white
+        
+        return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        var options = SwipeTableOptions()
+        options.expansionStyle = SwipeExpansionStyle.selection
+        options.transitionStyle = .border
+//        options.maximumButtonWidth = 300
+//        options.minimumButtonWidth = 150
+        options.backgroundColor = .white
+        
+        let fromColor = AppColor.Element.redBlur.withAlphaComponent(0.9).cgColor
+        let toColor = AppColor.Element.redBlur.withAlphaComponent(0).cgColor
+        
+        let frame = CGRect(x: 0, y: 0, width: 200, height: (self.tableView.cellForRow(at: indexPath)?.frame.height)!)
+        
+        options.showGradient = (frame, cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        
+        return options
     }
 }
 

@@ -551,6 +551,7 @@
 			children = (
 				36E1559F204D6ECB00C65DBE /* UserPlaylist */,
 				CF4453601F56C9E600660474 /* Feed */,
+				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
 				CF4453671F57F42800660474 /* Channels */,
 				019B3DC41FCC4599008C3B76 /* ChannelScreen */,
 				01510EB01FE0E8EC003AC116 /* SearchScreen */,
@@ -572,7 +573,6 @@
 				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
 				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
 				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
-				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
 				36F7C399201AF71200F99A9A /* Channels */,
 			);
 			path = Feed;
