@@ -263,6 +263,8 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         }
         deleteAction.backgroundColor = .white
         
+        deleteAction.frameForTitleLabel = CGRect(x: 15, y: 50, width: 50, height: 50)
+        
         return [deleteAction]
     }
     
@@ -270,8 +272,6 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         var options = SwipeTableOptions()
         options.expansionStyle = SwipeExpansionStyle.selection
         options.transitionStyle = .border
-//        options.maximumButtonWidth = 300
-//        options.minimumButtonWidth = 150
         options.backgroundColor = .white
         
         let fromColor = AppColor.Element.redBlur.withAlphaComponent(0.9).cgColor
@@ -279,7 +279,14 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         
         let frame = CGRect(x: 0, y: 0, width: 200, height: (self.tableView.cellForRow(at: indexPath)?.frame.height)!)
         
-        options.showGradient = (frame, cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [fromColor, toColor]
+        gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
+        gradientLayer.frame = frame
+        gradientLayer.cornerRadius = 10
+        
+        options.showGradient = gradientLayer
         
         return options
     }

@@ -18,6 +18,8 @@ class SwipeActionButton: UIButton {
 	var customTitleLabel: UILabel!
 	var customImageView: UIImageView!
     
+    var action: SwipeAction!
+    
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
     }
@@ -32,6 +34,8 @@ class SwipeActionButton: UIButton {
     
     convenience init(action: SwipeAction) {
         self.init(frame: .zero)
+        
+        self.action = action
 
         contentHorizontalAlignment = .center
         
@@ -53,7 +57,7 @@ class SwipeActionButton: UIButton {
         title.numberOfLines = 0
         title.textColor = .white
         title.text = action.title
-		
+        title.frame = action.frameForTitleLabel!
 		self.customTitleLabel = title
 		
         accessibilityLabel = action.accessibilityLabel
@@ -65,20 +69,10 @@ class SwipeActionButton: UIButton {
 //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
         let imageView = UIImageView(image: action.image)
-        if action.title?.range(of: "top") != nil || action.title?.range(of: "начало") != nil
-        {
-            imageView.frame = CGRect(x: 50, y: 47, width: 90, height: 278-71)
-            title.frame = CGRect(x: 35, y: 50, width: 87, height: 200)
+        if let frame = action.frameForImageView {
+            imageView.frame = frame
         }
-        else if action.title?.range(of: "Delete") != nil || action.title?.range(of: "Удалить") != nil {
-            title.frame = CGRect(x: 15, y: 50, width: 50, height: 50)
-        }
-        else {
-            imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
-            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
-        }
-		
-		customImageView = imageView
+		self.customImageView = imageView
         
         self.addSubview(imageView)
         self.addSubview(title)
@@ -112,9 +106,8 @@ class SwipeActionButton: UIButton {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		self.customTitleLabel.sizeToFit()
-        let fixCenter: CGFloat = self.customTitleLabel.text?.range(of: "Delete") != nil || self.customTitleLabel.text?.range(of: "Удалить") != nil ? 0 : 12
-        self.customTitleLabel.center.y = self.frame.height/2 + fixCenter
-		self.customImageView.center.y = self.frame.height/2 + 12
+        self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
+		self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
 		print(self.frame)
 	}
     

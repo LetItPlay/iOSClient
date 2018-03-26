@@ -335,26 +335,39 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var toBeginning: Bool!
         var image: UIImage!
         var addTo = ""
+        var frameForTitleLabel: CGRect!
+        var frameForImageView: CGRect!
+        
         if orientation == .left
         {
             image = UIImage(named: "illustrationTop")
             toBeginning = true
             addTo = "To the\ntop"
+            frameForTitleLabel = CGRect(x: 35, y: 50, width: 87, height: 200)
+            frameForImageView = CGRect(x: 50, y: 47, width: 90, height: 278-71)
         }
         else
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
             addTo = "Bottom"
+            frameForTitleLabel = CGRect(x: 30, y: 55, width: 87, height: 200)
+            frameForImageView = CGRect(x: 10, y: 47, width: 90, height: 278-71)
         }
+        
         let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
+        
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
         
         addToPlaylistAction.textColor = .white
         addToPlaylistAction.font = AppFont.Title.big
+        
+        addToPlaylistAction.frameForTitleLabel = frameForTitleLabel
+        addToPlaylistAction.frameForImageView = frameForImageView
+        addToPlaylistAction.fixCenterForItems = 12
         
         return [addToPlaylistAction]
     }
@@ -384,7 +397,14 @@ extension FeedViewController: SwipeTableViewCellDelegate
             frame = CGRect(x: -50, y: 25, width: 200, height: height-25)
         }
         
-        options.showGradient = (frame, cornerRadius: 10, fromColor: fromColor, toColor: toColor)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [fromColor, toColor]
+        gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
+        gradientLayer.frame = frame
+        gradientLayer.cornerRadius = 10
+        
+        options.showGradient = gradientLayer
         
         return options
     }
