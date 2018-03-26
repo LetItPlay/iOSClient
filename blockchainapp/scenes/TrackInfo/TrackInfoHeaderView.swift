@@ -15,6 +15,9 @@ class TrackInfoHeaderView: UIView {
     
     var delegate: TrackLikedDelegate?
     
+    let _scrollView = UIScrollView()
+    var heightForInfoTextView: NSLayoutConstraint!
+    
     let _channelIconView: UIImageView = {
         let imgView = UIImageView()
         imgView.layer.cornerRadius = 20
@@ -90,8 +93,13 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
+        self.addSubview(_scrollView)
+        _scrollView.snp.makeConstraints({ (make) in
+            make.edges.equalToSuperview()
+        })
+        
         let upperView = UIView()
-        self.addSubview(upperView)
+        _scrollView.addSubview(upperView)
         upperView.snp.makeConstraints({ (make) in
             make.top.equalTo(50)
             make.left.equalTo(8)
@@ -148,20 +156,27 @@ class TrackInfoHeaderView: UIView {
 
         })
         
-        self.addSubview(_infoTitle)
+        _scrollView.addSubview(_infoTitle)
         _infoTitle.snp.makeConstraints({ (make) in
             make.top.equalTo(upperView.snp.bottom).inset(-20)
             make.left.equalTo(16)
             make.right.equalTo(-16)
         })
         
-        self.addSubview(_infoTextView)
+        let viewForTextView = UIView()
+        _scrollView.addSubview(viewForTextView)
+        viewForTextView.snp.makeConstraints({ (make) in
+            make.edges.equalToSuperview()
+            make.width.equalTo(self.frame.width)
+        })
+        
+        _scrollView.addSubview(_infoTextView)
         _infoTextView.snp.makeConstraints({ (make) in
             make.top.equalTo(_infoTitle.snp.bottom).inset(-16)
             make.left.equalTo(16)
             make.right.equalTo(-16)
-//            make.bottom.equalTo(-16)
-            make.height.equalTo(500)
+            make.bottom.equalTo(-16)
+            heightForInfoTextView = make.height.equalTo(700).constraint.layoutConstraints.first
         })
     }
     
@@ -181,6 +196,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
         case .track:
             _infoTitle.text = viewModel.track.name
             _infoTextView.text = viewModel.track.description
+            self.heightForInfoTextView.constant = _infoTextView.sizeThatFits(CGSize(width: _infoTextView.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
             
             delegate?.track(liked: viewModel.track.isLiked)
             
