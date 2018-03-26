@@ -116,7 +116,42 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-        self.profileView.emitter?.send(event: ProfileEvent.setLanguage)
+        var currentLanguage = ""
+        switch UserSettings.language {
+        case .ru:
+            currentLanguage = "Русский"
+        case .en:
+            currentLanguage = "English"
+        case .fr:
+            currentLanguage = "Français"
+        default:
+            break
+        }
+        
+        let languageAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        
+        languageAlert.view.tintColor = AppColor.Title.lightGray
+        
+        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+        let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
+        languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
+        
+        for language in ["English", "Français", "Русский"] {
+            if language == currentLanguage {
+                languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
+//                    self.profileView.emitter?.send(event: ProfileEvent.set(language: speed))
+                }))
+            }
+            else {
+                languageAlert.addAction(UIAlertAction(title: language, style: .destructive, handler: { _ in
+                    self.profileView.emitter?.send(event: ProfileEvent.set(language: language))
+                }))
+            }
+        }
+        
+        languageAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
+        
+        self.present(languageAlert, animated: true, completion: nil)
         
 		AudioController.main.make(command: .pause)
 	}

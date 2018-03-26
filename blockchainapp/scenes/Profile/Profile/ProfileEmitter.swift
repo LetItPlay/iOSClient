@@ -11,7 +11,7 @@ import Foundation
 enum ProfileEvent {
     case setName(String)
     case setImage(Data)
-    case setLanguage
+    case set(language: String)
 }
 
 protocol ProfileEmitterProtocol: LifeCycleHandlerProtocol {
@@ -34,8 +34,8 @@ class ProfileEmitter: Emitter, ProfileEmitterProtocol {
             self.model.change(image: image)
         case .setName(let name):
             self.model.change(name: name)
-        case .setLanguage:
-            self.model.changeLanguage()
+        case .set(let language):
+            self.model.change(language: language)
         }
     }
 }

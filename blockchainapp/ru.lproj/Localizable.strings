@@ -46,9 +46,9 @@
 
 "see all" = "см. все";
 
-"To the\ntop\nof the\nplaylist" = "Добавить\nв начало\nплейлиста";
 "To the\ntop\nof the\nplaylist" = "Вверх\nплей-\nлиста";
 "To the\nbottom\nof the\nplaylist" = "Вниз\nплей-\nлиста";
+"The playback speed of audio" = "Скорость воспроизведения аудио";
 
 "Choose Image" = "Выбрать фото";
 "Camera" = "Камера";
@@ -58,3 +58,6 @@
 "Delete" = "Удалить";
 
 " followers" = " слушают";
+
+"Select language" = "Выберите язык";
+

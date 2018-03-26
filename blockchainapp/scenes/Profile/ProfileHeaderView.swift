@@ -21,6 +21,7 @@ class ProfileHeaderView: UIView {
     let profileNameTextField: UITextField = UITextField()
     let changePhotoButton: UIButton = UIButton()
     let languageButton: UIButton = UIButton()
+    let languageTitleLabel: UILabel = UILabel()
     
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
         super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
@@ -112,6 +113,12 @@ class ProfileHeaderView: UIView {
             make.centerX.equalToSuperview()
         }
         
+        blur.contentView.addSubview(languageTitleLabel)
+        languageTitleLabel.snp.makeConstraints({ (make) in
+            make.top.equalTo(languageButton.snp.bottom).inset(-14)
+            make.centerX.equalToSuperview()
+        })
+        
         languageButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
         languageButton.layer.cornerRadius = 6
         languageButton.layer.masksToBounds = true
@@ -119,6 +126,10 @@ class ProfileHeaderView: UIView {
         languageButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
         languageButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
         languageButton.semanticContentAttribute = .forceRightToLeft
+        languageButton.setTitle("Select language", for: .normal)
+        
+        languageTitleLabel.font = AppFont.Button.mid
+        languageTitleLabel.textColor = AppColor.Title.lightGray
         
         let bot = CALayer()
         bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
@@ -158,7 +169,9 @@ extension ProfileHeaderView: ProfileVMDelegate
                 profileImageView.image = image
                 bluredImageView.image = image
             case .language:
-                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+                self.languageTitleLabel.text = self.viewModel.currentLanguage
+//                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
+                break
             case .name:
                 self.setName(name: self.viewModel.name)
             }
