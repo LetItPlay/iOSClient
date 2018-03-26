@@ -188,7 +188,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         let alert = UILabel()
         alert.font = AppFont.Title.big
         alert.textAlignment = .center
-        alert.text = "Трек добавлен"
+        alert.text = "Track added".localized
         return alert
     }()
         
