@@ -36,7 +36,7 @@
 "Recent added"="Récents";
 "Tracks you’ve liked"="titres\"J'aime\"";
 "Your future profile"="Votre futur profil";
-"Current playlist"="Текущий плейлист";
+"Current playlist"="Playlist actuelle";
 "Profile"="Mon Profil";
 
 "Select your language" = "Choisissez votre langue";
@@ -61,7 +61,7 @@
 
 "To the\ntop\nof the\nplaylist" = "Ajouter\nen haut\nde la\nplaylist";
 "To the\nbottom\nof the\nplaylist" = "Ajouter\nau bas\nde la\nplaylist";
-"The playback speed of audio" = "Скорость воспроизведения аудио";
+"The playback speed of audio" = "Vitesse de lecture audio";
 
 "Choose Image" = "Sélectionner une image";
 "Camera" = "Caméra";
