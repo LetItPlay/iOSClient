@@ -166,11 +166,14 @@ class TrackInfoHeaderView: UIView {
         let viewForTextView = UIView()
         _scrollView.addSubview(viewForTextView)
         viewForTextView.snp.makeConstraints({ (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(_infoTitle.snp.bottom)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
             make.width.equalTo(self.frame.width)
         })
         
-        _scrollView.addSubview(_infoTextView)
+        viewForTextView.addSubview(_infoTextView)
         _infoTextView.snp.makeConstraints({ (make) in
             make.top.equalTo(_infoTitle.snp.bottom).inset(-16)
             make.left.equalTo(16)
