@@ -15,8 +15,8 @@ class SwipeActionButton: UIButton {
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
-	var customTitleLabel: UILabel!
-	var customImageView: UIImageView!
+    var customTitleLabel: UILabel!
+    var customImageView: UIImageView!
     
     var action: SwipeAction!
     
@@ -52,14 +52,14 @@ class SwipeActionButton: UIButton {
         
         let title = UILabel()
         title.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
-        title.textAlignment = .center
+        title.textAlignment = action.textAlignmentForTitleLabel
         title.lineBreakMode = .byWordWrapping
         title.numberOfLines = 0
         title.textColor = .white
         title.text = action.title
         title.frame = action.frameForTitleLabel!
-		self.customTitleLabel = title
-		
+        self.customTitleLabel = title
+        
         accessibilityLabel = action.accessibilityLabel
         
 //        setTitle(action.title, for: .normal)
@@ -72,10 +72,18 @@ class SwipeActionButton: UIButton {
         if let frame = action.frameForImageView {
             imageView.frame = frame
         }
-		self.customImageView = imageView
+        self.customImageView = imageView
         
         self.addSubview(imageView)
         self.addSubview(title)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.customTitleLabel.sizeToFit()
+        self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
+        self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
+        print(self.frame)
     }
     
     override var isHighlighted: Bool {
@@ -102,14 +110,6 @@ class SwipeActionButton: UIButton {
                                   attributes: [NSAttributedStringKey.font: font],
                                   context: nil).integral
     }
-	
-	override func layoutSubviews() {
-		super.layoutSubviews()
-		self.customTitleLabel.sizeToFit()
-        self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
-		self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
-		print(self.frame)
-	}
     
     override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = contentRect.center(size: titleBoundingRect(with: contentRect.size).size)
