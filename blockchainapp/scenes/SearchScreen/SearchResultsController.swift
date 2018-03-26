@@ -57,6 +57,10 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
             make.edges.equalToSuperview()
         }
         
+        DispatchQueue.main.async { [unowned self] in
+            self.searchController.searchBar.becomeFirstResponder()
+        }
+        
         self.emitter.send(event: LifeCycleEvent.initialize)
     }
     

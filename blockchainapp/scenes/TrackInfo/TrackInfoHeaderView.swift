@@ -30,8 +30,14 @@ class TrackInfoHeaderView: UIView {
         return imgView
     }()
     
-    let _channelTitleLabel: UILabel = UILabel()
-    let _channelFollowLabel: UILabel = UILabel()
+    let _channelTitleLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .left
+        label.numberOfLines = 2
+        label.lineBreakMode = .byWordWrapping
+        label.font = AppFont.Title.mid
+        return label
+    }()
     
     let _followButton: UIButton = {
         let button = UIButton()
@@ -54,15 +60,17 @@ class TrackInfoHeaderView: UIView {
     
     let _infoTitle: UILabel = {
         let label = UILabel()
-        label.font = AppFont.Title.small
+        label.font = AppFont.Title.mid
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.numberOfLines = 2
-        label.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
+        label.text = ""
         label.sizeToFit()
         return label
     }()
+    
+    var dataLabels: [IconLabelType: IconedLabel] = [:]
     
     let _infoTextView: UITextView = {
         let textView = UITextView()
@@ -75,7 +83,7 @@ class TrackInfoHeaderView: UIView {
         textView.isUserInteractionEnabled = true
         textView.dataDetectorTypes = UIDataDetectorTypes.link
         textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
-        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
+        textView.text = ""
         return textView
     }()
 
@@ -93,6 +101,11 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
+        let likesCount = IconedLabel(type: .likes)
+        let listenCount = IconedLabel(type: .listens)
+        
+        self.dataLabels = [.likes: likesCount, .listens: listenCount]
+        
         self.addSubview(_scrollView)
         _scrollView.snp.makeConstraints({ (make) in
             make.edges.equalToSuperview()
@@ -101,17 +114,17 @@ class TrackInfoHeaderView: UIView {
         let upperView = UIView()
         _scrollView.addSubview(upperView)
         upperView.snp.makeConstraints({ (make) in
-            make.top.equalTo(50)
-            make.left.equalTo(8)
-            make.right.equalTo(-8)
-            make.height.equalTo(90)
+            make.top.equalTo(52)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.height.equalTo(76)
         })
         
         upperView.addSubview(_channelIconView)
         _channelIconView.snp.makeConstraints({ (make) in
             make.left.equalTo(16)
-            make.width.equalTo(100)
-            make.height.equalTo(100)
+            make.width.equalTo(60)
+            make.height.equalTo(60)
             make.centerY.equalToSuperview()
         })
         
@@ -122,46 +135,43 @@ class TrackInfoHeaderView: UIView {
             make.height.equalTo(32)
         })
         
-        let titlesView = UIView()
-        upperView.addSubview(titlesView)
-        titlesView.snp.makeConstraints({ (make) in
-            make.left.equalTo(_channelIconView.snp.right).inset(8)
-            make.right.equalTo(_followButton.snp.left).inset(-8)
+        upperView.addSubview(_channelTitleLabel)
+        _channelTitleLabel.snp.makeConstraints({ (make) in
+            make.left.equalTo(_channelIconView.snp.right).inset(-10)
+            make.right.equalTo(_followButton.snp.left).inset(-10)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
         })
         
-        titlesView.addSubview(_channelTitleLabel)
-        _channelTitleLabel.snp.makeConstraints({ (make) in
-            make.top.equalTo(8)
-            make.left.equalTo(_channelIconView.snp.right)
-            make.right.equalTo(_followButton.snp.left).inset(-10)
-        })
-        
-        titlesView.addSubview(_channelFollowLabel)
-        _channelFollowLabel.snp.makeConstraints({ (make) in
-            make.top.equalTo(_channelTitleLabel.snp.bottom).inset(-5)
-            make.left.equalTo(_channelTitleLabel)
-            make.right.equalTo(_followButton.snp.left).inset(-8)
-        })
-        
         let view = UIView()
-        view.backgroundColor = .red
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
         upperView.addSubview(view)
         view.snp.makeConstraints({ (make) in
             make.bottom.equalToSuperview()
-            make.left.equalTo(16)
-            make.right.equalTo(-16)
-            make.height.equalTo(1)
+            make.left.equalTo(17)
+            make.right.equalTo(-17)
+            make.height.equalTo(2)
 
         })
         
         _scrollView.addSubview(_infoTitle)
         _infoTitle.snp.makeConstraints({ (make) in
-            make.top.equalTo(upperView.snp.bottom).inset(-20)
+            make.top.equalTo(upperView.snp.bottom).inset(-16)
             make.left.equalTo(16)
             make.right.equalTo(-16)
         })
+        
+        _scrollView.addSubview(likesCount)
+        likesCount.snp.makeConstraints { (make) in
+            make.top.equalTo(_infoTitle.snp.bottom).inset(-8)
+            make.left.equalTo(16)
+        }
+        
+        _scrollView.addSubview(listenCount)
+        listenCount.snp.makeConstraints { (make) in
+            make.left.equalTo(likesCount.snp.right).inset(-12)
+            make.centerY.equalTo(likesCount)
+        }
         
         let viewForTextView = UIView()
         _scrollView.addSubview(viewForTextView)
@@ -175,7 +185,7 @@ class TrackInfoHeaderView: UIView {
         
         viewForTextView.addSubview(_infoTextView)
         _infoTextView.snp.makeConstraints({ (make) in
-            make.top.equalTo(_infoTitle.snp.bottom).inset(-16)
+            make.top.equalTo(_infoTitle.snp.bottom).inset(-35)
             make.left.equalTo(16)
             make.right.equalTo(-16)
             make.bottom.equalTo(-16)
@@ -201,12 +211,14 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             _infoTextView.text = viewModel.track.description
             self.heightForInfoTextView.constant = _infoTextView.sizeThatFits(CGSize(width: _infoTextView.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
             
+            dataLabels[.listens]?.set(text: viewModel.track.listensCount)
+            dataLabels[.likes]?.set(text: viewModel.track.likesCount)
+            
             delegate?.track(liked: viewModel.track.isLiked)
             
         case .channel:
             _channelIconView.sd_setImage(with: viewModel.channel.imageURL)
             _channelTitleLabel.text = viewModel.channel.name
-            _channelFollowLabel.text = viewModel.channel.subscriptionCount + " followers".localized
             
             _followButton.isSelected = viewModel.channel.isSubscribed
             
