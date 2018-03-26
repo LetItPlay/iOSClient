@@ -31,6 +31,9 @@ struct TrackViewModel {
 		self.listensCount = Int64(track.listenCount).formatAmount()
 		self.isLiked = track.isLiked
 		
+		self.author = track.channel.name
+		self.authorImage = track.channel.image
+		
 		self.isPlaying = isPlaying
 	}
 	

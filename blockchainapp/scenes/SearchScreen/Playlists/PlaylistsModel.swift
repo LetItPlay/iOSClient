@@ -44,9 +44,9 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     init()
     {
 		self.dataAction = Action<Bool,[AudioTrack]>.init(workFactory: { (_) -> Observable<[AudioTrack]> in
-			return RequestManager.shared.tracks(req: .magic).map({ (tuple) -> [AudioTrack] in
-				return tuple.0.map({ (track) -> AudioTrack in
-					return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: tuple.1.first(where: {track.channel.id == $0.id})?.name ?? "", imageURL: track.image, length: track.length)
+			return RequestManager.shared.tracks(req: .magic).map({ (tracks) -> [AudioTrack] in
+				return tracks.map({ (track) -> AudioTrack in
+					return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: track.channel.name, imageURL: track.image, length: track.length)
 				})
 			})
 		})
@@ -56,13 +56,13 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 			self.getPlaylistViewModels()
 		}).disposed(by: disposeBag)
 		
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
 		
 		self.getData()
     }
 	
     func getData() {
-		self.dataAction.execute(true)
+//		self.dataAction.execute(true)
     }
     
     func formatPlaylists(index: Int) {

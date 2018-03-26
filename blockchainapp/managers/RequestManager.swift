@@ -65,7 +65,7 @@ enum RequestError: Error {
 
 class RequestManager {
 
-    static let server: String = "https://api.letitplay.io"
+    static let server: String = "https://beta.api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
 	func channel(id: Int) -> Observable<Channel> {
@@ -97,12 +97,13 @@ class RequestManager {
 		return Observable.error(RequestError.invalidURL)
 	}
 	
-    func tracks(req: TracksRequest) -> Observable<([Track],[Channel])> {
+    func tracks(req: TracksRequest) -> Observable<[Track]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Track]> in
+				print(url.absoluteString)
 				switch result {
 				case .value(let data):
 					do {
@@ -112,7 +113,7 @@ class RequestManager {
 						let channels: [Channel] = json["Stations"].array?
 							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
-						var tracksJSON: JSON!
+						let tracksJSON: JSON = json
 						let tracks: [Track] = tracksJSON.array?
 							.map({Track(json: $0)})
 							.filter({$0 != nil}).map({$0!})
@@ -127,7 +128,7 @@ class RequestManager {
 						try? realm?.write {
 							realm?.add(objs, update: true)
 						}
-						return Observable.just((tracks, channels))
+						return Observable.just(tracks)
 					} catch {
 						return Observable.error(RequestError.invalidJSON)
 					}
@@ -210,7 +211,7 @@ class RequestManager {
                         if let resp = response.response, let data = response.data {
                             if resp.statusCode == 200 {
                                 do {
-                                    let json  = try JSON(data: data)
+                                    let _  = try JSON(data: data)
 //                                    if let channel = Station1.init(json: json) {
 //                                        observer.onNext(channel.isSubscribed)
 //                                    } else {

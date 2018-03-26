@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import Action
 
-protocol FeedModelProtocol: class, ModelProtocol {
+protocol FeedModelProtocol: ModelProtocol {
     weak var delegate: FeedModelDelegate? {get set}
 	var playingIndex: Variable<Int?> {get}
 }
@@ -38,36 +38,26 @@ FeedEventHandler {
 	private var channels: Set<Channel> = Set<Channel>()
 	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	private var dataAction: Action<Int, ([Track],[Channel])>?
+	private var dataAction: Action<Int, [Track]>?
 	private let disposeBag = DisposeBag()
 	
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
         
-		dataAction = Action<Int, ([Track],[Channel])>.init(workFactory: { (offset) -> Observable<([Track],[Channel])> in
+		dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
 		})
 		
-		dataAction?.elements.do(onNext: { (tuple) in
+		dataAction?.elements.do(onNext: { (tracks) in
 			if self.currentOffest == 0 {
-				self.tracks = tuple.0
+				self.tracks = tracks
 			} else {
-				self.tracks += tuple.0
+				self.tracks += tracks
 			}
-			tuple.1.forEach({ (channel) in
-				self.channels.insert(channel)
-			})
-		}).map({ (tuple) -> [TrackViewModel] in
+		}).map({ (tracks) -> [TrackViewModel] in
 			let playingId = AudioController.main.currentTrack?.id
-			return tuple.0.map({ (track) -> TrackViewModel in
-				var vm = TrackViewModel(track: track,
-										isPlaying: track.id == playingId)
-				if let channel = tuple.1.filter({$0.id == track.channel.id}).first {
-					vm.authorImage = channel.image
-					vm.author = channel.name
-				}
-				return vm
-			})
+			return tracks.map({ TrackViewModel(track: $0,
+											   isPlaying: $0.id == playingId) })
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
             self.delegate?.showEmptyMessage(self.tracks.count == 0)
@@ -79,7 +69,7 @@ FeedEventHandler {
         
         
 		
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
 	}
     
     func send(event: LifeCycleEvent) {
@@ -100,7 +90,7 @@ FeedEventHandler {
     
     func trackSelected(index: Int) {
 		let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack(author: channels.first(where: {$0.id == track.channel.id})?.name ?? "")
+            return track.audioTrack()
 		}
         AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
     }

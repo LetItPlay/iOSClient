@@ -66,7 +66,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     func make(updates: [CollectionUpdate : [Int]]) {
 //        tableView.beginUpdates()
         for key in updates.keys {
-            if var indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
+            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
                 case .insert:
                     tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
