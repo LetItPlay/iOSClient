@@ -33,8 +33,8 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 
 	let emptyLabel: UILabel = {
 		let label = UILabel()
-		label.font = AppFont.Title.big
-		label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.sectionNotBold
+        label.textColor = AppColor.Element.emptyMessage
 		label.textAlignment = .center
 		label.numberOfLines = 0
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized

@@ -15,6 +15,8 @@ class TrackInfoHeaderView: UIView {
     
     var delegate: TrackLikedDelegate?
     
+    let refreshControll = UIRefreshControl()
+    
     let _scrollView = UIScrollView()
     var heightForInfoTextView: NSLayoutConstraint!
     
@@ -101,11 +103,27 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
+//        _scrollView.refreshControl = refreshControll
+        
+        let emptyLabel = UILabel()
+        emptyLabel.text = "Loading..."
+        emptyLabel.font = AppFont.Title.sectionNotBold
+        emptyLabel.textColor = AppColor.Element.emptyMessage
+        emptyLabel.textAlignment = .center
+        self.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints({ (make) in
+            make.centerX.equalToSuperview()
+            make.centerY.equalToSuperview()
+        })
+        
+        self.refresh(show: true)
+        
         let likesCount = IconedLabel(type: .likes)
         let listenCount = IconedLabel(type: .listens)
         
         self.dataLabels = [.likes: likesCount, .listens: listenCount]
         
+        _scrollView.backgroundColor = .white
         self.addSubview(_scrollView)
         _scrollView.snp.makeConstraints({ (make) in
             make.edges.equalToSuperview()
@@ -193,6 +211,16 @@ class TrackInfoHeaderView: UIView {
         })
     }
     
+    func refresh(show: Bool) {
+        _scrollView.isHidden = show
+//        if show {
+//            refreshControll.beginRefreshing()
+//        }
+//        else {
+//            refreshControll.endRefreshing()
+//        }
+    }
+    
     @objc func followButtonTouched() {
         _followButton.isSelected = !_followButton.isSelected
         self.emitter?.send(event: TrackInfoEvent.channelFollowButtonPressed)
@@ -205,6 +233,8 @@ class TrackInfoHeaderView: UIView {
 
 extension TrackInfoHeaderView: TrackInfoVMDelegate {
     func update(data: TrackInfoResultUpdate) {
+        self.refresh(show: false)
+        
         switch data {
         case .track:
             _infoTitle.text = viewModel.track.name

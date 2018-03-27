@@ -149,12 +149,12 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
                 if self.currentTrackID == -1 {
                     self.currentTrackID = ob.id
                     self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
-                    self.trackInfo.trackInfo.delegate = self
+                    self.trackInfo.trackInfoHeaderView.delegate = self
                 }
                 
                 if self.currentTrackID != ob.id {
                     self.currentTrackID = ob.id
-                    self.trackInfo.trackInfo.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
+                    self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
                 }
                 
                 
@@ -256,9 +256,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     @objc func trackLikeButtonTouched()
     {
-        self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfo.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
+        self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
         let id = self.audioController.currentTrack?.id
-        self.trackInfo.trackInfo.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
+        self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
     }
     
     @objc func trackSpeedButtonTouched()

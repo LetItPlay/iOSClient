@@ -13,7 +13,7 @@ class TrackInfoViewController: UIViewController {
     // for comments
 //    var _tableView: UITableView = UITableView()
     
-    var trackInfo: TrackInfoHeaderView!
+    var trackInfoHeaderView: TrackInfoHeaderView!
     
     var track: TrackViewModel!
 
@@ -25,7 +25,7 @@ class TrackInfoViewController: UIViewController {
     
     convenience init(view: TrackInfoHeaderView) {
         self.init(nibName: nil, bundle: nil)
-        self.trackInfo = view
+        self.trackInfoHeaderView = view
         
         self.navigationItem.setHidesBackButton(true, animated: false)
     }
@@ -34,8 +34,8 @@ class TrackInfoViewController: UIViewController {
     {
         self.view.backgroundColor = .white
         
-        self.view.addSubview(trackInfo)
-        trackInfo.snp.makeConstraints({ (make) in
+        self.view.addSubview(trackInfoHeaderView)
+        trackInfoHeaderView.snp.makeConstraints({ (make) in
             make.edges.equalToSuperview()
         })
         
