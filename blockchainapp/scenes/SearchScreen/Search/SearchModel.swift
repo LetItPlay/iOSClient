@@ -53,14 +53,14 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     init()
     {
-		searchState.asObservable()
-//        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
-//            return (tracksTuple.0, channels)
-//            }.subscribe(onNext: {(tuple) in
-//                self.tracks = tuple.0
-//                self.channels = tuple.1
-//                self.searchChanged(string: self.currentSearchString)
-//            }).disposed(by: self.disposeBag)
+//		searchState.asObservable()
+        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
+            return (tracksTuple, channels)
+            }.subscribe(onNext: {(tuple) in
+                self.tracks = tuple.0
+                self.channels = tuple.1
+                self.searchChanged(string: self.currentSearchString)
+            }).disposed(by: self.disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
     }

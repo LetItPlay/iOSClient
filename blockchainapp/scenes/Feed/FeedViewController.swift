@@ -160,6 +160,7 @@ class FeedViewController: UIViewController {
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+		self.emitter.send(event: .refresh)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 

@@ -16,6 +16,7 @@ enum TracksRequest {
     case channel(Int)
     case tag(String)
     case magic
+	case allTracks
 	case search(text: String, offset: Int, count: Int)
 }
 
@@ -37,7 +38,7 @@ fileprivate extension TracksRequest {
             let channelsString = channels.map({"\($0)"}).joined(separator: ",")
             return "feed?stIds=\(channelsString)&offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .trends(let offset, let count):
-            return "feed?offset=\(offset)&limit=\(count)&lang=\(lang)"
+            return "trends?offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .channel(let id):
             return "stations/\(id)/tracks"
         case .tag(let tag):
