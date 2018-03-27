@@ -8,8 +8,11 @@
 
 import UIKit
 import SwipeCellKit
+import XLPagerTabStrip
 
 class UserPlaylistViewController: UIViewController {
+    
+    var itemInfo = IndicatorInfo(title: "View")
     
     var viewModel: UserPlaylistVMProtocol!
     var emitter: UserPlaylistEmitterProtocol!
@@ -288,6 +291,13 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         options.showGradient = gradientLayer
         
         return options
+    }
+}
+
+extension UserPlaylistViewController: IndicatorInfoProvider {
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return itemInfo
     }
 }
 

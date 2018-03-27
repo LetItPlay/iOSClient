@@ -26,7 +26,7 @@ class MainRouter: Router {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-            ("Playlists".localized, (UIImage.init(named: "playlistsTab"), UserPlaylistBuilder.build(params: nil))),
+            ("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsTab())), //UserPlaylistBuilder.build(params: nil))),
             ("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
