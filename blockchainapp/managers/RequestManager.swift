@@ -96,10 +96,41 @@ class RequestManager {
 		return Observable.error(RequestError.invalidURL)
 	}
 	
-//	func search(text: String, offset: Int, count: Int) -> Observable<LIPModel> {
-//		let urlString = RequestManager.server + "/" + "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
-//
-//	}
+	func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
+		let urlString = RequestManager.server + "/" + "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
+		if let url = urlString.url() {
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
+				print(url.absoluteString)
+				switch result {
+				case .value(let data):
+					do {
+						let lm = LikeManager.shared
+						let json = try JSON(data: data)
+						
+						var tracks = [Track]()
+						var channels = [Channel]()
+						if let items = json["results"].array {
+							for item in items {
+								if let track = Track.init(json: item) {
+									tracks.append(track)
+								} else if let channel = Channel.init(json: item) {
+									channels.append(channel)
+								}
+							}
+						}
+						return Observable.just((tracks, channels))
+					} catch {
+						return Observable.error(RequestError.invalidJSON)
+					}
+				case .error(let error):
+					return Observable.error(error)
+				}
+			})
+		}
+		return Observable.error(RequestError.invalidURL)
+	}
 	
     func tracks(req: TracksRequest) -> Observable<[Track]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)

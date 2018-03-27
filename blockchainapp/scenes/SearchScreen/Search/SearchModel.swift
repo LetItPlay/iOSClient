@@ -53,15 +53,29 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     init()
     {
-//		searchState.asObservable()
-        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
-            return (tracksTuple, channels)
-            }.subscribe(onNext: {(tuple) in
-                self.tracks = tuple.0
-                self.channels = tuple.1
-                self.searchChanged(string: self.currentSearchString)
-            }).disposed(by: self.disposeBag)
-        
+		searchState.asObservable()
+			.flatMap { tuple -> Observable<([Track], [Channel])> in
+				if let q = tuple.0, q != "" {
+					return RequestManager.shared.search(text: q, offset: tuple.1, count: 100)
+				} else {
+					return Observable.just(([Track](),[Channel]()))
+					
+				}
+			}.subscribe(onNext: {(tuple) in
+				self.tracks = tuple.0
+				self.channels = tuple.1
+				self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
+				self.delegate?.update(channels: self.channels.map({SearchChannelViewModel.init(channel: $0)}))
+//				self.searchChanged(string: self.currentSearchString)
+			}).disposed(by: self.disposeBag)
+//        Observable<([Track], [Channel])>.combineLatest(RequestManager.shared.tracks(req: .allTracks), RequestManager.shared.channels()) { (tracksTuple, channels) -> ([Track], [Channel]) in
+//            return (tracksTuple, channels)
+//            }.subscribe(onNext: {(tuple) in
+//                self.tracks = tuple.0
+//                self.channels = tuple.1
+//                self.searchChanged(string: self.currentSearchString)
+//            }).disposed(by: self.disposeBag)
+		
         let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
@@ -76,84 +90,85 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     
     func searchChanged(string: String) {
-        self.playingIndex.value = nil
-        self.prevSearchString = self.currentSearchString
-        self.currentSearchString = string.lowercased()
-        if string.count == 0 {
-            self.searchChannels = []
-            self.searchTracks = []
-            
-            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
-            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
-        } else {
-            var tracksPool = self.tracks
-            if prevSearchString != "" && currentSearchString.contains(prevSearchString) {
-                tracksPool = self.searchTracks
-            }
-            self.searchTracks = tracksPool.filter({ track in
-                if track.name.lowercased().range(of: self.currentSearchString) != nil
-                {
-                    return true
-                }
-                
-                if track.tags.count != 0 {
-                    for tag in track.tags
-                    {
-                        if tag.lowercased().range(of: self.currentSearchString) != nil
-                        {
-                            return true
-                        }
-                    }
-                }
-                else
-                {
-                    for tag in (channels.filter({$0.id == track.channel.id}).first?.tags)!
-                    {
-                        if tag.lowercased().range(of: self.currentSearchString) != nil
-                        {
-                            return true
-                        }
-                    }
-                }
-                
-                return false
-            })
-            
-            var trackPlayingIndex: Int = -1
-            self.delegate?.update(tracks: self.searchTracks.map({ (track) -> TrackViewModel in
-                var vm = TrackViewModel(track: track)
-                
-                if track.id == AudioController.main.currentTrack?.id
-                {
-                    vm.isPlaying = true
-                    trackPlayingIndex = self.searchTracks.index(where: {$0.id == track.id})!
-                }
-                
-                if let channel = self.channels.first(where: {$0.id == track.channel.id}) {
-                    vm.author = channel.name
-                    vm.authorImage = channel.image
-                }
-                return vm
-            }))
-            self.playingIndex.value = trackPlayingIndex
-            
-            self.searchChannels = self.channels.filter({ channel in
-                if channel.name.lowercased().range(of: self.currentSearchString) != nil
-                {
-                    return true
-                }
-                
-                for tag in channel.tags
-                {
-                    if tag.contains(self.currentSearchString)
-                    {
-                        return true
-                    }
-                }
-                return false
-            })
-            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
-        }
+		self.searchState.value = (string, 0)
+//        self.playingIndex.value = nil
+//        self.prevSearchString = self.currentSearchString
+//        self.currentSearchString = string.lowercased()
+//        if string.count == 0 {
+//            self.searchChannels = []
+//            self.searchTracks = []
+//
+//            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
+//            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
+//        } else {
+//            var tracksPool = self.tracks
+//            if prevSearchString != "" && currentSearchString.contains(prevSearchString) {
+//                tracksPool = self.searchTracks
+//            }
+//            self.searchTracks = tracksPool.filter({ track in
+//                if track.name.lowercased().range(of: self.currentSearchString) != nil
+//                {
+//                    return true
+//                }
+//
+//                if track.tags.count != 0 {
+//                    for tag in track.tags
+//                    {
+//                        if tag.lowercased().range(of: self.currentSearchString) != nil
+//                        {
+//                            return true
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    for tag in (channels.filter({$0.id == track.channel.id}).first?.tags)!
+//                    {
+//                        if tag.lowercased().range(of: self.currentSearchString) != nil
+//                        {
+//                            return true
+//                        }
+//                    }
+//                }
+//
+//                return false
+//            })
+//
+//            var trackPlayingIndex: Int = -1
+//            self.delegate?.update(tracks: self.searchTracks.map({ (track) -> TrackViewModel in
+//                var vm = TrackViewModel(track: track)
+//
+//                if track.id == AudioController.main.currentTrack?.id
+//                {
+//                    vm.isPlaying = true
+//                    trackPlayingIndex = self.searchTracks.index(where: {$0.id == track.id})!
+//                }
+//
+//                if let channel = self.channels.first(where: {$0.id == track.channel.id}) {
+//                    vm.author = channel.name
+//                    vm.authorImage = channel.image
+//                }
+//                return vm
+//            }))
+//            self.playingIndex.value = trackPlayingIndex
+//
+//            self.searchChannels = self.channels.filter({ channel in
+//                if channel.name.lowercased().range(of: self.currentSearchString) != nil
+//                {
+//                    return true
+//                }
+//
+//                for tag in channel.tags
+//                {
+//                    if tag.contains(self.currentSearchString)
+//                    {
+//                        return true
+//                    }
+//                }
+//                return false
+//            })
+//            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
+//        }
     }
     
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int) {
