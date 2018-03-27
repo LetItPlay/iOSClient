@@ -116,7 +116,6 @@ class UserPlaylistViewController: UIViewController {
 
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
-    
     func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
         self.navigationItem.rightBarButtonItem?.isEnabled = !self.viewModel.hideEmptyMessage
@@ -134,8 +133,8 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
                     if indexes.count != 0 {
-                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                        //                        tableView.reloadData()
+//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                        tableView.reloadData()
                     }
                 }
             }
