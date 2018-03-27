@@ -69,7 +69,6 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     }
     
     func trackLiked(id: Int) {
-        let track = self.tracks.filter({$0.id == id}).first
         let action: TrackAction = track!.isLiked ? TrackAction.unlike : TrackAction.like
         ServerUpdateManager.shared.make(track: track!, action: action)
     }
@@ -96,6 +95,7 @@ extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
     func trackUpdated(track: Track) {
         if self.track.id == track.id {
             let vm = TrackViewModel(track: track)
+            self.track = track
             self.delegate?.reload(track: vm)
         }
     }
