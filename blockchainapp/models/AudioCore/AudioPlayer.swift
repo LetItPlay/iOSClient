@@ -101,7 +101,9 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
     func set(rate: Float) {
         if rate > 0 && rate <= 2 {
             self.chosenRate = rate
-            self.player.rate = rate
+            if self.player.rate != 0 {
+                self.player.rate = rate
+            }
         }
     }
 	
