@@ -40,9 +40,8 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     init(trackId: Int)
     {
         RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: { (tuple) in
-            self.tracks = tuple.0
-            self.track = tuple.0.filter({$0.id == trackId}).first
-            print(tuple.1.count)
+            self.tracks = tuple
+            self.track = tuple.filter({$0.id == trackId}).first
             self.delegate?.reload(track: TrackViewModel(track: self.track))
             self.getChannel()
         }).disposed(by: disposeBag)
@@ -52,7 +51,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     
     func getChannel()
     {
-        RequestManager.shared.channel(id: track.channelId).subscribe(onNext: { (channel) in
+        RequestManager.shared.channel(id: track.channel.id).subscribe(onNext: { (channel) in
             self.channel = channel
             let subscriptions = SubscribeManager.shared.channels
             self.channel.isSubscribed = subscriptions.contains(channel.id)

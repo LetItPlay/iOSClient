@@ -58,7 +58,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         let audioContr = AudioController.main
         if audioContr.playlist.name == "My playlist".localized {
             let audioTracks = self.tracks.map { track -> AudioTrack in
-                return track.audioTrack(author: self.channels.first(where: {$0.id == track.channelId})?.name ?? "")
+                return track.audioTrack()
             }
             audioContr.update(.reload(tracks: audioTracks))
         }
@@ -78,7 +78,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
     func formVMs() -> [TrackViewModel] {
         return self.tracks.map({ (track) -> TrackViewModel in
             var vm = TrackViewModel.init(track: track)
-            if let chan = self.channels.first(where: {$0.id == track.channelId}) {
+            if let chan = self.channels.first(where: {$0.id == track.channel.id}) {
                 vm.author = chan.name
                 vm.authorImage = chan.image
             }
@@ -89,7 +89,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
 
     func trackSelected(index: Int) {
         let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack(author: channels.first(where: {$0.id == track.channelId})?.name ?? "")
+            return track.audioTrack()
         }
         AudioController.main.loadPlaylist(playlist: ("My playlist".localized, tracks), playId: self.tracks[index].id)
     }

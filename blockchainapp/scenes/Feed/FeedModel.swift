@@ -2,27 +2,32 @@ import Foundation
 import RxSwift
 import Action
 
-protocol FeedModelProtocol: ModelProtocol {
-    weak var delegate: FeedModelDelegate? {get set}
+
+protocol FeedModelProtocol: class, ModelProtocol {
+	weak var delegate: FeedModelDelegate? {get set}
 	var playingIndex: Variable<Int?> {get}
 }
 
 protocol FeedEventHandler: class {
-    func trackSelected(index: Int)
-    func trackLiked(index: Int)
-    func reload()
-    func trackShowed(index: Int)
-    func showAllChannels()
+	func trackSelected(index: Int)
+	func trackLiked(index: Int)
+	func reload()
+	func trackShowed(index: Int)
+	func showAllChannels()
+	func addTrack(atIndex: Int, toBegining: Bool)
+	func showSearch()
 }
 
 protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
 	func trackUpdate(index: Int, vm: TrackViewModel)
-    func noDataLeft()
-    func showChannels(_ show: Bool)
-    func showEmptyMessage(_ show: Bool)
-    func showAllChannels()
+	func noDataLeft()
+	func showChannels(_ show: Bool)
+	func showEmptyMessage(_ show: Bool)
+	func showAllChannels()
+	func showSearch()
 }
+
 
 class FeedModel: FeedModelProtocol,
 FeedEventHandler {
@@ -112,6 +117,15 @@ FeedEventHandler {
             self.dataAction?.execute(self.tracks.count)
         }
     }
+	
+	func addTrack(atIndex: Int, toBegining: Bool) {
+		let track = self.tracks[atIndex]
+		UserPlaylistManager.shared.add(track: track, toBegining: toBegining)
+	}
+	
+	func showSearch() {
+		self.delegate?.showSearch()
+	}
 }
 
 extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
