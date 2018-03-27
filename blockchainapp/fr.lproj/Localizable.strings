@@ -1,0 +1,79 @@
+/* 
+  Localizable.strings
+  blockchainapp
+
+  Created by Ivan Gorbulin on 18/10/2017.
+  Copyright © 2017 Ivan Gorbulin. All rights reserved.
+*/
+
+"likes"="понравилось";
+"listening"="прослушано";
+"comments"="комментариев";
+
+"Follow"="S'abonner";
+"Following"="Abonné";
+
+"ago" = "il y a ";
+
+"m" = " m.";
+"s" = " sec.";
+"h" = " h.";
+"d" = " j.";
+"w" = " sem.";
+
+"m ago"=" m. il y a";
+"s ago"=" sec. il y a";
+"h ago"=" h. il y a";
+"d ago"=" j. il y a";
+"w ago"=" sem. il y a";
+
+"Feed"="Accueil";
+"Trends"="Tendances";
+"Search"="Rechercher";
+"Channels"="Chaînes";
+"Channel"="Сhaîne";
+
+"Recent added"="Récents";
+"Tracks you’ve liked"="titres\"J'aime\"";
+"Your future profile"="Votre futur profil";
+"Current playlist"="Playlist actuelle";
+"Profile"="Mon Profil";
+
+"Select your language" = "Choisissez votre langue";
+"Fresh news in 30 minutes" = "Informations d'actualité en 30 minutes";
+"A compilation of fresh news in one 30-minute playlist" = "Une compilation d'informations d'actualité dans une playlist de 30 minutes";
+"There are no tracks here yet. Subscribe to one of the channels first" = "Pas de titres. Abonnez-vous d'abord à l'une des chaînes";
+"Browse channels list" = "Afficher la liste de chaînes";
+
+"Today playlists"="Сегодняшняя подборка";
+"There are no playlists" = "Pas de recommendations";
+"There are no tracks" = "Pas de titres";
+
+"Playlist"="Playlist";
+"Playlists"="Playlists";
+"Liked"="Понравившиеся";
+"Player"="Плеер";
+"name" = "nom";
+"My playlist" = "Ma playlist";
+"Clear all" = "Effacer";
+
+"see all" = "tout";
+
+"To the\ntop\nof the\nplaylist" = "Ajouter\nen haut\nde la\nplaylist";
+"To the\nbottom\nof the\nplaylist" = "Ajouter\nau bas\nde la\nplaylist";
+"The playback speed of audio" = "Vitesse de lecture audio";
+
+"Choose Image" = "Sélectionner une image";
+"Camera" = "Caméra";
+"Gallery" = "Galerie";
+"Cancel" = "Annuler";
+"Default" = "Défaut";
+"Delete" = "Effacer";
+
+" followers" = " слушают";
+
+"Select language" = "Choisissez votre langue";
+"playing now" = "joue maintenant";
+
+"No Description" = "Pas de description";
+"Track added" = "Titre ajouté";

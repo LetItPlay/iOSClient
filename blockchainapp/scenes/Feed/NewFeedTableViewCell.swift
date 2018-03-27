@@ -4,7 +4,7 @@ import SnapKit
 import SwipeCellKit
 import RxSwift
 
-class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
+class NewFeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
@@ -152,7 +152,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
     
     let infoTitle: UILabel = {
        let label = UILabel()
-        label.font = AppFont.Title.sml
+        label.font = AppFont.Title.small
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -168,7 +168,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         textView.textColor = .black
         textView.backgroundColor = .clear
         textView.isEditable = false
-        textView.isSelectable = true
+        textView.isSelectable = false
         textView.isUserInteractionEnabled = true
         textView.dataDetectorTypes = UIDataDetectorTypes.link
         textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
@@ -188,7 +188,7 @@ class NewFeedTableViewCell: UITableViewCell {//SwipeTableViewCell {
         let alert = UILabel()
         alert.font = AppFont.Title.big
         alert.textAlignment = .center
-        alert.text = "Трек добавлен"
+        alert.text = "Track added".localized
         return alert
     }()
         

@@ -53,7 +53,7 @@ class IconedLabel: UIView {
 		
 		if type == .playingIndicator {
 			self.textLabel.textColor = UIColor.init(red: 1, green: 102.0/255, blue: 102.0/255, alpha: 1)
-			self.textLabel.text = "playing now"
+			self.textLabel.text = "playing now".localized
 		}
 	}
 	

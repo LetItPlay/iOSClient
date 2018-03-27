@@ -23,6 +23,7 @@ protocol ChannelsEventHandler: class {
     func subscribeAt(index: Int)
 	func refreshChannels()
 	func showAllChannels()
+    func showSearch()
 }
 
 protocol ChannelsModelDelegate: class {
@@ -80,6 +81,10 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 	func refreshChannels() {
 		self.getChannelsAction.execute(true)
 	}
+    
+    func showSearch() {
+        MainRouter.shared.show(screen: "search", params: [:], present: false)
+    }
     
     func send(event: LifeCycleEvent) {
         switch event {

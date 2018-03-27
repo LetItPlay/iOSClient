@@ -100,7 +100,7 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-        tableView.beginUpdates()
+//        tableView.beginUpdates()
         for key in updates.keys {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -109,11 +109,12 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
                 case .delete:
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
-                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                    tableView.reloadData()
                 }
             }
         }
-        tableView.endUpdates()
+//        tableView.endUpdates()
     }
 }
 

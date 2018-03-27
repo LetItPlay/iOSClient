@@ -77,16 +77,19 @@ class ServerUpdateManager {
         }).disposed(by: disposeBag)
 	}
     
-    func updateLanguage()
+    func update(language: Language)
     {
-        switch UserSettings.language {
-        case .ru:
-            UserSettings.language = .en
-        case .en:
-            UserSettings.language = .ru
-        default:
-            UserSettings.language = .none
-        }
+        UserSettings.language = language
+//        switch UserSettings.language {
+//        case .ru:
+//            UserSettings.language = .fr
+//        case .fr:
+//            UserSettings.language = .en
+//        case .en:
+//            UserSettings.language = .ru
+//        default:
+//            UserSettings.language = .none
+//        }
         
         NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil, userInfo: ["lang" : UserSettings.language])
     }

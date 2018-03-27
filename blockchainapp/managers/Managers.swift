@@ -470,6 +470,6 @@ class ListenManager {
         
         debugPrint("user listened \(id)")
         
-//        DownloadManager.shared.track(id: id, listen: 1)
+        DownloadManager.shared.track(id: id, listen: 1)
     }
 }

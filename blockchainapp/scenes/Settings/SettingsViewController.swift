@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import AssistantKit
 
 enum SettingsNotfification: String {
 	case changed = "Changed"
@@ -55,7 +56,10 @@ class SettingsViewController: UIViewController {
 
 		self.view.backgroundColor = UIColor.white
 		
-		let flags = ["🇬🇧","🇷🇺"]
+		let flags = ["🇬🇧","🇷🇺","🇫🇷"]
+        
+        let inset = self.view.frame.height / 47 * -1 //Device.screen == .inches_4_7 || Device.screen == .inches_4_0 ? -12 : -24
+        let multiplicateur: CGFloat = Device.screen == .inches_4_7 || Device.screen == .inches_4_0 ? 2 : 3
 		
 		let title = UILabel()
 		title.numberOfLines = 3
@@ -80,13 +84,11 @@ class SettingsViewController: UIViewController {
 		tupleRus.0.tag = 1
 		tupleRus.0.setTitle("Русский", for: .normal)
 		tupleRus.1.text = flags[1]
-		
-		self.view.addSubview(title)
-		title.snp.makeConstraints { (make) in
-			make.top.equalTo(self.view.snp.centerY)
-			make.left.equalToSuperview().inset(16)
-			make.right.equalToSuperview().inset(16)
-		}
+        
+        let tupleFrance = button()
+        tupleFrance.0.tag = 2
+        tupleFrance.0.setTitle("Français", for: .normal)
+        tupleFrance.1.text = flags[2]
 		
 		self.view.addSubview(lipText)
 		lipText.snp.makeConstraints { (make) in
@@ -101,30 +103,50 @@ class SettingsViewController: UIViewController {
 			make.centerX.equalToSuperview()
 			make.size.equalTo(CGSize.init(width: 120, height: 120))
 		}
-		
-		self.view.addSubview(tupleEng.0)
-		tupleEng.0.snp.makeConstraints { (make) in
-			make.top.equalTo(title.snp.bottom).inset(-48)
-			make.centerX.equalToSuperview()
-		}
+        
+        self.view.addSubview(tupleFrance.0)
+        tupleFrance.0.snp.makeConstraints({ (make) in
+            make.bottom.equalTo(inset * multiplicateur)
+            make.centerX.equalToSuperview()
+        })
 		
 		self.view.addSubview(tupleRus.0)
 		tupleRus.0.snp.makeConstraints { (make) in
-			make.top.equalTo(tupleEng.0.snp.bottom).inset(-24)
+            make.bottom.equalTo(tupleFrance.0.snp.top).inset(inset)
 			make.centerX.equalToSuperview()
 		}
+        
+        self.view.addSubview(tupleEng.0)
+        tupleEng.0.snp.makeConstraints { (make) in
+            make.bottom.equalTo(tupleRus.0.snp.top).inset(inset)
+            make.centerX.equalToSuperview()
+        }
+        
+        self.view.addSubview(title)
+        title.snp.makeConstraints { (make) in
+            make.bottom.equalTo(tupleEng.0.snp.top).inset(inset * multiplicateur)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
 		
 		tupleEng.0.addTarget(self, action: #selector(langSelected(sender:)), for: .touchUpInside)
 		tupleRus.0.addTarget(self, action: #selector(langSelected(sender:)), for: .touchUpInside)
+        tupleFrance.0.addTarget(self, action: #selector(langSelected(sender:)), for: .touchUpInside)
     }
 	
 	@objc func langSelected(sender: UIButton) {
 		sender.isEnabled = false
-		if sender.tag == 0 {
-			UserSettings.language = .en
-		} else {
-			UserSettings.language = .ru
-		}
+        
+        switch sender.tag {
+        case 0:
+            UserSettings.language = .en
+        case 1:
+            UserSettings.language = .ru
+        case 2:
+            UserSettings.language = .fr
+        default:
+            UserSettings.language = .none
+        }
 		
 		self.present(MainTabViewController(), animated: true, completion: nil)
 	}

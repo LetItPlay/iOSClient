@@ -52,6 +52,8 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 	var currentIndex: Int = -1
 	
 	var status: PlayerStatus = .none
+    
+    var chosenRate: Float = -1
 	
 	var error: Error?
 	
@@ -95,6 +97,15 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 						   options: [.initial, .new],
 						   context: nil)
 	}
+    
+    func set(rate: Float) {
+        if rate > 0 && rate <= 2 {
+            self.chosenRate = rate
+            if self.player.rate != 0 {
+                self.player.rate = rate
+            }
+        }
+    }
 	
 	@objc func handleRouteChange(_ notification: Notification) {
 		guard let userInfo = notification.userInfo,
@@ -246,6 +257,10 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 		guard let keyPath = keyPath else {
 			return
 		}
+        
+        if self.chosenRate != -1, self.player.rate != 0, self.player.rate != self.chosenRate {
+            self.player.rate = self.chosenRate
+        }
 		
 		switch keyPath {
 		case kRateKey:

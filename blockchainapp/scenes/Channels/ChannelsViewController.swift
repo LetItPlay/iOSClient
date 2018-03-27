@@ -50,6 +50,13 @@ class ChannelsViewController: UITableViewController {
         tableView.contentInset.bottom = 72
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
+        
+        let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
+        self.navigationItem.rightBarButtonItem = searchItem
+    }
+    
+    @objc func search() {
+        self.emitter?.send(event: ChannelsEvent.showSearch)
     }
 	
 	override func viewWillAppear(_ animated: Bool) {

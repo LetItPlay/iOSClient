@@ -259,7 +259,7 @@ class RequestManager {
                 elements["listen_count"] = 0
                 switch type {
                     case .like(let count):
-                        elements["like_count"]   = count
+                        elements["like_count"] = count
                     case .report(_):
                         elements["report_count"] = 1
                     case .listen:

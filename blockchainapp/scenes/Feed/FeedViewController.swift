@@ -15,7 +15,7 @@ enum FeedType {
 	case feed, popular
 }
 
-class FeedViewController: UIViewController {
+class FeedViewController: UIViewController, UISearchBarDelegate {
 	
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
@@ -33,8 +33,8 @@ class FeedViewController: UIViewController {
 
 	let emptyLabel: UILabel = {
 		let label = UILabel()
-		label.font = AppFont.Title.big
-		label.textColor = AppColor.Title.dark
+        label.font = AppFont.Title.sectionNotBold
+        label.textColor = AppColor.Element.emptyMessage
 		label.textAlignment = .center
 		label.numberOfLines = 0
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
@@ -135,6 +135,13 @@ class FeedViewController: UIViewController {
         //            make.right.equalTo(-10)
         //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
         //        }
+        
+        let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
+        self.navigationItem.rightBarButtonItem = searchItem
+    }
+    
+    @objc func search() {
+        self.emitter.send(event: FeedEvent.showSearch)
     }
     
     @objc func showAllChannels()
@@ -198,21 +205,20 @@ class FeedViewController: UIViewController {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-//        let audioTrack = self.presenter.tracks[indexPath.row].audioTrack()
-//        AudioController.main.addToUserPlaylist(track: audioTrack, inBeginning: toBegining)
-//
-//        let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
-//
-//        UIView.animate(withDuration: 0.3, animations: {
-//            cell.alertBlurView.alpha = 1
-//        })
-//
-//        let when = DispatchTime.now() + 1
-//        DispatchQueue.main.asyncAfter(deadline: when){
-//            UIView.animate(withDuration: 0.3, animations:{
-//                cell.alertBlurView.alpha = 0
-//            })
-//        }
+		self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
+		
+		let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+		
+		UIView.animate(withDuration: 0.3, animations: {
+			cell.alertBlurView.alpha = 1
+		})
+		
+		let when = DispatchTime.now() + 1
+		DispatchQueue.main.asyncAfter(deadline: when){
+			UIView.animate(withDuration: 0.3, animations:{
+				cell.alertBlurView.alpha = 0
+			})
+		}
     }
 }
 
@@ -283,7 +289,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 		let cell = cell as? NewFeedTableViewCell
         //for swipes
-//        cell?.delegate = self
+        cell?.delegate = self
 
         self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
         
@@ -337,27 +343,43 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var toBeginning: Bool!
         var image: UIImage!
         var addTo = ""
+        var frameForTitleLabel: CGRect!
+        var frameForImageView: CGRect!
+        
         if orientation == .left
         {
-            image = UIImage(named: "topIcon")
+            image = UIImage(named: "illustrationTop")
             toBeginning = true
-            addTo = "up"
+            addTo = "To the\ntop"
+            frameForTitleLabel = CGRect(x: 55, y: 55, width: 87, height: 200)
+            frameForImageView = CGRect(x: 50, y: 47, width: 90, height: 278-71)
         }
         else
         {
-            image = UIImage(named: "downIcon")
+            image = UIImage(named: "illustrationBottom")
             toBeginning = false
-            addTo = "down"
+            addTo = "To the\nbottom"
+            frameForTitleLabel = CGRect(x: 30, y: 55, width: 87, height: 200)
+            frameForImageView = CGRect(x: 10, y: 47, width: 90, height: 278-71)
         }
-        let addToPlaylistAction = SwipeAction(style: .default, title: "Add \(addTo)\nthe\nplaylist", handler: { action, indexPath in
+        
+        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
+        
         addToPlaylistAction.image = image
         addToPlaylistAction.backgroundColor = .clear
         
-        addToPlaylistAction.textColor = AppColor.Element.sideButtonColor
+        addToPlaylistAction.textColor = .white
         addToPlaylistAction.font = AppFont.Title.big
-        addToPlaylistAction.delegate = self
+        
+        addToPlaylistAction.frameForTitleLabel = frameForTitleLabel
+        addToPlaylistAction.frameForImageView = frameForImageView
+        addToPlaylistAction.fixCenterForItems = 12
+        
+        if addTo.range(of: "top") == nil {
+            addToPlaylistAction.textAlignmentForTitleLabel = .left
+        }
         
         return [addToPlaylistAction]
     }
@@ -370,14 +392,33 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.minimumButtonWidth = 150
         options.backgroundColor = .white
         
+        let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
+        let toColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0 : 0.9).cgColor
+        
+        var frame: CGRect!
+		
+		let vm = self.viewModel.tracks[indexPath.item]
+		let height =  NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		
+        if orientation == .right
+        {
+            frame = CGRect(x: 0, y: 25, width: 200, height: height-25)
+        }
+        else
+        {
+            frame = CGRect(x: -50, y: 25, width: 200, height: height-25)
+        }
+        
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [fromColor, toColor]
+        gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
+        gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
+        gradientLayer.frame = frame
+        gradientLayer.cornerRadius = 10
+        
+        options.showGradient = gradientLayer
+        
         return options
     }
 }
 
-extension FeedViewController: SwipeDelegate
-{
-    func buttonTapped()
-    {
-//        tappedSideButton = true
-    }
-}

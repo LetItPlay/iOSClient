@@ -1,7 +1,8 @@
 import UIKit
 import SnapKit
+import SwipeCellKit
 
-class ChannelTrackCell: UITableViewCell {
+class ChannelTrackCell: SwipeTableViewCell {
 	
 	static let cellID: String = "ChannelTrackCellID"
 	
@@ -67,7 +68,7 @@ class ChannelTrackCell: UITableViewCell {
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         self.contentView.addSubview(trackImageView)
         trackImageView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)

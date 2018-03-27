@@ -12,6 +12,7 @@ enum ChannelsEvent {
     case refreshData
     case subscribe(index: Int)
 	case showAllChannels
+    case showSearch
 }
 
 protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
@@ -36,6 +37,8 @@ class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
             self.model?.subscribeAt(index: index)
 		case .showAllChannels:
 			self.model?.showAllChannels()
+        case .showSearch:
+            self.model?.showSearch()
         }
     }
 }

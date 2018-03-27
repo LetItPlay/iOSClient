@@ -119,17 +119,32 @@ extension Date {
 		
 		if let day = components.day, day != 0 {
 			if day > 7 {
+                if Locale.preferredLanguages[0] == "fr" {
+                    return "ago".localized + "\(Int(Double(day)/7))" + "w".localized
+                }
 				return "\(Int(Double(day)/7))" + "w ago".localized
 			}
+            if Locale.preferredLanguages[0] == "fr" {
+                return "ago".localized + "\(day)" + "d".localized
+            }
 			return "\(day)" + "d ago".localized
 		} else
 			if let hours = components.hour, hours != 0 {
+                if Locale.preferredLanguages[0] == "fr" {
+                    return "ago".localized + "\(hours)" + "h".localized
+                }
 				return "\(hours)" + "h ago".localized
 			} else
 				if let min = components.minute, min != 0 {
+                    if Locale.preferredLanguages[0] == "fr" {
+                        return "ago".localized + "\(min)" + "m".localized
+                    }
 					return "\(min)" + "m ago".localized
 				} else
 					if let sec = components.second {
+                        if Locale.preferredLanguages[0] == "fr" {
+                            return "ago".localized + "\(sec)" + "s".localized
+                        }
 						return "\(sec)" + "s ago".localized
 		}
 		return "1" + "s ago".localizedLowercase

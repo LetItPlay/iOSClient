@@ -156,8 +156,37 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			print("unknown command")
 		}
 	}
-	
-	func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {
+
+    func update(_ update: AudioControllerUpdate) {
+        switch update {
+            case .reload(let tracks):
+                let id = self.currentTrack?.id ?? -1
+                self.playlist.tracks = tracks
+                if let index = self.playlist.tracks.index(where: {$0.id == id}) {
+                    self.currentTrackIndexPath = IndexPath.init(item: index, section: 1)
+                } else {
+                    self.currentTrackIndexPath = IndexPath.invalid
+                }
+            case .remove(let id):
+                if let index = self.playlist.tracks.index(where: {$0.id == id}) {
+                    if self.currentTrack?.id == id {
+                        self.make(command: .next)
+                    }
+                    self.playlist.tracks.remove(at: index)
+                }
+		case .clearAll:
+			self.make(command: .pause)
+			self.playlist.tracks = []
+        }
+        self.delegate?.playlistChanged()
+        self.delegate?.trackUpdate()
+		
+		if self.playlist.tracks.count == 0 {
+			self.popupDelegate?.popupPlayer(show: false, animated: true)
+		}
+    }
+
+    func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {
         if !self.userPlaylist.tracks.contains(where: {$0.id == track.id}) {
             var userIndexInsert = 0
             

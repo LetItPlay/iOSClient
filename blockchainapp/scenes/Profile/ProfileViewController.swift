@@ -20,7 +20,7 @@ class ProfileViewController: UIViewController {
     var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-    var profileView: ProfileTopView!
+    var profileView: ProfileHeaderView!
     let header: LikeHeader = LikeHeader()
     
     let imagePicker: UIImagePickerController = {
@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
 	
     var isKeyboardShown = true
 	
-    convenience init(view: ProfileTopView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
+    convenience init(view: ProfileHeaderView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
         self.profileView = view
         self.emitter = emitter
@@ -116,7 +116,42 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-        self.profileView.emitter?.send(event: ProfileEvent.setLanguage)
+        var currentLanguage = ""
+        switch UserSettings.language {
+        case .ru:
+            currentLanguage = "Русский"
+        case .en:
+            currentLanguage = "English"
+        case .fr:
+            currentLanguage = "Français"
+        default:
+            break
+        }
+        
+        let languageAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        
+        languageAlert.view.tintColor = AppColor.Title.lightGray
+        
+        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+        let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
+        languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
+        
+        for language in ["English", "Français", "Русский"] {
+            if language == currentLanguage {
+                languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
+//                    self.profileView.emitter?.send(event: ProfileEvent.set(language: speed))
+                }))
+            }
+            else {
+                languageAlert.addAction(UIAlertAction(title: language, style: .destructive, handler: { _ in
+                    self.profileView.emitter?.send(event: ProfileEvent.set(language: language))
+                }))
+            }
+        }
+        
+        languageAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
+        
+        self.present(languageAlert, animated: true, completion: nil)
         
 		AudioController.main.make(command: .pause)
 	}
@@ -190,16 +225,23 @@ extension ProfileViewController: LikesVMDelegate
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     func addImage() {
-        let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+        let alert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
+        
+        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+        let messageAttrString = NSMutableAttributedString(string: "Choose Image".localized, attributes: messageFont)
+        alert.setValue(messageAttrString, forKey: "attributedTitle")
+        
+        
+        alert.addAction(UIAlertAction(title: "Camera".localized, style: .default, handler: { _ in
             self.openCamera()
         }))
         
-        alert.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: "Gallery".localized, style: .default, handler: { _ in
             self.openGallery()
         }))
         
-        alert.addAction(UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
     }

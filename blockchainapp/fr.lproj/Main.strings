@@ -1,0 +1,69 @@
+
+/* Class = "UILabel"; text = "-"; ObjectID = "25o-HJ-VvR"; */
+"25o-HJ-VvR.text" = "-";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "2v1-a3-YaM"; */
+"2v1-a3-YaM.text" = "Label";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "9Ln-8G-qol"; */
+"9Ln-8G-qol.text" = "00:00";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "S5O-Gg-CSG"; */
+"S5O-Gg-CSG.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "SFe-A9-RGI"; */
+"SFe-A9-RGI.text" = "Label";
+
+/* Class = "UITabBarItem"; title = "About"; ObjectID = "Td6-MK-Y2J"; */
+"Td6-MK-Y2J.title" = "About";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "Ufv-2r-J0o"; */
+"Ufv-2r-J0o.text" = "0";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "aLo-29-JWM"; */
+"aLo-29-JWM.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Channels"; ObjectID = "c9g-2W-ZwR"; */
+"c9g-2W-ZwR.title" = "Channels";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "cKd-yz-mPM"; */
+"cKd-yz-mPM.text" = "Label";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "d3H-CX-9ea"; */
+"d3H-CX-9ea.text" = "-";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "dqG-Sd-gQx"; */
+"dqG-Sd-gQx.text" = "00:00";
+
+/* Class = "UITabBarItem"; title = "Feed"; ObjectID = "fKA-cK-0Y7"; */
+"fKA-cK-0Y7.title" = "Feed";
+
+/* Class = "UINavigationController"; title = "42"; ObjectID = "fqW-ar-4Bt"; */
+"fqW-ar-4Bt.title" = "42";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "gwW-hz-9hz"; */
+"gwW-hz-9hz.text" = "Label";
+
+/* Class = "UILabel"; text = "0"; ObjectID = "nDg-lT-CEr"; */
+"nDg-lT-CEr.text" = "0";
+
+/* Class = "UITabBarItem"; title = "Trends"; ObjectID = "nu4-wt-bZg"; */
+"nu4-wt-bZg.title" = "Trends";
+
+/* Class = "UILabel"; text = "No Tags"; ObjectID = "nvL-VP-9U0"; */
+"nvL-VP-9U0.text" = "No Tags";
+
+/* Class = "UIButton"; normalTitle = "Follow"; ObjectID = "rMz-TV-enp"; */
+"rMz-TV-enp.normalTitle" = "Follow";
+
+/* Class = "UIButton"; selectedTitle = "Following"; ObjectID = "rMz-TV-enp"; */
+"rMz-TV-enp.selectedTitle" = "Following";
+
+/* Class = "UILabel"; text = "00:00"; ObjectID = "rk8-IM-CfT"; */
+"rk8-IM-CfT.text" = "00:00";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "uFb-KG-25o"; */
+"uFb-KG-25o.text" = "Label";
+
+/* Class = "UITabBarItem"; title = "Channels"; ObjectID = "vSH-4j-wf9"; */
+"vSH-4j-wf9.title" = "Channels";

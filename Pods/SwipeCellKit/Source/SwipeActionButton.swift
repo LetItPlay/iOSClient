@@ -7,11 +7,6 @@
 
 import UIKit
 
-public var isLeft = false
-
-public var fromColor: UIColor = UIColor.init(red: 240.0 / 255, green: 240.0 / 255, blue: 240.0 / 255, alpha: 0.8)
-public var toColor: UIColor = UIColor.init(red: 240.0 / 255, green: 240.0 / 255, blue: 240.0 / 255, alpha: 0)
-
 class SwipeActionButton: UIButton {
     var spacing: CGFloat = 8
     var shouldHighlight = true
@@ -20,18 +15,14 @@ class SwipeActionButton: UIButton {
     var maximumImageHeight: CGFloat = 0
     var verticalAlignment: SwipeVerticalAlignment = .centerFirstBaseline
     
+    var customTitleLabel: UILabel!
+    var customImageView: UIImageView!
+    
+    var action: SwipeAction!
+    
     var currentSpacing: CGFloat {
         return (currentTitle?.isEmpty == false && maximumImageHeight > 0) ? spacing : 0
     }
-    
-    var gradientLayer: CAGradientLayer = {
-        let layer = CAGradientLayer()
-        layer.colors = [fromColor.cgColor, toColor.cgColor]
-        layer.startPoint = CGPoint.init(x: 0, y: 0.5)
-        layer.endPoint = CGPoint.init(x: 1, y: 0.5)
-        layer.bounds = CGRect.init(x: 0, y: 0, width: 50, height: 50)
-        return layer
-    }()
     
     var alignmentRect: CGRect {
         let contentRect = self.contentRect(forBounds: bounds)
@@ -43,6 +34,8 @@ class SwipeActionButton: UIButton {
     
     convenience init(action: SwipeAction) {
         self.init(frame: .zero)
+        
+        self.action = action
 
         contentHorizontalAlignment = .center
         
@@ -51,35 +44,46 @@ class SwipeActionButton: UIButton {
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
 
         titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
-        titleLabel?.textAlignment = .center
+        titleLabel?.textAlignment = action.textAlignmentForTitleLabel
         titleLabel?.lineBreakMode = .byWordWrapping
         titleLabel?.numberOfLines = 0
         
+        titleLabel?.textColor = action.textColor ?? .white
+        
+        let title = UILabel()
+        title.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+        title.textAlignment = action.textAlignmentForTitleLabel
+        title.lineBreakMode = .byWordWrapping
+        title.numberOfLines = 0
+        title.textColor = .white
+        title.text = action.title
+        title.frame = action.frameForTitleLabel!
+        self.customTitleLabel = title
+        
         accessibilityLabel = action.accessibilityLabel
         
-        setTitle(action.title, for: .normal)
-        setTitleColor(tintColor, for: .normal)
-        setTitleColor(highlightedTextColor, for: .highlighted)
-        setImage(action.image, for: .normal)
-        setImage(action.highlightedImage ?? action.image, for: .highlighted)
+//        setTitle(action.title, for: .normal)
+//        setTitleColor(tintColor, for: .normal)
+//        setTitleColor(highlightedTextColor, for: .highlighted)
+//        setImage(action.image, for: .normal)
+//        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
-        self.layer.insertSublayer(gradientLayer, at: 0)
-        self.layer.cornerRadius = 10
+        let imageView = UIImageView(image: action.image)
+        if let frame = action.frameForImageView {
+            imageView.frame = frame
+        }
+        self.customImageView = imageView
+        
+        self.addSubview(imageView)
+        self.addSubview(title)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        gradientLayer.frame = CGRect.init(x: 0, y: 24, width: 150, height: self.frame.height - 24)
-        gradientLayer.cornerRadius = 10
-        if !isLeft
-        {
-            gradientLayer.colors = [fromColor.cgColor, toColor.cgColor]
-        }
-        else
-        {
-            gradientLayer.colors = [toColor.cgColor, fromColor.cgColor]
-        }
+        self.customTitleLabel.sizeToFit()
+        self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
+        self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
+        print(self.frame)
     }
     
     override var isHighlighted: Bool {

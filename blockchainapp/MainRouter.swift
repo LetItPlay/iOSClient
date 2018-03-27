@@ -26,7 +26,8 @@ class MainRouter: Router {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-			("Search".localized, (UIImage.init(named: "searchTab"), SearchBuilder.build(params: nil))),
+            ("Playlists".localized, (UIImage.init(named: "playlistsTab"), UserPlaylistBuilder.build(params: nil))),
+            ("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		self.initialViewControllers = tabs.map({ (tuple) -> UINavigationController in
@@ -47,6 +48,8 @@ class MainRouter: Router {
 		case "allChannels":
 			vc = ChannelsBuilder.build(params: params)
 			break
+        case "search":
+            vc = SearchBuilder.build(params: params)
 		default:
 			print("did nothing right/wrong")
 		}
@@ -59,7 +62,7 @@ class MainRouter: Router {
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
 			} else {
-				self.currentNavigationController?.pushViewController(vc, animated: true)
+                self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
 	}

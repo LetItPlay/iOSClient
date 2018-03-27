@@ -14,18 +14,19 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     var searchController: UISearchController!
 	
     var searchResults = SearchResultsController()
-    var playlistsResults: PlaylistsController!
-	
-	var emptyLabel: UIView!
+//    var playlistsResults: PlaylistsController!
+    
+//    var emptyLabel: UIView!
     
     convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol, searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol)
     {
         self.init(nibName: nil, bundle: nil)
         
-        self.playlistsResults = PlaylistsController(viewModel: playlistViewModel, emitter: playlistEmitter)
+//        self.playlistsResults = PlaylistsController(viewModel: playlistViewModel, emitter: playlistEmitter)
         
         self.searchResults = SearchResultsController(viewModel: searchViewModel, emitter: searchEmitter)
         self.searchController = self.searchResults.searchController
+        self.searchResults.delegate = self
     }
 	
     override func viewDidLoad() {
@@ -33,53 +34,62 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
 
 		self.viewInitialize()
         
-        self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
+//        self.playlistsResults.emitter.send(event: LifeCycleEvent.initialize)
     }
     
     func viewInitialize()
     {
-        self.title = "Search".localized
+//        self.title = "Search".localized
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.largeTitleDisplayMode = .always
+//        self.navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationItem.largeTitleDisplayMode = .always
         self.view.backgroundColor = .white
         
         self.definesPresentationContext = true
         
         self.navigationItem.searchController = self.searchController
         
-        self.view.addSubview(self.playlistsResults.tableView)
-        self.playlistsResults.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
+//        self.view.addSubview(self.playlistsResults.tableView)
+//        self.playlistsResults.tableView.snp.makeConstraints { (make) in
+//            make.edges.equalToSuperview()
+//        }
         
-        self.playlistsResults.tableView.contentInset.bottom = 40
-        self.playlistsResults.tableView.delegate = self.playlistsResults
-        self.playlistsResults.tableView.dataSource = self.playlistsResults
-        
-        self.playlistsResults.tableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
-        self.playlistsResults.tableView.separatorStyle = .none
-        self.playlistsResults.tableView.backgroundColor = .white
+//        self.playlistsResults.tableView.contentInset.bottom = 40
+//        self.playlistsResults.tableView.delegate = self.playlistsResults
+//        self.playlistsResults.tableView.dataSource = self.playlistsResults
+//
+//        self.playlistsResults.tableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
+//        self.playlistsResults.tableView.separatorStyle = .none
+//        self.playlistsResults.tableView.backgroundColor = .white
         
         self.navigationItem.hidesSearchBarWhenScrolling = false
         
-        let label = UILabel()
-        label.textColor = AppColor.Title.dark
-        label.font = AppFont.Title.big
-        label.text = "There are no playlists".localized
+        self.searchResults.searchController.isActive = true
+        self.searchResults.searchController.searchBar.becomeFirstResponder()
         
-        self.view.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
-            make.centerX.equalToSuperview()
-        }
+//        let label = UILabel()
+//        label.textColor = AppColor.Title.dark
+//        label.font = AppFont.Title.big
+//        label.text = "There are no playlists".localized
         
-        self.emptyLabel = label
+//        self.view.addSubview(label)
+//        label.snp.makeConstraints { (make) in
+//            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
+//            make.centerX.equalToSuperview()
+//        }
         
-        self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
+//        self.emptyLabel = label
+        
+//        self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
     }
 	
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+}
+
+extension SearchViewController: SearchControllerDelegate {
+    func close() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
