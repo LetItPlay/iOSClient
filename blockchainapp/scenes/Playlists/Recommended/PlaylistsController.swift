@@ -16,6 +16,8 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
+    var delegate: PlaylistsDelegate?
+    
     let header: UIView = {
         let label = UILabel()
         label.textColor = AppColor.Title.dark
@@ -115,7 +117,13 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
 extension PlaylistsController: PlaylistsVMDelegate
 {
     func update() {
+        self.delegate?.emptyLabel(hide: self.viewModel.playlists.count == 0 ? false : true)
         self.tableView.reloadData()
         self.tableView.refreshControl?.endRefreshing()
     }
+}
+
+
+protocol PlaylistsDelegate {
+    func emptyLabel(hide: Bool)
 }

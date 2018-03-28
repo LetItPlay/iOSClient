@@ -11,6 +11,7 @@ import UIKit
 class PlaylistsViewController: UIViewController {
     
     var playlistsResults: PlaylistsController!
+    
     let emptyLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
@@ -25,6 +26,7 @@ class PlaylistsViewController: UIViewController {
         self.init(nibName: nil, bundle: nil)
         
         self.playlistsResults = PlaylistsController(viewModel: playlistViewModel, emitter: playlistEmitter)
+        self.playlistsResults.delegate = self
     }
 
     override func viewDidLoad() {
@@ -62,4 +64,10 @@ class PlaylistsViewController: UIViewController {
         self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
     }
 
+}
+
+extension PlaylistsViewController: PlaylistsDelegate {
+    func emptyLabel(hide: Bool) {
+        self.emptyLabel.isHidden = hide
+    }
 }
