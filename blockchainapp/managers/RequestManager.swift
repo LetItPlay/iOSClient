@@ -95,6 +95,31 @@ class RequestManager {
 		}
 		return Observable.error(RequestError.invalidURL)
 	}
+    
+    func track(id: Int) -> Observable<Track> {
+        let urlString = RequestManager.server + "/tracks/\(id)"
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Track> in
+                switch result {
+                case .value(let data):
+                    if let json = try? JSON(data: data), var track: Track = Track(json: json) {
+                            let lm = LikeManager.shared
+                            track.isLiked = lm.hasObject(id: track.id)
+                            return Observable.just(track)
+                    } else {
+                        return Observable.error(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    return Observable.error(error)
+                }
+            })
+            
+            return getSignal
+        }
+        return Observable.error(RequestError.invalidURL)
+    }
 	
 	func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
 		let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"

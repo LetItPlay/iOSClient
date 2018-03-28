@@ -62,6 +62,33 @@ struct Track: LIPModel {
 			
 			return
 		}
+        if let channelId = json["StationID"].int,
+            let idInt = json["Id"].int,
+            let title = json["Title"].string,
+            let audioURL = json["AudioURL"].string?.url(),
+            let publishedAtString = json["PublishedAt"].string,
+            let publishedAt = Track.formatter.date(from: publishedAtString),
+            let lang = json["Lang"].string {
+            self.id = idInt
+            self.name = title
+            self.url = audioURL
+            
+            self.publishedAt = publishedAt
+            
+            self.lang = lang
+            
+            self.tags = json["Tags"].array?.map({$0.string}).filter({$0 != nil}).map({$0!}) ?? []
+            
+            self.length = json["TotalLengthInSeconds"].int64 ?? 0
+            self.desc = json["Description"].string ?? ""
+            self.image = json["CoverURL"].string?.url()
+            
+            self.likeCount = json["LikeCount"].int ?? 0
+            self.listenCount = json["ListenCount"].int ?? 0
+            self.reportCount = json["ReportsCount"].int ?? 0
+            
+            return
+        }
 		
 		return nil
 	}
