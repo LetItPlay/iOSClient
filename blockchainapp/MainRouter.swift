@@ -20,6 +20,8 @@ class MainRouter: Router {
 	let initialViewControllers: [UIViewController]
 	
 	let disposeBag: DisposeBag = DisposeBag()
+    
+    var delegate: MainRouterDelegate?
 	
 	init() {
 		
@@ -46,8 +48,8 @@ class MainRouter: Router {
 			vc = ChannelBuilder.build(params: params)
 			break
 		case "allChannels":
-			vc = ChannelsBuilder.build(params: params)
-			break
+            self.delegate?.showAllChannels()
+			return
         case "search":
             vc = SearchBuilder.build(params: params)
 		default:
@@ -66,4 +68,8 @@ class MainRouter: Router {
 			}
 		}
 	}
+}
+
+protocol MainRouterDelegate {
+    func showAllChannels()
 }

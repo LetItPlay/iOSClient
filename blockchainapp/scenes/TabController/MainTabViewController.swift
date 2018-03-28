@@ -22,7 +22,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		
 		self.viewControllers = router.initialViewControllers
         self.router.currentNavigationController = self.viewControllers?.first as? UINavigationController
-		
+		self.router.delegate = self
 		self.playerController.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
 		self.playerController.miniPlayer.snp.makeConstraints { (make) in
@@ -35,7 +35,6 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		miniPlayerBottomConstr?.constant = 120
         
         self.delegate = self
-		
 	}
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -146,5 +145,11 @@ extension MainTabViewController: UITabBarControllerDelegate {
     func tabSelected(controller: String)
     {
         AnalyticsEngine.sendEvent(event: .tabSelected(controller: controller))
+    }
+}
+
+extension MainTabViewController: MainRouterDelegate {
+    func showAllChannels() {
+        self.selectedIndex = 3
     }
 }
