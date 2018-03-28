@@ -132,15 +132,17 @@ class RequestManager {
 				case .value(let data):
 					do {
 						let lm = LikeManager.shared
+                        let subscribeManager = SubscribeManager.shared
 						let json = try JSON(data: data)
-						
 						var tracks = [Track]()
 						var channels = [Channel]()
 						if let items = json["results"].array {
 							for item in items {
-								if let track = Track.init(json: item) {
+								if var track = Track.init(json: item) {
+                                    track.isLiked = lm.hasObject(id: track.id)
 									tracks.append(track)
-								} else if let channel = Channel.init(json: item) {
+								} else if var channel = Channel.init(json: item) {
+                                    channel.isSubscribed = subscribeManager.hasChannel(id: channel.id)
 									channels.append(channel)
 								}
 							}

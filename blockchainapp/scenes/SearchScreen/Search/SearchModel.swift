@@ -37,8 +37,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     var tracks: [Track] = []
     var channels: [Channel] = []
-    var searchTracks: [Track] = []
-    var searchChannels: [Channel] = []
+//    var searchTracks: [Track] = []
+//    var searchChannels: [Channel] = []
 	
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     var currentSearchString: String = ""
@@ -82,8 +82,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.delegate?.update(tracks: self.searchTracks.map({TrackViewModel.init(track: $0)}))
-            self.delegate?.update(channels: self.searchChannels.map({SearchChannelViewModel(channel: $0)}))
+            self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
+            self.delegate?.update(channels: self.channels.map({SearchChannelViewModel(channel: $0)}))
         default:
             break
         }
@@ -175,7 +175,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         switch viewModels {
         case .channels:
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
-            self.delegate?.showChannel(id: self.searchChannels.count != 0 ? self.searchChannels[atIndex].id : self.channels[atIndex].id)
+            self.delegate?.showChannel(id: self.channels[atIndex].id)
         case .tracks:
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
             self.trackSelected(index: atIndex)
@@ -183,14 +183,14 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     }
     
     func trackSelected(index: Int) {
-        let tracks = self.searchTracks.map { (track) -> AudioTrack in
+        let tracks = self.tracks.map { (track) -> AudioTrack in
             return track.audioTrack()
         }
-        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.searchTracks[index].id)
+        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.tracks[index].id)
     }
     
     func channelSubscriptionPressedAt(index: Int) {
-        let channel = self.searchChannels.count != 0 ? self.searchChannels[index] : self.channels[index]
+        let channel = self.tracks.count != 0 ? self.channels[index] : self.channels[index]
         let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         
@@ -203,7 +203,7 @@ extension SearchModel: ChannelUpdateProtocol, PlayingStateUpdateProtocol {
     
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
         if isPlaying {
-            if let index = self.searchTracks.index(where: {$0.id == id})
+            if let index = self.tracks.index(where: {$0.id == id})
             {
                 self.playingIndex.value = index
             }
@@ -219,12 +219,12 @@ extension SearchModel: ChannelUpdateProtocol, PlayingStateUpdateProtocol {
             oldChannel.isSubscribed = !oldChannel.isSubscribed
             var searchIndex = index
 
-            if self.searchChannels.count != 0
+            if self.channels.count != 0
             {
-                if let someIndex: Int = self.searchChannels.index(of: oldChannel)
+                if let someIndex: Int = self.channels.index(of: oldChannel)
                 {
                     searchIndex = someIndex
-                    self.searchChannels[searchIndex] = channel
+                    self.channels[searchIndex] = channel
                 }
             }
 

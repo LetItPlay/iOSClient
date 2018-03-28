@@ -83,10 +83,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         
         self.searchController.isActive = true
     }
-	
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
 }
 
 extension SearchViewController: SearchVMDelegate {
@@ -120,6 +116,10 @@ extension SearchViewController: SearchVMDelegate {
     func reloadChannels() {
         self.tableView.reloadData()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
 }
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
@@ -146,6 +146,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.searchController.searchBar.resignFirstResponder()
         self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
     }
     
@@ -174,4 +175,3 @@ extension SearchViewController: UISearchResultsUpdating {
         self.searchController.searchBar.resignFirstResponder()
     }
 }
-
