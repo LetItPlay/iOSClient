@@ -128,7 +128,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-        tableView.beginUpdates()
+//        tableView.beginUpdates()
         for key in updates.keys {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -144,7 +144,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
                 }
             }
         }
-        tableView.endUpdates()
+//        tableView.endUpdates()
     }
 
     func delete(index: Int) {
