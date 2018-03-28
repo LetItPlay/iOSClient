@@ -150,6 +150,7 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
+            self.tracks[index] = track
             self.delegate?.trackUpdate(index: index, vm: vm)
         }
     }
