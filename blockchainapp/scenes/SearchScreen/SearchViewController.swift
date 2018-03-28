@@ -18,7 +18,8 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     
 //    var emptyLabel: UIView!
     
-    convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol, searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol)
+//    convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol, searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol)
+    convenience init(searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol)
     {
         self.init(nibName: nil, bundle: nil)
         

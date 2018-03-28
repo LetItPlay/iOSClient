@@ -8,8 +8,11 @@
 
 import UIKit
 import SwipeCellKit
+import XLPagerTabStrip
 
 class UserPlaylistViewController: UIViewController {
+    
+    var itemInfo = IndicatorInfo(title: "View")
     
     var viewModel: UserPlaylistVMProtocol!
     var emitter: UserPlaylistEmitterProtocol!
@@ -86,6 +89,7 @@ class UserPlaylistViewController: UIViewController {
         super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
         
+        self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
@@ -247,8 +251,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let track = UserPlaylistManager.shared.tracks[indexPath.row]
-        return Common.height(text: track.name, width: tableView.frame.width)
+        return 107
     }
 }
 
@@ -288,6 +291,13 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         options.showGradient = gradientLayer
         
         return options
+    }
+}
+
+extension UserPlaylistViewController: IndicatorInfoProvider {
+    
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+        return itemInfo
     }
 }
 

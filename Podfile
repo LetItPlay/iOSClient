@@ -24,6 +24,9 @@ target 'blockchainapp' do
   
   pod 'SwipeCellKit'#, :inhibit_warnings => true
 
+  pod 'Tabman', '~> 1.0'
+
+
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'
@@ -35,4 +38,5 @@ target 'blockchainapp' do
   target 'blockchainappUITests' do
 	  inherit! :search_paths
   end
+
 end

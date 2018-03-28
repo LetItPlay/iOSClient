@@ -90,12 +90,16 @@
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
+		9D4DB1CE206A8B3B00B767FE /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */; };
+		9D54AA1B206B4AB400F693C0 /* PlaylistsTab1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
-		C2BE40E99A30033E6AA57274 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
+
+		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
+		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
 		9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */; };
 		9DFAE6F72060FB1500EF7C4D /* TrackInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */; };
@@ -240,12 +244,16 @@
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
 		678F07997865B266B43CA145 /* Pods-blockchainappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.release.xcconfig"; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
+		9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab1.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
 		A731DB6864B0878E37656300 /* Pods-blockchainappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
+		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
 		9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
 		9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoHeaderView.swift; sourceTree = "<group>"; };
@@ -470,6 +478,17 @@
 			path = Channels;
 			sourceTree = "<group>";
 		};
+		9D4DB1CC206A8B1D00B767FE /* Playlists */ = {
+			isa = PBXGroup;
+			children = (
+				9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */,
+				9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */,
+				9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */,
+				9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */,
+			);
+			path = Playlists;
+			sourceTree = "<group>";
+		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -571,6 +590,7 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9D4DB1CC206A8B1D00B767FE /* Playlists */,
 				36E1559F204D6ECB00C65DBE /* UserPlaylist */,
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
@@ -914,8 +934,10 @@
 				"${BUILT_PRODUCTS_DIR}/Action/Action.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AssistantKit/AssistantKit.framework",
+				"${BUILT_PRODUCTS_DIR}/AutoInsetter/AutoInsetter.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/Pageboy/Pageboy.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
@@ -926,15 +948,19 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
+				"${BUILT_PRODUCTS_DIR}/Tabman/Tabman.framework",
 				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
+				"${BUILT_PRODUCTS_DIR}/XLPagerTabStrip/XLPagerTabStrip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Action.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AssistantKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AutoInsetter.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pageboy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
@@ -945,7 +971,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tabman.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLPagerTabStrip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1062,12 +1090,15 @@
 				365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
+				9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */,
+				9D54AA1B206B4AB400F693C0 /* PlaylistsTab1.swift in Sources */,
 				365653F920358F980072087F /* PlaylistsModel.swift in Sources */,
 				2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */,
 				36706D532031A801002097E7 /* ChannelsViewModel.swift in Sources */,
 				3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */,
 				36045FAA204D8340003C7406 /* UserPlaylistModel.swift in Sources */,
 				01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */,
+				9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
@@ -1077,6 +1108,7 @@
 				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
 				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
+				9D4DB1CE206A8B3B00B767FE /* PlaylistsTab.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				365654022035A4550072087F /* PlaylistViewModel.swift in Sources */,
 				0160BB2520315AA400D7C3CB /* Channel.swift in Sources */,
