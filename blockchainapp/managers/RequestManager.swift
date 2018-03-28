@@ -97,7 +97,7 @@ class RequestManager {
 	}
 	
 	func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
-		let urlString = RequestManager.server + "/" + "search?q=\(text)&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
+		let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
 		if let url = urlString.url() {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
