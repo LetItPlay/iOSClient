@@ -105,7 +105,6 @@ class RequestManager {
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
-                        
                             let lm = LikeManager.shared
                             track.isLiked = lm.hasObject(id: track.id)
                             return Observable.just(track)

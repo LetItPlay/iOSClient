@@ -32,21 +32,22 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     var channel: Channel!
     var track: Track!
     
-    var tracks: [Track]!
-    
     var disposeBag = DisposeBag()
     
     
     init(trackId: Int)
     {
+        self.getData(trackId: trackId)
+        
+        InAppUpdateManager.shared.subscribe(self)
+    }
+    
+    func getData(trackId: Int) {
         RequestManager.shared.track(id: trackId).subscribe(onNext: { (tuple) in
-//            self.tracks = tuple
             self.track = tuple
             self.delegate?.reload(track: TrackViewModel(track: self.track))
             self.getChannel()
         }).disposed(by: disposeBag)
-        
-        InAppUpdateManager.shared.subscribe(self)
     }
     
     func getChannel()
@@ -60,11 +61,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     }
     
     func updateTrack(id: Int) {
-        if self.tracks != nil {
-            self.track = self.tracks.filter({$0.id == id}).first
-            self.delegate?.reload(track: TrackViewModel(track: self.track))
-            self.getChannel()
-        }
+        self.getData(trackId: id)
     }
     
     func trackLiked(id: Int) {
@@ -92,16 +89,11 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
 
 extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
     func trackUpdated(track: Track) {
-        if self.tracks != nil {
+        if self.track != nil {
             if self.track.id == track.id {
                 let vm = TrackViewModel(track: track)
                 self.track = track
                 self.delegate?.reload(track: vm)
-            }
-            else {
-                if let index = self.tracks.index(where: {$0.id == track.id}) {
-                    self.tracks[index] = track
-                }
             }
         }
     }
