@@ -58,13 +58,13 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 		
         let _ = InAppUpdateManager.shared.subscribe(self)
 		
-		self.getData()
+        self.getData()
     }
 	
     func getData() {
-//		self.dataAction.execute(true)
+        self.dataAction.execute(true)
     }
-    
+
     func formatPlaylists(index: Int) {
         let playlist = self.playlists[index]
         let contr = AudioController.main
