@@ -28,6 +28,16 @@ class UserPlaylistViewController: UIViewController {
         return label
     }()
     
+    let clearButton: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(AppColor.Element.redBlur, for: .normal)
+        button.setTitle("Clear all".localized, for: .normal)
+        button.titleLabel?.font = AppFont.Button.mid
+        button.titleLabel?.textAlignment = .right
+        button.addTarget(self, action: #selector(clearPlaylist), for: .touchUpInside)
+        return button
+    }()
+    
     convenience init(vm: UserPlaylistVMProtocol, emitter: UserPlaylistEmitterProtocol)
     {
         self.init(nibName: nil, bundle: nil)
@@ -50,7 +60,7 @@ class UserPlaylistViewController: UIViewController {
     {
         self.view.backgroundColor = UIColor.vaWhite
         
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Clear all".localized, style: .plain, target: self, action: #selector(clearPlaylist))
+//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Clear all".localized, style: .plain, target: self, action: #selector(clearPlaylist))
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -88,18 +98,13 @@ class UserPlaylistViewController: UIViewController {
         
         self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
-        
-        let BarButtonItemAppearance = UIBarButtonItem.appearance()
-        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
+    
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         self.emitter.send(event: LifeCycleEvent.disappear)
-        
-        let BarButtonItemAppearance = UIBarButtonItem.appearance()
-        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
     }
     
     override func didReceiveMemoryWarning() {
@@ -182,7 +187,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         label.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(3)
             make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(-16)
         }
         
         view.addSubview(tracks)
@@ -209,6 +214,13 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
             make.bottom.equalToSuperview()
             make.height.equalTo(2)
         }
+        
+        view.addSubview(clearButton)
+        clearButton.snp.makeConstraints({ (make) in
+            make.centerY.equalTo(time)
+            make.right.equalTo(-16)
+            make.height.equalTo(32)
+        })
         
         return view
     }
