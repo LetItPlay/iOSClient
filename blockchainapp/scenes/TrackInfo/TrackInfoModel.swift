@@ -39,7 +39,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     
     init(trackId: Int)
     {
-        RequestManager.shared.tracks(req: .allTracks).subscribe(onNext: { (tuple) in
+        RequestManager.shared.tracks(req: .track(trackId)).subscribe(onNext: { (tuple) in
             self.tracks = tuple
             self.track = tuple.filter({$0.id == trackId}).first
             self.delegate?.reload(track: TrackViewModel(track: self.track))

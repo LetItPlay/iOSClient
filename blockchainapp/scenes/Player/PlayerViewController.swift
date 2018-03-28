@@ -22,14 +22,14 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let pageController: UIPageViewController = UIPageViewController(transitionStyle: UIPageViewControllerTransitionStyle.scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.horizontal, options: [:])
 	let mainPlayer: MainPlayerViewController = MainPlayerViewController()
 	let playlist: PlaylistViewController = PlaylistViewController()
-//    var trackInfo: TrackInfoViewController!
+    var trackInfo: TrackInfoViewController!
     
-//    var trackLikeButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(UIImage(named: "likeInactiveFeed"), for: .normal)
-//        button.addTarget(self, action: #selector(trackLikeButtonTouched), for: .touchUpInside)
-//        return button
-//    }()
+    var trackLikeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "likeInactiveFeed"), for: .normal)
+        button.addTarget(self, action: #selector(trackLikeButtonTouched), for: .touchUpInside)
+        return button
+    }()
     
     var trackSpeedButton: UIButton = {
         let button = UIButton()
@@ -95,13 +95,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		self.ind.setFlat(false)
         
-//        self.view.addSubview(trackLikeButton)
-//        trackLikeButton.snp.makeConstraints({ (make) in
-//            make.left.equalTo(self.view.frame.width / 10 - 12)
-//            make.bottom.equalTo(-8)
-//            make.width.equalTo(24)
-//            make.height.equalTo(24)
-//        })
+        self.view.addSubview(trackLikeButton)
+        trackLikeButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(self.view.frame.width / 10 - 12)
+            make.bottom.equalTo(-8)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        })
         
         self.view.addSubview(trackSpeedButton)
         trackSpeedButton.snp.makeConstraints({ (make) in
@@ -148,13 +148,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
                 
                 if self.currentTrackID == -1 {
                     self.currentTrackID = ob.id
-//                    self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
-//                    self.trackInfo.trackInfoHeaderView.delegate = self
+                    self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
+                    self.trackInfo.trackInfoHeaderView.delegate = self
                 }
                 
                 if self.currentTrackID != ob.id {
                     self.currentTrackID = ob.id
-//                    self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
+                    self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
                 }
                 
                 
@@ -254,14 +254,14 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
     
-//    @objc func trackLikeButtonTouched()
-//    {
-//        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
-//            self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
-//            let id = self.audioController.currentTrack?.id
-//            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
-//        }
-//    }
+    @objc func trackLikeButtonTouched()
+    {
+        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
+            self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
+            let id = self.audioController.currentTrack?.id
+            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
+        }
+    }
     
     @objc func trackSpeedButtonTouched()
     {
@@ -305,7 +305,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 extension PlayerViewController: TrackLikedDelegate
 {
     func track(liked: Bool) {
-//        trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
+        trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
     }
 }
 
@@ -315,9 +315,9 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 			return mainPlayer
 		}
         
-//        if viewController is MainPlayerViewController {
-//            return trackInfo
-//        }
+        if viewController is MainPlayerViewController {
+            return trackInfo
+        }
 		
 		return nil
 	}
@@ -327,25 +327,25 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 			return playlist
 		}
         
-//        if viewController is TrackInfoViewController {
-//            return mainPlayer
-//        }
+        if viewController is TrackInfoViewController {
+            return mainPlayer
+        }
 		
 		return nil
 	}
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 2//3
+        return 3
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         if pageViewController.viewControllers![0] is PlaylistViewController {
-            return 1//2
+            return 2
         }
-//        if pageController.viewControllers![0] is TrackInfoViewController {
-//            return 0
-//        }
-        return 0//1
+        if pageController.viewControllers![0] is TrackInfoViewController {
+            return 0
+        }
+        return 1
     }
 }
 

@@ -18,6 +18,7 @@ enum TracksRequest {
     case magic
 	case allTracks
 	case search(text: String, offset: Int, count: Int)
+    case track(Int)
 }
 
 enum TrackUpdateRequest {
@@ -45,6 +46,8 @@ fileprivate extension TracksRequest {
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
+        case .track(let id):
+            return "tracks/\(id)"
         default: return "tracks"
         }
     }
