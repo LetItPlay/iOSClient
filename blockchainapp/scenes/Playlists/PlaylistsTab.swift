@@ -34,6 +34,13 @@ class PlaylistsTab: TabmanViewController {
             appearance.indicator.isProgressive = false
             appearance.indicator.color = AppColor.Element.redBlur
         })
+        
+        let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
+        self.navigationItem.rightBarButtonItem = searchItem
+    }
+    
+    @objc func search() {
+        MainRouter.shared.show(screen: "search", params: [:], present: false)
     }
 }
 

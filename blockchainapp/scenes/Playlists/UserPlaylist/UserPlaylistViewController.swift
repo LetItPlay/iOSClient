@@ -98,7 +98,6 @@ class UserPlaylistViewController: UIViewController {
         
         self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
-    
     }
     
     override func viewWillDisappear(_ animated: Bool) {

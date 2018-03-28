@@ -477,13 +477,22 @@
 			isa = PBXGroup;
 			children = (
 				9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */,
+				36E1559F204D6ECB00C65DBE /* UserPlaylist */,
+				9D979663206B62E700283825 /* Recommended */,
+			);
+			path = Playlists;
+			sourceTree = "<group>";
+		};
+		9D979663206B62E700283825 /* Recommended */ = {
+			isa = PBXGroup;
+			children = (
 				9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */,
 				9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */,
 				365654032035A7400072087F /* PlaylistsController.swift */,
 				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
 				365654002035987A0072087F /* Playlists */,
 			);
-			path = Playlists;
+			path = Recommended;
 			sourceTree = "<group>";
 		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
@@ -588,7 +597,6 @@
 			isa = PBXGroup;
 			children = (
 				9D4DB1CC206A8B1D00B767FE /* Playlists */,
-				36E1559F204D6ECB00C65DBE /* UserPlaylist */,
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
 				CF4453671F57F42800660474 /* Channels */,
