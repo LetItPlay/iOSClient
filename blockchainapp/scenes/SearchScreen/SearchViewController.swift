@@ -43,6 +43,8 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.searchController.searchBar.delegate = self
         self.searchController.view.tintColor = .white
         
+        self.searchController.dimsBackgroundDuringPresentation = true
+        
         self.searchController.hidesNavigationBarDuringPresentation = true
         self.searchController.definesPresentationContext = true
         
@@ -166,6 +168,10 @@ extension SearchViewController: UISearchResultsUpdating {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         self.navigationController?.popViewController(animated: true)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.searchController.searchBar.resignFirstResponder()
     }
 }
 
