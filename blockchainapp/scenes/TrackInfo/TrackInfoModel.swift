@@ -39,9 +39,9 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     
     init(trackId: Int)
     {
-        RequestManager.shared.tracks(req: .track(trackId)).subscribe(onNext: { (tuple) in
-            self.tracks = tuple
-            self.track = tuple.filter({$0.id == trackId}).first
+        RequestManager.shared.track(id: trackId).subscribe(onNext: { (tuple) in
+//            self.tracks = tuple
+            self.track = tuple
             self.delegate?.reload(track: TrackViewModel(track: self.track))
             self.getChannel()
         }).disposed(by: disposeBag)
