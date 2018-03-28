@@ -173,7 +173,13 @@ class RequestManager {
 						let channels: [Channel] = json["Stations"].array?
 							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
-						let tracksJSON: JSON = json
+                        let tracksJSON: JSON!
+                        switch req {
+                        case .magic:
+                            tracksJSON = json["Tracks"]
+                        default:
+                            tracksJSON = json
+                        }
 						let tracks: [Track] = tracksJSON.array?
 							.map({Track(json: $0)})
 							.filter({$0 != nil}).map({$0!})
