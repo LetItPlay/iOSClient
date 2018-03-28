@@ -116,11 +116,7 @@ class RequestManager {
                 }
             })
             
-//            if let track = (try? Realm())?.object(ofType: TrackObject.self, forPrimaryKey: id).plain() {
-//                return Observable.from([Observable.just(track), getSignal]).flatMap({$0})
-//            } else {
-//                return getSignal
-//            }
+            return getSignal
         }
         return Observable.error(RequestError.invalidURL)
     }
