@@ -19,7 +19,7 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
     
     var delegate: SearchControllerDelegate?
     
-    weak var parent: UIViewController?
+//    weak var parent: UIViewController?
     
     convenience init(viewModel: SearchVMProtocol, emitter: SearchEmitterProtocol) {
         self.init()
@@ -48,17 +48,12 @@ class SearchResultsController: NSObject, UITableViewDelegate, UITableViewDataSou
         
         self.searchController.hidesNavigationBarDuringPresentation = true
         self.searchController.definesPresentationContext = true
-//        self.searchController.dimsBackgroundDuringPresentation = true
         
         self.searchController.isActive = true
         
         self.searchController.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
-        }
-        
-        DispatchQueue.main.async { [unowned self] in
-            self.searchController.searchBar.becomeFirstResponder()
         }
         
         self.emitter.send(event: LifeCycleEvent.initialize)
