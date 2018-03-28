@@ -7,14 +7,19 @@
 //
 
 import UIKit
-import XLPagerTabStrip
 
 class PlaylistsViewController: UIViewController {
     
-    var itemInfo = IndicatorInfo(title: "View")
-    
     var playlistsResults: PlaylistsController!
-    var emptyLabel: UIView!
+    let emptyLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.Title.sectionNotBold
+        label.textColor = AppColor.Element.emptyMessage
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.text = "There are no recommendations".localized
+        return label
+    }()
     
     convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
@@ -47,26 +52,14 @@ class PlaylistsViewController: UIViewController {
         self.playlistsResults.tableView.separatorStyle = .none
         self.playlistsResults.tableView.backgroundColor = .white
 
-        let label = UILabel()
-        label.textColor = AppColor.Title.dark
-        label.font = AppFont.Title.big
-        label.text = "There are no playlists".localized
-
-        self.view.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view).inset(self.view.frame.height / 2 + 50)
-            make.centerX.equalToSuperview()
+        self.view.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view.center)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
         }
-
-        self.emptyLabel = label
 
         self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
     }
 
-}
-
-extension PlaylistsViewController: IndicatorInfoProvider {
-    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return itemInfo
-    }
 }

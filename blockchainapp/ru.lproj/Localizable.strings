@@ -33,13 +33,13 @@
 "Browse channels list" = "Перейти к списку каналов";
 
 "Today playlists"="Сегодняшняя подборка";
-"There are no playlists" = "Плейлисты отсутствуют";
+"Recommended" = "Рекомендуемое";
+"There are no recommendations" = "Рекомендации отсутствуют";
 "There are no tracks" = "Треки отсутствуют";
 
 "Playlist" = "Плейлист";
 "Playlists" = "Плейлисты";
 "Liked" = "Понравившиеся";
-//"Player" = "
 "name" = "имя";
 "My playlist" = "Мой плейлист";
 "Clear all" = "Очистить";

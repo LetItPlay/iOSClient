@@ -48,6 +48,7 @@
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
+		2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EFA2034418900B3D939 /* FeedEmitter.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
@@ -90,14 +91,12 @@
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
-		9D4DB1CE206A8B3B00B767FE /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */; };
-		9D54AA1B206B4AB400F693C0 /* PlaylistsTab1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */; };
+		9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
-
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
@@ -244,14 +243,12 @@
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
 		678F07997865B266B43CA145 /* Pods-blockchainappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.release.xcconfig"; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
-		9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab1.swift; sourceTree = "<group>"; };
+		9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
-		A731DB6864B0878E37656300 /* Pods-blockchainappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
@@ -260,6 +257,7 @@
 		9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoEmitter.swift; sourceTree = "<group>"; };
 		9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoModel.swift; sourceTree = "<group>"; };
 		9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewModel.swift; sourceTree = "<group>"; };
+		A731DB6864B0878E37656300 /* Pods-blockchainappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelpers.swift; sourceTree = "<group>"; };
 		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -298,7 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
-				C2BE40E99A30033E6AA57274 /* Pods_blockchainapp.framework in Frameworks */,
+				2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,11 +324,8 @@
 			children = (
 				365653FE203592DD0072087F /* SearchBuilder.swift */,
 				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
-				365654032035A7400072087F /* PlaylistsController.swift */,
-				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
 				3626C8CA2036A6200016772B /* SearchResultsController.swift */,
 				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
-				365654002035987A0072087F /* Playlists */,
 				3626C8CC2036A6600016772B /* Search */,
 			);
 			path = SearchScreen;
@@ -481,10 +476,12 @@
 		9D4DB1CC206A8B1D00B767FE /* Playlists */ = {
 			isa = PBXGroup;
 			children = (
-				9D4DB1CD206A8B3B00B767FE /* PlaylistsTab.swift */,
+				9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */,
 				9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */,
 				9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */,
-				9D54AA1A206B4AB400F693C0 /* PlaylistsTab1.swift */,
+				365654032035A7400072087F /* PlaylistsController.swift */,
+				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
+				365654002035987A0072087F /* Playlists */,
 			);
 			path = Playlists;
 			sourceTree = "<group>";
@@ -950,7 +947,6 @@
 				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Tabman/Tabman.framework",
 				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
-				"${BUILT_PRODUCTS_DIR}/XLPagerTabStrip/XLPagerTabStrip.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -973,7 +969,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Tabman.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/XLPagerTabStrip.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1091,7 +1086,7 @@
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
 				9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */,
-				9D54AA1B206B4AB400F693C0 /* PlaylistsTab1.swift in Sources */,
+				9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */,
 				365653F920358F980072087F /* PlaylistsModel.swift in Sources */,
 				2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */,
 				36706D532031A801002097E7 /* ChannelsViewModel.swift in Sources */,
@@ -1108,7 +1103,6 @@
 				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
 				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
-				9D4DB1CE206A8B3B00B767FE /* PlaylistsTab.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				365654022035A4550072087F /* PlaylistViewModel.swift in Sources */,
 				0160BB2520315AA400D7C3CB /* Channel.swift in Sources */,

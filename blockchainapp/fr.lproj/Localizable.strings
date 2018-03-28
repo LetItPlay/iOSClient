@@ -46,7 +46,8 @@
 "Browse channels list" = "Afficher la liste de chaînes";
 
 "Today playlists"="Сегодняшняя подборка";
-"There are no playlists" = "Pas de recommendations";
+"Recommended" = "Recommendations";
+"There are no recommendations" = "Pas de recommendations";
 "There are no tracks" = "Pas de titres";
 
 "Playlist"="Playlist";
