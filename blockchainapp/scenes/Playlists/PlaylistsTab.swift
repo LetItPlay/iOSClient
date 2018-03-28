@@ -47,6 +47,6 @@ class PlaylistsTab: ButtonBarPagerTabStripViewController {
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
-        return [UserPlaylistBuilder.build(params: nil)!, UserPlaylistBuilder.build(params: nil)!]
+        return [UserPlaylistBuilder.build(params: nil)!, PlaylistsBuilder.build(params: nil)!]
     }
 }

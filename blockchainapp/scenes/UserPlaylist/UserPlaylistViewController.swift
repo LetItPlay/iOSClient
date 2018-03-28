@@ -89,6 +89,7 @@ class UserPlaylistViewController: UIViewController {
         super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
         
+        self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
@@ -250,8 +251,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let track = UserPlaylistManager.shared.tracks[indexPath.row]
-        return Common.height(text: track.name, width: tableView.frame.width)
+        return 107
     }
 }
 

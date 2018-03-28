@@ -29,5 +29,6 @@ target 'blockchainapp' do
   pod 'Crashlytics'
 
   pod 'XLPagerTabStrip', '~> 8.0'
+  pod 'Tabman', '~> 1.0'
 
 end
