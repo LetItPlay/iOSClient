@@ -41,7 +41,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 		didSet {
 			channelNameLabel.text = channel?.name
             dataLabels[.subs]?.set(text: (channel?.subscriptionCount)!)
-			dataLabels[.listens]?.setData(data: 0)
+			dataLabels[.tracks]?.set(text: (channel?.tracksCount)!)
             if let urlString = channel?.imageURL {
 				channelImageView.sd_setImage(with: urlString)
 			} else {
@@ -74,7 +74,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 		}
 		
 		let subs = IconedLabel(type: .subs)
-		let listens = IconedLabel(type: .listens)
+//        let tracks = IconedLabel(type: .tracks)
 		
 		self.contentView.addSubview(subs)
 		subs.snp.makeConstraints { (make) in
@@ -82,13 +82,13 @@ class SmallChannelTableViewCell: UITableViewCell {
 			make.bottom.equalTo(channelImageView).inset(7)
 		}
 		
-		self.contentView.addSubview(listens)
-		listens.snp.makeConstraints { (make) in
-			make.centerY.equalTo(subs)
-			make.left.equalTo(subs.snp.right).inset(-10)
-		}
+//        self.contentView.addSubview(tracks)
+//        tracks.snp.makeConstraints { (make) in
+//            make.centerY.equalTo(subs)
+//            make.left.equalTo(subs.snp.right).inset(-10)
+//        }
 		
-		self.dataLabels = [.subs: subs, .listens: listens]
+		self.dataLabels = [.subs: subs]//, .tracks: tracks]
 		
 		self.followButton.addTarget(self, action: #selector(subChanged), for: .touchUpInside)
 	}

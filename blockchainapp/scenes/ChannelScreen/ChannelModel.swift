@@ -94,15 +94,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         subManager.addOrDelete(channel: self.channel.id)
     }
     
-    func getTrackViewModels()
-    {
-        var trackVMs = [TrackViewModel]()
-        for track in self.tracks
-        {
-            trackVMs.append(TrackViewModel.init(track: track, isPlaying: false))
-        }
-    }
-    
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:

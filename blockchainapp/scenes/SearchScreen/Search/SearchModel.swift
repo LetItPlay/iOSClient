@@ -82,8 +82,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
-            self.delegate?.update(channels: self.channels.map({SearchChannelViewModel(channel: $0)}))
+            break
         default:
             break
         }

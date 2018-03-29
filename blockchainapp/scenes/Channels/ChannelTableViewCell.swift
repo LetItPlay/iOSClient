@@ -163,11 +163,11 @@ class ChannelTableViewCell: UITableViewCell {
 			make.bottom.equalTo(channelImageView).inset(4)
 		}
 		
-		self.contentView.addSubview(plays)
-		plays.snp.makeConstraints { (make) in
-			make.left.equalTo(subs.snp.right).inset(-10)
-			make.bottom.equalTo(channelImageView).inset(4)
-		}
+//        self.contentView.addSubview(plays)
+//        plays.snp.makeConstraints { (make) in
+//            make.left.equalTo(subs.snp.right).inset(-10)
+//            make.bottom.equalTo(channelImageView).inset(4)
+//        }
 	}
     
     override func layoutIfNeeded() {

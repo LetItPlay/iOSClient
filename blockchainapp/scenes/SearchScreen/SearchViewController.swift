@@ -25,6 +25,23 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.viewModel.delegate = self
         
         self.emitter = searchEmitter
+    }
+	
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+		self.viewInitialize()
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    func viewInitialize()
+    {
+        self.navigationItem.hidesBackButton = true
+//        self.navigationController?.navigationBar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height:24)
+//        self.extendedLayoutIncludesOpaqueBars = true
+        
+        self.view.backgroundColor = .white
         
         self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
         self.tableView.delegate = self
@@ -55,13 +72,19 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
             make.edges.equalToSuperview()
         }
         
-        self.emitter.send(event: LifeCycleEvent.initialize)
+        self.definesPresentationContext = true
+        
+        self.navigationItem.searchController = self.searchController
+//        self.navigationItem.hidesSearchBarWhenScrolling = false
+        
+        self.searchController.isActive = true
     }
-	
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-		self.viewInitialize()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.view.setNeedsLayout()
+        self.navigationController?.view.layoutIfNeeded()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,17 +94,8 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         }
     }
     
-    func viewInitialize()
-    {
-        self.view.backgroundColor = .white
-        
-        self.definesPresentationContext = true
-        
-        self.navigationItem.searchController = self.searchController
-        
-        self.navigationItem.hidesSearchBarWhenScrolling = false
-        
-        self.searchController.isActive = true
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
 }
 
@@ -115,10 +129,6 @@ extension SearchViewController: SearchVMDelegate {
     
     func reloadChannels() {
         self.tableView.reloadData()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
 }
 
