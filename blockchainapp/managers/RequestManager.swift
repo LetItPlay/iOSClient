@@ -376,8 +376,10 @@ class RequestManager {
     }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
+        var req = request
+        req.addValue("Bearer \(UserSettings.session)", forHTTPHeaderField: "Authorization")
 		return Observable<Result<Data>>.create({ (observer) -> Disposable in
-			Alamofire.request(request).responseData { (response: DataResponse<Data>) in
+			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
 				if let _ = response.error {
 					observer.onError(RequestError.noConnection)
 					observer.onCompleted()
@@ -396,7 +398,7 @@ class RequestManager {
 			}
 			return Disposables.create {
 				let empty = "without url"
-				print("Request \(request.url?.absoluteString ?? empty) signal disposed")
+				print("Request \(req.url?.absoluteString ?? empty) signal disposed")
 			}
 		})
 	}

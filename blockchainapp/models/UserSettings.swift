@@ -14,6 +14,36 @@ enum Language: String {
 }
 
 class UserSettings {
+    static var token: String {
+        get {
+            let def = UserDefaults.standard
+            
+            if let token = def.value(forKey: "token") as? String {
+                return token
+            }
+            else {
+                return UUID.init().uuidString
+            }
+        }
+    }
+    
+    static var session: String {
+        get {
+            let def = UserDefaults.standard
+            var res: String = ""
+            if let token = def.value(forKey: "session") as? String {
+                res = token
+            }
+            
+            return res
+        }
+        set(newToken) {
+            let def = UserDefaults.standard
+            def.setValue(newToken, forKey: "session")
+            def.synchronize()
+        }
+    }
+    
     static var name: String {
         get {
             let def = UserDefaults.standard

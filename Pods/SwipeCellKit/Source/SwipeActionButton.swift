@@ -57,22 +57,28 @@ class SwipeActionButton: UIButton {
         title.numberOfLines = 0
         title.textColor = .white
         title.text = action.title
+
         title.frame = action.frameForTitleLabel!
+
         self.customTitleLabel = title
         
         accessibilityLabel = action.accessibilityLabel
         
-//        setTitle(action.title, for: .normal)
-//        setTitleColor(tintColor, for: .normal)
-//        setTitleColor(highlightedTextColor, for: .highlighted)
-//        setImage(action.image, for: .normal)
-//        setImage(action.highlightedImage ?? action.image, for: .highlighted)
+        //        setTitle(action.title, for: .normal)
+        //        setTitleColor(tintColor, for: .normal)
+        //        setTitleColor(highlightedTextColor, for: .highlighted)
+        //        setImage(action.image, for: .normal)
+        //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
         
         let imageView = UIImageView(image: action.image)
         if let frame = action.frameForImageView {
             imageView.frame = frame
+        } else {
+            imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
+            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
         }
-        self.customImageView = imageView
+        
+        customImageView = imageView
         
         self.addSubview(imageView)
         self.addSubview(title)

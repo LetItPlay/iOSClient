@@ -80,6 +80,11 @@ FeedEventHandler {
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
+            if self.isFeed
+            {
+                UserSettings.session = UUID.init().uuidString
+            }
+                
             self.dataAction?.execute(0)
         case .appear:
             self.delegate?.showChannels(!isFeed)
