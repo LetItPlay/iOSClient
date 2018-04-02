@@ -27,7 +27,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     var channelsView: ChannelsCollectionView!
     
 //    var trackInfoView: TrackInfoBlurView!
-    var refreshingTable: Bool = false
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
 
@@ -55,7 +54,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         button.isHidden = true
         return button
     }()
-        
+    
     convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
@@ -105,8 +104,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress(longPressGestureRecognizer:)))
         tableView.addGestureRecognizer(longPressRecognizer)
-        
-        refreshControl.beginRefreshing()
         
         tableView.tableFooterView = UIView()
         

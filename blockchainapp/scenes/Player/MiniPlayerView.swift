@@ -123,9 +123,9 @@ class MiniPlayerView: UITabBar {
 		}
 		
 		progressView.progress = 0.4
-		trackImageView.backgroundColor = .red
-		trackNameLabel.text = "123 123 123123 123 123123 123 123123 123 123"
-		trackAuthorLabel.text = "123 123 123123 123 123123 123 123123 123 123"
+//        trackImageView.backgroundColor = .red
+//        trackNameLabel.text = "123 123 123123 123 123123 123 123123 123 123"
+//        trackAuthorLabel.text = "123 123 123123 123 123123 123 123123 123 123"
 
 		let tap = UITapGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
 		self.addGestureRecognizer(tap)

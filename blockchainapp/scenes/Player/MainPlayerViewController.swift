@@ -145,7 +145,6 @@ class MainPlayerViewController: UIViewController {
 			make.right.equalToSuperview()
 			make.bottom.equalTo(self.trackProgressView.snp.top)
 		}
-        trackProgressView.setContentHuggingPriority(.init(999), for: .horizontal)
 		
 		imageSpacer.addSubview(coverImageView)
 		coverImageView.snp.makeConstraints { (make) in
