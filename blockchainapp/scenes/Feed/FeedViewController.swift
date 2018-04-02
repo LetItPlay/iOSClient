@@ -38,6 +38,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 		label.textAlignment = .center
 		label.numberOfLines = 0
 		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
+        label.isHidden = true
 		return label
 	}()
 
@@ -51,11 +52,10 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         button.layer.borderColor = UIColor.red.cgColor
         button.layer.borderWidth = 1
         button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
+        button.isHidden = true
         return button
     }()
-    
-//    var tappedSideButton = false
-    
+        
     convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
