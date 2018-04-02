@@ -134,7 +134,7 @@ class TrackInfoHeaderView: UIView {
         upperView.snp.makeConstraints({ (make) in
             make.top.equalTo(52)
             make.left.equalTo(0)
-            make.right.equalTo(0)
+            make.right.equalTo(self)
             make.height.equalTo(76)
         })
         
@@ -148,7 +148,7 @@ class TrackInfoHeaderView: UIView {
         
         upperView.addSubview(_followButton)
         _followButton.snp.makeConstraints({ (make) in
-            make.right.equalToSuperview().inset(16)
+            make.right.equalTo(self).inset(16)
             make.centerY.equalToSuperview()
             make.height.equalTo(32)
         })
@@ -161,22 +161,21 @@ class TrackInfoHeaderView: UIView {
             make.centerY.equalToSuperview()
         })
         
-        let view = UIView()
-        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-        upperView.addSubview(view)
-        view.snp.makeConstraints({ (make) in
+        let line = UIView()
+        line.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        upperView.addSubview(line)
+        line.snp.makeConstraints({ (make) in
             make.bottom.equalToSuperview()
-            make.left.equalTo(17)
-            make.right.equalTo(-17)
+            make.left.equalTo(self).inset(17)
+            make.right.equalTo(self).inset(17)
             make.height.equalTo(2)
-
         })
         
         _scrollView.addSubview(_infoTitle)
         _infoTitle.snp.makeConstraints({ (make) in
             make.top.equalTo(upperView.snp.bottom).inset(-16)
             make.left.equalTo(16)
-            make.right.equalTo(-16)
+            make.right.equalTo(self).inset(16)
         })
         
         _scrollView.addSubview(likesCount)
@@ -195,8 +194,8 @@ class TrackInfoHeaderView: UIView {
         _scrollView.addSubview(viewForTextView)
         viewForTextView.snp.makeConstraints({ (make) in
             make.top.equalTo(_infoTitle.snp.bottom)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.equalTo(self)
+            make.right.equalTo(self)
             make.bottom.equalToSuperview()
             make.width.equalTo(self.frame.width)
         })
@@ -204,8 +203,8 @@ class TrackInfoHeaderView: UIView {
         viewForTextView.addSubview(_infoTextView)
         _infoTextView.snp.makeConstraints({ (make) in
             make.top.equalTo(_infoTitle.snp.bottom).inset(-35)
-            make.left.equalTo(16)
-            make.right.equalTo(-16)
+            make.left.equalTo(self).inset(16)
+            make.right.equalTo(self).inset(16)
             make.bottom.equalTo(-16)
             heightForInfoTextView = make.height.equalTo(700).constraint.layoutConstraints.first
         })
