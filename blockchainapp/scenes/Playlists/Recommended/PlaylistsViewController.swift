@@ -61,13 +61,18 @@ class PlaylistsViewController: UIViewController {
             make.right.equalToSuperview().inset(16)
         }
 
-        self.emptyLabel.isHidden = self.playlistsResults.viewModel.playlists.count != 0
+        self.emptyLabel.isHidden = true
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        self.playlistsResults.tableView.setContentOffset(CGPoint.zero, animated: false)
+    }
 }
 
 extension PlaylistsViewController: PlaylistsDelegate {
     func emptyLabel(hide: Bool) {
         self.emptyLabel.isHidden = hide
+//        self.playlistsResults.tableView.setContentOffset(CGPoint.zero, animated: false)
     }
 }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource {
+class PlaylistsController: NSObject {
     
     var tableView: UITableView!
     
@@ -46,12 +46,6 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
         self.emitter = emitter
         
         self.viewInitialize()
-        
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
-        
-//        self.tableView.refreshControl = refreshControl
-//        refreshControl.beginRefreshing()
     }
     
     func viewInitialize()
@@ -59,18 +53,23 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
         self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        
+        tableView.refreshControl = refreshControl
+        self.tableView.refreshControl?.beginRefreshing()
     }
     
-//    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-////        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {[weak self] in self?.emitter.send(event: PlaylistsEvent.refresh)})
-////        self.emitter.send(event: PlaylistsEvent.refresh)
-//    }
-	
-	func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        if self.tableView.refreshControl?.isRefreshing == true {
-//            self.emitter.send(event: PlaylistsEvent.refresh)
-//        }
-	}
+    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+        self.emitter.send(event: .refresh)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in
+            self?.tableView.refreshControl?.endRefreshing()
+        })
+    }
+}
+
+extension PlaylistsController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -103,14 +102,14 @@ class PlaylistsController: NSObject, UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
-	
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         if self.viewModel.playlists.count == 0 {
             return nil
         }
-		
-		return header
+        
+        return header
     }
 }
 
@@ -120,6 +119,7 @@ extension PlaylistsController: PlaylistsVMDelegate
         self.delegate?.emptyLabel(hide: self.viewModel.playlists.count == 0 ? false : true)
         self.tableView.reloadData()
         self.tableView.refreshControl?.endRefreshing()
+        self.tableView.setContentOffset(CGPoint.zero, animated: false)
     }
 }
 
