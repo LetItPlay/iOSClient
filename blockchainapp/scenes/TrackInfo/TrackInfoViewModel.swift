@@ -26,16 +26,19 @@ class TrackInfoViewModel: TrackInfoModelDelegate {
     weak var delegate: TrackInfoVMDelegate?
     
     func reload(track: TrackViewModel) {
-        self.track = track
-
-        do {
-            var dict: NSDictionary? = [NSAttributedStringKey.font : AppFont.Title.info]
-            self.trackDescription = try NSMutableAttributedString(data: track.description.data(using: .utf16)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: &dict)
-        } catch (let error) {
-            print(error)
+        DispatchQueue.main.async {
+            self.track = track
+            
+            do {
+                var dict: NSDictionary? = [NSAttributedStringKey.font : AppFont.Title.info]
+                self.trackDescription = try NSMutableAttributedString(data: track.description.data(using: .utf16)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: &dict)
+                self.trackDescription.addAttribute(NSAttributedStringKey.font, value: AppFont.Title.info, range: NSRange(location: 0, length: self.trackDescription.length))
+            } catch (let error) {
+                print(error)
+            }
+            
+            self.delegate?.update(data: .track)
         }
-        
-        delegate?.update(data: .track)
     }
     
     func reload(channel: SearchChannelViewModel) {
