@@ -12,6 +12,7 @@ enum ProfileEvent {
     case setName(String)
     case setImage(Data)
     case set(language: String)
+    case authButtonPressed
 }
 
 protocol ProfileEmitterProtocol: LifeCycleHandlerProtocol {
@@ -36,6 +37,8 @@ class ProfileEmitter: Emitter, ProfileEmitterProtocol {
             self.model.change(name: name)
         case .set(let language):
             self.model.change(language: language)
+        case .authButtonPressed:
+            self.model.auth()
         }
     }
 }

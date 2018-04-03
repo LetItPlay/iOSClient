@@ -9,7 +9,7 @@
 import Foundation
 
 enum ProfileUpdate {
-    case image, name, language
+    case image, name, language, authorization
 }
 
 protocol ProfileVMDelegate: class {
@@ -21,19 +21,24 @@ class ProfileViewModel: ProfileModelDelegate {
     var name: String = ""
     var imageData: Data! = Data()
     var languageString: String = ""
+    var textForAuthButton: String = ""
     
-    let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺", "Changer en Français 🇫🇷"]
     var currentLanguage = ""
+    
+    var isAuthorized: Bool = false
     
     weak var delegate: ProfileVMDelegate?
     
-    func reload(name: String = "name", image: Data, language: Language = .en)
+    func reload(name: String, image: Data, language: Language = .en, isLogged: Bool)
     {
         self.name = name
         self.imageData = image
         self.getLanguage(lang: language)
         
-        self.delegate?.make(updates: [.name, .image, .language])
+        self.isAuthorized = isLogged
+        self.textForAuthButton = isLogged ? "Log out".localized : "Authorization".localized
+        
+        self.delegate?.make(updates: [.name, .image, .language, .authorization])
     }
     
     func getLanguage(lang: Language)

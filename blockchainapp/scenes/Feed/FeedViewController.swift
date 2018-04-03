@@ -43,7 +43,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 
     let emptyButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = AppFont.Title.section
+        button.titleLabel?.font = AppFont.Button.mid
         button.setTitle("Browse channels list".localized, for: .normal)
         button.setTitleColor(.red, for: .normal)
         button.titleLabel?.textAlignment = .center

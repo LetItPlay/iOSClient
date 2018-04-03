@@ -15,10 +15,11 @@ protocol ProfileModelProtocol: ModelProtocol {
     func change(name: String)
     func change(language: String)
     func getData()
+    func auth()
 }
 
 protocol ProfileModelDelegate: class {
-    func reload(name: String, image: Data, language: Language)
+    func reload(name: String, image: Data, language: Language, isLogged: Bool)
     func update(image: Data)
     func update(name: String)
     func update(language: Language)
@@ -30,6 +31,7 @@ class ProfileModel: ProfileModelProtocol {
     
     var disposeBag = DisposeBag()
     
+    var isLogged: Bool = false
     private let imageName = "profileImage"
     
     init()
@@ -38,7 +40,7 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func getData() {
-        delegate?.reload(name: UserSettings.name, image: self.getImage(), language: UserSettings.language)
+        delegate?.reload(name: UserSettings.name, image: self.getImage(), language: UserSettings.language, isLogged: isLogged)
     }
     
     func getImage() -> Data
@@ -53,7 +55,7 @@ class ProfileModel: ProfileModelProtocol {
         
         if image.cgImage == nil
         {
-            image = UIImage.init(named: "placeholder")!
+            image = UIImage.init(named: "profile")!
         }
         
         let data = UIImagePNGRepresentation(image)!
@@ -94,7 +96,6 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func change(language: String) {
-//        ServerUpdateManager.shared.updateLanguage()
         var newLanguage: Language = .none
         switch language {
         case "Русский":
@@ -108,7 +109,6 @@ class ProfileModel: ProfileModelProtocol {
         }
         
         ServerUpdateManager.shared.update(language: newLanguage)
-//        self.delegate?.update(language: newLanguage)
     }
     
     func send(event: LifeCycleEvent) {
@@ -118,6 +118,12 @@ class ProfileModel: ProfileModelProtocol {
         default:
             break
         }
+    }
+    
+    func auth() {
+        self.isLogged = !isLogged
+        
+        self.getData()
     }
 }
 

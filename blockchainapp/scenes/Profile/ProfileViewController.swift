@@ -321,7 +321,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 81
+        return self.profileView.viewModel.isAuthorized ? 564 : 515
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
