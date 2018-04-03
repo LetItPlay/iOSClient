@@ -25,6 +25,7 @@ class TrackInfoViewModel: TrackInfoModelDelegate {
     
     func reload(track: TrackViewModel) {
         self.track = track
+        self.track.description = track.description.replacingOccurrences(of: "<[^>]+>", with: "", options: String.CompareOptions.regularExpression, range: nil)
         
         delegate?.update(data: .track)
     }

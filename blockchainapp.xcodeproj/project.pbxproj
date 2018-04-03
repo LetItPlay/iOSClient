@@ -495,16 +495,24 @@
 			path = Recommended;
 			sourceTree = "<group>";
 		};
+		9DDE368C2073532200F4ED6F /* TrackInfo */ = {
+			isa = PBXGroup;
+			children = (
+				9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */,
+				9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */,
+				9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */,
+			);
+			path = TrackInfo;
+			sourceTree = "<group>";
+		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
 			isa = PBXGroup;
 			children = (
 				9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */,
 				9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */,
 				9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */,
-				9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */,
-				9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */,
-				9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */,
 				9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */,
+				9DDE368C2073532200F4ED6F /* TrackInfo */,
 			);
 			path = TrackInfo;
 			sourceTree = "<group>";
