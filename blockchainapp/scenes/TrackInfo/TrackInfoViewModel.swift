@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum TrackInfoResultUpdate {
     case track, channel, channelSubscription
@@ -20,11 +21,19 @@ class TrackInfoViewModel: TrackInfoModelDelegate {
     
     var track: TrackViewModel!
     var channel: SearchChannelViewModel!
+    var trackDescription: NSMutableAttributedString!
     
     weak var delegate: TrackInfoVMDelegate?
     
     func reload(track: TrackViewModel) {
         self.track = track
+
+        do {
+            var dict: NSDictionary? = [NSAttributedStringKey.font : AppFont.Title.info]
+            self.trackDescription = try NSMutableAttributedString(data: track.description.data(using: .utf16)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: &dict)
+        } catch (let error) {
+            print(error)
+        }
         
         delegate?.update(data: .track)
     }

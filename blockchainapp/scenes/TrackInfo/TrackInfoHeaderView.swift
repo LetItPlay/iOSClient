@@ -237,7 +237,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
         switch data {
         case .track:
             _infoTitle.text = viewModel.track.name
-            _infoTextView.text = viewModel.track.description
+            _infoTextView.attributedText = viewModel.trackDescription
             self.heightForInfoTextView.constant = _infoTextView.sizeThatFits(CGSize(width: _infoTextView.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
             
             dataLabels[.listens]?.set(text: viewModel.track.listensCount)

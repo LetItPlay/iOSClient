@@ -2,40 +2,27 @@ PODS:
   - Action (3.5.0):
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
-  - Alamofire (4.6.0)
+  - Alamofire (4.7.0)
   - AssistantKit (0.4.1)
-<<<<<<< HEAD
   - AutoInsetter (1.2.2)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
-=======
-  - Crashlytics (3.10.0):
-    - Fabric (~> 1.7.3)
->>>>>>> auth
   - DynamicBlurView (2.0.2)
-  - Fabric (1.7.3)
+  - Fabric (1.7.5)
   - MarqueeLabel/Swift (3.1.4)
   - Pageboy (2.4.0)
   - ReachabilitySwift (4.1.0)
-<<<<<<< HEAD
   - Realm (3.3.0):
     - Realm/Headers (= 3.3.0)
   - Realm/Headers (3.3.0)
   - RealmSwift (3.3.0):
     - Realm (= 3.3.0)
-=======
-  - Realm (3.1.1):
-    - Realm/Headers (= 3.1.1)
-  - Realm/Headers (3.1.1)
-  - RealmSwift (3.1.1):
-    - Realm (= 3.1.1)
->>>>>>> auth
   - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
   - RxSwift (4.1.2)
-  - SDWebImage (4.3.1):
-    - SDWebImage/Core (= 4.3.1)
-  - SDWebImage/Core (4.3.1)
+  - SDWebImage (4.3.3):
+    - SDWebImage/Core (= 4.3.3)
+  - SDWebImage/Core (4.3.3)
   - ShadowView (1.2)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.0.0)
@@ -66,29 +53,20 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
-  Alamofire: f41a599bd63041760b26d393ec1069d9d7b917f4
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
-<<<<<<< HEAD
   AutoInsetter: 5ca85dfccedc38000362e8f49e1c394148ce5bfc
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
-=======
-  Crashlytics: a989ef242b66605577a425733797f810bd2725eb
->>>>>>> auth
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
-  Fabric: bb495bb9a7a7677c6d03a1f8b83d95bc49b47e41
+  Fabric: ae7146a5f505ea370a1e44820b4b1dc8890e2890
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   Pageboy: b04cee5c1315a865fb49321129d12635e8465144
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-<<<<<<< HEAD
   Realm: 7d74ad6c5020432f58fe5e1df90bb6d97b2c7fef
   RealmSwift: b2fa31a09c22e246026766557405505eeaad2b01
-=======
-  Realm: 42d1c38a5b1bbcc828b48a7ce702cb86fc68adf4
-  RealmSwift: d31937ca6a6ee54acde64ec839523c0a3c04924b
->>>>>>> auth
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
-  SDWebImage: 09808bac78357b39f8db4ea360c7b5534d785ef4
+  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
   ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
@@ -96,6 +74,6 @@ SPEC CHECKSUMS:
   Tabman: a9be97d1c75b4b7f40eec416021f614c4ccbb670
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: ab33fffc13178817938713997b69704aa179ac3f
+PODFILE CHECKSUM: 7d598a2ffa790823b19125bd8c6dd9c2a71842b9
 
 COCOAPODS: 1.4.0

@@ -26,7 +26,6 @@ target 'blockchainapp' do
 
   pod 'Tabman', '~> 1.0'
 
-
   #Crashlytics
   pod 'Fabric'
   pod 'Crashlytics'
