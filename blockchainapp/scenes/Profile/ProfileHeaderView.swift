@@ -9,12 +9,20 @@
 import Foundation
 import UIKit
 
+protocol ProfileViewDelegate {
+    func addImage()
+    func changeHeaderHeigth()
+}
+
 class ProfileHeaderView: UIView {
     
     var delegate: ProfileViewDelegate?
     
     var emitter: ProfileEmitterProtocol?
     var viewModel: ProfileViewModel!
+    
+    var authorizedViewHeight: CGFloat = 564
+    var nonauthorizedViewHeight: CGFloat = 515
     
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
@@ -30,29 +38,33 @@ class ProfileHeaderView: UIView {
         return imageView
     }()
     
-    
-    let bluredImageView: UIImageView = UIImageView()
-    let profileNameTextField: UITextField = UITextField()
-    let lineForTextField = UIView()
-    let changePhotoButton: UIButton = UIButton()
-    
-    let languageButton: UIButton = {
+    let changePhotoButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = AppFont.Button.mid
-        button.setTitleColor(.red, for: .normal)
-        button.setTitle("Change content language".localized, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.red.cgColor
-        button.layer.borderWidth = 1
-        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
+        button.layer.cornerRadius = 20
+        button.setImage(UIImage.init(named: "editPhotoInactive"), for: .normal)
+        button.backgroundColor = .red
         return button
     }()
-    let languageTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.Button.mid
-        label.textColor = AppColor.Title.lightGray
-        return label
+    
+    let bluredImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 140
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    let profileNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        textField.textAlignment = .center
+        textField.returnKeyType = .done
+        return textField
+    }()
+    
+    let lineForTextField: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        return view
     }()
     
     var authButtonConstraint: NSLayoutConstraint!
@@ -69,10 +81,34 @@ class ProfileHeaderView: UIView {
         return button
     }()
     
+    let languageButton: UIButton = {
+        let button = UIButton()
+        button.titleLabel?.font = AppFont.Button.mid
+        button.setTitleColor(.red, for: .normal)
+        button.setTitle("Change content language".localized, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 5
+        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
+        return button
+    }()
+    
+    let languageTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.Button.mid
+        label.textColor = AppColor.Title.lightGray
+        return label
+    }()
+    
+    let bottomSeparator: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1)
+        return view
+    }()
+    
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
-//        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: self.viewModel.isAuthorized ? 515 : 564)))
-//        super.init()
-//        super.init(coder: nil)
+        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: viewModel.isAuthorized ? nonauthorizedViewHeight : authorizedViewHeight)))
         
         self.emitter = emitter
         self.viewModel = viewModel
@@ -89,10 +125,6 @@ class ProfileHeaderView: UIView {
     
     func viewInitialize()
     {
-        
-        bluredImageView.layer.cornerRadius = 140
-        bluredImageView.layer.masksToBounds = true
-        
         self.addSubview(bluredImageView)
         bluredImageView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -115,6 +147,7 @@ class ProfileHeaderView: UIView {
             make.height.equalTo(240)
         }
         
+        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
         blur.contentView.addSubview(self.changePhotoButton)
         self.changePhotoButton.snp.makeConstraints { (make) in
             make.right.equalTo(profileImageView)
@@ -123,12 +156,6 @@ class ProfileHeaderView: UIView {
             make.height.equalTo(40)
         }
         
-        changePhotoButton.layer.cornerRadius = 20
-        changePhotoButton.setImage(UIImage.init(named: "editPhotoInactive"), for: .normal)
-        changePhotoButton.backgroundColor = .red
-        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
-        
-        lineForTextField.backgroundColor = UIColor.red.withAlphaComponent(0.2)
         blur.contentView.addSubview(lineForTextField)
         
         blur.contentView.addSubview(profileNameTextField)
@@ -137,10 +164,6 @@ class ProfileHeaderView: UIView {
             make.right.equalTo(profileImageView.snp.right)
             make.left.equalTo(profileImageView.snp.left)
         }
-        
-        profileNameTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        profileNameTextField.textAlignment = .center
-        profileNameTextField.returnKeyType = .done
         
         lineForTextField.snp.makeConstraints { (make) in
             make.bottom.equalTo(profileNameTextField).inset(-1)
@@ -172,10 +195,13 @@ class ProfileHeaderView: UIView {
             make.centerX.equalToSuperview()
         })
         
-        let bot = CALayer()
-        bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
-        bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
-        blur.contentView.layer.addSublayer(bot)
+        blur.contentView.addSubview(bottomSeparator)
+        bottomSeparator.snp.makeConstraints { (make) in
+            make.width.equalTo(self.frame.width)
+            make.height.equalTo(1)
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -225,10 +251,14 @@ extension ProfileHeaderView: ProfileVMDelegate
             case .name:
                 self.setName(name: self.viewModel.name)
             case .authorization:
-//                self.init(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.viewModel.isAuthorized ? 564 : 515))
+                let newFrame = CGRect(x: 0, y: 0, width: self.frame.width, height: self.viewModel.isAuthorized ? authorizedViewHeight : nonauthorizedViewHeight)
+                self.frame = newFrame
+                
                 self.authButtonConstraint.constant = self.viewModel.isAuthorized ? 117 : 50
                 self.authorizationButton.setTitle(self.viewModel.textForAuthButton, for: .normal)
                 self.setElementsAppearance()
+                
+                self.delegate?.changeHeaderHeigth()
             }
         }
     }

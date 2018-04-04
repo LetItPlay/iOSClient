@@ -10,10 +10,6 @@ import UIKit
 import SnapKit
 import RealmSwift
 
-protocol ProfileViewDelegate {
-    func addImage()
-}
-
 class ProfileViewController: UIViewController {
 
     var emitter: LikesEmitterProtocol?
@@ -72,6 +68,7 @@ class ProfileViewController: UIViewController {
         
         self.tableView.tableHeaderView = profileView
         self.tableView.contentInset.bottom = 50
+        self.tableView.backgroundColor = .white
         
         self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
         self.tableView.separatorStyle = .none
@@ -224,6 +221,10 @@ extension ProfileViewController: LikesVMDelegate
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
+    func changeHeaderHeigth() {
+        self.tableView.reloadData()
+    }
+    
     func addImage() {
         let alert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
@@ -321,7 +322,7 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return self.profileView.viewModel.isAuthorized ? 564 : 515
+        return 80// self.profileView.viewModel.isAuthorized ? 564 : 515
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

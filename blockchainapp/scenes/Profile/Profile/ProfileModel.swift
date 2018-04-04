@@ -40,7 +40,7 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func getData() {
-        delegate?.reload(name: UserSettings.name, image: self.getImage(), language: UserSettings.language, isLogged: isLogged)
+        delegate?.reload(name: self.isLogged ? UserSettings.name : "name".localized, image: self.getImage(), language: UserSettings.language, isLogged: isLogged)
     }
     
     func getImage() -> Data
@@ -53,7 +53,7 @@ class ProfileModel: ProfileModelProtocol {
             image = UIImage(contentsOfFile: filePath)!
         }
         
-        if image.cgImage == nil
+        if image.cgImage == nil || !self.isLogged
         {
             image = UIImage.init(named: "profile")!
         }
