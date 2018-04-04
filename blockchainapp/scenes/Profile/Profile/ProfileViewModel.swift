@@ -72,4 +72,8 @@ class ProfileViewModel: ProfileModelDelegate {
         self.getLanguage(lang: language)
         self.delegate?.make(updates: [.language])
     }
+    
+    func showAuthorization() {
+        MainRouter.shared.show(screen: "authorization", params: [:], present: false)
+    }
 }

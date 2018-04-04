@@ -65,3 +65,7 @@
 "Log out" = "Выйти";
 "Authorization" = "Авторизоваться";
 "Change content language" = "Выбрать язык контента";
+
+"Login" = "Войти";
+"Forgot password?" = "Забыли пароль?";
+"Create a new account" = "Создать аккаунт";

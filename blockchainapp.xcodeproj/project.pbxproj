@@ -91,6 +91,7 @@
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
+		9D32F3F820747D1C005D7C22 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D32F3F720747D1C005D7C22 /* AuthorizationViewController.swift */; };
 		9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
@@ -243,6 +244,7 @@
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
 		678F07997865B266B43CA145 /* Pods-blockchainappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.release.xcconfig"; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D32F3F720747D1C005D7C22 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
@@ -473,6 +475,14 @@
 			path = Channels;
 			sourceTree = "<group>";
 		};
+		9D32F3F620747D04005D7C22 /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+				9D32F3F720747D1C005D7C22 /* AuthorizationViewController.swift */,
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
 		9D4DB1CC206A8B1D00B767FE /* Playlists */ = {
 			isa = PBXGroup;
 			children = (
@@ -596,6 +606,7 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9D32F3F620747D04005D7C22 /* Authorization */,
 				9D4DB1CC206A8B1D00B767FE /* Playlists */,
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
@@ -1079,6 +1090,7 @@
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
 				36F613CC202D6E3200661E48 /* ProfileBuilder.swift in Sources */,
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
+				9D32F3F820747D1C005D7C22 /* AuthorizationViewController.swift in Sources */,
 				014913852036ECBF004058CB /* InAppUpdateManager.swift in Sources */,
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
 				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,

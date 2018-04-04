@@ -23,6 +23,7 @@ protocol ProfileModelDelegate: class {
     func update(image: Data)
     func update(name: String)
     func update(language: Language)
+    func showAuthorization()
 }
 
 class ProfileModel: ProfileModelProtocol {
@@ -115,6 +116,8 @@ class ProfileModel: ProfileModelProtocol {
         switch event {
         case .initialize:
             self.getData()
+        case .appear:
+            self.getData()
         default:
             break
         }
@@ -122,8 +125,7 @@ class ProfileModel: ProfileModelProtocol {
     
     func auth() {
         self.isLogged = !isLogged
-        
-        self.getData()
+        self.delegate?.showAuthorization()
     }
 }
 

@@ -197,10 +197,10 @@ class ProfileHeaderView: UIView {
         
         blur.contentView.addSubview(bottomSeparator)
         bottomSeparator.snp.makeConstraints { (make) in
-            make.width.equalTo(self.frame.width)
             make.height.equalTo(1)
             make.bottom.equalToSuperview()
             make.left.equalToSuperview()
+            make.right.equalToSuperview()
         }
     }
     

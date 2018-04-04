@@ -52,6 +52,8 @@ class MainRouter: Router {
 			return
         case "search":
             vc = SearchBuilder.build(params: params)
+        case "authorization":
+            vc = AuthorizationViewController()
 		default:
 			print("did nothing right/wrong")
 		}
