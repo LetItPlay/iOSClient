@@ -56,7 +56,7 @@ extension PlaylistsTab: PageboyViewControllerDataSource {
         case 1:
             return PlaylistsBuilder.build(params: nil)
         default:
-            return nil//UIViewController()
+            return nil
         }
     }
     
