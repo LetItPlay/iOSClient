@@ -21,6 +21,7 @@ target 'blockchainapp' do
   pod "AssistantKit"
   pod "RxSwift"
   pod "Action"
+  pod "DeepLinkKit"
   
   pod 'SwipeCellKit'#, :inhibit_warnings => true
 

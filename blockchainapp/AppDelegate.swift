@@ -16,12 +16,12 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+	let router = LIPRouter()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
         setupAppearence()
         migrate()
-		
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 
@@ -30,13 +30,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if UserSettings.language == .none {
 			vc = SettingsViewController()
 		} else {
-			vc = MainTabViewController()
+			let tab =  MainTabViewController()
+			self.router.tabController = tab
+			vc = tab
 		}
 		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()
 
 		Fabric.with([Crashlytics.self])
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+			self.router.handle(URL(string: "lip://track/40")) { (res, error) in
+				print("\(res) \(error)")
+			}
+		}
+		
         return true
+		
+		
     }
 
     // MARK: - appearence setup

@@ -61,10 +61,7 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.searchController.view.tintColor = .white
         
         self.searchController.dimsBackgroundDuringPresentation = true
-        
-        self.searchController.hidesNavigationBarDuringPresentation = true
-        self.searchController.definesPresentationContext = true
-        
+		
         self.searchController.isActive = true
         
         self.searchController.view.addSubview(tableView)

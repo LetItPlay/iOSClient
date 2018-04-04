@@ -17,6 +17,12 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	var playerIsShowed: Bool = false
     var playerWasShowed: Bool = false
 	
+	var currentNavigationViewController: UINavigationController? {
+		get {
+			return self.selectedViewController as? UINavigationController
+		}
+	}
+	
 	convenience init() {
 		self.init(nibName: nil, bundle: nil)
 		

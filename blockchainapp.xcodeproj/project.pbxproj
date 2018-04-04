@@ -33,6 +33,7 @@
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
 		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
 		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
+		01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BF29F620749F6600CF877A /* LIPRouter.swift */; };
 		01D2F49E2029754F00E43B67 /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2F49D2029754F00E43B67 /* FeedModel.swift */; };
 		01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2F49F20297E2100E43B67 /* FeedViewModel.swift */; };
 		01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */; };
@@ -182,6 +183,7 @@
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
 		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
+		01BF29F620749F6600CF877A /* LIPRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIPRouter.swift; sourceTree = "<group>"; };
 		01D2F49D2029754F00E43B67 /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedModel.swift; sourceTree = "<group>"; };
 		01D2F49F20297E2100E43B67 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackViewModel.swift; sourceTree = "<group>"; };
@@ -546,6 +548,7 @@
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
 				CF27152F1F97C79A0038C81C /* Localizable.strings */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
+				01BF29F620749F6600CF877A /* LIPRouter.swift */,
 			);
 			path = blockchainapp;
 			sourceTree = "<group>";
@@ -940,6 +943,7 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AssistantKit/AssistantKit.framework",
 				"${BUILT_PRODUCTS_DIR}/AutoInsetter/AutoInsetter.framework",
+				"${BUILT_PRODUCTS_DIR}/DeepLinkKit/DeepLinkKit.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Pageboy/Pageboy.framework",
@@ -962,6 +966,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AssistantKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AutoInsetter.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepLinkKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Pageboy.framework",
@@ -1059,6 +1064,7 @@
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
 				361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
+				01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
