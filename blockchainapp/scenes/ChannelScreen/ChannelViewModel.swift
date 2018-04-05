@@ -83,5 +83,9 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
         self.channel = channel
         self.isSubscribed = channel.isSubscribed
     }
+    
+    func showSearch() {
+        MainRouter.shared.show(screen: "search", params: [:], present: false)
+    }
 }
 

@@ -11,6 +11,7 @@ import Foundation
 enum ChannelEvent {
     case trackSelected(index: Int)
     case followPressed
+    case showSearch
 }
 
 protocol ChannelEmitterProtocol: LifeCycleHandlerProtocol {
@@ -33,6 +34,8 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
             self.model?.followPressed()
         case .trackSelected(let index):
             self.model?.trackSelected(index: index)
+        case .showSearch:
+            self.model?.showSearch()
         }
     }
 }
