@@ -66,7 +66,7 @@ class TrackInfoHeaderView: UIView {
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.numberOfLines = 2
+        label.numberOfLines = 10
         label.text = ""
         label.sizeToFit()
         return label
