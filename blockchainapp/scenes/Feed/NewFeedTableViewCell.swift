@@ -132,6 +132,9 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		let button = UIButton()
 		button.setImage(UIImage.init(named: "likeActiveFeed") , for: .selected)
 		button.setImage(UIImage.init(named: "likeInactiveFeed"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 		return button
 	}()
 	
@@ -253,21 +256,21 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		let likes = IconedLabel.init(type: .likes)
 		cellContentView.addSubview(likes)
 		likes.snp.makeConstraints { (make) in
-			make.left.equalTo(time.snp.right).inset(-4)
+			make.left.equalTo(time.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		
 		let listens = IconedLabel.init(type: .listens)
 		cellContentView.addSubview(listens)
 		listens.snp.makeConstraints { (make) in
-			make.left.equalTo(likes.snp.right).inset(-4)
+			make.left.equalTo(likes.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		
 		let playingIndicator = IconedLabel.init(type: .playingIndicator)
 		cellContentView.addSubview(playingIndicator)
 		playingIndicator.snp.makeConstraints { (make) in
-			make.left.equalTo(likes.snp.right).inset(-4)
+			make.left.equalTo(likes.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		playingIndicator.isHidden = true
@@ -287,15 +290,17 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         self.likeButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
         cellContentView.addSubview(likeBlurView)
         likeBlurView.snp.makeConstraints { (make) in
             make.bottom.equalTo(mainPictureImageView).inset(10)
             make.right.equalTo(mainPictureImageView).inset(10)
-            make.width.equalTo(36)
-            make.height.equalTo(36)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
         }
+        
         likeBlurView.layer.masksToBounds = true
-        likeBlurView.layer.cornerRadius = 18
+        likeBlurView.layer.cornerRadius = 25
         
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in
