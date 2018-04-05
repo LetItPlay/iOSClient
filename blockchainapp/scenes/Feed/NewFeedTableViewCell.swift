@@ -12,39 +12,52 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
-        channelLabel.text = vm.author
-        if let authorImage = vm.authorImage {
-            iconImageView.sd_setImage(with: authorImage)
-        } else {
-            iconImageView.image = nil
-        }
+        DispatchQueue.main.async {
+            self.channelLabel.text = vm.author
+            if let authorImage = vm.authorImage {
+                self.iconImageView.sd_setImage(with: authorImage)
+            } else {
+                self.iconImageView.image = nil
+            }
         
-        timeAgoLabel.text = vm.dateString
+            self.timeAgoLabel.text = vm.dateString
         
-        trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
-        if let trackImage = vm.imageURL {
-            mainPictureImageView.sd_setImage(with: trackImage)
-        } else {
-            mainPictureImageView.image = nil
-        }
+            self.trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
+            if let trackImage = vm.imageURL {
+                self.mainPictureImageView.sd_setImage(with: trackImage)
+            } else {
+                self.mainPictureImageView.image = nil
+            }
         
-        infoTitle.text = vm.name
-        infoTextView.text = vm.description
-		
-		self.disposeBag = DisposeBag()
-		
-		self.dataLabels[.likes]?.set(text: vm.likesCount)
-		
-		self.dataLabels[.listens]?.set(text: vm.listensCount)
-		
-		self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
-		self.dataLabels[.listens]?.isHidden = vm.isPlaying
-		
-		self.likeButton.isSelected = vm.isLiked
-		
-        dataLabels[.time]?.set(text: vm.length)
+            self.infoTitle.text = vm.name
         
-        self.alertBlurView.alpha = 0
+            var trackDescription = NSMutableAttributedString()
+        
+            do {
+                var dict: NSDictionary? = [NSAttributedStringKey.font : AppFont.Text.descr]
+                trackDescription = try NSMutableAttributedString(data: vm.description.data(using: .utf16)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: &dict)
+                trackDescription.addAttribute(NSAttributedStringKey.font, value: AppFont.Text.descr, range: NSRange(location: 0, length: trackDescription.length))
+            } catch (let error) {
+                print(error)
+            }
+        
+            self.infoTextView.attributedText = trackDescription
+        
+            self.disposeBag = DisposeBag()
+        
+            self.dataLabels[.likes]?.set(text: vm.likesCount)
+        
+            self.dataLabels[.listens]?.set(text: vm.listensCount)
+        
+            self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+            self.dataLabels[.listens]?.isHidden = vm.isPlaying
+        
+            self.likeButton.isSelected = vm.isLiked
+        
+            self.dataLabels[.time]?.set(text: vm.length)
+        
+            self.alertBlurView.alpha = 0
+    }
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -155,7 +168,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     
     let infoTitle: UILabel = {
        let label = UILabel()
-        label.font = AppFont.Title.small
+        label.font = AppFont.Title.midBold
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
@@ -167,9 +180,10 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     
     let infoTextView: UITextView = {
         let textView = UITextView()
-        textView.font = AppFont.Title.info
+        textView.font = AppFont.Text.descr
         textView.textColor = .black
         textView.backgroundColor = .clear
+        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textView.isEditable = false
         textView.isSelectable = false
         textView.isUserInteractionEnabled = true
@@ -314,13 +328,10 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         infoTextView.snp.makeConstraints { (make) in
             make.top.equalTo(infoTitle.snp.bottom).inset(-12)
             make.bottom.equalTo(infoBlurView).inset(10)
-            make.left.equalTo(infoBlurView).inset(10)
-            make.right.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(7)
+            make.right.equalTo(infoBlurView).inset(7)
         }
         infoTextView.setContentHuggingPriority(.init(999), for: .vertical)
-        
-        
-        
         
 
         cellContentView.addSubview(infoBlurView)
