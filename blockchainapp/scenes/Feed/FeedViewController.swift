@@ -296,6 +296,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         cell?.getInfo(toHide: true, animated: false)
 		
 		cell?.onLike = { [weak self] track in
+            cell?.hideSwipe(animated: true)
             self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
 		}
     }
