@@ -268,7 +268,6 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         guard orientation == .right else { return nil }
         
         let deleteAction = SwipeAction(style: .default, title: "Delete".localized) { action, indexPath in
-            // handle action by updating model with deletion
             self.emitter.send(event: .trackDelete(index: indexPath.item))
         }
         deleteAction.backgroundColor = .white

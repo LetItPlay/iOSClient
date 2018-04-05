@@ -75,7 +75,7 @@ class SwipeActionButton: UIButton {
             imageView.frame = frame
         } else {
             imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
-            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
+//            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
         }
         
         customImageView = imageView
@@ -89,7 +89,6 @@ class SwipeActionButton: UIButton {
         self.customTitleLabel.sizeToFit()
         self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
         self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
-        print(self.frame)
     }
     
     override var isHighlighted: Bool {
