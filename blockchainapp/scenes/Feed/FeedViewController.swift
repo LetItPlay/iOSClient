@@ -26,6 +26,8 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 
     var channelsView: ChannelsCollectionView!
     
+    var didSwipeCell: Bool = false
+    
 //    var trackInfoView: TrackInfoBlurView!
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
@@ -268,7 +270,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
         cell.onLike = {[weak self] track in
-            self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+            if (self?.didSwipeCell)! {
+                cell.hideSwipe(animated: true)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+            }
         }
         return cell
     }
@@ -383,6 +390,9 @@ extension FeedViewController: SwipeTableViewCellDelegate
     }
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        
+        self.didSwipeCell = true
+        
         var options = SwipeTableOptions()
         options.expansionStyle = SwipeExpansionStyle.selection
         options.transitionStyle = .border
@@ -417,6 +427,12 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.showGradient = gradientLayer
         
         return options
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {
+        if orientation == .right {
+            self.didSwipeCell = false
+        }
     }
 }
 
