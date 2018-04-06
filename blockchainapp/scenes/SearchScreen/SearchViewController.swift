@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 
+protocol SearchViewControllerDelegate {
+    func searchDidDisappear()
+}
+
 class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
     
     var tableView: UITableView!
@@ -16,6 +20,8 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     
     var viewModel: SearchVMProtocol!
     var emitter: SearchEmitterProtocol!
+    
+    var delegate: SearchViewControllerDelegate?
     
     convenience init(searchViewModel: SearchVMProtocol, searchEmitter: SearchEmitterProtocol)
     {
@@ -96,6 +102,7 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.delegate?.searchDidDisappear()
     }
 }
 
