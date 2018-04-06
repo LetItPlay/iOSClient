@@ -20,7 +20,9 @@ struct TrackViewModel {
     var description: String = ""
 	var isLiked: Bool = false
 	var isPlaying: Bool = false
-	
+
+    init() {}
+
 	init(track: Track, isPlaying: Bool = false) {
 		self.name = track.name
 		self.imageURL = track.image

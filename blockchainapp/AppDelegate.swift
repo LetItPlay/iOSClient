@@ -40,7 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Fabric.with([Crashlytics.self])
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-			self.router.handle(URL(string: "lip://track/40")) { (res, error) in
+			self.router.handle(URL(string: "lip://channel/38/tracks/40")) { (res, error) in
 				print("\(res) \(error)")
 			}
 		}

@@ -66,7 +66,6 @@
 		3626C8D02036A6790016772B /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CF2036A6790016772B /* SearchModel.swift */; };
 		3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D12036A6800016772B /* SearchEmitter.swift */; };
 		3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */; };
-		3626F8DF203D6579000AA386 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		365653F920358F980072087F /* PlaylistsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653F820358F980072087F /* PlaylistsModel.swift */; };
 		365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FA20358FA10072087F /* PlaylistsViewModel.swift */; };
 		365653FD20358FA90072087F /* PlaylistsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FC20358FA90072087F /* PlaylistsEmitter.swift */; };
@@ -88,7 +87,6 @@
 		36E155A5204D7C0E00C65DBE /* UserPlaylistManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */; };
 		36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613C9202D67C000661E48 /* ProfileEmitter.swift */; };
 		36F613CC202D6E3200661E48 /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613CB202D6E3200661E48 /* ProfileBuilder.swift */; };
-		36F613D0202DA7C300661E48 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
@@ -122,6 +120,7 @@
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
 		F3E0F17E5D26D127B088066C /* Pods_blockchainappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AA887CF3A1B7E3E70BDB43 /* Pods_blockchainappTests.framework */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
+		FD10B7D58B227D2A158848C0 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */; };
 		FD10BBFE6256980A17C0B057 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10BE55E82F75A804CA6B47 /* RequestManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -289,6 +288,7 @@
 		DEFD7991728A8F7D902C8F79 /* Pods-blockchainappUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5E40995E32B295D839BCEE7 /* Pods-blockchainappUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FD10B17549A87867E48B318C /* AppUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUI.swift; sourceTree = "<group>"; };
+		FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		FD10BE55E82F75A804CA6B47 /* RequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -648,6 +648,7 @@
 				014761132010620F006E3373 /* PlayerTableViewCell.swift */,
 				01EFC872201A21D6005321B9 /* PlayerViewController.swift */,
 				01EFC876201A2421005321B9 /* PlaylistViewController.swift */,
+				FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1091,7 +1092,6 @@
 				01EFC875201A240B005321B9 /* MainPlayerViewController.swift in Sources */,
 				9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */,
 				36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */,
-				3626F8DF203D6579000AA386 /* (null) in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
 				019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */,
 				9DFAE70120610A4B00EF7C4D /* TrackInfoEmitter.swift in Sources */,
@@ -1112,7 +1112,6 @@
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,
-				36F613D0202DA7C300661E48 /* (null) in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
 				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
@@ -1144,6 +1143,7 @@
 				FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */,
 				0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */,
 				FD10BBFE6256980A17C0B057 /* RequestManager.swift in Sources */,
+				FD10B7D58B227D2A158848C0 /* PlayerViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

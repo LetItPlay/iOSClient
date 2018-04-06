@@ -16,6 +16,8 @@ class SearchChannelViewModel: SmallChannelViewModel {
 
     var isSubscribed: Bool = false
 
+    init() {}
+
     override init(channel: Channel) {
         super.init(channel: channel)
         

@@ -18,7 +18,7 @@ class LIPRouter: DPLDeepLinkRouter {
 				}
 				
 				if let trackId = Int(link?.routeParameters["trackID"] as? String ?? "") {
-					
+					self?.playTrack(id: trackId)
 				}
 			}
 		}
@@ -31,16 +31,22 @@ class LIPRouter: DPLDeepLinkRouter {
 		
 		self.register("track/:trackID") {[unowned self] (link) in
 			if let id = Int(link?.routeParameters["trackID"] as? String ?? "") {
-				RequestManager.shared.track(id: id).subscribe({ (event) in
-					switch event {
-					case .next(let track):
-						AudioController.main.loadPlaylist(playlist: ("Pushed track \(id)", [track.audioTrack()]), playId: id)
-						self.tabController?.showPlaylist()
-					default:
-						break
-					}
-				}).disposed(by: self.disposeBag)
+				self.playTrack(id: id)
 			}
 		}
 	}
+	
+	func playTrack(id: Int) {
+		RequestManager.shared.track(id: id).subscribe({ (event) in
+			switch event {
+			case .next(let track):
+				AudioController.main.loadPlaylist(playlist: ("Pushed track \(id)", [track.audioTrack()]), playId: id)
+				self.tabController?.showPlaylist()
+			default:
+				break
+			}
+		}).disposed(by: self.disposeBag)
+	}
 }
+
+

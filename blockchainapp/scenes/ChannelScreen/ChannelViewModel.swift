@@ -33,7 +33,7 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     var model: ChannelModelProtocol!
     
     let disposeBag = DisposeBag()
-    
+
     init(model: ChannelModelProtocol)
     {
         self.model = model
