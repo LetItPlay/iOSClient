@@ -109,7 +109,6 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		label.textAlignment = .left
 		label.lineBreakMode = .byTruncatingTail
 		label.numberOfLines = 1
-		label.text = "123 123 123"
 		return label
 	}()
 	
@@ -118,13 +117,11 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
 		label.textColor = UIColor.init(white: 74/255.0, alpha: 1)
 		label.textAlignment = .right
-		label.text = "9 days ago"
 		return label
 	}()
 	
 	let mainPictureImageView: UIImageView = {
 		let imageView = UIImageView()
-		imageView.image = UIImage.init(named: "channelPrevievImg")
 		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
 		return imageView
@@ -173,7 +170,6 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.numberOfLines = 2
-        label.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
         label.sizeToFit()
         return label
     }()
@@ -189,7 +185,6 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         textView.isUserInteractionEnabled = true
         textView.dataDetectorTypes = UIDataDetectorTypes.link
         textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
-        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
     

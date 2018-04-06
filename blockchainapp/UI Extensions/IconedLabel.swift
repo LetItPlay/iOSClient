@@ -19,7 +19,6 @@ class IconedLabel: UIView {
 		label.textColor = AppColor.Title.gray
 		label.font = AppFont.Text.mid
 		label.textAlignment = .left
-		label.text = "123"
 		return label
 	}()
 	
