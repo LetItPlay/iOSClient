@@ -119,9 +119,12 @@
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
 		F3E0F17E5D26D127B088066C /* Pods_blockchainappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AA887CF3A1B7E3E70BDB43 /* Pods_blockchainappTests.framework */; };
+		FD10B2EE2F2654061F2BDF07 /* PlayerEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
+		FD10B63115DA7C32A372FAD9 /* PlayerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B60FFE491AF62B1A26A6 /* PlayerBuilder.swift */; };
 		FD10B7D58B227D2A158848C0 /* PlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */; };
 		FD10BBFE6256980A17C0B057 /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10BE55E82F75A804CA6B47 /* RequestManager.swift */; };
+		FD10BEADF5B23D62CC2E1FAF /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B4E092F837E850DC5B81 /* PlayerModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -288,6 +291,9 @@
 		DEFD7991728A8F7D902C8F79 /* Pods-blockchainappUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E5E40995E32B295D839BCEE7 /* Pods-blockchainappUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests.release.xcconfig"; sourceTree = "<group>"; };
 		FD10B17549A87867E48B318C /* AppUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUI.swift; sourceTree = "<group>"; };
+		FD10B4E092F837E850DC5B81 /* PlayerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
+		FD10B60FFE491AF62B1A26A6 /* PlayerBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerBuilder.swift; sourceTree = "<group>"; };
+		FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerEmitter.swift; sourceTree = "<group>"; };
 		FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		FD10BE55E82F75A804CA6B47 /* RequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -649,6 +655,9 @@
 				01EFC872201A21D6005321B9 /* PlayerViewController.swift */,
 				01EFC876201A2421005321B9 /* PlaylistViewController.swift */,
 				FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */,
+				FD10B4E092F837E850DC5B81 /* PlayerModel.swift */,
+				FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */,
+				FD10B60FFE491AF62B1A26A6 /* PlayerBuilder.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1144,6 +1153,9 @@
 				0158129A1FD6ACC9002828F5 /* ChannelTableViewCell.swift in Sources */,
 				FD10BBFE6256980A17C0B057 /* RequestManager.swift in Sources */,
 				FD10B7D58B227D2A158848C0 /* PlayerViewModel.swift in Sources */,
+				FD10BEADF5B23D62CC2E1FAF /* PlayerModel.swift in Sources */,
+				FD10B2EE2F2654061F2BDF07 /* PlayerEmitter.swift in Sources */,
+				FD10B63115DA7C32A372FAD9 /* PlayerBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
