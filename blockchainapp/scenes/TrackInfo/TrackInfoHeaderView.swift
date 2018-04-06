@@ -15,10 +15,7 @@ class TrackInfoHeaderView: UIView {
     
     var delegate: TrackLikedDelegate?
     
-    let refreshControll = UIRefreshControl()
-    
     let _scrollView = UIScrollView()
-    var heightForInfoTextView: NSLayoutConstraint!
     
     let _channelIconView: UIImageView = {
         let imgView = UIImageView()
@@ -103,8 +100,6 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
-//        _scrollView.refreshControl = refreshControll
-        
         let emptyLabel = UILabel()
         emptyLabel.text = "Loading..."
         emptyLabel.font = AppFont.Title.sectionNotBold
@@ -132,7 +127,7 @@ class TrackInfoHeaderView: UIView {
         let upperView = UIView()
         _scrollView.addSubview(upperView)
         upperView.snp.makeConstraints({ (make) in
-            make.top.equalTo(52)
+            make.top.equalTo(0)
             make.left.equalTo(0)
             make.right.equalTo(self)
             make.height.equalTo(76)
@@ -156,7 +151,6 @@ class TrackInfoHeaderView: UIView {
         upperView.addSubview(_channelTitleLabel)
         _channelTitleLabel.snp.makeConstraints({ (make) in
             make.left.equalTo(_channelIconView.snp.right).inset(-10)
-//            make.right.equalTo(_followButton.snp.left).inset(-10)
             make.right.equalToSuperview().inset(124)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
@@ -207,18 +201,11 @@ class TrackInfoHeaderView: UIView {
             make.left.equalTo(self).inset(16)
             make.right.equalTo(self).inset(16)
             make.bottom.equalTo(-16)
-            heightForInfoTextView = make.height.equalTo(700).constraint.layoutConstraints.first
         })
     }
     
     func refresh(show: Bool) {
         _scrollView.isHidden = show
-//        if show {
-//            refreshControll.beginRefreshing()
-//        }
-//        else {
-//            refreshControll.endRefreshing()
-//        }
     }
     
     @objc func followButtonTouched() {
@@ -239,7 +226,6 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
         case .track:
             _infoTitle.text = viewModel.track.name
             _infoTextView.attributedText = viewModel.trackDescription
-            self.heightForInfoTextView.constant = _infoTextView.sizeThatFits(CGSize(width: _infoTextView.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
             
             dataLabels[.listens]?.set(text: viewModel.track.listensCount)
             dataLabels[.likes]?.set(text: viewModel.track.likesCount)
