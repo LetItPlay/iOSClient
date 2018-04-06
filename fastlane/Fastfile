@@ -15,6 +15,10 @@ platform :ios do
 	desc "Push a new beta build to TestFlight"
 	lane :upload do |options|
 		type = nil
+increment_build_number(
+  build_number: "93" # set a specific number
+)
+
 		increment_build_number
 		case options[:type]
 		when "p"
