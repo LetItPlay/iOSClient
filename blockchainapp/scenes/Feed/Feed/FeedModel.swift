@@ -17,6 +17,7 @@ protocol FeedEventHandler: class {
 	func addTrack(index: Int, toBegining: Bool)
 	func showSearch()
     func showChannel(index: Int)
+    func showOthers(index: Int)
 }
 
 protocol FeedModelDelegate: class {
@@ -28,6 +29,7 @@ protocol FeedModelDelegate: class {
 	func showAllChannels()
 	func showSearch()
     func showChannel(id: Int)
+    func showOthers(track: Track)
 }
 
 
@@ -136,6 +138,10 @@ FeedEventHandler {
     
     func showChannel(index: Int) {
         self.delegate?.showChannel(id: self.tracks[index].channel.id)
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

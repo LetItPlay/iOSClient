@@ -123,6 +123,14 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
 		let track = self.tracks[indexPath]
 		cell.track = track
+        
+        cell.onOthers = {[weak self] in
+            let othersViewController = OthersViewController()
+            othersViewController.add(track: self?.tracks[1][indexPath.row] as Any)
+            othersViewController.add(controller: self!)
+            self?.present(othersViewController, animated: true, completion: nil)
+        }
+        
 		let hideListens = indexPath == currentIndex
 //		cell.dataLabels[.listens]?.isHidden = hideListens
 		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens

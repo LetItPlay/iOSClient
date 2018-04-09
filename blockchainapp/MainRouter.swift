@@ -74,6 +74,49 @@ class MainRouter: Router {
     func hidePlayer() {
         self.delegate?.hidePlayer()
     }
+    
+    func shareTrack(track: Any, viewController: UIViewController) {
+        
+        var sharedText: String!
+        var sharedImage: UIImage!
+        var sharedUrl: String!
+        
+        if let track = track as? Track {
+            sharedText = "\"\(track.name)\" - \(track.channel.name)"
+            sharedImage = try! UIImage(data: Data(contentsOf: (track.image)!))!
+            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
+        }
+        if let track = track as?  AudioTrack {
+            sharedText = "\"\(track.name)\" - \(track.author)"
+            sharedImage = try! UIImage(data: Data(contentsOf: (track.imageURL)!))!
+            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
+        }
+        
+        if let track = track as? TrackObject {
+            sharedText = "\"\(track.name)\" - \(track.channel)"
+            sharedImage = UIImage()
+            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
+        }
+        
+        let activityViewController : UIActivityViewController = UIActivityViewController(
+            activityItems: [sharedText, sharedUrl, sharedImage], applicationActivities: nil)
+        
+        activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.down
+        activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
+        
+        activityViewController.excludedActivityTypes = [
+            UIActivityType.postToWeibo,
+            UIActivityType.print,
+            UIActivityType.assignToContact,
+            UIActivityType.saveToCameraRoll,
+            UIActivityType.addToReadingList,
+            UIActivityType.postToFlickr,
+            UIActivityType.postToVimeo,
+            UIActivityType.postToTencentWeibo
+        ]
+        
+        viewController.present(activityViewController, animated: true, completion: nil)
+    }
 }
 
 extension MainRouter: SearchViewControllerDelegate {

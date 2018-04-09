@@ -21,6 +21,7 @@ protocol ChannelEvenHandler: class {
     func followPressed()
     func set(channel: Channel)
     func showSearch()
+    func showOthers(index: Int)
 }
 
 protocol ChannelModelDelegate: class {
@@ -29,6 +30,7 @@ protocol ChannelModelDelegate: class {
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
+    func showOthers(track: Track)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -116,6 +118,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     func showSearch() {
         self.delegate?.showSearch()
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

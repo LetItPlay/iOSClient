@@ -10,6 +10,8 @@ class FeedTableViewCell: SwipeTableViewCell {
 	
 	public var onLike: ((Int) -> Void)?
     public var onChannel: ((Int) -> Void)?
+    public var onOthers: (() -> Void)?
+
 	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
@@ -65,15 +67,6 @@ class FeedTableViewCell: SwipeTableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		self.viewInitialize()
-    }
-	
-	@objc func likePressed(_: UIButton) {
-        likeButton.isSelected = !likeButton.isSelected
-        onLike?(0)
-	}
-    
-    @objc func channelPressed() {
-        onChannel?(0)
     }
 	
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
@@ -208,6 +201,12 @@ class FeedTableViewCell: SwipeTableViewCell {
         alert.text = "Track added".localized
         return alert
     }()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
+    }()
         
 	func viewInitialize() {
 		
@@ -327,6 +326,14 @@ class FeedTableViewCell: SwipeTableViewCell {
         likeBlurView.layer.masksToBounds = true
         likeBlurView.layer.cornerRadius = 25
         
+        cellContentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.height.equalTo(26)
+            make.width.equalTo(26)
+            make.right.equalTo(-8)
+            make.bottom.equalTo(-8)
+        }
+        
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in
             make.top.equalTo(infoBlurView).inset(10)
@@ -384,7 +391,22 @@ class FeedTableViewCell: SwipeTableViewCell {
         alertBlurView.alpha = 0
         
         self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
 	}
+    
+    
+    @objc func likePressed(_: UIButton) {
+        likeButton.isSelected = !likeButton.isSelected
+        onLike?(0)
+    }
+    
+    @objc func channelPressed() {
+        onChannel?(0)
+    }
+    
+    @objc func sharedButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil

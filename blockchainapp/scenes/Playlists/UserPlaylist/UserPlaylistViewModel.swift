@@ -20,6 +20,7 @@ protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reload()
     func delete(index: Int)
+    func show(othersController: OthersViewController)
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
@@ -73,5 +74,11 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
     func emptyMessage(show: Bool) {
         self.hideEmptyMessage = show
 		self.delegate?.reload()
+    }
+    
+    func showOthers(track: Track) {
+        let othersViewController = OthersViewController()
+        othersViewController.add(track: track)
+        self.delegate?.show(othersController: othersViewController)
     }
 }

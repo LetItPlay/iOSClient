@@ -193,6 +193,12 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: LikesVMDelegate
 {
+    
+    func show(othersController: OthersViewController) {
+        othersController.add(controller: self)
+        self.present(othersController, animated: true, completion: nil)
+    }
+    
     func reload() {
         self.tableView.reloadData()
     }
@@ -307,6 +313,11 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
         cell.fill(vm: self.viewModel.tracks[indexPath.item])
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
+        }
+        
 		return cell
 	}
 	

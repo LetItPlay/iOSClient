@@ -120,7 +120,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         
         self.view.addSubview(sharedButton)
         sharedButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(self.view.frame.width / 4)
+            make.right.equalToSuperview().inset(self.view.frame.width / 10 - 12)
             make.bottom.equalTo(-8)
             make.width.equalTo(24)
             make.height.equalTo(24)
@@ -309,7 +309,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     }
     
     @objc func sharedButtonTouched() {
-        
+        MainRouter.shared.shareTrack(track: self.audioController.currentTrack, viewController: self)
     }
     
     func change(speed: Float) {

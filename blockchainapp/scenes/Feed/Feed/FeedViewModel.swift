@@ -19,6 +19,7 @@ protocol FeedVMDelegate: class {
 	func make(updates: [CollectionUpdate: [Int]])
     func updateTableState()
     func updateEmptyMessage()
+    func show(othersController: OthersViewController)
 }
 
 class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
@@ -104,5 +105,11 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     
     func showChannel(id: Int) {
         MainRouter.shared.show(screen: "channel", params: ["id" : id], present: false)
+    }
+    
+    func showOthers(track: Track) {
+        let othersViewController = OthersViewController()
+        othersViewController.add(track: track)
+        self.delegate?.show(othersController: othersViewController)
     }
 }

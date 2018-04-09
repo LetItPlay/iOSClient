@@ -114,13 +114,18 @@ class UserPlaylistViewController: UIViewController {
     @objc func clearPlaylist()
     {
         UserPlaylistManager.shared.clearPlaylist()
-        self.emitter.send(event: PlaylistEvent.clearPlaylist)
+        self.emitter.send(event: UserPlaylistEvent.clearPlaylist)
         self.tableView.reloadData()
     }
 }
 
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
+    func show(othersController: OthersViewController) {
+        othersController.add(controller: self)
+        self.present(othersController, animated: true, completion: nil)
+    }
+    
     func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
         self.navigationItem.rightBarButtonItem?.isEnabled = !self.viewModel.hideEmptyMessage
@@ -240,7 +245,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter.send(event: PlaylistEvent.trackSelected(index: indexPath.row))
+        self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -254,6 +259,10 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
         cell.delegate = self
         cell.track = self.viewModel.tracks[indexPath.item]
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
+        }
         
         return cell
     }
