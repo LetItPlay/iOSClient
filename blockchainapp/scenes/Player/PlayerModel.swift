@@ -1,4 +1,5 @@
 import Foundation
+import MediaPlayer
 
 protocol PlaylistModelDelegate: class {
 
@@ -23,12 +24,46 @@ class PlayerModel {
     var playlistName: String = ""
     var tracks: [Track] = []
     var playingIndex: Int = -1
+    private var currentTrack: Track = {
+        get {
+            if self.playingIndex < 0 { return nil }
+            return self.tracks[self.playingIndex]
+        }
+    }
     var player: AudioPlayer!
     // TODO: Specify speed constants
     let speedConstants: [String: Float] = ["x0.5": 0.5, "x1.0": 1.0]
 
     init(player: AudioPlayer) {
         self.player = player
+
+        let mpcenter = MPRemoteCommandCenter.shared()
+        mpcenter.playCommand.isEnabled = true
+        mpcenter.pauseCommand.isEnabled = true
+        mpcenter.nextTrackCommand.isEnabled = true
+        mpcenter.skipBackwardCommand.isEnabled = true
+        mpcenter.skipBackwardCommand.preferredIntervals = [10]
+        mpcenter.previousTrackCommand.isEnabled = false
+
+        mpcenter.playCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.execute(event: .plause)
+            return .success
+        }
+
+        mpcenter.pauseCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.execute(event: .plause)
+            return .success
+        }
+
+        mpcenter.nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.execute(event: .next)
+            return .success
+        }
+
+        mpcenter.skipBackwardCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
+            self.execute(event: .seek(dir: .forward))
+            return .success
+        }
     }
 
     func loadPlaylist(tracks: [Track],
@@ -39,6 +74,7 @@ class PlayerModel {
             self.playingIndex = index
             self.player.load(item: self.tracks[index].audioTrack())
         }
+        // TODO: Update playlist
     }
 
     func add(track: Track, onTop: Bool) {
@@ -65,6 +101,17 @@ extension PlayerModel: PlayerTrackEvent {
             default:
                 self.player.make(command: .pause)
             }
+        case .next, .prev:
+            var prev = self.player.status
+            self.playingIndex = event == .prev
+                    ? max(self.playingIndex - 1, 0)
+                    : min(self.playingIndex + 1, self.tracks.count - 1)
+            if let item = self.currentTrack {
+                self.player.load(item: item)
+                self.player.make(command: prev == .playing ? .play : .pause)
+            }
+        case .seek(let direction: SeekDirection), .seek(let progress: Float):
+
         default:
             break
         }
