@@ -213,17 +213,25 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	}
 	
 	func loadPlaylist(playlist:(String, [AudioTrack]), playId: Int?) {
-			if self.playlistName != playlist.0 {
-				self.currentTrackIndexPath = IndexPath.invalid
-				let newPlaylist = AudioPlaylist()
-				newPlaylist.tracks = playlist.1
-				newPlaylist.name = playlist.0
-				self.playlist = newPlaylist
-				if let id = playId {
-					self.make(command: .play(id: id))
-				}
-			}
-			self.delegate?.playlistChanged()		
+        if self.playlistName == playlist.0 && self.currentTrack?.id == playId && self.player.status != .paused {
+            self.make(command: .pause)
+        } else {
+            if self.playlistName == playlist.0 && self.currentTrack?.id == playId && self.player.status == .paused {
+                self.player.make(command: .play)
+            } else {
+    //        if self.playlistName != playlist.0 {
+                self.playlistName = playlist.0
+                self.currentTrackIndexPath = IndexPath.invalid
+                let newPlaylist = AudioPlaylist()
+                newPlaylist.tracks = playlist.1
+                newPlaylist.name = playlist.0
+                self.playlist = newPlaylist
+                if let id = playId {
+                    self.make(command: .play(id: id))
+                }
+            }
+        }
+        self.delegate?.playlistChanged()
 	}
 	
 	func showPlaylist() {
