@@ -20,7 +20,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
     
-    var previousCell: NewFeedTableViewCell?
+    var previousCell: FeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
     var alertLabel: UILabel!
 
@@ -97,7 +97,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         tableView.refreshControl = refreshControl
         tableView.separatorStyle = .none
         
-        tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
+        tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: FeedTableViewCell.cellID)
         tableView.backgroundColor = .white
         tableView.backgroundView?.backgroundColor = .clear
         tableView.sectionIndexBackgroundColor = .clear
@@ -190,13 +190,13 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
                 {
                     previousCell = nil
                     AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+                    (cell as! FeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
-                    previousCell = cell as? NewFeedTableViewCell
+                    previousCell = cell as? FeedTableViewCell
                     AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+                    (cell as! FeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
         }
@@ -206,7 +206,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     {
 		self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
 		
-		let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+		let cell = tableView.cellForRow(at: indexPath) as! FeedTableViewCell
 		
 		UIView.animate(withDuration: 0.3, animations: {
 			cell.alertBlurView.alpha = 1
@@ -268,7 +268,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.cellID) as! FeedTableViewCell
         cell.onLike = {[weak self] track in
             if (self?.didSwipeCell)! {
                 cell.hideSwipe(animated: true)
@@ -277,6 +277,16 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
                 self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
             }
         }
+        
+        cell.onChannel = {[weak self] channel in
+            if (self?.didSwipeCell)! {
+                cell.hideSwipe(animated: true)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+            }
+        }
+        
         return cell
     }
 	
@@ -291,7 +301,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let cell = cell as? NewFeedTableViewCell
+		let cell = cell as? FeedTableViewCell
         //for swipes
         cell?.delegate = self
 
@@ -310,12 +320,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let vm = self.viewModel.tracks[indexPath.item]
-		return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
 	
 	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let vm = self.viewModel.tracks[indexPath.item]
-        return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -406,7 +416,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var frame: CGRect!
 		
 		let vm = self.viewModel.tracks[indexPath.item]
-		let height =  NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		let height =  FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
 		
         if orientation == .right
         {
@@ -430,9 +440,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
     }
     
     func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {
-        if orientation == .right {
-            self.didSwipeCell = false
-        }
+        self.didSwipeCell = false
     }
 }
 

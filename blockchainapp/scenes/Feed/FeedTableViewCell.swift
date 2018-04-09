@@ -4,20 +4,21 @@ import SnapKit
 import SwipeCellKit
 import RxSwift
 
-class NewFeedTableViewCell: SwipeTableViewCell {
+class FeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
 	public var onLike: ((Int) -> Void)?
+    public var onChannel: ((Int) -> Void)?
 	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
         DispatchQueue.main.async {
             self.channelLabel.text = vm.author
             if let authorImage = vm.authorImage {
-                self.iconImageView.sd_setImage(with: authorImage)
+                self.channelImageView.sd_setImage(with: authorImage)
             } else {
-                self.iconImageView.image = nil
+                self.channelImageView.image = nil
             }
         
             self.timeAgoLabel.text = vm.dateString
@@ -57,7 +58,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
             self.dataLabels[.time]?.set(text: vm.length)
         
             self.alertBlurView.alpha = 0
-    }
+        }
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -70,6 +71,10 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         likeButton.isSelected = !likeButton.isSelected
         onLike?(0)
 	}
+    
+    @objc func channelPressed() {
+        onChannel?(0)
+    }
 	
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
 		let para = NSMutableParagraphStyle()
@@ -91,7 +96,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	let iconImageView: UIImageView = {
+	let channelImageView: UIImageView = {
 		let imageView: UIImageView = UIImageView()
 		imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 10
@@ -235,22 +240,33 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		}
 		
 		
-		cellContentView.addSubview(iconImageView)
-		iconImageView.snp.makeConstraints { (make) in
+		cellContentView.addSubview(channelImageView)
+		channelImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(10)
 			make.top.equalToSuperview().inset(6)
 		}
 		
 		cellContentView.addSubview(channelLabel)
 		channelLabel.snp.makeConstraints { (make) in
-			make.left.equalTo(iconImageView.snp.right).inset(-6)
-			make.centerY.equalTo(iconImageView)
+			make.left.equalTo(channelImageView.snp.right).inset(-6)
+			make.centerY.equalTo(channelImageView)
 		}
+        
+        let invisibleChannelButton = UIButton()
+        invisibleChannelButton.alpha = 1
+        invisibleChannelButton.addTarget(self, action: #selector(channelPressed), for: .touchUpInside)
+        cellContentView.addSubview(invisibleChannelButton)
+        invisibleChannelButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(channelImageView.snp.left)
+            make.top.equalTo(channelImageView.snp.top)
+            make.right.equalTo(channelLabel.snp.right)
+            make.height.equalTo(channelImageView.snp.height)
+        })
 		
 		cellContentView.addSubview(timeAgoLabel)
 		timeAgoLabel.snp.makeConstraints { (make) in
 			make.right.equalToSuperview().inset(10)
-			make.centerY.equalTo(iconImageView)
+			make.centerY.equalTo(channelImageView)
 			make.width.equalTo(88)
 			make.left.equalTo(channelLabel.snp.right).inset(-8)
 		}
@@ -400,7 +416,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     }
 }
 
-extension NewFeedTableViewCell: UITextViewDelegate
+extension FeedTableViewCell: UITextViewDelegate
 {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         return true

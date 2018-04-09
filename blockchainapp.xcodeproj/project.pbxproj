@@ -22,7 +22,7 @@
 		015812A21FD80AF1002828F5 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812A11FD80AF1002828F5 /* AudioController.swift */; };
 		0160BB232031596600D7C3CB /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160BB222031596600D7C3CB /* Track.swift */; };
 		0160BB2520315AA400D7C3CB /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160BB2420315AA400D7C3CB /* Channel.swift */; };
-		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
+		0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */; };
 		0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195E8FC203EE0ED005AC202 /* MainRouter.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
@@ -170,7 +170,7 @@
 		015812A11FD80AF1002828F5 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		0160BB222031596600D7C3CB /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		0160BB2420315AA400D7C3CB /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
-		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
+		0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		0195E8FC203EE0ED005AC202 /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
@@ -492,6 +492,16 @@
 			path = Recommended;
 			sourceTree = "<group>";
 		};
+		9DE1A75C207B1A7D007604CA /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				01D2F49F20297E2100E43B67 /* FeedViewModel.swift */,
+				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
+				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -612,11 +622,9 @@
 			children = (
 				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
 				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
-				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
-				01D2F49F20297E2100E43B67 /* FeedViewModel.swift */,
-				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
-				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
+				0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */,
 				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
+				9DE1A75C207B1A7D007604CA /* Feed */,
 				36F7C399201AF71200F99A9A /* Channels */,
 			);
 			path = Feed;
@@ -1069,7 +1077,7 @@
 				36706D512031A7F3002097E7 /* ChannelsModel.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
-				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
+				0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */,
 				36706D552031A809002097E7 /* ChannelsEmitter.swift in Sources */,
 				36813A6E203D671E00EAE49A /* MediumChannelViewModel.swift in Sources */,
 				36952672202C610100F97E1E /* ProfileModel.swift in Sources */,
