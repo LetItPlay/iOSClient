@@ -393,11 +393,14 @@ extension FeedViewController: SwipeTableViewCellDelegate
         
         self.didSwipeCell = true
         
+        let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
+        
         var options = SwipeTableOptions()
-        options.expansionStyle = SwipeExpansionStyle.selection
+//        options.expansionStyle = SwipeExpansionStyle.selection
+        options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
-        options.minimumButtonWidth = 150
+        options.minimumButtonWidth = 130
         options.backgroundColor = .white
         
         let fromColor = AppColor.Element.redBlur.withAlphaComponent(orientation == .right ? 0.9 : 0).cgColor
@@ -410,11 +413,11 @@ extension FeedViewController: SwipeTableViewCellDelegate
 		
         if orientation == .right
         {
-            frame = CGRect(x: 0, y: 25, width: 200, height: height-25)
+            frame = CGRect(x: 0, y: 25, width: 180, height: height-25)
         }
         else
         {
-            frame = CGRect(x: -50, y: 25, width: 200, height: height-25)
+            frame = CGRect(x: -30, y: 25, width: 180, height: height-25)
         }
         
         let gradientLayer = CAGradientLayer()
