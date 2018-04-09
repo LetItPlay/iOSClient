@@ -357,43 +357,67 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var toBeginning: Bool!
         var image: UIImage!
         var addTo = ""
-        var frameForTitleLabel: CGRect!
-        var frameForImageView: CGRect!
+        
+        let myView = UIView(frame: CGRect(x: 0, y: 20, width: 150, height: 305))
+        let myLabel = UILabel()
+        myLabel.textColor = .white
+        myLabel.font = AppFont.Title.big
+        myLabel.lineBreakMode = .byWordWrapping
+        myLabel.numberOfLines = 0
         
         if orientation == .left
         {
             image = UIImage(named: "illustrationTop")
             toBeginning = true
             addTo = "To the\ntop"
-            frameForTitleLabel = CGRect(x: 55, y: 55, width: 87, height: 200)
-            frameForImageView = CGRect(x: 50, y: 47, width: 90, height: 278-71)
+            
+            let imageView = UIImageView(image: image)
+            myView.addSubview(imageView)
+            imageView.snp.makeConstraints { (make) in
+                make.right.equalToSuperview().inset(10)
+                make.centerY.equalToSuperview().inset(-10)
+            }
+            
+            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.textAlignment = .right
+            myView.addSubview(myLabel)
+            myLabel.snp.makeConstraints { (make) in
+                make.right.equalTo(-47)
+                make.centerY.equalToSuperview().inset(-10)
+            }
         }
         else
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
             addTo = "To the\nbottom"
-            frameForTitleLabel = CGRect(x: 30, y: 55, width: 87, height: 200)
-            frameForImageView = CGRect(x: 10, y: 47, width: 90, height: 278-71)
+            
+            let imageView = UIImageView(image: image)
+            myView.addSubview(imageView)
+            imageView.snp.makeConstraints { (make) in
+                make.left.equalTo(10)
+                make.centerY.equalToSuperview().inset(-10)
+            }
+            
+            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.textAlignment = .left
+            myView.addSubview(myLabel)
+            myLabel.snp.makeConstraints { (make) in
+                make.left.equalTo(47)
+                make.centerY.equalToSuperview().inset(-10)
+            }
         }
         
         let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
-        
-        addToPlaylistAction.image = image
+
+        addToPlaylistAction.customView = myView
         addToPlaylistAction.backgroundColor = .clear
         
-        addToPlaylistAction.textColor = .white
-        addToPlaylistAction.font = AppFont.Title.big
-        
-        addToPlaylistAction.frameForTitleLabel = frameForTitleLabel
-        addToPlaylistAction.frameForImageView = frameForImageView
-        addToPlaylistAction.fixCenterForItems = 12
-        
-        if addTo.range(of: "top") == nil {
-            addToPlaylistAction.textAlignmentForTitleLabel = .left
-        }
+//        if addTo.range(of: "top") == nil {
+//            myLabel.textAlignment = .right
+//        }
         
         return [addToPlaylistAction]
     }
@@ -402,8 +426,11 @@ extension FeedViewController: SwipeTableViewCellDelegate
         
         self.didSwipeCell = true
         
+        let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
+        
         var options = SwipeTableOptions()
-        options.expansionStyle = SwipeExpansionStyle.selection
+//        options.expansionStyle = SwipeExpansionStyle.selection
+        options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
         options.minimumButtonWidth = 150
