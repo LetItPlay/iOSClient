@@ -17,11 +17,11 @@ protocol TrackInfoViewDelegate: class {
 
 }
 
-enum PlayerStatus {
+enum PlayerControlsStatus {
     case isPlaying, canForward, canBackward
 }
 
-class PlaylistViewModel {
+class PlayingPlaylistViewModel {
     var tracks: [TrackViewModel] = []
     var name: String = ""
     var length: String = ""
@@ -30,8 +30,8 @@ class PlaylistViewModel {
 
 class PlayerViewModel {
     var track: TrackViewModel = TrackViewModel()
-    var channel: SearchChannelViewModel = SearchChannelViewModel()
+    var channel: SearchChannelViewModel?
     var currentTime: Float = 0.0
     var currentTimeState: (past: String, future: String) = (past: "", future: "")
-    var status: [PlayerStatus : Bool] = [.isPlaying : false, .canForward: false, .canBackward: false]
+    var status: [PlayerControlsStatus : Bool] = [.isPlaying : false, .canForward: false, .canBackward: false]
 }

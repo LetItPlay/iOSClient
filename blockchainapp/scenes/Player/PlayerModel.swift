@@ -24,12 +24,13 @@ class PlayerModel {
     var playlistName: String = ""
     var tracks: [Track] = []
     var playingIndex: Int = -1
-    private var currentTrack: Track = {
+    private var currentTrack: Track? {
         get {
             if self.playingIndex < 0 { return nil }
             return self.tracks[self.playingIndex]
         }
     }
+    var currentTime: AudioTime = AudioTime(current: 0, length: 0)
     var player: AudioPlayer!
     // TODO: Specify speed constants
     let speedConstants: [String: Float] = ["x0.5": 0.5, "x1.0": 1.0]
@@ -56,12 +57,12 @@ class PlayerModel {
         }
 
         mpcenter.nextTrackCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            self.execute(event: .next)
+            self.execute(event: .change(dir: .forward))
             return .success
         }
 
         mpcenter.skipBackwardCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            self.execute(event: .seek(dir: .forward))
+            self.execute(event: .seekDir(dir: .forward))
             return .success
         }
     }
@@ -89,7 +90,7 @@ class PlayerModel {
     }
 }
 
-extension PlayerModel: PlayerTrackEvent {
+extension PlayerModel: PlayerEventHandler {
     func execute(event: PlayerEvent) {
         switch event {
         case .plause:
@@ -101,19 +102,23 @@ extension PlayerModel: PlayerTrackEvent {
             default:
                 self.player.make(command: .pause)
             }
-        case .next, .prev:
-            var prev = self.player.status
-            self.playingIndex = event == .prev
+        case .change(let direction):
+            let prev = self.player.status
+            self.playingIndex = direction == .backward
                     ? max(self.playingIndex - 1, 0)
                     : min(self.playingIndex + 1, self.tracks.count - 1)
-            if let item = self.currentTrack {
+            if let item = self.currentTrack?.audioTrack() {
                 self.player.load(item: item)
                 self.player.make(command: prev == .playing ? .play : .pause)
             }
-        case .seek(let direction: SeekDirection), .seek(let progress: Float):
 
-        default:
-            break
+        case .seekDir(let direction):
+            let newTime = self.currentTime.current + (direction == .forward ? 10.0 : -10.0)
+            if newTime > 0 && newTime < self.currentTime.length {
+                self.player.make(command: .seek(progress: newTime / self.currentTime.length))
+            }
+        case .seek(let progress):
+            self.player.make(command: .seek(progress: progress))
         }
     }
 
@@ -128,6 +133,11 @@ extension PlayerModel: PlayerTrackEvent {
     func send(event: LifeCycleEvent) {
 
     }
+
+    func morePressed(index: Int) {
+
+    }
+
 }
 
 extension PlayerModel: AudioPlayerDelegate {

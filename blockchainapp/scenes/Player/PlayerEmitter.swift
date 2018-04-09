@@ -1,11 +1,11 @@
 import Foundation
 
-enum SeekDirection {
+enum Direction {
     case forward, backward
 }
 
 enum PlayerEvent {
-    case plause, next, prev, seek(dir: SeekDirection), seek(progress: Double)
+    case plause, change(dir: Direction), seekDir(dir: Direction), seek(progress: Double)
 }
 
 enum PlayerTrackEvent {
@@ -22,7 +22,7 @@ class PlayerEmitter: Emitter {
     }
 
     func send(event: PlayerEvent) {
-        self.handler.execute(event: event)
+        self.handler?.execute(event: event)
     }
 
     func setSpeed(index: Int) {
@@ -30,11 +30,11 @@ class PlayerEmitter: Emitter {
     }
 
     func send(event: PlayerTrackEvent) {
-        self.handler.execute(event: event)
+        self.handler?.execute(event: event)
     }
 
     func morePressed(index: Int) {
-        self.handler.morePressed(index: index)
+        self.handler?.morePressed(index: index)
     }
 }
 
