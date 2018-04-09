@@ -17,7 +17,7 @@ class TrackInfoHeaderView: UIView {
     
     let _scrollView = UIScrollView()
     
-    let _channelIconView: UIImageView = {
+    let _channelIconImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.layer.cornerRadius = 20
         imgView.layer.masksToBounds = true
@@ -127,8 +127,8 @@ class TrackInfoHeaderView: UIView {
             make.height.equalTo(76)
         })
 
-        upperView.addSubview(_channelIconView)
-        _channelIconView.snp.makeConstraints({ (make) in
+        upperView.addSubview(_channelIconImageView)
+        _channelIconImageView.snp.makeConstraints({ (make) in
             make.left.equalTo(16)
             make.width.equalTo(60)
             make.height.equalTo(60)
@@ -144,10 +144,21 @@ class TrackInfoHeaderView: UIView {
 
         upperView.addSubview(_channelTitleLabel)
         _channelTitleLabel.snp.makeConstraints({ (make) in
-            make.left.equalTo(_channelIconView.snp.right).inset(-10)
+            make.left.equalTo(_channelIconImageView.snp.right).inset(-10)
             make.right.equalToSuperview().inset(124)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
+        })
+        
+        let invisibleChannelButton = UIButton()
+        invisibleChannelButton.alpha = 1
+        invisibleChannelButton.addTarget(self, action: #selector(channelPressed), for: .touchUpInside)
+        upperView.addSubview(invisibleChannelButton)
+        invisibleChannelButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(_channelIconImageView.snp.left)
+            make.top.equalTo(_channelIconImageView.snp.top)
+            make.right.equalTo(_channelTitleLabel.snp.right)
+            make.height.equalTo(_channelIconImageView.snp.height)
         })
 
         let firstLine = UIView()
@@ -226,6 +237,10 @@ class TrackInfoHeaderView: UIView {
         self.emitter?.send(event: TrackInfoEvent.channelFollowButtonPressed)
     }
     
+    @objc func channelPressed() {
+        self.emitter?.send(event: TrackInfoEvent.showChannel)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -246,7 +261,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             delegate?.track(liked: viewModel.track.isLiked)
             
         case .channel:
-            _channelIconView.sd_setImage(with: viewModel.channel.imageURL)
+            _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL)
             _channelTitleLabel.text = viewModel.channel.name
             
             _followButton.isSelected = viewModel.channel.isSubscribed

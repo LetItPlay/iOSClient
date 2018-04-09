@@ -51,4 +51,9 @@ class TrackInfoViewModel: TrackInfoModelDelegate {
         self.channel?.isSubscribed = isSubscribed
         self.delegate?.update(data: .channelSubscription)
     }
+    
+    func showChannel(id: Int) {
+        MainRouter.shared.show(screen: "channel", params: ["id" : id], present: false)
+        MainRouter.shared.hidePlayer()
+    }
 }

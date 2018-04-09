@@ -70,6 +70,10 @@ class MainRouter: Router {
 			}
 		}
 	}
+    
+    func hidePlayer() {
+        self.delegate?.hidePlayer()
+    }
 }
 
 extension MainRouter: SearchViewControllerDelegate {
@@ -83,4 +87,5 @@ extension MainRouter: SearchViewControllerDelegate {
 
 protocol MainRouterDelegate {
     func showAllChannels()
+    func hidePlayer()
 }

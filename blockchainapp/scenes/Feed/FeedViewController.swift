@@ -282,9 +282,8 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             if (self?.didSwipeCell)! {
                 cell.hideSwipe(animated: true)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
-            }
+
+            self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
         }
         
         return cell
