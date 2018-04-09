@@ -89,6 +89,8 @@ public class SwipeAction: NSObject {
     public var fixCenterForItems: CGFloat = 0
     public var textAlignmentForTitleLabel: NSTextAlignment = .center
     
+    public var customView: UIView?
+    
     /**
      Constructs a new `SwipeAction` instance.
 

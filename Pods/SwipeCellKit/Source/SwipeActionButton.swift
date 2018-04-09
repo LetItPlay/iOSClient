@@ -42,53 +42,59 @@ class SwipeActionButton: UIButton {
         tintColor = action.textColor ?? .white
         let highlightedTextColor = action.highlightedTextColor ?? tintColor
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
-
-        titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
-        titleLabel?.textAlignment = action.textAlignmentForTitleLabel
-        titleLabel?.lineBreakMode = .byWordWrapping
-        titleLabel?.numberOfLines = 0
         
-        titleLabel?.textColor = action.textColor ?? .white
-        
-        let title = UILabel()
-        title.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
-        title.textAlignment = action.textAlignmentForTitleLabel
-        title.lineBreakMode = .byWordWrapping
-        title.numberOfLines = 0
-        title.textColor = .white
-        title.text = action.title
-
-        title.frame = action.frameForTitleLabel!
-
-        self.customTitleLabel = title
-        
-        accessibilityLabel = action.accessibilityLabel
-        
-        //        setTitle(action.title, for: .normal)
-        //        setTitleColor(tintColor, for: .normal)
-        //        setTitleColor(highlightedTextColor, for: .highlighted)
-        //        setImage(action.image, for: .normal)
-        //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
-        
-        let imageView = UIImageView(image: action.image)
-        if let frame = action.frameForImageView {
-            imageView.frame = frame
+        if let _ = action.customView {
+            self.addSubview(action.customView!)
         } else {
-            imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
-//            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
+            titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+            titleLabel?.textAlignment = action.textAlignmentForTitleLabel
+            titleLabel?.lineBreakMode = .byWordWrapping
+            titleLabel?.numberOfLines = 0
+            
+            titleLabel?.textColor = action.textColor ?? .white
+            
+            let title = UILabel()
+            title.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
+            title.textAlignment = action.textAlignmentForTitleLabel
+            title.lineBreakMode = .byWordWrapping
+            title.numberOfLines = 0
+            title.textColor = .white
+            title.text = action.title
+            
+            title.frame = action.frameForTitleLabel!
+            
+            self.customTitleLabel = title
+            
+            accessibilityLabel = action.accessibilityLabel
+            
+            //        setTitle(action.title, for: .normal)
+            //        setTitleColor(tintColor, for: .normal)
+            //        setTitleColor(highlightedTextColor, for: .highlighted)
+            //        setImage(action.image, for: .normal)
+            //        setImage(action.highlightedImage ?? action.image, for: .highlighted)
+            
+            let imageView = UIImageView(image: action.image)
+            if let frame = action.frameForImageView {
+                imageView.frame = frame
+            } else {
+                imageView.frame = CGRect(x: 10, y: 47, width: 90, height: 278-71)
+                //            title.frame = CGRect(x: 30, y: 55, width: 87, height: 200)
+            }
+            
+            customImageView = imageView
+            
+            self.addSubview(imageView)
+            self.addSubview(title)
         }
-        
-        customImageView = imageView
-        
-        self.addSubview(imageView)
-        self.addSubview(title)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.customTitleLabel.sizeToFit()
-        self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
-        self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
+        if let _ = self.customTitleLabel {
+            self.customTitleLabel.sizeToFit()
+            self.customTitleLabel.center.y = self.frame.height/2 + action.fixCenterForItems
+            self.customImageView.center.y = self.frame.height/2 + action.fixCenterForItems
+        }
     }
     
     override var isHighlighted: Bool {
