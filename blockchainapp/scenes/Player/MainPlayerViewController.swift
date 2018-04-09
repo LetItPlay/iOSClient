@@ -233,7 +233,6 @@ class MainPlayerViewController: UIViewController {
 			make.left.equalToSuperview().inset(16)
 			make.right.equalToSuperview().inset(16)
 		}
-		trackNameLabel.text = "i love swift! i love swift! i love swift! i love swift! i love swift!"
 		
 		blur.contentView.addSubview(channelNameLabel)
 		channelNameLabel.snp.makeConstraints { (make) in
@@ -241,7 +240,6 @@ class MainPlayerViewController: UIViewController {
 			make.right.equalToSuperview().inset(16)
 			make.bottom.equalTo(trackNameLabel.snp.top)
 		}
-		channelNameLabel.text = "i love swift! i love swift! i love swift! i love swift! i love swift!"
 		
 		trackProgressView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(33)
