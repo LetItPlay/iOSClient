@@ -53,6 +53,7 @@ class MainRouter: Router {
         case "search":
             vc = SearchBuilder.build(params: params)
             (vc as! SearchViewController).delegate = self
+			self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?.isEnabled = false
 		default:
 			print("did nothing right/wrong")
 		}
@@ -65,7 +66,6 @@ class MainRouter: Router {
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
 			} else {
-                self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?.isEnabled = false
                 self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
@@ -80,7 +80,6 @@ extension MainRouter: SearchViewControllerDelegate {
     func searchDidDisappear() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
             self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?.isEnabled = true
-//            self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?
         }
     }
 }
