@@ -22,7 +22,7 @@ protocol ModelProtocol: class {
 }
 
 class Emitter {
-    var lifecycleHandler: ModelProtocol?
+    weak var lifecycleHandler: ModelProtocol?
     
     func send(event: LifeCycleEvent) {
         self.lifecycleHandler?.send(event: event)
