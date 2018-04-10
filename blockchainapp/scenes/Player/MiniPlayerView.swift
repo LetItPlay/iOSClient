@@ -151,10 +151,7 @@ class MiniPlayerView: UITabBar {
 	}
     
     @objc func swipeGestureRecognizer() {
-        AudioController.main.make(command: .pause)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.05) {
-            AudioController.main.update(.clearAll)
-        }
+        AudioController.main.update(.clearAll)
     }
 	
 	@objc func buttonPressed(sender: UIButton) {
