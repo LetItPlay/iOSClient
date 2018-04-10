@@ -22,7 +22,7 @@
 		015812A21FD80AF1002828F5 /* AudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015812A11FD80AF1002828F5 /* AudioController.swift */; };
 		0160BB232031596600D7C3CB /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160BB222031596600D7C3CB /* Track.swift */; };
 		0160BB2520315AA400D7C3CB /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0160BB2420315AA400D7C3CB /* Channel.swift */; };
-		0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */; };
+		0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */; };
 		0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0195E8FC203EE0ED005AC202 /* MainRouter.swift */; };
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
@@ -71,7 +71,6 @@
 		365653FD20358FA90072087F /* PlaylistsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FC20358FA90072087F /* PlaylistsEmitter.swift */; };
 		365653FF203592DD0072087F /* SearchBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365653FE203592DD0072087F /* SearchBuilder.swift */; };
 		365654022035A4550072087F /* PlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365654012035A4550072087F /* PlaylistViewModel.swift */; };
-		365654042035A7400072087F /* PlaylistsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365654032035A7400072087F /* PlaylistsController.swift */; };
 		3659B22B203EE351009580E9 /* ChannelBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3659B22A203EE351009580E9 /* ChannelBuilder.swift */; };
 		365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B0A1B2031983A006458F9 /* LikesEmitter.swift */; };
 		365B0A1E20319844006458F9 /* LikesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365B0A1D20319844006458F9 /* LikesModel.swift */; };
@@ -174,7 +173,7 @@
 		015812A11FD80AF1002828F5 /* AudioController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioController.swift; sourceTree = "<group>"; };
 		0160BB222031596600D7C3CB /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		0160BB2420315AA400D7C3CB /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
-		0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedTableViewCell.swift; sourceTree = "<group>"; };
+		0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		0195E8FC203EE0ED005AC202 /* MainRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainRouter.swift; sourceTree = "<group>"; };
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
@@ -224,7 +223,6 @@
 		365653FC20358FA90072087F /* PlaylistsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsEmitter.swift; sourceTree = "<group>"; };
 		365653FE203592DD0072087F /* SearchBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBuilder.swift; sourceTree = "<group>"; };
 		365654012035A4550072087F /* PlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistViewModel.swift; sourceTree = "<group>"; };
-		365654032035A7400072087F /* PlaylistsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsController.swift; sourceTree = "<group>"; };
 		3659B22A203EE351009580E9 /* ChannelBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelBuilder.swift; sourceTree = "<group>"; };
 		365B0A1B2031983A006458F9 /* LikesEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesEmitter.swift; sourceTree = "<group>"; };
 		365B0A1D20319844006458F9 /* LikesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikesModel.swift; sourceTree = "<group>"; };
@@ -491,16 +489,35 @@
 			path = Playlists;
 			sourceTree = "<group>";
 		};
+		9D931AFB207B26C100BAFC51 /* TrackInfo */ = {
+			isa = PBXGroup;
+			children = (
+				9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */,
+				9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */,
+				9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */,
+			);
+			path = TrackInfo;
+			sourceTree = "<group>";
+		};
 		9D979663206B62E700283825 /* Recommended */ = {
 			isa = PBXGroup;
 			children = (
 				9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */,
 				9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */,
-				365654032035A7400072087F /* PlaylistsController.swift */,
 				019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */,
 				365654002035987A0072087F /* Playlists */,
 			);
 			path = Recommended;
+			sourceTree = "<group>";
+		};
+		9DE1A75C207B1A7D007604CA /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				01D2F49F20297E2100E43B67 /* FeedViewModel.swift */,
+				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
+				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
+			);
+			path = Feed;
 			sourceTree = "<group>";
 		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
@@ -509,10 +526,8 @@
 				9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */,
 				9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */,
 				9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */,
-				9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */,
-				9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */,
-				9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */,
 				9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */,
+				9D931AFB207B26C100BAFC51 /* TrackInfo */,
 			);
 			path = TrackInfo;
 			sourceTree = "<group>";
@@ -624,11 +639,9 @@
 			children = (
 				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
 				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
-				0184A02C1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift */,
-				01D2F49F20297E2100E43B67 /* FeedViewModel.swift */,
-				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
-				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
+				0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */,
 				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
+				9DE1A75C207B1A7D007604CA /* Feed */,
 				36F7C399201AF71200F99A9A /* Channels */,
 			);
 			path = Feed;
@@ -1088,7 +1101,7 @@
 				36706D512031A7F3002097E7 /* ChannelsModel.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
-				0184A02D1FC1AD0B009FF5CB /* NewFeedTableViewCell.swift in Sources */,
+				0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */,
 				36706D552031A809002097E7 /* ChannelsEmitter.swift in Sources */,
 				36813A6E203D671E00EAE49A /* MediumChannelViewModel.swift in Sources */,
 				36952672202C610100F97E1E /* ProfileModel.swift in Sources */,
@@ -1135,7 +1148,6 @@
 				361CD01A20482A410097F8E9 /* Common.swift in Sources */,
 				01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */,
 				365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */,
-				365654042035A7400072087F /* PlaylistsController.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
 				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
 				2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */,
@@ -1344,7 +1356,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -1367,7 +1379,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 66;
+				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = UW85D37HPT;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";

@@ -20,6 +20,7 @@ protocol ChannelEvenHandler: class {
     func trackSelected(index: Int)
     func followPressed()
     func set(channel: Channel)
+    func showSearch()
 }
 
 protocol ChannelModelDelegate: class {
@@ -27,6 +28,7 @@ protocol ChannelModelDelegate: class {
     func trackUpdate(index: Int, vm: TrackViewModel)
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
+    func showSearch()
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -110,6 +112,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
             return track.audioTrack()
         }
         AudioController.main.loadPlaylist(playlist: ("Channel".localized, tracks), playId: self.tracks[index].id)
+    }
+    
+    func showSearch() {
+        self.delegate?.showSearch()
     }
 }
 

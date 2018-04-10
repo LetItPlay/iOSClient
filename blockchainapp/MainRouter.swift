@@ -52,6 +52,8 @@ class MainRouter: Router {
 			return
         case "search":
             vc = SearchBuilder.build(params: params)
+            (vc as! SearchViewController).delegate = self
+			self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?.isEnabled = false
 		default:
 			print("did nothing right/wrong")
 		}
@@ -68,8 +70,21 @@ class MainRouter: Router {
 			}
 		}
 	}
+    
+    func hidePlayer() {
+        self.delegate?.hidePlayer()
+    }
+}
+
+extension MainRouter: SearchViewControllerDelegate {
+    func searchDidDisappear() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            self.currentNavigationController?.viewControllers.first?.navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+    }
 }
 
 protocol MainRouterDelegate {
     func showAllChannels()
+    func hidePlayer()
 }

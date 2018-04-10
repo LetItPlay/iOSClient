@@ -4,47 +4,61 @@ import SnapKit
 import SwipeCellKit
 import RxSwift
 
-class NewFeedTableViewCell: SwipeTableViewCell {
+class FeedTableViewCell: SwipeTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
 	public var onLike: ((Int) -> Void)?
+    public var onChannel: ((Int) -> Void)?
 	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
-        channelLabel.text = vm.author
-        if let authorImage = vm.authorImage {
-            iconImageView.sd_setImage(with: authorImage)
-        } else {
-            iconImageView.image = nil
+        DispatchQueue.main.async {
+            self.channelLabel.text = vm.author
+            if let authorImage = vm.authorImage {
+                self.channelImageView.sd_setImage(with: authorImage)
+            } else {
+                self.channelImageView.image = nil
+            }
+        
+            self.timeAgoLabel.text = vm.dateString
+        
+            self.trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
+            if let trackImage = vm.imageURL {
+                self.mainPictureImageView.sd_setImage(with: trackImage)
+            } else {
+                self.mainPictureImageView.image = nil
+            }
+        
+            self.infoTitle.text = vm.name
+        
+            var trackDescription = NSMutableAttributedString()
+        
+            do {
+                var dict: NSDictionary? = [NSAttributedStringKey.font : AppFont.Text.descr]
+                trackDescription = try NSMutableAttributedString(data: vm.description.data(using: .utf16)!, options: [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html], documentAttributes: &dict)
+                trackDescription.addAttribute(NSAttributedStringKey.font, value: AppFont.Text.descr, range: NSRange(location: 0, length: trackDescription.length))
+            } catch (let error) {
+                print(error)
+            }
+        
+            self.infoTextView.attributedText = trackDescription
+        
+            self.disposeBag = DisposeBag()
+        
+            self.dataLabels[.likes]?.set(text: vm.likesCount)
+        
+            self.dataLabels[.listens]?.set(text: vm.listensCount)
+        
+            self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+            self.dataLabels[.listens]?.isHidden = vm.isPlaying
+        
+            self.likeButton.isSelected = vm.isLiked
+        
+            self.dataLabels[.time]?.set(text: vm.length)
+        
+            self.alertBlurView.alpha = 0
         }
-        
-        timeAgoLabel.text = vm.dateString
-        
-        trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
-        if let trackImage = vm.imageURL {
-            mainPictureImageView.sd_setImage(with: trackImage)
-        } else {
-            mainPictureImageView.image = nil
-        }
-        
-        infoTitle.text = vm.name
-        infoTextView.text = vm.description
-		
-		self.disposeBag = DisposeBag()
-		
-		self.dataLabels[.likes]?.set(text: vm.likesCount)
-		
-		self.dataLabels[.listens]?.set(text: vm.listensCount)
-		
-		self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
-		self.dataLabels[.listens]?.isHidden = vm.isPlaying
-		
-		self.likeButton.isSelected = vm.isLiked
-		
-        dataLabels[.time]?.set(text: vm.length)
-        
-        self.alertBlurView.alpha = 0
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -57,6 +71,10 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         likeButton.isSelected = !likeButton.isSelected
         onLike?(0)
 	}
+    
+    @objc func channelPressed() {
+        onChannel?(0)
+    }
 	
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
 		let para = NSMutableParagraphStyle()
@@ -78,7 +96,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		NotificationCenter.default.removeObserver(self)
 	}
 	
-	let iconImageView: UIImageView = {
+	let channelImageView: UIImageView = {
 		let imageView: UIImageView = UIImageView()
 		imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 10
@@ -96,7 +114,6 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		label.textAlignment = .left
 		label.lineBreakMode = .byTruncatingTail
 		label.numberOfLines = 1
-		label.text = "123 123 123"
 		return label
 	}()
 	
@@ -105,13 +122,11 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		label.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.regular)
 		label.textColor = UIColor.init(white: 74/255.0, alpha: 1)
 		label.textAlignment = .right
-		label.text = "9 days ago"
 		return label
 	}()
 	
 	let mainPictureImageView: UIImageView = {
 		let imageView = UIImageView()
-		imageView.image = UIImage.init(named: "channelPrevievImg")
 		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
 		return imageView
@@ -132,6 +147,9 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		let button = UIButton()
 		button.setImage(UIImage.init(named: "likeActiveFeed") , for: .selected)
 		button.setImage(UIImage.init(named: "likeInactiveFeed"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 		return button
 	}()
 	
@@ -152,27 +170,26 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     
     let infoTitle: UILabel = {
        let label = UILabel()
-        label.font = AppFont.Title.small
+        label.font = AppFont.Title.midBold
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
         label.numberOfLines = 2
-        label.text = "Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго Виктор Гюго "
         label.sizeToFit()
         return label
     }()
     
     let infoTextView: UITextView = {
         let textView = UITextView()
-        textView.font = AppFont.Title.info
+        textView.font = AppFont.Text.descr
         textView.textColor = .black
         textView.backgroundColor = .clear
+        textView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         textView.isEditable = false
         textView.isSelectable = false
         textView.isUserInteractionEnabled = true
         textView.dataDetectorTypes = UIDataDetectorTypes.link
         textView.linkTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue : UIColor.blue, NSAttributedStringKey.underlineStyle.rawValue : NSUnderlineStyle.styleNone.rawValue]
-        textView.text = "Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин  Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин Максимилиан Волошин "
         return textView
     }()
     
@@ -223,22 +240,33 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		}
 		
 		
-		cellContentView.addSubview(iconImageView)
-		iconImageView.snp.makeConstraints { (make) in
+		cellContentView.addSubview(channelImageView)
+		channelImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(10)
 			make.top.equalToSuperview().inset(6)
 		}
 		
 		cellContentView.addSubview(channelLabel)
 		channelLabel.snp.makeConstraints { (make) in
-			make.left.equalTo(iconImageView.snp.right).inset(-6)
-			make.centerY.equalTo(iconImageView)
+			make.left.equalTo(channelImageView.snp.right).inset(-6)
+			make.centerY.equalTo(channelImageView)
 		}
+        
+        let invisibleChannelButton = UIButton()
+        invisibleChannelButton.alpha = 1
+        invisibleChannelButton.addTarget(self, action: #selector(channelPressed), for: .touchUpInside)
+        cellContentView.addSubview(invisibleChannelButton)
+        invisibleChannelButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(channelImageView.snp.left)
+            make.top.equalTo(channelImageView.snp.top)
+            make.right.equalTo(channelLabel.snp.right)
+            make.height.equalTo(channelImageView.snp.height)
+        })
 		
 		cellContentView.addSubview(timeAgoLabel)
 		timeAgoLabel.snp.makeConstraints { (make) in
 			make.right.equalToSuperview().inset(10)
-			make.centerY.equalTo(iconImageView)
+			make.centerY.equalTo(channelImageView)
 			make.width.equalTo(88)
 			make.left.equalTo(channelLabel.snp.right).inset(-8)
 		}
@@ -253,21 +281,21 @@ class NewFeedTableViewCell: SwipeTableViewCell {
 		let likes = IconedLabel.init(type: .likes)
 		cellContentView.addSubview(likes)
 		likes.snp.makeConstraints { (make) in
-			make.left.equalTo(time.snp.right).inset(-4)
+			make.left.equalTo(time.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		
 		let listens = IconedLabel.init(type: .listens)
 		cellContentView.addSubview(listens)
 		listens.snp.makeConstraints { (make) in
-			make.left.equalTo(likes.snp.right).inset(-4)
+			make.left.equalTo(likes.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		
 		let playingIndicator = IconedLabel.init(type: .playingIndicator)
 		cellContentView.addSubview(playingIndicator)
 		playingIndicator.snp.makeConstraints { (make) in
-			make.left.equalTo(likes.snp.right).inset(-4)
+			make.left.equalTo(likes.snp.right).inset(-12)
 			make.centerY.equalTo(time)
 		}
 		playingIndicator.isHidden = true
@@ -287,15 +315,17 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         self.likeButton.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        
         cellContentView.addSubview(likeBlurView)
         likeBlurView.snp.makeConstraints { (make) in
             make.bottom.equalTo(mainPictureImageView).inset(10)
             make.right.equalTo(mainPictureImageView).inset(10)
-            make.width.equalTo(36)
-            make.height.equalTo(36)
+            make.width.equalTo(50)
+            make.height.equalTo(50)
         }
+        
         likeBlurView.layer.masksToBounds = true
-        likeBlurView.layer.cornerRadius = 18
+        likeBlurView.layer.cornerRadius = 25
         
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in
@@ -309,13 +339,10 @@ class NewFeedTableViewCell: SwipeTableViewCell {
         infoTextView.snp.makeConstraints { (make) in
             make.top.equalTo(infoTitle.snp.bottom).inset(-12)
             make.bottom.equalTo(infoBlurView).inset(10)
-            make.left.equalTo(infoBlurView).inset(10)
-            make.right.equalTo(infoBlurView).inset(10)
+            make.left.equalTo(infoBlurView).inset(7)
+            make.right.equalTo(infoBlurView).inset(7)
         }
         infoTextView.setContentHuggingPriority(.init(999), for: .vertical)
-        
-        
-        
         
 
         cellContentView.addSubview(infoBlurView)
@@ -389,7 +416,7 @@ class NewFeedTableViewCell: SwipeTableViewCell {
     }
 }
 
-extension NewFeedTableViewCell: UITextViewDelegate
+extension FeedTableViewCell: UITextViewDelegate
 {
     func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
         return true

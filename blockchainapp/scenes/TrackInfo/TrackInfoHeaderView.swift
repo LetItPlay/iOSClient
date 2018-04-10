@@ -15,12 +15,9 @@ class TrackInfoHeaderView: UIView {
     
     var delegate: TrackLikedDelegate?
     
-    let refreshControll = UIRefreshControl()
-    
     let _scrollView = UIScrollView()
-    var heightForInfoTextView: NSLayoutConstraint!
     
-    let _channelIconView: UIImageView = {
+    let _channelIconImageView: UIImageView = {
         let imgView = UIImageView()
         imgView.layer.cornerRadius = 20
         imgView.layer.masksToBounds = true
@@ -66,7 +63,7 @@ class TrackInfoHeaderView: UIView {
         label.textColor = .black
         label.backgroundColor = .clear
         label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        label.numberOfLines = 2
+        label.numberOfLines = 10
         label.text = ""
         label.sizeToFit()
         return label
@@ -103,8 +100,6 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
-//        _scrollView.refreshControl = refreshControll
-        
         let emptyLabel = UILabel()
         emptyLabel.text = "Loading..."
         emptyLabel.font = AppFont.Title.sectionNotBold
@@ -120,80 +115,104 @@ class TrackInfoHeaderView: UIView {
         
         let likesCount = IconedLabel(type: .likes)
         let listenCount = IconedLabel(type: .listens)
-        
+
         self.dataLabels = [.likes: likesCount, .listens: listenCount]
         
-        _scrollView.backgroundColor = .white
-        self.addSubview(_scrollView)
-        _scrollView.snp.makeConstraints({ (make) in
-            make.edges.equalToSuperview()
-        })
-        
         let upperView = UIView()
-        _scrollView.addSubview(upperView)
+        self.addSubview(upperView)
         upperView.snp.makeConstraints({ (make) in
-            make.top.equalTo(52)
+            make.top.equalTo(0)
             make.left.equalTo(0)
             make.right.equalTo(self)
             make.height.equalTo(76)
         })
-        
-        upperView.addSubview(_channelIconView)
-        _channelIconView.snp.makeConstraints({ (make) in
+
+        upperView.addSubview(_channelIconImageView)
+        _channelIconImageView.snp.makeConstraints({ (make) in
             make.left.equalTo(16)
             make.width.equalTo(60)
             make.height.equalTo(60)
             make.centerY.equalToSuperview()
         })
-        
+
         upperView.addSubview(_followButton)
         _followButton.snp.makeConstraints({ (make) in
             make.right.equalTo(self).inset(16)
             make.centerY.equalToSuperview()
             make.height.equalTo(32)
         })
-        
+
         upperView.addSubview(_channelTitleLabel)
         _channelTitleLabel.snp.makeConstraints({ (make) in
-            make.left.equalTo(_channelIconView.snp.right).inset(-10)
-            make.right.equalTo(_followButton.snp.left).inset(-10)
+            make.left.equalTo(_channelIconImageView.snp.right).inset(-10)
+            make.right.equalToSuperview().inset(124)
             make.height.equalTo(50)
             make.centerY.equalToSuperview()
         })
         
-        let line = UIView()
-        line.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-        upperView.addSubview(line)
-        line.snp.makeConstraints({ (make) in
+        let invisibleChannelButton = UIButton()
+        invisibleChannelButton.alpha = 1
+        invisibleChannelButton.addTarget(self, action: #selector(channelPressed), for: .touchUpInside)
+        upperView.addSubview(invisibleChannelButton)
+        invisibleChannelButton.snp.makeConstraints({ (make) in
+            make.left.equalTo(_channelIconImageView.snp.left)
+            make.top.equalTo(_channelIconImageView.snp.top)
+            make.right.equalTo(_channelTitleLabel.snp.right)
+            make.height.equalTo(_channelIconImageView.snp.height)
+        })
+
+        let firstLine = UIView()
+        firstLine.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        upperView.addSubview(firstLine)
+        firstLine.snp.makeConstraints({ (make) in
             make.bottom.equalToSuperview()
             make.left.equalTo(self).inset(17)
             make.right.equalTo(self).inset(17)
             make.height.equalTo(2)
         })
         
-        _scrollView.addSubview(_infoTitle)
+        self.addSubview(_infoTitle)
         _infoTitle.snp.makeConstraints({ (make) in
             make.top.equalTo(upperView.snp.bottom).inset(-16)
             make.left.equalTo(16)
             make.right.equalTo(self).inset(16)
         })
-        
-        _scrollView.addSubview(likesCount)
+
+        self.addSubview(likesCount)
         likesCount.snp.makeConstraints { (make) in
             make.top.equalTo(_infoTitle.snp.bottom).inset(-8)
             make.left.equalTo(16)
         }
-        
-        _scrollView.addSubview(listenCount)
+
+        self.addSubview(listenCount)
         listenCount.snp.makeConstraints { (make) in
             make.left.equalTo(likesCount.snp.right).inset(-12)
             make.centerY.equalTo(likesCount)
         }
         
+//        let secondLine = UIView()
+//        secondLine.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+//        self.addSubview(secondLine)
+//        secondLine.snp.makeConstraints({ (make) in
+//            make.top.equalTo(likesCount.snp.bottom).inset(-8)
+//            make.left.equalTo(self).inset(17)
+//            make.right.equalTo(self).inset(17)
+//            make.height.equalTo(2)
+//        })
+        
+        _scrollView.backgroundColor = .white
+        self.addSubview(_scrollView)
+        _scrollView.snp.makeConstraints({ (make) in
+            make.top.equalTo(listenCount.snp.bottom)
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+        })
+        
         let viewForTextView = UIView()
         _scrollView.addSubview(viewForTextView)
         viewForTextView.snp.makeConstraints({ (make) in
-            make.top.equalTo(_infoTitle.snp.bottom)
+            make.top.equalToSuperview()
             make.left.equalTo(self)
             make.right.equalTo(self)
             make.bottom.equalToSuperview()
@@ -202,27 +221,24 @@ class TrackInfoHeaderView: UIView {
         
         viewForTextView.addSubview(_infoTextView)
         _infoTextView.snp.makeConstraints({ (make) in
-            make.top.equalTo(_infoTitle.snp.bottom).inset(-35)
+            make.top.equalToSuperview()
             make.left.equalTo(self).inset(16)
             make.right.equalTo(self).inset(16)
             make.bottom.equalTo(-16)
-            heightForInfoTextView = make.height.equalTo(700).constraint.layoutConstraints.first
         })
     }
     
     func refresh(show: Bool) {
         _scrollView.isHidden = show
-//        if show {
-//            refreshControll.beginRefreshing()
-//        }
-//        else {
-//            refreshControll.endRefreshing()
-//        }
     }
     
     @objc func followButtonTouched() {
         _followButton.isSelected = !_followButton.isSelected
         self.emitter?.send(event: TrackInfoEvent.channelFollowButtonPressed)
+    }
+    
+    @objc func channelPressed() {
+        self.emitter?.send(event: TrackInfoEvent.showChannel)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -237,8 +253,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
         switch data {
         case .track:
             _infoTitle.text = viewModel.track.name
-            _infoTextView.text = viewModel.track.description
-            self.heightForInfoTextView.constant = _infoTextView.sizeThatFits(CGSize(width: _infoTextView.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
+            _infoTextView.attributedText = viewModel.trackDescription
             
             dataLabels[.listens]?.set(text: viewModel.track.listensCount)
             dataLabels[.likes]?.set(text: viewModel.track.likesCount)
@@ -246,7 +261,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             delegate?.track(liked: viewModel.track.isLiked)
             
         case .channel:
-            _channelIconView.sd_setImage(with: viewModel.channel.imageURL)
+            _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL)
             _channelTitleLabel.text = viewModel.channel.name
             
             _followButton.isSelected = viewModel.channel.isSubscribed

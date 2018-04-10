@@ -20,11 +20,13 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 	var viewModel: FeedVMProtocol!
     var emitter: FeedEmitterProtocol!
     
-    var previousCell: NewFeedTableViewCell?
+    var previousCell: FeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
     var alertLabel: UILabel!
 
     var channelsView: ChannelsCollectionView!
+    
+    var didSwipeCell: Bool = false
     
 //    var trackInfoView: TrackInfoBlurView!
 
@@ -95,7 +97,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         tableView.refreshControl = refreshControl
         tableView.separatorStyle = .none
         
-        tableView.register(NewFeedTableViewCell.self, forCellReuseIdentifier: NewFeedTableViewCell.cellID)
+        tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: FeedTableViewCell.cellID)
         tableView.backgroundColor = .white
         tableView.backgroundView?.backgroundColor = .clear
         tableView.sectionIndexBackgroundColor = .clear
@@ -188,13 +190,13 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
                 {
                     previousCell = nil
                     AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: true, animated: true)
+                    (cell as! FeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
-                    previousCell = cell as? NewFeedTableViewCell
+                    previousCell = cell as? FeedTableViewCell
                     AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
-                    (cell as! NewFeedTableViewCell).getInfo(toHide: false, animated: true)
+                    (cell as! FeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
         }
@@ -204,7 +206,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     {
 		self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
 		
-		let cell = tableView.cellForRow(at: indexPath) as! NewFeedTableViewCell
+		let cell = tableView.cellForRow(at: indexPath) as! FeedTableViewCell
 		
 		UIView.animate(withDuration: 0.3, animations: {
 			cell.alertBlurView.alpha = 1
@@ -266,10 +268,24 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewFeedTableViewCell.cellID) as! NewFeedTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.cellID) as! FeedTableViewCell
         cell.onLike = {[weak self] track in
-            self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+            if (self?.didSwipeCell)! {
+                cell.hideSwipe(animated: true)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+            }
         }
+        
+        cell.onChannel = {[weak self] channel in
+            if (self?.didSwipeCell)! {
+                cell.hideSwipe(animated: true)
+            }
+
+            self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+        }
+        
         return cell
     }
 	
@@ -284,7 +300,7 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let cell = cell as? NewFeedTableViewCell
+		let cell = cell as? FeedTableViewCell
         //for swipes
         cell?.delegate = self
 
@@ -296,18 +312,19 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         cell?.getInfo(toHide: true, animated: false)
 		
 		cell?.onLike = { [weak self] track in
+            cell?.hideSwipe(animated: true)
             self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
 		}
     }
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let vm = self.viewModel.tracks[indexPath.item]
-		return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
 	
 	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         let vm = self.viewModel.tracks[indexPath.item]
-        return NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -340,50 +357,80 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var toBeginning: Bool!
         var image: UIImage!
         var addTo = ""
-        var frameForTitleLabel: CGRect!
-        var frameForImageView: CGRect!
+        
+        let myView = UIView(frame: CGRect(x: 0, y: 20, width: 150, height: 305))
+        let myLabel = UILabel()
+        myLabel.textColor = .white
+        myLabel.font = AppFont.Title.big
+        myLabel.lineBreakMode = .byWordWrapping
+        myLabel.numberOfLines = 0
         
         if orientation == .left
         {
             image = UIImage(named: "illustrationTop")
             toBeginning = true
             addTo = "To the\ntop"
-            frameForTitleLabel = CGRect(x: 55, y: 55, width: 87, height: 200)
-            frameForImageView = CGRect(x: 50, y: 47, width: 90, height: 278-71)
+            
+            let imageView = UIImageView(image: image)
+            myView.addSubview(imageView)
+            imageView.snp.makeConstraints { (make) in
+                make.right.equalToSuperview().inset(10)
+                make.centerY.equalToSuperview().inset(-10)
+            }
+            
+            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.textAlignment = .right
+            myView.addSubview(myLabel)
+            myLabel.snp.makeConstraints { (make) in
+                make.right.equalTo(-47)
+                make.centerY.equalToSuperview().inset(-10)
+            }
         }
         else
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
             addTo = "To the\nbottom"
-            frameForTitleLabel = CGRect(x: 30, y: 55, width: 87, height: 200)
-            frameForImageView = CGRect(x: 10, y: 47, width: 90, height: 278-71)
+            
+            let imageView = UIImageView(image: image)
+            myView.addSubview(imageView)
+            imageView.snp.makeConstraints { (make) in
+                make.left.equalTo(10)
+                make.centerY.equalToSuperview().inset(-10)
+            }
+            
+            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.textAlignment = .left
+            myView.addSubview(myLabel)
+            myLabel.snp.makeConstraints { (make) in
+                make.left.equalTo(47)
+                make.centerY.equalToSuperview().inset(-10)
+            }
         }
         
         let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
-        
-        addToPlaylistAction.image = image
+
+        addToPlaylistAction.customView = myView
         addToPlaylistAction.backgroundColor = .clear
         
-        addToPlaylistAction.textColor = .white
-        addToPlaylistAction.font = AppFont.Title.big
-        
-        addToPlaylistAction.frameForTitleLabel = frameForTitleLabel
-        addToPlaylistAction.frameForImageView = frameForImageView
-        addToPlaylistAction.fixCenterForItems = 12
-        
-        if addTo.range(of: "top") == nil {
-            addToPlaylistAction.textAlignmentForTitleLabel = .left
-        }
+//        if addTo.range(of: "top") == nil {
+//            myLabel.textAlignment = .right
+//        }
         
         return [addToPlaylistAction]
     }
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeTableOptions {
+        
+        self.didSwipeCell = true
+        
+        let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
+        
         var options = SwipeTableOptions()
-        options.expansionStyle = SwipeExpansionStyle.selection
+//        options.expansionStyle = SwipeExpansionStyle.selection
+        options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
         options.minimumButtonWidth = 150
@@ -395,7 +442,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var frame: CGRect!
 		
 		let vm = self.viewModel.tracks[indexPath.item]
-		let height =  NewFeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		let height =  FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
 		
         if orientation == .right
         {
@@ -416,6 +463,10 @@ extension FeedViewController: SwipeTableViewCellDelegate
         options.showGradient = gradientLayer
         
         return options
+    }
+    
+    func tableView(_ tableView: UITableView, didEndEditingRowAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {
+        self.didSwipeCell = false
     }
 }
 

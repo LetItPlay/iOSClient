@@ -12,6 +12,8 @@ import Pageboy
 
 class PlaylistsTab: TabmanViewController {
     
+    let viewControllers = [UserPlaylistBuilder.build(params: nil), PlaylistsBuilder.build(params: nil)]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -50,14 +52,7 @@ extension PlaylistsTab: PageboyViewControllerDataSource {
     }
     
     func viewController(for pageboyViewController: PageboyViewController, at index: PageboyViewController.PageIndex) -> UIViewController? {
-        switch index {
-        case 0:
-            return UserPlaylistBuilder.build(params: nil)
-        case 1:
-            return PlaylistsBuilder.build(params: nil)
-        default:
-            return nil//UIViewController()
-        }
+        return self.viewControllers[index]
     }
     
     func defaultPage(for pageboyViewController: PageboyViewController) -> PageboyViewController.Page? {

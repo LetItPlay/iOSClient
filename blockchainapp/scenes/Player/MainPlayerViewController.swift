@@ -121,9 +121,6 @@ class MainPlayerViewController: UIViewController {
 		
 		self.view.backgroundColor = UIColor.white
 		
-		underblurimageView.image = UIImage(named: "channelPrevievImg")
-		coverImageView.image = UIImage(named: "channelPrevievImg")
-		
 		self.view.addSubview(underblurimageView)
 		underblurimageView.snp.makeConstraints { (make) in
 			make.centerX.equalToSuperview()

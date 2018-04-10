@@ -73,7 +73,6 @@ class PlaylistTableViewCell: UITableViewCell {
 		
 		self.selectionStyle = .none
 		
-		playlistImageView.backgroundColor = .red
 		playlistTitleLabel.attributedText = PlaylistTableViewCell.titleString(string: "Fresh IT news")
 		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
 	}

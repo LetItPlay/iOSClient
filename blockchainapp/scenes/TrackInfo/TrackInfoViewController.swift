@@ -31,7 +31,10 @@ class TrackInfoViewController: UIViewController {
         
         self.view.addSubview(trackInfoHeaderView)
         trackInfoHeaderView.snp.makeConstraints({ (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(35)
+            make.left.equalTo(0)
+            make.right.equalTo(0)
+            make.bottom.equalTo(0)
         })
     }
 

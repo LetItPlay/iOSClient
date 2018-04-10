@@ -74,6 +74,13 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
         
         self.tableView.tableHeaderView = self.header
+        
+        let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
+        self.navigationItem.rightBarButtonItem = searchItem
+    }
+    
+    @objc func search() {
+        self.emitter.send(event: ChannelEvent.showSearch)
     }
 	
 	@objc func followPressed() {

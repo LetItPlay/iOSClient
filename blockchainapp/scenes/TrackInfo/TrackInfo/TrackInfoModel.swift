@@ -17,12 +17,14 @@ protocol TrackInfoEventHandler {
     func updateTrack(id: Int)
     func trackLiked(id: Int)
     func channelFollowButtonTyped()
+    func showChannel()
 }
 
 protocol TrackInfoModelDelegate: class {
     func reload(track: TrackViewModel)
     func reload(channel: SearchChannelViewModel)
     func followUpdate(isSubscribed: Bool)
+    func showChannel(id: Int)
 }
 
 class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
@@ -84,6 +86,10 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
         default:
             break
         }
+    }
+    
+    func showChannel() {
+        self.delegate?.showChannel(id: self.channel.id)
     }
 }
 

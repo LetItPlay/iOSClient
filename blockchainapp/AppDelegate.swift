@@ -61,6 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillEnterForeground(_ application: UIApplication) {
 		try? AVAudioSession.sharedInstance().setActive(true)
 	}
+    
     //DB
     func migrate() {
         let config = Realm.Configuration(

@@ -14,8 +14,9 @@ protocol FeedEventHandler: class {
 	func reload()
 	func trackShowed(index: Int)
 	func showAllChannels()
-	func addTrack(atIndex: Int, toBegining: Bool)
+	func addTrack(index: Int, toBegining: Bool)
 	func showSearch()
+    func showChannel(index: Int)
 }
 
 protocol FeedModelDelegate: class {
@@ -26,6 +27,7 @@ protocol FeedModelDelegate: class {
 	func showEmptyMessage(_ show: Bool)
 	func showAllChannels()
 	func showSearch()
+    func showChannel(id: Int)
 }
 
 
@@ -123,14 +125,18 @@ FeedEventHandler {
         }
     }
 	
-	func addTrack(atIndex: Int, toBegining: Bool) {
-		let track = self.tracks[atIndex]
+	func addTrack(index: Int, toBegining: Bool) {
+		let track = self.tracks[index]
 		UserPlaylistManager.shared.add(track: track, toBegining: toBegining)
 	}
 	
 	func showSearch() {
 		self.delegate?.showSearch()
 	}
+    
+    func showChannel(index: Int) {
+        self.delegate?.showChannel(id: self.tracks[index].channel.id)
+    }
 }
 
 extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {

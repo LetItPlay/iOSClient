@@ -17,7 +17,7 @@ protocol MiniPlayerPresentationDelegate: class {
 class MiniPlayerView: UITabBar {
 	
 	weak var presentationDelegate: MiniPlayerPresentationDelegate?
-	
+    
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.isUserInteractionEnabled = false
@@ -58,9 +58,10 @@ class MiniPlayerView: UITabBar {
 		button.setImage(UIImage(named: "playInactive"), for: .normal)
 		button.setImage(UIImage(named: "stopInactive"), for: .selected)
 		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .highlighted)
+        button.setBackgroundImage(UIImage.init(named: "touchBg"), for: [.selected, .highlighted])
 		button.snp.makeConstraints({ (make) in
-			make.width.equalTo(40)
-			make.height.equalTo(40)
+			make.width.equalTo(50)
+			make.height.equalTo(50)
 		})
 		return button
 	}()
@@ -70,8 +71,8 @@ class MiniPlayerView: UITabBar {
 		button.setImage(UIImage.init(named: "popupNextInactive"), for: .normal)
 		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .highlighted)
 		button.snp.makeConstraints({ (make) in
-			make.width.equalTo(40)
-			make.height.equalTo(40)
+			make.width.equalTo(50)
+			make.height.equalTo(50)
 		})
 		return button
 	}()
@@ -91,7 +92,7 @@ class MiniPlayerView: UITabBar {
 		
 		self.addSubview(playButton)
 		playButton.snp.makeConstraints { (make) in
-			make.right.equalTo(nextButton.snp.left).inset(-16)
+			make.right.equalTo(nextButton.snp.left)
 			make.centerY.equalTo(nextButton)
 		}
 		
@@ -123,9 +124,6 @@ class MiniPlayerView: UITabBar {
 		}
 		
 		progressView.progress = 0.4
-//        trackImageView.backgroundColor = .red
-//        trackNameLabel.text = "123 123 123123 123 123123 123 123123 123 123"
-//        trackAuthorLabel.text = "123 123 123123 123 123123 123 123123 123 123"
 
 		let tap = UITapGestureRecognizer(target: self, action: #selector(playerOpen(gesture:)))
 		self.addGestureRecognizer(tap)
