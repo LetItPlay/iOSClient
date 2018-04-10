@@ -97,6 +97,7 @@
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
+		9DDB0D0B207B8BF100581613 /* OthersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersViewController.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
 		9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */; };
 		9DFAE6F72060FB1500EF7C4D /* TrackInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */; };
@@ -253,6 +254,7 @@
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
+		9DDB0D0A207B8BF100581613 /* OthersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersViewController.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
 		9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
 		9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoHeaderView.swift; sourceTree = "<group>"; };
@@ -510,6 +512,14 @@
 			path = Recommended;
 			sourceTree = "<group>";
 		};
+		9DDB0D07207B8A9F00581613 /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				9DDB0D0A207B8BF100581613 /* OthersViewController.swift */,
+			);
+			path = Others;
+			sourceTree = "<group>";
+		};
 		9DE1A75C207B1A7D007604CA /* Feed */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,6 +630,7 @@
 		CF44535F1F56C9D700660474 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				9DDB0D07207B8A9F00581613 /* Others */,
 				9D4DB1CC206A8B1D00B767FE /* Playlists */,
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
@@ -1131,6 +1142,7 @@
 				01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */,
 				9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
+				9DDB0D0B207B8BF100581613 /* OthersViewController.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,

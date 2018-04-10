@@ -38,6 +38,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         return button
     }()
     
+    var sharedButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "sharedInactive"), for: .normal)
+        button.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        return button
+    }()
+    
     var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 	
 	var mask: CAShapeLayer!
@@ -110,6 +117,14 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         })
+        
+        self.view.addSubview(sharedButton)
+        sharedButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(self.view.frame.width / 10 - 12)
+            make.bottom.equalTo(-8)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        }
 	}
 	
 	@objc func arrowTapped() {
@@ -291,6 +306,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
 
         self.present(speedAlert, animated: true, completion: nil)
+    }
+    
+    @objc func sharedButtonTouched() {
+        MainRouter.shared.shareTrack(track: self.audioController.currentTrack, viewController: self)
     }
     
     func change(speed: Float) {

@@ -307,6 +307,11 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
         cell.fill(vm: self.viewModel.tracks[indexPath.item])
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
+        }
+        
 		return cell
 	}
 	

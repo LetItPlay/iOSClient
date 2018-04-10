@@ -106,59 +106,6 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		return self.tracks[section].count
 	}
 	
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        if self.tracks[section].count == 0 {
-//            return nil
-//        }
-//
-//        let view = UIView()
-//        view.backgroundColor = .white
-//
-//        let label = UILabel()
-//        label.font = AppFont.Title.big
-//        label.textColor = AppColor.Title.dark
-//        label.text = "Current playlist".localized
-//
-//        let tracks = IconedLabel.init(type: .tracks)
-//        tracks.setData(data: Int64(self.tracks[section].count))
-//
-//        let time = IconedLabel.init(type: .time)
-//        time.setData(data: Int64(self.tracks[section].map({$0.length}).reduce(0, {$0 + $1})))
-//
-//        view.addSubview(label)
-//        label.snp.makeConstraints { (make) in
-//            make.top.equalToSuperview().inset(3)
-//            make.left.equalToSuperview().inset(16)
-//        }
-//
-//        view.addSubview(tracks)
-//        tracks.snp.makeConstraints { (make) in
-//            make.left.equalToSuperview().inset(16)
-//            make.top.equalTo(label.snp.bottom).inset(-7)
-//        }
-//
-//        view.addSubview(time)
-//        time.snp.makeConstraints { (make) in
-//            make.left.equalTo(tracks.snp.right).inset(-8)
-//            make.centerY.equalTo(tracks)
-//        }
-//
-//        let line = UIView()
-//        line.backgroundColor = AppColor.Element.redBlur
-//        line.layer.cornerRadius = 1
-//        line.layer.masksToBounds = true
-//
-//        view.addSubview(line)
-//        line.snp.makeConstraints { (make) in
-//            make.left.equalToSuperview().inset(16)
-//            make.right.equalToSuperview().inset(16)
-//            make.bottom.equalToSuperview()
-//            make.height.equalTo(2)
-//        }
-//
-//        return view
-//    }
-	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 		return 0.01
 	}
@@ -166,13 +113,6 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
 		return nil
 	}
-	
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        if self.tracks[section].count == 0 {
-//            return 0.1
-//        }
-//        return 73
-//    }
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		let contr = AudioController.main
@@ -183,9 +123,19 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
 		let track = self.tracks[indexPath]
 		cell.track = track
+        
+        cell.onOthers = {[weak self] in
+            let othersViewController = OthersViewController()
+            othersViewController.add(track: self?.tracks[1][indexPath.row] as Any)
+            othersViewController.add(controller: self!)
+            self?.present(othersViewController, animated: true, completion: nil)
+        }
+        
 		let hideListens = indexPath == currentIndex
 //		cell.dataLabels[.listens]?.isHidden = hideListens
 		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+        cell.showOthersButton.isHidden = hideListens
+        
 		return cell
 	}
 	

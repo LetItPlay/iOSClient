@@ -4,6 +4,8 @@ import SnapKit
 class PlayerTableViewCell: UITableViewCell {
 	
 	static let cellID: String = "PlayerTrackCellID"
+    
+    public var onOthers: (() -> Void)?
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -41,6 +43,12 @@ class PlayerTableViewCell: UITableViewCell {
 		label.textAlignment = .right
 		return label
 	}()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
+    }()
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
@@ -113,6 +121,15 @@ class PlayerTableViewCell: UITableViewCell {
 		}
 		
 		playingIndicator.isHidden = true
+        
+        showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
+        self.contentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+            make.right.equalTo(-16)
+            make.bottom.equalTo(-8)
+        }
 		
 		self.dataLabels = [.time: timeCount, .playingIndicator: playingIndicator]
 		
@@ -129,6 +146,10 @@ class PlayerTableViewCell: UITableViewCell {
 			make.height.equalTo(1)
 		}
 	}
+    
+    @objc func showOthersButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

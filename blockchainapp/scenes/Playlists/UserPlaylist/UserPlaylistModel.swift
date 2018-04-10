@@ -20,12 +20,14 @@ protocol UserPlaylistEventHandler: class {
     func trackSelected(index: Int)
     func clearPlaylist()
     func trackDelete(index: Int)
+    func showOthers(index: Int)
 }
 
 protocol UserPlaylistModelDelegate: class {
     func show(tracks: [TrackViewModel])
     func emptyMessage(show: Bool)
     func delete(index: Int)
+    func showOthers(track: Track)
 }
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate
@@ -111,6 +113,10 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         default:
             break
         }
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

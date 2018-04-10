@@ -222,6 +222,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 }
 
 extension FeedViewController: FeedVMDelegate {
+    
     func reload() {
         self.tableView.reloadData()
         self.tableView.refreshControl?.endRefreshing()
@@ -284,6 +285,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+        }
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: FeedEvent.showOthers(index: indexPath.row))
         }
         
         return cell

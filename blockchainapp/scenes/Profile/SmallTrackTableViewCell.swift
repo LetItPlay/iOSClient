@@ -5,6 +5,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 
 	static let cellID: String = "LikeTrackCellID"
     var separator = UIView()
+    
+    public var onOthers: (() -> Void)?
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -42,6 +44,12 @@ class SmallTrackTableViewCell: UITableViewCell {
 		label.textAlignment = .right
 		return label
 	}()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
+    }()
 	
     var dataLabels: [IconLabelType: IconedLabel] = [:]
     var viewModel: SmallTrackViewModel?
@@ -83,6 +91,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+        
+        showOthersButton.isHidden = vm.isPlaying
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -143,6 +153,15 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 		
 		playingIndicator.isHidden = true
+        
+        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.contentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.height.equalTo(26)
+            make.width.equalTo(26)
+            make.right.equalTo(-8)
+            make.bottom.equalTo(-8)
+        }
 		
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		
@@ -160,6 +179,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 		self.separator = view
 	}
+    
+    @objc func sharedButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

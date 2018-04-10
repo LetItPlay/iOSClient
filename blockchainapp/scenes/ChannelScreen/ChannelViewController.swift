@@ -171,6 +171,11 @@ extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
 		cell.track = self.viewModel.tracks[indexPath.item]
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: ChannelEvent.showOthers(index: indexPath.row))
+        }
+        
 		return cell
 	}
 	
