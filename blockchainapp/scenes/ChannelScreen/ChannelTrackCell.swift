@@ -71,6 +71,8 @@ class ChannelTrackCell: SwipeTableViewCell {
             
             dataLabels[.listens]?.isHidden = (track?.isPlaying)!
             dataLabels[.playingIndicator]?.isHidden = !(track?.isPlaying)!
+            
+            showOthersButton.isHidden = (track?.isPlaying)!
 		}
 	}
 	

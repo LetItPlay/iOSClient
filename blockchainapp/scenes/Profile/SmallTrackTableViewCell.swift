@@ -91,6 +91,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+        
+        showOthersButton.isHidden = vm.isPlaying
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

@@ -134,6 +134,8 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		let hideListens = indexPath == currentIndex
 //		cell.dataLabels[.listens]?.isHidden = hideListens
 		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+        cell.showOthersButton.isHidden = hideListens
+        
 		return cell
 	}
 	
