@@ -97,14 +97,9 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		}
         
 		if !playerIsShowed && show {
-//            self.view.layoutIfNeeded()
 			miniPlayerBottomConstr?.constant = 0
 			playerIsShowed = true
 		}
-        
-//        UIView.animate(withDuration: 0.5) {
-//            self.view.layoutIfNeeded()
-//        }
         
         UIView.animate(withDuration: 0.5, animations: {
             self.view.layoutIfNeeded()
