@@ -380,7 +380,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             myView.addSubview(imageView)
             imageView.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(10)
-                make.centerY.equalToSuperview().inset(-10)
+                make.centerY.equalToSuperview()
             }
             
             myLabel.text = "\(addTo)\nof the\nplaylist".localized
@@ -401,7 +401,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             myView.addSubview(imageView)
             imageView.snp.makeConstraints { (make) in
                 make.left.equalTo(10)
-                make.centerY.equalToSuperview().inset(-10)
+                make.centerY.equalToSuperview()
             }
             
             myLabel.text = "\(addTo)\nof the\nplaylist".localized
