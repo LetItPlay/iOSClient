@@ -123,11 +123,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         }
 //        tableView.endUpdates()
     }
-    
-    func show(othersController: OthersViewController) {
-        othersController.add(controller: self)
-        self.present(othersController, animated: true, completion: nil)
-    }
 }
 
 extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {

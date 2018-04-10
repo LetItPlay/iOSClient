@@ -28,7 +28,7 @@ protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
     func trackUpdate(index: Int, vm: TrackViewModel)
     func show(tracks: [TrackViewModel], isContinue: Bool)
-    func showOthers(track: TrackObject, index: Int)
+    func showOthers(track: TrackObject)
 }
 
 class LikesModel: LikesModelProtocol, LikesEventHandler {
@@ -131,7 +131,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index], index: index)
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

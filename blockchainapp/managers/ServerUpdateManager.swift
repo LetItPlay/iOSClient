@@ -67,6 +67,7 @@ class ServerUpdateManager {
 			let obj = TrackObject(track: track)
 			realm?.add(obj, update: true)
 		}
+        
 		RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
             var track = track
             track.likeCount = tuple.0

@@ -19,8 +19,6 @@ protocol LikesVMProtocol {
 protocol LikesVMDelegate: class {
     func reload()
     func make(updates: [CollectionUpdate: [Int]])
-    func show(othersController: OthersViewController)
-
 }
 
 class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
@@ -84,10 +82,7 @@ class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
         self.delegate?.make(updates: [.update: [index]])
     }
     
-    func showOthers(track: TrackObject, index: Int) {
-        track.image = (self.tracks[index].imageURL?.absoluteString)!
-        let othersViewController = OthersViewController()
-        othersViewController.add(track: track)
-        self.delegate?.show(othersController: othersViewController)
+    func showOthers(track: TrackObject) {
+        MainRouter.shared.showOthers(track: track)
     }
 }

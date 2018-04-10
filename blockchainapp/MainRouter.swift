@@ -75,6 +75,14 @@ class MainRouter: Router {
         self.delegate?.hidePlayer()
     }
     
+    func showOthers(track: Any) {
+        let controller = self.currentNavigationController?.viewControllers.first
+        let othersController = OthersViewController()
+        othersController.add(track: track)
+        othersController.add(controller: (controller)!)
+        controller?.present(othersController, animated: true, completion: nil)
+    }
+    
     func shareTrack(track: Any, viewController: UIViewController) {
         
         var sharedText: String!
@@ -94,7 +102,7 @@ class MainRouter: Router {
         
         if let track = track as? TrackObject {
             sharedText = "\"\(track.name)\" - \(track.channel)"
-            sharedImage = UIImage()
+            sharedImage = try! UIImage(data: Data.init(contentsOf: track.image.url()!))
             sharedUrl = RequestManager.server + "/tracks/\(track.id)"
         }
         

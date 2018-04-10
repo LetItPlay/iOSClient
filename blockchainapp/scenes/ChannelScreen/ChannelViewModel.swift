@@ -21,7 +21,6 @@ protocol ChannelVMDelegate: class {
     func reloadTracks()
     func make(updates: [CollectionUpdate: [Int]])
     func updateSubscription()
-    func show(othersController: OthersViewController)
 }
 
 class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
@@ -90,9 +89,7 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     }
     
     func showOthers(track: Track) {
-        let othersViewController = OthersViewController()
-        othersViewController.add(track: track)
-        self.delegate?.show(othersController: othersViewController)
+        MainRouter.shared.showOthers(track: track)
     }
 }
 

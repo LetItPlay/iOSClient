@@ -193,12 +193,6 @@ class ProfileViewController: UIViewController {
 
 extension ProfileViewController: LikesVMDelegate
 {
-    
-    func show(othersController: OthersViewController) {
-        othersController.add(controller: self)
-        self.present(othersController, animated: true, completion: nil)
-    }
-    
     func reload() {
         self.tableView.reloadData()
     }
