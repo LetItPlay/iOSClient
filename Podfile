@@ -25,7 +25,7 @@ target 'blockchainapp' do
   
   pod 'SwipeCellKit'#, :inhibit_warnings => true
 
-  pod 'Tabman', '~> 1.0'
+  pod 'Tabman', '~> 1.6.0'
 
   #Crashlytics
   pod 'Fabric'
