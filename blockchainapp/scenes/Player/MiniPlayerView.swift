@@ -136,7 +136,26 @@ class MiniPlayerView: UITabBar {
 		
 		self.playButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
 		self.nextButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        self.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        self.addGestureRecognizer(swipeLeft)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
+        self.addGestureRecognizer(swipeDown)
 	}
+    
+    @objc func swipeGestureRecognizer() {
+        AudioController.main.make(command: .pause)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.05) {
+            AudioController.main.update(.clearAll)
+        }
+    }
 	
 	@objc func buttonPressed(sender: UIButton) {
 		if sender == self.nextButton {
