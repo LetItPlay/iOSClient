@@ -1,14 +1,20 @@
-//
-// Created by Aleksey Tyurnin on 06/04/2018.
-// Copyright (c) 2018 Ivan Gorbulin. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
-class PlayerBuilder: Builder {
-    class func build(params: [String: Any]?) -> UIViewController? {
+class PlayerHandler {
+    var miniPlayer: MiniPlayerView!
+    var main: PlayerViewController!
 
-        return nil
+    init() {
+        let player = AudioPlayer()
+        let playerModel = PlayerModel(player: player)
+        let playerVM = PlayerViewModel()
+        let emitter = PlayerEmitter(handler: playerModel)
+        let playerVC = MainPlayerViewController(viewModel: playerVM, emitter: emmiter)
+
+        self.main = PlayerViewController()
+        self.miniPlayer = MiniPlayerView()
+
+        playerVC.miniPlayer = self.miniPlayer
     }
 }

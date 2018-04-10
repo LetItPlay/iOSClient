@@ -6,7 +6,8 @@ protocol PlaylistModelDelegate: class {
 }
 
 protocol PlayerModelDelegate: class {
-
+    func update(status: [PlayerControlsStatus : Bool])
+    func update(progress: Float, currentTime: String, leftTime: String)
 }
 
 protocol PlayerEventHandler: ModelProtocol {
@@ -88,6 +89,13 @@ class PlayerModel {
             // TODO: Update playlist
         }
     }
+
+    func updateStatus() {
+        self.playerDelegate.update(status:
+        [.isPlaying: self.player.status == .playing,
+         .canForward: self.playingIndex != self.tracks.count - 1,
+         .canBackward: self.playingIndex != 0])
+    }
 }
 
 extension PlayerModel: PlayerEventHandler {
@@ -131,29 +139,34 @@ extension PlayerModel: PlayerEventHandler {
     }
 
     func send(event: LifeCycleEvent) {
-
+        switch event {
+        default:
+            break
+        }
     }
 
     func morePressed(index: Int) {
 
     }
-
 }
 
 extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
+        if let item = self.currentTrack.id, item.id == id {
 
+        }
     }
 
     func update(time: AudioTime) {
-
+        self.currentTime = time
+        self.playerDelegate.update(progress: time.current/time.length,
+                currentTime: Int64(round(time.current)).formatTime(),
+                leftTime: "-" + Int64(min(0, round(time.length - time.current))).formatTime())
     }
 
     func itemFinishedPlaying(id: Int) {
         if self.tracks.last?.id == id {
-
-        } else {
-
+            self.updateStatus()
         }
     }
 }
