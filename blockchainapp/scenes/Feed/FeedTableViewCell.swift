@@ -55,7 +55,7 @@ class FeedTableViewCell: SwipeTableViewCell {
             self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
             self.dataLabels[.listens]?.isHidden = vm.isPlaying
             
-            self.showOthersButton.isHidden = vm.isPlaying
+//            self.showOthersButton.isHidden = vm.isPlaying
         
             self.likeButton.isSelected = vm.isLiked
         
