@@ -9,7 +9,7 @@
 import Foundation
 
 protocol PlaylistsVMProtocol {
-    weak var delegate: PlaylistsVMDelegate? {get set}
+    var delegate: PlaylistsVMDelegate? {get set}
     var playlists: [PlaylistViewModel] {get set}
 }
 
@@ -20,8 +20,8 @@ protocol PlaylistsVMDelegate: class {
 class PlaylistsViewModel: PlaylistsVMProtocol, PlaylistsModelDelegate {
     
     var playlists: [PlaylistViewModel] = []
-    
-    var delegate: PlaylistsVMDelegate?
+
+    weak var delegate: PlaylistsVMDelegate?
     var model: PlaylistsModelProtocol!
     
     init(model: PlaylistsModelProtocol) {
