@@ -10,7 +10,7 @@ class PlayerHandler {
         let playerModel = PlayerModel(player: player)
         let playerVM = PlayerViewModel()
         let emitter = PlayerEmitter(handler: playerModel)
-        let playerVC = MainPlayerViewController(viewModel: playerVM, emitter: emmiter)
+        let playerVC = MainPlayerViewController(viewModel: playerVM, emitter: emitter)
 
         self.main = PlayerViewController()
         self.miniPlayer = MiniPlayerView()

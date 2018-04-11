@@ -91,7 +91,7 @@ class PlayerModel {
     }
 
     func updateStatus() {
-        self.playerDelegate.update(status:
+        self.playerDelegate?.update(status:
         [.isPlaying: self.player.status == .playing,
          .canForward: self.playingIndex != self.tracks.count - 1,
          .canBackward: self.playingIndex != 0])
@@ -152,21 +152,24 @@ extension PlayerModel: PlayerEventHandler {
 
 extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
-        if let item = self.currentTrack.id, item.id == id {
-
+        if let item = self.currentTrack?.id, item == id {
         }
+        self.updateStatus()
     }
 
     func update(time: AudioTime) {
         self.currentTime = time
-        self.playerDelegate.update(progress: time.current/time.length,
+        self.playerDelegate?.update(progress: Float(time.current/time.length),
                 currentTime: Int64(round(time.current)).formatTime(),
                 leftTime: "-" + Int64(min(0, round(time.length - time.current))).formatTime())
     }
 
     func itemFinishedPlaying(id: Int) {
         if self.tracks.last?.id == id {
-            self.updateStatus()
+            self.player.make(command: .pause)
+        } else {
+            self.execute(event: .change(dir: .forward))
         }
+        self.updateStatus()
     }
 }

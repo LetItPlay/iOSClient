@@ -11,6 +11,7 @@ import SnapKit
 import MediaPlayer
 import AssistantKit
 import MarqueeLabel
+import SDWebImage
 
 class MainPlayerViewController: UIViewController, PlayerViewDelegate {
 
@@ -18,11 +19,17 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
     var viewModel: PlayerViewModel!
     var emitter: PlayerEmitter!
 
+    init() { super.init(nibName: nil, bundle: nil) }
+
     init(viewModel: PlayerViewModel, emitter: PlayerEmitter) {
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel = viewModel
-        self.emitter = PlayerEmitter
+        self.emitter = emitter
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        return nil
     }
 
     override func viewDidLoad() {
@@ -38,57 +45,56 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
 	}
 
 	@objc func buttonPressed(sender: UIButton) {
-        var event: PlayerEvent = .plause
+        var event: PlayerEvent!
         switch sender.tag {
             case 1,2:
                 event = .change(dir: sender.tag == 1 ? .backward : .forward)
             case 3,4:
                 event = .seekDir(dir: sender.tag == 3 ? .backward : .forward)
+            default:
+                event = .plause
         }
 	}
 
     func updateButtons() {
-        if let dict = self.viewModel.status {
-            for tuple in dict {
-                switch tuple.key {
-                    case .isPlaying:
-                        self.playButton.isSelected = tuple.value
-                    case .canBackward:
-                        self.trackChangeButtons.prev.isEnabled = tuple.value
-                    case .canForward:
-                        self.trackChangeButtons.next.isEnabled = tuple.value
-                }
+        let dict = self.viewModel.status
+        for tuple in dict {
+            switch tuple.key {
+            case .isPlaying:
+                self.playButton.isSelected = tuple.value
+            case .canBackward:
+                self.trackChangeButtons.prev.isEnabled = tuple.value
+            case .canForward:
+                self.trackChangeButtons.next.isEnabled = tuple.value
             }
         }
     }
 
     func updateTime() {
-        if let time = self.viewModel.currentTimeState {
-            self.trackProgressView.trackProgressLabels.start = time.past
-            self.trackProgressView.trackProgressLabels.fin = time.future
-        }
+        let time = self.viewModel.currentTimeState
+        self.trackProgressView.trackProgressLabels.start.text = time.past
+        self.trackProgressView.trackProgressLabels.fin.text = time.future
     }
 
     func updateTrack() {
-        if let track = self.viewModel.track {
-            if let url = track.imageURL {
-                self.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-                    self.setPicture(image: img)
-                })
-            } else {
-                self.setPicture(image: nil)
-            }
-            self.channelNameLabel = track.author
-            self.trackNameLabel = track.name
-            self.miniPlayer?.trackNameLabel.text = track.name
-            self.miniPlayer?.trackAuthorLabel.text = track.name
+        let track = self.viewModel.track
+        if let url = track.imageURL {
+            self.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+                self.setPicture(image: img)
+            })
+        } else {
+            self.setPicture(image: nil)
         }
+        self.channelNameLabel.text = track.author
+        self.trackNameLabel.text = track.name
+        self.miniPlayer?.trackNameLabel.text = track.name
+        self.miniPlayer?.trackAuthorLabel.text = track.name
     }
 
     func setPicture(image: UIImage?) {
-		self.underblurimageView.image = image
+		self.underBlurImageView.image = image
 		self.coverImageView.image = image
-        self.miniPlayer?.trackImageView.image = img
+        self.miniPlayer?.trackImageView.image = image
 
         guard let image = image else {
 			return
@@ -113,8 +119,12 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		
-		self.shadowLayer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: underblurimageView.frame.width, height: underblurimageView.frame.height)), cornerRadius: 7).cgPath
-		self.shadowLayer.frame = self.underblurimageView.frame
+		self.shadowLayer.shadowPath = UIBezierPath.init(
+                roundedRect: CGRect.init(
+                        origin: CGPoint.zero,
+                        size: underBlurImageView.frame.size),
+                cornerRadius: 7).cgPath
+		self.shadowLayer.frame = self.underBlurImageView.frame
 		self.channelNameLabel.fadeLength = 16
 		self.trackNameLabel.fadeLength = 16
 	}
@@ -259,8 +269,8 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
             self.landscapeConstraint = make.height.equalTo(coverImageView.snp.width).multipliedBy(9.0/16).constraint.layoutConstraints.first
 
 
-            make.top.equalTo(underblurimageView.snp.top)
-            make.size.equalTo(underblurimageView.snp.size)
+            make.top.equalTo(underBlurImageView.snp.top)
+            make.size.equalTo(underBlurImageView.snp.size)
         }
 
         let volumeSlider: MPVolumeView = {
