@@ -32,21 +32,23 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     init(track: Any) {
 //        self.getData(trackId: trackID)
         
-        if let track = track as? Track {
-            self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel.name)",
-                                                 url: RequestManager.server + "/tracks/\(track.id)",
-                                                 image: try! UIImage(data: Data(contentsOf: (track.image)!))!)
-        }
-        if let track = track as?  AudioTrack {
-            self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.author)",
-                url: RequestManager.server + "/tracks/\(track.id)",
-                image: try! UIImage(data: Data(contentsOf: (track.imageURL)!))!)
-        }
-        
-        if let track = track as? TrackObject {
-            self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel)",
-                url: RequestManager.server + "/tracks/\(track.id)",
-                image: (try! UIImage(data: Data.init(contentsOf: track.image.url()!)))!)
+        DispatchQueue.global(qos: .background).async {
+            if let track = track as? Track {
+                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel.name)",
+                    url: RequestManager.server + "/tracks/\(track.id)",
+                    image: try! UIImage(data: Data(contentsOf: (track.image)!))!)
+            }
+            if let track = track as?  AudioTrack {
+                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.author)",
+                    url: RequestManager.server + "/tracks/\(track.id)",
+                    image: try! UIImage(data: Data(contentsOf: (track.imageURL)!))!)
+            }
+            
+            if let track = track as? TrackObject {
+                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel)",
+                    url: RequestManager.server + "/tracks/\(track.id)",
+                    image: (try! UIImage(data: Data.init(contentsOf: track.image.url()!)))!)
+            }
         }
     }
     
