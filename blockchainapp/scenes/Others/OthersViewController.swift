@@ -35,7 +35,7 @@ class OthersViewController: UIAlertController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.tintColor = AppColor.Title.lightGray
+        self.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(0.8)
         
 //        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
 //        let messageAttrString = NSMutableAttributedString(string: "", attributes: messageFont)
@@ -60,13 +60,13 @@ class OthersViewController: UIAlertController {
                 self.emitter.send(event: OthersEvent.report(.cruelContent))
             }))
             
-            alert.addAction(UIAlertAction(title: "Отмена", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: nil))
             
             self.viewController.present(alert, animated: true)
         }))
         
 //        self.addAction(UIAlertAction(title: "Скрыть", style: .default, handler: { (action) in
-//            
+//
 //        }))
         
         self.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
