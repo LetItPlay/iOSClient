@@ -125,12 +125,8 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		cell.track = track
         
         cell.onOthers = {[weak self] in
-            DispatchQueue.global(qos: .background).async {
-                let othersViewController = OthersViewController()
-                othersViewController.add(track: self?.tracks[1][indexPath.row] as Any)
-                othersViewController.add(controller: self!)
-                self?.present(othersViewController, animated: true, completion: nil)
-            }
+            let othersViewController = OthersBuilder.build(params: ["controller" : self, "track" : track]) as! OthersViewController
+            self?.present(othersViewController, animated: true, completion: nil)
         }
         
 		let hideListens = indexPath == currentIndex

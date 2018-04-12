@@ -76,9 +76,7 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
 		self.delegate?.reload()
     }
     
-    func showOthers(track: Track) {
-        let othersViewController = OthersViewController()
-        othersViewController.add(track: track)
-        self.delegate?.show(othersController: othersViewController)
+    func showOthers(track: Track, viewController: UIViewController) {
+        MainRouter.shared.showOthers(track: track, viewController: viewController)
     }
 }

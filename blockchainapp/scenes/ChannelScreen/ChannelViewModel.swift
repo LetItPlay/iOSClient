@@ -89,7 +89,11 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     }
     
     func showOthers(track: Track) {
-        MainRouter.shared.showOthers(track: track)
+        MainRouter.shared.showOthers(track: track, viewController: nil)
+    }
+    
+    func share(channel: ShareInfo) {
+        MainRouter.shared.share(data: channel, viewController: nil)
     }
 }
 

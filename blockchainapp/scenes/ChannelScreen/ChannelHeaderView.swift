@@ -11,6 +11,8 @@ import SnapKit
 import TagListView
 
 class ChannelHeaderView: UIView {
+    
+    public var onShared: (() -> Void)?
 	
 	let channelImageView: UIImageView = {
 		let imgView = UIImageView()
@@ -32,6 +34,12 @@ class ChannelHeaderView: UIView {
 	}()
 	
 	let subsView: IconedLabel = IconedLabel.init(type: IconLabelType.subs)
+    
+    var shareButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "sharedInactive"), for: .normal)
+        return button
+    }()
     
 	let followButton: UIButton = {
 		let button = UIButton()
@@ -138,6 +146,13 @@ class ChannelHeaderView: UIView {
 			make.centerY.equalToSuperview()
 			make.height.equalTo(32)
 		}
+        
+        shareButton.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)
+        view.addSubview(shareButton)
+        shareButton.snp.makeConstraints { (make) in
+            make.centerY.equalTo(followButton)
+            make.right.equalTo(followButton.snp.left).inset(-14)
+        }
 
 		self.addSubview(channelTitleView)
 		channelTitleView.snp.makeConstraints { (make) in
@@ -203,5 +218,9 @@ class ChannelHeaderView: UIView {
         self.tagListView.addTags(channel.tags.map({$0.uppercased()}))
         
         return self.frame.origin.y + self.frame.height
+    }
+    
+    @objc func shareButtonTouched() {
+        self.onShared!()
     }
 }

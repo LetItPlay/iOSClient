@@ -20,14 +20,14 @@ protocol UserPlaylistEventHandler: class {
     func trackSelected(index: Int)
     func clearPlaylist()
     func trackDelete(index: Int)
-    func showOthers(index: Int)
+    func showOthers(index: Int, viewController: UIViewController)
 }
 
 protocol UserPlaylistModelDelegate: class {
     func show(tracks: [TrackViewModel])
     func emptyMessage(show: Bool)
     func delete(index: Int)
-    func showOthers(track: Track)
+    func showOthers(track: Track, viewController: UIViewController)
 }
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate
@@ -115,8 +115,8 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         }
     }
     
-    func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index])
+    func showOthers(index: Int, viewController: UIViewController) {
+        self.delegate?.showOthers(track: self.tracks[index], viewController: viewController)
     }
 }
 

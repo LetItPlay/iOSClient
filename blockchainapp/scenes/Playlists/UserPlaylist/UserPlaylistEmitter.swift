@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import UIKit
 
 enum UserPlaylistEvent
 {
     case trackSelected(index: Int)
     case clearPlaylist
     case trackDelete(index: Int)
-    case showOthers(index: Int)
+    case showOthers(index: Int, viewController: UIViewController)
 }
 
 protocol UserPlaylistEmitterProtocol: LifeCycleHandlerProtocol {
@@ -38,8 +39,8 @@ class UserPlaylistEmitter: Emitter, UserPlaylistEmitterProtocol
             self.model?.clearPlaylist()
         case .trackDelete(let index):
             self.model?.trackDelete(index: index)
-        case .showOthers(let index):
-            self.model?.showOthers(index: index)
+        case .showOthers(let index, let viewController):
+            self.model?.showOthers(index: index, viewController: viewController)
         }
     }
 }

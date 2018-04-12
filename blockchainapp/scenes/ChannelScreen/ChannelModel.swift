@@ -22,6 +22,7 @@ protocol ChannelEvenHandler: class {
     func set(channel: Channel)
     func showSearch()
     func showOthers(index: Int)
+    func shareChannel()
 }
 
 protocol ChannelModelDelegate: class {
@@ -31,6 +32,7 @@ protocol ChannelModelDelegate: class {
     func followUpdate(isSubscribed: Bool)
     func showSearch()
     func showOthers(track: Track)
+    func share(channel: ShareInfo)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
@@ -122,6 +124,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
     func showOthers(index: Int) {
         self.delegate?.showOthers(track: self.tracks[index])
+    }
+    
+    func shareChannel() {
+        self.delegate?.share(channel: ShareInfo(text: self.channel.name, url: RequestManager.server + "/channels/\(channel.id)", image: try! UIImage(data: Data(contentsOf: (channel.image)!))!))
     }
 }
 

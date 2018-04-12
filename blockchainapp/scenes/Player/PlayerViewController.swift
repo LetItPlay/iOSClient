@@ -40,7 +40,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     var sharedButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "sharedInactive"), for: .normal)
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
         button.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
         return button
     }()
@@ -309,7 +309,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     }
     
     @objc func sharedButtonTouched() {
-        MainRouter.shared.shareTrack(track: self.audioController.currentTrack, viewController: self)
+        let track = audioController.currentTrack
+        MainRouter.shared.share(data: ShareInfo(text: "\"\(track?.name)\" - \(track?.author)", url: RequestManager.server + "/tracks/\(track?.id)", image: try! UIImage(data: Data(contentsOf: (track?.imageURL)!))!), viewController: self)
+
     }
     
     func change(speed: Float) {

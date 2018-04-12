@@ -122,7 +122,6 @@ class UserPlaylistViewController: UIViewController {
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
     func show(othersController: OthersViewController) {
-        othersController.add(controller: self)
         self.present(othersController, animated: true, completion: nil)
     }
     
@@ -261,7 +260,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         cell.track = self.viewModel.tracks[indexPath.item]
         
         cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
+            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row, viewController: self!))
         }
         
         return cell
