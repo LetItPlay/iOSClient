@@ -17,7 +17,7 @@ class OthersBuilder: Builder {
         let viewModel = OthersViewModel(model: model)
         let emitter = OthersEmitter(model: model)
         
-        let viewContoller = OthersViewController(viewModel: viewModel, emitter: emitter, viewController: viewController)
+        let viewContoller = OthersAlertController(viewModel: viewModel, emitter: emitter, viewController: viewController)
         return viewContoller
     }
 }

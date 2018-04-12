@@ -20,7 +20,7 @@ protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reload()
     func delete(index: Int)
-    func show(othersController: OthersViewController)
+    func show(othersController: OthersAlertController)
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate

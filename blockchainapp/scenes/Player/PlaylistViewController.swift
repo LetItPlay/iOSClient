@@ -125,7 +125,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 		cell.track = track
         
         cell.onOthers = {[weak self] in
-            let othersViewController = OthersBuilder.build(params: ["controller" : self, "track" : track]) as! OthersViewController
+            let othersViewController = OthersBuilder.build(params: ["controller" : self, "track" : track]) as! OthersAlertController
             self?.present(othersViewController, animated: true, completion: nil)
         }
         

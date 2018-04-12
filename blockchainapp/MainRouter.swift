@@ -83,7 +83,7 @@ class MainRouter: Router {
             controller = self.currentNavigationController?.viewControllers.first
         }
         
-        let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersViewController
+        let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)
     }
     

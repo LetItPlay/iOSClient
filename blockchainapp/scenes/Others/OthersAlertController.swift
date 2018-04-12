@@ -8,7 +8,7 @@
 
 import UIKit
 
-class OthersViewController: UIAlertController {
+class OthersAlertController: UIAlertController {
     
     var viewModel: OthersVMProtocol!
     var emitter: OthersEmitterProtocol!
@@ -77,7 +77,7 @@ class OthersViewController: UIAlertController {
     }
 }
 
-extension OthersViewController: OthersVMDelegate {
+extension OthersAlertController: OthersVMDelegate {
     func addTrack() {
         
     }

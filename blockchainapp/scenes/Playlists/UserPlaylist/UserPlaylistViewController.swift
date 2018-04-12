@@ -121,7 +121,7 @@ class UserPlaylistViewController: UIViewController {
 
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
-    func show(othersController: OthersViewController) {
+    func show(othersController: OthersAlertController) {
         self.present(othersController, animated: true, completion: nil)
     }
     
