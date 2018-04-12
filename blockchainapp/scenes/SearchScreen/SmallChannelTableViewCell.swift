@@ -22,6 +22,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 			maker.width.equalTo(60)
 			maker.height.equalTo(60)
 		 }
+        imageView.image = UIImage(named: "channelPreviewImg")
 		return imageView
 	}()
 	

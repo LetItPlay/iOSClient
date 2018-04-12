@@ -37,10 +37,6 @@ class OthersAlertController: UIAlertController {
         
         self.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(0.8)
         
-//        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-//        let messageAttrString = NSMutableAttributedString(string: "", attributes: messageFont)
-//        self.setValue(messageAttrString, forKey: "attributedTitle")
-        
         self.addAction(UIAlertAction(title: "Поделиться", style: .default, handler: { (action) in
             self.emitter.send(event: OthersEvent.shareTrack(viewController: self.viewController))
         }))

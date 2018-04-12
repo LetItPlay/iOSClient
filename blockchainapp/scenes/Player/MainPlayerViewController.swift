@@ -27,7 +27,7 @@ class MainPlayerViewController: UIViewController {
 		imageView.layer.cornerRadius = 7
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
-		
+        imageView.image = UIImage(named: "trackPlaceholder")
 		imageView.isUserInteractionEnabled = false
 		
 		return imageView

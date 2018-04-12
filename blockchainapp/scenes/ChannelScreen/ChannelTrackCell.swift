@@ -13,6 +13,7 @@ class ChannelTrackCell: SwipeTableViewCell {
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {

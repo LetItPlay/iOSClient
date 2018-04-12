@@ -70,7 +70,8 @@ class ProfileHeaderView: UIView {
         profileImageView.layer.shadowOpacity = 0.1
         profileImageView.layer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: -10, y: -10), size: CGSize.init(width: 260, height: 260)), cornerRadius: 130).cgPath
         profileImageView.layer.shouldRasterize = true
-        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.contentMode = .scaleAspectFit//scaleAspectFill
+        profileImageView.backgroundColor = .white
         
         blur.contentView.addSubview(self.changePhotoButton)
         self.changePhotoButton.snp.makeConstraints { (make) in

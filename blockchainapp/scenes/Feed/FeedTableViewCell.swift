@@ -99,6 +99,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)
 		})
+        imageView.image = UIImage(named: "channelPreviewImg")
 		return imageView
 	}()
 	
@@ -124,6 +125,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 		let imageView = UIImageView()
 		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	

@@ -15,22 +15,24 @@ class ChannelHeaderView: UIView {
     public var onShared: (() -> Void)?
 	
 	let channelImageView: UIImageView = {
-		let imgView = UIImageView()
-		imgView.contentMode = .scaleAspectFill
-		imgView.layer.masksToBounds = true
-		return imgView
+		let imageView = UIImageView()
+		imageView.contentMode = .scaleAspectFill
+		imageView.layer.masksToBounds = true
+        imageView.backgroundColor = .white
+		return imageView
 	}()
 	
 	let channelIconView: UIImageView = {
-		let imgView = UIImageView()
-		imgView.layer.cornerRadius = 20
-		imgView.layer.masksToBounds = true
-		imgView.contentMode = .scaleAspectFill
-		imgView.snp.makeConstraints({ (make) in
+		let imageView = UIImageView()
+		imageView.layer.cornerRadius = 20
+		imageView.layer.masksToBounds = true
+		imageView.contentMode = .scaleAspectFill
+		imageView.snp.makeConstraints({ (make) in
 			make.width.equalTo(40)
 			make.height.equalTo(40)
 		})
-		return imgView
+        imageView.image = UIImage(named: "channelPreviewImg")
+		return imageView
 	}()
 	
 	let subsView: IconedLabel = IconedLabel.init(type: IconLabelType.subs)
@@ -59,7 +61,7 @@ class ChannelHeaderView: UIView {
 		return button
 	}()
 	
-	let channelTitleView: UILabel = {
+	let channelTitleLabel: UILabel = {
 		let label = UILabel()
 		label.font = AppFont.Title.big
 		label.textColor = AppColor.Title.dark
@@ -154,8 +156,8 @@ class ChannelHeaderView: UIView {
             make.right.equalTo(followButton.snp.left).inset(-14)
         }
 
-		self.addSubview(channelTitleView)
-		channelTitleView.snp.makeConstraints { (make) in
+		self.addSubview(channelTitleLabel)
+		channelTitleLabel.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
 			make.top.equalTo(view.snp.bottom).inset(-12)
 			make.right.equalToSuperview().inset(16)
@@ -164,7 +166,7 @@ class ChannelHeaderView: UIView {
 		self.addSubview(infoLabel)
 		infoLabel.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
-			make.top.equalTo(channelTitleView.snp.bottom).inset(-14)
+			make.top.equalTo(channelTitleLabel.snp.bottom).inset(-14)
 			make.right.equalToSuperview().inset(16)
 		}
 		
@@ -192,7 +194,7 @@ class ChannelHeaderView: UIView {
     
     func fill(channel: FullChannelViewModel, width: CGFloat) -> CGFloat {
         
-        channelTitleView.text = channel.name
+        channelTitleLabel.text = channel.name
         infoLabel.text = "No description for this channel".localized
         subsView.set(text: channel.subscriptionCount)
         
