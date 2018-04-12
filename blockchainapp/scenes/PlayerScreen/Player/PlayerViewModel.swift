@@ -1,13 +1,4 @@
-//
-// Created by Aleksey Tyurnin on 05/04/2018.
-// Copyright (c) 2018 Ivan Gorbulin. All rights reserved.
-//
-
 import Foundation
-
-protocol PlaylistViewDelegate: class {
-
-}
 
 protocol PlayerViewDelegate: class {
     func updateButtons()
@@ -22,13 +13,6 @@ protocol TrackInfoViewDelegate: class {
 
 enum PlayerControlsStatus {
     case isPlaying, canForward, canBackward
-}
-
-class PlayingPlaylistViewModel {
-    var tracks: [TrackViewModel] = []
-    var name: String = ""
-    var length: String = ""
-    var count: String = ""
 }
 
 class PlayerViewModel: PlayerModelDelegate {
@@ -47,4 +31,8 @@ class PlayerViewModel: PlayerModelDelegate {
         self.currentTimeState.past = currentTime
         self.currentTimeState.future = leftTime
     }
+	
+	func update(track: TrackViewModel) {
+		self.track = track
+	}
 }

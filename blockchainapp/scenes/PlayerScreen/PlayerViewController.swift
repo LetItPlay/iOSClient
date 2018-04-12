@@ -15,13 +15,15 @@ protocol TrackLikedDelegate {
 }
 
 class PlayerViewController: UIViewController, AudioControllerDelegate {
-	
+
+    let playerBuilder: PlayerHandler = PlayerHandler()
+
 	let miniPlayer: MiniPlayerView = MiniPlayerView()
 	let audioController = AudioController.main
 	
 	let pageController: UIPageViewController = UIPageViewController(transitionStyle: UIPageViewControllerTransitionStyle.scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.horizontal, options: [:])
-	let mainPlayer: MainPlayerViewController = MainPlayerViewController()
-	let playlist: PlaylistViewController = PlaylistViewController()
+	let mainPlayer: MainPlayerViewController!
+	let playlist: PlayingPlaylistViewController = PlayingPlaylistViewController()
     var trackInfo: TrackInfoViewController!
     
     var trackLikeButton: UIButton = {
@@ -53,8 +55,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     var currentTrackID: Int = -1
     
 	init() {
-		super.init(nibName: nil, bundle: nil)
-		
+        self.mainPlayer = self.playerBuilder.playerVC
+        super.init(nibName: nil, bundle: nil)
+
 		pageController.delegate = self
 
         let appearance = UIPageControl.appearance()
@@ -330,7 +333,7 @@ extension PlayerViewController: TrackLikedDelegate
 
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		if viewController is PlaylistViewController {
+		if viewController is PlayingPlaylistViewController {
 			return mainPlayer
 		}
         

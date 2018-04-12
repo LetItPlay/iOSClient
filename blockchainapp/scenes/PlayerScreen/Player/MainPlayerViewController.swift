@@ -54,6 +54,7 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
             default:
                 event = .plause
         }
+        self.emitter.send(event: event)
 	}
 
     func updateButtons() {

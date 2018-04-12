@@ -9,11 +9,20 @@
 import UIKit
 import SnapKit
 
-class PlaylistViewController: UIViewController {
+class PlayingPlaylistViewController: UIViewController {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
 	var currentIndex: IndexPath = IndexPath.invalid
+	
+	var emitter: PlayingPlaylistEmitter!
+	var vm: PlayingPlaylistViewModel!
+	
+	convenience init(emitter: PlayingPlaylistEmitter, vm: PlayingPlaylistViewModel) {
+		self.init(nibName: nil, bundle: nil)
+		self.vm = vm
+		self.emitter = emitter
+	}
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,7 +105,7 @@ class PlaylistViewController: UIViewController {
     }
 }
 
-extension PlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
 		return self.tracks.count

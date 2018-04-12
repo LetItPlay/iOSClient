@@ -16,9 +16,9 @@ class PlayerEmitter: Emitter {
 
     weak var handler: PlayerEventHandler?
 
-    convenience init(handler: (PlayerEventHandler & ModelProtocol)) {
-        self.init(handler: handler)
-        self.handler = handler
+    convenience init(model: (PlayerEventHandler & ModelProtocol)) {
+        self.init(handler: model)
+        self.handler = model
     }
 
     func send(event: PlayerEvent) {
@@ -33,11 +33,7 @@ class PlayerEmitter: Emitter {
         self.handler?.execute(event: event)
     }
 
-    func morePressed(index: Int) {
-        self.handler?.morePressed(index: index)
+    func morePressed() {
+        self.handler?.morePressed()
     }
-}
-
-class PlaylistEmitter: Emitter {
-
 }
