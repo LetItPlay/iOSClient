@@ -154,7 +154,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		playingIndicator.isHidden = true
         
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         self.contentView.addSubview(showOthersButton)
         showOthersButton.snp.makeConstraints { (make) in
             make.height.equalTo(26)
@@ -180,7 +180,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.separator = view
 	}
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	

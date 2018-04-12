@@ -38,10 +38,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         return button
     }()
     
-    var sharedButton: UIButton = {
+    var showOthersButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        button.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         return button
     }()
     
@@ -118,8 +118,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.height.equalTo(24)
         })
         
-        self.view.addSubview(sharedButton)
-        sharedButton.snp.makeConstraints { (make) in
+        self.view.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
             make.right.equalToSuperview().inset(self.view.frame.width / 10 - 12)
             make.bottom.equalTo(-8)
             make.width.equalTo(24)
@@ -308,10 +308,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         self.present(speedAlert, animated: true, completion: nil)
     }
     
-    @objc func sharedButtonTouched() {
-        let track = audioController.currentTrack
-        MainRouter.shared.share(data: ShareInfo(text: "\"\(track?.name)\" - \(track?.author)", url: RequestManager.server + "/tracks/\(track?.id)", image: try! UIImage(data: Data(contentsOf: (track?.imageURL)!))!), viewController: self)
-
+    @objc func showOthersButtonTouched() {
+        MainRouter.shared.showOthers(track: audioController.currentTrack, viewController: self)
     }
     
     func change(speed: Float) {

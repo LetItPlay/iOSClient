@@ -393,7 +393,7 @@ class FeedTableViewCell: SwipeTableViewCell {
         alertBlurView.alpha = 0
         
         self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
 	}
     
     
@@ -406,7 +406,7 @@ class FeedTableViewCell: SwipeTableViewCell {
         onChannel?(0)
     }
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	

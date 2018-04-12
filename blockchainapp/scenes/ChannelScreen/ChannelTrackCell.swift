@@ -135,7 +135,7 @@ class ChannelTrackCell: SwipeTableViewCell {
         
         playingIndicator.isHidden = true
         
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         self.contentView.addSubview(showOthersButton)
         showOthersButton.snp.makeConstraints { (make) in
             make.height.equalTo(26)
@@ -160,7 +160,7 @@ class ChannelTrackCell: SwipeTableViewCell {
         }
 	}
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	
