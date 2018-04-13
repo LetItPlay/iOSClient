@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import SwipeCellKit
+import SDWebImage
 
 class ChannelTrackCell: SwipeTableViewCell {
 	
@@ -57,9 +58,9 @@ class ChannelTrackCell: SwipeTableViewCell {
     var track: TrackViewModel? = nil {
 		didSet {
             if let iconUrl = track?.imageURL {
-				trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
 			} else {
-				trackImageView.image = nil
+				trackImageView.image = UIImage(named: "trackPlaceholder")
 			}
 			
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")

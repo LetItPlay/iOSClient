@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import SDWebImage
 
 class PlayerTableViewCell: UITableViewCell {
 	
@@ -55,10 +56,10 @@ class PlayerTableViewCell: UITableViewCell {
 	weak var track: AudioTrack? = nil {
 		didSet {
 			if let iconUrl = track?.imageURL {
-				trackImageView.sd_setImage(with: iconUrl)
-			} else {
-				trackImageView.image = nil
-			}
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+            } else {
+                trackImageView.image = UIImage(named: "trackPlaceholder")
+            }
 			
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
 			channelNameLabel.text = track?.author

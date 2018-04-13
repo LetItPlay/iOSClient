@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import SDWebImage
 
 class SmallTrackTableViewCell: UITableViewCell {
 
@@ -60,9 +61,9 @@ class SmallTrackTableViewCell: UITableViewCell {
             self.viewModel = SmallTrackViewModel.init(track: track!)
             
             if let iconUrl = self.viewModel?.iconUrl {
-                trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                trackImageView.image = nil
+                trackImageView.image = UIImage(named: "trackPlaceholder")
             }
             
             trackNameLabel.attributedText = Common.trackText(text: (viewModel?.trackName)!)
@@ -77,10 +78,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	func fill(vm: TrackViewModel) {
 		if let iconUrl = vm.imageURL {
-			trackImageView.sd_setImage(with: iconUrl)
-		} else {
-			trackImageView.image = nil
-		}
+            trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+        } else {
+            trackImageView.image = UIImage(named: "trackPlaceholder")
+        }
 		
 		trackNameLabel.attributedText = Common.trackText(text: vm.name)
 		channelNameLabel.text = vm.author

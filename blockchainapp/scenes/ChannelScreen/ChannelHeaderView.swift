@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import TagListView
+import SDWebImage
 
 class ChannelHeaderView: UIView {
     
@@ -200,7 +201,7 @@ class ChannelHeaderView: UIView {
         
         if let iconUrl = channel.imageURL {
             
-            channelIconView.sd_setImage(with: iconUrl, completed: {[weak self] (image, error, type, url) in
+            channelIconView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: {[weak self] (image, error, type, url) in
                 self?.channelImageView.image = image
             })
             channelIconView.backgroundColor = .white
