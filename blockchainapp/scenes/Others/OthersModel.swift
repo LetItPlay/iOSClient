@@ -29,6 +29,8 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     
     var disposeBag = DisposeBag()
     
+    var trackID: Int!
+    
     init(track: Any) {
 //        self.getData(trackId: trackID)
         
@@ -37,17 +39,23 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
                 self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel.name)",
                     url: RequestManager.server + "/tracks/\(track.id)",
                     image: try! UIImage(data: Data(contentsOf: (track.image)!))!)
+                
+                self.trackID = track.id
             }
             if let track = track as?  AudioTrack {
                 self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.author)",
                     url: RequestManager.server + "/tracks/\(track.id)",
                     image: try! UIImage(data: Data(contentsOf: (track.imageURL)!))!)
+                
+                self.trackID = track.id
             }
             
             if let track = track as? TrackObject {
                 self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel)",
                     url: RequestManager.server + "/tracks/\(track.id)",
                     image: (try! UIImage(data: Data.init(contentsOf: track.image.url()!)))!)
+                
+                self.trackID = track.id
             }
         }
     }
@@ -62,7 +70,7 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
 //    }
     
     func report(cause: ReportEventCause) {
-        
+        RequestManager.shared.updateTrack(id: self.trackID, type: .report(msg: "\(cause)"))
     }
     
     func shareTrack(viewController: UIViewController) {
