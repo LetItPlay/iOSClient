@@ -21,7 +21,7 @@ class MiniPlayerView: UITabBar {
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.isUserInteractionEnabled = false
-		
+        imageView.image = UIImage(named: "trackPlaceholder")
 		imageView.snp.makeConstraints({ (make) in
 			make.width.equalTo(40)
 			make.height.equalTo(40)
