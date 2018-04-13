@@ -400,10 +400,10 @@ class SubscribeManager {
 class LikeManager {
     static let shared = LikeManager()
     
-    private var channels = [Int]()
+    private var tracks = [Int]()
     
     init() {
-        channels = (UserDefaults.standard.array(forKey: "array_like") as? [Int]) ?? []
+        tracks = (UserDefaults.standard.array(forKey: "array_like") as? [Int]) ?? []
     }
     
     public func addOrDelete(id: Int) {
@@ -413,17 +413,17 @@ class LikeManager {
             like(id: id)
         }
         
-        UserDefaults.standard.set(channels, forKey: "array_like")
+        UserDefaults.standard.set(tracks, forKey: "array_like")
     }
     
     public func hasObject(id: Int) -> Bool {
-        return channels.contains(id)
+        return tracks.contains(id)
     }
     
     private func like(id: Int) {
-        objc_sync_enter(channels)
-        channels.append(id)
-        objc_sync_exit(channels)
+        objc_sync_enter(tracks)
+        tracks.append(id)
+        objc_sync_exit(tracks)
         
         debugPrint("user like on \(id)")
         
@@ -431,11 +431,11 @@ class LikeManager {
     }
     
     private func dislike(id: Int) {
-        objc_sync_enter(channels)
-        if let index = channels.index(of: id) {
-            channels.remove(at: index)
+        objc_sync_enter(tracks)
+        if let index = tracks.index(of: id) {
+            tracks.remove(at: index)
         }
-        objc_sync_exit(channels)
+        objc_sync_exit(tracks)
         
         debugPrint("user dislike on \(id)")
         
@@ -446,27 +446,27 @@ class LikeManager {
 class ListenManager {
     static let shared = ListenManager()
     
-    private var channels = [Int]()
+    private var tracks = [Int]()
     
     init() {
-        channels = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
+        tracks = (UserDefaults.standard.array(forKey: "array_listened") as? [Int]) ?? []
     }
     
     public func add(id: Int) {
         if !hasObject(id: id) {
             listened(id: id)
-            UserDefaults.standard.set(channels, forKey: "array_listened")
+            UserDefaults.standard.set(tracks, forKey: "array_listened")
         }
     }
     
     public func hasObject(id: Int) -> Bool {
-        return channels.contains(id)
+        return tracks.contains(id)
     }
     
     private func listened(id: Int) {
-        objc_sync_enter(channels)
-        channels.append(id)
-        objc_sync_exit(channels)
+        objc_sync_enter(tracks)
+        tracks.append(id)
+        objc_sync_exit(tracks)
         
         debugPrint("user listened \(id)")
         
