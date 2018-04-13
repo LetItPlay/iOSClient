@@ -35,7 +35,7 @@ class PlaylistsViewController: UIViewController {
         blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         blurView.clipsToBounds = true
-        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
         
         blurView.contentView.addSubview(label)
         label.snp.makeConstraints { (make) in
