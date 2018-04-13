@@ -12,7 +12,7 @@ import RxSwift
 import Action
 
 protocol ChannelModelProtocol: ModelProtocol {
-    weak var delegate: ChannelModelDelegate? {get set}
+    var delegate: ChannelModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -37,7 +37,7 @@ protocol ChannelModelDelegate: class {
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
-    var delegate: ChannelModelDelegate?
+    weak var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
     var channel: Channel!
@@ -160,3 +160,4 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
 }
+

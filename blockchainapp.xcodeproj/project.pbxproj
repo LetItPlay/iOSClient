@@ -49,7 +49,6 @@
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
-		2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EFA2034418900B3D939 /* FeedEmitter.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
@@ -314,7 +313,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
-				2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -748,7 +746,6 @@
 				CF4453231F54139900660474 /* Frameworks */,
 				CF4453241F54139900660474 /* Resources */,
 				85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */,
-				CE6A97D7F56884174CDDB3E3 /* [CP] Copy Pods Resources */,
 				01321B681FCDADFF009BFE62 /* Embed Frameworks */,
 				01EB96C320171CEE00D5A419 /* Run Script */,
 			);
@@ -769,8 +766,6 @@
 				CF4453361F54139900660474 /* Sources */,
 				CF4453371F54139900660474 /* Frameworks */,
 				CF4453381F54139900660474 /* Resources */,
-				C8AF3E63BB57F28B48FE7061 /* [CP] Embed Pods Frameworks */,
-				42DE9541C374746EB4F1F60A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -790,8 +785,6 @@
 				CF4453411F54139900660474 /* Sources */,
 				CF4453421F54139900660474 /* Frameworks */,
 				CF4453431F54139900660474 /* Resources */,
-				84B573E19EE500946CDEAE20 /* [CP] Embed Pods Frameworks */,
-				CACED3878DCAFAAFB8FD2515 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -810,7 +803,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Ivan Gorbulin";
 				TargetAttributes = {
 					CF4453251F54139900660474 = {
@@ -933,21 +926,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		42DE9541C374746EB4F1F60A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		69FD1FFD8E350820AE7043D5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -964,21 +942,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		84B573E19EE500946CDEAE20 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		85CB1106F2638EFC2373BB7A /* [CP] Embed Pods Frameworks */ = {
@@ -1035,51 +998,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C8AF3E63BB57F28B48FE7061 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CACED3878DCAFAAFB8FD2515 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainappUITests/Pods-blockchainappUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		CE6A97D7F56884174CDDB3E3 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1288,6 +1206,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1295,6 +1214,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1327,6 +1247,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1346,6 +1267,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1353,6 +1275,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1377,6 +1300,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1442,7 +1366,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockchainapp.app/blockchainapp";
 			};
 			name = Debug;
@@ -1461,7 +1385,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockchainapp.app/blockchainapp";
 			};
 			name = Release;
@@ -1479,7 +1403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = blockchainapp;
 			};
 			name = Debug;
@@ -1497,7 +1421,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = blockchainapp;
 			};
 			name = Release;

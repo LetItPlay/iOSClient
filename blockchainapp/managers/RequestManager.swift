@@ -172,7 +172,7 @@ class RequestManager {
 						let lm = LikeManager.shared
 						let json = try JSON(data: data)
 						
-						let channels: [Channel] = json["Stations"].array?
+						let _: [Channel] = json["Stations"].array?
 							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
                         let tracksJSON: JSON!

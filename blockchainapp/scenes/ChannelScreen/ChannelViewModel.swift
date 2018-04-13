@@ -14,7 +14,7 @@ protocol ChannelVMProtocol {
     var isSubscribed: Bool {get set}
     var tracks: [TrackViewModel] {get}
     
-    weak var delegate: ChannelVMDelegate? {get set}
+    var delegate: ChannelVMDelegate? {get set}
 }
 
 protocol ChannelVMDelegate: class {

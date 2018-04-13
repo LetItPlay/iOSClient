@@ -11,7 +11,7 @@ protocol FeedVMProtocol {
     var showEmptyMessage: Bool {get}
     var endReached: Bool {get}
     
-    weak var delegate: FeedVMDelegate? {get set}
+    var delegate: FeedVMDelegate? {get set}
 }
 
 protocol FeedVMDelegate: class {

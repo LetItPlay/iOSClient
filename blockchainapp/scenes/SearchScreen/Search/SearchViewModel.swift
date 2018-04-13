@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 protocol SearchVMProtocol {
-    weak var delegate: SearchVMDelegate? {get set}
+    var delegate: SearchVMDelegate? {get set}
     var tracks: [TrackViewModel] {get set}
     var channels: [SearchChannelViewModel] {get set}
     var currentPlayingIndex: Int {get set}
@@ -28,7 +28,7 @@ protocol SearchVMDelegate: class {
 
 class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterProtocol {
     
-    var delegate: SearchVMDelegate?
+    weak var delegate: SearchVMDelegate?
     var model: SearchModelProtocol!
     
     var tracks: [TrackViewModel] = []

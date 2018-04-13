@@ -12,7 +12,7 @@ import RxSwift
 import Action
 
 protocol LikesModelProtocol: ModelProtocol {
-    weak var delegate: LikesModelDelegate? {get set}
+    var delegate: LikesModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 

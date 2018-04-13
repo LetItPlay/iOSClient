@@ -9,7 +9,7 @@
 import UIKit
 
 protocol OthersVMProtocol {
-    weak var delegate: OthersVMDelegate? {get set}
+    var delegate: OthersVMDelegate? {get set}
     
 //    var trackShareInfo: TrackShareInfo? {get set}
 }
@@ -19,7 +19,7 @@ protocol OthersVMDelegate: class {
 }
 
 class OthersViewModel: OthersVMProtocol, OthersModelDelegate {
-    var delegate: OthersVMDelegate?
+    weak var delegate: OthersVMDelegate?
     var model: OthersModelProtocol!
     
 //    var trackShareInfo: TrackShareInfo?

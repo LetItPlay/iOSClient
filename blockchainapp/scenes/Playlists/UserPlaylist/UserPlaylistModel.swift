@@ -11,8 +11,8 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-protocol UserPlaylistModelProtocol: class, ModelProtocol {
-    weak var delegate: UserPlaylistModelDelegate? {get set}
+protocol UserPlaylistModelProtocol: ModelProtocol {
+    var delegate: UserPlaylistModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -32,7 +32,7 @@ protocol UserPlaylistModelDelegate: class {
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate
 {
-    var delegate: UserPlaylistModelDelegate?
+    weak var delegate: UserPlaylistModelDelegate?
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     private var tracks: [Track] = []
@@ -43,7 +43,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
     {
         UserPlaylistManager.shared.delegate = self
 		self.channels = (try? Realm())?.objects(ChannelObject.self).map({$0.plain()}) ?? []
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func reload()

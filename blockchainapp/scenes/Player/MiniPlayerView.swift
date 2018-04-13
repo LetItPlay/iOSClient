@@ -55,8 +55,8 @@ class MiniPlayerView: UITabBar {
 	
 	let playButton: UIButton = {
 		let button = UIButton()
-		button.setImage(UIImage(named: "playInactive"), for: .normal)
-		button.setImage(UIImage(named: "stopInactive"), for: .selected)
+		button.setImage(UIImage(named: "playInactiveCompact"), for: .normal)
+		button.setImage(UIImage(named: "stopInactiveCompact"), for: .selected)
 		button.setBackgroundImage(UIImage.init(named: "touchBg"), for: .highlighted)
         button.setBackgroundImage(UIImage.init(named: "touchBg"), for: [.selected, .highlighted])
 		button.snp.makeConstraints({ (make) in

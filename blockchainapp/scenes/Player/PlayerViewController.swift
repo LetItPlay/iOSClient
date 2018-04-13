@@ -309,7 +309,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     }
     
     @objc func showOthersButtonTouched() {
-        MainRouter.shared.showOthers(track: audioController.currentTrack, viewController: self)
+        MainRouter.shared.showOthers(track: audioController.currentTrack as Any, viewController: self)
     }
     
     func change(speed: Float) {

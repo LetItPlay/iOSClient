@@ -9,8 +9,8 @@
 import Foundation
 import RxSwift
 
-protocol TrackInfoModelProtocol: class, ModelProtocol {
-    weak var delegate: TrackInfoModelDelegate? {get set}
+protocol TrackInfoModelProtocol: ModelProtocol {
+    var delegate: TrackInfoModelDelegate? {get set}
 }
 
 protocol TrackInfoEventHandler {
@@ -41,7 +41,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
     {
         self.getData(trackId: trackId)
         
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func getData(trackId: Int) {
