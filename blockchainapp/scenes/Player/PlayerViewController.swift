@@ -330,6 +330,9 @@ extension PlayerViewController: TrackLikedDelegate
 
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+
+        self.showOthersButton.isHidden = false
+
 		if viewController is PlaylistViewController {
 			return mainPlayer
 		}
@@ -345,10 +348,12 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		if viewController is MainPlayerViewController {
 			return playlist
 		}
-        
+
         if viewController is TrackInfoViewController {
             return mainPlayer
         }
+
+        self.showOthersButton.isHidden = true
 		
 		return nil
 	}
@@ -361,6 +366,7 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
         if pageViewController.viewControllers![0] is PlaylistViewController {
             return 2
         }
+
         if pageController.viewControllers![0] is TrackInfoViewController {
             return 0
         }
