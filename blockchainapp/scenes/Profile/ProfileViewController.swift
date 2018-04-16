@@ -72,6 +72,7 @@ class ProfileViewController: UIViewController {
         
         self.tableView.tableHeaderView = profileView
         self.tableView.contentInset.bottom = 50
+        self.tableView.backgroundColor = .white
         
         self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
         self.tableView.separatorStyle = .none
