@@ -95,6 +95,8 @@
 		9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18FC207F775800CBE87B /* ShareInfo.swift */; };
 		9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
+		9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */; };
+		9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
@@ -258,6 +260,8 @@
 		9D0B18FC207F775800CBE87B /* ShareInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfo.swift; sourceTree = "<group>"; };
 		9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
+		9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsView.swift; sourceTree = "<group>"; };
+		9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsEmitter.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
@@ -501,6 +505,15 @@
 			path = Playlists;
 			sourceTree = "<group>";
 		};
+		9D889862208482D7004A7575 /* BottomItems */ = {
+			isa = PBXGroup;
+			children = (
+				9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */,
+				9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */,
+			);
+			path = BottomItems;
+			sourceTree = "<group>";
+		};
 		9D931AFB207B26C100BAFC51 /* TrackInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -697,6 +710,7 @@
 				FD10B4E092F837E850DC5B81 /* PlayerModel.swift */,
 				FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */,
 				FD10B60FFE491AF62B1A26A6 /* PlayerBuilder.swift */,
+				9D889862208482D7004A7575 /* BottomItems */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -1017,6 +1031,7 @@
 				9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
+				9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */,
 				9DFAE70220610A4B00EF7C4D /* TrackInfoModel.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
@@ -1065,6 +1080,7 @@
 				9DFAE70120610A4B00EF7C4D /* TrackInfoEmitter.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */,
+				9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
 				9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */,

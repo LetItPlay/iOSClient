@@ -24,28 +24,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	let playlist: PlaylistViewController = PlaylistViewController()
     var trackInfo: TrackInfoViewController!
     
-    var trackLikeButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "likeInactiveFeed"), for: .normal)
-        button.addTarget(self, action: #selector(trackLikeButtonTouched), for: .touchUpInside)
-        return button
-    }()
-    
-    var trackSpeedButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "timespeedInactive"), for: .normal)
-        button.addTarget(self, action: #selector(trackSpeedButtonTouched), for: .touchUpInside)
-        return button
-    }()
-    
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        button.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
-        return button
-    }()
-    
-    var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
+    var bottomIconsView: MainPlayerBottomIconsView!
 	
 	var mask: CAShapeLayer!
 	let ind = ArrowView()
@@ -102,28 +81,15 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		self.ind.setFlat(false)
         
-        self.view.addSubview(trackLikeButton)
-        trackLikeButton.snp.makeConstraints({ (make) in
-            make.left.equalTo(self.view.frame.width / 10 - 12)
-            make.bottom.equalTo(-8)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        })
+        bottomIconsView = MainPlayerBottomIconsView(frame: self.view.frame)
+        bottomIconsView.emitter = MainPlayerBottomIconsEmitter(model: self)
         
-        self.view.addSubview(trackSpeedButton)
-        trackSpeedButton.snp.makeConstraints({ (make) in
-            make.left.equalTo(self.view.frame.width / 4)
-            make.bottom.equalTo(-8)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
-        })
-        
-        self.view.addSubview(showOthersButton)
-        showOthersButton.snp.makeConstraints { (make) in
-            make.right.equalToSuperview().inset(self.view.frame.width / 10 - 12)
-            make.bottom.equalTo(-8)
-            make.width.equalTo(24)
-            make.height.equalTo(24)
+        self.view.addSubview(bottomIconsView)
+        bottomIconsView.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.equalToSuperview()
+            make.height.equalTo(40)
         }
 	}
 	
@@ -171,7 +137,6 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
                     self.currentTrackID = ob.id
                     self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
                 }
-                
                 
 				let channel = ob.author
 				let title = ob.name
@@ -270,50 +235,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
-    
-    @objc func trackLikeButtonTouched()
-    {
-        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
-            self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
-            let id = self.audioController.currentTrack?.id
-            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
-        }
-    }
-    
-    @objc func trackSpeedButtonTouched()
-    {
-        let currentSpeed = self.audioController.player.chosenRate == -1 ? 1 : self.audioController.player.chosenRate
-        
-        let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-        
-        speedAlert.view.tintColor = AppColor.Title.lightGray
-        
-        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
-        speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
-
-        for speed in speeds {
-            if speed.value == currentSpeed {
-                speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
-                    self.change(speed: speed.value)
-                }))
-            }
-            else {
-                speedAlert.addAction(UIAlertAction(title: speed.text, style: .destructive, handler: { _ in
-                    self.change(speed: speed.value)
-                }))
-            }
-        }
-
-        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
-
-        self.present(speedAlert, animated: true, completion: nil)
-    }
-    
-    @objc func showOthersButtonTouched() {
-        MainRouter.shared.showOthers(track: audioController.currentTrack as Any, viewController: self)
-    }
-    
+ 
     func change(speed: Float) {
         self.audioController.player.set(rate: speed)
     }
@@ -326,14 +248,14 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 extension PlayerViewController: TrackLikedDelegate
 {
     func track(liked: Bool) {
-        trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
+        bottomIconsView.trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
     }
 }
 
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
-        self.showOthersButton.isHidden = false
+        self.bottomIconsView.hideIcons(false)
 
 		if viewController is PlaylistViewController {
 			return mainPlayer
@@ -355,7 +277,7 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
             return mainPlayer
         }
 
-        self.showOthersButton.isHidden = true
+        self.bottomIconsView.hideIcons(true)
 		
 		return nil
 	}
@@ -384,6 +306,24 @@ extension PlayerViewController: UIViewControllerTransitioningDelegate {
 	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		return PlayerDismissTransition.init(originFrame: self.view.frame)
 	}
+}
+
+extension PlayerViewController: MainPlayerBottomIconsEventHandler {
+    func likeButtonTouched() {
+        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
+        self.bottomIconsView.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
+            let id = AudioController.main.currentTrack?.id
+            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
+        }
+    }
+    
+    func speedButtonTouched(speedAlert: UIAlertController) {
+        self.present(speedAlert, animated: true, completion: nil)
+    }
+    
+    func showOthersButtonTouched() {
+        MainRouter.shared.showOthers(track: AudioController.main.currentTrack as Any, viewController: self)
+    }
 }
 
 class PlayerTransition: NSObject, UIViewControllerAnimatedTransitioning {
