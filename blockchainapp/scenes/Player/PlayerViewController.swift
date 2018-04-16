@@ -181,6 +181,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 				self.mainPlayer.channelNameLabel.text = channel
 				self.mainPlayer.trackNameLabel.text = title
 				if let url = ob.imageURL {
+                    self.mainPlayer.underblurimageView.image = UIImage(named: "trackPlaceholder")
 					self.mainPlayer.coverImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
 						self.miniPlayer.trackImageView.image = img
 						self.mainPlayer.setPicture(image: img)
@@ -214,6 +215,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		self.mainPlayer.channelNameLabel.text = ""
 		self.mainPlayer.trackNameLabel.text = ""
 		self.mainPlayer.coverImageView.image = UIImage(named: "trackPlaceholder")
+        self.mainPlayer.underblurimageView.image = UIImage(named: "trackPlaceholder")
 
 		self.playlist.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
 		self.playlist.currentIndex = self.audioController.currentTrackIndexPath
