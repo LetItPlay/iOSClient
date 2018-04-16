@@ -69,9 +69,20 @@ class MainPlayerBottomIconsView: UIView {
     }
     
     func hideIcons(_ hide: Bool) {
-        self.showOthersButton.isHidden = hide
-        self.trackLikeButton.isHidden = hide
-        self.trackSpeedButton.isHidden = hide
+        let alphaConst: CGFloat = hide ? 0 : 1
+        
+        UIView.animate(withDuration: 0.5) {
+            self.showOthersButton.alpha = alphaConst
+            self.trackLikeButton.alpha = alphaConst
+            self.trackSpeedButton.alpha = alphaConst
+        }
+    }
+    
+    func hideIcons(_ constant: CGFloat) {
+//        print(constant)
+        self.showOthersButton.alpha = constant
+        self.trackLikeButton.alpha = constant
+        self.trackSpeedButton.alpha = constant
     }
     
     @objc func trackLikeButtonTouched() {

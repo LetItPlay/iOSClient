@@ -31,6 +31,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     var currentTrackID: Int = -1
     
+    var isMainPlayer: Bool = true
+    
 	init() {
 		super.init(nibName: nil, bundle: nil)
 		
@@ -55,6 +57,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         for scroll in pageController.view.subviews{
             if scroll.isKind(of: UIScrollView.self){
                 scroll.setContentHuggingPriority(.init(100), for: .horizontal)
+                (scroll as! UIScrollView).delegate = self
             }
         }
 		
@@ -245,6 +248,24 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 	}
 }
 
+extension PlayerViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.pageController.viewControllers![0] is MainPlayerViewController && self.isMainPlayer {
+            if scrollView.contentOffset.x > self.view.frame.width {
+                let width = self.view.frame.width
+                self.bottomIconsView.hideIcons((scrollView.contentOffset.x / width - 2) * -1 )
+                print(scrollView.contentOffset.x)
+            }
+        }
+        if self.pageController.viewControllers![0] is PlaylistViewController {
+            if scrollView.contentOffset.x < self.view.frame.width {
+                let width = self.view.frame.width
+                self.bottomIconsView.hideIcons((scrollView.contentOffset.x / width - 1) * -1 )
+            }
+        }
+    }
+}
+
 extension PlayerViewController: TrackLikedDelegate
 {
     func track(liked: Bool) {
@@ -256,12 +277,15 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
         self.bottomIconsView.hideIcons(false)
+        
+        self.isMainPlayer = false
 
 		if viewController is PlaylistViewController {
 			return mainPlayer
 		}
         
         if viewController is MainPlayerViewController {
+            self.isMainPlayer = true
             return trackInfo
         }
 		
@@ -270,8 +294,11 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
 		if viewController is MainPlayerViewController {
+            self.isMainPlayer = true
 			return playlist
 		}
+        
+        self.isMainPlayer = false
 
         if viewController is TrackInfoViewController {
             return mainPlayer
