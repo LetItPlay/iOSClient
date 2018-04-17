@@ -92,6 +92,10 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
     }
     
+    func showOthers(track: Track) {
+        MainRouter.shared.showOthers(track: track, viewController: nil)
+    }
+    
     // for emitter
     func getTypeFor(section: Int) -> ViewModels {
         switch section {

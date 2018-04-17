@@ -23,6 +23,7 @@ protocol SearchEventHandler: class {
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int)
     func channelSubscriptionPressedAt(index: Int)
     func searchChanged(string: String)
+    func showOthers(index: Int)
 }
 
 protocol SearchModelDelegate: class {
@@ -31,6 +32,7 @@ protocol SearchModelDelegate: class {
     func update(index: Int, vm: SearchChannelViewModel)
     func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
+    func showOthers(track: Track)
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler {
@@ -195,6 +197,10 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
         
         // while in User Settings
         SubscribeManager.shared.addOrDelete(channel: channel.id)
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

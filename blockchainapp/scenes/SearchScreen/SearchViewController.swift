@@ -150,6 +150,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
             cell.fill(vm: self.viewModel.tracks[indexPath.item])
+            cell.onOthers = {[weak self] in
+                self?.emitter.send(event: SearchEvent.showOthers(index: indexPath.row))
+            }
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
