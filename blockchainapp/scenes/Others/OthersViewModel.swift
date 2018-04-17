@@ -11,18 +11,19 @@ import UIKit
 protocol OthersVMProtocol {
     var delegate: OthersVMDelegate? {get set}
     
-//    var trackShareInfo: TrackShareInfo? {get set}
+    var reportObjects: [(title: String, event: OthersEvent)] {get set}
 }
 
 protocol OthersVMDelegate: class {
-    func addTrack()
 }
 
 class OthersViewModel: OthersVMProtocol, OthersModelDelegate {
     weak var delegate: OthersVMDelegate?
     var model: OthersModelProtocol!
     
-//    var trackShareInfo: TrackShareInfo?
+    var reportObjects: [(title: String, event: OthersEvent)] = [(title: "Спам", event: OthersEvent.report(.spam)),
+                                                                (title: "Контент для взрослых", event: OthersEvent.report(.adultContent)),
+                                                                (title: "Жестокий контент", event: OthersEvent.report(.cruelContent))]
     
     init(model: OthersModelProtocol) {
         self.model = model
