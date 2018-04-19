@@ -9,6 +9,7 @@
 import UIKit
 import TagListView
 import SnapKit
+import SDWebImage
 
 class ChannelTableViewCell: UITableViewCell {
 	
@@ -108,16 +109,16 @@ class ChannelTableViewCell: UITableViewCell {
 				self.tagsList.isHidden = true
 			}
             if let urlString = self.viewModel?.imageURL {
-                channelImageView.sd_setImage(with: urlString)
+                channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
             } else {
-                channelImageView.image = nil
+                channelImageView.image = UIImage(named: "channelPreviewImg")
             }
 		}
 	}
 	
 	@objc func subPressed() {
+        self.subButton.isSelected = !self.subButton.isSelected
 		self.subAction(self.channel)
-		self.subButton.isSelected = !self.subButton.isSelected
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

@@ -46,7 +46,7 @@ class MainRouter: Router {
 	}
 	
 	func miniPlayer(show: Bool, animated: Bool) {
-		self.mainController.popupPlayer(show: show, animated: animated)
+		self.mainController.popupPlayer(show: show, animated: animated, direction: .up)
 	}
 	
 	func mainPlayer(show: Bool, index: Int = 0) {
@@ -96,38 +96,27 @@ class MainRouter: Router {
     }
     
     func showOthers(track: Any) {
-        let controller = self.currentNavigationController?.viewControllers.first
-        let othersController = OthersViewController()
-        othersController.add(track: track)
-        othersController.add(controller: (controller)!)
+        let controller: UIViewController!
+//        if let currentController = viewController {
+//            controller = currentController
+//        } else {
+            controller = self.currentNavigationController?.viewControllers.first
+//        }
+		
+        let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)
     }
     
-    func shareTrack(track: Any, viewController: UIViewController) {
-        
-        var sharedText: String!
-        var sharedImage: UIImage!
-        var sharedUrl: String!
-        
-        if let track = track as? Track {
-            sharedText = "\"\(track.name)\" - \(track.channel.name)"
-            sharedImage = try! UIImage(data: Data(contentsOf: (track.image)!))!
-            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
-        }
-        if let track = track as?  AudioTrack {
-            sharedText = "\"\(track.name)\" - \(track.author)"
-            sharedImage = try! UIImage(data: Data(contentsOf: (track.imageURL)!))!
-            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
-        }
-        
-        if let track = track as? TrackObject {
-            sharedText = "\"\(track.name)\" - \(track.channel)"
-            sharedImage = try! UIImage(data: Data.init(contentsOf: track.image.url()!))
-            sharedUrl = RequestManager.server + "/tracks/\(track.id)"
+    func share(data: ShareInfo, viewController: UIViewController?) {
+        let controller: UIViewController!
+        if let currentController = viewController {
+            controller = currentController
+        } else {
+            controller = self.currentNavigationController?.viewControllers.first
         }
         
         let activityViewController : UIActivityViewController = UIActivityViewController(
-            activityItems: [sharedText, sharedUrl, sharedImage], applicationActivities: nil)
+            activityItems: [data.text, data.url, data.image], applicationActivities: nil)
         
         activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.down
         activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
@@ -143,7 +132,9 @@ class MainRouter: Router {
             UIActivityType.postToTencentWeibo
         ]
         
-        viewController.present(activityViewController, animated: true, completion: nil)
+         DispatchQueue.global(qos: .background).async {
+            controller.present(activityViewController, animated: true, completion: nil)
+        }
     }
 }
 

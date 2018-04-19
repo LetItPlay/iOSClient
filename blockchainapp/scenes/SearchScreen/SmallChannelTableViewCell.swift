@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SDWebImage
 
 class SmallChannelTableViewCell: UITableViewCell {
 
@@ -22,6 +23,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 			maker.width.equalTo(60)
 			maker.height.equalTo(60)
 		 }
+        imageView.image = UIImage(named: "channelPreviewImg")
 		return imageView
 	}()
 	
@@ -43,10 +45,10 @@ class SmallChannelTableViewCell: UITableViewCell {
             dataLabels[.subs]?.set(text: (channel?.subscriptionCount)!)
 			dataLabels[.tracks]?.set(text: (channel?.tracksCount)!)
             if let urlString = channel?.imageURL {
-				channelImageView.sd_setImage(with: urlString)
-			} else {
-				channelImageView.image = nil
-			}
+                channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
+            } else {
+                channelImageView.image = UIImage(named: "channelPreviewImg")
+            }
             self.followButton.isSelected = (channel?.isSubscribed)!
 		}
 	}

@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import SwipeCellKit
+import SDWebImage
 
 class ChannelTrackCell: SwipeTableViewCell {
 	
@@ -13,6 +14,7 @@ class ChannelTrackCell: SwipeTableViewCell {
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {
@@ -56,9 +58,9 @@ class ChannelTrackCell: SwipeTableViewCell {
     var track: TrackViewModel? = nil {
 		didSet {
             if let iconUrl = track?.imageURL {
-				trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
 			} else {
-				trackImageView.image = nil
+				trackImageView.image = UIImage(named: "trackPlaceholder")
 			}
 			
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
@@ -72,7 +74,7 @@ class ChannelTrackCell: SwipeTableViewCell {
             dataLabels[.listens]?.isHidden = (track?.isPlaying)!
             dataLabels[.playingIndicator]?.isHidden = !(track?.isPlaying)!
             
-            showOthersButton.isHidden = (track?.isPlaying)!
+//            showOthersButton.isHidden = (track?.isPlaying)!
 		}
 	}
 	
@@ -135,7 +137,7 @@ class ChannelTrackCell: SwipeTableViewCell {
         
         playingIndicator.isHidden = true
         
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         self.contentView.addSubview(showOthersButton)
         showOthersButton.snp.makeConstraints { (make) in
             make.height.equalTo(26)
@@ -160,7 +162,7 @@ class ChannelTrackCell: SwipeTableViewCell {
         }
 	}
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	

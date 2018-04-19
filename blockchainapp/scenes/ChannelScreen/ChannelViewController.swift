@@ -64,6 +64,9 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         
         self.header = ChannelHeaderView(frame: self.view.frame)
         header.translatesAutoresizingMaskIntoConstraints = false
+        header.onShared = {
+            self.emitter.send(event: ChannelEvent.shareChannel)
+        }
         
         tableView.delegate = self
         tableView.dataSource = self

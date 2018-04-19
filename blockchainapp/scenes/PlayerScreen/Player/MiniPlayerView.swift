@@ -23,7 +23,7 @@ class MiniPlayerView: UITabBar {
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.isUserInteractionEnabled = false
-		
+        imageView.image = UIImage(named: "trackPlaceholder")
 		imageView.snp.makeConstraints({ (make) in
 			make.width.equalTo(40)
 			make.height.equalTo(40)
@@ -138,7 +138,38 @@ class MiniPlayerView: UITabBar {
 		
 		self.playButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
 		self.nextButton.addTarget(self, action: #selector(buttonPressed(sender:)), for: .touchUpInside)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+        self.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+        self.addGestureRecognizer(swipeLeft)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeGestureRecognizer))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
+        self.addGestureRecognizer(swipeDown)
 	}
+    
+    @objc func swipeGestureRecognizer(gesture: UIGestureRecognizer) {
+        var direction: HideMiniPlayerDirection? = .down
+        
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.right:
+                direction = .right
+            case UISwipeGestureRecognizerDirection.down:
+                direction = .down
+            case UISwipeGestureRecognizerDirection.left:
+                direction = .left
+            default:
+                break
+            }
+        }
+        
+        AudioController.main.update(.clearAll(direction: direction!))
+    }
 	
 	@objc func buttonPressed(sender: UIButton) {
 		

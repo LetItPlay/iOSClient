@@ -8,9 +8,15 @@
 
 import UIKit
 
+enum HideMiniPlayerDirection {
+    case left, right, down, up
+}
+
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 	
 	var miniPlayerBottomConstr: NSLayoutConstraint?
+    var miniPlayerLeftConstr: NSLayoutConstraint?
+    var miniPlayerRightConstr: NSLayoutConstraint?
 	var playerIsShowed: Bool = false
     var playerWasShowed: Bool = false
 	
@@ -76,21 +82,39 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //		}
 	}
 	
-	func popupPlayer(show: Bool, animated: Bool) {
+    func popupPlayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection) {
 		
 		self.view.layoutIfNeeded()
 		
 		if playerIsShowed && !show {
-			miniPlayerBottomConstr?.constant = self.miniPlayer.frame.height + self.tabBar.frame.height
+            switch direction {
+            case .down:
+                miniPlayerBottomConstr?.constant = self.miniPlayer.frame.height + self.tabBar.frame.height
+            case .left:
+                miniPlayerLeftConstr?.constant = self.tabBar.frame.width * (-1)
+                miniPlayerRightConstr?.constant = self.tabBar.frame.width * (-1)
+            case .right:
+                miniPlayerLeftConstr?.constant = self.tabBar.frame.width
+                miniPlayerRightConstr?.constant = self.miniPlayer.frame.width + self.tabBar.frame.width
+            default: break
+            }
 			playerIsShowed = false
 		}
+        
 		if !playerIsShowed && show {
 			miniPlayerBottomConstr?.constant = 0
-			playerIsShowed = true 
+			playerIsShowed = true
 		}
-		UIView.animate(withDuration: 0.5) {
-			self.view.layoutIfNeeded()
-		}
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutIfNeeded()
+        }) { (_) in
+            if !self.playerIsShowed {
+                self.miniPlayerBottomConstr?.constant = self.miniPlayer.frame.height + self.tabBar.frame.height
+                self.miniPlayerLeftConstr?.constant = 0
+                self.miniPlayerRightConstr?.constant = 0
+            }
+        }
 	}
 	
 	func showPlaylist() {

@@ -3,6 +3,7 @@ import UIKit
 import SnapKit
 import SwipeCellKit
 import RxSwift
+import SDWebImage
 
 class FeedTableViewCell: SwipeTableViewCell {
 
@@ -18,18 +19,18 @@ class FeedTableViewCell: SwipeTableViewCell {
         DispatchQueue.main.async {
             self.channelLabel.text = vm.author
             if let authorImage = vm.authorImage {
-                self.channelImageView.sd_setImage(with: authorImage)
+                self.channelImageView.sd_setImage(with: authorImage, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                self.channelImageView.image = nil
+                self.channelImageView.image = UIImage(named: "channelPreviewImg")
             }
         
             self.timeAgoLabel.text = vm.dateString
         
             self.trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
             if let trackImage = vm.imageURL {
-                self.mainPictureImageView.sd_setImage(with: trackImage)
+                self.mainPictureImageView.sd_setImage(with: trackImage, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                self.mainPictureImageView.image = nil
+                self.mainPictureImageView.image = UIImage(named: "trackPlaceholder")
             }
         
             self.infoTitle.text = vm.name
@@ -55,7 +56,7 @@ class FeedTableViewCell: SwipeTableViewCell {
             self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
             self.dataLabels[.listens]?.isHidden = vm.isPlaying
             
-            self.showOthersButton.isHidden = vm.isPlaying
+//            self.showOthersButton.isHidden = vm.isPlaying
         
             self.likeButton.isSelected = vm.isLiked
         
@@ -99,6 +100,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)
 		})
+        imageView.image = UIImage(named: "channelPreviewImg")
 		return imageView
 	}()
 	
@@ -124,6 +126,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 		let imageView = UIImageView()
 		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	
@@ -393,7 +396,7 @@ class FeedTableViewCell: SwipeTableViewCell {
         alertBlurView.alpha = 0
         
         self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
 	}
     
     
@@ -406,7 +409,7 @@ class FeedTableViewCell: SwipeTableViewCell {
         onChannel?(0)
     }
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	

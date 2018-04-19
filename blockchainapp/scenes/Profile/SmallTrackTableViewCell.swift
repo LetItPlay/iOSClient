@@ -1,5 +1,6 @@
 import UIKit
 import SnapKit
+import SDWebImage
 
 class SmallTrackTableViewCell: UITableViewCell {
 
@@ -13,6 +14,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {
@@ -59,9 +61,9 @@ class SmallTrackTableViewCell: UITableViewCell {
             self.viewModel = SmallTrackViewModel.init(track: track!)
             
             if let iconUrl = self.viewModel?.iconUrl {
-                trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                trackImageView.image = nil
+                trackImageView.image = UIImage(named: "trackPlaceholder")
             }
             
             trackNameLabel.attributedText = Common.trackText(text: (viewModel?.trackName)!)
@@ -76,10 +78,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	func fill(vm: TrackViewModel) {
 		if let iconUrl = vm.imageURL {
-			trackImageView.sd_setImage(with: iconUrl)
-		} else {
-			trackImageView.image = nil
-		}
+            trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+        } else {
+            trackImageView.image = UIImage(named: "trackPlaceholder")
+        }
 		
 		trackNameLabel.attributedText = Common.trackText(text: vm.name)
 		channelNameLabel.text = vm.author
@@ -92,7 +94,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
         
-        showOthersButton.isHidden = vm.isPlaying
+//        showOthersButton.isHidden = vm.isPlaying
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -154,7 +156,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		playingIndicator.isHidden = true
         
-        self.showOthersButton.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         self.contentView.addSubview(showOthersButton)
         showOthersButton.snp.makeConstraints { (make) in
             make.height.equalTo(26)
@@ -180,7 +182,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.separator = view
 	}
     
-    @objc func sharedButtonTouched() {
+    @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
 	

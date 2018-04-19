@@ -53,7 +53,7 @@ class ProfileModel: ProfileModelProtocol {
         
         if image.cgImage == nil
         {
-            image = UIImage.init(named: "placeholder")!
+            image = UIImage.init(named: "profilePlaceholder")!
         }
         
         let data = UIImagePNGRepresentation(image)!

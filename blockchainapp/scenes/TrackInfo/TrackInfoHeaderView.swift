@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class TrackInfoHeaderView: UIView {
     
@@ -261,7 +262,7 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             delegate?.track(liked: viewModel.track.isLiked)
             
         case .channel:
-            _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL)
+            _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
             _channelTitleLabel.text = viewModel.channel.name
             
             _followButton.isSelected = viewModel.channel.isSubscribed

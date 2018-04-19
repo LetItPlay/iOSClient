@@ -93,6 +93,11 @@
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
+		9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */; };
+		9D0B18F7207F67D900CBE87B /* OthersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F6207F67D900CBE87B /* OthersModel.swift */; };
+		9D0B18F9207F68E700CBE87B /* OthersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */; };
+		9D0B18FB207F6AF100CBE87B /* OthersBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18FA207F6AF100CBE87B /* OthersBuilder.swift */; };
+		9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18FC207F775800CBE87B /* ShareInfo.swift */; };
 		9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
@@ -101,7 +106,7 @@
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
-		9DDB0D0B207B8BF100581613 /* OthersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersViewController.swift */; };
+		9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
 		9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */; };
 		9DFAE6F72060FB1500EF7C4D /* TrackInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */; };
@@ -255,6 +260,11 @@
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
 		678F07997865B266B43CA145 /* Pods-blockchainappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.release.xcconfig"; sourceTree = "<group>"; };
 		68E8042BE89EC223F566C8D7 /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersEmitter.swift; sourceTree = "<group>"; };
+		9D0B18F6207F67D900CBE87B /* OthersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersModel.swift; sourceTree = "<group>"; };
+		9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersViewModel.swift; sourceTree = "<group>"; };
+		9D0B18FA207F6AF100CBE87B /* OthersBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersBuilder.swift; sourceTree = "<group>"; };
+		9D0B18FC207F775800CBE87B /* ShareInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfo.swift; sourceTree = "<group>"; };
 		9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
@@ -263,7 +273,7 @@
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
-		9DDB0D0A207B8BF100581613 /* OthersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersViewController.swift; sourceTree = "<group>"; };
+		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
 		9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
 		9DFAE6F62060FB1500EF7C4D /* TrackInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoHeaderView.swift; sourceTree = "<group>"; };
@@ -564,7 +574,12 @@
 		9DDB0D07207B8A9F00581613 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				9DDB0D0A207B8BF100581613 /* OthersViewController.swift */,
+				9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */,
+				9D0B18FA207F6AF100CBE87B /* OthersBuilder.swift */,
+				9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */,
+				9D0B18F6207F67D900CBE87B /* OthersModel.swift */,
+				9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */,
+				9D0B18FC207F775800CBE87B /* ShareInfo.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -1100,10 +1115,12 @@
 				365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
+				9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */,
 				9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */,
 				9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */,
 				365653F920358F980072087F /* PlaylistsModel.swift in Sources */,
 				2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */,
+				9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */,
 				36706D532031A801002097E7 /* ChannelsViewModel.swift in Sources */,
 				3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */,
 				36045FAA204D8340003C7406 /* UserPlaylistModel.swift in Sources */,
@@ -1112,9 +1129,10 @@
 				01C4A9CD207F333900A4232B /* PlaylistModelHandler.swift in Sources */,
 				9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */,
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
-				9DDB0D0B207B8BF100581613 /* OthersViewController.swift in Sources */,
+				9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
 				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
+				9D0B18FB207F6AF100CBE87B /* OthersBuilder.swift in Sources */,
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
 				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
@@ -1129,6 +1147,7 @@
 				365653FD20358FA90072087F /* PlaylistsEmitter.swift in Sources */,
 				361CD01A20482A410097F8E9 /* Common.swift in Sources */,
 				01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */,
+				9D0B18F7207F67D900CBE87B /* OthersModel.swift in Sources */,
 				365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
 				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
@@ -1137,6 +1156,7 @@
 				365653FF203592DD0072087F /* SearchBuilder.swift in Sources */,
 				01EFC873201A21D6005321B9 /* MainPlayerViewController.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
+				9D0B18F9207F68E700CBE87B /* OthersViewModel.swift in Sources */,
 				9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */,
 				9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */,
 				361CD018204815140097F8E9 /* LikeHeader.swift in Sources */,

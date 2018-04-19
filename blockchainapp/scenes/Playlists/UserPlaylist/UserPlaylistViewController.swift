@@ -121,8 +121,7 @@ class UserPlaylistViewController: UIViewController {
 
 extension UserPlaylistViewController: UserPlaylistVMDelegate
 {
-    func show(othersController: OthersViewController) {
-        othersController.add(controller: self)
+    func show(othersController: OthersAlertController) {
         self.present(othersController, animated: true, completion: nil)
     }
     
@@ -172,8 +171,11 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
             return nil
         }
         
-        let view = UIView()
-        view.backgroundColor = .white
+        var blurView = UIVisualEffectView()
+        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.clipsToBounds = true
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         
         let label = UILabel()
         label.font = AppFont.Title.big
@@ -187,20 +189,20 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         let time = IconedLabel.init(type: .time)
         time.setData(data: Int64(UserPlaylistManager.shared.tracks.map({$0.length}).reduce(0, {$0 + $1})))
         
-        view.addSubview(label)
+        blurView.contentView.addSubview(label)
         label.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(3)
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(-16)
         }
         
-        view.addSubview(tracks)
+        blurView.contentView.addSubview(tracks)
         tracks.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
             make.top.equalTo(label.snp.bottom).inset(-7)
         }
         
-        view.addSubview(time)
+        blurView.contentView.addSubview(time)
         time.snp.makeConstraints { (make) in
             make.left.equalTo(tracks.snp.right).inset(-8)
             make.centerY.equalTo(tracks)
@@ -211,7 +213,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         line.layer.cornerRadius = 1
         line.layer.masksToBounds = true
         
-        view.addSubview(line)
+        blurView.contentView.addSubview(line)
         line.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
@@ -219,14 +221,14 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
             make.height.equalTo(2)
         }
         
-        view.addSubview(clearButton)
+        blurView.contentView.addSubview(clearButton)
         clearButton.snp.makeConstraints({ (make) in
             make.centerY.equalTo(time)
             make.right.equalTo(-16)
             make.height.equalTo(32)
         })
         
-        return view
+        return blurView
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -261,7 +263,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         cell.track = self.viewModel.tracks[indexPath.item]
         
         cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
+            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row, viewController: self!))
         }
         
         return cell

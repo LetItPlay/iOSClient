@@ -20,7 +20,7 @@ protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reload()
     func delete(index: Int)
-    func show(othersController: OthersViewController)
+    func show(othersController: OthersAlertController)
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
@@ -77,8 +77,6 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
     }
     
     func showOthers(track: Track) {
-        let othersViewController = OthersViewController()
-        othersViewController.add(track: track)
-        self.delegate?.show(othersController: othersViewController)
+        MainRouter.shared.showOthers(track: track)
     }
 }

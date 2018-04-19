@@ -363,7 +363,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var image: UIImage!
         var addTo = ""
         
-        let myView = UIView(frame: CGRect(x: 0, y: 20, width: 150, height: 305))
+        let myView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 305))
         let myLabel = UILabel()
         myLabel.textColor = .white
         myLabel.font = AppFont.Title.big
@@ -419,6 +419,8 @@ extension FeedViewController: SwipeTableViewCellDelegate
 
         addToPlaylistAction.customView = myView
         addToPlaylistAction.backgroundColor = .clear
+        
+        addToPlaylistAction.fixCenterForItems = 10
         
 //        if addTo.range(of: "top") == nil {
 //            myLabel.textAlignment = .right
