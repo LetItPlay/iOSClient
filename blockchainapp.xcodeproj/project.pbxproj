@@ -556,6 +556,14 @@
 				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
 			);
 			path = Feed;
+		9DDE368C2073532200F4ED6F /* TrackInfo */ = {
+			isa = PBXGroup;
+			children = (
+				9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */,
+				9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */,
+				9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */,
+			);
+			path = TrackInfo;
 			sourceTree = "<group>";
 		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
