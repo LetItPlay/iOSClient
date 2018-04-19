@@ -31,5 +31,6 @@ class PlayerHandler {
         PlayerHandler.playlist = playerModel
 		
 		self.main = MainPlayerViewController(vcs: [playerVC, playlistVC])
+		self.main.modalPresentationStyle = .overFullScreen
     }
 }

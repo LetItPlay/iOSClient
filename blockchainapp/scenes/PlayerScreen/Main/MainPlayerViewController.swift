@@ -85,7 +85,7 @@ class MainPlayerViewController: UIViewController {
 		let panGest = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
 		self.view.addGestureRecognizer(panGest)
 		
-		self.transitioningDelegate = self
+//		self.transitioningDelegate = self
 		
 		self.view.addSubview(ind)
 		ind.snp.makeConstraints { (make) in
@@ -292,15 +292,15 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
     }
 }
 
-extension MainPlayerViewController: UIViewControllerTransitioningDelegate {
-	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-		return PlayerPresentTransition.init(originFrame: self.view.frame)
-	}
-	
-	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-		return PlayerDismissTransition.init(originFrame: self.view.frame)
-	}
-}
+//extension MainPlayerViewController: UIViewControllerTransitioningDelegate {
+//	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//		return PlayerPresentTransition.init(originFrame: self.view.frame)
+//	}
+//
+//	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//		return PlayerDismissTransition.init(originFrame: self.view.frame)
+//	}
+//}
 
 class PlayerTransition: NSObject, UIViewControllerAnimatedTransitioning {
 	

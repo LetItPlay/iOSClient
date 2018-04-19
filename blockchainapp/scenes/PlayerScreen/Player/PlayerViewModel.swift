@@ -36,10 +36,6 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 		self.track = track
 	}
 	
-	func set(isLiked: Bool) {
-		
-	}
-	
 	func showSpeedSettings() {
 		
 	}

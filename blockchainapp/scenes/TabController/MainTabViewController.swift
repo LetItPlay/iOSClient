@@ -50,7 +50,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //		self.playerHandler.main.modalPresentationStyle = .overFullScreen
 		
 		miniPlayerBottomConstr?.constant = 120
-        
+		
         self.delegate = self
 	}
 

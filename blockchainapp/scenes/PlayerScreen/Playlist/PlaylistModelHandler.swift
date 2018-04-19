@@ -1,6 +1,6 @@
 import Foundation
 
-extension PlayerModel: PlaylistEventHandler {
+extension PlayerModel: PlaylistEventHandler, PlayerUsingProtocol {
 	func selected(index: Int) {
 		self.playingIndex = index
 		self.reloadTrack()

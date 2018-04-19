@@ -2,11 +2,12 @@ import Foundation
 import MediaPlayer
 
 protocol PlaylistModelDelegate: class {
-	
+	func reload(tracks: [TrackViewModel], count: String, length: String)
+	func update(track: TrackViewModel, asIndex index: Int)
+	func re(name: String)
 }
 
 protocol MainPlayerModelDelegate: class {
-	func set(isLiked: Bool)
 	func showSpeedSettings()
 	func showMoreDialog()
 	func player(show: Bool)
@@ -32,7 +33,7 @@ protocol PlaylistEventHandler: ModelProtocol {
 
 class PlayerModel {
 
-    weak var playerDelegate: PlayerModelDelegate?
+    weak var playerDelegate: (PlayerModelDelegate & MainPlayerModelDelegate)?
     weak var playlistDelegate: PlaylistModelDelegate?
 	weak var mainDelegate: MainPlayerModelDelegate?
 
@@ -91,8 +92,9 @@ class PlayerModel {
 
     func reloadTrack() {
         let prev = self.player.status
-        if let item = self.currentTrack?.audioTrack() {
-            self.player.load(item: item)
+        if let item = self.currentTrack {
+			self.playerDelegate?.update(track: TrackViewModel(track: item))
+            self.player.load(item: item.audioTrack())
             self.player.make(command: prev == .playing ? .play : .pause)
         }
     }
