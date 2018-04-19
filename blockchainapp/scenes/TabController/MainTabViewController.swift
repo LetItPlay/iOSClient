@@ -184,6 +184,6 @@ extension MainTabViewController: UITabBarControllerDelegate {
 extension MainTabViewController: MainRouterDelegate {
     func showAllChannels() {
         self.selectedIndex = 3
-        self.router.currentNavigationController = self.viewControllers?[3] as? UINavigationController
+        self.router?.currentNavigationController = self.viewControllers?[3] as? UINavigationController
     }
 }

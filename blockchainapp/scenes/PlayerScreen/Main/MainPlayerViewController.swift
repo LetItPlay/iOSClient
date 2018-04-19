@@ -27,6 +27,8 @@ class MainPlayerViewController: UIViewController {
     var currentTrackID: Int = -1
 	
 	var isMainPlayer: Bool = true
+    
+    var vcs: [UIViewController]
 	
 	init(vcs: [UIViewController]) {
         self.vcs = vcs
@@ -149,16 +151,16 @@ class MainPlayerViewController: UIViewController {
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
 
-    func change(speed: Float) {
-        self.audioController.player.set(rate: speed)
-    }
+//    func change(speed: Float) {
+//        self.audioController.player.set(rate: speed)
+//    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil
 	}
 }
 
-extension PlayerViewController: UIScrollViewDelegate {
+extension MainPlayerViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if self.pageController.viewControllers![0] is MainPlayerViewController && self.isMainPlayer {
             if scrollView.contentOffset.x > self.view.frame.width {
@@ -167,7 +169,7 @@ extension PlayerViewController: UIScrollViewDelegate {
                 print(scrollView.contentOffset.x)
             }
         }
-        if self.pageController.viewControllers![0] is PlaylistViewController {
+        if self.pageController.viewControllers![0] is PlayingPlaylistViewController {
             if scrollView.contentOffset.x < self.view.frame.width {
                 let width = self.view.frame.width
                 self.bottomIconsView.hideIcons((scrollView.contentOffset.x / width - 1) * -1 )
@@ -251,7 +253,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
 //	}
 //}
 
-extension PlayerViewController: MainPlayerBottomIconsEventHandler {
+extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
     func likeButtonTouched() {
         if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
         self.bottomIconsView.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
@@ -265,7 +267,7 @@ extension PlayerViewController: MainPlayerBottomIconsEventHandler {
     }
     
     func showOthersButtonTouched() {
-        MainRouter.shared.showOthers(track: AudioController.main.currentTrack as Any, viewController: self)
+        MainRouter.shared.showOthers(track: AudioController.main.currentTrack as Any)
     }
 }
 

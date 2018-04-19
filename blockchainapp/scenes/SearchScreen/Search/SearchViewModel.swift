@@ -93,7 +93,7 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
     }
     
     func showOthers(track: Track) {
-        MainRouter.shared.showOthers(track: track, viewController: nil)
+        MainRouter.shared.showOthers(track: track)
     }
     
     // for emitter
