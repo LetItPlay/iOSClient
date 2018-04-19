@@ -32,6 +32,22 @@ struct Track: LIPModel {
 	
 	var isLiked: Bool			= false
 	
+	init(track: TrackObject) {
+		self.id = track.id
+		self.name = track.name
+		let channel = track.realm?.object(ofType: ChannelObject.self, forPrimaryKey: track.channel)
+		let channelName = channel?.name ?? "Unknown"
+		self.channel = (id: track.channel, name: channelName, image: channel?.image.url())
+		self.lang = track.lang
+		self.url = track.url.url()
+		self.length = track.length
+		self.desc = track.desc
+		self.image = track.image.url()
+		self.likeCount = track.likeCount
+		self.listenCount = track.listenCount
+		self.tags = track.tags.map({$0.value})
+	}
+	
 	init?(json: JSON) {
 		if 	let channelId = json["station"]["Id"].int,
 			  let channelName = json["station"]["Name"].string,

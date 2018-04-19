@@ -14,36 +14,30 @@ protocol TrackLikedDelegate {
     func track(liked: Bool)
 }
 
-class PlayerViewController: UIViewController, AudioControllerDelegate {
-
-    let playerBuilder: PlayerHandler = PlayerHandler()
-
-	let miniPlayer: MiniPlayerView = MiniPlayerView()
-	let audioController = AudioController.main
+class MainPlayerViewController: UIViewController {
 	
 	let pageController: UIPageViewController = UIPageViewController(transitionStyle: UIPageViewControllerTransitionStyle.scroll, navigationOrientation: UIPageViewControllerNavigationOrientation.horizontal, options: [:])
-	let mainPlayer: MainPlayerViewController!
-	let playlist: PlayingPlaylistViewController = PlayingPlaylistViewController()
     var trackInfo: TrackInfoViewController!
-    
+
+    var vcs: [UIViewController]!
+
     var trackLikeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "likeInactiveFeed"), for: .normal)
-        button.addTarget(self, action: #selector(trackLikeButtonTouched), for: .touchUpInside)
         return button
     }()
     
     var trackSpeedButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "timespeedInactive"), for: .normal)
-        button.addTarget(self, action: #selector(trackSpeedButtonTouched), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(trackSpeedButtonTouched), for: .touchUpInside)
         return button
     }()
     
     var sharedButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "sharedInactive"), for: .normal)
-        button.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(sharedButtonTouched), for: .touchUpInside)
         return button
     }()
     
@@ -54,8 +48,9 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
     
     var currentTrackID: Int = -1
     
-	init() {
-        self.mainPlayer = self.playerBuilder.playerVC
+	init(vcs: [UIViewController]) {
+//        self.mainPlayer = self.playerBuilder.playerVC
+        self.vcs = vcs
         super.init(nibName: nil, bundle: nil)
 
 		pageController.delegate = self
@@ -74,8 +69,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		pageController.view.backgroundColor = .white
 		pageController.delegate = self
 		pageController.dataSource = self
-		pageController.setViewControllers([mainPlayer], direction: .forward, animated: false, completion: nil)
-        
+		if let vc = self.vcs.first {
+			pageController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
+		}
+		
         for scroll in pageController.view.subviews{
             if scroll.isKind(of: UIScrollView.self){
                 scroll.setContentHuggingPriority(.init(100), for: .horizontal)
@@ -100,8 +97,6 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		
 		let tap = UITapGestureRecognizer(target: self, action: #selector(arrowTapped))
 		ind.addGestureRecognizer(tap)
-		
-		audioController.delegate = self
 		
 		self.ind.setFlat(false)
         
@@ -136,95 +131,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		}
 	}
 	
-	func updateTime(time: (current: Double, length: Double)) {
-		DispatchQueue.main.async {
-			if time.current >= 0 && time.length >= 0 {
-				self.miniPlayer.progressView.progress = Float(time.current / time.length)
-				if !self.mainPlayer.trackProgressView.slider.isHighlighted {
-					self.mainPlayer.trackProgressView.slider.value = Float(time.current / time.length)
-				}
-				self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(time.current).formatTime()
-				self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(time.length - time.current)).formatTime()
-			}
+	func setScreen(index: Int) {
+		self.pageController.setViewControllers([self.vcs[index]], direction: .forward, animated: false) { (finished) in
+			
 		}
-	}
-	
-	func playState(isPlaying: Bool) {
-		self.miniPlayer.playButton.isSelected = isPlaying
-		self.mainPlayer.playButton.isSelected = isPlaying
-		if isPlaying {
-			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
-		} else {
-			self.playlist.currentIndex = IndexPath.invalid
-		}
-		self.playlist.tableView.reloadData()
-	}
-	
-	func trackUpdate() {
-		DispatchQueue.main.async {
-			if let ob = self.audioController.currentTrack {
-                
-                if self.currentTrackID == -1 {
-                    self.currentTrackID = ob.id
-                    self.trackInfo = TrackInfoBuilder.build(params: ["id" : self.currentTrackID]) as! TrackInfoViewController
-                    self.trackInfo.trackInfoHeaderView.delegate = self
-                }
-                
-                if self.currentTrackID != ob.id {
-                    self.currentTrackID = ob.id
-                    self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.updateTrack(id: self.currentTrackID))
-                }
-                
-                
-				let channel = ob.author
-				let title = ob.name
-
-				self.miniPlayer.trackAuthorLabel.text = channel
-				self.miniPlayer.trackNameLabel.text = title
-				self.mainPlayer.channelNameLabel.text = channel
-				self.mainPlayer.trackNameLabel.text = title
-				if let url = ob.imageURL {
-					self.mainPlayer.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
-						self.miniPlayer.trackImageView.image = img
-						self.mainPlayer.setPicture(image: img)
-					})
-				}
-			}
-			if self.audioController.status != .playing {
-				let info = self.audioController.info
-				if info.current >= 0 && info.current >= 0 {
-					UIView.animate(withDuration: 0.01, animations: {
-						self.mainPlayer.trackProgressView.slider.value = Float(info.current/info.length)
-						self.mainPlayer.trackProgressView.trackProgressLabels.start.text = Int64(info.current).formatTime()
-						self.mainPlayer.trackProgressView.trackProgressLabels.fin.text = "-" + Int64(abs(info.length - info.current)).formatTime()
-
-						self.miniPlayer.progressView.progress = Float(info.current/info.length)
-					})
-				}
-			}
-//			self.playlist.currentIndex = self.audioController.currentTrackIndexPath
-//			self.playlist.tableView.reloadData()
-//			self.playlist.isHidden = false
-		}
-//		self.playButton.isSelected = audioController.status == .playing
-//		self.playerView.playButton.isSelected = audioController.status == .playing
-	}
-	
-	func playlistChanged() {
-		self.miniPlayer.trackNameLabel.text = ""
-		self.miniPlayer.trackAuthorLabel.text = ""
-		self.miniPlayer.progressView.progress = 0.0
-		self.mainPlayer.channelNameLabel.text = ""
-		self.mainPlayer.trackNameLabel.text = ""
-		self.mainPlayer.coverImageView.image = nil
-
-		self.playlist.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
-		self.playlist.currentIndex = self.audioController.currentTrackIndexPath
-		self.playlist.tableView.reloadData()
-	}
-	
-	func showPlaylist() {
-		self.pageController.setViewControllers([playlist], direction: .forward, animated: false, completion: nil)
 	}
 	
 	@objc func pan(gesture: UIPanGestureRecognizer) {
@@ -272,106 +182,117 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
     
-    @objc func trackLikeButtonTouched()
-    {
-        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
-            self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
-            let id = self.audioController.currentTrack?.id
-            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
-        }
-    }
-    
-    @objc func trackSpeedButtonTouched()
-    {
-        let currentSpeed = self.audioController.player.chosenRate == -1 ? 1 : self.audioController.player.chosenRate
-        
-        let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-        
-        speedAlert.view.tintColor = AppColor.Title.lightGray
-        
-        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
-        speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
-
-        for speed in speeds {
-            if speed.value == currentSpeed {
-                speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
-                    self.change(speed: speed.value)
-                }))
-            }
-            else {
-                speedAlert.addAction(UIAlertAction(title: speed.text, style: .destructive, handler: { _ in
-                    self.change(speed: speed.value)
-                }))
-            }
-        }
-
-        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
-
-        self.present(speedAlert, animated: true, completion: nil)
-    }
-    
-    @objc func sharedButtonTouched() {
-        MainRouter.shared.shareTrack(track: self.audioController.currentTrack, viewController: self)
-    }
-    
-    func change(speed: Float) {
-        self.audioController.player.set(rate: speed)
-    }
+//    @objc func trackLikeButtonTouched()
+//    {
+//        if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
+//            self.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
+//            let id = self.audioController.currentTrack?.id
+//            self.trackInfo.trackInfoHeaderView.emitter?.send(event: TrackInfoEvent.trackLiked(index: id!))
+//        }
+//    }
+//
+//    @objc func trackSpeedButtonTouched()
+//    {
+//        let currentSpeed = self.audioController.player.chosenRate == -1 ? 1 : self.audioController.player.chosenRate
+//
+//        let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
+//
+//        speedAlert.view.tintColor = AppColor.Title.lightGray
+//
+//        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
+//        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
+//        speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
+//
+//        for speed in speeds {
+//            if speed.value == currentSpeed {
+//                speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
+//                    self.change(speed: speed.value)
+//                }))
+//            }
+//            else {
+//                speedAlert.addAction(UIAlertAction(title: speed.text, style: .destructive, handler: { _ in
+//                    self.change(speed: speed.value)
+//                }))
+//            }
+//        }
+//
+//        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
+//
+//        self.present(speedAlert, animated: true, completion: nil)
+//    }
+//
+//    @objc func sharedButtonTouched() {
+//        MainRouter.shared.shareTrack(track: self.audioController.currentTrack, viewController: self)
+//    }
+//
+//    func change(speed: Float) {
+//        self.audioController.player.set(rate: speed)
+//    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil
 	}
 }
 
-extension PlayerViewController: TrackLikedDelegate
+extension MainPlayerViewController: TrackLikedDelegate
 {
     func track(liked: Bool) {
         trackLikeButton.setImage(UIImage(named: liked ? "likeActiveFeed" : "likeInactiveFeed"), for: .normal)
     }
 }
 
-extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		if viewController is PlayingPlaylistViewController {
-			return mainPlayer
-		}
-        
-        if viewController is MainPlayerViewController {
-            return trackInfo
+        if let index = self.vcs.index(where: {$0 == viewController}), index > 0 {
+            return self.vcs[index - 1]
         }
+//		if viewController is PlayingPlaylistViewController {
+//			return mainPlayer
+//		}
+//
+//        if viewController is MainPlayerViewController {
+//            return trackInfo
+//        }
 		
 		return nil
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		if viewController is MainPlayerViewController {
-			return playlist
-		}
-        
-        if viewController is TrackInfoViewController {
-            return mainPlayer
+        if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 2 {
+            return self.vcs[index + 1]
         }
+//		if viewController is MainPlayerViewController {
+//			return playlist
+//		}
+//
+//        if viewController is TrackInfoViewController {
+//            return mainPlayer
+//        }
 		
 		return nil
 	}
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return 3
+        return self.vcs.count
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        if pageViewController.viewControllers![0] is PlaylistViewController {
-            return 2
+        if let vc = pageViewController.viewControllers?[0], let index = self.vcs.index(where: {$0 == vc}) {
+            return index
         }
-        if pageController.viewControllers![0] is TrackInfoViewController {
-            return 0
-        }
-        return 1
+
+        return 0
+//        if pageViewController.viewControllers![0] is PlaylistViewController {
+//            return 2
+//        }
+//        if pageController.viewControllers![0] is TrackInfoViewController {
+//            return 0
+//        }
+//        return 1
     }
 }
 
-extension PlayerViewController: UIViewControllerTransitioningDelegate {
+extension MainPlayerViewController: UIViewControllerTransitioningDelegate {
 	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 		return PlayerPresentTransition.init(originFrame: self.view.frame)
 	}

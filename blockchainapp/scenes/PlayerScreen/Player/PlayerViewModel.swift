@@ -15,7 +15,7 @@ enum PlayerControlsStatus {
     case isPlaying, canForward, canBackward
 }
 
-class PlayerViewModel: PlayerModelDelegate {
+class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     var track: TrackViewModel = TrackViewModel()
     var channel: SearchChannelViewModel?
     var currentTime: Float = 0.0
@@ -34,5 +34,21 @@ class PlayerViewModel: PlayerModelDelegate {
 	
 	func update(track: TrackViewModel) {
 		self.track = track
+	}
+	
+	func set(isLiked: Bool) {
+		
+	}
+	
+	func showSpeedSettings() {
+		
+	}
+	
+	func showMoreDialog() {
+		
+	}
+	
+	func player(show: Bool) {
+		MainRouter.shared.miniPlayer(show: true, animated: true)
 	}
 }

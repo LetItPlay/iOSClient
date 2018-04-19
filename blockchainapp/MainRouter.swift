@@ -16,29 +16,49 @@ protocol Router {
 class MainRouter: Router {
 	static let shared: MainRouter = MainRouter()
 	
+	private (set) internal var mainController: MainTabViewController!
+	let playerHandler: PlayerHandler = PlayerHandler()
 	weak var currentNavigationController: UINavigationController?
-	let initialViewControllers: [UIViewController]
 	
 	let disposeBag: DisposeBag = DisposeBag()
     
     var delegate: MainRouterDelegate?
 	
 	init() {
-		
+		self.mainController = MainTabViewController(vcs: tabs(), miniPlayer: playerHandler.miniPlayer)
+		self.mainController.router = self
+	}
+	
+	func tabs() -> [UINavigationController] {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-            ("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsTab())),
-            ("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
+			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsTab())),
+			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
-		self.initialViewControllers = tabs.map({ (tuple) -> UINavigationController in
+		return tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1!)
 			tuple.1.1!.title = tuple.0
 			nvc.tabBarItem = UITabBarItem(title: tuple.0, image: tuple.1.0, tag: 0)
 			return nvc
 		})
-		
+	}
+	
+	func miniPlayer(show: Bool, animated: Bool) {
+		self.mainController.popupPlayer(show: show, animated: animated)
+	}
+	
+	func mainPlayer(show: Bool, index: Int = 0) {
+		if !self.playerHandler.main.isBeingPresented{
+			UIApplication.shared.beginIgnoringInteractionEvents()
+//			self.playerIsPresenting = true
+			self.mainController.present(self.playerHandler.main, animated: true) {
+//				self.playerIsPresenting = false
+				UIApplication.shared.endIgnoringInteractionEvents()
+			}
+		}
+		self.playerHandler.main.setScreen(index: index)
 	}
 	
 	func show(screen id: String, params: [String : Any], present: Bool) {

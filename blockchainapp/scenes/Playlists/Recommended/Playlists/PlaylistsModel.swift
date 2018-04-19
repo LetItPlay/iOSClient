@@ -34,21 +34,22 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     var currentPlayingIndex: Int = -1
 
     weak var delegate: PlaylistsModelDelegate?
-    var playlists: [(image: UIImage?, title: String, descr: String, tracks: [AudioTrack])] = []
+    var playlists: [(image: UIImage?, title: String, descr: String, tracks: [Track])] = []
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	var dataAction: Action<Bool,[AudioTrack]>!
+	var dataAction: Action<Bool,[Track]>!
     let disposeBag = DisposeBag()
     
     init()
     {
-		self.dataAction = Action<Bool,[AudioTrack]>.init(workFactory: { (_) -> Observable<[AudioTrack]> in
-			return RequestManager.shared.tracks(req: .magic).map({ (tracks) -> [AudioTrack] in
-				return tracks.map({ (track) -> AudioTrack in
-					return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: track.channel.name, imageURL: track.image, length: track.length)
-				})
-			})
+		self.dataAction = Action<Bool,[Track]>.init(workFactory: { (_) -> Observable<[Track]> in
+			return RequestManager.shared.tracks(req: .magic)
+//				.map({ (tracks) -> [AudioTrack] in
+//					return tracks.map({ (track) -> AudioTrack in
+//						return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: track.channel.name, imageURL: track.image, length: track.length)
+//				})
+//			})
 		})
 		
 		self.dataAction.elements.subscribe(onNext: { (audio) in
@@ -67,9 +68,13 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 
     func formatPlaylists(index: Int) {
         let playlist = self.playlists[index]
-        let contr = AudioController.main
-        contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0})), playId: playlist.tracks[0].id)
-        contr.showPlaylist()
+		let name = "Playlist".localized + " \"\(playlist.title)\""
+//        let contr = AudioController.main
+		let player = PlayerHandler.player
+		player?.loadPlaylist(name: name, tracks: playlist.tracks)
+		let _ = player?.trackSelected(playlistName: name, id: playlist.tracks[0].id)
+//        contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0})), playId: playlist.tracks[0].id)
+//        contr.showPlaylist()
     }
     
     func send(event: LifeCycleEvent) {

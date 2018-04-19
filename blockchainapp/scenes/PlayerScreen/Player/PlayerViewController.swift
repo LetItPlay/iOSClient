@@ -13,7 +13,7 @@ import AssistantKit
 import MarqueeLabel
 import SDWebImage
 
-class MainPlayerViewController: UIViewController, PlayerViewDelegate {
+class PlayerViewController: UIViewController, PlayerViewDelegate {
 
     weak var miniPlayer: MiniPlayerView?
     var viewModel: PlayerViewModel!
@@ -63,10 +63,12 @@ class MainPlayerViewController: UIViewController, PlayerViewDelegate {
             switch tuple.key {
             case .isPlaying:
                 self.playButton.isSelected = tuple.value
+				self.miniPlayer?.playButton.isSelected = tuple.value
             case .canBackward:
                 self.trackChangeButtons.prev.isEnabled = tuple.value
             case .canForward:
                 self.trackChangeButtons.next.isEnabled = tuple.value
+				self.miniPlayer?.nextButton.isEnabled = tuple.value
             }
         }
     }

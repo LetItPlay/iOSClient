@@ -2,7 +2,14 @@ import Foundation
 import MediaPlayer
 
 protocol PlaylistModelDelegate: class {
+	
+}
 
+protocol MainPlayerModelDelegate: class {
+	func set(isLiked: Bool)
+	func showSpeedSettings()
+	func showMoreDialog()
+	func player(show: Bool)
 }
 
 protocol PlayerModelDelegate: class {
@@ -27,13 +34,14 @@ class PlayerModel {
 
     weak var playerDelegate: PlayerModelDelegate?
     weak var playlistDelegate: PlaylistModelDelegate?
+	weak var mainDelegate: MainPlayerModelDelegate?
 
     var playlistName: String = ""
     var tracks: [Track] = []
     var playingIndex: Int = -1
-    private var currentTrack: Track? {
+	internal var currentTrack: Track? {
         get {
-            if self.playingIndex < 0 { return nil }
+            if self.playingIndex < 0 || self.playingIndex >= self.tracks.count { return nil }
             return self.tracks[self.playingIndex]
         }
     }

@@ -28,17 +28,18 @@ protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
     func trackUpdate(index: Int, vm: TrackViewModel)
     func show(tracks: [TrackViewModel], isContinue: Bool)
-    func showOthers(track: TrackObject)
+    func showOthers(track: Track)
 }
 
-class LikesModel: LikesModelProtocol, LikesEventHandler {
+class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
 
     weak var delegate: LikesModelDelegate?
     private var token: NotificationToken?
     
     private var channels: Set<Channel> = Set<Channel>()
     private var trackChannels: [Channel] = []
-    private var tracks: [TrackObject] = []
+	var tracks: [Track] = []
+	var playlistName: String = "Like".localized
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     private var currentOffest: Int = 0
     
@@ -85,14 +86,14 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
     func getTracks() {
         let realm = try? Realm()
         let likeMan = LikeManager.shared
-        self.tracks = realm?.objects(TrackObject.self).map({$0.detached()}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+		self.tracks = realm?.objects(TrackObject.self).map({Track.init(track: $0)}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
 
         self.getTracksViewModel()
     }
     
     func getTracksViewModel()
     {
-        let playingID = AudioController.main.currentTrack?.id
+        let playingID = PlayerHandler.player?.playingNow
         
         var length: Int64 = 0
         var tracksVMs = [TrackViewModel]()
@@ -117,17 +118,11 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
             break
         case .appear:
             self.getTracks()
+			self.playlistName = "Like".localized + " \(self.tracks.count)"
             break
         default:
             break
         }
-    }
-    
-    func trackSelected(index: Int) {
-        let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
-        }
-        AudioController.main.loadPlaylist(playlist: ("Like".localized, tracks), playId: self.tracks[index].id)
     }
     
     func showOthers(index: Int) {

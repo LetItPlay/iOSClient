@@ -16,6 +16,8 @@ protocol MiniPlayerPresentationDelegate: class {
 
 class MiniPlayerView: UITabBar {
 	
+	weak var emitter: PlayerEmitter?
+	
 	weak var presentationDelegate: MiniPlayerPresentationDelegate?
     
 	let trackImageView: UIImageView = {
@@ -139,6 +141,7 @@ class MiniPlayerView: UITabBar {
 	}
 	
 	@objc func buttonPressed(sender: UIButton) {
+		
 		if sender == self.nextButton {
 			AudioController.main.make(command: .next)
 		} else {

@@ -33,8 +33,9 @@ protocol SearchModelDelegate: class {
     func showChannel(id: Int)
 }
 
-class SearchModel: SearchModelProtocol, SearchEventHandler {
-    
+class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
+	
+	var playlistName: String = "Search".localized
     var tracks: [Track] = []
     var channels: [Channel] = []
 //    var searchTracks: [Track] = []
@@ -62,7 +63,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
 					
 				}
 			}.subscribe(onNext: {(tuple) in
-				self.tracks = tuple.0
+				self.playlistName = "Seacrh".localized + " \"\(self.searchState.value.text)\""
+ 				self.tracks = tuple.0
 				self.channels = tuple.1
 				self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
 				self.delegate?.update(channels: self.channels.map({SearchChannelViewModel.init(channel: $0)}))
@@ -179,13 +181,6 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
             AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
             self.trackSelected(index: atIndex)
         }
-    }
-    
-    func trackSelected(index: Int) {
-        let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
-        }
-        AudioController.main.loadPlaylist(playlist: ("Search".localized, tracks), playId: self.tracks[index].id)
     }
     
     func channelSubscriptionPressedAt(index: Int) {

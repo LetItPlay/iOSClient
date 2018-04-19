@@ -82,7 +82,7 @@ class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
         self.delegate?.make(updates: [.update: [index]])
     }
     
-    func showOthers(track: TrackObject) {
+    func showOthers(track: Track) {
         MainRouter.shared.showOthers(track: track)
     }
 }

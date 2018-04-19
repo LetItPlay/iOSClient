@@ -39,9 +39,9 @@ class LIPRouter: DPLDeepLinkRouter {
 	func playTrack(id: Int) {
 		RequestManager.shared.track(id: id).subscribe({ (event) in
 			switch event {
-			case .next(let track):
-				AudioController.main.loadPlaylist(playlist: ("Pushed track \(id)", [track.audioTrack()]), playId: id)
-				self.tabController?.showPlaylist()
+//			case .next(let track):
+//				AudioController.main.loadPlaylist(playlist: ("Pushed track \(id)", [track.audioTrack()]), playId: id)
+//				self.tabController?.showPlaylist()
 			default:
 				break
 			}

@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 	let router = LIPRouter()
-    
+	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
         setupAppearence()
@@ -30,9 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if UserSettings.language == .none {
 			vc = SettingsViewController()
 		} else {
-			let tab =  MainTabViewController()
-			self.router.tabController = tab
-			vc = tab
+			vc = MainRouter.shared.mainController
 		}
 		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()

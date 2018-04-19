@@ -377,7 +377,7 @@ class RequestManager {
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
         var req = request
-        req.addValue("Bearer \(UserSettings.session)", forHTTPHeaderField: "Authorization")
+//        req.addValue("Bearer \(UserSettings.session)", forHTTPHeaderField: "Authorization")
 		return Observable<Result<Data>>.create({ (observer) -> Disposable in
 			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
 				if let _ = response.error {

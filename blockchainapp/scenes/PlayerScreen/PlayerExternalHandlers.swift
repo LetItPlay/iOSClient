@@ -1,12 +1,15 @@
 import Foundation
 
-protocol PlayerProtocol {
+protocol PlayerProtocol: class {
+	var playingNow: Int {get}
 	func loadPlaylist(name: String, tracks: [Track])
 	func trackSelected(playlistName: String, id: Int) -> Bool
 	func add(track: Track, inBeginning: Bool)
+	func reset()
 }
 
-protocol PlaylistProtocol {
+protocol PlaylistProtocol: class {
+	var playlistName: String {get}
 	func remove(index: Int)
 	func clearAll()
 	func reload(tracks: [Track])
@@ -37,7 +40,22 @@ extension PlayerModel: PlaylistProtocol {
 }
 
 extension PlayerModel: PlayerProtocol {
+	var playingNow: Int {
+		get {
+			return self.currentTrack?.id ?? -1
+		}
+	}
+	
+	func reset() {
+		self.player.make(command: .pause)
+	}
+	
 	func loadPlaylist(name: String, tracks: [Track]) {
+		if name != self.playlistName {
+			self.player.make(command: .pause)
+			self.playingIndex = -1
+			self.reloadTrack()
+		}
 		self.tracks = tracks
 		self.playlistName = name
 	}
@@ -63,6 +81,7 @@ extension PlayerModel: PlayerProtocol {
 		} else {
 			self.playingIndex = index
 			self.reloadTrack()
+			self.player.make(command: .play)
 		}
 		return true
 	}

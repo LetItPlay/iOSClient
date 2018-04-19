@@ -8,9 +8,9 @@ protocol FeedModelProtocol: class, ModelProtocol {
 	var playingIndex: Variable<Int?> {get}
 }
 
-protocol FeedEventHandler: class {
-	func trackSelected(index: Int)
+protocol FeedEventHandler: class, PlayerUsingProtocol {
 	func trackLiked(index: Int)
+	func trackSelected(index: Int)
 	func reload()
 	func trackShowed(index: Int)
 	func showAllChannels()
@@ -33,9 +33,7 @@ protocol FeedModelDelegate: class {
 }
 
 
-class FeedModel: FeedModelProtocol,
-FeedEventHandler {
-	
+class FeedModel: FeedModelProtocol, FeedEventHandler {
 	private let isFeed: Bool
 	private var currentOffest: Int = 0
     private let amount: Int = 100
@@ -43,7 +41,8 @@ FeedEventHandler {
 	
 	weak var delegate: FeedModelDelegate?
 	
-	private var tracks: [Track] = []
+	var playlistName: String = "Feed".localized
+	var tracks: [Track] = []
 	private var channels: Set<Channel> = Set<Channel>()
 	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
@@ -64,7 +63,7 @@ FeedEventHandler {
 				self.tracks += tracks
 			}
 		}).map({ (tracks) -> [TrackViewModel] in
-			let playingId = AudioController.main.currentTrack?.id
+			let playingId = PlayerHandler.player?.playingNow
 			return tracks.map({ TrackViewModel(track: $0,
 											   isPlaying: $0.id == playingId) })
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
@@ -100,13 +99,6 @@ FeedEventHandler {
         case .deinitialize:
             break
         }
-    }
-    
-    func trackSelected(index: Int) {
-		let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
-		}
-        AudioController.main.loadPlaylist(playlist: ("Feed".localized, tracks), playId: self.tracks[index].id)
     }
     
     func trackLiked(index: Int) {

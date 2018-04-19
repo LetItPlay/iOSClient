@@ -30,12 +30,13 @@ protocol UserPlaylistModelDelegate: class {
     func showOthers(track: Track)
 }
 
-class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate
+class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate, PlayerUsingProtocol
 {
     var delegate: UserPlaylistModelDelegate?
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
-    
-    private var tracks: [Track] = []
+	
+	var playlistName: String = "My playlist".localized
+	var tracks: [Track] = []
     private var tracksObs: Variable<[Track]> = Variable<[Track]>([])
 	private var channels: [Channel] = []
     
@@ -57,17 +58,17 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         self.tracks = tracks
         self.delegate?.emptyMessage(show: self.tracks.count == 0 ? true : false)
         self.delegate?.show(tracks: self.formVMs())
-        let audioContr = AudioController.main
-        if audioContr.playlist.name == "My playlist".localized {
-            let audioTracks = self.tracks.map { track -> AudioTrack in
-                return track.audioTrack()
-            }
-            audioContr.update(.reload(tracks: audioTracks))
-        }
+		let playlist = PlayerHandler.playlist
+        if playlist?.playlistName == playlistName {
+			playlist?.reload(tracks: self.tracks)
+		}
     }
 
     func trackDelete(index: Int) {
-        AudioController.main.update(.remove(id: self.tracks[index].id))
+		let playlist = PlayerHandler.playlist
+		if playlist?.playlistName == playlistName {
+			PlayerHandler.playlist?.remove(index: index)
+		}
         UserPlaylistManager.shared.remove(index: index)
         self.tracks.remove(at: index)
         self.delegate?.delete(index: index)
@@ -84,16 +85,9 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
                 vm.author = chan.name
                 vm.authorImage = chan.image
             }
-            vm.isPlaying = AudioController.main.currentTrack?.id == track.id
+            vm.isPlaying = PlayerHandler.player?.playingNow == track.id
             return vm
         })
-    }
-
-    func trackSelected(index: Int) {
-        let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
-        }
-        AudioController.main.loadPlaylist(playlist: ("My playlist".localized, tracks), playId: self.tracks[index].id)
     }
     
     func clearPlaylist() {
@@ -101,7 +95,10 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         self.delegate?.emptyMessage(show: true)
         self.tracks = UserPlaylistManager.shared.tracks
         self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
-		AudioController.main.update(.clearAll)
+		let playlist = PlayerHandler.playlist
+		if playlist?.playlistName == playlistName {
+			PlayerHandler.playlist?.clearAll()
+		}
     }
     
     func send(event: LifeCycleEvent) {

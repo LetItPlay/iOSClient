@@ -11,13 +11,31 @@ import RealmSwift
 import RxSwift
 import Action
 
+protocol PlayerUsingProtocol {
+	var tracks: [Track] {get}
+	var playlistName: String {get}
+	func trackSelected(index: Int)
+}
+
+extension PlayerUsingProtocol {
+	func trackSelected(index: Int) {
+		let selectedId = self.tracks[index].id
+		if let player = PlayerHandler.player {
+			if !player.trackSelected(playlistName: self.playlistName, id: selectedId) {
+				player.loadPlaylist(name: self.playlistName, tracks: self.tracks)
+			}
+			let _ = player.trackSelected(playlistName: self.playlistName, id: selectedId)
+		}
+	}
+}
+
 protocol ChannelModelProtocol: ModelProtocol {
     weak var delegate: ChannelModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
 protocol ChannelEvenHandler: class {
-    func trackSelected(index: Int)
+	func trackSelected(index: Int)
     func followPressed()
     func set(channel: Channel)
     func showSearch()
@@ -33,10 +51,11 @@ protocol ChannelModelDelegate: class {
     func showOthers(track: Track)
 }
 
-class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
+class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtocol {
     
     var delegate: ChannelModelDelegate?
-    
+	
+	var playlistName: String = "Channel".localized
     var tracks: [Track] = []
     var channel: Channel!
     var currentTrackID: Int?
@@ -50,6 +69,8 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         
     init(channelID: Int)
     {
+		self.playlistName = "Channel".localized + " \(channelID)"
+		
         getTracksAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
             return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
         })
@@ -57,7 +78,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         getTracksAction.elements.do(onNext: { (tracks) in
             self.tracks = tracks
         }).map({ (tracks) -> [TrackViewModel] in
-                let playingId = AudioController.main.currentTrack?.id
+                let playingId = PlayerHandler.player?.playingNow
                 return tracks.map({ return TrackViewModel(track: $0, isPlaying: $0.id == playingId)})
             }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
                 self.delegate?.reload(tracks: vms)
@@ -67,6 +88,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
 
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
+			self.playlistName = "Channel".localized + " \(channel.name)"
             let subscriptions = self.subManager.channels
             self.channel.isSubscribed = subscriptions.contains(channel.id)
             self.delegate?.followUpdate(isSubscribed: self.channel.isSubscribed)
@@ -107,13 +129,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
         default:
             break
         }
-    }
-    
-    func trackSelected(index: Int) {
-        let tracks = self.tracks.map { (track) -> AudioTrack in
-            return track.audioTrack()
-        }
-        AudioController.main.loadPlaylist(playlist: ("Channel".localized, tracks), playId: self.tracks[index].id)
     }
     
     func showSearch() {

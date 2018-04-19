@@ -10,9 +10,6 @@ import UIKit
 
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 	
-	let router: MainRouter = MainRouter.shared
-	
-	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
 	var playerIsShowed: Bool = false
     var playerWasShowed: Bool = false
@@ -23,20 +20,28 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		}
 	}
 	
-	convenience init() {
+	weak var miniPlayer: MiniPlayerView!
+	weak var router: MainRouter? {
+		didSet {
+			self.router?.currentNavigationController = self.viewControllers?.first as? UINavigationController
+			self.router?.delegate = self
+		}
+	}
+	
+	convenience init(vcs: [UIViewController], miniPlayer: MiniPlayerView) {
 		self.init(nibName: nil, bundle: nil)
 		
-		self.viewControllers = router.initialViewControllers
-        self.router.currentNavigationController = self.viewControllers?.first as? UINavigationController
-		self.router.delegate = self
-		self.playerController.miniPlayer.presentationDelegate = self
-		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
-		self.playerController.miniPlayer.snp.makeConstraints { (make) in
+		self.miniPlayer = miniPlayer
+		
+		self.viewControllers = vcs
+        self.miniPlayer.presentationDelegate = self
+		self.view.insertSubview(self.miniPlayer, belowSubview: self.tabBar)
+        self.miniPlayer.snp.makeConstraints { (make) in
 			make.left.equalToSuperview()
 			make.right.equalToSuperview()
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
-		playerController.modalPresentationStyle = .overFullScreen
+//		self.playerHandler.main.modalPresentationStyle = .overFullScreen
 		
 		miniPlayerBottomConstr?.constant = 120
         
@@ -54,20 +59,21 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	var playerIsPresenting: Bool = false
 	
 	func playerTapped() {
+		self.router?.mainPlayer(show: true)
 //		miniPlayerBottomConstr?.constant = miniPlayer.frame.height + self.tabBar.frame.height
 //		UIView.animate(withDuration: 0.5) {
 //			self.view.layoutIfNeeded()
 //		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
-			if !self.playerController.isBeingPresented {
-				UIApplication.shared.beginIgnoringInteractionEvents()
-				self.playerIsPresenting = true
-				self.present(self.playerController, animated: true) {
-					self.playerIsPresenting = false
-					UIApplication.shared.endIgnoringInteractionEvents()
-				}
-			}
-		}
+//		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
+//			if !self.playerHandler.main.isBeingPresented {
+//				UIApplication.shared.beginIgnoringInteractionEvents()
+//				self.playerIsPresenting = true
+//				self.present(self.playerHandler.main, animated: true) {
+//					self.playerIsPresenting = false
+//					UIApplication.shared.endIgnoringInteractionEvents()
+//				}
+//			}
+//		}
 	}
 	
 	func popupPlayer(show: Bool, animated: Bool) {
@@ -75,7 +81,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		self.view.layoutIfNeeded()
 		
 		if playerIsShowed && !show {
-			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
+			miniPlayerBottomConstr?.constant = self.miniPlayer.frame.height + self.tabBar.frame.height
 			playerIsShowed = false
 		}
 		if !playerIsShowed && show {
@@ -88,24 +94,24 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func showPlaylist() {
-        if !self.playerIsPresenting && !self.playerWasShowed {
-            self.playerController.showPlaylist()
-            if !self.playerController.isBeingPresented {
-                UIApplication.shared.beginIgnoringInteractionEvents()
-                self.playerIsPresenting = true
-                self.present(self.playerController, animated: true) {
-                    self.playerIsPresenting = false
-                    self.playerWasShowed = true
-                    UIApplication.shared.endIgnoringInteractionEvents()
-                }
-            }
-        }
+//        if !self.playerIsPresenting && !self.playerWasShowed {
+//            self.playerHandler.main.showPlaylist()
+//            if !self.playerHandler.main.isBeingPresented {
+//                UIApplication.shared.beginIgnoringInteractionEvents()
+//                self.playerIsPresenting = true
+//                self.present(self.playerHandler.main, animated: true) {
+//                    self.playerIsPresenting = false
+//                    self.playerWasShowed = true
+//                    UIApplication.shared.endIgnoringInteractionEvents()
+//                }
+//            }
+//        }
 	}
 	
 	func hidePlayer() {
-		self.playerController.dismiss(animated: true) {
-			print("player dismissed")
-		}
+//        self.playerHandler.main.dismiss(animated: true) {
+//			print("player dismissed")
+//		}
 	}
 	
     override func viewDidLoad() {
@@ -143,9 +149,6 @@ extension MainTabViewController: UITabBarControllerDelegate {
 			self.tabSelected(controller: title)
 		}
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
-        if let nc = viewController as? UINavigationController {
-			self.router.currentNavigationController = nc
-        }
     }
 	
     func tabSelected(controller: String)
