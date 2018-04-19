@@ -15,7 +15,7 @@ enum ViewModels {
 }
 
 protocol SearchModelProtocol: ModelProtocol {
-    weak var delegate: SearchModelDelegate? {get set}
+    var delegate: SearchModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -23,6 +23,7 @@ protocol SearchEventHandler: class {
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int)
     func channelSubscriptionPressedAt(index: Int)
     func searchChanged(string: String)
+    func showOthers(index: Int)
 }
 
 protocol SearchModelDelegate: class {
@@ -31,6 +32,7 @@ protocol SearchModelDelegate: class {
     func update(index: Int, vm: SearchChannelViewModel)
     func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
+    func showOthers(track: Track)
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
@@ -47,7 +49,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     
     let realm: Realm? = try? Realm()
     
-    var delegate: SearchModelDelegate?
+    weak var delegate: SearchModelDelegate?
 	
 	let searchState: Variable<(text: String?, offset: Int)> = Variable<(text: String?, offset: Int)>((nil,0))
     let disposeBag = DisposeBag()
@@ -190,6 +192,10 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
         
         // while in User Settings
         SubscribeManager.shared.addOrDelete(channel: channel.id)
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

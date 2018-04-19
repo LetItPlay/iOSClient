@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import blockchainapp
+//@testable import blockchainapp
 
 class blockchainappTests: XCTestCase {
     

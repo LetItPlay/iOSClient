@@ -3,8 +3,8 @@ import RxSwift
 import Action
 
 
-protocol FeedModelProtocol: class, ModelProtocol {
-	weak var delegate: FeedModelDelegate? {get set}
+protocol FeedModelProtocol: ModelProtocol {
+    var delegate: FeedModelDelegate? {get set}
 	var playingIndex: Variable<Int?> {get}
 }
 

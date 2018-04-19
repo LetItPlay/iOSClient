@@ -9,8 +9,8 @@
 import Foundation
 import RxSwift
 
-protocol OthersModelProtocol: class, ModelProtocol {
-    weak var delegate: OthersModelDelegate? {get set}
+protocol OthersModelProtocol: ModelProtocol {
+    var delegate: OthersModelDelegate? {get set}
     var trackShareInfo: ShareInfo? {get set}
 }
 
@@ -24,7 +24,7 @@ protocol OthersModelDelegate: class {
 }
 
 class OthersModel: OthersModelProtocol, OthersEventHandler {
-    var delegate: OthersModelDelegate?
+    weak var delegate: OthersModelDelegate?
     var trackShareInfo: ShareInfo?
     
     var disposeBag = DisposeBag()

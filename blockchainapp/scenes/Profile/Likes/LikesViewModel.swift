@@ -13,7 +13,7 @@ protocol LikesVMProtocol {
     var tracks: [TrackViewModel] {get}
     var length: String {get set}
   
-    weak var delegate: LikesVMDelegate? {get set}
+    var delegate: LikesVMDelegate? {get set}
 }
 
 protocol LikesVMDelegate: class {

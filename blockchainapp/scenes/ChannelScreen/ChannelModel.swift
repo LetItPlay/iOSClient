@@ -30,7 +30,7 @@ extension PlayerUsingProtocol {
 }
 
 protocol ChannelModelProtocol: ModelProtocol {
-    weak var delegate: ChannelModelDelegate? {get set}
+    var delegate: ChannelModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -54,10 +54,10 @@ protocol ChannelModelDelegate: class {
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtocol {
-    
-    var delegate: ChannelModelDelegate?
 	
 	var playlistName: String = "Channel".localized
+    weak var delegate: ChannelModelDelegate?
+    
     var tracks: [Track] = []
     var channel: Channel!
     var currentTrackID: Int?
@@ -175,3 +175,4 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
 }
+

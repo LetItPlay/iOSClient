@@ -53,9 +53,7 @@
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
-		2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
-		2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EFA2034418900B3D939 /* FeedEmitter.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
 		36045FA8204D8338003C7406 /* UserPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36045FA7204D8338003C7406 /* UserPlaylistViewModel.swift */; };
 		36045FAA204D8340003C7406 /* UserPlaylistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36045FA9204D8340003C7406 /* UserPlaylistModel.swift */; };
@@ -83,6 +81,9 @@
 		36706D532031A801002097E7 /* ChannelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36706D522031A801002097E7 /* ChannelsViewModel.swift */; };
 		36706D552031A809002097E7 /* ChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36706D542031A809002097E7 /* ChannelsEmitter.swift */; };
 		36813A6E203D671E00EAE49A /* MediumChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */; };
+		369301B32088A50A003D11BC /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369301B02088A509003D11BC /* FeedViewModel.swift */; };
+		369301B42088A50A003D11BC /* FeedModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369301B12088A50A003D11BC /* FeedModel.swift */; };
+		369301B52088A50A003D11BC /* FeedEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 369301B22088A50A003D11BC /* FeedEmitter.swift */; };
 		36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */; };
 		36952672202C610100F97E1E /* ProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36952671202C610100F97E1E /* ProfileModel.swift */; };
 		36DF1BFE201A00570017BDE7 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */; };
@@ -100,6 +101,8 @@
 		9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18FC207F775800CBE87B /* ShareInfo.swift */; };
 		9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
+		9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */; };
+		9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
@@ -127,6 +130,7 @@
 		CF4453691F57F4D200660474 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453681F57F4D200660474 /* ChannelsViewController.swift */; };
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
+		CFA4842C919729E5AACAD804 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
 		F3E0F17E5D26D127B088066C /* Pods_blockchainappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0AA887CF3A1B7E3E70BDB43 /* Pods_blockchainappTests.framework */; };
 		FD10B2EE2F2654061F2BDF07 /* PlayerEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
@@ -218,7 +222,6 @@
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		2CE07EF62028883C00B3D939 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
-		2CE07EFA2034418900B3D939 /* FeedEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedEmitter.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		36045FA7204D8338003C7406 /* UserPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistViewModel.swift; sourceTree = "<group>"; };
 		36045FA9204D8340003C7406 /* UserPlaylistModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistModel.swift; sourceTree = "<group>"; };
@@ -246,6 +249,9 @@
 		36706D522031A801002097E7 /* ChannelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewModel.swift; sourceTree = "<group>"; };
 		36706D542031A809002097E7 /* ChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsEmitter.swift; sourceTree = "<group>"; };
 		36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediumChannelViewModel.swift; sourceTree = "<group>"; };
+		369301B02088A509003D11BC /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedViewModel.swift; path = blockchainapp/scenes/Feed/Feed/FeedViewModel.swift; sourceTree = SOURCE_ROOT; };
+		369301B12088A50A003D11BC /* FeedModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedModel.swift; path = blockchainapp/scenes/Feed/Feed/FeedModel.swift; sourceTree = SOURCE_ROOT; };
+		369301B22088A50A003D11BC /* FeedEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedEmitter.swift; path = blockchainapp/scenes/Feed/Feed/FeedEmitter.swift; sourceTree = SOURCE_ROOT; };
 		3695266F202C5EBF00F97E1E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		36952671202C610100F97E1E /* ProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileModel.swift; sourceTree = "<group>"; };
 		36DF1BFD201A00570017BDE7 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
@@ -267,6 +273,8 @@
 		9D0B18FC207F775800CBE87B /* ShareInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfo.swift; sourceTree = "<group>"; };
 		9D54AA1A206B4AB400F693C0 /* PlaylistsTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsTab.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
+		9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsView.swift; sourceTree = "<group>"; };
+		9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsEmitter.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
@@ -324,7 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
-				2411F6667C0394FB5ADB3D5B /* Pods_blockchainapp.framework in Frameworks */,
+				CFA4842C919729E5AACAD804 /* Pods_blockchainapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,6 +522,17 @@
 			path = Likes;
 			sourceTree = "<group>";
 		};
+		369301B62088A519003D11BC /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				369301B22088A50A003D11BC /* FeedEmitter.swift */,
+				369301B12088A50A003D11BC /* FeedModel.swift */,
+				369301B02088A509003D11BC /* FeedViewModel.swift */,
+			);
+			name = Feed;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		36E1559F204D6ECB00C65DBE /* UserPlaylist */ = {
 			isa = PBXGroup;
 			children = (
@@ -550,6 +569,15 @@
 			path = Playlists;
 			sourceTree = "<group>";
 		};
+		9D889862208482D7004A7575 /* BottomItems */ = {
+			isa = PBXGroup;
+			children = (
+				9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */,
+				9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */,
+			);
+			path = BottomItems;
+			sourceTree = "<group>";
+		};
 		9D931AFB207B26C100BAFC51 /* TrackInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -582,16 +610,6 @@
 				9D0B18FC207F775800CBE87B /* ShareInfo.swift */,
 			);
 			path = Others;
-			sourceTree = "<group>";
-		};
-		9DE1A75C207B1A7D007604CA /* Feed */ = {
-			isa = PBXGroup;
-			children = (
-				01D2F49F20297E2100E43B67 /* FeedViewModel.swift */,
-				01D2F49D2029754F00E43B67 /* FeedModel.swift */,
-				2CE07EFA2034418900B3D939 /* FeedEmitter.swift */,
-			);
-			path = Feed;
 			sourceTree = "<group>";
 		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
@@ -716,7 +734,7 @@
 				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
 				0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */,
 				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
-				9DE1A75C207B1A7D007604CA /* Feed */,
+				369301B62088A519003D11BC /* Feed */,
 				36F7C399201AF71200F99A9A /* Channels */,
 			);
 			path = Feed;
@@ -744,6 +762,9 @@
 				FD10B60FFE491AF62B1A26A6 /* PlayerScreenBuilder.swift */,
 				FD10B4E092F837E850DC5B81 /* PlayerModel.swift */,
 				01C4A9D0207F33AE00A4232B /* PlayerExternalHandlers.swift */,
+				FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */,
+				FD10B60FFE491AF62B1A26A6 /* PlayerBuilder.swift */,
+				9D889862208482D7004A7575 /* BottomItems */,
 			);
 			path = PlayerScreen;
 			sourceTree = "<group>";
@@ -852,7 +873,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Ivan Gorbulin";
 				TargetAttributes = {
 					CF4453251F54139900660474 = {
@@ -1064,6 +1085,7 @@
 				9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
+				9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */,
 				9DFAE70220610A4B00EF7C4D /* TrackInfoModel.swift in Sources */,
 				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
 				01C4A9D3207F375C00A4232B /* PlayingPlaylistEmitter.swift in Sources */,
@@ -1084,6 +1106,7 @@
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
+				369301B42088A50A003D11BC /* FeedModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,
 				0158129C1FD70561002828F5 /* ChannelsBuilder.swift in Sources */,
 				9DFAE70320610A4B00EF7C4D /* TrackInfoViewModel.swift in Sources */,
@@ -1091,10 +1114,10 @@
 				01EFC877201A2421005321B9 /* PlayingPlaylistViewController.swift in Sources */,
 				0158129E1FD70793002828F5 /* FeedBuilders.swift in Sources */,
 				36045FAE204D8A87003C7406 /* UserPlaylistBuilder.swift in Sources */,
-				01D2F49E2029754F00E43B67 /* FeedModel.swift in Sources */,
 				3659B22B203EE351009580E9 /* ChannelBuilder.swift in Sources */,
 				36706D512031A7F3002097E7 /* ChannelsModel.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
+				369301B32088A50A003D11BC /* FeedViewModel.swift in Sources */,
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */,
 				36706D552031A809002097E7 /* ChannelsEmitter.swift in Sources */,
@@ -1113,13 +1136,13 @@
 				9DFAE70120610A4B00EF7C4D /* TrackInfoEmitter.swift in Sources */,
 				CF44532A1F54139900660474 /* AppDelegate.swift in Sources */,
 				365B0A1C2031983A006458F9 /* LikesEmitter.swift in Sources */,
+				9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */,
 				36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */,
 				01418562203C41EA004C69F0 /* ServerUpdateManager.swift in Sources */,
 				9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */,
 				9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */,
 				9D54AA1B206B4AB400F693C0 /* PlaylistsTab.swift in Sources */,
 				365653F920358F980072087F /* PlaylistsModel.swift in Sources */,
-				2CE07EFB2034418900B3D939 /* FeedEmitter.swift in Sources */,
 				9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */,
 				36706D532031A801002097E7 /* ChannelsViewModel.swift in Sources */,
 				3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */,
@@ -1131,7 +1154,6 @@
 				CF44535B1F55406B00660474 /* Managers.swift in Sources */,
 				9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */,
 				01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */,
-				01D2F4A020297E2100E43B67 /* FeedViewModel.swift in Sources */,
 				9D0B18FB207F6AF100CBE87B /* OthersBuilder.swift in Sources */,
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
@@ -1161,6 +1183,7 @@
 				9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */,
 				361CD018204815140097F8E9 /* LikeHeader.swift in Sources */,
 				3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */,
+				369301B52088A50A003D11BC /* FeedEmitter.swift in Sources */,
 				019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */,
 				36045FA8204D8338003C7406 /* UserPlaylistViewModel.swift in Sources */,
 				FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */,
@@ -1260,6 +1283,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1267,6 +1291,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1299,6 +1324,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1318,6 +1344,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -1325,6 +1352,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1349,6 +1377,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1414,7 +1443,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockchainapp.app/blockchainapp";
 			};
 			name = Debug;
@@ -1433,7 +1462,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockchainapp.app/blockchainapp";
 			};
 			name = Release;
@@ -1451,7 +1480,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = blockchainapp;
 			};
 			name = Debug;
@@ -1469,7 +1498,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = MSL.blockchainappUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TEST_TARGET_NAME = blockchainapp;
 			};
 			name = Release;

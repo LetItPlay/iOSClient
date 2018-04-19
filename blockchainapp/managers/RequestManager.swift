@@ -172,7 +172,7 @@ class RequestManager {
 						let lm = LikeManager.shared
 						let json = try JSON(data: data)
 						
-						let channels: [Channel] = json["Stations"].array?
+						let _: [Channel] = json["Stations"].array?
 							.map({Channel(json: $0)})
 							.filter({$0 != nil}).map({$0!}) ?? []
                         let tracksJSON: JSON!
@@ -323,6 +323,7 @@ class RequestManager {
                 elements["listen_count"] = 0
                 switch type {
                     case .like(let count):
+                        print(count)
                         elements["like_count"] = count
                     case .report(_):
                         elements["report_count"] = 1
@@ -374,10 +375,33 @@ class RequestManager {
             }
         })
     }
+    
+    func getToken() {
+        let urlString = RequestManager.server + "/auth"
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            let postString = "uuid=\(UserSettings.userIdentifier)"
+            request.httpBody = postString.data(using: .utf8)
+            
+            self.request(request: request).retry().subscribe(onNext: { result in
+                switch result {
+                case .value(let data):
+                    do {
+                        let json = try JSON(data: data)
+                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
+                    } catch {
+                        print(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    print(error)
+                }
+            })
+        }
+    }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
         var req = request
-//        req.addValue("Bearer \(UserSettings.session)", forHTTPHeaderField: "Authorization")
 		return Observable<Result<Data>>.create({ (observer) -> Disposable in
 			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
 				if let _ = response.error {
@@ -389,7 +413,7 @@ class RequestManager {
 					if resp.statusCode == 200 {
 						observer.onNext(.value(data))
 					} else {
-						observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+                        observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
 					}
 				} else {
 					observer.onError(RequestError.noConnection)
@@ -402,4 +426,5 @@ class RequestManager {
 			}
 		})
 	}
+
 }

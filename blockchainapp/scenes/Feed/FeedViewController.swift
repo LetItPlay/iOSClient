@@ -143,8 +143,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         self.emitter.send(event: FeedEvent.showSearch)
     }
     
-    @objc func showAllChannels()
-    {
+    @objc func showAllChannels() {
         emitter.send(event: FeedEvent.showAllChannels())
     }
 

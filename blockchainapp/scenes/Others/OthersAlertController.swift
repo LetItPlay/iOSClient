@@ -44,26 +44,16 @@ class OthersAlertController: UIAlertController {
         self.addAction(UIAlertAction(title: "Пожаловаться", style: .default, handler: { (action) in
             let alert = UIAlertController(title: "Пожаловаться на", message: "", preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "Спам", style: .default, handler: { _ in
-                self.emitter.send(event: OthersEvent.report(.spam))
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Контент для взрослых", style: .default, handler: { _ in
-                self.emitter.send(event: OthersEvent.report(.adultContent))
-            }))
-        
-            alert.addAction(UIAlertAction(title: "Жестокий контент", style: .default, handler: { _ in
-                self.emitter.send(event: OthersEvent.report(.cruelContent))
-            }))
+            for report in self.viewModel.reportObjects {
+                alert.addAction(UIAlertAction(title: report.title, style: .default, handler: { (_) in
+                    self.emitter.send(event: report.event)
+                }))
+            }
             
             alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: nil))
             
             self.viewController.present(alert, animated: true)
         }))
-        
-//        self.addAction(UIAlertAction(title: "Скрыть", style: .default, handler: { (action) in
-//
-//        }))
         
         self.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
     }
@@ -74,7 +64,4 @@ class OthersAlertController: UIAlertController {
 }
 
 extension OthersAlertController: OthersVMDelegate {
-    func addTrack() {
-        
-    }
 }

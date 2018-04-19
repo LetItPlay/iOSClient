@@ -78,7 +78,7 @@ struct Track: LIPModel {
 			
 			return
 		}
-        if let channelId = json["StationID"].int,
+        if let _ = json["StationID"].int,
             let idInt = json["Id"].int,
             let title = json["Title"].string,
             let audioURL = json["AudioURL"].string?.url(),

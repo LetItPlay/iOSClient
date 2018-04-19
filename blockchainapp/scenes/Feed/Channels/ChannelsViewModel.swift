@@ -10,7 +10,7 @@ import Foundation
 protocol ChannelsVMProtocol {
     var channels: [SmallChannelViewModel] {get}
     
-    weak var delegate: ChannelsVMDelegate? {get set}
+    var delegate: ChannelsVMDelegate? {get set}
 }
 
 protocol ChannelsVMDelegate: class  {

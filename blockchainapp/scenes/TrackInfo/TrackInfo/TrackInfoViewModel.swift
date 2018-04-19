@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import UIKit
 
 enum TrackInfoResultUpdate {
     case track, channel, channelSubscription
