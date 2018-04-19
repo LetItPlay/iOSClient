@@ -53,6 +53,7 @@ class PlayerModel {
 
     init(player: AudioPlayer) {
         self.player = player
+		self.player.delegate = self
 
         let mpcenter = MPRemoteCommandCenter.shared()
         mpcenter.playCommand.isEnabled = true
@@ -111,7 +112,7 @@ extension PlayerModel: AudioPlayerDelegate {
         self.currentTime = time
         self.playerDelegate?.update(progress: Float(time.current/time.length),
                 currentTime: Int64(round(time.current)).formatTime(),
-                leftTime: "-" + Int64(min(0, round(time.length - time.current))).formatTime())
+                leftTime: "-" + Int64(max(0, round(time.length - time.current))).formatTime())
     }
 
     func itemFinishedPlaying(id: Int) {

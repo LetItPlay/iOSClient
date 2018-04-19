@@ -2,7 +2,6 @@ import Foundation
 
 extension PlayerModel: PlayerEventHandler {
 	func execute(event: PlayerEvent) {
-		self.playerDelegate?.player(show: true)
 		switch event {
 		case .plause:
 			switch self.player.status {

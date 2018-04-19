@@ -26,7 +26,7 @@ PODS:
   - SDWebImage/Core (4.3.3)
   - ShadowView (1.2)
   - SnapKit (4.0.0)
-  - SwiftyJSON (4.0.0)
+  - SwiftyJSON (4.1.0)
   - SwipeCellKit (2.2.0)
   - Tabman (1.6.0):
     - AutoInsetter (~> 1.2.0)
@@ -97,7 +97,7 @@ SPEC CHECKSUMS:
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
   ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
-  SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
   SwipeCellKit: 8ae09401e1137566b187980d824310129233c959
   Tabman: a9be97d1c75b4b7f40eec416021f614c4ccbb670
   TagListView: 669f7d4455003c877655875d34829731c4191528

@@ -25,6 +25,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel = viewModel
+		self.viewModel.playerDelegate = self
         self.emitter = emitter
     }
 
@@ -77,6 +78,8 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let time = self.viewModel.currentTimeState
         self.trackProgressView.trackProgressLabels.start.text = time.past
         self.trackProgressView.trackProgressLabels.fin.text = time.future
+		self.trackProgressView.slider.value = self.viewModel.currentTime
+		self.miniPlayer?.progressView.progress = self.viewModel.currentTime
     }
 
     func updateTrack() {
@@ -91,7 +94,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         self.channelNameLabel.text = track.author
         self.trackNameLabel.text = track.name
         self.miniPlayer?.trackNameLabel.text = track.name
-        self.miniPlayer?.trackAuthorLabel.text = track.name
+        self.miniPlayer?.trackAuthorLabel.text = track.author
     }
 
     func setPicture(image: UIImage?) {

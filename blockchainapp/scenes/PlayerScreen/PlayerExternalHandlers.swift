@@ -76,6 +76,7 @@ extension PlayerModel: PlayerProtocol {
 			self.playlistName == playlistName else {
 				return false
 		}
+		self.playerDelegate?.player(show: true)
 		if self.playingIndex == index {
 			self.execute(event: .plause)
 		} else {
