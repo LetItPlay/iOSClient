@@ -64,7 +64,7 @@ enum RequestError: Error {
 
 class RequestManager {
 
-    static let server: String = "https://1d47ed43.ngrok.io" //"https://beta.api.letitplay.io"
+    static let server: String = "https://beta.api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
 	func channel(id: Int) -> Observable<Channel> {
@@ -402,7 +402,7 @@ class RequestManager {
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
         var req = request
-        req.addValue("\(UserSettings.token)", forHTTPHeaderField: "Authorization")
+//        req.addValue("\(UserSettings.token)", forHTTPHeaderField: "Authorization")
 		return Observable<Result<Data>>.create({ (observer) -> Disposable in
 			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
 				if let _ = response.error {

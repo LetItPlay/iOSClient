@@ -5,7 +5,6 @@ PODS:
   - Alamofire (4.7.2)
   - AssistantKit (0.4.1)
   - AutoInsetter (1.2.3)
-  - BartyCrouch (3.11.1)
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
   - DeepLinkKit (1.5.0)
@@ -38,7 +37,6 @@ DEPENDENCIES:
   - Action
   - Alamofire
   - AssistantKit
-  - BartyCrouch
   - Crashlytics
   - DeepLinkKit
   - DynamicBlurView
@@ -61,7 +59,6 @@ SPEC REPOS:
     - Alamofire
     - AssistantKit
     - AutoInsetter
-    - BartyCrouch
     - Crashlytics
     - DeepLinkKit
     - DynamicBlurView
@@ -86,7 +83,6 @@ SPEC CHECKSUMS:
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
   AutoInsetter: 1a8f8ad5e7da8e993970b3809cfb8e8e330f4db1
-  BartyCrouch: 14986f4adc676174f28c93bcf3bb53885d9f7c84
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   DeepLinkKit: 98a26f2c5cf4c86b97c1170cdf3737ae49a3a50c
   DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
@@ -106,6 +102,6 @@ SPEC CHECKSUMS:
   Tabman: a9be97d1c75b4b7f40eec416021f614c4ccbb670
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: 2e796dcbe5f80b2aeab28dd28c1b718a570bbee0
+PODFILE CHECKSUM: bfa674359ceb76c79d74bb70c193408a7e60b1cb
 
 COCOAPODS: 1.5.0
