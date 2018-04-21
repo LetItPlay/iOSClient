@@ -1,7 +1,7 @@
 import Foundation
 
-protocol PlaylistViewDelegate: class {
-	
+protocol PlayingPlaylistViewDelegate: class {
+	func update()
 }
 
 class PlayingPlaylistViewModel: PlaylistModelDelegate {

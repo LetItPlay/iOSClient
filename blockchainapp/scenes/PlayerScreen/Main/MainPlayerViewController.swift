@@ -206,7 +206,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 2 {
+        if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 1 {
             return self.vcs[index + 1]
         }
 //		if viewController is MainPlayerViewController {

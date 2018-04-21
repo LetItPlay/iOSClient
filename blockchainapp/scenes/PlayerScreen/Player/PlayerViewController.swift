@@ -214,10 +214,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         for i in 0..<arr.count {
             arr[i].tag = i + 1
         }
-        arr.first!.setImage(UIImage(named: "nextInactive"), for: .normal)
-        arr.last!.setImage(UIImage(named: "prevInactive"), for: .normal)
+        arr.first!.setImage(UIImage(named: "prevInactive"), for: .normal)
+        arr.last!.setImage(UIImage(named: "nextInactive"), for: .normal)
 
-        return (next: arr.first!, prev: arr.last!)
+        return (next: arr.last!, prev: arr.first!)
     }()
 
     let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
@@ -232,10 +232,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         for i in 0..<arr.count {
             arr[i].tag = i + 3
         }
-        arr.first!.setImage(UIImage(named: "playerForw"), for: .normal)
-        arr.last!.setImage(UIImage(named: "playerBackw"), for: .normal)
+        arr.last!.setImage(UIImage(named: "playerForw"), for: .normal)
+        arr.first!.setImage(UIImage(named: "playerBackw"), for: .normal)
 
-        return (forw: arr.first!, backw: arr.last!)
+        return (forw: arr.last!, backw: arr.first!)
     }()
 
     func viewInitialize() {

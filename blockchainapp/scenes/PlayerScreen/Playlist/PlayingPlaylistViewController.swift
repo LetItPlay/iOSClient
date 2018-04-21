@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PlayingPlaylistViewController: UIViewController {
+class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelegate {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
@@ -22,6 +22,10 @@ class PlayingPlaylistViewController: UIViewController {
 		self.init(nibName: nil, bundle: nil)
 		self.vm = vm
 		self.emitter = emitter
+	}
+	
+	func update() {
+		
 	}
 	
     override func viewDidLoad() {
