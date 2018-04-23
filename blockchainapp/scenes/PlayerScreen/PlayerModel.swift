@@ -99,6 +99,21 @@ class PlayerModel {
             self.player.make(command: prev == .playing ? .play : .pause)
         }
     }
+    
+    func updatePlaylist() {
+        self.playlistDelegate?.reload(
+            tracks: self.tracks.map({TrackViewModel.init(track: $0, isPlaying: self.playingNow == $0.id)}),
+            count: Int64(self.tracks.count).formatAmount(),
+            length: Int64(self.tracks.map({$0.length}).reduce(0, +)).formatTime())
+    }
+
+    func updatePlaying(index: Int) {
+		//TODO: Send notification for all to update
+        if index > -1 && index < self.tracks.count {
+			let track = self.tracks[index]
+            self.playlistDelegate?.update(track: TrackViewModel(track: track, isPlaying: track.id == self.playingNow), asIndex: index)
+        }
+    }
 }
 
 extension PlayerModel: AudioPlayerDelegate {

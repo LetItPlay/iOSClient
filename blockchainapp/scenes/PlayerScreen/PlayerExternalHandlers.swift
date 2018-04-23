@@ -19,6 +19,7 @@ extension PlayerModel: PlaylistProtocol {
 	func reload(tracks: [Track]) {
 		self.tracks = tracks
 		//TODO: Update playlist
+        self.updatePlaylist()
 	}
 	
 	func remove(index: Int) {
@@ -31,11 +32,13 @@ extension PlayerModel: PlaylistProtocol {
 			}
 			self.reloadTrack()
 		}
+        self.updatePlaylist()
 	}
 	
 	func clearAll() {
 		self.tracks.removeAll()
 		self.player.make(command: .pause)
+        self.updatePlaylist()
 	}
 }
 
@@ -58,10 +61,7 @@ extension PlayerModel: PlayerProtocol {
 		}
 		self.tracks = tracks
 		self.playlistName = name
-        self.playlistDelegate?.reload(
-                tracks: self.tracks.map({TrackViewModel.init(track: $0, isPlaying: self.playingNow == $0.id)}),
-                count: Int64(tracks.count).formatAmount(),
-                length: Int64(self.tracks.map({$0.length}).reduce(0, +)).formatTime()
+        self.updatePlaylist()
 	}
 	
 	func add(track: Track, inBeginning: Bool) {
@@ -71,6 +71,7 @@ extension PlayerModel: PlayerProtocol {
 			} else {
 				self.tracks.append(track)
 			}
+            self.updatePlaylist()
 			// TODO: Update playlist
 		}
 	}

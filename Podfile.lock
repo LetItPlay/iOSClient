@@ -13,11 +13,11 @@ PODS:
   - MarqueeLabel/Swift (3.1.4)
   - Pageboy (2.4.0)
   - ReachabilitySwift (4.1.0)
-  - Realm (3.3.2):
-    - Realm/Headers (= 3.3.2)
-  - Realm/Headers (3.3.2)
-  - RealmSwift (3.3.2):
-    - Realm (= 3.3.2)
+  - Realm (3.4.0):
+    - Realm/Headers (= 3.4.0)
+  - Realm/Headers (3.4.0)
+  - RealmSwift (3.4.0):
+    - Realm (= 3.4.0)
   - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
   - RxSwift (4.1.2)
@@ -53,31 +53,6 @@ DEPENDENCIES:
   - Tabman (~> 1.6.0)
   - TagListView
 
-SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - Action
-    - Alamofire
-    - AssistantKit
-    - AutoInsetter
-    - Crashlytics
-    - DeepLinkKit
-    - DynamicBlurView
-    - Fabric
-    - MarqueeLabel
-    - Pageboy
-    - ReachabilitySwift
-    - Realm
-    - RealmSwift
-    - RxCocoa
-    - RxSwift
-    - SDWebImage
-    - ShadowView
-    - SnapKit
-    - SwiftyJSON
-    - SwipeCellKit
-    - Tabman
-    - TagListView
-
 SPEC CHECKSUMS:
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
@@ -90,8 +65,8 @@ SPEC CHECKSUMS:
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   Pageboy: b04cee5c1315a865fb49321129d12635e8465144
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-  Realm: d927fbf66df5532cfafc08afb5f7e53ded37b894
-  RealmSwift: 4e903a494e05d866581d69ad6f7e7b879d446baf
+  Realm: 9527c7baa2260f3a3aad6823d2d71cafff9b046b
+  RealmSwift: f40a747beaea1cadde7dcef41ee5a34b3001677b
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
@@ -104,4 +79,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bfa674359ceb76c79d74bb70c193408a7e60b1cb
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.4.0
