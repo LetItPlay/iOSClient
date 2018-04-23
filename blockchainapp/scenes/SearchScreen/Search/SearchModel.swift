@@ -34,6 +34,7 @@ protocol SearchModelDelegate: class {
     func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
     func showOthers(track: Track)
+    func toUpdate(nothing: Bool)
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
@@ -41,7 +42,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 	var playlistName: String = "Search".localized
     var tracks: [Track] = []
     var channels: [Channel] = []
-    var tracksCount: Int = 16
+    var tracksCount: Int = 100
 	
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     var currentSearchString: String = ""
@@ -66,12 +67,16 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 				}
 			}.subscribe(onNext: {(tuple) in
                 if self.searchState.value.offset == 0 {
+                    self.delegate?.toUpdate(nothing: false)
                     self.playlistName = "Search".localized + " \"\(self.searchState.value.text)\""
                     self.tracks = tuple.0
                     self.channels = tuple.1
                     self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
                     self.delegate?.update(channels: self.channels.map({SearchChannelViewModel.init(channel: $0)}))
                 } else {
+                    if tuple.0.count == 0 {
+                        self.delegate?.toUpdate(nothing: true)
+                    }
                     self.tracks += tuple.0
                     self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
                 }

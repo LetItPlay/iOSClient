@@ -17,6 +17,7 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     
     var tableView: UITableView!
     var searchController: UISearchController!
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     var viewModel: SearchVMProtocol!
     var emitter: SearchEmitterProtocol!
@@ -76,7 +77,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.definesPresentationContext = true
         
         self.navigationItem.searchController = self.searchController
-//        self.navigationItem.hidesSearchBarWhenScrolling = false
         
         self.searchController.isActive = true
     }
@@ -127,6 +127,7 @@ extension SearchViewController: SearchVMDelegate {
     
     func reloadTracks() {
         self.tableView.reloadData()
+        activityIndicator.stopAnimating()
     }
     
     func reloadChannels() {
@@ -175,9 +176,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1 {
-            print(indexPath.row)
-            self.emitter.send(event: SearchEvent.showMoreTracks)
+        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1,
+            !viewModel.nothingToUpdate {
+                activityIndicator.startAnimating()
+                self.emitter.send(event: SearchEvent.showMoreTracks)
+        }
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 {
+            return nil
+        } else {
+            return activityIndicator
         }
     }
 }
