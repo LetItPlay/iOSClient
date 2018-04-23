@@ -13,6 +13,7 @@ enum SearchEvent {
     case channelSubPressed(index: Int)
     case cellDidSelect(section: Int, index: Int)
     case showOthers(index: Int)
+    case showMoreTracks
 }
 
 protocol SearchEmitterProtocol: LifeCycleHandlerProtocol {
@@ -41,6 +42,8 @@ class SearchEmitter: Emitter, SearchEmitterProtocol {
             self.model?.searchChanged(string: string)
         case .showOthers(let index):
             self.model?.showOthers(index: index)
+        case .showMoreTracks:
+            self.model?.showMoreTracks()
         }
     }
 }

@@ -44,8 +44,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
     func viewInitialize()
     {
         self.navigationItem.hidesBackButton = true
-//        self.navigationController?.navigationBar.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height:24)
-//        self.extendedLayoutIncludesOpaqueBars = true
         
         self.view.backgroundColor = .white
         
@@ -173,6 +171,13 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             return Common.height(text: track.name, width: tableView.frame.width)
         } else {
             return SmallChannelTableViewCell.height
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1 {
+            print(indexPath.row)
+            self.emitter.send(event: SearchEvent.showMoreTracks)
         }
     }
 }
