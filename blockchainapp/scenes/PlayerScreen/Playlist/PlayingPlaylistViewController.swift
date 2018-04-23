@@ -42,10 +42,10 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
         label.text = "Current playlist".localized
         
         let tracks = IconedLabel.init(type: .tracks)
-        tracks.setData(data: Int64(self.tracks[1].count))
-        
+//        tracks.setData(data: Int64(self.tracks[1].count))
+//
         let time = IconedLabel.init(type: .time)
-        time.setData(data: Int64(self.tracks[1].map({$0.length}).reduce(0, {$0 + $1})))
+//        time.setData(data: Int64(self.tracks[1].map({$0.length}).reduce(0, {$0 + $1})))
         
         view.addSubview(label)
         label.snp.makeConstraints { (make) in
@@ -100,7 +100,7 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		
-		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
+		tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
     }
 
     override func didReceiveMemoryWarning() {
@@ -112,11 +112,11 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
 extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return self.tracks.count
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.tracks[section].count
+		return self.vm.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -128,24 +128,24 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let contr = AudioController.main
-		contr.make(command: .play(id: self.tracks[indexPath].id))
+//		let contr = AudioController.main
+//		contr.make(command: .play(id: self.tracks[indexPath].id))
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-		let track = self.tracks[indexPath]
-		cell.track = track
-        
+		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+		let track = self.vm.tracks[indexPath.item]
+		cell.fill(vm: track)
+
         cell.onOthers = {[weak self] in
             let othersViewController = OthersBuilder.build(params: ["controller" : self as Any, "track" : track]) as! OthersAlertController
             self?.present(othersViewController, animated: true, completion: nil)
         }
         
-		let hideListens = indexPath == currentIndex
-//		cell.dataLabels[.listens]?.isHidden = hideListens
-		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
-//        cell.showOthersButton.isHidden = hideListens
+//		let hideListens = indexPath == currentIndex
+////		cell.dataLabels[.listens]?.isHidden = hideListens
+//		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
+////        cell.showOthersButton.isHidden = hideListens
         
 		return cell
 	}
