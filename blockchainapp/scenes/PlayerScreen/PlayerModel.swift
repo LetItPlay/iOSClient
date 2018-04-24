@@ -118,8 +118,10 @@ class PlayerModel {
 
 extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
-        if let item = self.currentTrack?.id, item == id {
+        if let index = self.tracks.index(where: {$0.id == id}) {
+            self.playlistDelegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: status == .playing), asIndex: index)
         }
+        //TODO: Post notifications
         self.updateStatus()
     }
 
@@ -136,6 +138,7 @@ extension PlayerModel: AudioPlayerDelegate {
         } else {
             self.execute(event: .change(dir: .forward))
         }
+        //TODO: Post notifications
         self.updateStatus()
     }
 }

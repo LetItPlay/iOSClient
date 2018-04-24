@@ -53,6 +53,31 @@ DEPENDENCIES:
   - Tabman (~> 1.6.0)
   - TagListView
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Action
+    - Alamofire
+    - AssistantKit
+    - AutoInsetter
+    - Crashlytics
+    - DeepLinkKit
+    - DynamicBlurView
+    - Fabric
+    - MarqueeLabel
+    - Pageboy
+    - ReachabilitySwift
+    - Realm
+    - RealmSwift
+    - RxCocoa
+    - RxSwift
+    - SDWebImage
+    - ShadowView
+    - SnapKit
+    - SwiftyJSON
+    - SwipeCellKit
+    - Tabman
+    - TagListView
+
 SPEC CHECKSUMS:
   Action: d60087ebce41b969d1afdad01e2fa1372a82f26e
   Alamofire: e4fa87002c137ba2d8d634d2c51fabcda0d5c223
@@ -79,4 +104,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bfa674359ceb76c79d74bb70c193408a7e60b1cb
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

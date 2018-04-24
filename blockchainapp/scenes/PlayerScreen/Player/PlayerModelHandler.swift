@@ -12,7 +12,6 @@ extension PlayerModel: PlayerEventHandler {
 			default:
 				self.player.make(command: .pause)
 			}
-			self.updatePlaying(index: self.playingIndex)
 		case .change(let direction):
 			let prevIndex = self.playingIndex
 			self.playingIndex = direction == .backward
@@ -20,8 +19,6 @@ extension PlayerModel: PlayerEventHandler {
 				: min(self.playingIndex + 1, self.tracks.count - 1)
 			let newIndex = self.playingIndex
 			self.reloadTrack()
-			self.updatePlaying(index: prevIndex)
-			self.updatePlaying(index: newIndex)
 		case .seekDir(let direction):
 			let newTime = self.currentTime.current + (direction == .forward ? 10.0 : -10.0)
 			if newTime > 0 && newTime < self.currentTime.length {

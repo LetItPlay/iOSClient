@@ -14,6 +14,10 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
 	var currentIndex: IndexPath = IndexPath.invalid
+    
+    let timeLabel = IconedLabel(type: .time)
+    let trackLabel = IconedLabel(type: .tracks)
+    let nameLabel = UILabel()
 	
 	var emitter: PlayingPlaylistEmitter!
 	var vm: PlayingPlaylistViewModel!
@@ -21,11 +25,14 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
 	convenience init(emitter: PlayingPlaylistEmitter, vm: PlayingPlaylistViewModel) {
 		self.init(nibName: nil, bundle: nil)
 		self.vm = vm
+        self.vm.delegate = self
 		self.emitter = emitter
 	}
 	
 	func update() {
-		
+		self.tableView.reloadData()
+        self.trackLabel.set(text: self.vm.count)
+        self.timeLabel.set(text: self.vm.length)
 	}
 	
     override func viewDidLoad() {
@@ -36,33 +43,26 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
         let view = UIView()
         view.backgroundColor = .white
         
-        let label = UILabel()
-        label.font = AppFont.Title.big
-        label.textColor = AppColor.Title.dark
-        label.text = "Current playlist".localized
+        nameLabel.font = AppFont.Title.big
+        nameLabel.textColor = AppColor.Title.dark
+        nameLabel.text = "Current playlist".localized
         
-        let tracks = IconedLabel.init(type: .tracks)
-//        tracks.setData(data: Int64(self.tracks[1].count))
-//
-        let time = IconedLabel.init(type: .time)
-//        time.setData(data: Int64(self.tracks[1].map({$0.length}).reduce(0, {$0 + $1})))
-        
-        view.addSubview(label)
-        label.snp.makeConstraints { (make) in
+        view.addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(3)
             make.left.equalToSuperview().inset(16)
         }
         
-        view.addSubview(tracks)
-        tracks.snp.makeConstraints { (make) in
+        view.addSubview(trackLabel)
+        trackLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(label.snp.bottom).inset(-7)
+            make.top.equalTo(nameLabel.snp.bottom).inset(-7)
         }
         
-        view.addSubview(time)
-        time.snp.makeConstraints { (make) in
-            make.left.equalTo(tracks.snp.right).inset(-8)
-            make.centerY.equalTo(tracks)
+        view.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(trackLabel.snp.right).inset(-8)
+            make.centerY.equalTo(trackLabel)
         }
         
         let line = UIView()
@@ -151,7 +151,7 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.tracks[indexPath]
+        let track = self.vm.tracks[indexPath.item]
 		return Common.height(text: track.name, width: tableView.frame.width)
 	}
 }
