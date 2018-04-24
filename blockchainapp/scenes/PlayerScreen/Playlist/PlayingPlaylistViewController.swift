@@ -130,6 +130,7 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //		let contr = AudioController.main
 //		contr.make(command: .play(id: self.tracks[indexPath].id))
+        self.emitter.itemSelected(index: indexPath.item)
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
