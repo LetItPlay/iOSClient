@@ -15,29 +15,6 @@ class PlaylistsViewController: UIViewController {
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
-    let header: UIVisualEffectView = {
-        let label = UILabel()
-        label.textColor = AppColor.Title.dark
-        label.font = AppFont.Title.section
-        label.text = "Today playlists".localized
-
-        var blurView = UIVisualEffectView()
-        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurView.clipsToBounds = true
-        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-        
-        blurView.contentView.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
-        }
-        
-        return blurView
-    }()
-    
     let emptyLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
@@ -57,14 +34,11 @@ class PlaylistsViewController: UIViewController {
         self.viewModel.delegate = self
         
         self.emitter = playlistEmitter
-        
-        self.viewInitialize()
-        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
@@ -72,6 +46,7 @@ class PlaylistsViewController: UIViewController {
     
     func viewInitialize()
     {
+        
         self.view.backgroundColor = .white
         
         refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
@@ -81,12 +56,13 @@ class PlaylistsViewController: UIViewController {
         
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(-24)
+            make.top.equalToSuperview()//.inset(-24)
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.bottom.equalTo(0)
         }
 
+        self.tableView.contentInset.top = 108
         self.tableView.contentInset.bottom = 40
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -148,21 +124,12 @@ extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
         return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 41
-    }
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 41
+//    }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        if self.viewModel.playlists.count == 0 {
-            return nil
-        }
-        
-        return header
     }
 }
 

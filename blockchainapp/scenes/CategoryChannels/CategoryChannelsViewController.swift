@@ -35,6 +35,7 @@ class CategoryChannelsViewController: UITableViewController {
     
     func viewInitialize()
     {
+
         navigationController?.navigationBar.prefersLargeTitles = false
         
         refreshControl = UIRefreshControl()
