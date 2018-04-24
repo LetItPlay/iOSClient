@@ -30,11 +30,10 @@ class UserPlaylistViewController: UIViewController {
     
     let clearButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(AppColor.Element.redBlur, for: .normal)
+        button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
         button.setTitle("Clear all".localized, for: .normal)
         button.titleLabel?.font = AppFont.Button.mid
         button.titleLabel?.textAlignment = .right
-        button.addTarget(self, action: #selector(clearPlaylist), for: .touchUpInside)
         return button
     }()
     
@@ -58,8 +57,13 @@ class UserPlaylistViewController: UIViewController {
     
     func viewInitialize()
     {
-        
         self.view.backgroundColor = UIColor.vaWhite
+        
+        self.navigationController?.navigationBar.addSubview(clearButton)
+        clearButton.snp.makeConstraints { (make) in
+            make.right.equalTo(-16)
+            make.centerY.equalToSuperview()
+        }
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
@@ -87,11 +91,15 @@ class UserPlaylistViewController: UIViewController {
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
 
         tableView.allowsMultipleSelectionDuringEditing = false
+        
+        clearButton.addTarget(self, action: #selector(clearPlaylist), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
+        
+        self.clearButton.isHidden = self.viewModel.hideEmptyMessage
         
         self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
@@ -124,6 +132,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     
     func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
+        self.clearButton.isHidden = self.viewModel.hideEmptyMessage
         self.navigationItem.rightBarButtonItem?.isEnabled = !self.viewModel.hideEmptyMessage
         self.tableView.reloadData()
     }
@@ -176,12 +185,6 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-//        let track = UserPlaylistManager.shared.tracks[indexPath.row]
-//        cell.track = track
-//        let hideListens = indexPath == currentIndex
-//        //        cell.dataLabels[.listens]?.isHidden = hideListens
-//        cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
         cell.delegate = self
