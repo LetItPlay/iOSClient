@@ -1,31 +1,9 @@
 import Foundation
 import MediaPlayer
 
-protocol TrackInfoDelegate: class {
-    func update(track: Track)
-}
-
-protocol PlaylistModelDelegate: class {
-	func reload(tracks: [TrackViewModel], count: String, length: String)
-	func update(track: TrackViewModel, asIndex index: Int)
-	func re(name: String)
-}
-
-protocol MainPlayerModelDelegate: class {
-	func showSpeedSettings()
-	func showMoreDialog()
-	func player(show: Bool)
-}
-
-protocol PlayerModelDelegate: class {
-    func update(status: [PlayerControlsStatus : Bool])
-    func update(progress: Float, currentTime: String, leftTime: String)
-    func update(track: TrackViewModel)
-}
-
 protocol PlayerEventHandler: ModelProtocol {
     func execute(event: PlayerEvent)
-    func execute(event: PlayerTrackEvent)
+    func channelPressed()
     func setSpeed(index: Int)
     func morePressed()
 }
@@ -112,14 +90,6 @@ class PlayerModel {
             count: Int64(self.tracks.count).formatAmount(),
             length: Int64(self.tracks.map({$0.length}).reduce(0, +)).formatTime())
     }
-
-    func updatePlaying(index: Int) {
-		//TODO: Send notification for all to update
-        if index > -1 && index < self.tracks.count {
-			let track = self.tracks[index]
-            self.playlistDelegate?.update(track: TrackViewModel(track: track, isPlaying: track.id == self.playingNow), asIndex: index)
-        }
-    }
 }
 
 extension PlayerModel: AudioPlayerDelegate {
@@ -129,7 +99,6 @@ extension PlayerModel: AudioPlayerDelegate {
             let name = status == .playing ? AudioStateNotification.playing.notification() : AudioStateNotification.paused.notification()
             NotificationCenter.default.post(name: name, object: nil, userInfo: ["id": id])
         }
-        //TODO: Post notifications
         self.updateStatus()
     }
 
@@ -146,7 +115,6 @@ extension PlayerModel: AudioPlayerDelegate {
         } else {
             self.execute(event: .change(dir: .forward))
         }
-        //TODO: Post notifications
         self.updateStatus()
     }
 }

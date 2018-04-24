@@ -81,7 +81,19 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
 		self.trackProgressView.slider.value = self.viewModel.currentTime
 		self.miniPlayer?.progressView.progress = self.viewModel.currentTime
     }
-
+    
+    func showSpeeds() {
+        let alertVC = UIAlertController.init(title: nil, message: nil, preferredStyle: .actionSheet)
+        self.viewModel.speeds.enumerated().map { (index, title) -> UIAlertAction in
+            return UIAlertAction.init(title: title, style: .default, handler: { (_) in
+                print("speed is \(title) and index is \(index)")
+            })
+            }.forEach { (action) in
+                alertVC.addAction(action)
+        }
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    
     func updateTrack() {
         let track = self.viewModel.track
         if let url = track.imageURL {

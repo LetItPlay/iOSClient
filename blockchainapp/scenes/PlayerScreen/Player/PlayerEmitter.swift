@@ -8,10 +8,6 @@ enum PlayerEvent {
     case plause, change(dir: Direction), seekDir(dir: Direction), seek(progress: Double)
 }
 
-enum PlayerTrackEvent {
-    case likePressed, channelPressed
-}
-
 class PlayerEmitter: Emitter {
 
     weak var handler: PlayerEventHandler?
@@ -29,8 +25,8 @@ class PlayerEmitter: Emitter {
 
     }
 
-    func send(event: PlayerTrackEvent) {
-        self.handler?.execute(event: event)
+    func channelPressed() {
+        self.handler?.channelPressed()
     }
 
     func morePressed() {

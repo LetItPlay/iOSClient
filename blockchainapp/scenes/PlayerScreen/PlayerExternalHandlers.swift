@@ -18,7 +18,6 @@ protocol PlaylistProtocol: class {
 extension PlayerModel: PlaylistProtocol {
 	func reload(tracks: [Track]) {
 		self.tracks = tracks
-		//TODO: Update playlist
         self.updatePlaylist()
 	}
 	
@@ -72,7 +71,6 @@ extension PlayerModel: PlayerProtocol {
 				self.tracks.append(track)
 			}
             self.updatePlaylist()
-			// TODO: Update playlist
 		}
 	}
 	

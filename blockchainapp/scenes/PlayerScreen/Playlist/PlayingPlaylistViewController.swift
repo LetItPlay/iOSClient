@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelegate {
+class PlayingPlaylistViewController: UIViewController {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
@@ -27,12 +27,6 @@ class PlayingPlaylistViewController: UIViewController, PlayingPlaylistViewDelega
 		self.vm = vm
         self.vm.delegate = self
 		self.emitter = emitter
-	}
-	
-	func update() {
-		self.tableView.reloadData()
-        self.trackLabel.set(text: self.vm.count)
-        self.timeLabel.set(text: self.vm.length)
 	}
 	
     override func viewDidLoad() {
@@ -128,8 +122,6 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//		let contr = AudioController.main
-//		contr.make(command: .play(id: self.tracks[indexPath].id))
         self.emitter.itemSelected(index: indexPath.item)
 	}
 	
@@ -143,11 +135,6 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
             self?.present(othersViewController, animated: true, completion: nil)
         }
         
-//		let hideListens = indexPath == currentIndex
-////		cell.dataLabels[.listens]?.isHidden = hideListens
-//		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
-////        cell.showOthersButton.isHidden = hideListens
-        
 		return cell
 	}
 	
@@ -155,4 +142,20 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
         let track = self.vm.tracks[indexPath.item]
 		return Common.height(text: track.name, width: tableView.frame.width)
 	}
+}
+
+extension PlayingPlaylistViewController: PlayingPlaylistViewDelegate {
+    func update() {
+        self.tableView.reloadData()
+    }
+    
+    func reload(index: Int) {
+        self.tableView.reloadRows(at: [IndexPath.init(row: index, section: 0)], with: .none)
+    }
+    
+    func updateTitles() {
+        self.trackLabel.set(text: self.vm.count)
+        self.timeLabel.set(text: self.vm.length)
+        self.nameLabel.text = self.vm.name
+    }
 }

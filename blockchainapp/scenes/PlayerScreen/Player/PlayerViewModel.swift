@@ -4,6 +4,7 @@ protocol PlayerViewDelegate: class {
     func updateButtons()
     func updateTrack()
     func updateTime()
+    func showSpeeds()
 }
 
 protocol BottomPlayerViewDelegate: class {
@@ -19,6 +20,7 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     var channel: SearchChannelViewModel?
     var currentTime: Float = 0.0
     var currentTimeState: (past: String, future: String) = (past: "", future: "")
+    var speeds: [String] = [String]()
     var status: [PlayerControlsStatus : Bool] = [.isPlaying : false, .canForward: false, .canBackward: false]
 
 	weak var playerDelegate: PlayerViewDelegate?
@@ -43,7 +45,7 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 	}
 	
 	func showSpeedSettings() {
-		
+		self.playerDelegate?.showSpeeds()
 	}
 	
 	func showMoreDialog() {

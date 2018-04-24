@@ -13,11 +13,9 @@ extension PlayerModel: PlayerEventHandler {
 				self.player.make(command: .pause)
 			}
 		case .change(let direction):
-			let prevIndex = self.playingIndex
 			self.playingIndex = direction == .backward
 				? max(self.playingIndex - 1, 0)
 				: min(self.playingIndex + 1, self.tracks.count - 1)
-			let newIndex = self.playingIndex
 			self.reloadTrack()
 		case .seekDir(let direction):
 			let newTime = self.currentTime.current + (direction == .forward ? 10.0 : -10.0)
@@ -29,9 +27,9 @@ extension PlayerModel: PlayerEventHandler {
 		}
 	}
 	
-	func execute(event: PlayerTrackEvent) {
-		
-	}
+    func channelPressed() {
+        //TODO: Close player and push channel screen
+    }
 	
 	func setSpeed(index: Int) {
 		// TODO: make speed change
@@ -45,6 +43,6 @@ extension PlayerModel: PlayerEventHandler {
 	}
 	
 	func morePressed() {
-		
+        //TODO: Show more dialog
 	}
 }
