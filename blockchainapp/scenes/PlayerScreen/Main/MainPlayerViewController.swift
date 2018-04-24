@@ -25,12 +25,13 @@ class MainPlayerViewController: UIViewController {
 	let ind = ArrowView()
     
     var currentTrackID: Int = -1
+    var defaultIndex: Int = 0
 	
 	var isMainPlayer: Bool = true
     
     var vcs: [UIViewController]
 	
-	init(vcs: [UIViewController]) {
+    init(vcs: [UIViewController], defaultIndex: Int? = nil) {
         self.vcs = vcs
         super.init(nibName: nil, bundle: nil)
 
@@ -50,9 +51,11 @@ class MainPlayerViewController: UIViewController {
 		pageController.view.backgroundColor = .white
 		pageController.delegate = self
 		pageController.dataSource = self
-		if let vc = self.vcs.first {
-			pageController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
-		}
+        
+        if let def = defaultIndex {
+            self.defaultIndex = def
+        }
+        pageController.setViewControllers([self.vcs[self.defaultIndex]], direction: .forward, animated: false, completion: nil)
 		
         for scroll in pageController.view.subviews{
             if scroll.isKind(of: UIScrollView.self){

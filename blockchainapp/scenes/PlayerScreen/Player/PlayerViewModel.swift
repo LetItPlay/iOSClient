@@ -6,9 +6,8 @@ protocol PlayerViewDelegate: class {
     func updateTime()
 }
 
-protocol TrackInfoViewDelegate: class {
-    func updateTrack()
-    func updateChannel()
+protocol BottomPlayerViewDelegate: class {
+    func update()
 }
 
 enum PlayerControlsStatus {
@@ -22,8 +21,8 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     var currentTimeState: (past: String, future: String) = (past: "", future: "")
     var status: [PlayerControlsStatus : Bool] = [.isPlaying : false, .canForward: false, .canBackward: false]
 
-	weak var infoDelegate: TrackInfoViewDelegate?
 	weak var playerDelegate: PlayerViewDelegate?
+    weak var bottomDelegate: BottomPlayerViewDelegate?
 	
     func update(status: [PlayerControlsStatus: Bool]) {
         self.status = status
@@ -40,6 +39,7 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 	func update(track: TrackViewModel) {
 		self.track = track
 		self.playerDelegate?.updateTrack()
+        self.bottomDelegate?.update()
 	}
 	
 	func showSpeedSettings() {

@@ -27,7 +27,7 @@ protocol TrackInfoModelDelegate: class {
     func showChannel(id: Int)
 }
 
-class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
+class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDelegate
 {
     weak var delegate: TrackInfoModelDelegate?
     
@@ -42,6 +42,12 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler
         self.getData(trackId: trackId)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
+    }
+    
+    func update(track: Track) {
+        self.track = track
+        self.delegate?.reload(track: TrackViewModel.init(track: track))
+        self.getChannel()
     }
     
     func getData(trackId: Int) {

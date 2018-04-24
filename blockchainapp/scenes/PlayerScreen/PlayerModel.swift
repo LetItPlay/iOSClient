@@ -1,6 +1,10 @@
 import Foundation
 import MediaPlayer
 
+protocol TrackInfoDelegate: class {
+    func update(track: Track)
+}
+
 protocol PlaylistModelDelegate: class {
 	func reload(tracks: [TrackViewModel], count: String, length: String)
 	func update(track: TrackViewModel, asIndex index: Int)
@@ -36,6 +40,7 @@ class PlayerModel {
     weak var playerDelegate: (PlayerModelDelegate & MainPlayerModelDelegate)?
     weak var playlistDelegate: PlaylistModelDelegate?
 	weak var mainDelegate: MainPlayerModelDelegate?
+    weak var trackInfoDelegate: TrackInfoDelegate?
 
     var playlistName: String = ""
     var tracks: [Track] = []
@@ -94,6 +99,7 @@ class PlayerModel {
     func reloadTrack() {
         let prev = self.player.status
         if let item = self.currentTrack {
+            self.trackInfoDelegate?.update(track: item)
 			self.playerDelegate?.update(track: TrackViewModel(track: item))
             self.player.load(item: item.audioTrack())
             self.player.make(command: prev == .playing ? .play : .pause)
@@ -120,6 +126,8 @@ extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
         if let index = self.tracks.index(where: {$0.id == id}) {
             self.playlistDelegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: status == .playing), asIndex: index)
+            let name = status == .playing ? AudioStateNotification.playing.notification() : AudioStateNotification.paused.notification()
+            NotificationCenter.default.post(name: name, object: nil, userInfo: ["id": id])
         }
         //TODO: Post notifications
         self.updateStatus()

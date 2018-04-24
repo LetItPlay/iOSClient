@@ -49,7 +49,7 @@ class MainRouter: Router {
 		self.mainController.popupPlayer(show: show, animated: animated, direction: .up)
 	}
 	
-	func mainPlayer(show: Bool, index: Int = 0) {
+	func mainPlayer(show: Bool, index: Int = 1) {
 		if !self.playerHandler.main.isBeingPresented{
 			UIApplication.shared.beginIgnoringInteractionEvents()
 //			self.playerIsPresenting = true

@@ -9,9 +9,10 @@
 import UIKit
 import SnapKit
 
-class MainPlayerBottomIconsView: UIView {
+class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
     
     var emitter: MainPlayerBottomIconsEmitter!
+    var vm: PlayerViewModel!
     
     var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 
@@ -35,6 +36,15 @@ class MainPlayerBottomIconsView: UIView {
         button.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
         return button
     }()
+    
+    convenience init(vm: PlayerViewModel) {
+        self.init(frame: CGRect.zero)
+        self.vm = vm
+    }
+    
+    func update() {
+        self.trackLikeButton.isSelected = self.vm.track.isLiked
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

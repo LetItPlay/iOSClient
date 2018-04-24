@@ -51,11 +51,11 @@ class InAppUpdateManager {
 	init() {
 		NotificationCenter.default.addObserver(self,
                                                selector: #selector(trackPlayed(notification:)),
-                                               name: AudioController.AudioStateNotification.playing.notification(),
+                                               name: AudioStateNotification.playing.notification(),
                                                object: nil)
 		NotificationCenter.default.addObserver(self,
                                                selector: #selector(trackPaused(notification:)),
-                                               name: AudioController.AudioStateNotification.paused.notification(),
+                                               name: AudioStateNotification.paused.notification(),
                                                object: nil)
         
 		NotificationCenter.default.addObserver(self,
