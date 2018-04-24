@@ -48,6 +48,7 @@ class CategoryChannelsViewController: UITableViewController {
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
         
+        tableView.contentInset.top = 44
         tableView.contentInset.bottom = 72
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)

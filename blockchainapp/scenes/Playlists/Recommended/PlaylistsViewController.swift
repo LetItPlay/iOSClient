@@ -25,8 +25,6 @@ class PlaylistsViewController: UIViewController {
         return label
     }()
     
-    let refreshControl = UIRefreshControl()
-    
     convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         
@@ -49,20 +47,15 @@ class PlaylistsViewController: UIViewController {
         
         self.view.backgroundColor = .white
         
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
-        
-        self.tableView.addSubview(refreshControl)
-        self.refreshControl.beginRefreshing()
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()//.inset(-24)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.bottom.equalTo(0)
+            make.edges.equalToSuperview()
         }
 
-        self.tableView.contentInset.top = 108
+        self.tableView.contentInset.top = 44
         self.tableView.contentInset.bottom = 40
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -92,9 +85,6 @@ class PlaylistsViewController: UIViewController {
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         self.emitter.send(event: .refresh)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in
-            self?.tableView.refreshControl?.endRefreshing()
-        })
     }
 }
 
@@ -124,10 +114,6 @@ extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
         return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
     }
     
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 41
-//    }
-    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
     }
@@ -138,6 +124,6 @@ extension PlaylistsViewController: PlaylistsVMDelegate
     func update() {
         self.emptyLabel(hide: self.viewModel.playlists.count == 0 ? false : true)
         self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        self.tableView.refreshControl?.endRefreshing()
     }
 }
