@@ -1,5 +1,5 @@
 //
-//  ChannelsBuilder.swift
+//  CategoryChannelsBuilder.swift
 //  blockchainapp
 //
 //  Created by Aleksey Tyurnin on 05/12/2017.
@@ -12,14 +12,14 @@ protocol Builder {
     static func build(params: [String: Any]?) -> UIViewController?
 }
 
-class ChannelsBuilder: Builder {
+class CategoryChannelsBuilder: Builder {
     static func build(params: [String: Any]?) -> UIViewController? {
 
-        let model = ChannelsModel(channelScreen: .medium)
+        let model = ChannelsModel(channelScreen: .full)
         let vm = ChannelsViewModel(model: model)
         let emitter = ChannelsEmitter.init(model: model)
         
-		let vc = ChannelsViewController.init(emitter: emitter, viewModel: vm)
+		let vc = CategoryChannelsViewController.init(emitter: emitter, viewModel: vm)
 		return vc
 	}
 }

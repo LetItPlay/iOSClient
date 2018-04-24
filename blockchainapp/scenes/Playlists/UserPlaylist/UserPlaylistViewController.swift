@@ -60,8 +60,6 @@ class UserPlaylistViewController: UIViewController {
     {
         self.view.backgroundColor = UIColor.vaWhite
         
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Clear all".localized, style: .plain, target: self, action: #selector(clearPlaylist))
-        
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(60)

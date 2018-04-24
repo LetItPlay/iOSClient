@@ -20,16 +20,6 @@ class PlaylistsViewController: UIViewController {
         label.textColor = AppColor.Title.dark
         label.font = AppFont.Title.section
         label.text = "Today playlists".localized
-        
-//        let container = UIView()
-//        container.backgroundColor = UIColor.white
-//        container.addSubview(label)
-//        label.snp.makeConstraints { (make) in
-//            make.top.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//            make.left.equalToSuperview().inset(16)
-//            make.right.equalToSuperview().inset(16)
-//        }
 
         var blurView = UIVisualEffectView()
         blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))

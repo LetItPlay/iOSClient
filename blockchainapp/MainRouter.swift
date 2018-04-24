@@ -34,7 +34,7 @@ class MainRouter: Router {
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
 			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsTab())),
-			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
+			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))), //CategoryChannelsBuilder.build(params: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		return tabs.map({ (tuple) -> UINavigationController in

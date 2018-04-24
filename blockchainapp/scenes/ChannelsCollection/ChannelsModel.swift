@@ -11,7 +11,7 @@ import RxSwift
 import Action
 
 enum ChannelScreen {
-    case small, medium
+    case small, full, recentAdded
 }
 
 protocol ChannelsModelProtocol: ModelProtocol {

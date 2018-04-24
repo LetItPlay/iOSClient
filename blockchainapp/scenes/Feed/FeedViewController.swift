@@ -435,7 +435,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
         
         var options = SwipeTableOptions()
-//        options.expansionStyle = SwipeExpansionStyle.selection
+//        options.expansionStyle = SwipeExpansionStyle.selectionx
         options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
