@@ -10,23 +10,26 @@ import UIKit
 
 class ChannelsViewController: UIViewController {
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
         self.viewInitialize()
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
     func viewInitialize() {
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: 250))
+        view.backgroundColor = .red
         self.view.addSubview(view)
-        self.view.backgroundColor = .red
+        
+        let button = UIButton(frame: CGRect(x: 100, y: 100, width: 100, height: 100))
+        button.setTitleColor(.black, for: .normal)
+        button.setTitle("PUSH ME", for: .normal)
+        button.addTarget(self, action: #selector(self.pushed), for: .touchUpInside)
+        self.view.addSubview(button)
+    }
+    
+    @objc func pushed() {
+        self.view.backgroundColor = .orange
     }
 
     override func didReceiveMemoryWarning() {
