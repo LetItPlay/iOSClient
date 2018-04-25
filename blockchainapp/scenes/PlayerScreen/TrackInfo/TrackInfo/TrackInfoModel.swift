@@ -73,7 +73,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     }
     
     func trackLiked(id: Int) {
-        let action: TrackAction = track!.isLiked ? TrackAction.unlike : TrackAction.like
+        let action: TrackAction = TrackAction.like
         ServerUpdateManager.shared.make(track: track!, action: action)
     }
     

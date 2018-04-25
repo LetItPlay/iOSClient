@@ -103,7 +103,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     
     func trackLiked(index: Int) {
         let track = self.tracks[index]
-        let action: TrackAction = track.isLiked ? TrackAction.unlike : TrackAction.like
+        let action: TrackAction = TrackAction.like
         ServerUpdateManager.shared.make(track: track, action: action)
     }
     

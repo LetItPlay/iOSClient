@@ -42,7 +42,10 @@ class PlayerHandler {
         
         playerModel.trackInfoDelegate = model
         
-		self.main = MainPlayerViewController.init(vcs: [vc, playerVC, playlistVC], defaultIndex: 1)
+        let panelEmitter = MainPlayerBottomIconsEmitter(model: playerModel)
+        let bottomPanel = MainPlayerBottomIconsView(vm: playerVM, emitter: panelEmitter)
+        
+        self.main = MainPlayerViewController.init(vcs: [vc, playerVC, playlistVC], defaultIndex: 1, bottom: bottomPanel)
 		self.main.modalPresentationStyle = .overFullScreen
     }
 }

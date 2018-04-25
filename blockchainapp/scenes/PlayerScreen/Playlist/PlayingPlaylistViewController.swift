@@ -150,7 +150,7 @@ extension PlayingPlaylistViewController: PlayingPlaylistViewDelegate {
     }
     
     func reload(index: Int) {
-        self.tableView.reloadRows(at: [IndexPath.init(row: index, section: 0)], with: .none)
+        tableView.reloadData()
     }
     
     func updateTitles() {

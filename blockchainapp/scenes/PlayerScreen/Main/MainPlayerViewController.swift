@@ -31,7 +31,7 @@ class MainPlayerViewController: UIViewController {
     
     var vcs: [UIViewController]
 	
-    init(vcs: [UIViewController], defaultIndex: Int? = nil) {
+    init(vcs: [UIViewController], defaultIndex: Int? = nil, bottom: MainPlayerBottomIconsView? = nil) {
         self.vcs = vcs
         super.init(nibName: nil, bundle: nil)
 
@@ -85,8 +85,12 @@ class MainPlayerViewController: UIViewController {
 		
 		self.ind.setFlat(false)
         
-        bottomIconsView = MainPlayerBottomIconsView(frame: self.view.frame)
-        bottomIconsView.emitter = MainPlayerBottomIconsEmitter(model: self)
+        if let bottom = bottom {
+            bottomIconsView = bottom
+        } else {
+            bottomIconsView = MainPlayerBottomIconsView(frame: self.view.frame)
+            bottomIconsView.emitter = MainPlayerBottomIconsEmitter(model: self)
+        }
 		
         self.view.addSubview(bottomIconsView)
         bottomIconsView.snp.makeConstraints { (make) in
@@ -257,6 +261,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
 //}
 
 extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
+    
     func likeButtonTouched() {
         if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
         self.bottomIconsView.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
@@ -265,8 +270,8 @@ extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
         }
     }
     
-    func speedButtonTouched(speedAlert: UIAlertController) {
-        self.present(speedAlert, animated: true, completion: nil)
+    func speedButtonTouched() {
+//        self.present(speedAlert, animated: true, completion: nil)
     }
     
     func showOthersButtonTouched() {

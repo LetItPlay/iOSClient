@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 enum MainPlayerBottomIconsEvent {
-    case likeButtonTouched, speedButtonTouched(UIAlertController), showOthersButtonTouched
+    case likeButtonTouched, speedButtonTouched, showOthersButtonTouched
 }
 
 protocol MainPlayerBottomIconsEmitterProtocol {
@@ -20,7 +20,7 @@ protocol MainPlayerBottomIconsEmitterProtocol {
 protocol MainPlayerBottomIconsEventHandler {
     func likeButtonTouched()
     func showOthersButtonTouched()
-    func speedButtonTouched(speedAlert: UIAlertController)
+    func speedButtonTouched()
 }
 
 class MainPlayerBottomIconsEmitter: MainPlayerBottomIconsEmitterProtocol {
@@ -39,8 +39,8 @@ class MainPlayerBottomIconsEmitter: MainPlayerBottomIconsEmitterProtocol {
             self.model?.likeButtonTouched()
         case .showOthersButtonTouched:
             self.model?.showOthersButtonTouched()
-        case .speedButtonTouched(let alert):
-            self.model?.speedButtonTouched(speedAlert: alert)
+        case .speedButtonTouched:
+            self.model?.speedButtonTouched()
         }
     }
 }

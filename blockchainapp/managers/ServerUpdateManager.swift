@@ -12,7 +12,6 @@ import RealmSwift
 
 enum TrackAction {
 	case like
-	case unlike
 	case listen
 	case report(msg: String)
 }
@@ -59,11 +58,7 @@ class ServerUpdateManager {
         case .like:
             type = .like(count: 1)
 			LikeManager.shared.addOrDelete(id: track.id)
-            updatedTrack.isLiked = true
-        case .unlike:
-            type = .like(count: -1)
-			LikeManager.shared.addOrDelete(id: track.id)
-            updatedTrack.isLiked = false
+            updatedTrack.isLiked = LikeManager.shared.hasObject(id: track.id)
         case .report(let msg):
             type = .report(msg: msg)
         }

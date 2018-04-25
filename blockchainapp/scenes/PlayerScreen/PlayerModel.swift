@@ -32,7 +32,7 @@ class PlayerModel {
     var currentTime: AudioTime = AudioTime(current: 0, length: 0)
     var player: AudioPlayer!
     // TODO: Specify speed constants
-    let speedConstants: [String: Float] = ["x0.5": 0.5, "x1.0": 1.0]
+    let speedConstants: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 
     init(player: AudioPlayer) {
         self.player = player
@@ -65,6 +65,8 @@ class PlayerModel {
             self.execute(event: .seekDir(dir: .forward))
             return .success
         }
+        
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
 
     func updateStatus() {
@@ -79,6 +81,7 @@ class PlayerModel {
         if let item = self.currentTrack {
             self.trackInfoDelegate?.update(track: item)
 			self.playerDelegate?.update(track: TrackViewModel(track: item))
+            self.playerDelegate?.update(speeds: self.speedConstants.map({$0.text}))
             self.player.load(item: item.audioTrack())
             self.player.make(command: prev == .playing ? .play : .pause)
         }

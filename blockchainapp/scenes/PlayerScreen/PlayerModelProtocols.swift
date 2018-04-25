@@ -18,4 +18,5 @@ protocol PlayerModelDelegate: class {
     func update(status: [PlayerControlsStatus : Bool])
     func update(progress: Float, currentTime: String, leftTime: String)
     func update(track: TrackViewModel)
+    func update(speeds: [String])
 }

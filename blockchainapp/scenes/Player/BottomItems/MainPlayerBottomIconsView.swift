@@ -37,9 +37,11 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
         return button
     }()
     
-    convenience init(vm: PlayerViewModel) {
+    convenience init(vm: PlayerViewModel, emitter: MainPlayerBottomIconsEmitter) {
         self.init(frame: CGRect.zero)
         self.vm = vm
+        self.vm.bottomDelegate = self
+        self.emitter = emitter
     }
     
     func update() {
@@ -126,7 +128,7 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
         
         speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
         
-        self.emitter.send(event: .speedButtonTouched(speedAlert))
+        self.emitter.send(event: .speedButtonTouched)
     }
     
     func change(speed: Float) {

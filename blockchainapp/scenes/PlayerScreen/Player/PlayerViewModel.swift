@@ -43,6 +43,10 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 		self.playerDelegate?.updateTrack()
         self.bottomDelegate?.update()
 	}
+    
+    func update(speeds: [String]) {
+        self.speeds = speeds
+    }
 	
 	func showSpeedSettings() {
 		self.playerDelegate?.showSpeeds()

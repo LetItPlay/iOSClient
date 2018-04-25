@@ -33,6 +33,7 @@ extension PlayerModel: PlayerEventHandler {
 	
 	func setSpeed(index: Int) {
 		// TODO: make speed change
+        self.player.set(rate: self.speedConstants[index].value)
 	}
 	
 	func send(event: LifeCycleEvent) {

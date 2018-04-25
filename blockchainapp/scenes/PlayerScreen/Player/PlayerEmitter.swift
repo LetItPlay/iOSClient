@@ -22,7 +22,7 @@ class PlayerEmitter: Emitter {
     }
 
     func setSpeed(index: Int) {
-
+        self.handler?.setSpeed(index: index)
     }
 
     func channelPressed() {
