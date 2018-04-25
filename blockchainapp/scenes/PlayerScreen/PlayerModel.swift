@@ -92,6 +92,7 @@ class PlayerModel {
             tracks: self.tracks.map({TrackViewModel.init(track: $0, isPlaying: self.playingNow == $0.id)}),
             count: Int64(self.tracks.count).formatAmount(),
             length: Int64(self.tracks.map({$0.length}).reduce(0, +)).formatTime())
+        self.playlistDelegate?.re(name: self.playlistName)
     }
 }
 

@@ -10,7 +10,7 @@ protocol PlaylistModelDelegate: class {
 
 protocol MainPlayerModelDelegate: class {
     func showSpeedSettings()
-    func showMoreDialog()
+    func showMoreDialog(track: Track)
     func player(show: Bool)
 }
 

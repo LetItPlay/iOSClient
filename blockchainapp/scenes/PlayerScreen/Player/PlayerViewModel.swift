@@ -52,9 +52,9 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 		self.playerDelegate?.showSpeeds()
 	}
 	
-	func showMoreDialog() {
-		
-	}
+    func showMoreDialog(track: Track) {
+        MainRouter.shared.showOthers(track: track)
+    }
 	
 	func player(show: Bool) {
 		MainRouter.shared.miniPlayer(show: true, animated: true)

@@ -16,7 +16,9 @@ extension PlayerModel: MainPlayerBottomIconsEventHandler {
     }
     
     func showOthersButtonTouched() {
-        
+        if let current = self.currentTrack {
+            self.playerDelegate?.showMoreDialog(track: current)
+        }
     }
     
     func speedButtonTouched() {
@@ -29,7 +31,9 @@ extension PlayerModel: TrackUpdateProtocol {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             self.tracks[index] = track
             let isPlaying = self.playingNow == track.id && self.player.status == .playing
-            self.playlistDelegate?.update(track: TrackViewModel.init(track: track, isPlaying: isPlaying), asIndex: index)
+            let trackVM = TrackViewModel.init(track: track, isPlaying: isPlaying)
+            self.playlistDelegate?.update(track: trackVM, asIndex: index)
+            self.playerDelegate?.update(track: trackVM)
         }
     }
 }

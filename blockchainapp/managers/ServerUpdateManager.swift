@@ -56,9 +56,9 @@ class ServerUpdateManager {
 			ListenManager.shared.add(id: track.id)
             updatedTrack.listenCount += 1
         case .like:
-            type = .like(count: 1)
 			LikeManager.shared.addOrDelete(id: track.id)
             updatedTrack.isLiked = LikeManager.shared.hasObject(id: track.id)
+            type = .like(count: updatedTrack.isLiked ? 1 : -1)
         case .report(let msg):
             type = .report(msg: msg)
         }

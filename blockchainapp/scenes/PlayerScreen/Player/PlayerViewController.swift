@@ -275,10 +275,11 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let imageSpacer = UIView()
         blur.contentView.addSubview(imageSpacer)
         imageSpacer.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(52)
+            make.top.equalToSuperview().inset(37)//(52)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalTo(self.trackProgressView.snp.top)
+            make.width.equalTo(imageSpacer.snp.height)
+//            make.bottom.equalTo(self.trackProgressView.snp.top)
         }
 
         imageSpacer.addSubview(coverImageView)
