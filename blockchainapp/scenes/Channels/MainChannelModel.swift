@@ -7,3 +7,45 @@
 //
 
 import Foundation
+
+protocol MainChannelsModelProtocol: ModelProtocol {
+    var delegate: MainChannelsModelDelegate? {get set}
+}
+
+protocol MainChannelsEventHandler: class {
+    func showChannel(section: String, index: Int)
+    func showAllChannelsFor(section: String)
+}
+
+protocol MainChannelsModelDelegate: class {
+    func showChannel(id: Int)
+    func showAllChannelsFor(category: String)
+}
+
+class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
+    var delegate: MainChannelsModelDelegate?
+    
+    var categories: [String : [Channel]]
+    
+    init() {
+        // get categories
+        categories = [:]
+    }
+    
+    func send(event: LifeCycleEvent) {
+        switch event {
+        case .initialize:
+            break
+        default:
+            break
+        }
+    }
+    
+    func showAllChannelsFor(section: String) {
+        self.delegate?.showAllChannelsFor(category: section)
+    }
+    
+    func showChannel(section: String, index: Int) {
+        self.delegate?.showChannel(id: categories[section]![index].id)
+    }
+}
