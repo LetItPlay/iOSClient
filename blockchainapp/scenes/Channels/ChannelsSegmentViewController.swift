@@ -12,7 +12,7 @@ class ChannelsSegmentViewController: UIViewController {
     
     var channelsSegmentedControl: UISegmentedControl = UISegmentedControl(items: ["Categories".localized, "Recent added".localized])
     
-    let firstViewController = UIViewController() //ChannelsViewController(nibName: nil, bundle: nil)
+    let firstViewController = MainChannelsBuilder.build(params: nil)
     let secondViewController = CategoryChannelsBuilder.build(params: nil)
     
     override func viewDidLoad() {
@@ -26,10 +26,10 @@ class ChannelsSegmentViewController: UIViewController {
         
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
-        self.addChildViewController(firstViewController)
-        firstViewController.view.frame = self.view.frame
-        self.view.addSubview(firstViewController.view)
-        firstViewController.didMove(toParentViewController: self)
+        self.addChildViewController(firstViewController!)
+        firstViewController!.view.frame = self.view.frame
+        self.view.addSubview(firstViewController!.view)
+        firstViewController!.didMove(toParentViewController: self)
         
         self.addChildViewController(secondViewController!)
         secondViewController!.view.frame = self.view.frame
@@ -75,7 +75,7 @@ class ChannelsSegmentViewController: UIViewController {
     }
     
     func hide(first: Bool) {
-        firstViewController.view.isHidden = first
+        firstViewController!.view.isHidden = first
         secondViewController?.view.isHidden = !first
     }
     

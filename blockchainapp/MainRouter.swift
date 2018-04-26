@@ -33,8 +33,8 @@ class MainRouter: Router {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())), //PlaylistsTab())),
-			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))), //CategoryChannelsBuilder.build(params: nil))),
+			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())),
+			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		return tabs.map({ (tuple) -> UINavigationController in
@@ -66,7 +66,6 @@ class MainRouter: Router {
 		switch id {
 		case "channel":
 			vc = ChannelBuilder.build(params: params)
-			break
 		case "allChannels":
             self.delegate?.showAllChannels()
 			return

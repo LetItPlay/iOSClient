@@ -14,6 +14,10 @@ enum ChannelScreen {
     case small, full, recentAdded
 }
 
+enum ChannelsFilter {
+    case subscribed, all
+}
+
 protocol  CategoryChannelsModelProtocol: ModelProtocol {
     var delegate:  CategoryChannelsModelDelegate? {get set}
 }
@@ -36,6 +40,7 @@ protocol  CategoryChannelsModelDelegate: class {
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
 
     var channelScreen: ChannelScreen!
+    var channelsFilter: ChannelsFilter!
     
     weak var delegate:  CategoryChannelsModelDelegate?
     var subManager = SubscribeManager.shared
@@ -44,9 +49,10 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
 	let getChannelsAction: Action<Bool, [Channel]>!
 	let disposeBag = DisposeBag()
     
-    init(channelScreen: ChannelScreen)
+    init(channelScreen: ChannelScreen, channelsFilter: ChannelsFilter)
     {
         self.channelScreen = channelScreen
+        self.channelsFilter = channelsFilter
 	
 		self.getChannelsAction = Action<Bool, [Channel]>.init(workFactory: { (_) -> Observable<[Channel]> in
 			return RequestManager.shared.channels()
@@ -54,7 +60,18 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
 		
 		self.getChannelsAction.elements.subscribe(onNext: { channels in
             self.channels = channels.filter({$0.lang == UserSettings.language.rawValue})
-			self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
+            switch channelsFilter {
+            case .all:
+                self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
+            case .subscribed:
+                self.channels = self.channels.filter({ (channel) -> Bool in
+                    if SubscribeManager.shared.hasChannel(id: channel.id) {
+                        return true
+                    }
+                    return false
+                })
+            }
+			
 			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
 		}).disposed(by: disposeBag)
 		
