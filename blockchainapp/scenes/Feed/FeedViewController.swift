@@ -23,8 +23,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     var previousCell: FeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
     var alertLabel: UILabel!
-
-    var channelsView: ChannelsCollectionView!
     
     var didSwipeCell: Bool = false
     
@@ -57,13 +55,12 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         return button
     }()
     
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.viewModel.delegate = self
         
         self.emitter = emitter
-        self.channelsView = channelsView
     }
 	
     override func viewDidLoad() {
@@ -150,18 +147,15 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.emitter.send(event: LifeCycleEvent.disappear)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.disappear)
     }
     
     deinit {
         self.emitter.send(event: LifeCycleEvent.deinitialize)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.deinitialize)
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
@@ -339,20 +333,9 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.viewModel.showChannels
-        {
-			if channelsView == nil {
-            	channelsView = ChannelsCollectionView()
-			}
-            return channelsView
-        }
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
-    }
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
 }
 
 extension FeedViewController: SwipeTableViewCellDelegate

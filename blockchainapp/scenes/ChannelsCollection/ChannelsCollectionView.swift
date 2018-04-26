@@ -11,8 +11,8 @@ import SnapKit
 
 class ChannelsCollectionView: UIView {
     
-    var emitter: ChannelsEmitterProtocol?
-    var viewModel: ChannelsViewModel!
+    var emitter: CategoryChannelsEmitterProtocol?
+    var viewModel: CategoryChannelsViewModel!
     
     let channelLabel: UILabel = {
         let label = UILabel()
@@ -47,7 +47,7 @@ class ChannelsCollectionView: UIView {
         return cv
     }()
     
-    convenience init(frame: CGRect, emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    convenience init(frame: CGRect, emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel)
     {
         self.init(frame: frame)
         self.emitter = emitter
@@ -103,7 +103,7 @@ class ChannelsCollectionView: UIView {
     }
 }
 
-extension ChannelsCollectionView: ChannelsVMDelegate
+extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
     func reloadChannels() {
         self.channelsCollectionView.reloadData()

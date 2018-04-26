@@ -15,9 +15,9 @@ protocol Builder {
 class CategoryChannelsBuilder: Builder {
     static func build(params: [String: Any]?) -> UIViewController? {
 
-        let model = ChannelsModel(channelScreen: .full)
-        let vm = ChannelsViewModel(model: model)
-        let emitter = ChannelsEmitter.init(model: model)
+        let model = CategoryChannelsModel(channelScreen: .full)
+        let vm = CategoryChannelsViewModel(model: model)
+        let emitter = CategoryChannelsEmitter.init(model: model)
         
 		let vc = CategoryChannelsViewController.init(emitter: emitter, viewModel: vm)
 		return vc

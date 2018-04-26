@@ -12,7 +12,7 @@ class ChannelsSegmentViewController: UIViewController {
     
     var channelsSegmentedControl: UISegmentedControl = UISegmentedControl(items: ["Categories".localized, "Recent added".localized])
     
-    let firstViewController = ChannelsViewController(nibName: nil, bundle: nil)
+    let firstViewController = UIViewController() //ChannelsViewController(nibName: nil, bundle: nil)
     let secondViewController = CategoryChannelsBuilder.build(params: nil)
     
     override func viewDidLoad() {

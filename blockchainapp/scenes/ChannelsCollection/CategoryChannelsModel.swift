@@ -1,5 +1,5 @@
 //
-//  ChannelsModel.swift
+//  CategoryChannelsModel.swift
 //  blockchainapp
 //
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
@@ -14,11 +14,11 @@ enum ChannelScreen {
     case small, full, recentAdded
 }
 
-protocol ChannelsModelProtocol: ModelProtocol {
-    var delegate: ChannelsModelDelegate? {get set}
+protocol  CategoryChannelsModelProtocol: ModelProtocol {
+    var delegate:  CategoryChannelsModelDelegate? {get set}
 }
 
-protocol ChannelsEventHandler: class {
+protocol CategoryChannelsEventHandler: class {
     func showChannel(index: Int)
     func subscribeAt(index: Int)
 	func refreshChannels()
@@ -26,18 +26,18 @@ protocol ChannelsEventHandler: class {
     func showSearch()
 }
 
-protocol ChannelsModelDelegate: class {
+protocol  CategoryChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
     func showChannel(id: Int)
 	func showAllChannels()
     func update(index: Int, vm: SmallChannelViewModel)
 }
 
-class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
+class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
 
     var channelScreen: ChannelScreen!
     
-    weak var delegate: ChannelsModelDelegate?
+    weak var delegate:  CategoryChannelsModelDelegate?
     var subManager = SubscribeManager.shared
 	var channels: [Channel] = []
 	
@@ -96,7 +96,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
     }
 }
 
-extension ChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
+extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
     func settingsUpdated() {
         self.getChannelsAction.execute(true)
     }

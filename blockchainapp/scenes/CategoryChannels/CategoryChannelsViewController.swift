@@ -12,10 +12,10 @@ import TagListView
 
 class CategoryChannelsViewController: UITableViewController {
     
-    var emitter: ChannelsEmitterProtocol?
-    var viewModel: ChannelsViewModel!
+    var emitter: CategoryChannelsEmitterProtocol?
+    var viewModel: CategoryChannelsViewModel!
     
-    convenience init(emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel)
     {
         self.init(nibName: nil, bundle: nil)
         
@@ -86,7 +86,7 @@ class CategoryChannelsViewController: UITableViewController {
     }
 }
 
-extension CategoryChannelsViewController: ChannelsVMDelegate {
+extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
     func reloadChannels() {
         if let _: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
 //            self.source = source
