@@ -46,6 +46,7 @@
 		01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
 		01E59B49209046A0001E7A29 /* PlayerBottomModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */; };
+		01E59B4B2090AC48001E7A29 /* blockchainapp.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */; };
 		01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */; };
 		01EFC873201A21D6005321B9 /* MainPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC872201A21D6005321B9 /* MainPlayerViewController.swift */; };
 		01EFC877201A2421005321B9 /* PlayingPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC876201A2421005321B9 /* PlayingPlaylistViewController.swift */; };
@@ -214,6 +215,7 @@
 		01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
 		01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBottomModelExtension.swift; sourceTree = "<group>"; };
+		01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = blockchainapp.entitlements; sourceTree = "<group>"; };
 		01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		01EFC872201A21D6005321B9 /* MainPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerViewController.swift; sourceTree = "<group>"; };
 		01EFC876201A2421005321B9 /* PlayingPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingPlaylistViewController.swift; sourceTree = "<group>"; };
@@ -451,18 +453,6 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		01E52E3A1FC7E33900CCFCC2 /* UI Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				01FF376C2010B9E7007F57E0 /* Extensions.swift */,
-				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
-				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
-				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
-				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
-			);
-			path = "UI Extensions";
-			sourceTree = "<group>";
-		};
 		01FF376B201072B7007F57E0 /* AudioCore */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,7 +634,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
-				01E52E3A1FC7E33900CCFCC2 /* UI Extensions */,
+				01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */,
 				CF44535C1F569D1E00660474 /* extensions */,
 				0160BB262031B12300D7C3CB /* managers */,
 				CF4453571F553FE400660474 /* models */,
@@ -695,6 +685,11 @@
 		CF44535C1F569D1E00660474 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				01FF376C2010B9E7007F57E0 /* Extensions.swift */,
+				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
+				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
+				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
+				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
 				FD10B17549A87867E48B318C /* AppUI.swift */,
 				01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */,
 				01510EAC1FDED922003AC116 /* RealmExtension.swift */,
@@ -874,6 +869,11 @@
 						DevelopmentTeam = UW85D37HPT;
 						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					CF4453391F54139900660474 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -915,6 +915,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01E59B4B2090AC48001E7A29 /* blockchainapp.entitlements in Resources */,
 				CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */,
 				CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */,
 				01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */,
@@ -1383,6 +1384,7 @@
 			baseConfigurationReference = C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = blockchainapp/blockchainapp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1406,6 +1408,7 @@
 			baseConfigurationReference = D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = blockchainapp/blockchainapp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
