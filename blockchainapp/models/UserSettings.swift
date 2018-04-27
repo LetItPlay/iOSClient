@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 enum Language: String {
-	case en = "en", ru = "ru", fr = "fr", zh = "zh-Hans", none = "suicide silence"
+	case en = "en", ru = "ru", fr = "fr", zh = "ch", none = "suicide silence"
 }
 
 class UserSettings {
