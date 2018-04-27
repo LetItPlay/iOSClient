@@ -67,7 +67,7 @@ FeedEventHandler {
 											   isPlaying: $0.id == playingId) })
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
-            self.delegate?.showEmptyMessage(self.tracks.count == 0)
+            self.delegate?.showEmptyMessage(self.tracks.count == 0 && self.isFeed)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
             self.threshold = false

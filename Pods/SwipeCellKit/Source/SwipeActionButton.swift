@@ -44,6 +44,7 @@ class SwipeActionButton: UIButton {
         highlightedBackgroundColor = action.highlightedBackgroundColor ?? UIColor.black.withAlphaComponent(0.1)
         
         if let _ = action.customView {
+            action.customView?.isUserInteractionEnabled = false
             self.addSubview(action.customView!)
         } else {
             titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)
