@@ -64,7 +64,7 @@ enum RequestError: Error {
 
 class RequestManager {
 
-    static let server: String = "https://beta.api.letitplay.io"
+    static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
 
 	func channel(id: Int) -> Observable<Channel> {
