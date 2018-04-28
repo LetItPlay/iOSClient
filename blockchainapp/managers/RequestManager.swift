@@ -5,7 +5,7 @@
 
 import Foundation
 import RxSwift
-import Alamofire.Swift
+import Alamofire
 import SwiftyJSON
 import RealmSwift
 
@@ -59,6 +59,7 @@ enum RequestError: Error {
     case invalidURL
     case invalidJSON
     case noConnection
+    case unAuth
     case serverError(code: Int, msg: String)
 }
 
@@ -398,6 +399,37 @@ class RequestManager {
                 }
             })
         }
+    }
+    
+    func resurrectJWT() -> Single<String> {
+        return Single<String>.create(subscribe: { single -> Disposable in
+            let req: DataRequest!
+            return Disposables.create { print("JWT is Alive"); req.cancel() }
+        })
+    }
+    
+    private func simpleRequest(req: URLRequest) -> Single<Result<Data>> {
+        return Single<Result<Data>>.create(subscribe: { single -> Disposable in
+            let dataReq: DataRequest = Alamofire.request(req).responseData { (response: DataResponse<Data>) in
+                if let _ = response.error {
+                    single(.error(RequestError.noConnection))
+                    return
+                }
+                guard let resp = response.response, let data = response.data else {
+                    single(.error(RequestError.noConnection))
+                    return
+                }
+                switch resp.statusCode {
+                case 200:
+                    single(.success(.value(data)))
+                case 403:
+                    single(.error(RequestError.unAuth))
+                default:
+                    single(.success(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))))
+                }
+            }
+            return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
+        })
     }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
