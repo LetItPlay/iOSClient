@@ -30,6 +30,8 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     init() {
         // get categories
         categories = [:]
+        
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func send(event: LifeCycleEvent) {
@@ -47,5 +49,14 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     
     func showChannel(section: String, index: Int) {
         self.delegate?.showChannel(id: categories[section]![index].id)
+    }
+}
+
+extension MainChannelsModel: ChannelUpdateProtocol {
+    func channelUpdated(channel: Channel) {
+//        if let index = self.channels.index(where: {$0.id == channel.id}) {
+//            self.channels[index] = channel
+//            self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+//        }
     }
 }

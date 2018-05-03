@@ -119,9 +119,31 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
     }
     
     func channelUpdated(channel: Channel) {
-        if let index = self.channels.index(where: {$0.id == channel.id}) {
+        switch self.channelsFilter {
+        case .subscribed:
+            if let index = self.channels.index(where: {$0.id == channel.id}) {
+                if channel.isSubscribed {
+                    self.channels[index] = channel
+                    self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+                } else {
+                    self.channels.remove(at: index)
+                    self.delegate?.reload(newChannels: self.channels.map({SmallChannelViewModel(channel: $0)}))
+                }
+            } else {
+                if channel.isSubscribed {
+                    self.channels.append(channel)
+                    self.delegate?.reload(newChannels: self.channels.map({SmallChannelViewModel(channel: $0)}))
+                }
+            }
+            
+        case .all:
+            if let index = self.channels.index(where: {$0.id == channel.id}) {
             self.channels[index] = channel
             self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+            }
+            
+        default:
+            break
         }
     }
 }
