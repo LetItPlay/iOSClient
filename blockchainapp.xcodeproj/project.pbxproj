@@ -524,7 +524,7 @@
 			path = Likes;
 			sourceTree = "<group>";
 		};
-		368920A6208E0B1600D83278 /* Channels */ = {
+		368920A6208E0B1600D83278 /* MainChannelsScreen */ = {
 			isa = PBXGroup;
 			children = (
 				368920A8208E0F8500D83278 /* ChannelsSegmentViewController.swift */,
@@ -535,7 +535,7 @@
 				9DC6C2412091D21300C980D4 /* MainChannelModel.swift */,
 				9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */,
 			);
-			path = Channels;
+			path = MainChannelsScreen;
 			sourceTree = "<group>";
 		};
 		369301B62088A519003D11BC /* Feed */ = {
@@ -732,7 +732,7 @@
 				9D4DB1CC206A8B1D00B767FE /* Playlists */,
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
-				368920A6208E0B1600D83278 /* Channels */,
+				368920A6208E0B1600D83278 /* MainChannelsScreen */,
 				CF4453671F57F42800660474 /* CategoryChannels */,
 				36F7C399201AF71200F99A9A /* ChannelsCollection */,
 				019B3DC41FCC4599008C3B76 /* ChannelScreen */,

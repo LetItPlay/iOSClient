@@ -7,6 +7,9 @@
 //
 
 import Foundation
+import RxSwift
+import RealmSwift
+import Action
 
 protocol MainChannelsModelProtocol: ModelProtocol {
     var delegate: MainChannelsModelDelegate? {get set}
@@ -18,6 +21,7 @@ protocol MainChannelsEventHandler: class {
 }
 
 protocol MainChannelsModelDelegate: class {
+    func reload(categories: [String : [CategoryChannelViewModel]])
     func showChannel(id: Int)
     func showAllChannelsFor(category: String)
 }
@@ -25,19 +29,33 @@ protocol MainChannelsModelDelegate: class {
 class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     var delegate: MainChannelsModelDelegate?
     
-    var categories: [String : [Channel]]
+    var categories: [String : [Channel]] = [:]
+    
+    let getChannelsAction: Action<Bool, [Channel]>!
+    var disposeBag = DisposeBag()
     
     init() {
-        // get categories
-        categories = [:]
+        
+        self.getChannelsAction = Action<Bool, [Channel]>.init(workFactory: { (_) -> Observable<[Channel]> in
+            return RequestManager.shared.channels()
+        })
+        
+        self.getChannelsAction.elements.subscribe(onNext: { channels in
+            self.categories = ["Auto" : Array(channels[0...5]), "Some others" : Array(channels[6...10])]
+            self.delegate?.reload(categories: self.categories.mapValues({ (channels) -> [CategoryChannelViewModel] in
+                return channels.map({CategoryChannelViewModel(channel: $0)})
+            }))
+        }).disposed(by: disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
+        self.getChannelsAction.execute(true)
+
     }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.getChannelsAction.execute(true)
         default:
             break
         }
