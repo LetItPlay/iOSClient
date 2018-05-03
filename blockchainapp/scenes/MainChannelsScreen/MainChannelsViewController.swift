@@ -14,7 +14,7 @@ class MainChannelsViewController: UIViewController {
     var viewModel: MainChannelsVMProtocol!
     
     var channelsView: ChannelsCollectionView!
-    let topInset = 44
+    let topInset: CGFloat = 44
     
     var tableView = UITableView(frame: CGRect.zero, style: .grouped)
     
