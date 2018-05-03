@@ -15,7 +15,7 @@ enum ChannelScreen {
 }
 
 enum ChannelsFilter {
-    case subscribed, all
+    case subscribed, all, category(String)
 }
 
 protocol  CategoryChannelsModelProtocol: ModelProtocol {
@@ -70,6 +70,15 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
                     }
                     return false
                 })
+            case .category(let category):
+                if category == "subscribed" {
+                    self.channels = self.channels.filter({ (channel) -> Bool in
+                        if SubscribeManager.shared.hasChannel(id: channel.id) {
+                            return true
+                        }
+                        return false
+                    })
+                }
             }
 			
 			self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
@@ -119,7 +128,7 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
     }
     
     func channelUpdated(channel: Channel) {
-        switch self.channelsFilter {
+        switch self.channelsFilter! {
         case .subscribed:
             if let index = self.channels.index(where: {$0.id == channel.id}) {
                 if channel.isSubscribed {
@@ -135,13 +144,16 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
                     self.delegate?.reload(newChannels: self.channels.map({SmallChannelViewModel(channel: $0)}))
                 }
             }
-            
+
         case .all:
             if let index = self.channels.index(where: {$0.id == channel.id}) {
             self.channels[index] = channel
             self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
             }
-            
+
+        case .category:
+            break
+
         default:
             break
         }

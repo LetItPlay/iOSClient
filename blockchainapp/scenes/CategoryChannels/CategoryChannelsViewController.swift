@@ -15,13 +15,17 @@ class CategoryChannelsViewController: UITableViewController {
     var emitter: CategoryChannelsEmitterProtocol?
     var viewModel: CategoryChannelsViewModel!
     
-    convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel)
+    var topInset: Bool = false
+    
+    convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel, topInset: Bool)
     {
         self.init(nibName: nil, bundle: nil)
         
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
+        
+        self.topInset = topInset
     }
     
 
@@ -35,7 +39,6 @@ class CategoryChannelsViewController: UITableViewController {
     
     func viewInitialize()
     {
-
         navigationController?.navigationBar.prefersLargeTitles = false
         
         refreshControl = UIRefreshControl()
@@ -48,7 +51,7 @@ class CategoryChannelsViewController: UITableViewController {
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
         
-        tableView.contentInset.top = 44
+        tableView.contentInset.top = self.topInset ? 44 : 0
         tableView.contentInset.bottom = 72
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)

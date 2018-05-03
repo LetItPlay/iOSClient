@@ -69,6 +69,8 @@ class MainRouter: Router {
 		case "allChannels":
             self.delegate?.showAllChannels()
 			return
+        case "category":
+            vc = CategoryChannelsBuilder.build(params: params)
         case "search":
             vc = SearchBuilder.build(params: params)
             (vc as! SearchViewController).delegate = self
