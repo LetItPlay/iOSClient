@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 class MainChannelsCategoryCellView: UIView {
-    var category: ChannelCategory!
+    var category: ChannelCategoryViewModel!
     
     public var onSeeAll: ((String) -> Void)?
     public var onChannelTap: ((Int) -> Void)?
@@ -48,7 +48,7 @@ class MainChannelsCategoryCellView: UIView {
         return cv
     }()
     
-    convenience init(frame: CGRect, category: ChannelCategory) {
+    convenience init(frame: CGRect, category: ChannelCategoryViewModel) {
         self.init(frame: frame)
         
         self.category = category

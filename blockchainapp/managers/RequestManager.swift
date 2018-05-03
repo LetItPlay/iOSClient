@@ -18,6 +18,9 @@ enum TracksRequest {
     case magic
 	case allTracks
 	case search(text: String, offset: Int, count: Int)
+    case subscriptions
+    case categories
+    case stationsFor(category: Int)
 }
 
 enum TrackUpdateRequest {
@@ -45,6 +48,12 @@ fileprivate extension TracksRequest {
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
+        case .subscriptions:
+            return "user/favorites/channels"
+        case .categories:
+            return "catalog"
+        case .stationsFor(let category):
+            return "categories/\(category)/stations"
         default: return "tracks"
         }
     }

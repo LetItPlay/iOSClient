@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MainChannelsVMProtocol {
-    var categories: [ChannelCategory] {get}
+    var categories: [ChannelCategoryViewModel] {get}
     
     var delegate: MainChannelsVMDelegate? {get set}
 }
@@ -20,7 +20,7 @@ protocol MainChannelsVMDelegate: class {
 
 class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
     
-    var categories: [ChannelCategory] = []
+    var categories: [ChannelCategoryViewModel] = []
     
     var delegate: MainChannelsVMDelegate?
     var model: MainChannelsModelProtocol!
@@ -30,7 +30,7 @@ class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
         self.model.delegate = self
     }
     
-    func reload(categories: [ChannelCategory]) {
+    func reload(categories: [ChannelCategoryViewModel]) {
         self.categories = categories
         self.delegate?.reloadCategories()
     }

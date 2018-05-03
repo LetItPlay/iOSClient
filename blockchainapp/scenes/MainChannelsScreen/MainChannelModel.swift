@@ -22,7 +22,7 @@ protocol MainChannelsEventHandler: class {
 }
 
 protocol MainChannelsModelDelegate: class {
-    func reload(categories: [ChannelCategory])
+    func reload(categories: [ChannelCategoryViewModel])
     func showChannel(id: Int)
     func showAllChannelsFor(category: String)
 }
@@ -49,10 +49,10 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
         let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
-    func getChannelsCategories() -> [ChannelCategory] {
-        var channelCategories: [ChannelCategory] = []
+    func getChannelsCategories() -> [ChannelCategoryViewModel] {
+        var channelCategories: [ChannelCategoryViewModel] = []
         for category in self.categories {
-            channelCategories.append(ChannelCategory(name: category.key, channels: category.value.map({CategoryChannelViewModel(channel: $0)})))
+            channelCategories.append(ChannelCategoryViewModel(name: category.key, channels: category.value.map({CategoryChannelViewModel(channel: $0)})))
         }
         return channelCategories
     }

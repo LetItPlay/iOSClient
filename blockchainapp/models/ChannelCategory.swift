@@ -7,3 +7,23 @@
 //
 
 import Foundation
+import SwiftyJSON
+
+class ChannelCategory {
+    var id: Int = 0
+    var name: String = ""
+    var channels: [Channel] = []
+    
+    init?(json: JSON) {
+        if let id = json["id"].int,
+           let name = json["name"].string {
+            self.id = id
+            self.name = name
+            
+            
+            return
+        }
+        
+        return nil
+    }
+}
