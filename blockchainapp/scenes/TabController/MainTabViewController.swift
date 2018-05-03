@@ -173,6 +173,10 @@ extension MainTabViewController: UITabBarControllerDelegate {
 			self.tabSelected(controller: title)
 		}
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
+        
+        if let nc = viewController as? UINavigationController {
+            self.router?.currentNavigationController = nc
+        }
     }
 	
     func tabSelected(controller: String)
