@@ -401,18 +401,40 @@ class RequestManager {
         }
     }
     
-    func resurrectJWT() -> Single<String> {
-        return Single<String>.create(subscribe: { single -> Disposable in
-            let req: DataRequest!
-            return Disposables.create { print("JWT is Alive"); req.cancel() }
-        })
+    private func renewToken() -> Single<String> {
+        let urlString = RequestManager.server + "/auth/signup?uid=C2E9B683-BDE5-4065-80C2-F74276BFC090&username=iosFirstUser"
+        if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
+            request.httpMethod = "POST"
+            
+            return Single<String>.create(subscribe: { single -> Disposable in
+                let dataReq: DataRequest = Alamofire.request(request).responseData { (response: DataResponse<Data>) in
+                    if let _ = response.error {
+                        single(.error(RequestError.noConnection))
+                        return
+                    }
+                    guard let resp = response.response, let data = response.data else {
+                        single(.error(RequestError.noConnection))
+                        return
+                    }
+                    switch resp.statusCode {
+                    case 200:
+                        let jwt = (resp.allHeaderFields["Authorization"] as? String ?? "").replacingOccurrences(of: "Bearer ", with: "")
+                        single(.success(jwt))
+                    default:
+                        single(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+                    }
+                }
+                return Disposables.create { print("🔑 JWT signal disposed"); dataReq.cancel()}
+            })
+        }
+        return Single<String>.error(RequestError.invalidURL)
     }
     
-    private func simpleRequest(req: URLRequest) -> Single<Result<Data>> {
-        return Single<Result<Data>>.create(subscribe: { single -> Disposable in
+    private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
+        return Observable<Result<Data>>.create(subscribe: { obs -> Disposable in
             let dataReq: DataRequest = Alamofire.request(req).responseData { (response: DataResponse<Data>) in
                 if let _ = response.error {
-                    single(.error(RequestError.noConnection))
+                    obs. //single(.error(RequestError.noConnection))
                     return
                 }
                 guard let resp = response.response, let data = response.data else {
@@ -433,30 +455,33 @@ class RequestManager {
     }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
-        var req = request
-		return Observable<Result<Data>>.create({ (observer) -> Disposable in
-			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
-				if let _ = response.error {
-					observer.onError(RequestError.noConnection)
-					observer.onCompleted()
-					return
-				}
-				if let resp = response.response, let data = response.data {
-					if resp.statusCode == 200 {
-						observer.onNext(.value(data))
-					} else {
-                        observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
-					}
-				} else {
-					observer.onError(RequestError.noConnection)
-				}
-				observer.onCompleted()
-			}
-			return Disposables.create {
-				let empty = "without url"
-				print("Request \(req.url?.absoluteString ?? empty) signal disposed")
-			}
-		})
+        
+        
+        
+//        var req = request
+//        return Observable<Result<Data>>.create({ (observer) -> Disposable in
+//            Alamofire.request(req).responseData { (response: DataResponse<Data>) in
+//                if let _ = response.error {
+//                    observer.onError(RequestError.noConnection)
+//                    observer.onCompleted()
+//                    return
+//                }
+//                if let resp = response.response, let data = response.data {
+//                    if resp.statusCode == 200 {
+//                        observer.onNext(.value(data))
+//                    } else {
+//                        observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+//                    }
+//                } else {
+//                    observer.onError(RequestError.noConnection)
+//                }
+//                observer.onCompleted()
+//            }
+//            return Disposables.create {
+//                let empty = "without url"
+//                print("Request \(req.url?.absoluteString ?? empty) signal disposed")
+//            }
+//        })
 	}
-
 }
+
