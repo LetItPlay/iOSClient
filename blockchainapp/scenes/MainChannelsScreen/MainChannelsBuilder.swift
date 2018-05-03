@@ -18,11 +18,12 @@ class MainChannelsBuilder: Builder {
         let channelsEmitter = CategoryChannelsEmitter(model: channelsModel)
         let channelsView = ChannelsCollectionView.init(frame: CGRect.zero, emitter: channelsEmitter, viewModel: channelsVM)
         
+        // for categories
         let mainModel = MainChannelsModel()
         let mainViewModel = MainChannelsViewModel(model: mainModel)
-        // emitter
+        let mainEmitter = MainChannelsEmitter(model: mainModel)
         
-        let mainChannelsViewController = MainChannelsViewController(viewModel: mainViewModel, channelsView: channelsView)
+        let mainChannelsViewController = MainChannelsViewController(viewModel: mainViewModel, emitter: mainEmitter, channelsView: channelsView)
         
         return mainChannelsViewController
     }

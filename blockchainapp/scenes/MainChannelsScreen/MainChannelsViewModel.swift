@@ -9,7 +9,7 @@
 import Foundation
 
 protocol MainChannelsVMProtocol {
-    var categories: [String : [CategoryChannelViewModel]] {get}
+    var categories: [ChannelCategory] {get}
     
     var delegate: MainChannelsVMDelegate? {get set}
 }
@@ -20,7 +20,7 @@ protocol MainChannelsVMDelegate: class {
 
 class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
     
-    var categories: [String : [CategoryChannelViewModel]] = [:]
+    var categories: [ChannelCategory] = []
     
     var delegate: MainChannelsVMDelegate?
     var model: MainChannelsModelProtocol!
@@ -30,7 +30,7 @@ class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
         self.model.delegate = self
     }
     
-    func reload(categories: [String : [CategoryChannelViewModel]]) {
+    func reload(categories: [ChannelCategory]) {
         self.categories = categories
         self.delegate?.reloadCategories()
     }
@@ -40,7 +40,6 @@ class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
     }
     
     func showAllChannelsFor(category: String) {
-        // TODO: add categories
-        MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
+        MainRouter.shared.show(screen: "category", params: [:], present: false)
     }
 }

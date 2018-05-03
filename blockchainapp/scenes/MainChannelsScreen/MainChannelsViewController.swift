@@ -12,17 +12,20 @@ import SnapKit
 class MainChannelsViewController: UIViewController {
     
     var viewModel: MainChannelsVMProtocol!
+    var emitter: MainChannelsEmitterProtocol?
     
     var channelsView: ChannelsCollectionView!
     let topInset: CGFloat = 44
     
     var tableView = UITableView(frame: CGRect.zero, style: .grouped)
     
-    convenience init(viewModel: MainChannelsVMProtocol, channelsView: ChannelsCollectionView) {
+    convenience init(viewModel: MainChannelsVMProtocol, emitter: MainChannelsEmitterProtocol, channelsView: ChannelsCollectionView) {
         self.init(nibName: nil, bundle: nil)
         
         self.viewModel = viewModel
         self.viewModel.delegate = self
+        
+        self.emitter = emitter
         
         self.channelsView = channelsView
     }
@@ -31,6 +34,8 @@ class MainChannelsViewController: UIViewController {
         super.viewDidLoad()
         
         self.viewInitialize()
+        
+        self.emitter?.send(event: LifeCycleEvent.initialize)
     }
     
     func viewInitialize() {
@@ -38,7 +43,11 @@ class MainChannelsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        tableView.contentInset.top = 44
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        self.tableView.refreshControl?.beginRefreshing()
+        
+        tableView.contentInset.top = topInset + (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
         tableView.contentInset.bottom = 72
         
         tableView.separatorStyle = .none
@@ -49,10 +58,15 @@ class MainChannelsViewController: UIViewController {
             make.edges.equalToSuperview()
         }
     }
+    
+    @objc func onRefreshAction(refreshControl: UIRefreshControl) {
+        self.emitter?.send(event: MainChannelsEvent.refresh)
+    }
 }
 
 extension MainChannelsViewController: MainChannelsVMDelegate {
     func reloadCategories() {
+        self.tableView.refreshControl?.endRefreshing()
         self.tableView.reloadData()
     }
 }
@@ -64,8 +78,16 @@ extension MainChannelsViewController: UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        let keys = self.viewModel.categories.keys.map({$0})
-        cell.textLabel?.text = keys[indexPath.row]
+        let contentView = MainChannelsCategoryCellView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 217), category: self.viewModel.categories[indexPath.row])
+        
+        contentView.onSeeAll = {[weak self] category in
+            self?.emitter?.send(event: MainChannelsEvent.showAllChannels(index: indexPath.row))
+        }
+        contentView.onChannelTap = {[weak self] index in
+            self?.emitter?.send(event: MainChannelsEvent.showChannel(index: IndexPath(row: index, section: indexPath.row)))
+        }
+        
+        cell.addSubview(contentView)
         return cell
     }
     

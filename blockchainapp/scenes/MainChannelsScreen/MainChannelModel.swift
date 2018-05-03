@@ -16,12 +16,13 @@ protocol MainChannelsModelProtocol: ModelProtocol {
 }
 
 protocol MainChannelsEventHandler: class {
-    func showChannel(section: String, index: Int)
-    func showAllChannelsFor(section: String)
+    func showChannel(section: Int, index: Int)
+    func showAllChannelsFor(section: Int)
+    func refresh()
 }
 
 protocol MainChannelsModelDelegate: class {
-    func reload(categories: [String : [CategoryChannelViewModel]])
+    func reload(categories: [ChannelCategory])
     func showChannel(id: Int)
     func showAllChannelsFor(category: String)
 }
@@ -41,32 +42,42 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
         })
         
         self.getChannelsAction.elements.subscribe(onNext: { channels in
-            self.categories = ["Auto" : Array(channels[0...5]), "Some others" : Array(channels[6...10])]
-            self.delegate?.reload(categories: self.categories.mapValues({ (channels) -> [CategoryChannelViewModel] in
-                return channels.map({CategoryChannelViewModel(channel: $0)})
-            }))
+            self.categories = ["Auto" : Array(channels[0...3]), "Some others" : Array(channels[6...13])]
+            self.delegate?.reload(categories: self.getChannelsCategories())
         }).disposed(by: disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
-        self.getChannelsAction.execute(true)
-
+    }
+    
+    func getChannelsCategories() -> [ChannelCategory] {
+        var channelCategories: [ChannelCategory] = []
+        for category in self.categories {
+            channelCategories.append(ChannelCategory(name: category.key, channels: category.value.map({CategoryChannelViewModel(channel: $0)})))
+        }
+        return channelCategories
     }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.getChannelsAction.execute(true)
+            self.refresh()
         default:
             break
         }
     }
     
-    func showAllChannelsFor(section: String) {
-        self.delegate?.showAllChannelsFor(category: section)
+    func showAllChannelsFor(section: Int) {
+        let channelsCategories = self.getChannelsCategories()
+        self.delegate?.showAllChannelsFor(category: channelsCategories[section].name)
     }
     
-    func showChannel(section: String, index: Int) {
-        self.delegate?.showChannel(id: categories[section]![index].id)
+    func showChannel(section: Int, index: Int) {
+        let channelsCategories = self.getChannelsCategories()
+        self.delegate?.showChannel(id: categories[channelsCategories[section].name]![index].id)
+    }
+    
+    func refresh() {
+        self.getChannelsAction.execute(true)
     }
 }
 
