@@ -86,7 +86,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalTo(self.view)
+            make.edges.equalToSuperview()
         }
         
         tableView.dataSource = self
@@ -121,16 +121,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         emptyButton.addTarget(self, action: #selector(showAllChannels), for: .touchUpInside)
         
         self.tableView.refreshControl?.beginRefreshing()
-        
-        //        self.trackInfoView = TrackInfoBlurView()
-        //        self.view.addSubview(self.trackInfoView)
-        //
-        //        self.trackInfoView.snp.makeConstraints { (make) in
-        //            make.top.equalTo((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 10)
-        //            make.left.equalTo(10)
-        //            make.right.equalTo(-10)
-        //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
-        //        }
         
         let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
         self.navigationItem.rightBarButtonItem = searchItem

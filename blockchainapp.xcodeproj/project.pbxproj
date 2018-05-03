@@ -107,6 +107,7 @@
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
+		9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */; };
 		9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */; };
 		9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */; };
 		9DC6C2402091D20900C980D4 /* MainChannelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */; };
@@ -283,6 +284,7 @@
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
+		9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelViewModel.swift; sourceTree = "<group>"; };
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
 		9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsViewModel.swift; sourceTree = "<group>"; };
@@ -531,6 +533,7 @@
 				9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */,
 				9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */,
 				9DC6C2412091D21300C980D4 /* MainChannelModel.swift */,
+				9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -1113,6 +1116,7 @@
 				361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
 				01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */,
+				9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
 				369301B42088A50A003D11BC /* FeedModel.swift in Sources */,
 				01510EAD1FDED922003AC116 /* RealmExtension.swift in Sources */,

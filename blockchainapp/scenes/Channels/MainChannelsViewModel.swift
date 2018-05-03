@@ -7,3 +7,28 @@
 //
 
 import Foundation
+
+protocol MainChannelsVMProtocol {
+    var categories: [String : [CategoryChannelViewModel]] {get}
+    
+    var delegate: MainChannelsVMDelegate? {get set}
+}
+
+protocol MainChannelsVMDelegate: class {
+    func reloadCategories()
+}
+
+class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
+    var categories: [String : [CategoryChannelViewModel]] = [:]
+    
+    var delegate: MainChannelsVMDelegate?
+    
+    func showChannel(id: Int) {
+        MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
+    }
+    
+    func showAllChannelsFor(category: String) {
+        // TODO: add categories
+        MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
+    }
+}
