@@ -125,6 +125,7 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         }
+        showOthersButton.isHidden = true
 	}
 	
 	@objc func arrowTapped() {
@@ -333,7 +334,7 @@ extension PlayerViewController: TrackLikedDelegate
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
 
-        self.showOthersButton.isHidden = false
+//        self.showOthersButton.isHidden = false
 
 		if viewController is PlaylistViewController {
 			return mainPlayer
