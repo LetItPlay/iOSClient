@@ -1,16 +1,20 @@
 import UIKit
 import SnapKit
 import SwipeCellKit
+import SDWebImage
 
 class ChannelTrackCell: SwipeTableViewCell {
 	
 	static let cellID: String = "ChannelTrackCellID"
+    
+    public var onOthers: (() -> Void)?
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {
@@ -42,15 +46,21 @@ class ChannelTrackCell: SwipeTableViewCell {
 		label.textAlignment = .right
 		return label
 	}()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
+    }()
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
     var track: TrackViewModel? = nil {
 		didSet {
             if let iconUrl = track?.imageURL {
-				trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
 			} else {
-				trackImageView.image = nil
+				trackImageView.image = UIImage(named: "trackPlaceholder")
 			}
 			
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
@@ -63,6 +73,8 @@ class ChannelTrackCell: SwipeTableViewCell {
             
             dataLabels[.listens]?.isHidden = (track?.isPlaying)!
             dataLabels[.playingIndicator]?.isHidden = !(track?.isPlaying)!
+            
+//            showOthersButton.isHidden = (track?.isPlaying)!
 		}
 	}
 	
@@ -125,6 +137,15 @@ class ChannelTrackCell: SwipeTableViewCell {
         
         playingIndicator.isHidden = true
         
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
+        self.contentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.height.equalTo(26)
+            make.width.equalTo(26)
+            make.right.equalTo(-8)
+            make.bottom.equalTo(-8)
+        }
+        
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
         
         self.separatorInset.left = 90
@@ -140,6 +161,10 @@ class ChannelTrackCell: SwipeTableViewCell {
             make.height.equalTo(1)
         }
 	}
+    
+    @objc func showOthersButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

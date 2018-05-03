@@ -15,7 +15,7 @@ enum ChannelScreen {
 }
 
 protocol ChannelsModelProtocol: ModelProtocol {
-    weak var delegate: ChannelsModelDelegate? {get set}
+    var delegate: ChannelsModelDelegate? {get set}
 }
 
 protocol ChannelsEventHandler: class {

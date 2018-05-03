@@ -38,6 +38,13 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         return button
     }()
     
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        button.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
+        return button
+    }()
+    
     var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 	
 	var mask: CAShapeLayer!
@@ -110,6 +117,14 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         })
+        
+        self.view.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(self.view.frame.width / 10 - 12)
+            make.bottom.equalTo(-8)
+            make.width.equalTo(24)
+            make.height.equalTo(24)
+        }
 	}
 	
 	@objc func arrowTapped() {
@@ -166,7 +181,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 				self.mainPlayer.channelNameLabel.text = channel
 				self.mainPlayer.trackNameLabel.text = title
 				if let url = ob.imageURL {
-					self.mainPlayer.coverImageView.sd_setImage(with: url, placeholderImage: nil, options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
+                    self.mainPlayer.underblurimageView.image = UIImage(named: "trackPlaceholder")
+					self.mainPlayer.coverImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: { (img, error, type, url) in
 						self.miniPlayer.trackImageView.image = img
 						self.mainPlayer.setPicture(image: img)
 					})
@@ -198,7 +214,8 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
 		self.miniPlayer.progressView.progress = 0.0
 		self.mainPlayer.channelNameLabel.text = ""
 		self.mainPlayer.trackNameLabel.text = ""
-		self.mainPlayer.coverImageView.image = nil
+		self.mainPlayer.coverImageView.image = UIImage(named: "trackPlaceholder")
+        self.mainPlayer.underblurimageView.image = UIImage(named: "trackPlaceholder")
 
 		self.playlist.tracks = [self.audioController.userPlaylist.tracks, self.audioController.playlist.tracks]
 		self.playlist.currentIndex = self.audioController.currentTrackIndexPath
@@ -293,6 +310,10 @@ class PlayerViewController: UIViewController, AudioControllerDelegate {
         self.present(speedAlert, animated: true, completion: nil)
     }
     
+    @objc func showOthersButtonTouched() {
+        MainRouter.shared.showOthers(track: audioController.currentTrack as Any, viewController: self)
+    }
+    
     func change(speed: Float) {
         self.audioController.player.set(rate: speed)
     }
@@ -311,6 +332,9 @@ extension PlayerViewController: TrackLikedDelegate
 
 extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+
+        self.showOthersButton.isHidden = false
+
 		if viewController is PlaylistViewController {
 			return mainPlayer
 		}
@@ -326,10 +350,12 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
 		if viewController is MainPlayerViewController {
 			return playlist
 		}
-        
+
         if viewController is TrackInfoViewController {
             return mainPlayer
         }
+
+        self.showOthersButton.isHidden = true
 		
 		return nil
 	}
@@ -342,6 +368,7 @@ extension PlayerViewController: UIPageViewControllerDelegate, UIPageViewControll
         if pageViewController.viewControllers![0] is PlaylistViewController {
             return 2
         }
+
         if pageController.viewControllers![0] is TrackInfoViewController {
             return 0
         }

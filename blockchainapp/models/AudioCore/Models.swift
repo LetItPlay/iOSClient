@@ -81,7 +81,7 @@ protocol AudioControllerDelegate: class {
 }
 
 protocol AudioControllerPresenter: class {
-	func popupPlayer(show: Bool, animated: Bool)
+    func popupPlayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection)
 	func showPlaylist()
 	func hidePlayer()
 }
@@ -89,11 +89,11 @@ protocol AudioControllerPresenter: class {
 enum AudioControllerUpdate {
     case reload(tracks: [AudioTrack])
     case remove(id: Int)
-	case clearAll
+    case clearAll(direction: HideMiniPlayerDirection)
 }
 
 protocol AudioControllerProtocol: class {
-	weak var delegate: AudioControllerDelegate? {get set}
+    var delegate: AudioControllerDelegate? {get set}
 	
 	var currentTrack: AudioTrack? {get}
 	var userPlaylist: AudioPlaylist {get}
@@ -112,7 +112,7 @@ protocol AudioControllerProtocol: class {
 
 //MARK: - Audio Player Protocols
 protocol AudioPlayerProto {
-	weak var delegate: AudioPlayerDelegate? {get set}
+    var delegate: AudioPlayerDelegate? {get set}
 	var currentIndex: Int {get}
 	var status: PlayerStatus {get}
 	var error: Error? {get}

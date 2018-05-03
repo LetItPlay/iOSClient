@@ -11,7 +11,7 @@ protocol FeedVMProtocol {
     var showEmptyMessage: Bool {get}
     var endReached: Bool {get}
     
-    weak var delegate: FeedVMDelegate? {get set}
+    var delegate: FeedVMDelegate? {get set}
 }
 
 protocol FeedVMDelegate: class {
@@ -19,6 +19,7 @@ protocol FeedVMDelegate: class {
 	func make(updates: [CollectionUpdate: [Int]])
     func updateTableState()
     func updateEmptyMessage()
+    
 }
 
 class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
@@ -104,5 +105,9 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     
     func showChannel(id: Int) {
         MainRouter.shared.show(screen: "channel", params: ["id" : id], present: false)
+    }
+    
+    func showOthers(track: Track) {
+        MainRouter.shared.showOthers(track: track, viewController: nil)
     }
 }

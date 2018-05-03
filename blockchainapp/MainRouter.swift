@@ -74,6 +74,48 @@ class MainRouter: Router {
     func hidePlayer() {
         self.delegate?.hidePlayer()
     }
+    
+    func showOthers(track: Any, viewController: UIViewController?) {
+        let controller: UIViewController!
+        if let currentController = viewController {
+            controller = currentController
+        } else {
+            controller = self.currentNavigationController?.viewControllers.first
+        }
+        
+        let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
+        controller?.present(othersController, animated: true, completion: nil)
+    }
+    
+    func share(data: ShareInfo, viewController: UIViewController?) {
+        let controller: UIViewController!
+        if let currentController = viewController {
+            controller = currentController
+        } else {
+            controller = self.currentNavigationController?.viewControllers.first
+        }
+        
+        let activityViewController : UIActivityViewController = UIActivityViewController(
+            activityItems: [data.text, data.url, data.image], applicationActivities: nil)
+        
+        activityViewController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.down
+        activityViewController.popoverPresentationController?.sourceRect = CGRect(x: 150, y: 150, width: 0, height: 0)
+        
+        activityViewController.excludedActivityTypes = [
+            UIActivityType.postToWeibo,
+            UIActivityType.print,
+            UIActivityType.assignToContact,
+            UIActivityType.saveToCameraRoll,
+            UIActivityType.addToReadingList,
+            UIActivityType.postToFlickr,
+            UIActivityType.postToVimeo,
+            UIActivityType.postToTencentWeibo
+        ]
+        
+         DispatchQueue.global(qos: .background).async {
+            controller.present(activityViewController, animated: true, completion: nil)
+        }
+    }
 }
 
 extension MainRouter: SearchViewControllerDelegate {

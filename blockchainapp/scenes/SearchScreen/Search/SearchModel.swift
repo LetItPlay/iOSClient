@@ -15,7 +15,7 @@ enum ViewModels {
 }
 
 protocol SearchModelProtocol: ModelProtocol {
-    weak var delegate: SearchModelDelegate? {get set}
+    var delegate: SearchModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -46,7 +46,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler {
     
     let realm: Realm? = try? Realm()
     
-    var delegate: SearchModelDelegate?
+    weak var delegate: SearchModelDelegate?
 	
 	let searchState: Variable<(text: String?, offset: Int)> = Variable<(text: String?, offset: Int)>((nil,0))
     let disposeBag = DisposeBag()

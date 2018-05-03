@@ -13,18 +13,19 @@ protocol UserPlaylistVMProtocol {
     var tracks: [TrackViewModel] {get}
     var hideEmptyMessage: Bool {get set}
     
-    weak var delegate: UserPlaylistVMDelegate? {get set}
+    var delegate: UserPlaylistVMDelegate? {get set}
 }
 
 protocol UserPlaylistVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reload()
     func delete(index: Int)
+    func show(othersController: OthersAlertController)
 }
 
 class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
 {
-    var delegate: UserPlaylistVMDelegate?
+    weak var delegate: UserPlaylistVMDelegate?
     var tracks: [TrackViewModel] = []
     
     var hideEmptyMessage: Bool = true
@@ -73,5 +74,9 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
     func emptyMessage(show: Bool) {
         self.hideEmptyMessage = show
 		self.delegate?.reload()
+    }
+    
+    func showOthers(track: Track, viewController: UIViewController) {
+        MainRouter.shared.showOthers(track: track, viewController: viewController)
     }
 }

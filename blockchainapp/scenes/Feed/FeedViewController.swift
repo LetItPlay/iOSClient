@@ -222,6 +222,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 }
 
 extension FeedViewController: FeedVMDelegate {
+    
     func reload() {
         self.tableView.reloadData()
         self.tableView.refreshControl?.endRefreshing()
@@ -284,6 +285,10 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
 
             self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+        }
+        
+        cell.onOthers = {[weak self] in
+            self?.emitter?.send(event: FeedEvent.showOthers(index: indexPath.row))
         }
         
         return cell
@@ -358,7 +363,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var image: UIImage!
         var addTo = ""
         
-        let myView = UIView(frame: CGRect(x: 0, y: 20, width: 150, height: 305))
+        let myView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 305))
         let myLabel = UILabel()
         myLabel.textColor = .white
         myLabel.font = AppFont.Title.big
@@ -375,7 +380,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             myView.addSubview(imageView)
             imageView.snp.makeConstraints { (make) in
                 make.right.equalToSuperview().inset(10)
-                make.centerY.equalToSuperview().inset(-10)
+                make.centerY.equalToSuperview()
             }
             
             myLabel.text = "\(addTo)\nof the\nplaylist".localized
@@ -396,7 +401,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             myView.addSubview(imageView)
             imageView.snp.makeConstraints { (make) in
                 make.left.equalTo(10)
-                make.centerY.equalToSuperview().inset(-10)
+                make.centerY.equalToSuperview()
             }
             
             myLabel.text = "\(addTo)\nof the\nplaylist".localized
@@ -414,6 +419,8 @@ extension FeedViewController: SwipeTableViewCellDelegate
 
         addToPlaylistAction.customView = myView
         addToPlaylistAction.backgroundColor = .clear
+        
+        addToPlaylistAction.fixCenterForItems = 10
         
 //        if addTo.range(of: "top") == nil {
 //            myLabel.textAlignment = .right

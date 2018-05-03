@@ -14,7 +14,7 @@ protocol ChannelVMProtocol {
     var isSubscribed: Bool {get set}
     var tracks: [TrackViewModel] {get}
     
-    weak var delegate: ChannelVMDelegate? {get set}
+    var delegate: ChannelVMDelegate? {get set}
 }
 
 protocol ChannelVMDelegate: class {
@@ -87,6 +87,14 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
     
     func showSearch() {
         MainRouter.shared.show(screen: "search", params: [:], present: false)
+    }
+    
+    func showOthers(track: Track) {
+        MainRouter.shared.showOthers(track: track, viewController: nil)
+    }
+    
+    func share(channel: ShareInfo) {
+        MainRouter.shared.share(data: channel, viewController: nil)
     }
 }
 

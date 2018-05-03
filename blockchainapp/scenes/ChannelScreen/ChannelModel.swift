@@ -12,7 +12,7 @@ import RxSwift
 import Action
 
 protocol ChannelModelProtocol: ModelProtocol {
-    weak var delegate: ChannelModelDelegate? {get set}
+    var delegate: ChannelModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -21,6 +21,8 @@ protocol ChannelEvenHandler: class {
     func followPressed()
     func set(channel: Channel)
     func showSearch()
+    func showOthers(index: Int)
+    func shareChannel()
 }
 
 protocol ChannelModelDelegate: class {
@@ -29,11 +31,13 @@ protocol ChannelModelDelegate: class {
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
+    func showOthers(track: Track)
+    func share(channel: ShareInfo)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     
-    var delegate: ChannelModelDelegate?
+    weak var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
     var channel: Channel!
@@ -118,6 +122,14 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler {
     func showSearch() {
         self.delegate?.showSearch()
     }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
+    }
+    
+    func shareChannel() {
+        self.delegate?.share(channel: ShareInfo(text: self.channel.name, url: RequestManager.server + "/channels/\(channel.id)", image: try! UIImage(data: Data(contentsOf: (channel.image)!))!))
+    }
 }
 
 extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
@@ -149,3 +161,4 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
 }
+

@@ -12,7 +12,7 @@ import RxSwift
 import Action
 
 protocol LikesModelProtocol: ModelProtocol {
-    weak var delegate: LikesModelDelegate? {get set}
+    var delegate: LikesModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -20,12 +20,15 @@ protocol LikesEventHandler: class
 {
     func getTracks()
     func trackSelected(index: Int)
+    func showOthers(index: Int)
+
 }
 
 protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
     func trackUpdate(index: Int, vm: TrackViewModel)
     func show(tracks: [TrackViewModel], isContinue: Bool)
+    func showOthers(track: TrackObject)
 }
 
 class LikesModel: LikesModelProtocol, LikesEventHandler {
@@ -125,6 +128,10 @@ class LikesModel: LikesModelProtocol, LikesEventHandler {
             return track.audioTrack()
         }
         AudioController.main.loadPlaylist(playlist: ("Like".localized, tracks), playId: self.tracks[index].id)
+    }
+    
+    func showOthers(index: Int) {
+        self.delegate?.showOthers(track: self.tracks[index])
     }
 }
 

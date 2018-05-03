@@ -1,16 +1,20 @@
 import UIKit
 import SnapKit
+import SDWebImage
 
 class SmallTrackTableViewCell: UITableViewCell {
 
 	static let cellID: String = "LikeTrackCellID"
     var separator = UIView()
+    
+    public var onOthers: (() -> Void)?
 	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 6
 		imageView.contentMode = .scaleAspectFill
 		imageView.layer.masksToBounds = true
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	let trackNameLabel: UILabel = {
@@ -42,6 +46,12 @@ class SmallTrackTableViewCell: UITableViewCell {
 		label.textAlignment = .right
 		return label
 	}()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
+    }()
 	
     var dataLabels: [IconLabelType: IconedLabel] = [:]
     var viewModel: SmallTrackViewModel?
@@ -51,9 +61,9 @@ class SmallTrackTableViewCell: UITableViewCell {
             self.viewModel = SmallTrackViewModel.init(track: track!)
             
             if let iconUrl = self.viewModel?.iconUrl {
-                trackImageView.sd_setImage(with: iconUrl)
+                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                trackImageView.image = nil
+                trackImageView.image = UIImage(named: "trackPlaceholder")
             }
             
             trackNameLabel.attributedText = Common.trackText(text: (viewModel?.trackName)!)
@@ -68,10 +78,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
 	func fill(vm: TrackViewModel) {
 		if let iconUrl = vm.imageURL {
-			trackImageView.sd_setImage(with: iconUrl)
-		} else {
-			trackImageView.image = nil
-		}
+            trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+        } else {
+            trackImageView.image = UIImage(named: "trackPlaceholder")
+        }
 		
 		trackNameLabel.attributedText = Common.trackText(text: vm.name)
 		channelNameLabel.text = vm.author
@@ -83,6 +93,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
+        
+//        showOthersButton.isHidden = vm.isPlaying
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -143,6 +155,15 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 		
 		playingIndicator.isHidden = true
+        
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
+        self.contentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.height.equalTo(26)
+            make.width.equalTo(26)
+            make.right.equalTo(-8)
+            make.bottom.equalTo(-8)
+        }
 		
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		
@@ -160,6 +181,10 @@ class SmallTrackTableViewCell: UITableViewCell {
 		}
 		self.separator = view
 	}
+    
+    @objc func showOthersButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")

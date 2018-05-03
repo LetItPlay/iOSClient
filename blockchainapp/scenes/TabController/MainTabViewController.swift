@@ -8,12 +8,18 @@
 
 import UIKit
 
+enum HideMiniPlayerDirection {
+    case left, right, down, up
+}
+
 class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniPlayerPresentationDelegate {
 	
 	let router: MainRouter = MainRouter.shared
 	
 	let playerController = PlayerViewController()
 	var miniPlayerBottomConstr: NSLayoutConstraint?
+    var miniPlayerLeftConstr: NSLayoutConstraint?
+    var miniPlayerRightConstr: NSLayoutConstraint?
 	var playerIsShowed: Bool = false
     var playerWasShowed: Bool = false
 	
@@ -32,8 +38,8 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		self.playerController.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.playerController.miniPlayer, belowSubview: self.tabBar)
 		self.playerController.miniPlayer.snp.makeConstraints { (make) in
-			make.left.equalToSuperview()
-			make.right.equalToSuperview()
+			miniPlayerLeftConstr = make.left.equalToSuperview().constraint.layoutConstraints.first
+			miniPlayerRightConstr = make.right.equalToSuperview().constraint.layoutConstraints.first
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
 		playerController.modalPresentationStyle = .overFullScreen
@@ -58,7 +64,7 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //		UIView.animate(withDuration: 0.5) {
 //			self.view.layoutIfNeeded()
 //		}
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.5 ) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.05 ) {
 			if !self.playerController.isBeingPresented {
 				UIApplication.shared.beginIgnoringInteractionEvents()
 				self.playerIsPresenting = true
@@ -70,21 +76,40 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 		}
 	}
 	
-	func popupPlayer(show: Bool, animated: Bool) {
+    func popupPlayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection) {
 		
 		self.view.layoutIfNeeded()
 		
 		if playerIsShowed && !show {
-			miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
+            switch direction {
+            case .down:
+                miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
+            case .left:
+                miniPlayerLeftConstr?.constant = self.tabBar.frame.width * (-1)
+                miniPlayerRightConstr?.constant = self.tabBar.frame.width * (-1)
+            case .right:
+                miniPlayerLeftConstr?.constant = self.tabBar.frame.width
+                miniPlayerRightConstr?.constant = self.playerController.miniPlayer.frame.width + self.tabBar.frame.width
+            default: break
+            }
+            
 			playerIsShowed = false
 		}
+        
 		if !playerIsShowed && show {
 			miniPlayerBottomConstr?.constant = 0
-			playerIsShowed = true 
+			playerIsShowed = true
 		}
-		UIView.animate(withDuration: 0.5) {
-			self.view.layoutIfNeeded()
-		}
+        
+        UIView.animate(withDuration: 0.5, animations: {
+            self.view.layoutIfNeeded()
+        }) { (_) in
+            if !self.playerIsShowed {
+                self.miniPlayerBottomConstr?.constant = self.playerController.miniPlayer.frame.height + self.tabBar.frame.height
+                self.miniPlayerLeftConstr?.constant = 0
+                self.miniPlayerRightConstr?.constant = 0
+            }
+        }
 	}
 	
 	func showPlaylist() {

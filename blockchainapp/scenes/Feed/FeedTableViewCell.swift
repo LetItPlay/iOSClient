@@ -3,6 +3,7 @@ import UIKit
 import SnapKit
 import SwipeCellKit
 import RxSwift
+import SDWebImage
 
 class FeedTableViewCell: SwipeTableViewCell {
 
@@ -10,24 +11,26 @@ class FeedTableViewCell: SwipeTableViewCell {
 	
 	public var onLike: ((Int) -> Void)?
     public var onChannel: ((Int) -> Void)?
+    public var onOthers: (() -> Void)?
+
 	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
         DispatchQueue.main.async {
             self.channelLabel.text = vm.author
             if let authorImage = vm.authorImage {
-                self.channelImageView.sd_setImage(with: authorImage)
+                self.channelImageView.sd_setImage(with: authorImage, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                self.channelImageView.image = nil
+                self.channelImageView.image = UIImage(named: "channelPreviewImg")
             }
         
             self.timeAgoLabel.text = vm.dateString
         
             self.trackTitleLabel.attributedText = type(of: self).title(text: vm.name)
             if let trackImage = vm.imageURL {
-                self.mainPictureImageView.sd_setImage(with: trackImage)
+                self.mainPictureImageView.sd_setImage(with: trackImage, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
             } else {
-                self.mainPictureImageView.image = nil
+                self.mainPictureImageView.image = UIImage(named: "trackPlaceholder")
             }
         
             self.infoTitle.text = vm.name
@@ -52,6 +55,8 @@ class FeedTableViewCell: SwipeTableViewCell {
         
             self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
             self.dataLabels[.listens]?.isHidden = vm.isPlaying
+            
+//            self.showOthersButton.isHidden = vm.isPlaying
         
             self.likeButton.isSelected = vm.isLiked
         
@@ -65,15 +70,6 @@ class FeedTableViewCell: SwipeTableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		self.viewInitialize()
-    }
-	
-	@objc func likePressed(_: UIButton) {
-        likeButton.isSelected = !likeButton.isSelected
-        onLike?(0)
-	}
-    
-    @objc func channelPressed() {
-        onChannel?(0)
     }
 	
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
@@ -104,6 +100,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 			maker.width.equalTo(20)
 			maker.height.equalTo(20)
 		})
+        imageView.image = UIImage(named: "channelPreviewImg")
 		return imageView
 	}()
 	
@@ -129,6 +126,7 @@ class FeedTableViewCell: SwipeTableViewCell {
 		let imageView = UIImageView()
 		imageView.layer.masksToBounds = true
 		imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "trackPlaceholder")
 		return imageView
 	}()
 	
@@ -207,6 +205,12 @@ class FeedTableViewCell: SwipeTableViewCell {
         alert.textAlignment = .center
         alert.text = "Track added".localized
         return alert
+    }()
+    
+    var showOthersButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "otherInactive"), for: .normal)
+        return button
     }()
         
 	func viewInitialize() {
@@ -327,6 +331,14 @@ class FeedTableViewCell: SwipeTableViewCell {
         likeBlurView.layer.masksToBounds = true
         likeBlurView.layer.cornerRadius = 25
         
+        cellContentView.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.height.equalTo(26)
+            make.width.equalTo(26)
+            make.right.equalTo(-8)
+            make.bottom.equalTo(-8)
+        }
+        
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in
             make.top.equalTo(infoBlurView).inset(10)
@@ -384,7 +396,22 @@ class FeedTableViewCell: SwipeTableViewCell {
         alertBlurView.alpha = 0
         
         self.likeButton.addTarget(self, action: #selector(likePressed(_:)), for: .touchUpInside)
+        self.showOthersButton.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
 	}
+    
+    
+    @objc func likePressed(_: UIButton) {
+        likeButton.isSelected = !likeButton.isSelected
+        onLike?(0)
+    }
+    
+    @objc func channelPressed() {
+        onChannel?(0)
+    }
+    
+    @objc func showOthersButtonTouched() {
+        self.onOthers?()
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil

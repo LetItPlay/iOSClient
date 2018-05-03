@@ -15,22 +15,37 @@ class PlaylistsViewController: UIViewController {
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
-    let header: UIView = {
+    let header: UIVisualEffectView = {
         let label = UILabel()
         label.textColor = AppColor.Title.dark
         label.font = AppFont.Title.section
         label.text = "Today playlists".localized
         
-        let container = UIView()
-        container.backgroundColor = UIColor.white
-        container.addSubview(label)
+//        let container = UIView()
+//        container.backgroundColor = UIColor.white
+//        container.addSubview(label)
+//        label.snp.makeConstraints { (make) in
+//            make.top.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.left.equalToSuperview().inset(16)
+//            make.right.equalToSuperview().inset(16)
+//        }
+
+        var blurView = UIVisualEffectView()
+        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.clipsToBounds = true
+        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+        
+        blurView.contentView.addSubview(label)
         label.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
             make.left.equalToSuperview().inset(16)
             make.right.equalToSuperview().inset(16)
         }
-        return container
+        
+        return blurView
     }()
     
     let emptyLabel: UILabel = {

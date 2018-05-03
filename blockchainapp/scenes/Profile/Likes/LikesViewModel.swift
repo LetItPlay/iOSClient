@@ -13,7 +13,7 @@ protocol LikesVMProtocol {
     var tracks: [TrackViewModel] {get}
     var length: String {get set}
   
-    weak var delegate: LikesVMDelegate? {get set}
+    var delegate: LikesVMDelegate? {get set}
 }
 
 protocol LikesVMDelegate: class {
@@ -80,5 +80,9 @@ class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
         vm.update(vm: vm)
         self.tracks[index] = vm
         self.delegate?.make(updates: [.update: [index]])
+    }
+    
+    func showOthers(track: TrackObject) {
+        MainRouter.shared.showOthers(track: track, viewController: nil)
     }
 }

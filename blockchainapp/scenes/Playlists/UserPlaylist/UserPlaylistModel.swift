@@ -11,8 +11,8 @@ import Foundation
 import RxSwift
 import RealmSwift
 
-protocol UserPlaylistModelProtocol: class, ModelProtocol {
-    weak var delegate: UserPlaylistModelDelegate? {get set}
+protocol UserPlaylistModelProtocol: ModelProtocol {
+    var delegate: UserPlaylistModelDelegate? {get set}
     var playingIndex: Variable<Int?> {get}
 }
 
@@ -20,17 +20,19 @@ protocol UserPlaylistEventHandler: class {
     func trackSelected(index: Int)
     func clearPlaylist()
     func trackDelete(index: Int)
+    func showOthers(index: Int, viewController: UIViewController)
 }
 
 protocol UserPlaylistModelDelegate: class {
     func show(tracks: [TrackViewModel])
     func emptyMessage(show: Bool)
     func delete(index: Int)
+    func showOthers(track: Track, viewController: UIViewController)
 }
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate
 {
-    var delegate: UserPlaylistModelDelegate?
+    weak var delegate: UserPlaylistModelDelegate?
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     
     private var tracks: [Track] = []
@@ -41,7 +43,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
     {
         UserPlaylistManager.shared.delegate = self
 		self.channels = (try? Realm())?.objects(ChannelObject.self).map({$0.plain()}) ?? []
-        InAppUpdateManager.shared.subscribe(self)
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
     func reload()
@@ -99,7 +101,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         self.delegate?.emptyMessage(show: true)
         self.tracks = UserPlaylistManager.shared.tracks
         self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
-		AudioController.main.update(.clearAll)
+        AudioController.main.update(.clearAll(direction: .down))
     }
     
     func send(event: LifeCycleEvent) {
@@ -111,6 +113,10 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         default:
             break
         }
+    }
+    
+    func showOthers(index: Int, viewController: UIViewController) {
+        self.delegate?.showOthers(track: self.tracks[index], viewController: viewController)
     }
 }
 

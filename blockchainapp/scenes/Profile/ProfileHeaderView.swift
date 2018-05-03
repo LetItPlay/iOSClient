@@ -54,6 +54,15 @@ class ProfileHeaderView: UIView {
             make.edges.equalToSuperview()
         }
         
+        let shadowLayer = CALayer()
+        shadowLayer.shadowColor = UIColor.black.cgColor
+        shadowLayer.shadowOffset = CGSize.zero
+        shadowLayer.shadowRadius = 10.0
+        shadowLayer.shadowOpacity = 0.2
+        shadowLayer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: self.frame.width / 2 - 130, y: 68), size: CGSize.init(width: 260, height: 260)), cornerRadius: 130).cgPath
+        shadowLayer.shouldRasterize = true
+        blur.layer.addSublayer(shadowLayer)
+        
         blur.contentView.addSubview(profileImageView)
         profileImageView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -64,13 +73,8 @@ class ProfileHeaderView: UIView {
         
         profileImageView.layer.cornerRadius = 120
         profileImageView.layer.masksToBounds = true
-        profileImageView.layer.shadowColor = UIColor.black.cgColor
-        profileImageView.layer.shadowOffset = CGSize.zero
-        profileImageView.layer.shadowRadius = 10.0
-        profileImageView.layer.shadowOpacity = 0.1
-        profileImageView.layer.shadowPath = UIBezierPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: -10, y: -10), size: CGSize.init(width: 260, height: 260)), cornerRadius: 130).cgPath
-        profileImageView.layer.shouldRasterize = true
         profileImageView.contentMode = .scaleAspectFill
+        profileImageView.backgroundColor = .white
         
         blur.contentView.addSubview(self.changePhotoButton)
         self.changePhotoButton.snp.makeConstraints { (make) in

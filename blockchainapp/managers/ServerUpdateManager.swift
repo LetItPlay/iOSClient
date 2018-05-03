@@ -48,17 +48,22 @@ class ServerUpdateManager {
 	}
 	
 	func make(track: Track, action: TrackAction) {
+        var updatedTrack = track
         let type: TrackUpdateRequest
+        print(action)
         switch action {
         case .listen:
             type = .listen
 			ListenManager.shared.add(id: track.id)
+            updatedTrack.listenCount += 1
         case .like:
             type = .like(count: 1)
 			LikeManager.shared.addOrDelete(id: track.id)
+            updatedTrack.isLiked = true
         case .unlike:
             type = .like(count: -1)
 			LikeManager.shared.addOrDelete(id: track.id)
+            updatedTrack.isLiked = false
         case .report(let msg):
             type = .report(msg: msg)
         }
@@ -67,6 +72,9 @@ class ServerUpdateManager {
 			let obj = TrackObject(track: track)
 			realm?.add(obj, update: true)
 		}
+        
+        NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["track": updatedTrack])
+        
 		RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
             var track = track
             track.likeCount = tuple.0

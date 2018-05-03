@@ -128,7 +128,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 				player.make(command: .play)
 			}
 			DispatchQueue.main.async {
-				self.popupDelegate?.popupPlayer(show: true, animated: true)
+				self.popupDelegate?.popupPlayer(show: true, animated: true, direction: .up)
 			}
 		case .pause:
 			player.make(command: .pause)
@@ -158,32 +158,43 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	}
 
     func update(_ update: AudioControllerUpdate) {
+        var removeAll: Bool = false
+        var directionToHideMiniPlayer: HideMiniPlayerDirection? = .down
+        
         switch update {
-            case .reload(let tracks):
-                let id = self.currentTrack?.id ?? -1
-                self.playlist.tracks = tracks
-                if let index = self.playlist.tracks.index(where: {$0.id == id}) {
-                    self.currentTrackIndexPath = IndexPath.init(item: index, section: 1)
-                } else {
-                    self.currentTrackIndexPath = IndexPath.invalid
+        case .reload(let tracks):
+            let id = self.currentTrack?.id ?? -1
+            self.playlist.tracks = tracks
+            if let index = self.playlist.tracks.index(where: {$0.id == id}) {
+                self.currentTrackIndexPath = IndexPath.init(item: index, section: 1)
+            } else {
+                self.currentTrackIndexPath = IndexPath.invalid
+            }
+        case .remove(let id):
+            if let index = self.playlist.tracks.index(where: {$0.id == id}) {
+                if self.currentTrack?.id == id {
+                    self.make(command: .next)
                 }
-            case .remove(let id):
-                if let index = self.playlist.tracks.index(where: {$0.id == id}) {
-                    if self.currentTrack?.id == id {
-                        self.make(command: .next)
-                    }
-                    self.playlist.tracks.remove(at: index)
-                }
-		case .clearAll:
-			self.make(command: .pause)
-			self.playlist.tracks = []
+                self.playlist.tracks.remove(at: index)
+                directionToHideMiniPlayer = .down
+            }
+        case .clearAll(let direction):
+            self.make(command: .pause)
+            removeAll = true
+            directionToHideMiniPlayer = direction
         }
+        
         self.delegate?.playlistChanged()
         self.delegate?.trackUpdate()
 		
-		if self.playlist.tracks.count == 0 {
-			self.popupDelegate?.popupPlayer(show: false, animated: true)
-		}
+		if removeAll || self.playlist.tracks.count == 0 {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
+                if removeAll {
+                    self.playlist.tracks.removeAll()
+                }
+                self.popupDelegate?.popupPlayer(show: false, animated: true, direction: directionToHideMiniPlayer!)
+            }
+        }
     }
 
     func addToUserPlaylist(track: AudioTrack, inBeginning: Bool) {

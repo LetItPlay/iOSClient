@@ -12,7 +12,7 @@ import RxSwift
 import Action
 
 protocol PlaylistsModelProtocol: ModelProtocol {
-    weak var delegate: PlaylistsModelDelegate? {get set}
+    var delegate: PlaylistsModelDelegate? {get set}
 }
 
 protocol PlaylistsEventHandler: class {
@@ -33,7 +33,7 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     
     var currentPlayingIndex: Int = -1
 
-    var delegate: PlaylistsModelDelegate?
+    weak var delegate: PlaylistsModelDelegate?
     var playlists: [(image: UIImage?, title: String, descr: String, tracks: [AudioTrack])] = []
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
