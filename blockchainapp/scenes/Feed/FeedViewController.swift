@@ -26,9 +26,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
     var didSwipeCell: Bool = false
     
-//    var trackInfoView: TrackInfoBlurView!
-
-	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 
 	let emptyLabel: UILabel = {
 		let label = UILabel()
@@ -83,6 +81,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         self.view.addSubview(tableView)
         
+        tableView.contentInset.top = -44
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
