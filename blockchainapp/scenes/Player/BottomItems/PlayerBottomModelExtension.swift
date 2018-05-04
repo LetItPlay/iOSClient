@@ -33,7 +33,9 @@ extension PlayerModel: TrackUpdateProtocol {
             let isPlaying = self.playingNow == track.id && self.player.status == .playing
             let trackVM = TrackViewModel.init(track: track, isPlaying: isPlaying)
             self.playlistDelegate?.update(track: trackVM, asIndex: index)
-            self.playerDelegate?.update(track: trackVM)
+            if isPlaying {
+                self.playerDelegate?.update(track: trackVM)
+            }
         }
     }
 }

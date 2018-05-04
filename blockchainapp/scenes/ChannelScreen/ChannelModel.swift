@@ -23,8 +23,8 @@ extension PlayerUsingProtocol {
 		if let player = PlayerHandler.player {
 			if !player.trackSelected(playlistName: self.playlistName, id: selectedId) {
 				player.loadPlaylist(name: self.playlistName, tracks: self.tracks)
-			}
-			let _ = player.trackSelected(playlistName: self.playlistName, id: selectedId)
+                let _ = player.trackSelected(playlistName: self.playlistName, id: selectedId)
+            }
 		}
 	}
 }
