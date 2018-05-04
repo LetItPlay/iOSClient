@@ -111,8 +111,10 @@ extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
     }
     
     func channelSubscriptionUpdated() {
-        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        channel.isSubscribed = channels.contains(channel.id)
-        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+        if let _ = channel {
+            let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
+            channel.isSubscribed = channels.contains(channel.id)
+            self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+        }
     }
 }

@@ -34,7 +34,6 @@
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
 		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
 		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
-		01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BF29F620749F6600CF877A /* LIPRouter.swift */; };
 		01C4A9CB207F32C800A4232B /* PlayingPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C4A9CA207F32C800A4232B /* PlayingPlaylistViewModel.swift */; };
 		01C4A9CD207F333900A4232B /* PlaylistModelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C4A9CC207F333900A4232B /* PlaylistModelHandler.swift */; };
 		01C4A9CF207F335E00A4232B /* PlayerModelHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C4A9CE207F335E00A4232B /* PlayerModelHandler.swift */; };
@@ -211,7 +210,6 @@
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
 		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
-		01BF29F620749F6600CF877A /* LIPRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LIPRouter.swift; sourceTree = "<group>"; };
 		01C4A9CA207F32C800A4232B /* PlayingPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingPlaylistViewModel.swift; sourceTree = "<group>"; };
 		01C4A9CC207F333900A4232B /* PlaylistModelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistModelHandler.swift; sourceTree = "<group>"; };
 		01C4A9CE207F335E00A4232B /* PlayerModelHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModelHandler.swift; sourceTree = "<group>"; };
@@ -709,7 +707,6 @@
 				CF4453321F54139900660474 /* LaunchScreen.storyboard */,
 				CF27152F1F97C79A0038C81C /* Localizable.strings */,
 				CF44532D1F54139900660474 /* Main.storyboard */,
-				01BF29F620749F6600CF877A /* LIPRouter.swift */,
 			);
 			path = blockchainapp;
 			sourceTree = "<group>";
@@ -1085,7 +1082,6 @@
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/AssistantKit/AssistantKit.framework",
 				"${BUILT_PRODUCTS_DIR}/DeepLinkKit/DeepLinkKit.framework",
-				"${BUILT_PRODUCTS_DIR}/DynamicBlurView/DynamicBlurView.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
@@ -1093,7 +1089,6 @@
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
-				"${BUILT_PRODUCTS_DIR}/ShadowView/ShadowView.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
@@ -1105,7 +1100,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AssistantKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepLinkKit.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicBlurView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
@@ -1113,7 +1107,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ShadowView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
@@ -1161,7 +1154,6 @@
 				015088842006472200E42F7D /* AudioPlayer.swift in Sources */,
 				361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */,
 				01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */,
-				01BF29F720749F6600CF877A /* LIPRouter.swift in Sources */,
 				9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */,
 				01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */,
 				369301B42088A50A003D11BC /* FeedModel.swift in Sources */,

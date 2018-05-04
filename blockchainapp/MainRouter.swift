@@ -87,7 +87,7 @@ class MainRouter: Router {
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
 			} else {
-                self.currentNavigationController?.viewControllers.first?.navigationController?.pushViewController(vc, animated: true)
+                self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
 	}
@@ -98,15 +98,11 @@ class MainRouter: Router {
     
     func showOthers(track: Any) {
         let controller: UIViewController!
-//        if let currentController = viewController {
-//            controller = currentController
-//        } else {
         if let vc = self.currentNavigationController?.presentedViewController {
             controller = vc
         } else {
             controller = self.currentNavigationController?.viewControllers.first
         }
-//        }
 		
         let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)

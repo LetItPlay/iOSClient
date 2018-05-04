@@ -16,7 +16,6 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-	let router = MainRouter()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
@@ -26,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 
 		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
-		var vc: UIViewController!
-		if UserSettings.language == .none {
+
+        if UserSettings.language == .none {
             switch NSLocale.preferredLanguages[0] {
             case "ru":
                 UserSettings.language = Language.ru
@@ -42,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 		}
         
-		self.window?.rootViewController = router.mainController
+		self.window?.rootViewController = MainRouter.shared.mainController
 		self.window?.makeKeyAndVisible()
 
 		Fabric.with([Crashlytics.self])
