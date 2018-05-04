@@ -20,6 +20,12 @@ class ChannelCategory {
             self.id = id
             self.name = name
             
+            guard let channels = json["stations"].array?.map({Channel(json: $0)!}) else {
+                self.channels = []
+                return
+            }
+            
+            self.channels = channels
             
             return
         }

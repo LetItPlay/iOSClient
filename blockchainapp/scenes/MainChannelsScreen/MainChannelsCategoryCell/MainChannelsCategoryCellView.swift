@@ -43,7 +43,7 @@ class MainChannelsCategoryCellView: UIView {
         cv.dataSource = self
         cv.contentInset = UIEdgeInsets.init(top: 0, left: 16, bottom: 0, right: 16)
         cv.showsHorizontalScrollIndicator = false
-        cv.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "CategoryChannel")
+        cv.register(MainChannelsCategotyCollectionViewCell.self, forCellWithReuseIdentifier: MainChannelsCategotyCollectionViewCell.cellIdentifier)
         cv.backgroundColor = .clear
         return cv
     }()
@@ -60,7 +60,6 @@ class MainChannelsCategoryCellView: UIView {
         self.backgroundColor = .white
         
         seeAllButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
-        seeAllButton.isHidden = self.category.hideSeeAllButton
         self.addSubview(seeAllButton)
         seeAllButton.snp.makeConstraints { (make) in
             make.top.equalTo(2)
@@ -106,36 +105,8 @@ extension MainChannelsCategoryCellView: UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let contentView = UIView(frame: CGRect(x: 0, y: 0, width: 130, height: 170))
-        var imageView: UIImageView! = UIImageView()
-        do {
-            imageView = try UIImageView(image: UIImage(data: Data(contentsOf: self.category.channels[indexPath.row].imageURL!)))
-        } catch {
-            print("ooooops")
-        }
-        imageView.frame = CGRect(x: 0, y: 0, width: 130, height: 130)
-        imageView.layer.cornerRadius = 4
-        imageView.layer.masksToBounds = true
-        
-        let channelLabel = UILabel()
-        channelLabel.textColor = .black
-        channelLabel.font = AppFont.Text.mid
-        channelLabel.text = self.category.channels[indexPath.row].name
-        channelLabel.frame.size = CGSize(width: 130, height: 36)
-        channelLabel.numberOfLines = 2
-        channelLabel.lineBreakMode = .byWordWrapping
-        
-        contentView.addSubview(imageView)
-        contentView.addSubview(channelLabel)
-        channelLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(imageView.snp.bottom).inset(4)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryChannel", for: indexPath)
-        cell.addSubview(contentView)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryChannel", for: indexPath) as! MainChannelsCategotyCollectionViewCell
+        cell.fill(channel: self.category.channels[indexPath.row])
         return cell
     }
     

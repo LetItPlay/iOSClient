@@ -99,7 +99,9 @@ class RequestManager {
                 case .value(let data):
                     if let json = try? JSON(data: data) {
                         
-                        let categories: [ChannelCategory] = (json.array?.map({ChannelCategory(json: $0)}))! as! [ChannelCategory]
+                        guard let categories: [ChannelCategory] = json.array?.map({ChannelCategory(json: $0)!}) else {
+                            return Observable.error(RequestError.invalidJSON)
+                        }
                         
                         return Observable<[ChannelCategory]>.just(categories)
                     }

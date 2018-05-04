@@ -24,37 +24,29 @@ protocol MainChannelsEventHandler: class {
 protocol MainChannelsModelDelegate: class {
     func reload(categories: [ChannelCategoryViewModel])
     func showChannel(id: Int)
-    func showAllChannelsFor(category: String)
+    func showAllChannelsFor(category: Int)
 }
 
 class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     var delegate: MainChannelsModelDelegate?
     
-    var categories: [String : [Channel]] = [:]
+    var categories: [ChannelCategory] = []
     
-    let getChannelsAction: Action<Bool, [Channel]>!
+    let getChannelsAction: Action<Bool, [ChannelCategory]>!
     var disposeBag = DisposeBag()
     
     init() {
         
-        self.getChannelsAction = Action<Bool, [Channel]>.init(workFactory: { (_) -> Observable<[Channel]> in
-            return RequestManager.shared.channels(req: .all(offset: 0, count: 100))
+        self.getChannelsAction = Action<Bool, [ChannelCategory]>.init(workFactory: { (_) -> Observable<[ChannelCategory]> in
+            return RequestManager.shared.categories()
         })
         
-        self.getChannelsAction.elements.subscribe(onNext: { channels in
-            self.categories = ["Auto" : Array(channels[0...3]), "Some others" : Array(channels[6...13])]
-            self.delegate?.reload(categories: self.getChannelsCategories())
+        self.getChannelsAction.elements.subscribe(onNext: { categories in
+            self.categories = categories
+            self.delegate?.reload(categories: self.categories.map({ChannelCategoryViewModel(category: $0)}))
         }).disposed(by: disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
-    }
-    
-    func getChannelsCategories() -> [ChannelCategoryViewModel] {
-        var channelCategories: [ChannelCategoryViewModel] = []
-        for category in self.categories {
-            channelCategories.append(ChannelCategoryViewModel(name: category.key, channels: category.value.map({CategoryChannelViewModel(channel: $0)})))
-        }
-        return channelCategories
     }
     
     func send(event: LifeCycleEvent) {
@@ -67,13 +59,11 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     }
     
     func showAllChannelsFor(section: Int) {
-        let channelsCategories = self.getChannelsCategories()
-        self.delegate?.showAllChannelsFor(category: channelsCategories[section].name)
+        self.delegate?.showAllChannelsFor(category: categories[section].id)
     }
     
     func showChannel(section: Int, index: Int) {
-        let channelsCategories = self.getChannelsCategories()
-        self.delegate?.showChannel(id: categories[channelsCategories[section].name]![index].id)
+        self.delegate?.showChannel(id: categories[section].channels[index].id)
     }
     
     func refresh() {

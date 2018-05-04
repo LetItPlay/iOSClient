@@ -38,7 +38,7 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
 	}
 	
 	func showAllChannels() {
-		MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.category("subscribed")], present: false)
+		MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.subscribed], present: false)
 	}
     
     func showChannel(channel: Channel) {
