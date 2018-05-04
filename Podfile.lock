@@ -7,7 +7,6 @@ PODS:
   - Crashlytics (3.10.1):
     - Fabric (~> 1.7.5)
   - DeepLinkKit (1.5.0)
-  - DynamicBlurView (2.0.2)
   - Fabric (1.7.6)
   - MarqueeLabel/Swift (3.1.4)
   - ReachabilitySwift (4.1.0)
@@ -22,7 +21,6 @@ PODS:
   - SDWebImage (4.3.3):
     - SDWebImage/Core (= 4.3.3)
   - SDWebImage/Core (4.3.3)
-  - ShadowView (1.2)
   - SnapKit (4.0.0)
   - SwiftyJSON (4.0.0)
   - SwipeCellKit (2.2.0)
@@ -34,14 +32,11 @@ DEPENDENCIES:
   - AssistantKit
   - Crashlytics
   - DeepLinkKit
-  - DynamicBlurView
-  - Fabric
   - MarqueeLabel/Swift
   - ReachabilitySwift
   - RealmSwift
   - RxSwift
   - SDWebImage
-  - ShadowView
   - SnapKit
   - SwiftyJSON
   - SwipeCellKit
@@ -54,7 +49,6 @@ SPEC REPOS:
     - AssistantKit
     - Crashlytics
     - DeepLinkKit
-    - DynamicBlurView
     - Fabric
     - MarqueeLabel
     - ReachabilitySwift
@@ -63,7 +57,6 @@ SPEC REPOS:
     - RxCocoa
     - RxSwift
     - SDWebImage
-    - ShadowView
     - SnapKit
     - SwiftyJSON
     - SwipeCellKit
@@ -75,7 +68,6 @@ SPEC CHECKSUMS:
   AssistantKit: 9ee71039dffa9dc050de945258e50e3e6bb20d5c
   Crashlytics: aee1a064cbbf99b32efa3f056a5f458d846bc8ff
   DeepLinkKit: 98a26f2c5cf4c86b97c1170cdf3737ae49a3a50c
-  DynamicBlurView: aa6db4defc6e537eb86fc5e58dd3991666178399
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
@@ -84,12 +76,11 @@ SPEC CHECKSUMS:
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
-  ShadowView: e686f2e27fc281c0118419b1fb314b6e534a4682
   SnapKit: a42d492c16e80209130a3379f73596c3454b7694
   SwiftyJSON: 070dabdcb1beb81b247c65ffa3a79dbbfb3b48aa
   SwipeCellKit: 8ae09401e1137566b187980d824310129233c959
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: 435a67a566aacc7338653ed39941bb478571e60f
+PODFILE CHECKSUM: 4f9f00c897988bb84875a24f6940987d292755d2
 
 COCOAPODS: 1.5.0

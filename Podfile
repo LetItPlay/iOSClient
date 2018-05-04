@@ -4,17 +4,14 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'blockchainapp' do
-	#  pod "SwiftyAudioManager", :git => 'git@gitlab.ludentes.ru:iOS-dependencies/SwiftyAuidoManager.git'
   pod "SwiftyJSON"
   
   pod "RealmSwift"
   pod "Alamofire"
   
   pod "SDWebImage"
-  pod "ShadowView"
-  pod "SnapKit"#, '~> 3.0.0'
-  pod "TagListView"#, '~> 1.0'
-  pod "DynamicBlurView"
+  pod "SnapKit"
+  pod "TagListView"
   pod "MarqueeLabel/Swift"
   pod "ReachabilitySwift"
 
@@ -25,8 +22,6 @@ target 'blockchainapp' do
   
   pod 'SwipeCellKit'#, :inhibit_warnings => true
 
-  #Crashlytics
-  pod 'Fabric'
   pod 'Crashlytics'
   
   target 'blockchainappTests' do
