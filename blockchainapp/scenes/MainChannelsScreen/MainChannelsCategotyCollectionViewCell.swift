@@ -40,9 +40,11 @@ class MainChannelsCategotyCollectionViewCell: UICollectionViewCell {
     }
     
     func fill(channel: CategoryChannelViewModel) {
-        imageView.sd_setImage(with: channel.imageURL, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
-        
-        channelLabel.text = channel.name
+        DispatchQueue.main.async {
+            self.imageView.sd_setImage(with: channel.imageURL, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
+            
+            self.channelLabel.text = channel.name
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -1,15 +1,17 @@
 //
-//  MainChannelsCategoryCellView.swift
+//  MainChannelsTableViewCell.swift
 //  blockchainapp
 //
-//  Created by Polina Abrosimova on 03.05.2018.
+//  Created by Polina Abrosimova on 04.05.2018.
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import UIKit
-import SnapKit
 
-class MainChannelsCategoryCellView: UIView {
+class MainChannelsTableViewCell: UITableViewCell {
+    
+    public static let cellIdentifier = "MainChannelsTableViewCell"
+    
     var category: ChannelCategoryViewModel!
     
     public var onSeeAll: ((String) -> Void)?
@@ -48,12 +50,23 @@ class MainChannelsCategoryCellView: UIView {
         return cv
     }()
     
-    convenience init(frame: CGRect, category: ChannelCategoryViewModel) {
-        self.init(frame: frame)
-        
-        self.category = category
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.viewInitialize()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func fill(category: ChannelCategoryViewModel) {
+        DispatchQueue.main.async {
+            self.category = category
+
+            self.categoryLabel.text = self.category.name
+            self.categoryCollectionView.reloadData()
+        }
     }
     
     func viewInitialize() {
@@ -68,7 +81,6 @@ class MainChannelsCategoryCellView: UIView {
             make.height.equalTo(39)
         }
         
-        categoryLabel.text = self.category.name
         self.addSubview(categoryLabel)
         categoryLabel.snp.makeConstraints { (make) in
             make.top.equalTo(0)
@@ -85,13 +97,13 @@ class MainChannelsCategoryCellView: UIView {
             make.height.equalTo(170)
         }
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
@@ -99,9 +111,13 @@ class MainChannelsCategoryCellView: UIView {
     }
 }
 
-extension MainChannelsCategoryCellView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MainChannelsTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.category.channels.count
+        if let _ = self.category {
+            return self.category.channels.count
+        } else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

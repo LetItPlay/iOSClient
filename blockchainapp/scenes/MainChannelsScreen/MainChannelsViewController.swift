@@ -43,6 +43,8 @@ class MainChannelsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.register(MainChannelsTableViewCell.self, forCellReuseIdentifier: MainChannelsTableViewCell.cellIdentifier)
+        
         self.tableView.refreshControl = UIRefreshControl()
         self.tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         self.tableView.refreshControl?.beginRefreshing()
@@ -77,17 +79,18 @@ extension MainChannelsViewController: UITableViewDelegate, UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        let contentView = MainChannelsCategoryCellView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 217), category: self.viewModel.categories[indexPath.row])
+        let cell = tableView.dequeueReusableCell(withIdentifier: MainChannelsTableViewCell.cellIdentifier) as! MainChannelsTableViewCell
         
-        contentView.onSeeAll = {[weak self] category in
+        cell.fill(category: self.viewModel.categories[indexPath.row])
+
+        cell.onSeeAll = {[weak self] category in
             self?.emitter?.send(event: MainChannelsEvent.showAllChannels(index: indexPath.row))
         }
-        contentView.onChannelTap = {[weak self] index in
+        
+        cell.onChannelTap = {[weak self] index in
             self?.emitter?.send(event: MainChannelsEvent.showChannel(index: IndexPath(row: index, section: indexPath.row)))
         }
         
-        cell.addSubview(contentView)
         return cell
     }
     

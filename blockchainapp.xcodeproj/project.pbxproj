@@ -105,6 +105,7 @@
 		9D16A162209B434A00E5116D /* ChannelCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D16A161209B434A00E5116D /* ChannelCategory.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
 		9D861CA2209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */; };
+		9D861CA4209C74F700DCBB60 /* MainChannelsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D861CA3209C74F700DCBB60 /* MainChannelsTableViewCell.swift */; };
 		9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */; };
 		9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
@@ -119,7 +120,6 @@
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
 		9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */; };
-		9DFAB815209B121D00796C77 /* MainChannelsCategoryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAB814209B121D00796C77 /* MainChannelsCategoryCellView.swift */; };
 		9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
 		9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */; };
@@ -288,6 +288,7 @@
 		9D16A161209B434A00E5116D /* ChannelCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategory.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
 		9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsCategotyCollectionViewCell.swift; sourceTree = "<group>"; };
+		9D861CA3209C74F700DCBB60 /* MainChannelsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsTableViewCell.swift; sourceTree = "<group>"; };
 		9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsView.swift; sourceTree = "<group>"; };
 		9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsEmitter.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
@@ -305,7 +306,6 @@
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
-		9DFAB814209B121D00796C77 /* MainChannelsCategoryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsCategoryCellView.swift; sourceTree = "<group>"; };
 		9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategoryViewModel.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
 		9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
@@ -530,11 +530,12 @@
 			children = (
 				368920A8208E0F8500D83278 /* ChannelsSegmentViewController.swift */,
 				368920AC208E230F00D83278 /* MainChannelsViewController.swift */,
+				9D861CA3209C74F700DCBB60 /* MainChannelsTableViewCell.swift */,
+				9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */,
 				9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */,
 				9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */,
 				9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */,
 				9DC6C2412091D21300C980D4 /* MainChannelModel.swift */,
-				9DFAB813209B11E100796C77 /* MainChannelsCategoryCell */,
 			);
 			path = MainChannelsScreen;
 			sourceTree = "<group>";
@@ -649,15 +650,6 @@
 				9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */,
 			);
 			path = Others;
-			sourceTree = "<group>";
-		};
-		9DFAB813209B11E100796C77 /* MainChannelsCategoryCell */ = {
-			isa = PBXGroup;
-			children = (
-				9DFAB814209B121D00796C77 /* MainChannelsCategoryCellView.swift */,
-				9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */,
-			);
-			path = MainChannelsCategoryCell;
 			sourceTree = "<group>";
 		};
 		9DFAE6F12060F5EC00EF7C4D /* TrackInfo */ = {
@@ -1176,7 +1168,6 @@
 				CF4453751F666BB800660474 /* DBModels.swift in Sources */,
 				0184A02D1FC1AD0B009FF5CB /* FeedTableViewCell.swift in Sources */,
 				36706D552031A809002097E7 /* CategoryChannelsEmitter.swift in Sources */,
-				9DFAB815209B121D00796C77 /* MainChannelsCategoryCellView.swift in Sources */,
 				36813A6E203D671E00EAE49A /* MediumChannelViewModel.swift in Sources */,
 				36952672202C610100F97E1E /* ProfileModel.swift in Sources */,
 				01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */,
@@ -1229,6 +1220,7 @@
 				361CD01A20482A410097F8E9 /* Common.swift in Sources */,
 				01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */,
 				9D0B18F7207F67D900CBE87B /* OthersModel.swift in Sources */,
+				9D861CA4209C74F700DCBB60 /* MainChannelsTableViewCell.swift in Sources */,
 				365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */,
 				9D16A162209B434A00E5116D /* ChannelCategory.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,

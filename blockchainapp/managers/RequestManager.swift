@@ -83,7 +83,7 @@ enum RequestError: Error {
 }
 
 class RequestManager {
-    static let server: String = "https://api.letitplay.io"
+    static let server: String = "https://beta.api.letitplay.io"
     static let shared: RequestManager = RequestManager()
     
     private var jwt: String?
@@ -93,7 +93,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            return self.request(request: request).retry().flatMap ({ (result) -> Observable<[ChannelCategory]> in
+            return self.request(request: request).flatMap ({ (result) -> Observable<[ChannelCategory]> in
                 print(url.absoluteString)
                 switch result {
                 case .value(let data):
@@ -119,7 +119,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Channel> in
+            let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Channel> in
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
@@ -173,7 +173,7 @@ class RequestManager {
         if let url = urlString.url() {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
+            return self.request(request: request).flatMap({ (result) -> Observable<([Track],[Channel])> in
                 print(url.absoluteString)
                 switch result {
                 case .value(let data):
@@ -211,7 +211,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            return self.request(request: request).retry().flatMap({ (result) -> Observable<[Track]> in
+            return self.request(request: request).flatMap({ (result) -> Observable<[Track]> in
                 print(url.absoluteString)
                 switch result {
                 case .value(let data):
