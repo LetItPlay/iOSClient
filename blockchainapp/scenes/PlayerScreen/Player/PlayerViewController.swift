@@ -172,15 +172,16 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         imageView.isUserInteractionEnabled = false
+        imageView.image = UIImage(named: "trackPlaceholder")
         
         return imageView
     }()
     let coverImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 7
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
-        
+        imageView.image = UIImage(named: "trackPlaceholder")
         imageView.isUserInteractionEnabled = false
         
         return imageView
@@ -232,37 +233,41 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
     let trackChangeButtons: (next: UIButton, prev: UIButton) = {
         let arr = [UIButton(), UIButton()]
         arr.forEach({ (button) in
-            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
-            button.imageView?.contentMode = .scaleAspectFit
+            //            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
+            button.contentHorizontalAlignment = .fill
+            button.contentVerticalAlignment = .fill
+            //            button.layer.masksToBounds = true
             button.snp.makeConstraints({ (make) in
                 make.width.equalTo(button.snp.height)
             })
         })
-        for i in 0..<arr.count {
-            arr[i].tag = i + 1
-        }
-        arr.first!.setImage(UIImage(named: "prevInactive"), for: .normal)
-        arr.last!.setImage(UIImage(named: "nextInactive"), for: .normal)
         
-        return (next: arr.last!, prev: arr.first!)
+        arr.first!.setImage(UIImage(named: "nextInactive"), for: .normal)
+        arr.first!.setBackgroundImage(UIImage(named: "nextActive"), for: .highlighted)
+        arr.last!.setImage(UIImage(named: "prevInactive"), for: .normal)
+        arr.last!.setBackgroundImage(UIImage(named: "prevActive"), for: .highlighted)
+        
+        return (next: arr.first!, prev: arr.last!)
     }()
     
     let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
         let arr = [UIButton(), UIButton()]
         arr.forEach({ (button) in
-            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
-            button.imageView?.contentMode = .scaleAspectFit
+            //            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
+            button.contentHorizontalAlignment = .fill
+            button.contentVerticalAlignment = .fill
+            //            button.layer.masksToBounds = true
             button.snp.makeConstraints({ (make) in
                 make.width.equalTo(button.snp.height)
             })
         })
-        for i in 0..<arr.count {
-            arr[i].tag = i + 3
-        }
-        arr.last!.setImage(UIImage(named: "playerForw"), for: .normal)
-        arr.first!.setImage(UIImage(named: "playerBackw"), for: .normal)
         
-        return (forw: arr.last!, backw: arr.first!)
+        arr.first!.setImage(UIImage(named: "playerForw"), for: .normal)
+        arr.first!.setBackgroundImage(UIImage(named: "playerForwActive"), for: .highlighted)
+        arr.last!.setImage(UIImage(named: "playerBackw"), for: .normal)
+        arr.last!.setBackgroundImage(UIImage(named: "playerBackwActive"), for: .highlighted)
+        
+        return (forw: arr.first!, backw: arr.last!)
     }()
     
     func viewInitialize() {
@@ -285,11 +290,11 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let imageSpacer = UIView()
         blur.contentView.addSubview(imageSpacer)
         imageSpacer.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(37)//(52)
+            make.top.equalToSuperview().inset(52)//(37)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.width.equalTo(imageSpacer.snp.height)
-            //            make.bottom.equalTo(self.trackProgressView.snp.top)
+//            make.width.equalTo(imageSpacer.snp.height)
+            make.bottom.equalTo(self.trackProgressView.snp.top)
         }
         
         imageSpacer.addSubview(coverImageView)
@@ -350,30 +355,43 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         blur.contentView.addSubview(trackSeekButtons.backw)
         trackSeekButtons.backw.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
-            make.right.equalTo(playButton.snp.left).inset(-12)
+            make.right.equalTo(playButton.snp.left).inset(-2)
             
-            make.width.equalTo(playButton.snp.width).inset(10)
+            make.width.equalTo(playButton.snp.width)//.inset(10)
+//            make.centerY.equalTo(playButton)
+//            make.right.equalTo(playButton.snp.left).inset(-12)
+//
+//            make.width.equalTo(playButton.snp.width).inset(10)
         }
         
         blur.contentView.addSubview(trackSeekButtons.forw)
         trackSeekButtons.forw.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
-            make.left.equalTo(playButton.snp.right).inset(-12)
-            make.width.equalTo(playButton.snp.width).inset(10)
+            make.left.equalTo(playButton.snp.right).inset(-2)
+            make.width.equalTo(playButton.snp.width)//.inset(10)
+//            make.centerY.equalTo(playButton)
+//            make.left.equalTo(playButton.snp.right).inset(-12)
+//            make.width.equalTo(playButton.snp.width).inset(10)
         }
         
         blur.contentView.addSubview(trackChangeButtons.next)
         trackChangeButtons.next.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
-            make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)
-            make.width.equalTo(playButton.snp.width).inset(10)
+            make.left.equalTo(trackSeekButtons.forw.snp.right).inset(10)
+            make.width.equalTo(playButton.snp.width)//.inset(10)
+//            make.centerY.equalTo(playButton)
+//            make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)
+//            make.width.equalTo(playButton.snp.width).inset(10)
         }
         
         blur.contentView.addSubview(trackChangeButtons.prev)
         trackChangeButtons.prev.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
-            make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)
-            make.width.equalTo(playButton.snp.width).inset(10)
+            make.right.equalTo(trackSeekButtons.backw.snp.left).inset(10)
+            make.width.equalTo(playButton.snp.width)//.inset(10)
+//            make.centerY.equalTo(playButton)
+//            make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)
+//            make.width.equalTo(playButton.snp.width).inset(10)
         }
         
         blur.contentView.addSubview(trackNameLabel)
