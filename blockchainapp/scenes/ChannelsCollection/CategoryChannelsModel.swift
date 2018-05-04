@@ -153,9 +153,6 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
 
         case .category:
             break
-
-        default:
-            break
         }
     }
 }

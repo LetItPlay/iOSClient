@@ -14,12 +14,7 @@ enum Language: String {
 }
 
 class UserSettings {
-    static var token: String {
-        get { return token }
-        set {
-            token = newValue
-        }
-    }
+    static var token: String = ""
     
     static var userIdentifier: UUID {
         get {

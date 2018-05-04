@@ -427,7 +427,7 @@ class RequestManager {
             let postString = "uuid=\(UserSettings.userIdentifier)"
             request.httpBody = postString.data(using: .utf8)
             
-            self.request(request: request).retry().subscribe(onNext: { result in
+            let _ = self.request(request: request).retry().subscribe(onNext: { result in
                 switch result {
                 case .value(let data):
                     do {

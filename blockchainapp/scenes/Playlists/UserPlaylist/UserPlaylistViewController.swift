@@ -191,7 +191,7 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         cell.track = self.viewModel.tracks[indexPath.item]
         
         cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row, viewController: self!))
+            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
         }
         
         return cell

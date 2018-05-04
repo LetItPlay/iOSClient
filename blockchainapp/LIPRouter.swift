@@ -24,7 +24,7 @@ class LIPRouter: DPLDeepLinkRouter {
 		}
 		
 		self.register("search/:searchString") {[weak self] (link) in
-			if let text = link?.routeParameters["searchString"] as? String {
+			if let _ = link?.routeParameters["searchString"] as? String {
 				
 			}
 		}
