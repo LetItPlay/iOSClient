@@ -16,7 +16,6 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-	let router = LIPRouter()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
@@ -42,11 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
 		}
         
-        let tab =  MainTabViewController()
-        self.router.tabController = tab
-        vc = tab
-		
-		self.window?.rootViewController = vc
+		self.window?.rootViewController = MainRouter.shared.mainController
 		self.window?.makeKeyAndVisible()
 
 		Fabric.with([Crashlytics.self])

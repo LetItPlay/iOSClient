@@ -85,7 +85,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
     func showSpeeds() {
         let alertVC = UIAlertController.init(title: "Speeds", message: nil, preferredStyle: .actionSheet)
         self.viewModel.speeds.enumerated().map { (index, title) -> UIAlertAction in
-            return UIAlertAction.init(title: title, style: .default, handler: { (_) in
+            return UIAlertAction.init(title: title, style: .default, handler: { (action) in
                 print("speed is \(title) and index is \(index)")
                 self.emitter.setSpeed(index: index)
             })

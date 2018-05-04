@@ -8,6 +8,7 @@ import RxSwift
 import Alamofire
 import SwiftyJSON
 import RealmSwift
+import Action
 
 enum TracksRequest {
     case feed(channels: [Int], offset: Int, count: Int)
@@ -68,8 +69,20 @@ class RequestManager {
     static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
     
-    private var jwt: String?
-
+    private var jwt: Variable<String?> = Variable<String?>(nil)
+    var renewTokenAction: Action<Bool,String>!
+    let disposeBag = DisposeBag()
+    
+    init() {
+        self.renewTokenAction = Action<Bool, String>.init(workFactory: { (_) -> Observable<String> in
+            return self.renewToken()
+        })
+        
+        self.renewTokenAction.elements.subscribe(onNext: { jwt in
+            self.jwt.value = jwt
+        }).disposed(by: disposeBag)
+    }
+    
 	func channel(id: Int) -> Observable<Channel> {
 		let urlString = RequestManager.server + "/stations/\(id)"
 		if let url = URL(string: urlString) {
@@ -403,37 +416,38 @@ class RequestManager {
 //        }
 //    }
     
-    private func renewToken() -> Single<String> {
+    private func renewToken() -> Observable<String> {
         let urlString = RequestManager.server + "/auth/signup?uid=\(UserSettings.userIdentifier)&username=\(UserSettings.name)"
         if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
             request.httpMethod = "POST"
             
-            return Single<String>.create(subscribe: { single -> Disposable in
+            return Observable<String>.create({ (observer) -> Disposable in
                 let dataReq: DataRequest = Alamofire.request(request).responseData { (response: DataResponse<Data>) in
                     if let _ = response.error {
-                        single(.error(RequestError.noConnection))
+                        observer.onError(RequestError.noConnection)
                         return
                     }
                     guard let resp = response.response, let data = response.data else {
-                        single(.error(RequestError.noConnection))
+                        observer.onError(RequestError.noConnection)
                         return
                     }
                     switch resp.statusCode {
                     case 200:
                         let jwt = (resp.allHeaderFields["Authorization"] as? String ?? "").replacingOccurrences(of: "Bearer ", with: "")
-                        single(.success(jwt))
+                        observer.onNext(jwt)
                     default:
-                        single(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+                        observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
                     }
+                    observer.onCompleted()
                 }
                 return Disposables.create { print("🔑 JWT signal disposed"); dataReq.cancel()}
             })
         }
-        return Single<String>.error(RequestError.invalidURL)
+        return Observable<String>.error(RequestError.invalidURL)
     }
     
     private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
-        guard let jwt = self.jwt else {
+        guard let jwt = self.jwt.value else {
             return Observable<Result<Data>>.error(RequestError.unAuth)
         }
         var requsest = req
@@ -456,50 +470,39 @@ class RequestManager {
                 default:
                     observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
                 }
+                observer.onCompleted()
             }
             return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
         })
     }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
-        var req = request
-//        return Observable<Result<Data>>.create({ (observer) -> Disposable in
-//            Alamofire.request(req).responseData { (response: DataResponse<Data>) in
-//                if let _ = response.error {
-//                    observer.onError(RequestError.noConnection)
-//                    observer.onCompleted()
-//                    return
+//        let signal = simpleRequest(req: request).retryWhen({ (obs) -> Observable<String> in
+//            return obs.flatMap({ (error) -> Observable<String> in
+//                switch error {
+//                case RequestError.unAuth:
+//                    return self.renewToken().do(onNext: { (jwt) in
+//                        self.jwt.value = jwt
+//                    })
+//                default: return Observable<String>.just(self.jwt.value ?? "")
 //                }
-//                if let resp = response.response, let data = response.data {
-//                    if resp.statusCode == 200 {
-//                        observer.onNext(.value(data))
-//                    } else {
-//                        observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
-//                    }
-//                } else {
-//                    observer.onError(RequestError.noConnection)
-//                }
-//                observer.onCompleted()
-//            }
-//            return Disposables.create {
-//                let empty = "without url"
-//                print("Request \(req.url?.absoluteString ?? empty) signal disposed")
-//            }
+//            })
 //        })
+//
         let signal = simpleRequest(req: request)
             .catchError({ (error) -> Observable<Result<Data>> in
+                print(request)
                 switch error {
                 case RequestError.unAuth:
                     return self.renewToken().asObservable().do(onNext: { (jwt) in
-                        self.jwt = jwt
+                        self.jwt.value = jwt
                     }).flatMap({ _ -> Observable<Result<Data>> in
                         return self.simpleRequest(req: request)
                     })
                 default: return Observable<Result<Data>>.error(error)
                 }
-            })
-//            .retry(1)
+            }).retry()
+
         return signal
 	}
 }
-

@@ -39,7 +39,9 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     
     init(trackId: Int)
     {
-        self.getData(trackId: trackId)
+        if trackId != -1 {
+            self.getData(trackId: trackId)
+        }
         
         let _ = InAppUpdateManager.shared.subscribe(self)
     }
