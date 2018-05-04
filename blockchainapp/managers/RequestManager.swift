@@ -505,7 +505,7 @@ class RequestManager {
     }
     
     func request(request: URLRequest) -> Observable<Result<Data>>{
-        var req = request
+        _ = request
         let signal = simpleRequest(req: request)
             .catchError({ (error) -> Observable<Result<Data>> in
                 switch error {

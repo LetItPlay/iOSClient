@@ -131,12 +131,10 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //            }
 //        }
 	}
-	
-	func hidePlayer() {
-//        self.playerHandler.main.dismiss(animated: true) {
-//			print("player dismissed")
-//		}
-	}
+    
+    func hidePlayer() {
+        
+    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -27,10 +27,6 @@ extension PlayerModel: PlayerEventHandler {
 		}
 	}
 	
-    func channelPressed() {
-        //TODO: Close player and push channel screen
-    }
-	
 	func setSpeed(index: Int) {
         self.player.set(rate: self.speedConstants[index].value)
         self.playerDelegate?.update(currentSpeedIndex: index)
@@ -41,9 +37,5 @@ extension PlayerModel: PlayerEventHandler {
 		default:
 			break
 		}
-	}
-	
-	func morePressed() {
-        //TODO: Show more dialog
 	}
 }

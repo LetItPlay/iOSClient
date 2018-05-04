@@ -52,9 +52,7 @@ class MainRouter: Router {
 	func mainPlayer(show: Bool, index: Int = 1) {
 		if !self.playerHandler.main.isBeingPresented{
 			UIApplication.shared.beginIgnoringInteractionEvents()
-//            self.playerIsPresenting = true
 			self.mainController.present(self.playerHandler.main, animated: true) {
-//				self.playerIsPresenting = false
 				UIApplication.shared.endIgnoringInteractionEvents()
 			}
 		}
@@ -93,7 +91,10 @@ class MainRouter: Router {
 	}
     
     func hidePlayer() {
-        self.delegate?.hidePlayer()
+        // TODO: hide player
+        self.playerHandler.main.dismiss(animated: true) {
+            print("player dismissed")
+        }
     }
     
     func showOthers(track: Any) {
@@ -149,5 +150,4 @@ extension MainRouter: SearchViewControllerDelegate {
 
 protocol MainRouterDelegate {
     func showAllChannels()
-    func hidePlayer()
 }

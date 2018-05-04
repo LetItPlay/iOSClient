@@ -3,9 +3,7 @@ import MediaPlayer
 
 protocol PlayerEventHandler: ModelProtocol {
     func execute(event: PlayerEvent)
-    func channelPressed()
     func setSpeed(index: Int)
-    func morePressed()
 }
 
 protocol PlaylistEventHandler: ModelProtocol {
