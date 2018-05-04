@@ -18,9 +18,6 @@ enum TracksRequest {
     case magic
 	case allTracks
 	case search(text: String, offset: Int, count: Int)
-    case subscriptions
-    case categories
-    case stationsFor(category: Int)
 }
 
 enum TrackUpdateRequest {
@@ -48,12 +45,6 @@ fileprivate extension TracksRequest {
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
-        case .subscriptions:
-            return "user/favorites/channels"
-        case .categories:
-            return "catalog"
-        case .stationsFor(let category):
-            return "categories/\(category)/stations"
         default: return "tracks"
         }
     }
@@ -75,7 +66,31 @@ class RequestManager {
 
     static let server: String = "https://beta.api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
-
+    
+    func categories() -> Observable<[ChannelCategory]> {
+        let urlString = RequestManager.server + "/catalog"
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            return self.request(request: request).retry().flatMap ({ (result) -> Observable<[ChannelCategory]> in
+                print(url.absoluteString)
+                switch result {
+                case .value(let data):
+                    if let json = try? JSON(data: data) {
+                        
+                        let categories: [ChannelCategory] = (json.array?.map({ChannelCategory(json: $0)}))! as! [ChannelCategory]
+                        
+                        return Observable<[ChannelCategory]>.just(categories)
+                    }
+                    return Observable<[ChannelCategory]>.error(RequestError.invalidJSON)
+                case .error(let error):
+                    return Observable<[ChannelCategory]>.error(error)
+                }
+            })
+        }
+        return Observable.error(RequestError.invalidURL)
+    }
+    
 	func channel(id: Int) -> Observable<Channel> {
 		let urlString = RequestManager.server + "/stations/\(id)"
 		if let url = URL(string: urlString) {
@@ -166,8 +181,8 @@ class RequestManager {
 			})
 		}
 		return Observable.error(RequestError.invalidURL)
-	}
-	
+    }
+    
     func tracks(req: TracksRequest) -> Observable<[Track]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {

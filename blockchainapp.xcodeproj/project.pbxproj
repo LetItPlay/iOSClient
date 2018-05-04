@@ -393,6 +393,7 @@
 				CF44535A1F55406B00660474 /* Managers.swift */,
 				FD10BE55E82F75A804CA6B47 /* RequestManager.swift */,
 				01418561203C41EA004C69F0 /* ServerUpdateManager.swift */,
+				36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -407,7 +408,6 @@
 				9DA077CE20345071002BF631 /* ChannelEmitter.swift */,
 				9DA077CC2034505F002BF631 /* ChannelModel.swift */,
 				9DA077CA20345055002BF631 /* ChannelViewModel.swift */,
-				9DA077BE20343650002BF631 /* FullChannelViewModel.swift */,
 			);
 			path = ChannelScreen;
 			sourceTree = "<group>";
@@ -420,7 +420,6 @@
 				361CD015204814A60097F8E9 /* ProfileHeaderView.swift */,
 				361CD017204815140097F8E9 /* LikeHeader.swift */,
 				01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */,
-				3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */,
 				365B0A1A20319817006458F9 /* Likes */,
 				365B0A19203197D7006458F9 /* Profile */,
 			);
@@ -494,7 +493,6 @@
 				3626C8D12036A6800016772B /* SearchEmitter.swift */,
 				3626C8CF2036A6790016772B /* SearchModel.swift */,
 				3626C8CD2036A6730016772B /* SearchViewModel.swift */,
-				3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -505,7 +503,6 @@
 				365653FC20358FA90072087F /* PlaylistsEmitter.swift */,
 				365653F820358F980072087F /* PlaylistsModel.swift */,
 				365653FA20358FA10072087F /* PlaylistsViewModel.swift */,
-				365654012035A4550072087F /* PlaylistViewModel.swift */,
 			);
 			path = Playlists;
 			sourceTree = "<group>";
@@ -539,7 +536,6 @@
 				9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */,
 				9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */,
 				9DC6C2412091D21300C980D4 /* MainChannelModel.swift */,
-				9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */,
 				9DFAB813209B11E100796C77 /* MainChannelsCategoryCell */,
 			);
 			path = MainChannelsScreen;
@@ -560,7 +556,6 @@
 			children = (
 				36045FAD204D8A87003C7406 /* UserPlaylistBuilder.swift */,
 				36E155A2204D6F1800C65DBE /* UserPlaylistViewController.swift */,
-				36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */,
 				36045FA7204D8338003C7406 /* UserPlaylistViewModel.swift */,
 				36045FA9204D8340003C7406 /* UserPlaylistModel.swift */,
 				36045FAB204D8347003C7406 /* UserPlaylistEmitter.swift */,
@@ -576,9 +571,32 @@
 				36706D542031A809002097E7 /* CategoryChannelsEmitter.swift */,
 				36706D502031A7F3002097E7 /* CategoryChannelsModel.swift */,
 				36706D522031A801002097E7 /* CategoryChannelsViewModel.swift */,
-				36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */,
 			);
 			path = ChannelsCollection;
+			sourceTree = "<group>";
+		};
+		9D2A248E209C1A290034F007 /* Tracks */ = {
+			isa = PBXGroup;
+			children = (
+				0160BB222031596600D7C3CB /* Track.swift */,
+				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
+				3604E81B20330E4100623C55 /* SmallTrackViewModel.swift */,
+			);
+			path = Tracks;
+			sourceTree = "<group>";
+		};
+		9D2A248F209C1A2F0034F007 /* Channels */ = {
+			isa = PBXGroup;
+			children = (
+				0160BB2420315AA400D7C3CB /* Channel.swift */,
+				9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */,
+				3626C8D32036A81E0016772B /* SearchChannelViewModel.swift */,
+				36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */,
+				36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */,
+				9DA077BE20343650002BF631 /* FullChannelViewModel.swift */,
+				9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */,
+			);
+			path = Channels;
 			sourceTree = "<group>";
 		};
 		9D4DB1CC206A8B1D00B767FE /* Playlists */ = {
@@ -630,7 +648,6 @@
 				9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */,
 				9D0B18F6207F67D900CBE87B /* OthersModel.swift */,
 				9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */,
-				9D0B18FC207F775800CBE87B /* ShareInfo.swift */,
 			);
 			path = Others;
 			sourceTree = "<group>";
@@ -719,13 +736,14 @@
 		CF4453571F553FE400660474 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				9D2A248F209C1A2F0034F007 /* Channels */,
+				9D2A248E209C1A290034F007 /* Tracks */,
 				01FF376B201072B7007F57E0 /* AudioCore */,
 				CF4453581F55400F00660474 /* MainModels.swift */,
-				0160BB2420315AA400D7C3CB /* Channel.swift */,
-				0160BB222031596600D7C3CB /* Track.swift */,
 				01E1991B1FE8DBB00016060E /* UserSettings.swift */,
-				9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */,
 				9D16A161209B434A00E5116D /* ChannelCategory.swift */,
+				9D0B18FC207F775800CBE87B /* ShareInfo.swift */,
+				365654012035A4550072087F /* PlaylistViewModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -768,7 +786,6 @@
 				0158129D1FD70793002828F5 /* FeedBuilders.swift */,
 				CF4453611F56CA2E00660474 /* FeedViewController.swift */,
 				0184A02C1FC1AD0B009FF5CB /* FeedTableViewCell.swift */,
-				01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */,
 				369301B62088A519003D11BC /* Feed */,
 			);
 			path = Feed;
@@ -780,7 +797,6 @@
 				0158129B1FD70561002828F5 /* CategoryChannelsBuilder.swift */,
 				CF4453681F57F4D200660474 /* CategoryChannelsViewController.swift */,
 				015812991FD6ACC9002828F5 /* ChannelTableViewCell.swift */,
-				36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */,
 			);
 			path = CategoryChannels;
 			sourceTree = "<group>";
