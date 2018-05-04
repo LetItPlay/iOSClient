@@ -103,6 +103,8 @@ class ProfileModel: ProfileModelProtocol {
             newLanguage = .en
         case "Français":
             newLanguage = .fr
+        case "Chinese": // TODO: in Chinese
+            newLanguage = .zh
         default:
             break
         }

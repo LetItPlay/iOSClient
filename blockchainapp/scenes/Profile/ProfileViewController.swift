@@ -125,6 +125,8 @@ class ProfileViewController: UIViewController {
             currentLanguage = "English"
         case .fr:
             currentLanguage = "Français"
+        case .zh:
+            currentLanguage = "Chinese" // TODO: Chinese in Chinese
         default:
             break
         }
@@ -137,7 +139,7 @@ class ProfileViewController: UIViewController {
         let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
         languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
-        for language in ["English", "Français", "Русский"] {
+        for language in ["English", "Français", "Русский", "Chinese"] { // TODO: Chinese in Chinese
             if language == currentLanguage {
                 languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
 //                    self.profileView.emitter?.send(event: ProfileEvent.set(language: speed))

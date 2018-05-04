@@ -64,9 +64,6 @@ class PlayerTableViewCell: UITableViewCell {
 			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
 			channelNameLabel.text = track?.author
 			
-//			self.timeLabel.text = (track?.publishedAt ?? Date()).formatString()
-			
-//			dataLabels[.listens]?.setData(data: Int64(track?.listenCount ?? 0))
 			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
 		}
 	}
@@ -99,21 +96,13 @@ class PlayerTableViewCell: UITableViewCell {
 		}
 		
 		let timeCount = IconedLabel(type: .time)
-//		let listensCount = IconedLabel(type: .listens)
 		let playingIndicator = IconedLabel(type: .playingIndicator)
 		
 		self.contentView.addSubview(timeCount)
 		timeCount.snp.makeConstraints { (make) in
 			make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
 			make.left.equalTo(trackNameLabel)
-			//			make.bottom.equalToSuperview().inset(12)
 		}
-		
-//		self.contentView.addSubview(listensCount)
-//		listensCount.snp.makeConstraints { (make) in
-//			make.left.equalTo(timeCount.snp.right).inset(-10)
-//			make.centerY.equalTo(timeCount)
-//		}
 		
 		self.contentView.addSubview(playingIndicator)
 		playingIndicator.snp.makeConstraints { (make) in
@@ -131,6 +120,7 @@ class PlayerTableViewCell: UITableViewCell {
             make.right.equalTo(-16)
             make.bottom.equalTo(-8)
         }
+        showOthersButton.isHidden = true
 		
 		self.dataLabels = [.time: timeCount, .playingIndicator: playingIndicator]
 		

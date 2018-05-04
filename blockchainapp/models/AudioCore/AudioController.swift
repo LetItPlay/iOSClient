@@ -13,16 +13,16 @@ import SDWebImage
 import UIKit
 import MediaPlayer
 
-class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
-	
-	enum AudioStateNotification: String {
-		case playing = "Playing",
-		paused = "Paused"
+enum AudioStateNotification: String {
+    case playing = "Playing",
+    paused = "Paused"
+    
+    func notification() -> NSNotification.Name {
+        return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
+    }
+}
 
-		func notification() -> NSNotification.Name {
-			return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
-		}
-	}
+class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 	
 	static let main = AudioController()
 	

@@ -30,6 +30,7 @@
 		019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2541FE27DEE0007FDEE /* FollowButton.swift */; };
 		019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */; };
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
+		01A9A2E6208F6021009111AD /* PlayerModelProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A9A2E5208F6021009111AD /* PlayerModelProtocols.swift */; };
 		01AA891D1FC45D0500D50C13 /* UndBlurLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */; };
 		01AA89211FC5612500D50C13 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89201FC5612500D50C13 /* ProfileViewController.swift */; };
 		01AA89231FC5989E00D50C13 /* SmallTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */; };
@@ -44,6 +45,8 @@
 		01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991B1FE8DBB00016060E /* UserSettings.swift */; };
 		01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
+		01E59B49209046A0001E7A29 /* PlayerBottomModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */; };
+		01E59B4B2090AC48001E7A29 /* blockchainapp.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */; };
 		01EFC8712019AEA9005321B9 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */; };
 		01EFC873201A21D6005321B9 /* MainPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC872201A21D6005321B9 /* MainPlayerViewController.swift */; };
 		01EFC877201A2421005321B9 /* PlayingPlaylistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EFC876201A2421005321B9 /* PlayingPlaylistViewController.swift */; };
@@ -204,6 +207,7 @@
 		019FB2541FE27DEE0007FDEE /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
 		019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
+		01A9A2E5208F6021009111AD /* PlayerModelProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModelProtocols.swift; sourceTree = "<group>"; };
 		01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UndBlurLabel.swift; sourceTree = "<group>"; };
 		01AA89201FC5612500D50C13 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		01AA89221FC5989E00D50C13 /* SmallTrackTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallTrackTableViewCell.swift; sourceTree = "<group>"; };
@@ -220,6 +224,8 @@
 		01E1991B1FE8DBB00016060E /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
+		01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBottomModelExtension.swift; sourceTree = "<group>"; };
+		01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = blockchainapp.entitlements; sourceTree = "<group>"; };
 		01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		01EFC872201A21D6005321B9 /* MainPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerViewController.swift; sourceTree = "<group>"; };
 		01EFC876201A2421005321B9 /* PlayingPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingPlaylistViewController.swift; sourceTree = "<group>"; };
@@ -288,6 +294,9 @@
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
+		9DA3E47620933FE900979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		9DA3E47720933FE900979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		9DA3E47820933FEA00979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelViewModel.swift; sourceTree = "<group>"; };
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
@@ -336,7 +345,7 @@
 		FD10B17549A87867E48B318C /* AppUI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppUI.swift; sourceTree = "<group>"; };
 		FD10B4E092F837E850DC5B81 /* PlayerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
 		FD10B60FFE491AF62B1A26A6 /* PlayerScreenBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerScreenBuilder.swift; sourceTree = "<group>"; };
-		FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayerEmitter.swift; path = Player/PlayerEmitter.swift; sourceTree = "<group>"; };
+		FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerEmitter.swift; sourceTree = "<group>"; };
 		FD10BA68475D796F52C8516A /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		FD10BCD04C8F930B5738957F /* PlayerViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewModel.swift; sourceTree = "<group>"; };
 		FD10BE55E82F75A804CA6B47 /* RequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
@@ -433,6 +442,7 @@
 				01EFC8702019AEA9005321B9 /* MiniPlayerView.swift */,
 				FD10BA68475D796F52C8516A /* PlayerViewController.swift */,
 				01C4A9CE207F335E00A4232B /* PlayerModelHandler.swift */,
+				FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -463,18 +473,6 @@
 				01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		01E52E3A1FC7E33900CCFCC2 /* UI Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				01FF376C2010B9E7007F57E0 /* Extensions.swift */,
-				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
-				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
-				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
-				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
-			);
-			path = "UI Extensions";
 			sourceTree = "<group>";
 		};
 		01FF376B201072B7007F57E0 /* AudioCore */ = {
@@ -614,6 +612,7 @@
 			children = (
 				9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */,
 				9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */,
+				01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */,
 			);
 			name = BottomItems;
 			path = ../Player/BottomItems;
@@ -669,7 +668,8 @@
 				9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */,
 				9D931AFB207B26C100BAFC51 /* TrackInfo */,
 			);
-			path = TrackInfo;
+			name = TrackInfo;
+			path = PlayerScreen/TrackInfo;
 			sourceTree = "<group>";
 		};
 		CF44531D1F54139900660474 = {
@@ -697,7 +697,7 @@
 		CF4453281F54139900660474 /* blockchainapp */ = {
 			isa = PBXGroup;
 			children = (
-				01E52E3A1FC7E33900CCFCC2 /* UI Extensions */,
+				01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */,
 				CF44535C1F569D1E00660474 /* extensions */,
 				0160BB262031B12300D7C3CB /* managers */,
 				CF4453571F553FE400660474 /* models */,
@@ -751,6 +751,11 @@
 		CF44535C1F569D1E00660474 /* extensions */ = {
 			isa = PBXGroup;
 			children = (
+				01FF376C2010B9E7007F57E0 /* Extensions.swift */,
+				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
+				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
+				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
+				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
 				FD10B17549A87867E48B318C /* AppUI.swift */,
 				01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */,
 				01510EAC1FDED922003AC116 /* RealmExtension.swift */,
@@ -768,8 +773,8 @@
 				CF4453601F56C9E600660474 /* Feed */,
 				9DFAE6F12060F5EC00EF7C4D /* TrackInfo */,
 				368920A6208E0B1600D83278 /* MainChannelsScreen */,
-				CF4453671F57F42800660474 /* CategoryChannels */,
 				36F7C399201AF71200F99A9A /* ChannelsCollection */,
+				CF4453671F57F42800660474 /* CategoryChannels */,
 				019B3DC41FCC4599008C3B76 /* ChannelScreen */,
 				01510EB01FE0E8EC003AC116 /* SearchScreen */,
 				01AA891F1FC5610500D50C13 /* Profile */,
@@ -809,8 +814,8 @@
 				01C4A9C7207F325100A4232B /* Player */,
 				2CEBFBC9202827C700523FDE /* ArrowView.swift */,
 				FD10B4E092F837E850DC5B81 /* PlayerModel.swift */,
+				01A9A2E5208F6021009111AD /* PlayerModelProtocols.swift */,
 				01C4A9D0207F33AE00A4232B /* PlayerExternalHandlers.swift */,
-				FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */,
 				FD10B60FFE491AF62B1A26A6 /* PlayerScreenBuilder.swift */,
 				9D889862208482D7004A7575 /* BottomItems */,
 			);
@@ -929,6 +934,11 @@
 						DevelopmentTeam = UW85D37HPT;
 						LastSwiftMigration = 0910;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					CF4453391F54139900660474 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -952,6 +962,7 @@
 				en,
 				Base,
 				fr,
+				"zh-Hans",
 			);
 			mainGroup = CF44531D1F54139900660474;
 			productRefGroup = CF4453271F54139900660474 /* Products */;
@@ -970,6 +981,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				01E59B4B2090AC48001E7A29 /* blockchainapp.entitlements in Resources */,
 				CF4453341F54139900660474 /* LaunchScreen.storyboard in Resources */,
 				CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */,
 				01FF31671FD16FBB00FB2B9E /* Assets.xcassets in Resources */,
@@ -1126,6 +1138,7 @@
 				9DC6C2422091D21300C980D4 /* MainChannelModel.swift in Sources */,
 				9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */,
 				9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */,
+				01E59B49209046A0001E7A29 /* PlayerBottomModelExtension.swift in Sources */,
 				36F613CA202D67C000661E48 /* ProfileEmitter.swift in Sources */,
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
 				9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */,
@@ -1246,6 +1259,7 @@
 				FD10B2EE2F2654061F2BDF07 /* PlayerEmitter.swift in Sources */,
 				FD10B63115DA7C32A372FAD9 /* PlayerScreenBuilder.swift in Sources */,
 				FD10BD9E3AFC833C74464712 /* PlayerViewController.swift in Sources */,
+				01A9A2E6208F6021009111AD /* PlayerModelProtocols.swift in Sources */,
 				01C4A9CF207F335E00A4232B /* PlayerModelHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1290,6 +1304,7 @@
 				CF2715301F97C79F0038C81C /* en */,
 				CF27152E1F97C79A0038C81C /* ru */,
 				36F32E86206257E400F67A76 /* fr */,
+				9DA3E47820933FEA00979948 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			path = .;
@@ -1301,6 +1316,7 @@
 				CF44532E1F54139900660474 /* Base */,
 				CF2715291F97BA370038C81C /* ru */,
 				36F32E85206257E400F67A76 /* fr */,
+				9DA3E47720933FE900979948 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			path = .;
@@ -1312,6 +1328,7 @@
 				CF4453331F54139900660474 /* Base */,
 				CF27152A1F97BA370038C81C /* ru */,
 				36F32E84206257E400F67A76 /* fr */,
+				9DA3E47620933FE900979948 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			path = .;
@@ -1440,6 +1457,7 @@
 			baseConfigurationReference = C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = blockchainapp/blockchainapp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -1463,6 +1481,7 @@
 			baseConfigurationReference = D0F0C982204F108F173327BA /* Pods-blockchainapp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = blockchainapp/blockchainapp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 96;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

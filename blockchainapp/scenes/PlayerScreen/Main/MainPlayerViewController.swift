@@ -25,12 +25,13 @@ class MainPlayerViewController: UIViewController {
 	let ind = ArrowView()
     
     var currentTrackID: Int = -1
+    var defaultIndex: Int = 0
 	
 	var isMainPlayer: Bool = true
     
     var vcs: [UIViewController]
 	
-	init(vcs: [UIViewController]) {
+    init(vcs: [UIViewController], defaultIndex: Int? = nil, bottom: MainPlayerBottomIconsView? = nil) {
         self.vcs = vcs
         super.init(nibName: nil, bundle: nil)
 
@@ -50,9 +51,11 @@ class MainPlayerViewController: UIViewController {
 		pageController.view.backgroundColor = .white
 		pageController.delegate = self
 		pageController.dataSource = self
-		if let vc = self.vcs.first {
-			pageController.setViewControllers([vc], direction: .forward, animated: false, completion: nil)
-		}
+        
+        if let def = defaultIndex {
+            self.defaultIndex = def
+        }
+        pageController.setViewControllers([self.vcs[self.defaultIndex]], direction: .forward, animated: false, completion: nil)
 		
         for scroll in pageController.view.subviews{
             if scroll.isKind(of: UIScrollView.self){
@@ -82,8 +85,12 @@ class MainPlayerViewController: UIViewController {
 		
 		self.ind.setFlat(false)
         
-        bottomIconsView = MainPlayerBottomIconsView(frame: self.view.frame)
-        bottomIconsView.emitter = MainPlayerBottomIconsEmitter(model: self)
+        if let bottom = bottom {
+            bottomIconsView = bottom
+        } else {
+            bottomIconsView = MainPlayerBottomIconsView(frame: self.view.frame)
+            bottomIconsView.emitter = MainPlayerBottomIconsEmitter(model: self)
+        }
 		
         self.view.addSubview(bottomIconsView)
         bottomIconsView.snp.makeConstraints { (make) in
@@ -206,7 +213,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 2 {
+        if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 1 {
             return self.vcs[index + 1]
         }
 //		if viewController is MainPlayerViewController {
@@ -254,6 +261,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
 //}
 
 extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
+    
     func likeButtonTouched() {
         if let _ = self.trackInfo.trackInfoHeaderView.viewModel.track {
         self.bottomIconsView.trackLikeButton.setImage(UIImage(named: self.trackInfo.trackInfoHeaderView.viewModel.track.isLiked ? "likeInactiveFeed" : "likeActiveFeed"), for: .normal)
@@ -262,8 +270,8 @@ extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
         }
     }
     
-    func speedButtonTouched(speedAlert: UIAlertController) {
-        self.present(speedAlert, animated: true, completion: nil)
+    func speedButtonTouched() {
+//        self.present(speedAlert, animated: true, completion: nil)
     }
     
     func showOthersButtonTouched() {

@@ -45,7 +45,9 @@ class SwipeActionButton: UIButton {
         
         if let _ = action.customView {
             action.customView?.isUserInteractionEnabled = false
+            
 //            action.customView?.center.y = self.frame.size.height / 2
+
             self.addSubview(action.customView!)
         } else {
             titleLabel?.font = action.font ?? UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.medium)

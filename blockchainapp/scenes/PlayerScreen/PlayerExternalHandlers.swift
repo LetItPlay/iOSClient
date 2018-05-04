@@ -18,7 +18,7 @@ protocol PlaylistProtocol: class {
 extension PlayerModel: PlaylistProtocol {
 	func reload(tracks: [Track]) {
 		self.tracks = tracks
-		//TODO: Update playlist
+        self.updatePlaylist()
 	}
 	
 	func remove(index: Int) {
@@ -31,11 +31,13 @@ extension PlayerModel: PlaylistProtocol {
 			}
 			self.reloadTrack()
 		}
+        self.updatePlaylist()
 	}
 	
 	func clearAll() {
 		self.tracks.removeAll()
 		self.player.make(command: .pause)
+        self.updatePlaylist()
 	}
 }
 
@@ -58,6 +60,7 @@ extension PlayerModel: PlayerProtocol {
 		}
 		self.tracks = tracks
 		self.playlistName = name
+        self.updatePlaylist()
 	}
 	
 	func add(track: Track, inBeginning: Bool) {
@@ -67,7 +70,7 @@ extension PlayerModel: PlayerProtocol {
 			} else {
 				self.tracks.append(track)
 			}
-			// TODO: Update playlist
+            self.updatePlaylist()
 		}
 	}
 	
@@ -76,6 +79,7 @@ extension PlayerModel: PlayerProtocol {
 			self.playlistName == playlistName else {
 				return false
 		}
+		self.playerDelegate?.player(show: true)
 		if self.playingIndex == index {
 			self.execute(event: .plause)
 		} else {

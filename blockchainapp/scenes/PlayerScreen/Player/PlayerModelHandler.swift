@@ -2,7 +2,6 @@ import Foundation
 
 extension PlayerModel: PlayerEventHandler {
 	func execute(event: PlayerEvent) {
-		self.playerDelegate?.player(show: true)
 		switch event {
 		case .plause:
 			switch self.player.status {
@@ -28,12 +27,13 @@ extension PlayerModel: PlayerEventHandler {
 		}
 	}
 	
-	func execute(event: PlayerTrackEvent) {
-		
-	}
+    func channelPressed() {
+        //TODO: Close player and push channel screen
+    }
 	
 	func setSpeed(index: Int) {
 		// TODO: make speed change
+        self.player.set(rate: self.speedConstants[index].value)
 	}
 	
 	func send(event: LifeCycleEvent) {
@@ -44,6 +44,6 @@ extension PlayerModel: PlayerEventHandler {
 	}
 	
 	func morePressed() {
-		
+        //TODO: Show more dialog
 	}
 }

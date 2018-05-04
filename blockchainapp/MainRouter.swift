@@ -23,7 +23,7 @@ class MainRouter: Router {
 	let disposeBag: DisposeBag = DisposeBag()
     
     var delegate: MainRouterDelegate?
-	
+    
 	init() {
 		self.mainController = MainTabViewController(vcs: tabs(), miniPlayer: playerHandler.miniPlayer)
 		self.mainController.router = self
@@ -49,10 +49,10 @@ class MainRouter: Router {
 		self.mainController.popupPlayer(show: show, animated: animated, direction: .up)
 	}
 	
-	func mainPlayer(show: Bool, index: Int = 0) {
+	func mainPlayer(show: Bool, index: Int = 1) {
 		if !self.playerHandler.main.isBeingPresented{
 			UIApplication.shared.beginIgnoringInteractionEvents()
-//			self.playerIsPresenting = true
+//            self.playerIsPresenting = true
 			self.mainController.present(self.playerHandler.main, animated: true) {
 //				self.playerIsPresenting = false
 				UIApplication.shared.endIgnoringInteractionEvents()
@@ -98,7 +98,15 @@ class MainRouter: Router {
     
     func showOthers(track: Any) {
         let controller: UIViewController!
-        controller = self.currentNavigationController?.viewControllers.first
+//        if let currentController = viewController {
+//            controller = currentController
+//        } else {
+        if let vc = self.currentNavigationController?.presentedViewController {
+            controller = vc
+        } else {
+            controller = self.currentNavigationController?.viewControllers.first
+        }
+//        }
 		
         let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)

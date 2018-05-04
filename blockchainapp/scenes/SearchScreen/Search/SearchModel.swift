@@ -24,6 +24,7 @@ protocol SearchEventHandler: class {
     func channelSubscriptionPressedAt(index: Int)
     func searchChanged(string: String)
     func showOthers(index: Int)
+    func showMoreTracks()
 }
 
 protocol SearchModelDelegate: class {
@@ -33,6 +34,7 @@ protocol SearchModelDelegate: class {
     func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
     func showOthers(track: Track)
+    func toUpdate(nothing: Bool)
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
@@ -40,6 +42,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 	var playlistName: String = "Search".localized
     var tracks: [Track] = []
     var channels: [Channel] = []
+    var tracksCount: Int = 100
 	
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     var currentSearchString: String = ""
@@ -57,17 +60,26 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 		searchState.asObservable()
 			.flatMap { tuple -> Observable<([Track], [Channel])> in
 				if let q = tuple.0, q != "" {
-					return RequestManager.shared.search(text: q, offset: tuple.1, count: 100)
+                    return RequestManager.shared.search(text: q, offset: tuple.1, count: self.tracksCount)
 				} else {
 					return Observable.just(([Track](),[Channel]()))
 					
 				}
 			}.subscribe(onNext: {(tuple) in
-				self.playlistName = "Seacrh".localized + " \"\(self.searchState.value.text!)\""
- 				self.tracks = tuple.0
-				self.channels = tuple.1
-				self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
-				self.delegate?.update(channels: self.channels.map({SearchChannelViewModel.init(channel: $0)}))
+                if self.searchState.value.offset == 0 {
+                    self.delegate?.toUpdate(nothing: false)
+                    self.playlistName = "Search".localized + " \"\(self.searchState.value.text)\""
+                    self.tracks = tuple.0
+                    self.channels = tuple.1
+                    self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
+                    self.delegate?.update(channels: self.channels.map({SearchChannelViewModel.init(channel: $0)}))
+                } else {
+                    if tuple.0.count == 0 {
+                        self.delegate?.toUpdate(nothing: true)
+                    }
+                    self.tracks += tuple.0
+                    self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
+                }
 			}).disposed(by: self.disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
@@ -108,6 +120,12 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     
     func showOthers(index: Int) {
         self.delegate?.showOthers(track: self.tracks[index])
+    }
+    
+    func showMoreTracks() {
+        if self.tracks.count != 0 {
+            self.searchState.value.offset = self.tracksCount
+        }
     }
 }
 

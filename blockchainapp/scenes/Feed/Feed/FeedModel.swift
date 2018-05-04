@@ -52,6 +52,8 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
         
+        self.playlistName = isFeed ? "Feed".localized : "Trends".localized
+        
 		dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
 		})
@@ -68,7 +70,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 											   isPlaying: $0.id == playingId) })
 		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
 			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
-            self.delegate?.showEmptyMessage(self.tracks.count == 0)
+            self.delegate?.showEmptyMessage(self.tracks.count == 0 && self.isFeed)
 			self.currentOffest = self.tracks.count
 		}, onCompleted: {
             self.threshold = false
@@ -103,7 +105,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     
     func trackLiked(index: Int) {
         let track = self.tracks[index]
-        let action: TrackAction = track.isLiked ? TrackAction.unlike : TrackAction.like
+        let action: TrackAction = TrackAction.like
         ServerUpdateManager.shared.make(track: track, action: action)
     }
     

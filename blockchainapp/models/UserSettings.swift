@@ -10,21 +10,21 @@ import Foundation
 import UIKit
 
 enum Language: String {
-	case en = "en", ru = "ru", fr = "fr", none = "suicide silence"
+	case en = "en", ru = "ru", fr = "fr", zh = "zh", none = "suicide silence"
 }
 
 class UserSettings {
     static var token: String = ""
     
-    static var userIdentifier: UUID {
+    static var userIdentifier: String {
         get {
             let def = UserDefaults.standard
             
-            if let token = def.value(forKey: "token") {
-                return token as! UUID
+            if let token = def.value(forKey: "token") as? String {
+                return token
             }
             else {
-                let newToken = UUID.init()
+                let newToken = UUID.init().uuidString
                 let def = UserDefaults.standard
                 def.setValue(newToken, forKey: "token")
                 def.synchronize()

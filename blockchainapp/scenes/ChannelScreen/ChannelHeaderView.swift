@@ -196,7 +196,7 @@ class ChannelHeaderView: UIView {
     func fill(channel: FullChannelViewModel, width: CGFloat) -> CGFloat {
         
         channelTitleLabel.text = channel.name
-        infoLabel.text = "No description for this channel".localized
+        infoLabel.text = ""//No description for this channel".localized
         subsView.set(text: channel.subscriptionCount)
         
         if let iconUrl = channel.imageURL {

@@ -5,7 +5,7 @@
 
 import Foundation
 import RxSwift
-import Alamofire.Swift
+import Alamofire
 import SwiftyJSON
 import RealmSwift
 
@@ -78,13 +78,15 @@ enum RequestError: Error {
     case invalidURL
     case invalidJSON
     case noConnection
+    case unAuth
     case serverError(code: Int, msg: String)
 }
 
 class RequestManager {
-    
-    static let server: String = "https://beta.api.letitplay.io"
+    static let server: String = "https://api.letitplay.io"
     static let shared: RequestManager = RequestManager()
+    
+    private var jwt: String?
     
     func categories() -> Observable<[ChannelCategory]> {
         let urlString = RequestManager.server + "/catalog"
@@ -144,7 +146,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Track> in
+            let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Track> in
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
@@ -254,37 +256,37 @@ class RequestManager {
     func channels(req: ChannelsRequest) -> Observable<[Channel]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel]> in
-                switch result {
-                case .value(let data):
-                    do {
-                        let subMan = SubscribeManager.shared
-                        let json = try JSON(data: data)
-                        let channels: [Channel] = json.array?
-                            .map({Channel(json: $0)})
-                            .filter({$0 != nil}).map({channel in
-                                var channel = channel!
-                                channel.isSubscribed = subMan.hasChannel(id: channel.id)
-                                return channel
-                            }) ?? []
-                        let objs = json.array?.map({ (json) -> ChannelObject? in
-                            return ChannelObject.init(json: json)
-                        }).filter({$0 != nil}).map({$0!}) ?? []
-                        let realm = try? Realm()
-                        try? realm?.write {
-                            realm?.add(objs, update: true)
-                        }
-                        return Observable.just(channels)
-                    } catch {
-                        return Observable.error(RequestError.invalidJSON)
-                    }
-                case .error(let error):
-                    return Observable.error(error)
-                }
-            })
-        }
+			var request = URLRequest(url: url)
+			request.httpMethod = "GET"
+			return self.request(request: request).flatMap({ (result) -> Observable<[Channel]> in
+				switch result {
+				case .value(let data):
+					do {
+						let subMan = SubscribeManager.shared
+						let json = try JSON(data: data)
+						let channels: [Channel] = json.array?
+							.map({Channel(json: $0)})
+							.filter({$0 != nil}).map({channel in
+								var channel = channel!
+								channel.isSubscribed = subMan.hasChannel(id: channel.id)
+								return channel
+							}) ?? []
+						let objs = json.array?.map({ (json) -> ChannelObject? in
+							return ChannelObject.init(json: json)
+						}).filter({$0 != nil}).map({$0!}) ?? []
+						let realm = try? Realm()
+						try? realm?.write {
+							realm?.add(objs, update: true)
+						}
+						return Observable.just(channels)
+					} catch {
+						return Observable.error(RequestError.invalidJSON)
+					}
+				case .error(let error):
+					return Observable.error(error)
+				}
+			})
+		}
         return Observable.error(RequestError.invalidURL)
     }
     
@@ -419,55 +421,102 @@ class RequestManager {
         })
     }
     
-    func getToken() {
-        let urlString = RequestManager.server + "/auth"
-        if let url = URL(string: urlString) {
-            var request = URLRequest(url: url)
+//    func getToken() {
+//        let urlString = RequestManager.server + "/auth"
+//        if let url = URL(string: urlString) {
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            let postString = "uuid=\(UserSettings.userIdentifier)"
+//            request.httpBody = postString.data(using: .utf8)
+//
+//            self.request(request: request).subscribe(onNext: { result in
+//                switch result {
+//                case .value(let data):
+//                    do {
+//                        let json = try JSON(data: data)
+//                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
+//                    } catch {
+//                        print(RequestError.invalidJSON)
+//                    }
+//                case .error(let error):
+//                    print(error)
+//                }
+//            })
+//        }
+//    }
+    
+    private func renewToken() -> Single<String> {
+        let urlString = RequestManager.server + "/auth/signup?uid=\(UserSettings.userIdentifier)&username=\(UserSettings.name)"
+        if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
             request.httpMethod = "POST"
-            let postString = "uuid=\(UserSettings.userIdentifier)"
-            request.httpBody = postString.data(using: .utf8)
-            
-            let _ = self.request(request: request).retry().subscribe(onNext: { result in
-                switch result {
-                case .value(let data):
-                    do {
-                        let json = try JSON(data: data)
-                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
-                    } catch {
-                        print(RequestError.invalidJSON)
+            return Single<String>.create(subscribe: { single -> Disposable in
+                let dataReq: DataRequest = Alamofire.request(request).responseData { (response: DataResponse<Data>) in
+                    if let _ = response.error {
+                        single(.error(RequestError.noConnection))
+                        return
                     }
-                case .error(let error):
-                    print(error)
+                    guard let resp = response.response, let data = response.data else {
+                        single(.error(RequestError.noConnection))
+                        return
+                    }
+                    switch resp.statusCode {
+                    case 200:
+                        let jwt = (resp.allHeaderFields["Authorization"] as? String ?? "").replacingOccurrences(of: "Bearer ", with: "")
+                        single(.success(jwt))
+                    default:
+                        single(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
+                    }
                 }
+                return Disposables.create { print("🔑 JWT signal disposed"); dataReq.cancel()}
             })
         }
+        return Single<String>.error(RequestError.invalidURL)
+    }
+    
+    private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
+        guard let jwt = self.jwt else {
+            return Observable<Result<Data>>.error(RequestError.unAuth)
+        }
+        var requsest = req
+        requsest.allHTTPHeaderFields?["Authorization"] = "Bearer " + jwt
+        return Observable<Result<Data>>.create({ (observer) -> Disposable in
+            let dataReq: DataRequest = Alamofire.request(requsest).responseData { (response: DataResponse<Data>) in
+                if let _ = response.error {
+                    observer.onError(RequestError.noConnection)
+                    return
+                }
+                guard let resp = response.response, let data = response.data else {
+                    observer.onError(RequestError.noConnection)
+                    return
+                }
+                switch resp.statusCode {
+                case 200:
+                    observer.onNext(.value(data))
+                case 403:
+                    observer.onError(RequestError.unAuth)
+                default:
+                    observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
+                }
+            }
+            return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
+        })
     }
     
     func request(request: URLRequest) -> Observable<Result<Data>>{
         var req = request
-        return Observable<Result<Data>>.create({ (observer) -> Disposable in
-            Alamofire.request(req).responseData { (response: DataResponse<Data>) in
-                if let _ = response.error {
-                    observer.onError(RequestError.noConnection)
-                    observer.onCompleted()
-                    return
+        let signal = simpleRequest(req: request)
+            .catchError({ (error) -> Observable<Result<Data>> in
+                switch error {
+                case RequestError.unAuth:
+                    return self.renewToken().asObservable().do(onNext: { (jwt) in
+                        self.jwt = jwt
+                    }).flatMap({ _ -> Observable<Result<Data>> in
+                        return self.simpleRequest(req: request)
+                    })
+                default: return Observable<Result<Data>>.error(error)
                 }
-                if let resp = response.response, let data = response.data {
-                    if resp.statusCode == 200 {
-                        observer.onNext(.value(data))
-                    } else {
-                        observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
-                    }
-                } else {
-                    observer.onError(RequestError.noConnection)
-                }
-                observer.onCompleted()
-            }
-            return Disposables.create {
-                let empty = "without url"
-                print("Request \(req.url?.absoluteString ?? empty) signal disposed")
-            }
-        })
-    }
-    
+            })
+        return signal
+	}
 }
+

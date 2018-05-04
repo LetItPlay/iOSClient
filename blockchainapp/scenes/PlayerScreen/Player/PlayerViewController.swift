@@ -25,6 +25,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         super.init(nibName: nil, bundle: nil)
 
         self.viewModel = viewModel
+		self.viewModel.playerDelegate = self
         self.emitter = emitter
     }
 
@@ -77,8 +78,27 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let time = self.viewModel.currentTimeState
         self.trackProgressView.trackProgressLabels.start.text = time.past
         self.trackProgressView.trackProgressLabels.fin.text = time.future
+		self.trackProgressView.slider.value = self.viewModel.currentTime
+		self.miniPlayer?.progressView.progress = self.viewModel.currentTime
     }
-
+    
+    func showSpeeds() {
+        let alertVC = UIAlertController.init(title: "Speeds", message: nil, preferredStyle: .actionSheet)
+        self.viewModel.speeds.enumerated().map { (index, title) -> UIAlertAction in
+            return UIAlertAction.init(title: title, style: .default, handler: { (_) in
+                print("speed is \(title) and index is \(index)")
+                self.emitter.setSpeed(index: index)
+            })
+            }.forEach { (action) in
+                alertVC.addAction(action)
+        }
+        let cancel = UIAlertAction.init(title: "Cancel", style: .destructive) { (action) in
+            alertVC.dismiss(animated: true, completion: nil)
+        }
+        alertVC.addAction(cancel)
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    
     func updateTrack() {
         let track = self.viewModel.track
         if let url = track.imageURL {
@@ -91,7 +111,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         self.channelNameLabel.text = track.author
         self.trackNameLabel.text = track.name
         self.miniPlayer?.trackNameLabel.text = track.name
-        self.miniPlayer?.trackAuthorLabel.text = track.name
+        self.miniPlayer?.trackAuthorLabel.text = track.author
     }
 
     func setPicture(image: UIImage?) {
@@ -211,10 +231,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         for i in 0..<arr.count {
             arr[i].tag = i + 1
         }
-        arr.first!.setImage(UIImage(named: "nextInactive"), for: .normal)
-        arr.last!.setImage(UIImage(named: "prevInactive"), for: .normal)
+        arr.first!.setImage(UIImage(named: "prevInactive"), for: .normal)
+        arr.last!.setImage(UIImage(named: "nextInactive"), for: .normal)
 
-        return (next: arr.first!, prev: arr.last!)
+        return (next: arr.last!, prev: arr.first!)
     }()
 
     let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
@@ -229,10 +249,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         for i in 0..<arr.count {
             arr[i].tag = i + 3
         }
-        arr.first!.setImage(UIImage(named: "playerForw"), for: .normal)
-        arr.last!.setImage(UIImage(named: "playerBackw"), for: .normal)
+        arr.last!.setImage(UIImage(named: "playerForw"), for: .normal)
+        arr.first!.setImage(UIImage(named: "playerBackw"), for: .normal)
 
-        return (forw: arr.first!, backw: arr.last!)
+        return (forw: arr.last!, backw: arr.first!)
     }()
 
     func viewInitialize() {
@@ -255,10 +275,11 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let imageSpacer = UIView()
         blur.contentView.addSubview(imageSpacer)
         imageSpacer.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(52)
+            make.top.equalToSuperview().inset(37)//(52)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.bottom.equalTo(self.trackProgressView.snp.top)
+            make.width.equalTo(imageSpacer.snp.height)
+//            make.bottom.equalTo(self.trackProgressView.snp.top)
         }
 
         imageSpacer.addSubview(coverImageView)

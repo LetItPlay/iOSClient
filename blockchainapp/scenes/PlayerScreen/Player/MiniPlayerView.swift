@@ -174,13 +174,9 @@ class MiniPlayerView: UITabBar {
 	@objc func buttonPressed(sender: UIButton) {
 		
 		if sender == self.nextButton {
-			AudioController.main.make(command: .next)
+            self.emitter?.send(event: .change(dir: .forward))
 		} else {
-			if sender.isSelected {
-				AudioController.main.make(command: .pause)
-			} else {
-				AudioController.main.make(command: .play(id: nil))
-			}
+			self.emitter?.send(event: .plause)
 		}
 	}
 	

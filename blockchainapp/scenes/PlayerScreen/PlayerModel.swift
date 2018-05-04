@@ -1,27 +1,9 @@
 import Foundation
 import MediaPlayer
 
-protocol PlaylistModelDelegate: class {
-	func reload(tracks: [TrackViewModel], count: String, length: String)
-	func update(track: TrackViewModel, asIndex index: Int)
-	func re(name: String)
-}
-
-protocol MainPlayerModelDelegate: class {
-	func showSpeedSettings()
-	func showMoreDialog()
-	func player(show: Bool)
-}
-
-protocol PlayerModelDelegate: class {
-    func update(status: [PlayerControlsStatus : Bool])
-    func update(progress: Float, currentTime: String, leftTime: String)
-    func update(track: TrackViewModel)
-}
-
 protocol PlayerEventHandler: ModelProtocol {
     func execute(event: PlayerEvent)
-    func execute(event: PlayerTrackEvent)
+    func channelPressed()
     func setSpeed(index: Int)
     func morePressed()
 }
@@ -36,6 +18,7 @@ class PlayerModel {
     weak var playerDelegate: (PlayerModelDelegate & MainPlayerModelDelegate)?
     weak var playlistDelegate: PlaylistModelDelegate?
 	weak var mainDelegate: MainPlayerModelDelegate?
+    weak var trackInfoDelegate: TrackInfoDelegate?
 
     var playlistName: String = ""
     var tracks: [Track] = []
@@ -49,10 +32,11 @@ class PlayerModel {
     var currentTime: AudioTime = AudioTime(current: 0, length: 0)
     var player: AudioPlayer!
     // TODO: Specify speed constants
-    let speedConstants: [String: Float] = ["x0.5": 0.5, "x1.0": 1.0]
+    let speedConstants: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 
     init(player: AudioPlayer) {
         self.player = player
+		self.player.delegate = self
 
         let mpcenter = MPRemoteCommandCenter.shared()
         mpcenter.playCommand.isEnabled = true
@@ -81,6 +65,8 @@ class PlayerModel {
             self.execute(event: .seekDir(dir: .forward))
             return .success
         }
+        
+        let _ = InAppUpdateManager.shared.subscribe(self)
     }
 
     func updateStatus() {
@@ -93,16 +79,29 @@ class PlayerModel {
     func reloadTrack() {
         let prev = self.player.status
         if let item = self.currentTrack {
+            self.trackInfoDelegate?.update(track: item)
 			self.playerDelegate?.update(track: TrackViewModel(track: item))
+            self.playerDelegate?.update(speeds: self.speedConstants.map({$0.text}))
             self.player.load(item: item.audioTrack())
             self.player.make(command: prev == .playing ? .play : .pause)
         }
+    }
+    
+    func updatePlaylist() {
+        self.playlistDelegate?.reload(
+            tracks: self.tracks.map({TrackViewModel.init(track: $0, isPlaying: self.playingNow == $0.id)}),
+            count: Int64(self.tracks.count).formatAmount(),
+            length: Int64(self.tracks.map({$0.length}).reduce(0, +)).formatTime())
+        self.playlistDelegate?.re(name: self.playlistName)
     }
 }
 
 extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
-        if let item = self.currentTrack?.id, item == id {
+        if let index = self.tracks.index(where: {$0.id == id}) {
+            self.playlistDelegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: status == .playing), asIndex: index)
+            let name = status == .playing ? AudioStateNotification.playing.notification() : AudioStateNotification.paused.notification()
+            NotificationCenter.default.post(name: name, object: nil, userInfo: ["id": id])
         }
         self.updateStatus()
     }
@@ -111,7 +110,7 @@ extension PlayerModel: AudioPlayerDelegate {
         self.currentTime = time
         self.playerDelegate?.update(progress: Float(time.current/time.length),
                 currentTime: Int64(round(time.current)).formatTime(),
-                leftTime: "-" + Int64(min(0, round(time.length - time.current))).formatTime())
+                leftTime: "-" + Int64(max(0, round(time.length - time.current))).formatTime())
     }
 
     func itemFinishedPlaying(id: Int) {

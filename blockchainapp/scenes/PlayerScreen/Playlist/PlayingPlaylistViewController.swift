@@ -14,6 +14,10 @@ class PlayingPlaylistViewController: UIViewController {
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
 	var tracks: [[AudioTrack]] = [[]]
 	var currentIndex: IndexPath = IndexPath.invalid
+    
+    let timeLabel = IconedLabel(type: .time)
+    let trackLabel = IconedLabel(type: .tracks)
+    let nameLabel = UILabel()
 	
 	var emitter: PlayingPlaylistEmitter!
 	var vm: PlayingPlaylistViewModel!
@@ -21,6 +25,7 @@ class PlayingPlaylistViewController: UIViewController {
 	convenience init(emitter: PlayingPlaylistEmitter, vm: PlayingPlaylistViewModel) {
 		self.init(nibName: nil, bundle: nil)
 		self.vm = vm
+        self.vm.delegate = self
 		self.emitter = emitter
 	}
 	
@@ -32,33 +37,26 @@ class PlayingPlaylistViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .white
         
-        let label = UILabel()
-        label.font = AppFont.Title.big
-        label.textColor = AppColor.Title.dark
-        label.text = "Current playlist".localized
+        nameLabel.font = AppFont.Title.big
+        nameLabel.textColor = AppColor.Title.dark
+        nameLabel.text = "Current playlist".localized
         
-        let tracks = IconedLabel.init(type: .tracks)
-        tracks.setData(data: Int64(self.tracks[1].count))
-        
-        let time = IconedLabel.init(type: .time)
-        time.setData(data: Int64(self.tracks[1].map({$0.length}).reduce(0, {$0 + $1})))
-        
-        view.addSubview(label)
-        label.snp.makeConstraints { (make) in
+        view.addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(3)
             make.left.equalToSuperview().inset(16)
         }
         
-        view.addSubview(tracks)
-        tracks.snp.makeConstraints { (make) in
+        view.addSubview(trackLabel)
+        trackLabel.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
-            make.top.equalTo(label.snp.bottom).inset(-7)
+            make.top.equalTo(nameLabel.snp.bottom).inset(-7)
         }
         
-        view.addSubview(time)
-        time.snp.makeConstraints { (make) in
-            make.left.equalTo(tracks.snp.right).inset(-8)
-            make.centerY.equalTo(tracks)
+        view.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(trackLabel.snp.right).inset(-8)
+            make.centerY.equalTo(trackLabel)
         }
         
         let line = UIView()
@@ -96,7 +94,7 @@ class PlayingPlaylistViewController: UIViewController {
 		
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		
-		tableView.register(PlayerTableViewCell.self, forCellReuseIdentifier: PlayerTableViewCell.cellID)
+		tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
     }
 
     override func didReceiveMemoryWarning() {
@@ -108,11 +106,11 @@ class PlayingPlaylistViewController: UIViewController {
 extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func numberOfSections(in tableView: UITableView) -> Int {
-		return self.tracks.count
+		return 1
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.tracks[section].count
+		return self.vm.tracks.count
 	}
 	
 	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -124,30 +122,40 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		let contr = AudioController.main
-		contr.make(command: .play(id: self.tracks[indexPath].id))
+        self.emitter.itemSelected(index: indexPath.item)
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-		let track = self.tracks[indexPath]
-		cell.track = track
-        
+		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+		let track = self.vm.tracks[indexPath.item]
+		cell.fill(vm: track)
+
         cell.onOthers = {[weak self] in
             let othersViewController = OthersBuilder.build(params: ["controller" : self as Any, "track" : track]) as! OthersAlertController
             self?.present(othersViewController, animated: true, completion: nil)
         }
         
-		let hideListens = indexPath == currentIndex
-//		cell.dataLabels[.listens]?.isHidden = hideListens
-		cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
-//        cell.showOthersButton.isHidden = hideListens
-        
 		return cell
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.tracks[indexPath]
+        let track = self.vm.tracks[indexPath.item]
 		return Common.height(text: track.name, width: tableView.frame.width)
 	}
+}
+
+extension PlayingPlaylistViewController: PlayingPlaylistViewDelegate {
+    func update() {
+        self.tableView.reloadData()
+    }
+    
+    func reload(index: Int) {
+        tableView.reloadData()
+    }
+    
+    func updateTitles() {
+        self.trackLabel.set(text: self.vm.count)
+        self.timeLabel.set(text: self.vm.length)
+        self.nameLabel.text = self.vm.name
+    }
 }
