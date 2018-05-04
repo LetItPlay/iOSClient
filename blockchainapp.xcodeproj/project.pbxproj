@@ -102,6 +102,7 @@
 		9D0B18FD207F775800CBE87B /* ShareInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18FC207F775800CBE87B /* ShareInfo.swift */; };
 		9D16A162209B434A00E5116D /* ChannelCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D16A161209B434A00E5116D /* ChannelCategory.swift */; };
 		9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */; };
+		9D861CA2209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */; };
 		9D88986120848065004A7575 /* MainPlayerBottomIconsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */; };
 		9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */; };
 		9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077BE20343650002BF631 /* FullChannelViewModel.swift */; };
@@ -282,6 +283,7 @@
 		9D0B18FC207F775800CBE87B /* ShareInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInfo.swift; sourceTree = "<group>"; };
 		9D16A161209B434A00E5116D /* ChannelCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategory.swift; sourceTree = "<group>"; };
 		9D62CFCD20611642005A504A /* TrackInfoBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackInfoBuilder.swift; sourceTree = "<group>"; };
+		9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsCategotyCollectionViewCell.swift; sourceTree = "<group>"; };
 		9D88986020848065004A7575 /* MainPlayerBottomIconsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsView.swift; sourceTree = "<group>"; };
 		9D889863208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPlayerBottomIconsEmitter.swift; sourceTree = "<group>"; };
 		9DA077BE20343650002BF631 /* FullChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullChannelViewModel.swift; sourceTree = "<group>"; };
@@ -656,6 +658,7 @@
 			isa = PBXGroup;
 			children = (
 				9DFAB814209B121D00796C77 /* MainChannelsCategoryCellView.swift */,
+				9D861CA1209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift */,
 			);
 			path = MainChannelsCategoryCell;
 			sourceTree = "<group>";
@@ -1226,6 +1229,7 @@
 				365653FF203592DD0072087F /* SearchBuilder.swift in Sources */,
 				01EFC873201A21D6005321B9 /* MainPlayerViewController.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
+				9D861CA2209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift in Sources */,
 				9D0B18F9207F68E700CBE87B /* OthersViewModel.swift in Sources */,
 				9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */,
 				9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */,
