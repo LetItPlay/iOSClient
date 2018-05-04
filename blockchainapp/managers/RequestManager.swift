@@ -102,7 +102,6 @@ class RequestManager {
                         guard let categories: [ChannelCategory] = json.array?.map({ChannelCategory(json: $0)!}) else {
                             return Observable.error(RequestError.invalidJSON)
                         }
-                        
                         return Observable<[ChannelCategory]>.just(categories)
                     }
                     return Observable<[ChannelCategory]>.error(RequestError.invalidJSON)
@@ -499,6 +498,7 @@ class RequestManager {
                 default:
                     observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
                 }
+                observer.onCompleted()
             }
             return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
         })
