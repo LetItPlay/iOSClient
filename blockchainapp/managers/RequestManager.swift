@@ -67,13 +67,15 @@ class RequestManager {
 
     static let server: String = "https://beta.api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
+    
+    private var jwt: String?
 
 	func channel(id: Int) -> Observable<Channel> {
 		let urlString = RequestManager.server + "/stations/\(id)"
 		if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Channel> in
+			let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Channel> in
 				switch result {
 				case .value(let data):
 					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
@@ -102,7 +104,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Track> in
+            let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Track> in
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
@@ -127,7 +129,7 @@ class RequestManager {
 		if let url = urlString.url() {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
+			return self.request(request: request).flatMap({ (result) -> Observable<([Track],[Channel])> in
 				print(url.absoluteString)
 				switch result {
 				case .value(let data):
@@ -165,7 +167,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Track]> in
+			return self.request(request: request).flatMap({ (result) -> Observable<[Track]> in
 				print(url.absoluteString)
 				switch result {
 				case .value(let data):
@@ -214,7 +216,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel]> in
+			return self.request(request: request).flatMap({ (result) -> Observable<[Channel]> in
 				switch result {
 				case .value(let data):
 					do {
@@ -377,32 +379,32 @@ class RequestManager {
         })
     }
     
-    func getToken() {
-        let urlString = RequestManager.server + "/auth"
-        if let url = URL(string: urlString) {
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            let postString = "uuid=\(UserSettings.userIdentifier)"
-            request.httpBody = postString.data(using: .utf8)
-            
-            self.request(request: request).retry().subscribe(onNext: { result in
-                switch result {
-                case .value(let data):
-                    do {
-                        let json = try JSON(data: data)
-                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
-                    } catch {
-                        print(RequestError.invalidJSON)
-                    }
-                case .error(let error):
-                    print(error)
-                }
-            })
-        }
-    }
+//    func getToken() {
+//        let urlString = RequestManager.server + "/auth"
+//        if let url = URL(string: urlString) {
+//            var request = URLRequest(url: url)
+//            request.httpMethod = "POST"
+//            let postString = "uuid=\(UserSettings.userIdentifier)"
+//            request.httpBody = postString.data(using: .utf8)
+//
+//            self.request(request: request).subscribe(onNext: { result in
+//                switch result {
+//                case .value(let data):
+//                    do {
+//                        let json = try JSON(data: data)
+//                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
+//                    } catch {
+//                        print(RequestError.invalidJSON)
+//                    }
+//                case .error(let error):
+//                    print(error)
+//                }
+//            })
+//        }
+//    }
     
     private func renewToken() -> Single<String> {
-        let urlString = RequestManager.server + "/auth/signup?uid=C2E9B683-BDE5-4065-80C2-F74276BFC090&username=iosFirstUser"
+        let urlString = RequestManager.server + "/auth/signup?uid=\(UserSettings.userIdentifier)&username=\(UserSettings.name)"
         if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
             request.httpMethod = "POST"
             
@@ -431,23 +433,28 @@ class RequestManager {
     }
     
     private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
-        return Observable<Result<Data>>.create(subscribe: { obs -> Disposable in
-            let dataReq: DataRequest = Alamofire.request(req).responseData { (response: DataResponse<Data>) in
+        guard let jwt = self.jwt else {
+            return Observable<Result<Data>>.error(RequestError.unAuth)
+        }
+        var requsest = req
+        requsest.allHTTPHeaderFields?["Authorization"] = "Bearer " + jwt
+        return Observable<Result<Data>>.create({ (observer) -> Disposable in
+            let dataReq: DataRequest = Alamofire.request(requsest).responseData { (response: DataResponse<Data>) in
                 if let _ = response.error {
-                    obs. //single(.error(RequestError.noConnection))
+                    observer.onError(RequestError.noConnection)
                     return
                 }
                 guard let resp = response.response, let data = response.data else {
-                    single(.error(RequestError.noConnection))
+                    observer.onError(RequestError.noConnection)
                     return
                 }
                 switch resp.statusCode {
                 case 200:
-                    single(.success(.value(data)))
+                    observer.onNext(.value(data))
                 case 403:
-                    single(.error(RequestError.unAuth))
+                    observer.onError(RequestError.unAuth)
                 default:
-                    single(.success(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))))
+                    observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
                 }
             }
             return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
@@ -455,10 +462,7 @@ class RequestManager {
     }
 	
 	func request(request: URLRequest) -> Observable<Result<Data>>{
-        
-        
-        
-//        var req = request
+        var req = request
 //        return Observable<Result<Data>>.create({ (observer) -> Disposable in
 //            Alamofire.request(req).responseData { (response: DataResponse<Data>) in
 //                if let _ = response.error {
@@ -482,6 +486,20 @@ class RequestManager {
 //                print("Request \(req.url?.absoluteString ?? empty) signal disposed")
 //            }
 //        })
+        let signal = simpleRequest(req: request)
+            .catchError({ (error) -> Observable<Result<Data>> in
+                switch error {
+                case RequestError.unAuth:
+                    return self.renewToken().asObservable().do(onNext: { (jwt) in
+                        self.jwt = jwt
+                    }).flatMap({ _ -> Observable<Result<Data>> in
+                        return self.simpleRequest(req: request)
+                    })
+                default: return Observable<Result<Data>>.error(error)
+                }
+            })
+//            .retry(1)
+        return signal
 	}
 }
 
