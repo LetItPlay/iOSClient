@@ -85,7 +85,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.edges.equalTo(self.view)
         }
         
         tableView.dataSource = self
@@ -315,16 +315,12 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.viewModel.showChannels
-        {
-            return 121
-        }
         return 0
     }
     
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 0.01
-//    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
 }
 
 extension FeedViewController: SwipeTableViewCellDelegate
@@ -407,7 +403,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
         
         var options = SwipeTableOptions()
-//        options.expansionStyle = SwipeExpansionStyle.selectionx
+//        options.expansionStyle = SwipeExpansionStyle.selection
         options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
