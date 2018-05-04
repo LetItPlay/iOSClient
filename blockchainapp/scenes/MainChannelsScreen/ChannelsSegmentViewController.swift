@@ -72,6 +72,13 @@ class ChannelsSegmentViewController: UIViewController {
             make.right.equalToSuperview()
             make.height.equalTo(1)
         }
+        
+        let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
+        self.navigationItem.rightBarButtonItem = searchItem
+    }
+    
+    @objc func search() {
+        MainRouter.shared.show(screen: "search", params: [:], present: false)
     }
     
     func hide(first: Bool) {
