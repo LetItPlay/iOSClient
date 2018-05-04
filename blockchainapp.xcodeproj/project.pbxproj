@@ -281,6 +281,9 @@
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
+		9DA3E47620933FE900979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		9DA3E47720933FE900979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		9DA3E47820933FEA00979948 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
@@ -897,6 +900,7 @@
 				en,
 				Base,
 				fr,
+				"zh-Hans",
 			);
 			mainGroup = CF44531D1F54139900660474;
 			productRefGroup = CF4453271F54139900660474 /* Products */;
@@ -1234,6 +1238,7 @@
 				CF2715301F97C79F0038C81C /* en */,
 				CF27152E1F97C79A0038C81C /* ru */,
 				36F32E86206257E400F67A76 /* fr */,
+				9DA3E47820933FEA00979948 /* zh-Hans */,
 			);
 			name = Localizable.strings;
 			path = .;
@@ -1245,6 +1250,7 @@
 				CF44532E1F54139900660474 /* Base */,
 				CF2715291F97BA370038C81C /* ru */,
 				36F32E85206257E400F67A76 /* fr */,
+				9DA3E47720933FE900979948 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			path = .;
@@ -1256,6 +1262,7 @@
 				CF4453331F54139900660474 /* Base */,
 				CF27152A1F97BA370038C81C /* ru */,
 				36F32E84206257E400F67A76 /* fr */,
+				9DA3E47620933FE900979948 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			path = .;

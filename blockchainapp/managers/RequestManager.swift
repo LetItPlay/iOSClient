@@ -65,7 +65,7 @@ enum RequestError: Error {
 
 class RequestManager {
 
-    static let server: String = "https://beta.api.letitplay.io"
+    static let server: String = "https://api.letitplay.io"
 	static let shared: RequestManager = RequestManager()
     
     private var jwt: String?
@@ -79,8 +79,7 @@ class RequestManager {
 				switch result {
 				case .value(let data):
 					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
-						let lm = LikeManager.shared
-						channel.isSubscribed = lm.hasObject(id: channel.id)
+                        channel.isSubscribed = SubscribeManager.shared.hasChannel(id: channel.id)
 						return Observable.just(channel)
 					} else {
 						return Observable.error(RequestError.invalidJSON)

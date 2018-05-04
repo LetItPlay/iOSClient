@@ -28,10 +28,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
 		var vc: UIViewController!
 		if UserSettings.language == .none {
-			vc = SettingsViewController()
-		} else {
-			vc = MainRouter.shared.mainController
+            switch NSLocale.preferredLanguages[0] {
+            case "ru":
+                UserSettings.language = Language.ru
+            case "en":
+                UserSettings.language = Language.en
+            case "fr":
+                UserSettings.language = Language.fr
+            case "zh-Hans":
+                UserSettings.language = Language.zh
+            default:
+                UserSettings.language = Language.en
+            }
 		}
+        
+        let tab =  MainTabViewController()
+        self.router.tabController = tab
+        vc = tab
+		
 		self.window?.rootViewController = vc
 		self.window?.makeKeyAndVisible()
 

@@ -120,6 +120,7 @@ class PlayerTableViewCell: UITableViewCell {
             make.right.equalTo(-16)
             make.bottom.equalTo(-8)
         }
+        showOthersButton.isHidden = true
 		
 		self.dataLabels = [.time: timeCount, .playingIndicator: playingIndicator]
 		
