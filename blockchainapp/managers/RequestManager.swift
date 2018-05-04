@@ -16,8 +16,14 @@ enum TracksRequest {
     case channel(Int)
     case tag(String)
     case magic
-	case allTracks
-	case search(text: String, offset: Int, count: Int)
+    case allTracks
+    case search(text: String, offset: Int, count: Int)
+}
+
+enum ChannelsRequest {
+    case all(offset: Int, count: Int)
+    case subscribed
+    case category(id: Int)
 }
 
 enum TrackUpdateRequest {
@@ -50,6 +56,19 @@ fileprivate extension TracksRequest {
     }
 }
 
+fileprivate extension ChannelsRequest {
+    func urlQuery(lang: String) -> String {
+        switch self {
+        case .all(let offset, let count):
+            return "stations?offset=\(offset)&count=\(count)&lang=\(lang)"
+        case .category(let id):
+            return "categories/\(id)/stations"
+        case .subscribed:
+            return "user/favorites/channels"
+        }
+    }
+}
+
 enum Result<T> {
     case value(T)
     case error(Error)
@@ -63,9 +82,9 @@ enum RequestError: Error {
 }
 
 class RequestManager {
-
+    
     static let server: String = "https://beta.api.letitplay.io"
-	static let shared: RequestManager = RequestManager()
+    static let shared: RequestManager = RequestManager()
     
     func categories() -> Observable<[ChannelCategory]> {
         let urlString = RequestManager.server + "/catalog"
@@ -91,34 +110,34 @@ class RequestManager {
         return Observable.error(RequestError.invalidURL)
     }
     
-	func channel(id: Int) -> Observable<Channel> {
-		let urlString = RequestManager.server + "/stations/\(id)"
-		if let url = URL(string: urlString) {
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Channel> in
-				switch result {
-				case .value(let data):
-					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
-						let lm = LikeManager.shared
-						channel.isSubscribed = lm.hasObject(id: channel.id)
-						return Observable.just(channel)
-					} else {
-						return Observable.error(RequestError.invalidJSON)
-					}
-				case .error(let error):
-					return Observable.error(error)
-				}
-			})
-			
-			if let channel = (try? Realm())?.object(ofType: ChannelObject.self, forPrimaryKey: id)?.plain() {
-				return Observable.from([Observable.just(channel), getSignal]).flatMap({$0})
-			} else {
-				return getSignal
-			}
-		}
-		return Observable.error(RequestError.invalidURL)
-	}
+    func channel(id: Int) -> Observable<Channel> {
+        let urlString = RequestManager.server + "/stations/\(id)"
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            let getSignal = self.request(request: request).retry().flatMap({ (result) -> Observable<Channel> in
+                switch result {
+                case .value(let data):
+                    if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
+                        let lm = LikeManager.shared
+                        channel.isSubscribed = lm.hasObject(id: channel.id)
+                        return Observable.just(channel)
+                    } else {
+                        return Observable.error(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    return Observable.error(error)
+                }
+            })
+            
+            if let channel = (try? Realm())?.object(ofType: ChannelObject.self, forPrimaryKey: id)?.plain() {
+                return Observable.from([Observable.just(channel), getSignal]).flatMap({$0})
+            } else {
+                return getSignal
+            }
+        }
+        return Observable.error(RequestError.invalidURL)
+    }
     
     func track(id: Int) -> Observable<Track> {
         let urlString = RequestManager.server + "/tracks/\(id)"
@@ -129,9 +148,9 @@ class RequestManager {
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
-                            let lm = LikeManager.shared
-                            track.isLiked = lm.hasObject(id: track.id)
-                            return Observable.just(track)
+                        let lm = LikeManager.shared
+                        track.isLiked = lm.hasObject(id: track.id)
+                        return Observable.just(track)
                     } else {
                         return Observable.error(RequestError.invalidJSON)
                     }
@@ -144,61 +163,61 @@ class RequestManager {
         }
         return Observable.error(RequestError.invalidURL)
     }
-	
-	func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
-		let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
-		if let url = urlString.url() {
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
-				print(url.absoluteString)
-				switch result {
-				case .value(let data):
-					do {
-						let lm = LikeManager.shared
+    
+    func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
+        let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
+        if let url = urlString.url() {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            return self.request(request: request).retry().flatMap({ (result) -> Observable<([Track],[Channel])> in
+                print(url.absoluteString)
+                switch result {
+                case .value(let data):
+                    do {
+                        let lm = LikeManager.shared
                         let subscribeManager = SubscribeManager.shared
-						let json = try JSON(data: data)
-						var tracks = [Track]()
-						var channels = [Channel]()
-						if let items = json["results"].array {
-							for item in items {
-								if var track = Track.init(json: item) {
+                        let json = try JSON(data: data)
+                        var tracks = [Track]()
+                        var channels = [Channel]()
+                        if let items = json["results"].array {
+                            for item in items {
+                                if var track = Track.init(json: item) {
                                     track.isLiked = lm.hasObject(id: track.id)
-									tracks.append(track)
-								} else if var channel = Channel.init(json: item) {
+                                    tracks.append(track)
+                                } else if var channel = Channel.init(json: item) {
                                     channel.isSubscribed = subscribeManager.hasChannel(id: channel.id)
-									channels.append(channel)
-								}
-							}
-						}
-						return Observable.just((tracks, channels))
-					} catch {
-						return Observable.error(RequestError.invalidJSON)
-					}
-				case .error(let error):
-					return Observable.error(error)
-				}
-			})
-		}
-		return Observable.error(RequestError.invalidURL)
+                                    channels.append(channel)
+                                }
+                            }
+                        }
+                        return Observable.just((tracks, channels))
+                    } catch {
+                        return Observable.error(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    return Observable.error(error)
+                }
+            })
+        }
+        return Observable.error(RequestError.invalidURL)
     }
     
     func tracks(req: TracksRequest) -> Observable<[Track]> {
         let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Track]> in
-				print(url.absoluteString)
-				switch result {
-				case .value(let data):
-					do {
-						let lm = LikeManager.shared
-						let json = try JSON(data: data)
-						
-						let _: [Channel] = json["Stations"].array?
-							.map({Channel(json: $0)})
-							.filter({$0 != nil}).map({$0!}) ?? []
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            return self.request(request: request).retry().flatMap({ (result) -> Observable<[Track]> in
+                print(url.absoluteString)
+                switch result {
+                case .value(let data):
+                    do {
+                        let lm = LikeManager.shared
+                        let json = try JSON(data: data)
+                        
+                        let _: [Channel] = json["Stations"].array?
+                            .map({Channel(json: $0)})
+                            .filter({$0 != nil}).map({$0!}) ?? []
                         let tracksJSON: JSON!
                         switch req {
                         case .magic:
@@ -206,66 +225,66 @@ class RequestManager {
                         default:
                             tracksJSON = json
                         }
-						let tracks: [Track] = tracksJSON.array?
-							.map({Track(json: $0)})
-							.filter({$0 != nil}).map({$0!})
-							.map({track in
-								var track = track
-								track.isLiked = lm.hasObject(id: track.id)
-								return track}) ?? []
-						let objs = json["Stations"].array?.map({ (json) -> ChannelObject? in
-							return ChannelObject.init(json: json)
-						}).filter({$0 != nil}).map({$0!}) ?? []
-						let realm = try? Realm()
-						try? realm?.write {
-							realm?.add(objs, update: true)
-						}
-						return Observable.just(tracks)
-					} catch {
-						return Observable.error(RequestError.invalidJSON)
-					}
-				case .error(let error):
-					return Observable.error(error)
-				}
-			})
+                        let tracks: [Track] = tracksJSON.array?
+                            .map({Track(json: $0)})
+                            .filter({$0 != nil}).map({$0!})
+                            .map({track in
+                                var track = track
+                                track.isLiked = lm.hasObject(id: track.id)
+                                return track}) ?? []
+                        let objs = json["Stations"].array?.map({ (json) -> ChannelObject? in
+                            return ChannelObject.init(json: json)
+                        }).filter({$0 != nil}).map({$0!}) ?? []
+                        let realm = try? Realm()
+                        try? realm?.write {
+                            realm?.add(objs, update: true)
+                        }
+                        return Observable.just(tracks)
+                    } catch {
+                        return Observable.error(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    return Observable.error(error)
+                }
+            })
         }
         return Observable.error(RequestError.invalidURL)
     }
     
-    func channels(offset: Int = 0, count: Int = 100) -> Observable<[Channel]> {
-        let urlString = RequestManager.server + "/stations?offset=\(offset)&count=\(count)&lang=\(UserSettings.language.rawValue)"
+    func channels(req: ChannelsRequest) -> Observable<[Channel]> {
+        let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
         if let url = URL(string: urlString) {
-			var request = URLRequest(url: url)
-			request.httpMethod = "GET"
-			return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel]> in
-				switch result {
-				case .value(let data):
-					do {
-						let subMan = SubscribeManager.shared
-						let json = try JSON(data: data)
-						let channels: [Channel] = json.array?
-							.map({Channel(json: $0)})
-							.filter({$0 != nil}).map({channel in
-								var channel = channel!
-								channel.isSubscribed = subMan.hasChannel(id: channel.id)
-								return channel
-							}) ?? []
-						let objs = json.array?.map({ (json) -> ChannelObject? in
-							return ChannelObject.init(json: json)
-						}).filter({$0 != nil}).map({$0!}) ?? []
-						let realm = try? Realm()
-						try? realm?.write {
-							realm?.add(objs, update: true)
-						}
-						return Observable.just(channels)
-					} catch {
-						return Observable.error(RequestError.invalidJSON)
-					}
-				case .error(let error):
-					return Observable.error(error)
-				}
-			})
-		}
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            return self.request(request: request).retry().flatMap({ (result) -> Observable<[Channel]> in
+                switch result {
+                case .value(let data):
+                    do {
+                        let subMan = SubscribeManager.shared
+                        let json = try JSON(data: data)
+                        let channels: [Channel] = json.array?
+                            .map({Channel(json: $0)})
+                            .filter({$0 != nil}).map({channel in
+                                var channel = channel!
+                                channel.isSubscribed = subMan.hasChannel(id: channel.id)
+                                return channel
+                            }) ?? []
+                        let objs = json.array?.map({ (json) -> ChannelObject? in
+                            return ChannelObject.init(json: json)
+                        }).filter({$0 != nil}).map({$0!}) ?? []
+                        let realm = try? Realm()
+                        try? realm?.write {
+                            realm?.add(objs, update: true)
+                        }
+                        return Observable.just(channels)
+                    } catch {
+                        return Observable.error(RequestError.invalidJSON)
+                    }
+                case .error(let error):
+                    return Observable.error(error)
+                }
+            })
+        }
         return Observable.error(RequestError.invalidURL)
     }
     
@@ -304,11 +323,11 @@ class RequestManager {
                             if resp.statusCode == 200 {
                                 do {
                                     let _  = try JSON(data: data)
-//                                    if let channel = Station1.init(json: json) {
-//                                        observer.onNext(channel.isSubscribed)
-//                                    } else {
-//                                        observer.onError(RequestError.invalidJSON)
-//                                    }
+                                    //                                    if let channel = Station1.init(json: json) {
+                                    //                                        observer.onNext(channel.isSubscribed)
+                                    //                                    } else {
+                                    //                                        observer.onError(RequestError.invalidJSON)
+                                    //                                    }
                                     observer.onNext(true)
                                 } catch(let error) {
                                     print(error)
@@ -346,54 +365,54 @@ class RequestManager {
                 elements["like_count"]   = 0
                 elements["listen_count"] = 0
                 switch type {
-                    case .like(let count):
-                        print(count)
-                        elements["like_count"] = count
-                    case .report(_):
-                        elements["report_count"] = 1
-                    case .listen:
-                        elements["listen_count"] = 1
+                case .like(let count):
+                    print(count)
+                    elements["like_count"] = count
+                case .report(_):
+                    elements["report_count"] = 1
+                case .listen:
+                    elements["listen_count"] = 1
                 }
                 
                 request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
-				
+                
                 Alamofire.request(request)
-					.responseData { (response: DataResponse<Data>) in
-						
-						if let _ = response.error {
-							observer.onError(RequestError.noConnection)
-							observer.onCompleted()
-							return
-						}
-						
-						if let resp = response.response, let data = response.data {
-							if resp.statusCode == 200 {
-								do {
-									let json  = try JSON(data: data)
+                    .responseData { (response: DataResponse<Data>) in
+                        
+                        if let _ = response.error {
+                            observer.onError(RequestError.noConnection)
+                            observer.onCompleted()
+                            return
+                        }
+                        
+                        if let resp = response.response, let data = response.data {
+                            if resp.statusCode == 200 {
+                                do {
+                                    let json  = try JSON(data: data)
                                     if let likes = json["like_count"].int,
-                                       let reports = json["report_count"].int,
-                                       let listens = json["listen_count"].int
+                                        let reports = json["report_count"].int,
+                                        let listens = json["listen_count"].int
                                     {
                                         observer.onNext((likes, reports, listens))
-									} else {
-										observer.onError(RequestError.invalidJSON)
-									}
-								} catch(let error) {
-									print(error)
-									observer.onError(RequestError.invalidJSON)
-								}
-							} else {
-								observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
-							}
-						} else {
-							observer.onError(RequestError.noConnection)
-						}
-						observer.onCompleted()
-				}
-			} else {
-				observer.onError(RequestError.invalidURL)
-			}
-			
+                                    } else {
+                                        observer.onError(RequestError.invalidJSON)
+                                    }
+                                } catch(let error) {
+                                    print(error)
+                                    observer.onError(RequestError.invalidJSON)
+                                }
+                            } else {
+                                observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
+                            }
+                        } else {
+                            observer.onError(RequestError.noConnection)
+                        }
+                        observer.onCompleted()
+                }
+            } else {
+                observer.onError(RequestError.invalidURL)
+            }
+            
             return Disposables.create {
                 print("Track update signal disposed")
             }
@@ -423,32 +442,32 @@ class RequestManager {
             })
         }
     }
-	
-	func request(request: URLRequest) -> Observable<Result<Data>>{
+    
+    func request(request: URLRequest) -> Observable<Result<Data>>{
         var req = request
-		return Observable<Result<Data>>.create({ (observer) -> Disposable in
-			Alamofire.request(req).responseData { (response: DataResponse<Data>) in
-				if let _ = response.error {
-					observer.onError(RequestError.noConnection)
-					observer.onCompleted()
-					return
-				}
-				if let resp = response.response, let data = response.data {
-					if resp.statusCode == 200 {
-						observer.onNext(.value(data))
-					} else {
+        return Observable<Result<Data>>.create({ (observer) -> Disposable in
+            Alamofire.request(req).responseData { (response: DataResponse<Data>) in
+                if let _ = response.error {
+                    observer.onError(RequestError.noConnection)
+                    observer.onCompleted()
+                    return
+                }
+                if let resp = response.response, let data = response.data {
+                    if resp.statusCode == 200 {
+                        observer.onNext(.value(data))
+                    } else {
                         observer.onNext(.error(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? "")))
-					}
-				} else {
-					observer.onError(RequestError.noConnection)
-				}
-				observer.onCompleted()
-			}
-			return Disposables.create {
-				let empty = "without url"
-				print("Request \(req.url?.absoluteString ?? empty) signal disposed")
-			}
-		})
-	}
-
+                    }
+                } else {
+                    observer.onError(RequestError.noConnection)
+                }
+                observer.onCompleted()
+            }
+            return Disposables.create {
+                let empty = "without url"
+                print("Request \(req.url?.absoluteString ?? empty) signal disposed")
+            }
+        })
+    }
+    
 }

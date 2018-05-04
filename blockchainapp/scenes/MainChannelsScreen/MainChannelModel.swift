@@ -38,7 +38,7 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     init() {
         
         self.getChannelsAction = Action<Bool, [Channel]>.init(workFactory: { (_) -> Observable<[Channel]> in
-            return RequestManager.shared.channels()
+            return RequestManager.shared.channels(req: .all(offset: 0, count: 100))
         })
         
         self.getChannelsAction.elements.subscribe(onNext: { channels in
