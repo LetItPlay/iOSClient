@@ -130,7 +130,8 @@ class RequestManager {
 			request.httpMethod = "GET"
 			return self.request(request: request).flatMap({ (result) -> Observable<([Track],[Channel])> in
 				print(url.absoluteString)
-				switch result {
+				switch
+                result {
 				case .value(let data):
 					do {
 						let lm = LikeManager.shared

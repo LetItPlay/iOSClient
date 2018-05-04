@@ -13,6 +13,7 @@ protocol SearchVMProtocol {
     var delegate: SearchVMDelegate? {get set}
     var tracks: [TrackViewModel] {get set}
     var channels: [SearchChannelViewModel] {get set}
+    var nothingToUpdate: Bool {get set}
     var currentPlayingIndex: Int {get set}
 }
 
@@ -33,6 +34,7 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
     
     var tracks: [TrackViewModel] = []
     var channels: [SearchChannelViewModel] = []
+    var nothingToUpdate: Bool = false
     
     var disposeBag = DisposeBag()
     
@@ -62,6 +64,10 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
                     self.delegate?.make(updates: [.update: indexes])
                 }
             }).disposed(by: disposeBag)
+    }
+    
+    func toUpdate(nothing: Bool) {
+        self.nothingToUpdate = nothing
     }
     
     func update(tracks: [TrackViewModel]) {
