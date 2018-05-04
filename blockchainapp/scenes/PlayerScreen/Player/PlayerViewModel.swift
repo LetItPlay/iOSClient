@@ -21,6 +21,7 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     var currentTime: Float = 0.0
     var currentTimeState: (past: String, future: String) = (past: "", future: "")
     var speeds: [String] = [String]()
+    var currentSpeedIndex: Int = 3
     var status: [PlayerControlsStatus : Bool] = [.isPlaying : false, .canForward: false, .canBackward: false]
 
 	weak var playerDelegate: PlayerViewDelegate?
@@ -47,10 +48,14 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     func update(speeds: [String]) {
         self.speeds = speeds
     }
+    
+    func update(currentSpeedIndex: Int) {
+        self.currentSpeedIndex = currentSpeedIndex
+    }
 	
 	func showSpeedSettings() {
 		self.playerDelegate?.showSpeeds()
-	}
+    }
 	
     func showMoreDialog(track: Track) {
         MainRouter.shared.showOthers(track: track)
