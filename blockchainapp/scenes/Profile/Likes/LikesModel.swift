@@ -21,7 +21,7 @@ protocol LikesEventHandler: class
     func getTracks()
     func trackSelected(index: Int)
     func showOthers(index: Int)
-
+    func hidePlayer()
 }
 
 protocol LikesModelDelegate: class {
@@ -128,6 +128,10 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     func showOthers(index: Int) {
         self.delegate?.showOthers(track: self.tracks[index])
     }
+    
+    func hidePlayer() {
+        PlayerHandler.playlist?.clearAll(direction: .down)
+    }
 }
 
 extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsUpdateProtocol {
@@ -147,6 +151,7 @@ extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsU
     
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
+            tracks[index] = track
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)
         }

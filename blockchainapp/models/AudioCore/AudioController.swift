@@ -280,7 +280,6 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			if indexPath.item + way >= self.playlist.tracks.count ||  indexPath.item + way < 0 {
 				self.delegate?.playState(isPlaying: false)
 				return
-				// TODO: hide player
 			} else {
 				self.currentTrackIndexPath.item += way
 			}

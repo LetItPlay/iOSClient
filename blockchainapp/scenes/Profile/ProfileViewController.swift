@@ -126,7 +126,7 @@ class ProfileViewController: UIViewController {
         case .fr:
             currentLanguage = "Français"
         case .zh:
-            currentLanguage = "Chinese" // TODO: Chinese in Chinese
+            currentLanguage = "Chinese"
         default:
             break
         }
@@ -139,15 +139,15 @@ class ProfileViewController: UIViewController {
         let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
         languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
-        for language in ["English", "Français", "Русский", "Chinese"] { // TODO: Chinese in Chinese
+        for language in ["English", "Français", "Русский", "Chinese"] {
             if language == currentLanguage {
                 languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
-//                    self.profileView.emitter?.send(event: ProfileEvent.set(language: speed))
                 }))
             }
             else {
                 languageAlert.addAction(UIAlertAction(title: language, style: .destructive, handler: { _ in
                     self.profileView.emitter?.send(event: ProfileEvent.set(language: language))
+                    self.emitter?.send(event: LikesTrackEvent.hidePlayer)
                 }))
             }
         }
@@ -155,9 +155,6 @@ class ProfileViewController: UIViewController {
         languageAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
         
         self.present(languageAlert, animated: true, completion: nil)
-        
-        // TODO: with new player
-		AudioController.main.make(command: .pause)
 	}
 	
     deinit {
