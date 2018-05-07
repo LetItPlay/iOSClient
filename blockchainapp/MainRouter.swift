@@ -86,6 +86,10 @@ class MainRouter: Router {
 				}).disposed(by: disposeBag)
 //                self.currentNavigationController?.present(vc, animated: true, completion: nil)
 			} else {
+                if self.currentNavigationController?.viewControllers.first is ProfileViewController {
+                    // TODO: special open
+                    return
+                }
                 self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
