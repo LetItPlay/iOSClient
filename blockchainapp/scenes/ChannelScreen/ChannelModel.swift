@@ -69,9 +69,13 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
 	let getTracksAction: Action<Int, [Track]>!
 	let disposeBag = DisposeBag()
         
-    init(channelID: Int)
+    init(channelID: Int, playTrack: Int? = nil)
     {
 		self.playlistName = "Channel".localized + " \(channelID)"
+        
+        if let id = playTrack {
+            self.currentTrackID = id
+        }
 		
         getTracksAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
             return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
@@ -84,6 +88,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
                 return tracks.map({ return TrackViewModel(track: $0, isPlaying: $0.id == playingId)})
             }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
                 self.delegate?.reload(tracks: vms)
+                if let _ = self.currentTrackID, let index = self.tracks.index(where: {$0.id == self.currentTrackID}) {
+                    PlayerHandler.playlist?.clearAll(direction: .down)
+                    self.trackSelected(index: index)
+                }
             }, onCompleted: {
                 print("Track loaded")
             }).disposed(by: self.disposeBag)

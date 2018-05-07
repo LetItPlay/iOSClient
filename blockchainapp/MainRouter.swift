@@ -84,6 +84,7 @@ class MainRouter: Router {
 				close.rx.tap.subscribe(onNext: { _ in
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
+//                self.currentNavigationController?.present(vc, animated: true, completion: nil)
 			} else {
                 self.currentNavigationController?.pushViewController(vc, animated: true)
 			}

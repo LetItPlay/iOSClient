@@ -11,14 +11,29 @@ import RealmSwift
 import AVFoundation
 import Fabric
 import Crashlytics
+import DeepLinkKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var router: DPLDeepLinkRouter = DPLDeepLinkRouter()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		
+
+        self.router.register("/tracks") { link in
+            if let link = link {
+                if let channelID = Int(link.queryParameters["channel"] as! String) {
+                    if let param = link.queryParameters["track"] as? String,
+                       let trackID = Int(param) {
+                        MainRouter.shared.show(screen: "channel", params: ["id" : channelID, "trackID" : trackID], present: false)
+                        return
+                    }
+                    MainRouter.shared.show(screen: "channel", params: ["id" : channelID], present: false)
+                }
+            }
+        }
+
         setupAppearence()
         migrate()
 		
@@ -73,18 +88,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //DB
     func migrate() {
         let config = Realm.Configuration(
-            // Set the new schema version. This must be greater than the previously used
-            // version (if you've never set a schema version before, the version is 0).
             schemaVersion: 6,
-            
-            // Set the block which will be called automatically when opening a Realm with
-            // a schema version lower than the one set above
             migrationBlock: { migration, oldSchemaVersion in
-                // We haven’t migrated anything yet, so oldSchemaVersion == 0
                 if (oldSchemaVersion < 4) {
-                    // Nothing to do!
-                    // Realm will automatically detect new properties and removed properties
-                    // And will update the schema on disk automatically
                 }
 				
 				if (oldSchemaVersion < 5) {
@@ -94,54 +100,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				}
 				
 				if (oldSchemaVersion < 5) {
-//					migration.enumerateObjects(ofType: "Track", { (old, new) in
-//						if let tagString = old?["tagString"] as? String, let newObj = new {
-//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
-//								let rlmTag = Tag.init()
-//								rlmTag.value = tag
-//								return rlmTag
-//							})
-//							let list = List<Tag>.init()
-//							tags.forEach({ (tag) in
-//								list.append(tag)
-//							})
-//							newObj["tags"] = list
-//						}
-//						if let length = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? Int64,
-//							let cover = (old?["audiofile"] as? MigrationObject)?["lengthSeconds"] as? String,
-//							let url = (old?["audiofile"]as? MigrationObject)?["file"] as? String {
-//							new?["length"] = length
-//							new?["coverURL"] = cover
-//							new?["url"] = url
-//						} else {
-//							new?["length"] = 0
-//							new?["coverURL"] = ""
-//							new?["url"] = ""
-//						}
-//					})
-//					migration.enumerateObjects(ofType: "Station", { (old, new) in
-//						if let tagString = old?["tagString"] as? String, let newObj = new {
-//							let tags = tagString.components(separatedBy: ",").map({ (tag) -> Tag in
-//								let rlmTag = Tag.init()
-//								rlmTag.value = tag
-//								return rlmTag
-//							})
-//							let list = List<Tag>.init()
-//							tags.forEach({ (tag) in
-//								list.append(tag)
-//							})
-//							newObj["tags"] = list
-//							new?["sourceURL"] = ""
-//						}
-//					})
 					(try? Realm.init())?.deleteAll()
 				}
 		})
-        // Tell Realm to use this new configuration object for the default Realm
         Realm.Configuration.defaultConfiguration = config
     }
 
-	func applicationDidBecomeActive(_ application: UIApplication) {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+        let newUserActivity = userActivity
+        newUserActivity.webpageURL = URL(string: (newUserActivity.webpageURL?.absoluteString.replacingOccurrences(of: "/#", with: ""))!)
+        self.router.handle(userActivity, withCompletion: nil)
+        return true
+    }
+
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        self.router.handle(url, withCompletion: nil)
+        return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        self.router.handle(url, withCompletion: nil)
+        return true
+    }
+
+    func applicationDidBecomeActive(_ application: UIApplication) {
 		try? AVAudioSession.sharedInstance().setActive(true)
 	}
 	
