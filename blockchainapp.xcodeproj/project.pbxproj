@@ -120,6 +120,7 @@
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
 		9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */; };
+		9DDC286820A01EEA00A4C3DE /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDC286720A01EEA00A4C3DE /* Language.swift */; };
 		9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */; };
 		9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */; };
 		9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */; };
@@ -306,6 +307,7 @@
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
+		9DDC286720A01EEA00A4C3DE /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategoryViewModel.swift; sourceTree = "<group>"; };
 		9DFAE6F22060F5EC00EF7C4D /* TrackInfoBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoBlurView.swift; sourceTree = "<group>"; };
 		9DFAE6F32060F5EC00EF7C4D /* TrackInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewController.swift; sourceTree = "<group>"; };
@@ -733,6 +735,7 @@
 				01FF376B201072B7007F57E0 /* AudioCore */,
 				CF4453581F55400F00660474 /* MainModels.swift */,
 				01E1991B1FE8DBB00016060E /* UserSettings.swift */,
+				9DDC286720A01EEA00A4C3DE /* Language.swift */,
 				9D16A161209B434A00E5116D /* ChannelCategory.swift */,
 				9D0B18FC207F775800CBE87B /* ShareInfo.swift */,
 				365654012035A4550072087F /* PlaylistViewModel.swift */,
@@ -1139,6 +1142,7 @@
 				015812A21FD80AF1002828F5 /* AudioController.swift in Sources */,
 				9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */,
 				CF4453591F55400F00660474 /* MainModels.swift in Sources */,
+				9DDC286820A01EEA00A4C3DE /* Language.swift in Sources */,
 				CF44535E1F569D4E00660474 /* StyleExtension.swift in Sources */,
 				CF4453691F57F4D200660474 /* CategoryChannelsViewController.swift in Sources */,
 				365B0A2020319851006458F9 /* LikesViewModel.swift in Sources */,

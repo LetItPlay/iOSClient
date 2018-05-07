@@ -28,7 +28,7 @@ struct Track: LIPModel {
 	
 	var tags: [String]			= []
 	
-	var lang: String			= Language.ru.rawValue
+	var lang: String			= UserSettings.languages[2].identifier
 	
 	var isLiked: Bool			= false
 	

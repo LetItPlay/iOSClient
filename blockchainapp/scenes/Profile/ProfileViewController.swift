@@ -117,19 +117,7 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-        var currentLanguage = ""
-        switch UserSettings.language {
-        case .ru:
-            currentLanguage = "Русский"
-        case .en:
-            currentLanguage = "English"
-        case .fr:
-            currentLanguage = "Français"
-        case .zh:
-            currentLanguage = "Chinese"
-        default:
-            break
-        }
+        let currentLanguage = UserSettings.language.name
         
         let languageAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         
@@ -139,7 +127,7 @@ class ProfileViewController: UIViewController {
         let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
         languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
-        for language in ["English", "Français", "Русский", "Chinese"] {
+        for language in UserSettings.languages.map({$0.name}) {
             if language == currentLanguage {
                 languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
                 }))

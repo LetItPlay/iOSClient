@@ -168,7 +168,7 @@ class RequestManager {
     }
     
     func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
-        let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.rawValue)"
+        let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.identifier)"
         if let url = urlString.url() {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
@@ -206,7 +206,7 @@ class RequestManager {
     }
     
     func tracks(req: TracksRequest) -> Observable<[Track]> {
-        let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
+        let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.identifier)
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
@@ -255,7 +255,7 @@ class RequestManager {
     }
     
     func channels(req: ChannelsRequest) -> Observable<[Channel]> {
-        let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.rawValue)
+        let urlString = RequestManager.server + "/" + req.urlQuery(lang: UserSettings.language.identifier)
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"

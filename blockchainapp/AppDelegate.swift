@@ -26,18 +26,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
 
-        if UserSettings.language == .none {
+        let languages = UserSettings.languages
+        if UserSettings.language.identifier == "none" {
             switch NSLocale.preferredLanguages[0] {
-            case "ru":
-                UserSettings.language = Language.ru
             case "en":
-                UserSettings.language = Language.en
-            case "fr":
-                UserSettings.language = Language.fr
+                UserSettings.language = languages[0]
             case "zh-Hans":
-                UserSettings.language = Language.zh
+                UserSettings.language = languages[1]
+            case "ru":
+                UserSettings.language = languages[2]
+            case "fr":
+                UserSettings.language = languages[3]
             default:
-                UserSettings.language = Language.en
+                UserSettings.language = languages[0]
             }
 		}
         

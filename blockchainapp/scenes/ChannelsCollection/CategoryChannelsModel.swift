@@ -69,7 +69,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
         })
         
         self.getChannelsAction.elements.subscribe(onNext: { channels in
-            self.channels = channels.filter({$0.lang == UserSettings.language.rawValue})
+            self.channels = channels.filter({$0.lang == UserSettings.language.identifier})
             switch self.channelsFilter! {
             case .all:
                 self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})

@@ -86,7 +86,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     func getTracks() {
         let realm = try? Realm()
         let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(TrackObject.self).map({Track.init(track: $0)}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+		self.tracks = realm?.objects(TrackObject.self).map({Track.init(track: $0)}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.identifier}) ?? []
 
         self.getTracksViewModel()
     }

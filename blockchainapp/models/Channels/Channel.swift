@@ -15,7 +15,7 @@ struct Channel: LIPModel, Hashable {
 	
     var isSubscribed: Bool      = false
     
-	var lang: String			= Language.ru.rawValue
+	var lang: String			= UserSettings.languages[2].identifier
 	var tags: [String]			= []
 	
 	init?(json: JSON) {

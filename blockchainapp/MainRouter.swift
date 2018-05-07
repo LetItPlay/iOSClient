@@ -91,7 +91,6 @@ class MainRouter: Router {
 	}
     
     func hidePlayer() {
-        // TODO: hide player
         self.playerHandler.main.dismiss(animated: true) {
             print("player dismissed")
         }
