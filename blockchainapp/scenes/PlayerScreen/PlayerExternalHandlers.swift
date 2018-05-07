@@ -11,7 +11,7 @@ protocol PlayerProtocol: class {
 protocol PlaylistProtocol: class {
 	var playlistName: String {get}
 	func remove(index: Int)
-	func clearAll()
+    func clearAll(direction: HideMiniPlayerDirection)
 	func reload(tracks: [Track])
 }
 
@@ -34,7 +34,8 @@ extension PlayerModel: PlaylistProtocol {
         self.updatePlaylist()
 	}
 	
-	func clearAll() {
+    func clearAll(direction: HideMiniPlayerDirection) {
+        self.playerDelegate?.miniplayer(show: false, animated: true, direction: direction)
 		self.player.make(command: .pause)
         self.tracks.removeAll()
         self.playlistName = "null"

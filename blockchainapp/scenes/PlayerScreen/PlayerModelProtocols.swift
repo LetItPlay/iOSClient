@@ -12,6 +12,7 @@ protocol MainPlayerModelDelegate: class {
     func showSpeedSettings()
     func showMoreDialog(track: Track)
     func player(show: Bool)
+    func miniplayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection)
 }
 
 protocol PlayerModelDelegate: class {

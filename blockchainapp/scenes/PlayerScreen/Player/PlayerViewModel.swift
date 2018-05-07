@@ -64,4 +64,8 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 	func player(show: Bool) {
 		MainRouter.shared.miniPlayer(show: true, animated: true)
 	}
+    
+    func miniplayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection) {
+        MainRouter.shared.mainController.popupPlayer(show: show, animated: animated, direction: direction)
+    }
 }

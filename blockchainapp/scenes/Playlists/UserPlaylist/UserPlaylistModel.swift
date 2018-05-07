@@ -97,7 +97,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         self.delegate?.show(tracks: self.tracks.map({TrackViewModel(track: $0)}))
 		let playlist = PlayerHandler.playlist
 		if playlist?.playlistName == playlistName {
-			PlayerHandler.playlist?.clearAll()
+            PlayerHandler.playlist?.clearAll(direction: .down)
 		}
     }
     

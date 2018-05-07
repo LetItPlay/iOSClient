@@ -15,7 +15,6 @@ class PlayerModel {
 
     weak var playerDelegate: (PlayerModelDelegate & MainPlayerModelDelegate)?
     weak var playlistDelegate: PlaylistModelDelegate?
-	weak var mainDelegate: MainPlayerModelDelegate?
     weak var trackInfoDelegate: TrackInfoDelegate?
 
     var playlistName: String = ""

@@ -168,8 +168,7 @@ class MiniPlayerView: UITabBar {
             }
         }
         
-        self.emitter?.send(event: PlayerEvent.clearAll)
-        AudioController.main.update(.clearAll(direction: direction!))
+        self.emitter?.send(event: PlayerEvent.clearAll(direction: direction!))
     }
 	
 	@objc func buttonPressed(sender: UIButton) {

@@ -43,8 +43,8 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
         self.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.miniPlayer, belowSubview: self.tabBar)
         self.miniPlayer.snp.makeConstraints { (make) in
-			make.left.equalToSuperview()
-			make.right.equalToSuperview()
+			miniPlayerLeftConstr = make.left.equalToSuperview().constraint.layoutConstraints.first
+			miniPlayerRightConstr = make.right.equalToSuperview().constraint.layoutConstraints.first
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
 //		self.playerHandler.main.modalPresentationStyle = .overFullScreen
