@@ -24,6 +24,8 @@ extension PlayerModel: PlayerEventHandler {
 			}
 		case .seek(let progress):
 			self.player.make(command: .seek(progress: progress))
+        case .clearAll:
+            self.clearAll()
 		}
 	}
 	

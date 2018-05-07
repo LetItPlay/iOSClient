@@ -156,6 +156,7 @@ class ProfileViewController: UIViewController {
         
         self.present(languageAlert, animated: true, completion: nil)
         
+        // TODO: with new player
 		AudioController.main.make(command: .pause)
 	}
 	

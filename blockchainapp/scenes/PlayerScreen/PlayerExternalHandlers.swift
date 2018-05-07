@@ -35,8 +35,9 @@ extension PlayerModel: PlaylistProtocol {
 	}
 	
 	func clearAll() {
-		self.tracks.removeAll()
 		self.player.make(command: .pause)
+        self.tracks.removeAll()
+        self.playlistName = "null"
         self.updatePlaylist()
 	}
 }
