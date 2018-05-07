@@ -168,6 +168,7 @@ class MiniPlayerView: UITabBar {
             }
         }
         
+        self.emitter?.send(event: PlayerEvent.plause)
         AudioController.main.update(.clearAll(direction: direction!))
     }
 	
