@@ -69,9 +69,7 @@ class MainPlayerViewController: UIViewController {
 		
 		let panGest = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
 		self.view.addGestureRecognizer(panGest)
-		
-//		self.transitioningDelegate = self
-		
+				
 		self.view.addSubview(arrowView)
 		arrowView.snp.makeConstraints { (make) in
 			make.width.equalTo(37)
@@ -94,7 +92,7 @@ class MainPlayerViewController: UIViewController {
 		
         self.view.addSubview(bottomIconsView)
         bottomIconsView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(UIScreen.main.nativeBounds.height == 2436 ? -34 : 0)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.height.equalTo(40)
