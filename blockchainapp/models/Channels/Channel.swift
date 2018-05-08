@@ -54,7 +54,14 @@ struct Channel: LIPModel, Hashable {
 	}
     
     func sharedInfo() -> ShareInfo {
-        return ShareInfo(text: self.name, url: RequestManager.sharedServer + "/tracks?channel=/\(self.id)", image: try! UIImage(data: Data(contentsOf: (self.image)!))!)
+        let image: UIImage!
+        do {
+            image = try UIImage(data: Data(contentsOf: (self.image)!))!
+        } catch {
+            image = UIImage(named: "redTriangle")
+        }
+        
+        return ShareInfo(text: self.name, url: RequestManager.sharedServer + "/tracks?channel=/\(self.id)", image: image)
     }
 }
 

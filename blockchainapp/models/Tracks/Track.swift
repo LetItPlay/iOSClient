@@ -118,9 +118,15 @@ struct Track: LIPModel {
 	}
     
     func sharedInfo() -> ShareInfo {
+        let image: UIImage!
+        do {
+            image = try UIImage(data: Data(contentsOf: (self.image)!))!
+        } catch {
+            image = UIImage(named: "redTriangle")
+        }
         return ShareInfo(text: "\"\(self.name)\" - \(self.channel.name)",
             url: RequestManager.sharedServer + "/tracks?channel=/\(self.channel.id)&track=\(self.id)",
-            image: try! UIImage(data: Data(contentsOf: (self.image)!))!)
+            image: image)
     }
 }
 
