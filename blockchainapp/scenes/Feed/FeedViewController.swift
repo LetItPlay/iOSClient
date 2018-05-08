@@ -81,7 +81,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         self.view.addSubview(tableView)
         
-//        tableView.contentInset.top = -44
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in

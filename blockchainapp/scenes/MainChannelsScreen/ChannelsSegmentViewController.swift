@@ -57,7 +57,7 @@ class ChannelsSegmentViewController: UIViewController {
         
         self.view.addSubview(blurView)
         blurView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(64)
+            make.top.equalTo(UIApplication.shared.statusBarFrame.height + (self.navigationController?.navigationBar.frame.height)!)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.height.equalTo(44)
