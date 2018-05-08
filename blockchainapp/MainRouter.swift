@@ -136,9 +136,7 @@ class MainRouter: Router {
             UIActivityType.postToTencentWeibo
         ]
         
-         DispatchQueue.global(qos: .background).async {
-            controller.present(activityViewController, animated: true, completion: nil)
-        }
+        controller.present(activityViewController, animated: true, completion: nil)
     }
 }
 
