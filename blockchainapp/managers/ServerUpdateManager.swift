@@ -12,13 +12,11 @@ import RealmSwift
 
 enum TrackAction {
 	case like
-	case listen
 	case report(msg: String)
 }
 
 enum ChannelAction {
 	case subscribe
-	case unsubscribe
 	case report(msg: String)
 }
 
@@ -31,17 +29,11 @@ class ServerUpdateManager {
         let type: ChannelUpdateRequest
         switch action {
         case .subscribe:
-            type = .subscribe(count: 1)
-        case .unsubscribe:
-            type = .subscribe(count: -1)
+            type = channel.isSubscribed ? .unsubscribe : .subscribe
         case .report(let msg):
             type = .report(msg: msg)
         }
-        RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (isSub) in
-            
-        }, onCompleted: {
-            var channel = channel
-            channel.isSubscribed = !channel.isSubscribed
+        RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (Channel) in
             NotificationCenter.default.post(name: InAppUpdateNotification.channel.notification(), object: nil, userInfo: ["station" : channel])
         }).disposed(by: disposeBag)
 	}
@@ -51,14 +43,10 @@ class ServerUpdateManager {
         let type: TrackUpdateRequest
         print(action)
         switch action {
-        case .listen:
-            type = .listen
-			ListenManager.shared.add(id: track.id)
-            updatedTrack.listenCount += 1
         case .like:
 			LikeManager.shared.addOrDelete(id: track.id)
             updatedTrack.isLiked = LikeManager.shared.hasObject(id: track.id)
-            type = .like(count: updatedTrack.isLiked ? 1 : -1)
+            type = track.isLiked ? .dislike : .like
         case .report(let msg):
             type = .report(msg: msg)
         }
@@ -72,9 +60,6 @@ class ServerUpdateManager {
         
 		RequestManager.shared.updateTrack(id: track.id, type: type).subscribe(onNext: { (tuple) in
             var track = track
-            track.likeCount = tuple.0
-            track.reportCount = tuple.1
-            track.listenCount = tuple.2
 			track.isLiked = LikeManager.shared.hasObject(id: track.id)
             NotificationCenter.default.post(name: InAppUpdateNotification.track.notification(), object: nil, userInfo: ["track": track])
         }).disposed(by: disposeBag)
@@ -83,17 +68,6 @@ class ServerUpdateManager {
     func update(language: Language)
     {
         UserSettings.language = language
-//        switch UserSettings.language {
-//        case .ru:
-//            UserSettings.language = .fr
-//        case .fr:
-//            UserSettings.language = .en
-//        case .en:
-//            UserSettings.language = .ru
-//        default:
-//            UserSettings.language = .none
-//        }
-        
         NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil, userInfo: ["lang" : UserSettings.language])
     }
 }

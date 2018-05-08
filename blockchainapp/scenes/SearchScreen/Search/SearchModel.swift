@@ -68,7 +68,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 			}.subscribe(onNext: {(tuple) in
                 if self.searchState.value.offset == 0 {
                     self.delegate?.toUpdate(nothing: false)
-                    self.playlistName = "Search".localized + " \"\(self.searchState.value.text)\""
+                    self.playlistName = "Search".localized + " \"\(self.searchState.value.text ?? "")\""
                     self.tracks = tuple.0
                     self.channels = tuple.1
                     self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))
@@ -111,7 +111,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     
     func channelSubscriptionPressedAt(index: Int) {
         let channel = self.tracks.count != 0 ? self.channels[index] : self.channels[index]
-        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         
         // while in User Settings

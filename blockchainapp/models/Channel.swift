@@ -14,6 +14,7 @@ struct Channel: LIPModel, Hashable {
 	var descr: String			= ""
 	
     var isSubscribed: Bool      = false
+	var isReported: Bool		= false
     
 	var lang: String			= Language.ru.rawValue
 	var tags: [String]			= []
@@ -32,6 +33,8 @@ struct Channel: LIPModel, Hashable {
 			self.descr = json["Description"].string ?? ""
 			self.lang = lang
 			self.tags = json["Tags"].array?.map({$0.string}).filter({$0 != nil}).map({$0!}) ?? []
+            self.isSubscribed = json["followed"].bool ?? false
+			self.isReported = json["reported"].bool ?? false
 			return
 		}
 		

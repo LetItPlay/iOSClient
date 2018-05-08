@@ -63,7 +63,7 @@ class ChannelsModel: ChannelsModelProtocol, ChannelsEventHandler {
 	
 	func subscribeAt(index: Int) {
         let channel = self.channels[index]
-        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         
         // while in User Settings

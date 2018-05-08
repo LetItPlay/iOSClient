@@ -129,6 +129,13 @@ enum AnalyticsEvent {
     }
 }
 
+let defaultDict: [String: Any] = ["v": UserSettings.version,
+                                  "pt": 2,
+                                  "pst": 21,
+                                  "sid": UserSettings.session,
+                                  "uid": UserSettings.userIdentifier,
+                                  "lang": UserSettings.language.rawValue]
+
 class AnalyticsEngine {
     class func sendEvent(event: AnalyticsEvent) {
         Answers.logCustomEvent(withName: event.name, customAttributes: event.metadata)

@@ -81,7 +81,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     
     func channelFollowButtonTyped() {
         // to server
-        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         // while in User Setting
         SubscribeManager.shared.addOrDelete(channel: self.channel.id)
@@ -114,7 +114,9 @@ extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
     
     func channelSubscriptionUpdated() {
         let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        channel.isSubscribed = channels.contains(channel.id)
-        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+        if self.channel != nil {
+            channel.isSubscribed = channels.contains(channel.id)
+            self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+        }
     }
 }

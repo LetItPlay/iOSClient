@@ -22,13 +22,14 @@ enum TracksRequest {
 }
 
 enum TrackUpdateRequest {
-    case listen
-    case like(count: Int)
+    case like
+    case dislike
     case report(msg: String)
 }
 
 enum ChannelUpdateRequest {
-    case subscribe(count: Int)
+    case subscribe
+    case unsubscribe
     case report(msg: String)
 }
 
@@ -60,7 +61,7 @@ enum RequestError: Error {
     case invalidURL
     case invalidJSON
     case noConnection
-    case unAuth
+    case unAuth(prev: String?)
     case serverError(code: Int, msg: String)
 }
 
@@ -70,17 +71,21 @@ class RequestManager {
 	static let shared: RequestManager = RequestManager()
     
     private var jwt: Variable<String?> = Variable<String?>(nil)
-    var renewTokenAction: Action<Bool,String>!
+    var sessionManager: SessionManager!
     let disposeBag = DisposeBag()
     
     init() {
-        self.renewTokenAction = Action<Bool, String>.init(workFactory: { (_) -> Observable<String> in
-            return self.renewToken()
-        })
-        
-        self.renewTokenAction.elements.subscribe(onNext: { jwt in
-            self.jwt.value = jwt
-        }).disposed(by: disposeBag)
+
+//        var proxyConfiguration = [NSObject: AnyObject]()
+//        proxyConfiguration[kCFNetworkProxiesHTTPProxy] = "128.140.175.97" as AnyObject?
+//        proxyConfiguration[kCFNetworkProxiesHTTPPort] = "443" as AnyObject?
+//        proxyConfiguration[kCFNetworkProxiesHTTPEnable] = 1 as AnyObject?
+//        proxyConfiguration[kCFStreamPropertyHTTPSProxyHost] = "128.140.175.97" as AnyObject?
+//        proxyConfiguration[kCFStreamPropertyHTTPSProxyPort] = 443 as AnyObject?
+        let cfg = Alamofire.SessionManager.default.session.configuration
+//        cfg.connectionProxyDictionary = proxyConfiguration
+
+        self.sessionManager = SessionManager.init(configuration: cfg)
     }
     
 	func channel(id: Int) -> Observable<Channel> {
@@ -88,7 +93,7 @@ class RequestManager {
 		if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Channel> in
+			let getSignal = self.makeRequest(request).flatMap({ (result) -> Observable<Channel> in
 				switch result {
 				case .value(let data):
 					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
@@ -116,7 +121,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            let getSignal = self.request(request: request).flatMap({ (result) -> Observable<Track> in
+            let getSignal = self.makeRequest(request).flatMap({ (result) -> Observable<Track> in
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
@@ -141,7 +146,7 @@ class RequestManager {
 		if let url = urlString.url() {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).flatMap({ (result) -> Observable<([Track],[Channel])> in
+			return self.makeRequest(request).flatMap({ (result) -> Observable<([Track], [Channel])> in
 				print(url.absoluteString)
 				switch
                 result {
@@ -180,7 +185,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).flatMap({ (result) -> Observable<[Track]> in
+			return self.makeRequest(request).flatMap({ (result) -> Observable<[Track]> in
 				print(url.absoluteString)
 				switch result {
 				case .value(let data):
@@ -229,7 +234,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
 			var request = URLRequest(url: url)
 			request.httpMethod = "GET"
-			return self.request(request: request).flatMap({ (result) -> Observable<[Channel]> in
+			return self.makeRequest(request).flatMap({ (result) -> Observable<[Channel]> in
 				switch result {
 				case .value(let data):
 					do {
@@ -260,161 +265,93 @@ class RequestManager {
 		}
         return Observable.error(RequestError.invalidURL)
     }
-    
-    func updateChannel(id: Int, type: ChannelUpdateRequest) -> Observable<Bool> {
-        return Observable<Bool>.create({ (observer) -> Disposable in
-            if let str = String(format: "https://manage.letitplay.io/api/stations/%d/counts/", id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                let url = URL(string: str) {
-                
-                var request = URLRequest(url: url)
-                request.httpMethod = "POST"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                
-                var elements: [String: Int] = [:]
-                elements["report_count"] = 0
-                elements["subscription_count"]   = 0
-                
-                switch type {
-                case .subscribe(let count):
-                    elements["subscription_count"] = count
-                case .report(_):
-                    elements["report_count"] = 1
+
+    func updateChannel(id: Int, type: ChannelUpdateRequest) -> Observable<Channel> {
+        var urlString = RequestManager.server
+        switch type {
+            case .report(_):
+                urlString += "/report/channel/\(id)"
+            default:
+                urlString += "/follow/channel/\(id)"
+        }
+        guard let str = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) else {
+                return Observable<Channel>.error(RequestError.invalidURL)
+        }
+        
+        var bodyString = ""
+        
+        var req = URLRequest(url: url)
+        switch type {
+        case .unsubscribe:
+            req.httpMethod = "DELETE"
+        case .subscribe:
+            req.httpMethod = "PUT"
+        case .report(let msg):
+            req.httpMethod = "PUT"
+            bodyString = "reason:\(msg)"
+        }
+
+        req.httpBody = bodyString.data(using: .utf8)
+        req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        return makeRequest(req).flatMap({ result -> Observable<Channel> in
+            switch result {
+            case .value(let data):
+                if let json = try? JSON(data: data), let ch = Channel.init(json: json) {
+                    return Observable.just(ch)
                 }
-                
-                request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
-                
-                Alamofire.request(request)
-                    .responseData { (response: DataResponse<Data>) in
-                        
-                        if let _ = response.error {
-                            observer.onError(RequestError.noConnection)
-                            observer.onCompleted()
-                            return
-                        }
-                        
-                        if let resp = response.response, let data = response.data {
-                            if resp.statusCode == 200 {
-                                do {
-                                    let _  = try JSON(data: data)
-//                                    if let channel = Station1.init(json: json) {
-//                                        observer.onNext(channel.isSubscribed)
-//                                    } else {
-//                                        observer.onError(RequestError.invalidJSON)
-//                                    }
-                                    observer.onNext(true)
-                                } catch(let error) {
-                                    print(error)
-                                    observer.onError(RequestError.invalidJSON)
-                                }
-                            } else {
-                                observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
-                            }
-                        } else {
-                            observer.onError(RequestError.noConnection)
-                        }
-                        observer.onCompleted()
-                }
-            } else {
-                observer.onError(RequestError.invalidURL)
+                return Observable<Channel>.error(RequestError.invalidJSON)
+            case .error(let error):
+                return Observable<Channel>.error(error)
             }
+        })
+    }
+    
+    func updateTrack(id: Int, type: TrackUpdateRequest) -> Observable<Track> {
+        var urlString = RequestManager.server
+        switch type {
+        case .report(_):
+            urlString += "/report/track/\(id)"
+        default:
+            urlString += "/like/track/\(id)"
+        }
+        guard let str = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+            let url = URL(string: str) else {
+                return Observable<Track>.error(RequestError.invalidURL)
+        }
             
-            return Disposables.create {
-                print("Track update signal disposed")
-            }
-        })
-    }
-    
-    func updateTrack(id: Int, type: TrackUpdateRequest) -> Observable<(Int, Int, Int)> {
-        return Observable<(Int, Int, Int)>.create({ (observer) -> Disposable in
-            if let str = String(format: "https://manage.letitplay.io/api/tracks/%d/counts/", id).addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                let url = URL(string: str) {
-                
-                var request = URLRequest(url: url)
-                request.httpMethod = "POST"
-                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-                
-                var elements: [String: Int] = [:]
-                elements["report_count"] = 0
-                elements["like_count"]   = 0
-                elements["listen_count"] = 0
-                switch type {
-                    case .like(let count):
-                        print(count)
-                        elements["like_count"] = count
-                    case .report(_):
-                        elements["report_count"] = 1
-                    case .listen:
-                        elements["listen_count"] = 1
+        var request = URLRequest(url: url)
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        var body = ""
+
+        switch type {
+        case .dislike:
+            request.httpMethod = "DELETE"
+        case .report(let msg):
+            request.httpMethod = "PUT"
+            body = "reason:\(msg)"
+        default:
+            request.httpMethod = "PUT"
+        }
+        request.httpBody = body.data(using: .utf8)
+
+        return makeRequest(request).flatMap { result -> Observable<Track> in
+            switch result {
+            case .value(let data):
+                if let json = try? JSON(data: data),
+                   let tr = Track.init(json: json),
+                   let ch = Channel.init(json: json["station"]) {
+
+                    return Observable.just(tr)
                 }
-                
-                request.httpBody = try? JSONSerialization.data(withJSONObject: elements, options: .prettyPrinted)
-				
-                Alamofire.request(request)
-					.responseData { (response: DataResponse<Data>) in
-						
-						if let _ = response.error {
-							observer.onError(RequestError.noConnection)
-							observer.onCompleted()
-							return
-						}
-						
-						if let resp = response.response, let data = response.data {
-							if resp.statusCode == 200 {
-								do {
-									let json  = try JSON(data: data)
-                                    if let likes = json["like_count"].int,
-                                       let reports = json["report_count"].int,
-                                       let listens = json["listen_count"].int
-                                    {
-                                        observer.onNext((likes, reports, listens))
-									} else {
-										observer.onError(RequestError.invalidJSON)
-									}
-								} catch(let error) {
-									print(error)
-									observer.onError(RequestError.invalidJSON)
-								}
-							} else {
-								observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
-							}
-						} else {
-							observer.onError(RequestError.noConnection)
-						}
-						observer.onCompleted()
-				}
-			} else {
-				observer.onError(RequestError.invalidURL)
-			}
-			
-            return Disposables.create {
-                print("Track update signal disposed")
+                return Observable<Track>.error(RequestError.invalidJSON)
+            case .error(let error):
+                return Observable<Track>.error(error)
             }
-        })
+         }
     }
-    
-//    func getToken() {
-//        let urlString = RequestManager.server + "/auth"
-//        if let url = URL(string: urlString) {
-//            var request = URLRequest(url: url)
-//            request.httpMethod = "POST"
-//            let postString = "uuid=\(UserSettings.userIdentifier)"
-//            request.httpBody = postString.data(using: .utf8)
-//
-//            self.request(request: request).subscribe(onNext: { result in
-//                switch result {
-//                case .value(let data):
-//                    do {
-//                        let json = try JSON(data: data)
-//                        UserSettings.token = (json.array?.map({"\($0)"}).first) ?? ""
-//                    } catch {
-//                        print(RequestError.invalidJSON)
-//                    }
-//                case .error(let error):
-//                    print(error)
-//                }
-//            })
-//        }
-//    }
     
     private func renewToken() -> Observable<String> {
         let urlString = RequestManager.server + "/auth/signup?uid=\(UserSettings.userIdentifier)&username=\(UserSettings.name)"
@@ -448,12 +385,12 @@ class RequestManager {
     
     private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
         guard let jwt = self.jwt.value else {
-            return Observable<Result<Data>>.error(RequestError.unAuth)
+            return Observable<Result<Data>>.error(RequestError.unAuth(prev: self.jwt.value))
         }
         var requsest = req
         requsest.allHTTPHeaderFields?["Authorization"] = "Bearer " + jwt
         return Observable<Result<Data>>.create({ (observer) -> Disposable in
-            let dataReq: DataRequest = Alamofire.request(requsest).responseData { (response: DataResponse<Data>) in
+            let dataReq: DataRequest = self.sessionManager.request(requsest).responseData { (response: DataResponse<Data>) in
                 if let _ = response.error {
                     observer.onError(RequestError.noConnection)
                     return
@@ -466,7 +403,7 @@ class RequestManager {
                 case 200:
                     observer.onNext(.value(data))
                 case 403:
-                    observer.onError(RequestError.unAuth)
+                    observer.onError(RequestError.unAuth(prev: jwt))
                 default:
                     observer.onError(RequestError.serverError(code: resp.statusCode, msg: String(data: data, encoding: .utf8) ?? ""))
                 }
@@ -476,7 +413,7 @@ class RequestManager {
         })
     }
 	
-	func request(request: URLRequest) -> Observable<Result<Data>>{
+	func makeRequest(_ request: URLRequest) -> Observable<Result<Data>>{
 //        let signal = simpleRequest(req: request).retryWhen({ (obs) -> Observable<String> in
 //            return obs.flatMap({ (error) -> Observable<String> in
 //                switch error {

@@ -21,6 +21,13 @@ class UserSettings {
         }
     }
     
+    static let version: String = {
+        let dictionary = Bundle.main.infoDictionary!
+        let version = dictionary["CFBundleShortVersionString"] as! String
+        let build = dictionary["CFBundleVersion"] as! String
+        return "\(version) build \(build)"
+    }()
+    
     static var userIdentifier: String {
         get {
             let def = UserDefaults.standard

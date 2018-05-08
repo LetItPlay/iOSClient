@@ -117,7 +117,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     
     func followPressed() {
         // to server
-        let action: ChannelAction = channel.isSubscribed ? ChannelAction.unsubscribe : ChannelAction.subscribe
+        let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         // while in User Setting
         subManager.addOrDelete(channel: self.channel.id)
