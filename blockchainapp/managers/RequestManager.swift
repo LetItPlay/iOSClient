@@ -44,7 +44,7 @@ fileprivate extension TracksRequest {
         switch self {
         case .feed(let channels, let offset, let count):
             let channelsString = channels.map({"\($0)"}).joined(separator: ",")
-            return "feed?stIds=\(channelsString)&offset=\(offset)&limit=\(count)&lang=\(lang)"
+            return "feed?offset=\(offset)&limit=\(count)&lang=\(lang)" // stIds=\(channelsString)&
         case .trends(let offset, let count):
             return "trends?offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .channel(let id):
@@ -140,7 +140,6 @@ class RequestManager {
 				switch result {
 				case .value(let data):
 					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
-                        channel.isSubscribed = SubscribeManager.shared.hasChannel(id: channel.id)
 						return Observable.just(channel)
 					} else {
 						return Observable.error(RequestError.invalidJSON)
@@ -168,8 +167,6 @@ class RequestManager {
                 switch result {
                 case .value(let data):
                     if let json = try? JSON(data: data), var track: Track = Track(json: json) {
-                        let lm = LikeManager.shared
-                        track.isLiked = lm.hasObject(id: track.id)
                         return Observable.just(track)
                     } else {
                         return Observable.error(RequestError.invalidJSON)
@@ -194,18 +191,14 @@ class RequestManager {
                 switch result {
                 case .value(let data):
                     do {
-                        let lm = LikeManager.shared
-                        let subscribeManager = SubscribeManager.shared
                         let json = try JSON(data: data)
                         var tracks = [Track]()
                         var channels = [Channel]()
                         if let items = json["results"].array {
                             for item in items {
                                 if var track = Track.init(json: item) {
-                                    track.isLiked = lm.hasObject(id: track.id)
                                     tracks.append(track)
                                 } else if var channel = Channel.init(json: item) {
-                                    channel.isSubscribed = subscribeManager.hasChannel(id: channel.id)
                                     channels.append(channel)
                                 }
                             }
@@ -247,11 +240,7 @@ class RequestManager {
                         }
                         let tracks: [Track] = tracksJSON.array?
                             .map({Track(json: $0)})
-                            .filter({$0 != nil}).map({$0!})
-                            .map({track in
-                                var track = track
-                                track.isLiked = lm.hasObject(id: track.id)
-                                return track}) ?? []
+                            .filter({$0 != nil}).map({$0!}) ?? []
                         let objs = json["Stations"].array?.map({ (json) -> ChannelObject? in
                             return ChannelObject.init(json: json)
                         }).filter({$0 != nil}).map({$0!}) ?? []
@@ -280,15 +269,10 @@ class RequestManager {
 				switch result {
 				case .value(let data):
 					do {
-						let subMan = SubscribeManager.shared
 						let json = try JSON(data: data)
 						let channels: [Channel] = json.array?
 							.map({Channel(json: $0)})
-							.filter({$0 != nil}).map({channel in
-								var channel = channel!
-								channel.isSubscribed = subMan.hasChannel(id: channel.id)
-								return channel
-							}) ?? []
+							.filter({$0 != nil}).map({$0!}) ?? []
 						let objs = json.array?.map({ (json) -> ChannelObject? in
 							return ChannelObject.init(json: json)
 						}).filter({$0 != nil}).map({$0!}) ?? []
@@ -479,7 +463,7 @@ class RequestManager {
                     })
                 default: return Observable<Result<Data>>.error(error)
                 }
-            }).retry()
+            })
         return signal
 	}
 }
