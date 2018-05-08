@@ -69,12 +69,9 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     func formatPlaylists(index: Int) {
         let playlist = self.playlists[index]
 		let name = "Playlist".localized + " \"\(playlist.title)\""
-//        let contr = AudioController.main
 		let player = PlayerHandler.player
 		player?.loadPlaylist(name: name, tracks: playlist.tracks)
 		let _ = player?.trackSelected(playlistName: name, id: playlist.tracks[0].id)
-//        contr.loadPlaylist(playlist: ("Playlist".localized + " \"\(playlist.title)\"", playlist.tracks.map({$0})), playId: playlist.tracks[0].id)
-//        contr.showPlaylist()
     }
     
     func send(event: LifeCycleEvent) {

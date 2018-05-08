@@ -101,10 +101,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     func cellDidSelectFor(viewModels: ViewModels, atIndex: Int) {
         switch viewModels {
         case .channels:
-            AnalyticsEngine.sendEvent(event: .searchEvent(event: .channelTapped))
             self.delegate?.showChannel(id: self.channels[atIndex].id)
         case .tracks:
-            AnalyticsEngine.sendEvent(event: .searchEvent(event: .trackTapped))
             self.trackSelected(index: atIndex)
         }
     }

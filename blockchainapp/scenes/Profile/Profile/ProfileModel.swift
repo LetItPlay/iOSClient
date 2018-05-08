@@ -94,10 +94,10 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func change(language: String) {
-        let newLanguage: Language = UserSettings.languages.filter({$0.name == language}).first!
+        AnalyticsEngine.sendEvent(event: .langChanged)
         
+        let newLanguage: Language = UserSettings.languages.filter({$0.name == language}).first!
         ServerUpdateManager.shared.update(language: newLanguage)
-//        self.delegate?.update(language: newLanguage)
     }
     
     func send(event: LifeCycleEvent) {

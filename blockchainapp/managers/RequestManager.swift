@@ -84,7 +84,7 @@ enum RequestError: Error {
 }
 
 class RequestManager {
-    static let server: String = "https://beta.api.letitplay.io"
+    static let server: String = "https://api.letitplay.io"
     static let sharedServer: String = "https://webui.letitplay.io/#"
     static let shared: RequestManager = RequestManager()
     
@@ -93,16 +93,16 @@ class RequestManager {
     let disposeBag = DisposeBag()
     
     init() {
-
-//        var proxyConfiguration = [NSObject: AnyObject]()
-//        proxyConfiguration[kCFNetworkProxiesHTTPProxy] = "128.140.175.97" as AnyObject?
-//        proxyConfiguration[kCFNetworkProxiesHTTPPort] = "443" as AnyObject?
-//        proxyConfiguration[kCFNetworkProxiesHTTPEnable] = 1 as AnyObject?
-//        proxyConfiguration[kCFStreamPropertyHTTPSProxyHost] = "128.140.175.97" as AnyObject?
-//        proxyConfiguration[kCFStreamPropertyHTTPSProxyPort] = 443 as AnyObject?
+        
+        //        var proxyConfiguration = [NSObject: AnyObject]()
+        //        proxyConfiguration[kCFNetworkProxiesHTTPProxy] = "128.140.175.97" as AnyObject?
+        //        proxyConfiguration[kCFNetworkProxiesHTTPPort] = "443" as AnyObject?
+        //        proxyConfiguration[kCFNetworkProxiesHTTPEnable] = 1 as AnyObject?
+        //        proxyConfiguration[kCFStreamPropertyHTTPSProxyHost] = "128.140.175.97" as AnyObject?
+        //        proxyConfiguration[kCFStreamPropertyHTTPSProxyPort] = 443 as AnyObject?
         let cfg = Alamofire.SessionManager.default.session.configuration
-//        cfg.connectionProxyDictionary = proxyConfiguration
-
+        //        cfg.connectionProxyDictionary = proxyConfiguration
+        
         self.sessionManager = SessionManager.init(configuration: cfg)
     }
     
@@ -111,7 +111,7 @@ class RequestManager {
         if let url = URL(string: urlString) {
             var request = URLRequest(url: url)
             request.httpMethod = "GET"
-            return self.makeRequest(request).retry().flatMap ({ (result) -> Observable<[ChannelCategory]> in
+            return self.makeRequest(request).flatMap ({ (result) -> Observable<[ChannelCategory]> in
                 print(url.absoluteString)
                 switch result {
                 case .value(let data):
@@ -179,7 +179,7 @@ class RequestManager {
         }
         return Observable.error(RequestError.invalidURL)
     }
-
+    
     func search(text: String, offset: Int, count: Int) -> Observable<([Track], [Channel])> {
         let urlString = RequestManager.server + "/" + "search?q=\(text.lowercased())&offset=\(offset)&limit=\(count)&lang=\(UserSettings.language.identifier)"
         if let url = urlString.url() {
@@ -290,13 +290,27 @@ class RequestManager {
         return Observable.error(RequestError.invalidURL)
     }
     
+    func sendAnalytic(event: [String : Any]) {
+        let urlString = RequestManager.server + "/events"
+        if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
+            request.httpMethod = "POST"
+            
+            let jsonData = try? JSON(event).rawData()
+            request.httpBody = jsonData
+            
+            let _ = self.makeRequest(request).subscribe()
+        } else {
+            print("request error")
+        }
+    }
+    
     func updateChannel(id: Int, type: ChannelUpdateRequest) -> Observable<Channel> {
         var urlString = RequestManager.server
         switch type {
-            case .report(_):
-                urlString += "/report/channel/\(id)"
-            default:
-                urlString += "/follow/channel/\(id)"
+        case .report(_):
+            urlString += "/report/channel/\(id)"
+        default:
+            urlString += "/follow/channel/\(id)"
         }
         guard let str = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) else {
@@ -315,10 +329,10 @@ class RequestManager {
             req.httpMethod = "PUT"
             bodyString = "reason:\(msg)"
         }
-
+        
         req.httpBody = bodyString.data(using: .utf8)
         req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+        
         return makeRequest(req).flatMap({ result -> Observable<Channel> in
             switch result {
             case .value(let data):
@@ -344,12 +358,12 @@ class RequestManager {
             let url = URL(string: str) else {
                 return Observable<Track>.error(RequestError.invalidURL)
         }
-            
+        
         var request = URLRequest(url: url)
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
+        
         var body = ""
-
+        
         switch type {
         case .dislike:
             request.httpMethod = "DELETE"
@@ -360,20 +374,20 @@ class RequestManager {
             request.httpMethod = "PUT"
         }
         request.httpBody = body.data(using: .utf8)
-
+        
         return makeRequest(request).flatMap { result -> Observable<Track> in
             switch result {
             case .value(let data):
                 if let json = try? JSON(data: data),
                    let tr = Track.init(json: json),
-                   let ch = Channel.init(json: json["station"]) {
+                   let _ = Channel.init(json: json["station"]) {
                     return Observable.just(tr)
                 }
                 return Observable<Track>.error(RequestError.invalidJSON)
             case .error(let error):
                 return Observable<Track>.error(error)
             }
-         }
+        }
     }
     
     private func renewToken() -> Observable<String> {
@@ -434,20 +448,20 @@ class RequestManager {
             return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
         })
     }
-	
-	func makeRequest(_ request: URLRequest) -> Observable<Result<Data>>{
-//        let signal = simpleRequest(req: request).retryWhen({ (obs) -> Observable<String> in
-//            return obs.flatMap({ (error) -> Observable<String> in
-//                switch error {
-//                case RequestError.unAuth:
-//                    return self.renewToken().do(onNext: { (jwt) in
-//                        self.jwt.value = jwt
-//                    })
-//                default: return Observable<String>.just(self.jwt.value ?? "")
-//                }
-//            })
-//        })
-//
+    
+    func makeRequest(_ request: URLRequest) -> Observable<Result<Data>>{
+        //        let signal = simpleRequest(req: request).retryWhen({ (obs) -> Observable<String> in
+        //            return obs.flatMap({ (error) -> Observable<String> in
+        //                switch error {
+        //                case RequestError.unAuth:
+        //                    return self.renewToken().do(onNext: { (jwt) in
+        //                        self.jwt.value = jwt
+        //                    })
+        //                default: return Observable<String>.just(self.jwt.value ?? "")
+        //                }
+        //            })
+        //        })
+        //
         let signal = simpleRequest(req: request)
             .catchError({ (error) -> Observable<Result<Data>> in
                 print(request)
@@ -462,5 +476,5 @@ class RequestManager {
                 }
             })
         return signal
-	}
+    }
 }
