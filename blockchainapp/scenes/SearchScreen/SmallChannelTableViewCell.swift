@@ -41,15 +41,17 @@ class SmallChannelTableViewCell: UITableViewCell {
 	
 	weak var channel: SearchChannelViewModel? = nil {
 		didSet {
-			channelNameLabel.text = channel?.name
-            dataLabels[.subs]?.set(text: (channel?.subscriptionCount)!)
-			dataLabels[.tracks]?.set(text: (channel?.tracksCount)!)
-            if let urlString = channel?.imageURL {
-                channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
-            } else {
-                channelImageView.image = UIImage(named: "channelPreviewImg")
+            DispatchQueue.main.async {
+                self.channelNameLabel.text = self.channel?.name
+                self.dataLabels[.subs]?.set(text: (self.channel?.subscriptionCount == nil ? "0" : self.channel?.subscriptionCount)!)
+                self.dataLabels[.tracks]?.set(text: (self.channel?.tracksCount)!)
+                if let urlString = self.channel?.imageURL {
+                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
+                } else {
+                    self.channelImageView.image = UIImage(named: "channelPreviewImg")
+                }
+                self.followButton.isSelected = (self.channel?.isSubscribed)!
             }
-            self.followButton.isSelected = (channel?.isSubscribed)!
 		}
 	}
 	

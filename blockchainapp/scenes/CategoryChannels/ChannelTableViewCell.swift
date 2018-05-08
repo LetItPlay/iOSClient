@@ -86,32 +86,34 @@ class ChannelTableViewCell: UITableViewCell {
 	
 	weak var channel: MediumChannelViewModel? = nil {
 		didSet {
-            self.viewModel = channel
-            
-			channelTitle.text = self.viewModel?.name
-            subs.set(text: (self.viewModel?.subscriptionCount)!)
-            plays.set(text: (self.viewModel?.tracksCount)!)
-            
-            self.subButton.isSelected = (self.viewModel?.isSubscribed)!
-            
-			self.tagsList.removeAllTags()
-			if let tags = self.viewModel?.tags.map({$0}).prefix(4) {
-				if tags.count != 0 {
-					tagsList.addTags(tags.map({$0.uppercased()}))
-					self.noTagsView.isHidden = true
-					tagsList.isHidden = false
-				} else {
-					self.noTagsView.isHidden = false
-					self.tagsList.isHidden = true
-				}
-			} else {
-				self.noTagsView.isHidden = false
-				self.tagsList.isHidden = true
-			}
-            if let urlString = self.viewModel?.imageURL {
-                channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
-            } else {
-                channelImageView.image = UIImage(named: "channelPreviewImg")
+            DispatchQueue.main.async {
+                self.viewModel = self.channel
+                
+                self.channelTitle.text = self.viewModel?.name
+                self.subs.set(text: (self.viewModel?.subscriptionCount)!)
+                self.plays.set(text: (self.viewModel?.tracksCount)!)
+                
+                self.subButton.isSelected = (self.viewModel?.isSubscribed)!
+                
+                self.tagsList.removeAllTags()
+                if let tags = self.viewModel?.tags.map({$0}).prefix(4) {
+                    if tags.count != 0 {
+                        self.tagsList.addTags(tags.map({$0.uppercased()}))
+                        self.noTagsView.isHidden = true
+                        self.tagsList.isHidden = false
+                    } else {
+                        self.noTagsView.isHidden = false
+                        self.tagsList.isHidden = true
+                    }
+                } else {
+                    self.noTagsView.isHidden = false
+                    self.tagsList.isHidden = true
+                }
+                if let urlString = self.viewModel?.imageURL {
+                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
+                } else {
+                    self.channelImageView.image = UIImage(named: "channelPreviewImg")
+                }
             }
 		}
 	}

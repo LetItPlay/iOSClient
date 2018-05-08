@@ -55,16 +55,18 @@ class PlayerTableViewCell: UITableViewCell {
 	
 	weak var track: AudioTrack? = nil {
 		didSet {
-			if let iconUrl = track?.imageURL {
-                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-            } else {
-                trackImageView.image = UIImage(named: "trackPlaceholder")
+            DispatchQueue.main.async {
+                if let iconUrl = self.track?.imageURL {
+                    self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+                } else {
+                    self.trackImageView.image = UIImage(named: "trackPlaceholder")
+                }
+                
+                self.trackNameLabel.attributedText = Common.trackText(text: self.track?.name ?? "")
+                self.channelNameLabel.text = self.track?.author
+                
+                self.dataLabels[.time]?.setData(data: Int64(self.track?.length ?? 0))
             }
-			
-			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
-			channelNameLabel.text = track?.author
-			
-			dataLabels[.time]?.setData(data: Int64(track?.length ?? 0))
 		}
 	}
 	

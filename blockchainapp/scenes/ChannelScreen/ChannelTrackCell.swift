@@ -4,83 +4,85 @@ import SwipeCellKit
 import SDWebImage
 
 class ChannelTrackCell: SwipeTableViewCell {
-	
-	static let cellID: String = "ChannelTrackCellID"
+    
+    static let cellID: String = "ChannelTrackCellID"
     
     public var onOthers: (() -> Void)?
-	
-	let trackImageView: UIImageView = {
-		let imageView = UIImageView()
-		imageView.layer.cornerRadius = 6
-		imageView.contentMode = .scaleAspectFill
-		imageView.layer.masksToBounds = true
+    
+    let trackImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 6
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.masksToBounds = true
         imageView.image = UIImage(named: "trackPlaceholder")
-		return imageView
-	}()
-	let trackNameLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-		label.textColor = .black
-		label.lineBreakMode = .byTruncatingTail
-		label.numberOfLines = 2
-		return label
-	}()
+        return imageView
+    }()
+    let trackNameLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textColor = .black
+        label.lineBreakMode = .byTruncatingTail
+        label.numberOfLines = 2
+        return label
+    }()
     let channelNameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = UIColor.black.withAlphaComponent(0.6)
         return label
     }()
-	let timeLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-		label.textColor = UIColor.black.withAlphaComponent(0.6)
-		label.textAlignment = .right
-		return label
-	}()
-	
-	let reserveTimeLabel: UILabel = {
-		let label = UILabel()
-		label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-		label.textColor = UIColor.black.withAlphaComponent(0.6)
-		label.textAlignment = .right
-		return label
-	}()
+    let timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = UIColor.black.withAlphaComponent(0.6)
+        label.textAlignment = .right
+        return label
+    }()
+    
+    let reserveTimeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.textColor = UIColor.black.withAlphaComponent(0.6)
+        label.textAlignment = .right
+        return label
+    }()
     
     var showOthersButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "otherInactive"), for: .normal)
         return button
     }()
-	
-	var dataLabels: [IconLabelType: IconedLabel] = [:]
-	
+    
+    var dataLabels: [IconLabelType: IconedLabel] = [:]
+    
     var track: TrackViewModel? = nil {
-		didSet {
-            if let iconUrl = track?.imageURL {
-                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-			} else {
-				trackImageView.image = UIImage(named: "trackPlaceholder")
-			}
-			
-			trackNameLabel.attributedText = Common.trackText(text: track?.name ?? "")
-            channelNameLabel.text = track?.author
-
-            self.timeLabel.text = track?.dateString
-			
-            dataLabels[.listens]?.set(text: (track?.listensCount)!)
-            dataLabels[.time]?.set(text: (track?.length)!)
-            
-            dataLabels[.listens]?.isHidden = (track?.isPlaying)!
-            dataLabels[.playingIndicator]?.isHidden = !(track?.isPlaying)!
-            
-//            showOthersButton.isHidden = (track?.isPlaying)!
-		}
-	}
-	
-	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-		super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        didSet {
+            DispatchQueue.main.async {
+                if let iconUrl = self.track?.imageURL {
+                    self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+                } else {
+                    self.trackImageView.image = UIImage(named: "trackPlaceholder")
+                }
+                
+                self.trackNameLabel.attributedText = Common.trackText(text: self.track?.name ?? "")
+                self.channelNameLabel.text = self.track?.author
+                
+                self.timeLabel.text = self.track?.dateString
+                
+                self.dataLabels[.listens]?.set(text: (self.track?.listensCount)!)
+                self.dataLabels[.time]?.set(text: (self.track?.length)!)
+                
+                self.dataLabels[.listens]?.isHidden = (self.track?.isPlaying)!
+                self.dataLabels[.playingIndicator]?.isHidden = !(self.track?.isPlaying)!
+                
+                //            showOthersButton.isHidden = (track?.isPlaying)!
+            }
+        }
+    }
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         self.contentView.addSubview(trackImageView)
         trackImageView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
@@ -161,21 +163,21 @@ class ChannelTrackCell: SwipeTableViewCell {
             make.bottom.equalToSuperview()
             make.height.equalTo(1)
         }
-	}
+    }
     
     @objc func showOthersButtonTouched() {
         self.onOthers?()
     }
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override func setSelected(_ selected: Bool, animated: Bool) {
-		super.setSelected(selected, animated: animated)
-		
-		// Configure the view for the selected state
-	}
-	
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        
+        // Configure the view for the selected state
+    }
+    
 }
 
