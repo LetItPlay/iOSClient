@@ -20,20 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var router: DPLDeepLinkRouter = DPLDeepLinkRouter()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-
-        self.router.register("/tracks") { link in
-            if let link = link {
-                if let channelID = Int(link.queryParameters["channel"] as! String) {
-                    if let param = link.queryParameters["track"] as? String,
-                       let trackID = Int(param) {
-                        MainRouter.shared.show(screen: "channel", params: ["id" : channelID, "trackID" : trackID], present: false)
-                        return
-                    }
-                    MainRouter.shared.show(screen: "channel", params: ["id" : channelID], present: false)
-                }
-            }
-        }
-
+        
+        AnalyticsEngine.sendEvent(event: .appLoaded)
+        
+        setupDeepLink()
         setupAppearence()
         migrate()
 		
@@ -62,15 +52,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		Fabric.with([Crashlytics.self])
 		
-//		DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//			self.router.handle(URL(string: "lip://channel/38/tracks/40")) { (res, error) in
-//				print("\(res) \(error)")
-//			}
-//		}
-		
         return true
-		
-		
+    }
+    
+    func setupDeepLink() {
+        self.router.register("/tracks") { link in
+            if let link = link {
+                if let channelID = Int(link.queryParameters["channel"] as! String) {
+                    if let param = link.queryParameters["track"] as? String,
+                        let trackID = Int(param) {
+                        MainRouter.shared.show(screen: "channel", params: ["id" : channelID, "trackID" : trackID], present: false)
+                        return
+                    }
+                    MainRouter.shared.show(screen: "channel", params: ["id" : channelID], present: false)
+                }
+            }
+        }
     }
 
     // MARK: - appearence setup

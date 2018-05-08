@@ -99,7 +99,6 @@ class ProfileViewController: UIViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         isKeyboardShown = true
-        AnalyticsEngine.sendEvent(event: .profileEvent(on: .name))
         tableView.setContentOffset(CGPoint(x: 0, y: 100), animated: true)
     }
     
@@ -303,7 +302,6 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .profileEvent(on: .like))
         self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
 	}
 	

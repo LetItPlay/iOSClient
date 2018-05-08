@@ -94,7 +94,6 @@ class ChannelsCollectionView: UIView {
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
-        AnalyticsEngine.sendEvent(event: .trendEvent(event: .seeAll))
         self.emitter?.send(event: ChannelsEvent.showAllChannels)
     }
     
@@ -126,7 +125,6 @@ extension ChannelsCollectionView: UICollectionViewDataSource, UICollectionViewDe
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .trendEvent(event: .channelTapped))
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
     }
 }

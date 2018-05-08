@@ -171,13 +171,11 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
                 if self.previousCell == cell
                 {
                     previousCell = nil
-                    AnalyticsEngine.sendEvent(event: .longTap(to: .hideInfo))
                     (cell as! FeedTableViewCell).getInfo(toHide: true, animated: true)
                 }
                 else
                 {
                     previousCell = cell as? FeedTableViewCell
-                    AnalyticsEngine.sendEvent(event: .longTap(to: .showInfo))
                     (cell as! FeedTableViewCell).getInfo(toHide: false, animated: true)
                 }
             }
@@ -278,12 +276,6 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
-        if self.viewModel.showChannels {
-            AnalyticsEngine.sendEvent(event: .trendEvent(event: .cardTapped))
-        }
-        else {
-            AnalyticsEngine.sendEvent(event: .feedCardSelected)
-        }
 	}
 	
 	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

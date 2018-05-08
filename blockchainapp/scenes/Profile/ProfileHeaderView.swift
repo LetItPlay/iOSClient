@@ -146,7 +146,6 @@ class ProfileHeaderView: UIView {
     }
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
-        AnalyticsEngine.sendEvent(event: .profileEvent(on: .avatar))
         delegate?.addImage()
     }
     

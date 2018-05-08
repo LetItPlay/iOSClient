@@ -131,7 +131,6 @@ extension CategoryChannelsViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .channelCellTapped)
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
     }
 }

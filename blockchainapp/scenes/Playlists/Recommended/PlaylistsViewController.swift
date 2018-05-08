@@ -105,7 +105,7 @@ extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .searchEvent(event: .playlistTapped))
+        AnalyticsEngine.sendEvent(event: .playlistSelected)
         self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
     }
     

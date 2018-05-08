@@ -6,8 +6,10 @@ extension PlayerModel: PlayerEventHandler {
 		case .plause:
 			switch self.player.status {
 			case .playing:
+                AnalyticsEngine.sendEvent(event: .pause)
 				self.player.make(command: .pause)
 			case .paused:
+                AnalyticsEngine.sendEvent(event: .play)
 				self.player.make(command: .play)
 			default:
 				self.player.make(command: .pause)

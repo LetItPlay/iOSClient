@@ -179,7 +179,7 @@ extension MainTabViewController: UITabBarControllerDelegate {
 	
     func tabSelected(controller: String)
     {
-        AnalyticsEngine.sendEvent(event: .tabSelected(controller: controller))
+        AnalyticsEngine.sendEvent(event: .tabSelected)
     }
 }
 
