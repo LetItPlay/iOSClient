@@ -84,11 +84,9 @@ class MainRouter: Router {
 				close.rx.tap.subscribe(onNext: { _ in
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
-//                self.currentNavigationController?.present(vc, animated: true, completion: nil)
 			} else {
                 if self.currentNavigationController?.viewControllers.first is ProfileViewController {
-                    // TODO: special open
-                    return
+                    self.currentNavigationController?.setNavigationBarHidden(false, animated: true)
                 }
                 self.currentNavigationController?.pushViewController(vc, animated: true)
 			}

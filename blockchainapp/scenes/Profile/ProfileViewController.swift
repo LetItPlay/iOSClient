@@ -84,8 +84,6 @@ class ProfileViewController: UIViewController {
         
         self.tableView.reloadData()
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
         let view = UIView()
         self.view.addSubview(view)
         view.backgroundColor = UIColor.white
@@ -152,6 +150,8 @@ class ProfileViewController: UIViewController {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
     
@@ -175,7 +175,6 @@ class ProfileViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }
@@ -261,7 +260,6 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
 		print("\(info)")
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-//			self.profileView.profileImageView.image = pickedImage
             self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
         }
         
