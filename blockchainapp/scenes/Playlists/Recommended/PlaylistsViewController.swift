@@ -15,39 +15,6 @@ class PlaylistsViewController: UIViewController {
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
-    let header: UIVisualEffectView = {
-        let label = UILabel()
-        label.textColor = AppColor.Title.dark
-        label.font = AppFont.Title.section
-        label.text = "Today playlists".localized
-        
-//        let container = UIView()
-//        container.backgroundColor = UIColor.white
-//        container.addSubview(label)
-//        label.snp.makeConstraints { (make) in
-//            make.top.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//            make.left.equalToSuperview().inset(16)
-//            make.right.equalToSuperview().inset(16)
-//        }
-
-        var blurView = UIVisualEffectView()
-        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurView.clipsToBounds = true
-        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
-        
-        blurView.contentView.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
-        }
-        
-        return blurView
-    }()
-    
     let emptyLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
@@ -58,8 +25,6 @@ class PlaylistsViewController: UIViewController {
         return label
     }()
     
-    let refreshControl = UIRefreshControl()
-    
     convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         
@@ -67,14 +32,11 @@ class PlaylistsViewController: UIViewController {
         self.viewModel.delegate = self
         
         self.emitter = playlistEmitter
-        
-        self.viewInitialize()
-        
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
@@ -82,21 +44,18 @@ class PlaylistsViewController: UIViewController {
     
     func viewInitialize()
     {
+        
         self.view.backgroundColor = .white
         
-        refreshControl.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
-        
-        self.tableView.addSubview(refreshControl)
-        self.refreshControl.beginRefreshing()
+        self.tableView.refreshControl = UIRefreshControl()
+        self.tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         self.view.addSubview(self.tableView)
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(-24)
-            make.left.equalTo(0)
-            make.right.equalTo(0)
-            make.bottom.equalTo(0)
+            make.edges.equalToSuperview()
         }
 
+        self.tableView.contentInset.top = 44
         self.tableView.contentInset.bottom = 40
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -126,9 +85,6 @@ class PlaylistsViewController: UIViewController {
     
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
         self.emitter.send(event: .refresh)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in
-            self?.tableView.refreshControl?.endRefreshing()
-        })
     }
 }
 
@@ -158,21 +114,8 @@ extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
         return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 41
-    }
-    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        if self.viewModel.playlists.count == 0 {
-            return nil
-        }
-        
-        return header
     }
 }
 
@@ -181,6 +124,6 @@ extension PlaylistsViewController: PlaylistsVMDelegate
     func update() {
         self.emptyLabel(hide: self.viewModel.playlists.count == 0 ? false : true)
         self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
+        self.tableView.refreshControl?.endRefreshing()
     }
 }

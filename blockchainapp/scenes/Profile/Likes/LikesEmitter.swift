@@ -11,7 +11,7 @@ import Foundation
 enum LikesTrackEvent {
     case trackSelected(index: Int)
     case showOthers(index: Int)
-
+    case hidePlayer
 }
 
 protocol LikesEmitterProtocol: LifeCycleHandlerProtocol {
@@ -41,6 +41,8 @@ class LikesEmitter: Emitter, LikesEmitterProtocol {
             self.model?.trackSelected(index: index)
         case .showOthers(let index):
             self.model?.showOthers(index: index)
+        case .hidePlayer:
+            self.model?.hidePlayer()
         }
     }
 }

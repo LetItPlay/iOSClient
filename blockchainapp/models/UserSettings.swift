@@ -9,17 +9,15 @@
 import Foundation
 import UIKit
 
-enum Language: String {
-	case en = "en", ru = "ru", fr = "fr", zh = "zh", none = "suicide silence"
-}
-
 class UserSettings {
-    static var token: String {
-        get { return token }
-        set {
-            token = newValue
-        }
-    }
+    
+    public static let languages: [Language] = [//Language(identifier: "none", name: "", currentLanguage: "", switchTo: ""),
+                                               Language(identifier: "en", name: "English", currentLanguage: "Language: English", switchTo: "Switch to English 🇬🇧"),
+                                               Language(identifier: "zh", name: "Chinese", currentLanguage: "Language: Chinese", switchTo: "Change to Chinese 🇨🇳"),
+                                               Language(identifier: "ru", name: "Русский", currentLanguage: "Язык: Русский", switchTo: "Поменять на Русский 🇷🇺"),
+                                               Language(identifier: "fr", name: "Français", currentLanguage: "Langue: Français", switchTo: "Changer en Français 🇫🇷")]
+    
+    static var token: String = ""
     
     static let version: String = {
         let dictionary = Bundle.main.infoDictionary!
@@ -110,18 +108,18 @@ class UserSettings {
 		get {
 			let def = UserDefaults.standard
 			var res: Language
-			if let langStr = def.value(forKey: "lang") as? String, let lang = Language.init(rawValue: langStr) {
+            if let langStr = def.value(forKey: "lang") as? String, let lang = languages.filter({$0.identifier == langStr}).first {
 				res = lang
 			} else {
-				def.setValue(Language.none.rawValue, forKey: "lang")
+                res = Language(identifier: "none", name: "", currentLanguage: "", switchTo: "")
+				def.setValue(res.identifier, forKey: "lang")
 				def.synchronize()
-				res = .none
 			}
 			return res
 		}
 		set(newLang) {
 			let def = UserDefaults.standard
-			def.setValue(newLang.rawValue, forKey: "lang")
+			def.setValue(newLang.identifier, forKey: "lang")
 			def.synchronize()
 		}
 	}

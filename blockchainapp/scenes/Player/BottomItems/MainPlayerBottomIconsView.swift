@@ -104,31 +104,6 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
     
     @objc func trackSpeedButtonTouched()
     {
-//        let currentSpeed = AudioController.main.player.chosenRate == -1 ? 1 : AudioController.main.player.chosenRate
-//
-//        let speedAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
-//
-//        speedAlert.view.tintColor = AppColor.Title.lightGray
-//
-//        let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-//        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
-//        speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
-//
-//        for speed in speeds {
-//            if speed.value == currentSpeed {
-//                speedAlert.addAction(UIAlertAction(title: speed.text, style: .default, handler: { _ in
-//                    self.change(speed: speed.value)
-//                }))
-//            }
-//            else {
-//                speedAlert.addAction(UIAlertAction(title: speed.text, style: .destructive, handler: { _ in
-//                    self.change(speed: speed.value)
-//                }))
-//            }
-//        }
-//
-//        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
-        
         self.emitter.send(event: .speedButtonTouched)
     }
     

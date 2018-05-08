@@ -11,13 +11,13 @@ import SnapKit
 
 class ChannelsCollectionView: UIView {
     
-    var emitter: ChannelsEmitterProtocol?
-    var viewModel: ChannelsViewModel!
+    var emitter: CategoryChannelsEmitterProtocol?
+    var viewModel: CategoryChannelsViewModel!
     
     let channelLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
-        label.text = "Channels".localized
+        label.text = "You are subscribed".localized
         label.textAlignment = .left
         return label
     }()
@@ -47,7 +47,7 @@ class ChannelsCollectionView: UIView {
         return cv
     }()
     
-    convenience init(frame: CGRect, emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    convenience init(frame: CGRect, emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel)
     {
         self.init(frame: frame)
         self.emitter = emitter
@@ -61,7 +61,7 @@ class ChannelsCollectionView: UIView {
     
     func viewInitialize()
     {
-        self.backgroundColor = AppColor.Element.backgroundColor.withAlphaComponent(1)
+        self.backgroundColor = .white
         
         seeAllButton.addTarget(self, action: #selector(onSeeAllBtnTouched(_:)), for: .touchUpInside)
         self.addSubview(seeAllButton)
@@ -82,7 +82,7 @@ class ChannelsCollectionView: UIView {
         
         self.addSubview(channelsCollectionView)
         channelsCollectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(channelLabel.snp.bottom).inset(0)
+            make.top.equalTo(channelLabel.snp.bottom).inset(10)
             make.left.equalTo(0)
             make.right.equalTo(0)
             make.bottom.equalTo(self.snp.bottom).inset(6)
@@ -103,7 +103,7 @@ class ChannelsCollectionView: UIView {
     }
 }
 
-extension ChannelsCollectionView: ChannelsVMDelegate
+extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
     func reloadChannels() {
         self.channelsCollectionView.reloadData()
@@ -113,6 +113,9 @@ extension ChannelsCollectionView: ChannelsVMDelegate
 extension ChannelsCollectionView: UICollectionViewDataSource, UICollectionViewDelegate
 {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if self.viewModel.channels.count > 50 {
+            return 50
+        }
         return self.viewModel.channels.count
     }
     

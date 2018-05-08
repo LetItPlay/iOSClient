@@ -21,14 +21,14 @@ protocol LikesEventHandler: class
     func getTracks()
     func trackSelected(index: Int)
     func showOthers(index: Int)
-
+    func hidePlayer()
 }
 
 protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
     func trackUpdate(index: Int, vm: TrackViewModel)
     func show(tracks: [TrackViewModel], isContinue: Bool)
-    func showOthers(track: Track)
+    func showOthers(track: ShareInfo)
 }
 
 class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
@@ -86,7 +86,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     func getTracks() {
         let realm = try? Realm()
         let likeMan = LikeManager.shared
-		self.tracks = realm?.objects(TrackObject.self).map({Track.init(track: $0)}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.rawValue}) ?? []
+		self.tracks = realm?.objects(TrackObject.self).map({Track.init(track: $0)}).filter({likeMan.hasObject(id: $0.id) && $0.lang == UserSettings.language.identifier}) ?? []
 
         self.getTracksViewModel()
     }
@@ -126,7 +126,11 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index])
+        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
+    }
+    
+    func hidePlayer() {
+        PlayerHandler.playlist?.clearAll(direction: .down)
     }
 }
 
@@ -147,6 +151,7 @@ extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsU
     
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
+            tracks[index] = track
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)
         }

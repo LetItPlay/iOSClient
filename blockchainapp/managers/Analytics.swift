@@ -134,7 +134,7 @@ let defaultDict: [String: Any] = ["v": UserSettings.version,
                                   "pst": 21,
                                   "sid": UserSettings.session,
                                   "uid": UserSettings.userIdentifier,
-                                  "lang": UserSettings.language.rawValue]
+                                  "lang": UserSettings.language.currentLanguage]
 
 class AnalyticsEngine {
     class func sendEvent(event: AnalyticsEvent) {

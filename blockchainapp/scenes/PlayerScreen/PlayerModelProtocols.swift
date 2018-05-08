@@ -10,8 +10,9 @@ protocol PlaylistModelDelegate: class {
 
 protocol MainPlayerModelDelegate: class {
     func showSpeedSettings()
-    func showMoreDialog(track: Track)
+    func showMoreDialog(track: ShareInfo)
     func player(show: Bool)
+    func miniplayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection)
 }
 
 protocol PlayerModelDelegate: class {
@@ -19,4 +20,5 @@ protocol PlayerModelDelegate: class {
     func update(progress: Float, currentTime: String, leftTime: String)
     func update(track: TrackViewModel)
     func update(speeds: [String])
+    func update(currentSpeedIndex: Int)
 }

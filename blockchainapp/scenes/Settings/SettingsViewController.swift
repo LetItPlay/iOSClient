@@ -135,20 +135,20 @@ class SettingsViewController: UIViewController {
     }
 	
 	@objc func langSelected(sender: UIButton) {
-		sender.isEnabled = false
-        
-        switch sender.tag {
-        case 0:
-            UserSettings.language = .en
-        case 1:
-            UserSettings.language = .ru
-        case 2:
-            UserSettings.language = .fr
-        default:
-            UserSettings.language = .none
-        }
-		
-		self.present(MainTabViewController(), animated: true, completion: nil)
+//        sender.isEnabled = false
+//        
+//        switch sender.tag {
+//        case 0:
+//            UserSettings.language = .en
+//        case 1:
+//            UserSettings.language = .ru
+//        case 2:
+//            UserSettings.language = .fr
+//        default:
+//            UserSettings.language = .none
+//        }
+//        
+//        self.present(MainTabViewController(), animated: true, completion: nil)
 	}
 
     override func didReceiveMemoryWarning() {

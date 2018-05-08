@@ -71,10 +71,12 @@
 "Default" = "Défaut";
 "Delete" = "Effacer";
 
-" followers" = " слушают";
-
 "Select language" = "Choisissez votre langue";
 "playing now" = "joue maintenant";
 
 "No Description" = "Pas de description";
 "Track added" = "Titre ajouté";
+
+"Categories" = "";
+"Recent added" = "";
+"You are subscribed" = "";

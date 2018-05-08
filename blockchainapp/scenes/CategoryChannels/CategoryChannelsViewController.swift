@@ -1,5 +1,5 @@
 //
-//  ChannelsViewController.swift
+//  CategoryChannelsViewController.swift
 //  blockchainapp
 //
 //  Created by Ivan Gorbulin on 31/08/2017.
@@ -10,18 +10,22 @@ import UIKit
 import SDWebImage
 import TagListView
 
-class ChannelsViewController: UITableViewController {
+class CategoryChannelsViewController: UITableViewController {
     
-    var emitter: ChannelsEmitterProtocol?
-    var viewModel: ChannelsViewModel!
+    var emitter: CategoryChannelsEmitterProtocol?
+    var viewModel: CategoryChannelsViewModel!
     
-    convenience init(emitter: ChannelsEmitterProtocol, viewModel: ChannelsViewModel)
+    var topInset: Bool = false
+    
+    convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel, topInset: Bool)
     {
         self.init(nibName: nil, bundle: nil)
         
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
+        
+        self.topInset = topInset
     }
     
 
@@ -47,6 +51,7 @@ class ChannelsViewController: UITableViewController {
         tableView.allowsMultipleSelection = true
         tableView.refreshControl = refreshControl
         
+        tableView.contentInset.top = self.topInset ? 44 : 0
         tableView.contentInset.bottom = 72
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
@@ -84,7 +89,7 @@ class ChannelsViewController: UITableViewController {
     }
 }
 
-extension ChannelsViewController: ChannelsVMDelegate {
+extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
     func reloadChannels() {
         if let _: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
 //            self.source = source
@@ -95,7 +100,7 @@ extension ChannelsViewController: ChannelsVMDelegate {
     }
 }
 
-extension ChannelsViewController {
+extension CategoryChannelsViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1

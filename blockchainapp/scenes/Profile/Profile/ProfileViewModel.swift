@@ -22,12 +22,12 @@ class ProfileViewModel: ProfileModelDelegate {
     var imageData: Data! = Data()
     var languageString: String = ""
     
-    let languages = ["Switch to English 🇬🇧", "Поменять на Русский 🇷🇺", "Changer en Français 🇫🇷", "Change to Chinese 🇨🇳"] // TODO: name in Chinese
-    var currentLanguage = ""
+    let languages = UserSettings.languages.map({$0.switchTo})
+    var currentLanguage = UserSettings.language.currentLanguage
     
     weak var delegate: ProfileVMDelegate?
     
-    func reload(name: String = "name", image: Data, language: Language = .en)
+    func reload(name: String = "name", image: Data, language: Language = UserSettings.languages[0])
     {
         self.name = name
         self.imageData = image
@@ -38,18 +38,7 @@ class ProfileViewModel: ProfileModelDelegate {
     
     func getLanguage(lang: Language)
     {
-        switch lang {
-        case .ru:
-            self.currentLanguage = "Язык: Русский"
-        case .en:
-            self.currentLanguage = "Language: English"
-        case .fr:
-            self.currentLanguage = "Langue: Français"
-        case .zh:
-            self.currentLanguage = "Language: Chinese" // TODO: name in Chinese
-        default:
-            self.languageString = ""
-        }
+        self.currentLanguage = lang.currentLanguage
     }
     
     func update(image: Data)

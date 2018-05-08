@@ -83,7 +83,7 @@ protocol AudioControllerDelegate: class {
 protocol AudioControllerPresenter: class {
     func popupPlayer(show: Bool, animated: Bool, direction: HideMiniPlayerDirection)
 	func showPlaylist()
-	func hidePlayer()
+    func hidePlayer()
 }
 
 enum AudioControllerUpdate {

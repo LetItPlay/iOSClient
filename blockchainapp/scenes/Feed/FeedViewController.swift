@@ -23,14 +23,10 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     var previousCell: FeedTableViewCell?
     var alertBlurView: UIVisualEffectView!
     var alertLabel: UILabel!
-
-    var channelsView: ChannelsCollectionView!
     
     var didSwipeCell: Bool = false
     
-//    var trackInfoView: TrackInfoBlurView!
-
-	let tableView: UITableView = UITableView.init(frame: CGRect.init(x: 0, y: 0, width: 0, height: 0), style: .grouped)
+	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 
 	let emptyLabel: UILabel = {
 		let label = UILabel()
@@ -57,13 +53,12 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         return button
     }()
     
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol, channelsView: ChannelsCollectionView) {
+    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.viewModel.delegate = self
         
         self.emitter = emitter
-        self.channelsView = channelsView
     }
 	
     override func viewDidLoad() {
@@ -86,6 +81,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         self.view.addSubview(tableView)
         
+//        tableView.contentInset.top = -44
         tableView.contentInset.bottom = 60
         
         tableView.snp.makeConstraints { (make) in
@@ -125,16 +121,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         self.tableView.refreshControl?.beginRefreshing()
         
-        //        self.trackInfoView = TrackInfoBlurView()
-        //        self.view.addSubview(self.trackInfoView)
-        //
-        //        self.trackInfoView.snp.makeConstraints { (make) in
-        //            make.top.equalTo((self.navigationController?.navigationBar.frame.height)! + (self.navigationController?.navigationBar.frame.origin.y)! + 10)
-        //            make.left.equalTo(10)
-        //            make.right.equalTo(-10)
-        //            make.bottom.equalTo((self.tabBarController?.tabBar.frame.height)! * (-1) - 10)
-        //        }
-        
         let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
         self.navigationItem.rightBarButtonItem = searchItem
     }
@@ -150,18 +136,15 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.appear)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.emitter.send(event: LifeCycleEvent.disappear)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.disappear)
     }
     
     deinit {
         self.emitter.send(event: LifeCycleEvent.deinitialize)
-        self.channelsView.emitter?.send(event: LifeCycleEvent.deinitialize)
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
@@ -332,26 +315,11 @@ extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if self.viewModel.showChannels
-        {
-            return 121
-        }
         return 0
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.viewModel.showChannels
-        {
-			if channelsView == nil {
-            	channelsView = ChannelsCollectionView()
-			}
-            return channelsView
-        }
         return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
     }
 }
 

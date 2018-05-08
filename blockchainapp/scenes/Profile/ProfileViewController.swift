@@ -84,8 +84,6 @@ class ProfileViewController: UIViewController {
         
         self.tableView.reloadData()
         
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        
         let view = UIView()
         self.view.addSubview(view)
         view.backgroundColor = UIColor.white
@@ -117,19 +115,7 @@ class ProfileViewController: UIViewController {
     }
 	
 	@objc func langChanged(_: UIButton) {
-        var currentLanguage = ""
-        switch UserSettings.language {
-        case .ru:
-            currentLanguage = "Русский"
-        case .en:
-            currentLanguage = "English"
-        case .fr:
-            currentLanguage = "Français"
-        case .zh:
-            currentLanguage = "Chinese" // TODO: Chinese in Chinese
-        default:
-            break
-        }
+        let currentLanguage = UserSettings.language.name
         
         let languageAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         
@@ -139,15 +125,15 @@ class ProfileViewController: UIViewController {
         let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
         languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
-        for language in ["English", "Français", "Русский", "Chinese"] { // TODO: Chinese in Chinese
+        for language in UserSettings.languages.map({$0.name}) {
             if language == currentLanguage {
                 languageAlert.addAction(UIAlertAction(title: language, style: .default, handler: { _ in
-//                    self.profileView.emitter?.send(event: ProfileEvent.set(language: speed))
                 }))
             }
             else {
                 languageAlert.addAction(UIAlertAction(title: language, style: .destructive, handler: { _ in
                     self.profileView.emitter?.send(event: ProfileEvent.set(language: language))
+                    self.emitter?.send(event: LikesTrackEvent.hidePlayer)
                 }))
             }
         }
@@ -155,8 +141,6 @@ class ProfileViewController: UIViewController {
         languageAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
         
         self.present(languageAlert, animated: true, completion: nil)
-        
-		AudioController.main.make(command: .pause)
 	}
 	
     deinit {
@@ -165,6 +149,8 @@ class ProfileViewController: UIViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
@@ -189,7 +175,6 @@ class ProfileViewController: UIViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 }
@@ -275,7 +260,6 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
 		print("\(info)")
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-//			self.profileView.profileImageView.image = pickedImage
             self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
         }
         

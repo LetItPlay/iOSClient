@@ -16,7 +16,7 @@ struct Channel: LIPModel, Hashable {
     var isSubscribed: Bool      = false
 	var isReported: Bool		= false
     
-	var lang: String			= Language.ru.rawValue
+	var lang: String			= UserSettings.languages[2].identifier
 	var tags: [String]			= []
 	
 	init?(json: JSON) {
@@ -52,6 +52,10 @@ struct Channel: LIPModel, Hashable {
 	var hashValue: Int {
 		return self.id
 	}
+    
+    func sharedInfo() -> ShareInfo {
+        return ShareInfo(text: self.name, url: RequestManager.server + "/tracks?channel=/\(self.id)", image: try! UIImage(data: Data(contentsOf: (self.image)!))!)
+    }
 }
 
 class ChannelObject: Object {

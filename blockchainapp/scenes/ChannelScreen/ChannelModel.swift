@@ -23,8 +23,8 @@ extension PlayerUsingProtocol {
 		if let player = PlayerHandler.player {
 			if !player.trackSelected(playlistName: self.playlistName, id: selectedId) {
 				player.loadPlaylist(name: self.playlistName, tracks: self.tracks)
-			}
-			let _ = player.trackSelected(playlistName: self.playlistName, id: selectedId)
+                let _ = player.trackSelected(playlistName: self.playlistName, id: selectedId)
+            }
 		}
 	}
 }
@@ -49,7 +49,7 @@ protocol ChannelModelDelegate: class {
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
-    func showOthers(track: Track)
+    func showOthers(track: ShareInfo)
     func share(channel: ShareInfo)
 }
 
@@ -69,9 +69,13 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
 	let getTracksAction: Action<Int, [Track]>!
 	let disposeBag = DisposeBag()
         
-    init(channelID: Int)
+    init(channelID: Int, playTrack: Int? = nil)
     {
 		self.playlistName = "Channel".localized + " \(channelID)"
+        
+        if let id = playTrack {
+            self.currentTrackID = id
+        }
 		
         getTracksAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
             return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
@@ -84,6 +88,10 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
                 return tracks.map({ return TrackViewModel(track: $0, isPlaying: $0.id == playingId)})
             }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
                 self.delegate?.reload(tracks: vms)
+                if let _ = self.currentTrackID, let index = self.tracks.index(where: {$0.id == self.currentTrackID}) {
+                    PlayerHandler.playlist?.clearAll(direction: .down)
+                    self.trackSelected(index: index)
+                }
             }, onCompleted: {
                 print("Track loaded")
             }).disposed(by: self.disposeBag)
@@ -139,11 +147,11 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index])
+        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
     }
     
     func shareChannel() {
-        self.delegate?.share(channel: ShareInfo(text: self.channel.name, url: RequestManager.server + "/channels/\(channel.id)", image: try! UIImage(data: Data(contentsOf: (channel.image)!))!))
+        self.delegate?.share(channel: self.channel.sharedInfo())
     }
 }
 

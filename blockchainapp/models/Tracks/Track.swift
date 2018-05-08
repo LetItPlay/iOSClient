@@ -28,7 +28,7 @@ struct Track: LIPModel {
 	
 	var tags: [String]			= []
 	
-	var lang: String			= Language.ru.rawValue
+	var lang: String			= UserSettings.languages[2].identifier
 	
 	var isLiked: Bool			= false
 	
@@ -116,6 +116,12 @@ struct Track: LIPModel {
 	func idString() -> String {
 		return "\(id)"
 	}
+    
+    func sharedInfo() -> ShareInfo {
+        return ShareInfo(text: "\"\(self.name)\" - \(self.channel.name)",
+            url: RequestManager.sharedServer + "/tracks?channel=/\(self.channel.id)&track=\(self.id)",
+            image: try! UIImage(data: Data(contentsOf: (self.image)!))!)
+    }
 }
 
 

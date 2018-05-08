@@ -190,17 +190,7 @@ class TrackInfoHeaderView: UIView {
             make.left.equalTo(likesCount.snp.right).inset(-12)
             make.centerY.equalTo(likesCount)
         }
-        
-//        let secondLine = UIView()
-//        secondLine.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-//        self.addSubview(secondLine)
-//        secondLine.snp.makeConstraints({ (make) in
-//            make.top.equalTo(likesCount.snp.bottom).inset(-8)
-//            make.left.equalTo(self).inset(17)
-//            make.right.equalTo(self).inset(17)
-//            make.height.equalTo(2)
-//        })
-        
+
         _scrollView.backgroundColor = .white
         self.addSubview(_scrollView)
         _scrollView.snp.makeConstraints({ (make) in

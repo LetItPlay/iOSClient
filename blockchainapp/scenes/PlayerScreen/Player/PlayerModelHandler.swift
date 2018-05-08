@@ -24,16 +24,14 @@ extension PlayerModel: PlayerEventHandler {
 			}
 		case .seek(let progress):
 			self.player.make(command: .seek(progress: progress))
+        case .clearAll(let direction):
+            self.clearAll(direction: direction)
 		}
 	}
 	
-    func channelPressed() {
-        //TODO: Close player and push channel screen
-    }
-	
 	func setSpeed(index: Int) {
-		// TODO: make speed change
         self.player.set(rate: self.speedConstants[index].value)
+        self.playerDelegate?.update(currentSpeedIndex: index)
 	}
 	
 	func send(event: LifeCycleEvent) {
@@ -41,9 +39,5 @@ extension PlayerModel: PlayerEventHandler {
 		default:
 			break
 		}
-	}
-	
-	func morePressed() {
-        //TODO: Show more dialog
 	}
 }

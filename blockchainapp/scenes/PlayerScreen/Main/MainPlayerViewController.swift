@@ -157,10 +157,6 @@ class MainPlayerViewController: UIViewController {
 		
 		self.mask.path = CGPath.init(roundedRect: CGRect.init(origin: CGPoint.init(x: 0, y: 20), size: self.view.frame.size), cornerWidth: 10, cornerHeight: 10, transform: nil)
 	}
-
-//    func change(speed: Float) {
-//        self.audioController.player.set(rate: speed)
-//    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		return nil
@@ -271,11 +267,9 @@ extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
     }
     
     func speedButtonTouched() {
-//        self.present(speedAlert, animated: true, completion: nil)
     }
     
     func showOthersButtonTouched() {
-        MainRouter.shared.showOthers(track: AudioController.main.currentTrack as Any)
     }
 }
 

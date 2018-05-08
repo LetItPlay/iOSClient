@@ -1,5 +1,5 @@
 //
-//  ChannelsViewModel.swift
+//  CategoryChannelsViewModel.swift
 //  blockchainapp
 //
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
@@ -7,23 +7,23 @@
 
 import Foundation
 
-protocol ChannelsVMProtocol {
+protocol CategoryChannelsVMProtocol {
     var channels: [SmallChannelViewModel] {get}
     
-    var delegate: ChannelsVMDelegate? {get set}
+    var delegate: CategoryChannelsVMDelegate? {get set}
 }
 
-protocol ChannelsVMDelegate: class  {
+protocol CategoryChannelsVMDelegate: class  {
     func reloadChannels()
 }
 
-class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
+class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsModelDelegate {
     
     var channels: [SmallChannelViewModel] = []
-    weak var delegate: ChannelsVMDelegate?
-    var model: ChannelsModelProtocol!
+    weak var delegate: CategoryChannelsVMDelegate?
+    var model:  CategoryChannelsModelProtocol!
     
-    init(model: ChannelsModelProtocol) {
+    init(model:  CategoryChannelsModelProtocol) {
         self.model = model
         self.model.delegate = self
     }
@@ -38,7 +38,7 @@ class ChannelsViewModel: ChannelsVMProtocol, ChannelsModelDelegate {
 	}
 	
 	func showAllChannels() {
-		MainRouter.shared.show(screen: "allChannels", params: [:], present: false)
+		MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.subscribed], present: false)
 	}
     
     func showChannel(channel: Channel) {

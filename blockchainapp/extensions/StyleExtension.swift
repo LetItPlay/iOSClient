@@ -50,6 +50,10 @@ extension UIFont {
 extension String {
 	
 	func url() -> URL? {
+        if let url = URL(string: self) {
+            return url
+        }
+        
 		if String(self.prefix(4)) == "http", let str = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
 			return URL(string: str)
 		}

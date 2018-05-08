@@ -3,21 +3,18 @@ import MediaPlayer
 
 protocol PlayerEventHandler: ModelProtocol {
     func execute(event: PlayerEvent)
-    func channelPressed()
     func setSpeed(index: Int)
-    func morePressed()
 }
 
 protocol PlaylistEventHandler: ModelProtocol {
     func selected(index: Int)
-    func morePressed(index: Int)
+    func showOthers(index: Int)
 }
 
 class PlayerModel {
 
     weak var playerDelegate: (PlayerModelDelegate & MainPlayerModelDelegate)?
     weak var playlistDelegate: PlaylistModelDelegate?
-	weak var mainDelegate: MainPlayerModelDelegate?
     weak var trackInfoDelegate: TrackInfoDelegate?
 
     var playlistName: String = ""
@@ -31,7 +28,7 @@ class PlayerModel {
     }
     var currentTime: AudioTime = AudioTime(current: 0, length: 0)
     var player: AudioPlayer!
-    // TODO: Specify speed constants
+
     let speedConstants: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 
     init(player: AudioPlayer) {

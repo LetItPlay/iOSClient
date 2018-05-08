@@ -131,8 +131,7 @@ extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSou
 		cell.fill(vm: track)
 
         cell.onOthers = {[weak self] in
-            let othersViewController = OthersBuilder.build(params: ["controller" : self as Any, "track" : track]) as! OthersAlertController
-            self?.present(othersViewController, animated: true, completion: nil)
+            self?.emitter.showOthers(index: indexPath.row)
         }
         
 		return cell

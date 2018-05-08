@@ -1,5 +1,5 @@
 //
-//  ChannelsEmitter.swift
+//  CategoryChannelsEmitter.swift
 //  blockchainapp
 //
 //  Copyright © 2018 Ivan Gorbulin. All rights reserved.
@@ -15,14 +15,14 @@ enum ChannelsEvent {
     case showSearch
 }
 
-protocol ChannelsEmitterProtocol: LifeCycleHandlerProtocol {
+protocol CategoryChannelsEmitterProtocol: LifeCycleHandlerProtocol {
     func send(event: ChannelsEvent)
 }
 
-class ChannelsEmitter: Emitter, ChannelsEmitterProtocol {
-    weak var model: ChannelsEventHandler?
+class CategoryChannelsEmitter: Emitter, CategoryChannelsEmitterProtocol {
+    weak var model: CategoryChannelsEventHandler?
     
-    convenience init(model: ChannelsEventHandler) {
+    convenience init(model: CategoryChannelsEventHandler) {
         self.init(handler: model as! ModelProtocol)
         self.model = model
     }

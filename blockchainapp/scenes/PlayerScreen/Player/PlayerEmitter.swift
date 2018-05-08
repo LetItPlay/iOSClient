@@ -5,7 +5,7 @@ enum Direction {
 }
 
 enum PlayerEvent {
-    case plause, change(dir: Direction), seekDir(dir: Direction), seek(progress: Double)
+    case plause, change(dir: Direction), seekDir(dir: Direction), seek(progress: Double), clearAll(direction: HideMiniPlayerDirection)
 }
 
 class PlayerEmitter: Emitter {
@@ -23,13 +23,5 @@ class PlayerEmitter: Emitter {
 
     func setSpeed(index: Int) {
         self.handler?.setSpeed(index: index)
-    }
-
-    func channelPressed() {
-        self.handler?.channelPressed()
-    }
-
-    func morePressed() {
-        self.handler?.morePressed()
     }
 }

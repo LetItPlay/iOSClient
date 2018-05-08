@@ -43,8 +43,8 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
         self.miniPlayer.presentationDelegate = self
 		self.view.insertSubview(self.miniPlayer, belowSubview: self.tabBar)
         self.miniPlayer.snp.makeConstraints { (make) in
-			make.left.equalToSuperview()
-			make.right.equalToSuperview()
+			miniPlayerLeftConstr = make.left.equalToSuperview().constraint.layoutConstraints.first
+			miniPlayerRightConstr = make.right.equalToSuperview().constraint.layoutConstraints.first
 			miniPlayerBottomConstr = make.bottom.equalTo(self.tabBar.snp.top).constraint.layoutConstraints.first
 		}
 //		self.playerHandler.main.modalPresentationStyle = .overFullScreen
@@ -131,12 +131,10 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 //            }
 //        }
 	}
-	
-	func hidePlayer() {
-//        self.playerHandler.main.dismiss(animated: true) {
-//			print("player dismissed")
-//		}
-	}
+    
+    func hidePlayer() {
+        
+    }
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -173,6 +171,10 @@ extension MainTabViewController: UITabBarControllerDelegate {
 			self.tabSelected(controller: title)
 		}
         tabBarController.tabBar.items?[tabBarController.selectedIndex].badgeValue = nil
+        
+        if let nc = viewController as? UINavigationController {
+            self.router?.currentNavigationController = nc
+        }
     }
 	
     func tabSelected(controller: String)

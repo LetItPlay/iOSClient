@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-class ChannelViewController: UIViewController, ChannelVMDelegate {
+class ChannelViewController: UIViewController {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
     
@@ -25,14 +25,6 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         self.viewModel.delegate = self
         
         self.emitter = emitter
-    }
-    
-    func reloadTracks() {
-        self.tableView.reloadData()
-    }
-    
-    func updateSubscription() {
-        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
     }
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -108,9 +100,21 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+
+}
+
+extension ChannelViewController: ChannelVMDelegate {
+    
+    func reloadTracks() {
+        self.tableView.reloadData()
+    }
+    
+    func updateSubscription() {
+        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
+    }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-//        tableView.beginUpdates()
+        //        tableView.beginUpdates()
         for key in updates.keys {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -119,12 +123,12 @@ class ChannelViewController: UIViewController, ChannelVMDelegate {
                 case .delete:
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
-//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                    //                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
                     tableView.reloadData()
                 }
             }
         }
-//        tableView.endUpdates()
+        //        tableView.endUpdates()
     }
 }
 

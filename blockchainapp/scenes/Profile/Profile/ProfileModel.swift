@@ -94,20 +94,7 @@ class ProfileModel: ProfileModelProtocol {
     }
     
     func change(language: String) {
-//        ServerUpdateManager.shared.updateLanguage()
-        var newLanguage: Language = .none
-        switch language {
-        case "Русский":
-            newLanguage = .ru
-        case "English":
-            newLanguage = .en
-        case "Français":
-            newLanguage = .fr
-        case "Chinese": // TODO: in Chinese
-            newLanguage = .zh
-        default:
-            break
-        }
+        let newLanguage: Language = UserSettings.languages.filter({$0.name == language}).first!
         
         ServerUpdateManager.shared.update(language: newLanguage)
 //        self.delegate?.update(language: newLanguage)

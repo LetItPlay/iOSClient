@@ -33,8 +33,8 @@ class MainRouter: Router {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
 			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
 			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsTab())),
-			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsBuilder.build(params: nil))),
+			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())),
+			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))),
 			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		return tabs.map({ (tuple) -> UINavigationController in
@@ -52,9 +52,7 @@ class MainRouter: Router {
 	func mainPlayer(show: Bool, index: Int = 1) {
 		if !self.playerHandler.main.isBeingPresented{
 			UIApplication.shared.beginIgnoringInteractionEvents()
-//            self.playerIsPresenting = true
 			self.mainController.present(self.playerHandler.main, animated: true) {
-//				self.playerIsPresenting = false
 				UIApplication.shared.endIgnoringInteractionEvents()
 			}
 		}
@@ -66,10 +64,11 @@ class MainRouter: Router {
 		switch id {
 		case "channel":
 			vc = ChannelBuilder.build(params: params)
-			break
 		case "allChannels":
             self.delegate?.showAllChannels()
 			return
+        case "category":
+            vc = CategoryChannelsBuilder.build(params: params)
         case "search":
             vc = SearchBuilder.build(params: params)
             (vc as! SearchViewController).delegate = self
@@ -86,26 +85,27 @@ class MainRouter: Router {
 					vc.dismiss(animated: true, completion: nil)
 				}).disposed(by: disposeBag)
 			} else {
+                if self.currentNavigationController?.viewControllers.first is ProfileViewController {
+                    self.currentNavigationController?.setNavigationBarHidden(false, animated: true)
+                }
                 self.currentNavigationController?.pushViewController(vc, animated: true)
 			}
 		}
 	}
     
     func hidePlayer() {
-        self.delegate?.hidePlayer()
+        self.playerHandler.main.dismiss(animated: true) {
+            print("player dismissed")
+        }
     }
     
-    func showOthers(track: Any) {
+    func showOthers(track: ShareInfo) {
         let controller: UIViewController!
-//        if let currentController = viewController {
-//            controller = currentController
-//        } else {
         if let vc = self.currentNavigationController?.presentedViewController {
             controller = vc
         } else {
             controller = self.currentNavigationController?.viewControllers.first
         }
-//        }
 		
         let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)
@@ -152,5 +152,4 @@ extension MainRouter: SearchViewControllerDelegate {
 
 protocol MainRouterDelegate {
     func showAllChannels()
-    func hidePlayer()
 }

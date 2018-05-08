@@ -30,11 +30,10 @@ class UserPlaylistViewController: UIViewController {
     
     let clearButton: UIButton = {
         let button = UIButton()
-        button.setTitleColor(AppColor.Element.redBlur, for: .normal)
+        button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
         button.setTitle("Clear all".localized, for: .normal)
         button.titleLabel?.font = AppFont.Button.mid
         button.titleLabel?.textAlignment = .right
-        button.addTarget(self, action: #selector(clearPlaylist), for: .touchUpInside)
         return button
     }()
     
@@ -60,14 +59,15 @@ class UserPlaylistViewController: UIViewController {
     {
         self.view.backgroundColor = UIColor.vaWhite
         
-//        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(title: "Clear all".localized, style: .plain, target: self, action: #selector(clearPlaylist))
+        self.navigationController?.navigationBar.addSubview(clearButton)
+        clearButton.snp.makeConstraints { (make) in
+            make.right.equalTo(-16)
+            make.centerY.equalToSuperview()
+        }
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(60)
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         
         self.view.addSubview(emptyLabel)
@@ -83,6 +83,7 @@ class UserPlaylistViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        self.tableView.contentInset.top = 44
         self.tableView.contentInset.bottom = 65
         
         self.tableView.separatorColor = self.tableView.backgroundColor
@@ -90,11 +91,15 @@ class UserPlaylistViewController: UIViewController {
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
 
         tableView.allowsMultipleSelectionDuringEditing = false
+        
+        clearButton.addTarget(self, action: #selector(clearPlaylist), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.emitter.send(event: LifeCycleEvent.appear)
+        
+        self.clearButton.isHidden = self.viewModel.hideEmptyMessage
         
         self.tableView.setContentOffset(CGPoint.zero, animated: false)
         self.tableView.reloadData()
@@ -127,6 +132,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     
     func reload() {
         self.emptyLabel.isHidden = !self.viewModel.hideEmptyMessage
+        self.clearButton.isHidden = self.viewModel.hideEmptyMessage
         self.navigationItem.rightBarButtonItem?.isEnabled = !self.viewModel.hideEmptyMessage
         self.tableView.reloadData()
     }
@@ -165,71 +171,6 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.tracks.count
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if self.viewModel.tracks.count == 0 {
-            return nil
-        }
-        
-        var blurView = UIVisualEffectView()
-        blurView = UIVisualEffectView(effect: UIBlurEffect.init(style: UIBlurEffectStyle.light))
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurView.clipsToBounds = true
-        blurView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        
-        let label = UILabel()
-        label.font = AppFont.Title.big
-        label.textColor = AppColor.Title.dark
-        label.numberOfLines = 1
-        label.text = "My playlist".localized
-        
-        let tracks = IconedLabel.init(type: .tracks)
-        tracks.setData(data: Int64(UserPlaylistManager.shared.tracks.count))
-        
-        let time = IconedLabel.init(type: .time)
-        time.setData(data: Int64(UserPlaylistManager.shared.tracks.map({$0.length}).reduce(0, {$0 + $1})))
-        
-        blurView.contentView.addSubview(label)
-        label.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(3)
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(-16)
-        }
-        
-        blurView.contentView.addSubview(tracks)
-        tracks.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(16)
-            make.top.equalTo(label.snp.bottom).inset(-7)
-        }
-        
-        blurView.contentView.addSubview(time)
-        time.snp.makeConstraints { (make) in
-            make.left.equalTo(tracks.snp.right).inset(-8)
-            make.centerY.equalTo(tracks)
-        }
-        
-        let line = UIView()
-        line.backgroundColor = AppColor.Element.redBlur
-        line.layer.cornerRadius = 1
-        line.layer.masksToBounds = true
-        
-        blurView.contentView.addSubview(line)
-        line.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().inset(16)
-            make.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(2)
-        }
-        
-        blurView.contentView.addSubview(clearButton)
-        clearButton.snp.makeConstraints({ (make) in
-            make.centerY.equalTo(time)
-            make.right.equalTo(-16)
-            make.height.equalTo(32)
-        })
-        
-        return blurView
-    }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 0.01
@@ -239,31 +180,18 @@ extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource
         return nil
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if UserPlaylistManager.shared.tracks.count == 0 {
-            return 0.1
-        }
-        return 73
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: PlayerTableViewCell.cellID, for: indexPath) as! PlayerTableViewCell
-//        let track = UserPlaylistManager.shared.tracks[indexPath.row]
-//        cell.track = track
-//        let hideListens = indexPath == currentIndex
-//        //        cell.dataLabels[.listens]?.isHidden = hideListens
-//        cell.dataLabels[.playingIndicator]?.isHidden = !hideListens
         
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
         cell.delegate = self
         cell.track = self.viewModel.tracks[indexPath.item]
         
         cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row, viewController: self!))
+            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
         }
         
         return cell
