@@ -88,7 +88,6 @@ class RequestManager {
     static let sharedServer: String = "https://webui.letitplay.io/#"
     static let shared: RequestManager = RequestManager()
     
-    private var jwt: Variable<String?> = Variable<String?>(nil)
     var sessionManager: SessionManager!
     let disposeBag = DisposeBag()
     
@@ -420,8 +419,8 @@ class RequestManager {
     }
     
     private func simpleRequest(req: URLRequest) -> Observable<Result<Data>> {
-        guard let jwt = self.jwt.value else {
-            return Observable<Result<Data>>.error(RequestError.unAuth(prev: self.jwt.value))
+        guard let jwt = UserSettings.jwt else {
+            return Observable<Result<Data>>.error(RequestError.unAuth(prev: UserSettings.jwt))
         }
         var requsest = req
         requsest.allHTTPHeaderFields?["Authorization"] = "Bearer " + jwt
@@ -448,27 +447,16 @@ class RequestManager {
             return Disposables.create { print("📤 Request disposed"); dataReq.cancel()}
         })
     }
-    
-    func makeRequest(_ request: URLRequest) -> Observable<Result<Data>>{
-        //        let signal = simpleRequest(req: request).retryWhen({ (obs) -> Observable<String> in
-        //            return obs.flatMap({ (error) -> Observable<String> in
-        //                switch error {
-        //                case RequestError.unAuth:
-        //                    return self.renewToken().do(onNext: { (jwt) in
-        //                        self.jwt.value = jwt
-        //                    })
-        //                default: return Observable<String>.just(self.jwt.value ?? "")
-        //                }
-        //            })
-        //        })
-        //
+
+	
+	func makeRequest(_ request: URLRequest) -> Observable<Result<Data>>{
         let signal = simpleRequest(req: request)
             .catchError({ (error) -> Observable<Result<Data>> in
                 print(request)
                 switch error {
                 case RequestError.unAuth:
                     return self.renewToken().asObservable().do(onNext: { (jwt) in
-                        self.jwt.value = jwt
+                        UserSettings.jwt = jwt
                     }).flatMap({ _ -> Observable<Result<Data>> in
                         return self.simpleRequest(req: request)
                     })

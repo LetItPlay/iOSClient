@@ -11,11 +11,14 @@ import UIKit
 
 class UserSettings {
     
-    public static let languages: [Language] = [//Language(identifier: "none", name: "", currentLanguage: "", switchTo: ""),
-                                               Language(identifier: "en", name: "English", currentLanguage: "Language: English", switchTo: "Switch to English 🇬🇧"),
-                                               Language(identifier: "zh", name: "Chinese", currentLanguage: "Language: Chinese", switchTo: "Change to Chinese 🇨🇳"),
-                                               Language(identifier: "ru", name: "Русский", currentLanguage: "Язык: Русский", switchTo: "Поменять на Русский 🇷🇺"),
-                                               Language(identifier: "fr", name: "Français", currentLanguage: "Langue: Français", switchTo: "Changer en Français 🇫🇷")]
+    public static let languages: [Language] = [Language(identifier: "en", name: "English", currentLanguage: "Language: English",
+                                               switchTo: "Switch to English 🇬🇧"),
+                                               Language(identifier: "zh", name: "Chinese", currentLanguage: "Language: Chinese",
+                                               switchTo: "Change to Chinese 🇨🇳"),
+                                               Language(identifier: "ru", name: "Русский", currentLanguage: "Язык: Русский",
+                                               switchTo: "Поменять на Русский 🇷🇺"),
+                                               Language(identifier: "fr", name: "Français", currentLanguage: "Langue: Français",
+                                               switchTo: "Changer en Français 🇫🇷")]
     
     static var token: String = ""
     
@@ -25,6 +28,24 @@ class UserSettings {
         let build = dictionary["CFBundleVersion"] as! String
         return "\(version) build \(build)"
     }()
+    
+    static var jwt: String? {
+        get {
+            let def = UserDefaults.standard
+            
+            if let jwt = def.value(forKey: "jwt") as? String {
+                return jwt
+            } else {
+                return nil
+            }
+        }
+        
+        set(newJWT) {
+            let def = UserDefaults.standard
+            def.setValue(newJWT, forKey: "jwt")
+            def.synchronize()
+        }
+    }
     
     static var userIdentifier: String {
         get {
