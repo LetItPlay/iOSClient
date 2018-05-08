@@ -114,8 +114,6 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
         let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
         
-        // while in User Settings
-        SubscribeManager.shared.addOrDelete(channel: channel.id)
     }
     
     func showOthers(index: Int) {

@@ -33,8 +33,8 @@ protocol CategoryChannelsEventHandler: class {
 protocol  CategoryChannelsModelDelegate: class {
     func reload(newChannels: [SmallChannelViewModel])
     func showChannel(id: Int)
-    func showAllChannels()
     func update(index: Int, vm: SmallChannelViewModel)
+    func showAllChannels()
 }
 
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
@@ -43,7 +43,6 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
     var channelsFilter: ChannelsFilter!
     
     weak var delegate:  CategoryChannelsModelDelegate?
-    var subManager = SubscribeManager.shared
     var channels: [Channel] = []
     
     let getChannelsAction: Action<Bool, [Channel]>!
@@ -86,10 +85,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
     func subscribeAt(index: Int) {
         let channel = self.channels[index]
         let action: ChannelAction = ChannelAction.subscribe
-        ServerUpdateManager.shared.make(channel: channel, action: action)
-        
-        // while in User Settings
-        subManager.addOrDelete(channel: self.channels[index].id)
+        ServerUpdateManager.shared.make(channel: channel, action: action)        
     }
     
     func showChannel(index: Int) {
@@ -123,10 +119,27 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
         self.getChannelsAction.execute(true)
     }
     
+    func gen(_ ch: Channel) -> SmallChannelViewModel {
+        return self.channelScreen == .small ? SmallChannelViewModel(channel: ch) : MediumChannelViewModel(channel: ch)
+    }
+    
     func channelUpdated(channel: Channel) {
-        if let index = self.channels.index(where: {$0.id == channel.id}) {
-            self.channels[index] = channel
-            self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+        if self.channelScreen != .small {
+            if let index = self.channels.index(where: {$0.id == channel.id}) {
+                self.channels[index] = channel
+                self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+            }
+        } else {
+            if let index = self.channels.index(where: {$0.id == channel.id}) {
+                if !channel.isSubscribed {
+                    self.channels.remove(at: index)
+                }
+            } else {
+                if channel.isSubscribed {
+                    self.channels.insert(channel, at: 0)
+                }
+            }
+            self.delegate?.reload(newChannels: self.channels.map({self.gen($0)}))
         }
     }
 }

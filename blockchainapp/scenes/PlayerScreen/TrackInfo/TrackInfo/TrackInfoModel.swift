@@ -64,8 +64,6 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     {
         RequestManager.shared.channel(id: track.channel.id).subscribe(onNext: { (channel) in
             self.channel = channel
-            let subscriptions = SubscribeManager.shared.channels
-            self.channel.isSubscribed = subscriptions.contains(channel.id)
             self.delegate?.reload(channel: SearchChannelViewModel(channel: self.channel))
         }).disposed(by: disposeBag)
     }
@@ -83,8 +81,6 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
         // to server
         let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
-        // while in User Setting
-        SubscribeManager.shared.addOrDelete(channel: self.channel.id)
     }
     
     func send(event: LifeCycleEvent) {

@@ -55,7 +55,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
         self.playlistName = isFeed ? "Feed".localized : "Trends".localized
         
 		dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
-			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(channels: SubscribeManager.shared.channels, offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
+			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
 		})
 		
 		dataAction?.elements.do(onNext: { (tracks) in

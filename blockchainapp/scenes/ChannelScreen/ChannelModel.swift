@@ -63,9 +63,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     var currentTrackID: Int?
     
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
-    
-    var subManager = SubscribeManager.shared
-	
+    	
 	let getTracksAction: Action<Int, [Track]>!
 	let disposeBag = DisposeBag()
         
@@ -99,8 +97,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
 			self.playlistName = "Channel".localized + " \(channel.name)"
-            let subscriptions = self.subManager.channels
-            self.channel.isSubscribed = subscriptions.contains(channel.id)
             self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
 //            self.delegate?.followUpdate(isSubscribed: self.channel.isSubscribed)
         }).disposed(by: disposeBag)
@@ -127,8 +123,6 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
         // to server
         let action: ChannelAction = ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
-        // while in User Setting
-        subManager.addOrDelete(channel: self.channel.id)
     }
     
     func send(event: LifeCycleEvent) {

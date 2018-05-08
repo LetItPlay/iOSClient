@@ -11,7 +11,7 @@ import RealmSwift
 import Action
 
 enum TracksRequest {
-    case feed(channels: [Int], offset: Int, count: Int)
+    case feed(offset: Int, count: Int)
     case trends(offset: Int, count: Int)
     case likes
     case channel(Int)
@@ -42,9 +42,8 @@ enum ChannelUpdateRequest {
 fileprivate extension TracksRequest {
     func urlQuery(lang: String) -> String {
         switch self {
-        case .feed(let channels, let offset, let count):
-            let channelsString = channels.map({"\($0)"}).joined(separator: ",")
-            return "feed?offset=\(offset)&limit=\(count)&lang=\(lang)" // stIds=\(channelsString)&
+        case .feed(let offset, let count):
+            return "feed?offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .trends(let offset, let count):
             return "trends?offset=\(offset)&limit=\(count)&lang=\(lang)"
         case .channel(let id):
@@ -139,7 +138,7 @@ class RequestManager {
 			let getSignal = self.makeRequest(request).flatMap({ (result) -> Observable<Channel> in
 				switch result {
 				case .value(let data):
-					if let json = try? JSON(data: data), var channel: Channel = Channel(json: json) {
+					if let json = try? JSON(data: data), let channel: Channel = Channel(json: json) {
 						return Observable.just(channel)
 					} else {
 						return Observable.error(RequestError.invalidJSON)
@@ -166,7 +165,7 @@ class RequestManager {
             let getSignal = self.makeRequest(request).flatMap({ (result) -> Observable<Track> in
                 switch result {
                 case .value(let data):
-                    if let json = try? JSON(data: data), var track: Track = Track(json: json) {
+                    if let json = try? JSON(data: data), let track: Track = Track(json: json) {
                         return Observable.just(track)
                     } else {
                         return Observable.error(RequestError.invalidJSON)
@@ -196,9 +195,9 @@ class RequestManager {
                         var channels = [Channel]()
                         if let items = json["results"].array {
                             for item in items {
-                                if var track = Track.init(json: item) {
+                                if let track = Track.init(json: item) {
                                     tracks.append(track)
-                                } else if var channel = Channel.init(json: item) {
+                                } else if let channel = Channel.init(json: item) {
                                     channels.append(channel)
                                 }
                             }
@@ -225,7 +224,6 @@ class RequestManager {
 				switch result {
 				case .value(let data):
 					do {
-						let lm = LikeManager.shared
 						let json = try JSON(data: data)
 						
 						let _: [Channel] = json["Stations"].array?
@@ -369,7 +367,6 @@ class RequestManager {
                 if let json = try? JSON(data: data),
                    let tr = Track.init(json: json),
                    let ch = Channel.init(json: json["station"]) {
-
                     return Observable.just(tr)
                 }
                 return Observable<Track>.error(RequestError.invalidJSON)
