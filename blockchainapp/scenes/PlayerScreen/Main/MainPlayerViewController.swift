@@ -167,7 +167,6 @@ extension MainPlayerViewController: UIScrollViewDelegate {
             if scrollView.contentOffset.x > self.view.frame.width {
                 let width = self.view.frame.width
                 self.bottomIconsView.hideIcons((scrollView.contentOffset.x / width - 2) * -1 )
-                print(scrollView.contentOffset.x)
             }
         }
         if self.pageController.viewControllers![0] is PlayingPlaylistViewController {
