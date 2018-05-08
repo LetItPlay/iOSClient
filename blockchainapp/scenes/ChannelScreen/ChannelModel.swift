@@ -49,7 +49,7 @@ protocol ChannelModelDelegate: class {
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
-    func showOthers(track: Track)
+    func showOthers(track: ShareInfo)
     func share(channel: ShareInfo)
 }
 
@@ -147,11 +147,11 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index])
+        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
     }
     
     func shareChannel() {
-        self.delegate?.share(channel: ShareInfo(text: self.channel.name, url: RequestManager.server + "/channels/\(channel.id)", image: try! UIImage(data: Data(contentsOf: (channel.image)!))!))
+        self.delegate?.share(channel: self.channel.sharedInfo())
     }
 }
 

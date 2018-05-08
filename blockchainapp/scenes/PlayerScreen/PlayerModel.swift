@@ -8,7 +8,7 @@ protocol PlayerEventHandler: ModelProtocol {
 
 protocol PlaylistEventHandler: ModelProtocol {
     func selected(index: Int)
-    func morePressed(index: Int)
+    func showOthers(index: Int)
 }
 
 class PlayerModel {

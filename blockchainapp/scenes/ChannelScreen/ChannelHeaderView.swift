@@ -196,7 +196,7 @@ class ChannelHeaderView: UIView {
     func fill(channel: FullChannelViewModel, width: CGFloat) -> CGFloat {
         
         channelTitleLabel.text = channel.name
-        infoLabel.text = ""//No description for this channel".localized
+        infoLabel.text = ""
         subsView.set(text: channel.subscriptionCount)
         
         if let iconUrl = channel.imageURL {
@@ -210,7 +210,7 @@ class ChannelHeaderView: UIView {
             }
         } else {
             channelImageView.snp.makeConstraints { (make) in
-                make.height.equalTo(0)//width*CGFloat(9)/CGFloat(16))
+                make.height.equalTo(0)
             }
             channelImageView.image = nil
             channelIconView.image = nil

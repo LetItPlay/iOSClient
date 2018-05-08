@@ -31,43 +31,9 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     
     var trackID: Int!
     
-    init(track: Any) {
-//        self.getData(trackId: trackID)
-        
-        DispatchQueue.global(qos: .background).async {
-            if let track = track as? Track {
-                self.trackID = track.id
-
-                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel.name)",
-                    url: RequestManager.server + "/tracks/\(track.id)",
-                    image: try! UIImage(data: Data(contentsOf: (track.image)!))!)
-            }
-            if let track = track as?  AudioTrack {
-                self.trackID = track.id
-
-                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.author)",
-                    url: RequestManager.server + "/tracks/\(track.id)",
-                    image: try! UIImage(data: Data(contentsOf: (track.imageURL)!))!)
-            }
-            
-            if let track = track as? TrackObject {
-                self.trackID = track.id
-
-                self.trackShareInfo = ShareInfo(text: "\"\(track.name)\" - \(track.channel)",
-                    url: RequestManager.server + "/tracks/\(track.id)",
-                    image: (try! UIImage(data: Data.init(contentsOf: track.image.url()!)))!)
-            }
-        }
+    init(track: ShareInfo) {
+        self.trackShareInfo = track
     }
-    
-//    func getData(track: Int) {
-//        RequestManager.shared.track(id: trackId).subscribe(onNext: { (tuple) in
-//            self.trackShareInfo = TrackShareInfo(text: "\"\(tuple.name)\" - \(tuple.channel.name)",
-//                                                 url: RequestManager.server + "/tracks/\(tuple.id)",
-//                                                 image: try! UIImage(data: Data(contentsOf: (tuple.image)!))!)
-//            self.delegate?.add(track: self.trackShareInfo!)
-//        }).disposed(by: disposeBag)
-//    }
     
     func report(cause: ReportEventCause) {
         RequestManager.shared.updateTrack(id: self.trackID, type: .report(msg: "\(cause)")).subscribe(onNext: { (tuple) in

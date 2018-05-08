@@ -13,7 +13,7 @@ class OthersBuilder: Builder {
         let viewController = params!["controller"] as! UIViewController
         let track = params!["track"]
         
-        let model = OthersModel(track: track as Any)
+        let model = OthersModel(track: track as! ShareInfo)
         let viewModel = OthersViewModel(model: model)
         let emitter = OthersEmitter(model: model)
         

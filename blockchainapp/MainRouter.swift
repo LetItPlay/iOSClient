@@ -99,7 +99,7 @@ class MainRouter: Router {
         }
     }
     
-    func showOthers(track: Any) {
+    func showOthers(track: ShareInfo) {
         let controller: UIViewController!
         if let vc = self.currentNavigationController?.presentedViewController {
             controller = vc
