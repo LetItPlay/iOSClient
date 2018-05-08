@@ -1,6 +1,7 @@
 import Foundation
 import RealmSwift
 import SwiftyJSON
+import SDWebImage
 
 typealias ChannelInfo = (id: Int, name: String, image: URL?)
 
@@ -118,15 +119,17 @@ struct Track: LIPModel {
 	}
     
     func sharedInfo() -> ShareInfo {
-        let image: UIImage!
-        do {
-            image = try UIImage(data: Data(contentsOf: (self.image)!))!
-        } catch {
-            image = UIImage(named: "redTriangle")
+        var trackImage = UIImage(named: "redTriangle")
+        
+        if let image = SDImageCache.shared().imageFromDiskCache(forKey: self.image?.absoluteString) {
+            trackImage = image
+        }
+        if let image = SDImageCache.shared().imageFromMemoryCache(forKey: self.image?.absoluteString) {
+            trackImage = image
         }
         return ShareInfo(text: "\"\(self.name)\" - \(self.channel.name)",
             url: RequestManager.sharedServer + "/tracks?channel=/\(self.channel.id)&track=\(self.id)",
-            image: image)
+            image: trackImage!)
     }
 }
 
