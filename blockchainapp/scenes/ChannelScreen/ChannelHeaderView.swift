@@ -156,7 +156,6 @@ class ChannelHeaderView: UIView {
             make.centerY.equalTo(followButton)
             make.right.equalTo(followButton.snp.left).inset(-14)
         }
-        shareButton.isHidden = true
 
 		self.addSubview(channelTitleLabel)
 		channelTitleLabel.snp.makeConstraints { (make) in

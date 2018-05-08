@@ -166,7 +166,6 @@ class SmallTrackTableViewCell: UITableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
 		
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		

@@ -75,7 +75,6 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         }
-        showOthersButton.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {
