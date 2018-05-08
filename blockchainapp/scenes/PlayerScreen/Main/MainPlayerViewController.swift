@@ -22,7 +22,7 @@ class MainPlayerViewController: UIViewController {
     var bottomIconsView: MainPlayerBottomIconsView!
 	
 	var mask: CAShapeLayer!
-	let ind = ArrowView()
+	let arrowView = ArrowView()
     
     var currentTrackID: Int = -1
     var defaultIndex: Int = 0
@@ -43,7 +43,7 @@ class MainPlayerViewController: UIViewController {
 				
 		self.view.addSubview(pageController.view)
 		pageController.view.snp.makeConstraints { (make) in
-			make.top.equalToSuperview()
+			make.top.equalTo(UIApplication.shared.statusBarFrame.height)
 			make.left.equalToSuperview()
 			make.right.equalToSuperview()
 			make.bottom.equalToSuperview()
@@ -69,21 +69,19 @@ class MainPlayerViewController: UIViewController {
 		
 		let panGest = UIPanGestureRecognizer.init(target: self, action: #selector(pan(gesture:)))
 		self.view.addGestureRecognizer(panGest)
-		
-//		self.transitioningDelegate = self
-		
-		self.view.addSubview(ind)
-		ind.snp.makeConstraints { (make) in
+				
+		self.view.addSubview(arrowView)
+		arrowView.snp.makeConstraints { (make) in
 			make.width.equalTo(37)
 			make.height.equalTo(12)
-			make.top.equalToSuperview().inset(40)
+			make.top.equalTo(pageController.view.snp.top).inset(40)
 			make.centerX.equalToSuperview()
 		}
 		
 		let tap = UITapGestureRecognizer(target: self, action: #selector(arrowTapped))
-		ind.addGestureRecognizer(tap)
+		arrowView.addGestureRecognizer(tap)
 		
-		self.ind.setFlat(false)
+		self.arrowView.setFlat(false)
         
         if let bottom = bottom {
             bottomIconsView = bottom
@@ -94,7 +92,7 @@ class MainPlayerViewController: UIViewController {
 		
         self.view.addSubview(bottomIconsView)
         bottomIconsView.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(UIScreen.main.nativeBounds.height == 2436 ? -34 : 0)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.height.equalTo(40)
@@ -126,7 +124,7 @@ class MainPlayerViewController: UIViewController {
 			}
             let velo = gesture.velocity(in: self.view)
             if velo.y > 0 {
-                self.ind.setFlat(true, animated: true)
+                self.arrowView.setFlat(true, animated: true)
             }
 			break
 		case .ended:
@@ -135,7 +133,7 @@ class MainPlayerViewController: UIViewController {
 				self.dismiss(animated: true, completion: {
 					self.view.frame.origin.y = 0.0
 					print("Player dismissed")
-                    self.ind.setFlat(false, animated: true)
+                    self.arrowView.setFlat(false, animated: true)
 				})
 			} else {
 				UIApplication.shared.beginIgnoringInteractionEvents()
@@ -143,7 +141,7 @@ class MainPlayerViewController: UIViewController {
 					self.view.frame.origin.y = 0.0
 				}, completion: { (completed) in
 					UIApplication.shared.endIgnoringInteractionEvents()
-                    self.ind.setFlat(false, animated: true)
+                    self.arrowView.setFlat(false, animated: true)
 				})
 			}
 		default:

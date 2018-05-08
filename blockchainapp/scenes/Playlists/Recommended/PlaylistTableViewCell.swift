@@ -79,9 +79,11 @@ class PlaylistTableViewCell: UITableViewCell {
     
     func fill(playlist: PlaylistViewModel)
     {
-        self.playlistImageView.image = UIImage(data: playlist.imageURL!)
-        self.playlistTitleLabel.text = playlist.title
-        self.descriptionLabel.text = playlist.description
+        DispatchQueue.main.async {
+            self.playlistImageView.image = UIImage(data: playlist.imageURL!)
+            self.playlistTitleLabel.text = playlist.title
+            self.descriptionLabel.text = playlist.description
+        }
     }
 	
 	static func titleString(string: String) -> NSAttributedString {

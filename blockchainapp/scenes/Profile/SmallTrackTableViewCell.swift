@@ -58,21 +58,23 @@ class SmallTrackTableViewCell: UITableViewCell {
 	
     var track: TrackViewModel? = nil {
 		didSet {
-            self.viewModel = SmallTrackViewModel.init(track: track!)
-            
-            if let iconUrl = self.viewModel?.iconUrl {
-                trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-            } else {
-                trackImageView.image = UIImage(named: "trackPlaceholder")
+            DispatchQueue.main.async {
+                self.viewModel = SmallTrackViewModel.init(track: self.track!)
+                
+                if let iconUrl = self.viewModel?.iconUrl {
+                    self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+                } else {
+                    self.trackImageView.image = UIImage(named: "trackPlaceholder")
+                }
+                
+                self.trackNameLabel.attributedText = Common.trackText(text: (self.viewModel?.trackName)!)
+                self.channelNameLabel.text = self.viewModel?.channelName
+                
+                self.timeLabel.text = self.viewModel?.time
+                
+                self.dataLabels[.listens]?.set(text: (self.viewModel?.listens)!)
+                self.dataLabels[.time]?.set(text: (self.viewModel?.length)!)
             }
-            
-            trackNameLabel.attributedText = Common.trackText(text: (viewModel?.trackName)!)
-            channelNameLabel.text = viewModel?.channelName
-            
-            timeLabel.text = viewModel?.time
-
-            dataLabels[.listens]?.set(text: (viewModel?.listens)!)
-            dataLabels[.time]?.set(text: (viewModel?.length)!)
 		}
 	}
 	
