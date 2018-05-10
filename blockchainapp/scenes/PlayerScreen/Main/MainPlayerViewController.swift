@@ -196,6 +196,7 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
             }
             return self.vcs[index - 1]
 		}
+        self.isMainPlayer = false
 		
 		return nil
 	}

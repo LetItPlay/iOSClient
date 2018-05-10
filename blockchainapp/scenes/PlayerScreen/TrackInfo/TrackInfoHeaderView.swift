@@ -194,7 +194,7 @@ class TrackInfoHeaderView: UIView {
         _scrollView.backgroundColor = .white
         self.addSubview(_scrollView)
         _scrollView.snp.makeConstraints({ (make) in
-            make.top.equalTo(listenCount.snp.bottom)
+            make.top.equalTo(listenCount.snp.bottom).inset(-4)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
