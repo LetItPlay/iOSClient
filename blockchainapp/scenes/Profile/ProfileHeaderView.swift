@@ -40,6 +40,12 @@ class ProfileHeaderView: UIView {
         return textField
     }()
     
+    let lineForTextField: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        return view
+    }()
+    
     let changePhotoButton: UIButton = {
         let button = UIButton()
         button.layer.cornerRadius = 20
@@ -50,14 +56,14 @@ class ProfileHeaderView: UIView {
     
     let languageButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-        button.layer.cornerRadius = 6
-        button.layer.masksToBounds = true
         button.titleLabel?.font = AppFont.Button.mid
-        button.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-        button.semanticContentAttribute = .forceRightToLeft
-        button.setTitle("Select language".localized, for: .normal)
+        button.setTitleColor(.red, for: .normal)
+        button.setTitle("Change content language".localized, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 5
+        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
         return button
     }()
     
@@ -70,14 +76,14 @@ class ProfileHeaderView: UIView {
     
     let hiddenChannelsButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-        button.layer.cornerRadius = 6
-        button.layer.masksToBounds = true
         button.titleLabel?.font = AppFont.Button.mid
-        button.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-        button.semanticContentAttribute = .forceRightToLeft
+        button.setTitleColor(.red, for: .normal)
         button.setTitle("Hidden channels".localized, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.layer.cornerRadius = 5
+        button.layer.borderColor = UIColor.red.cgColor
+        button.layer.borderWidth = 1
+        button.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
         return button
     }()
     
@@ -125,6 +131,7 @@ class ProfileHeaderView: UIView {
             make.height.equalTo(240)
         }
         
+        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
         blur.contentView.addSubview(self.changePhotoButton)
         self.changePhotoButton.snp.makeConstraints { (make) in
             make.right.equalTo(profileImageView)
@@ -132,7 +139,8 @@ class ProfileHeaderView: UIView {
             make.width.equalTo(40)
             make.height.equalTo(40)
         }
-        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
+
+        blur.contentView.addSubview(lineForTextField)
         
         blur.contentView.addSubview(profileNameTextField)
         profileNameTextField.snp.makeConstraints { (make) in
@@ -141,20 +149,20 @@ class ProfileHeaderView: UIView {
             make.left.equalTo(profileImageView.snp.left)
         }
         
-        let highlight = UIView()
-        highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-        blur.contentView.addSubview(highlight)
-        highlight.snp.makeConstraints { (make) in
+        lineForTextField.snp.makeConstraints { (make) in
             make.bottom.equalTo(profileNameTextField).inset(-1)
             make.left.equalTo(profileNameTextField).inset(-14)
             make.right.equalTo(profileNameTextField).inset(-14)
             make.height.equalTo(14)
         }
         
+        blur.contentView.addSubview(hiddenChannelsButton)
+
         blur.contentView.addSubview(languageButton)
         languageButton.snp.makeConstraints { (make) in
-            make.top.equalTo(highlight.snp.bottom).inset(-24)
+            make.top.equalTo(lineForTextField.snp.bottom).inset(-24)
             make.centerX.equalToSuperview()
+            make.width.equalTo(hiddenChannelsButton.snp.width)
         }
         
         blur.contentView.addSubview(languageTitleLabel)
@@ -163,7 +171,6 @@ class ProfileHeaderView: UIView {
             make.centerX.equalToSuperview()
         })
         
-        blur.contentView.addSubview(hiddenChannelsButton)
         hiddenChannelsButton.snp.makeConstraints { (make) in
             make.top.equalTo(languageTitleLabel.snp.bottom).inset(-20)
             make.centerX.equalToSuperview()
