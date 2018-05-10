@@ -128,7 +128,7 @@ struct Track: LIPModel {
             trackImage = image
         }
         return ShareInfo(text: "\"\(self.name)\" - \(self.channel.name)",
-            url: RequestManager.sharedServer + "/tracks?channel=/\(self.channel.id)&track=\(self.id)",
+            url: RequestManager.sharedServer + "/tracks?channel=\(self.channel.id)&track=\(self.id)",
             image: trackImage!)
     }
 }
