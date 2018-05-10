@@ -134,6 +134,7 @@ class ProfileHeaderView: UIView {
             make.height.equalTo(14)
         }
         
+        self.hiddenChannelsButton.addTarget(self, action: #selector(self.hiddenChannelsButtonTapped(_:)), for: .touchUpInside)
         blur.contentView.addSubview(hiddenChannelsButton)
 
         blur.contentView.addSubview(languageButton)
@@ -171,6 +172,10 @@ class ProfileHeaderView: UIView {
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
         delegate?.addImage()
+    }
+    
+    @objc func hiddenChannelsButtonTapped(_ sender: Any) {
+        self.emitter?.send(event: ProfileEvent.showHiddenChannels)
     }
     
     func setName(name: String)

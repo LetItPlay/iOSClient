@@ -58,4 +58,8 @@ class ProfileViewModel: ProfileModelDelegate {
         self.getLanguage(lang: language)
         self.delegate?.make(updates: [.language])
     }
+    
+    func showHiddenChannels() {
+        MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.hidden], present: false)
+    }
 }

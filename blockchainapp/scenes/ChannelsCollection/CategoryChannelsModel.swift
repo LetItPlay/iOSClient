@@ -15,7 +15,7 @@ enum ChannelScreen {
 }
 
 enum ChannelsFilter {
-    case subscribed, all, category(Int)
+    case subscribed, all, category(Int), hidden
 }
 
 protocol  CategoryChannelsModelProtocol: ModelProtocol {
@@ -62,6 +62,8 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
                 request = ChannelsRequest.category(id: id)
             case .subscribed:
                 request = ChannelsRequest.subscribed
+            case .hidden:
+                request = ChannelsRequest.all(offset: 0, count: 100)
             }
             
             return RequestManager.shared.channels(req: request)

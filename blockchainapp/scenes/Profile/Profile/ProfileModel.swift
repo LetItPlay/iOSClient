@@ -15,6 +15,7 @@ protocol ProfileModelProtocol: ModelProtocol {
     func change(name: String)
     func change(language: String)
     func getData()
+    func showHiddenChannels()
 }
 
 protocol ProfileModelDelegate: class {
@@ -22,6 +23,7 @@ protocol ProfileModelDelegate: class {
     func update(image: Data)
     func update(name: String)
     func update(language: Language)
+    func showHiddenChannels()
 }
 
 class ProfileModel: ProfileModelProtocol {
@@ -98,6 +100,10 @@ class ProfileModel: ProfileModelProtocol {
         
         let newLanguage: Language = UserSettings.languages.filter({$0.name == language}).first!
         ServerUpdateManager.shared.update(language: newLanguage)
+    }
+    
+    func showHiddenChannels() {
+        self.delegate?.showHiddenChannels()
     }
     
     func send(event: LifeCycleEvent) {
