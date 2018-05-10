@@ -108,6 +108,6 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     }
     
     func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+        MainRouter.shared.showOthers(shareInfo: track)
     }
 }

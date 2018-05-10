@@ -40,7 +40,7 @@ protocol ChannelEvenHandler: class {
     func set(channel: Channel)
     func showSearch()
     func showOthers(index: Int)
-    func shareChannel()
+    func showOthers()
 }
 
 protocol ChannelModelDelegate: class {
@@ -50,7 +50,7 @@ protocol ChannelModelDelegate: class {
     func followUpdate(isSubscribed: Bool)
     func showSearch()
     func showOthers(track: ShareInfo)
-    func share(channel: ShareInfo)
+    func showOthers(channel: ShareInfo)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtocol {
@@ -144,8 +144,8 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
         self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
     }
     
-    func shareChannel() {
-        self.delegate?.share(channel: self.channel.sharedInfo())
+    func showOthers() {
+        self.delegate?.showOthers(channel: self.channel.sharedInfo())
     }
 }
 

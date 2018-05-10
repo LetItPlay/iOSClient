@@ -83,6 +83,6 @@ class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
     }
     
     func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+        MainRouter.shared.showOthers(shareInfo: track)
     }
 }

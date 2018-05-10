@@ -38,7 +38,7 @@ class ChannelHeaderView: UIView {
 	
 	let subsView: IconedLabel = IconedLabel.init(type: IconLabelType.subs)
     
-    var shareButton: UIButton = {
+    var showOthers: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "sharedInactive"), for: .normal)
         return button
@@ -133,13 +133,13 @@ class ChannelHeaderView: UIView {
 			make.centerY.equalToSuperview()
 		}
         
-        shareButton.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)
-        view.addSubview(shareButton)
-        shareButton.snp.makeConstraints { (make) in
+        showOthers.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)
+        view.addSubview(showOthers)
+        showOthers.snp.makeConstraints { (make) in
             make.centerY.equalTo(followButton)
             make.right.equalTo(followButton.snp.left).inset(-14)
         }
-        shareButton.isHidden = true
+        showOthers.isHidden = true
 
 		self.addSubview(channelTitleLabel)
 		channelTitleLabel.snp.makeConstraints { (make) in

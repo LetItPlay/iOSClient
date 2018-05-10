@@ -72,7 +72,6 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
         UserPlaylistManager.shared.remove(index: index)
         self.tracks.remove(at: index)
         self.delegate?.delete(index: index)
-//        self.delegate?.show(tracks: self.formVMs())
         if self.tracks.count == 0 {
             self.delegate?.emptyMessage(show: true)
         }

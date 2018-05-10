@@ -84,7 +84,7 @@ enum RequestError: Error {
 }
 
 class RequestManager {
-    static let server: String = "https://api.letitplay.io"
+    static let server: String = "https://beta.api.letitplay.io"
     static let sharedServer: String = "https://webui.letitplay.io/#"
     static let shared: RequestManager = RequestManager()
     

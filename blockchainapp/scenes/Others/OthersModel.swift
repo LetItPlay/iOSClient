@@ -20,6 +20,7 @@ protocol OthersEventHandler: class {
 }
 
 protocol OthersModelDelegate: class {
+    func set(objectToShare: ShareObjectType)
     func share(trackShareInfo: ShareInfo, viewController: UIViewController)
 }
 
@@ -31,8 +32,9 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     
     var trackID: Int!
     
-    init(track: ShareInfo) {
-        self.trackShareInfo = track
+    init(infoToShare: ShareInfo) {
+        self.trackShareInfo = infoToShare
+        self.delegate?.set(objectToShare: infoToShare.type)
     }
     
     func report(cause: ReportEventCause) {
