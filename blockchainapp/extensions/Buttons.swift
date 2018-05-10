@@ -1,5 +1,5 @@
 //
-//  Followself.swift
+//  Buttons.swift
 //  blockchainapp
 //
 //  Created by Aleksey Tyurnin on 14/12/2017.
@@ -31,4 +31,18 @@ class FollowButton: UIButton {
 			make.height.equalTo(32)
 		}
 	}
+}
+
+class ProfileButton: UIButton {
+    convenience init(title: String) {
+        self.init(frame: CGRect.zero)
+        self.titleLabel?.font = AppFont.Button.mid
+        self.setTitleColor(.red, for: .normal)
+        self.setTitle(title, for: .normal)
+        self.titleLabel?.textAlignment = .center
+        self.layer.cornerRadius = 5
+        self.layer.borderColor = UIColor.red.cgColor
+        self.layer.borderWidth = 1
+        self.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
+    }
 }

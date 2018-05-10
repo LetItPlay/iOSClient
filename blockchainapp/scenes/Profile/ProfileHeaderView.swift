@@ -54,18 +54,7 @@ class ProfileHeaderView: UIView {
         return button
     }()
     
-    let languageButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = AppFont.Button.mid
-        button.setTitleColor(.red, for: .normal)
-        button.setTitle("Change content language".localized, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.red.cgColor
-        button.layer.borderWidth = 1
-        button.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
-        return button
-    }()
+    let languageButton = ProfileButton(title: "Change content language".localized)
     
     let languageTitleLabel: UILabel = {
         let label = UILabel()
@@ -74,18 +63,7 @@ class ProfileHeaderView: UIView {
         return label
     }()
     
-    let hiddenChannelsButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = AppFont.Button.mid
-        button.setTitleColor(.red, for: .normal)
-        button.setTitle("Hidden channels".localized, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.red.cgColor
-        button.layer.borderWidth = 1
-        button.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
-        return button
-    }()
+    let hiddenChannelsButton = ProfileButton(title: "Hidden channels".localized)
     
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
         super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511 + 52)))

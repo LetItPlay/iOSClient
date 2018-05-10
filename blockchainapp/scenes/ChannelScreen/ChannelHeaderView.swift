@@ -131,7 +131,6 @@ class ChannelHeaderView: UIView {
 		followButton.snp.makeConstraints { (make) in
 			make.right.equalToSuperview().inset(16)
 			make.centerY.equalToSuperview()
-			make.height.equalTo(32)
 		}
         
         shareButton.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)

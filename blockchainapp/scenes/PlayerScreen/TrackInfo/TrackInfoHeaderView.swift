@@ -124,7 +124,6 @@ class TrackInfoHeaderView: UIView {
         _followButton.snp.makeConstraints({ (make) in
             make.right.equalTo(self).inset(16)
             make.centerY.equalToSuperview()
-            make.height.equalTo(32)
         })
 
         upperView.addSubview(_channelTitleLabel)
