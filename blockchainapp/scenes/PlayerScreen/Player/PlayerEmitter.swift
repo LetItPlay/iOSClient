@@ -5,7 +5,7 @@ enum Direction {
 }
 
 enum PlayerEvent {
-    case plause, change(dir: Direction), seekDir(dir: Direction), seek(progress: Double), clearAll(direction: HideMiniPlayerDirection)
+    case plause, change(dir: Direction), seekDirection(Direction), seekProgress(Double), clearAll(direction: HideMiniPlayerDirection)
 }
 
 class PlayerEmitter: Emitter {

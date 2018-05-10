@@ -59,7 +59,7 @@ class PlayerModel {
         }
 
         mpcenter.skipBackwardCommand.addTarget { (_) -> MPRemoteCommandHandlerStatus in
-            self.execute(event: .seekDir(dir: .forward))
+            self.execute(event: .seekDirection(.forward))
             return .success
         }
         
