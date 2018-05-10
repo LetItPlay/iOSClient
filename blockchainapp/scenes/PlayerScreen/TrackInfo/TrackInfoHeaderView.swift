@@ -39,24 +39,7 @@ class TrackInfoHeaderView: UIView {
         return label
     }()
     
-    let _followButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 6
-        button.layer.borderColor = AppColor.Element.subscribe.cgColor
-        button.layer.borderWidth = 1
-        button.layer.masksToBounds = true
-        button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-        button.setBackgroundImage(UIColor.clear.img(), for: .selected)
-        button.setTitle("Follow".localized, for: .normal)
-        button.setTitle("Following".localized, for: .selected)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-        button.contentEdgeInsets.left = 12
-        button.contentEdgeInsets.right = 12
-        button.titleLabel?.font = AppFont.Button.mid
-        button.addTarget(self, action: #selector(followButtonTouched), for: .touchUpInside)
-        return button
-    }()
+    let _followButton = FollowButton()
     
     let _infoTitle: UILabel = {
         let label = UILabel()
@@ -136,6 +119,7 @@ class TrackInfoHeaderView: UIView {
             make.centerY.equalToSuperview()
         })
 
+        _followButton.addTarget(self, action: #selector(followButtonTouched), for: .touchUpInside)
         upperView.addSubview(_followButton)
         _followButton.snp.makeConstraints({ (make) in
             make.right.equalTo(self).inset(16)

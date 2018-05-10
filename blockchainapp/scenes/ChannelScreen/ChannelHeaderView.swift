@@ -44,23 +44,7 @@ class ChannelHeaderView: UIView {
         return button
     }()
     
-	let followButton: UIButton = {
-		let button = UIButton()
-		button.layer.cornerRadius = 6
-		button.layer.borderColor = AppColor.Element.subscribe.cgColor
-		button.layer.borderWidth = 1
-		button.layer.masksToBounds = true
-		button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-		button.setBackgroundImage(UIColor.clear.img(), for: .selected)
-		button.setTitle("Follow".localized, for: .normal)
-		button.setTitle("Following".localized, for: .selected)
-		button.setTitleColor(UIColor.white, for: .normal)
-		button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-		button.contentEdgeInsets.left = 12
-		button.contentEdgeInsets.right = 12
-		button.titleLabel?.font = AppFont.Button.mid
-		return button
-	}()
+	let followButton = FollowButton()
 	
 	let channelTitleLabel: UILabel = {
 		let label = UILabel()
