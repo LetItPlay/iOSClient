@@ -31,8 +31,9 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     
     var trackID: Int!
     
-    init(track: ShareInfo) {
+    init(track: ShareInfo, trackID: Int) {
         self.trackShareInfo = track
+        self.trackID = trackID
     }
     
     func report(cause: ReportEventCause) {

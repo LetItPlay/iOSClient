@@ -98,8 +98,8 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
     }
     
-    func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+    func showOthers(track: ShareInfo, trackID: Int) {
+        MainRouter.shared.showOthers(track: track, trackID: trackID)
     }
     
     // for emitter

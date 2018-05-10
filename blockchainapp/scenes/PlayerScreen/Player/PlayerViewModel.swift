@@ -57,8 +57,8 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
 		self.playerDelegate?.showSpeeds()
     }
 	
-    func showMoreDialog(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+    func showMoreDialog(track: ShareInfo, trackID: Int) {
+        MainRouter.shared.showOthers(track: track, trackID: trackID)
     }
 	
 	func player(show: Bool) {

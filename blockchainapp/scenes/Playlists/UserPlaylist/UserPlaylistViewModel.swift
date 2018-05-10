@@ -76,7 +76,7 @@ class UserPlaylistViewModel: UserPlaylistVMProtocol, UserPlaylistModelDelegate
 		self.delegate?.reload()
     }
     
-    func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+    func showOthers(track: ShareInfo, trackID: Int) {
+        MainRouter.shared.showOthers(track: track, trackID: trackID)
     }
 }
