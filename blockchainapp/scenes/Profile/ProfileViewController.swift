@@ -20,8 +20,8 @@ class ProfileViewController: UIViewController {
     var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
-    var profileView: ProfileHeaderView!
-    let header: LikeHeader = LikeHeader()
+    var profileHeader: ProfileHeaderView!
+    let likeHeader: LikeHeader = LikeHeader()
     
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
@@ -34,7 +34,7 @@ class ProfileViewController: UIViewController {
 	
     convenience init(view: ProfileHeaderView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
 		self.init(nibName: nil, bundle: nil)
-        self.profileView = view
+        self.profileHeader = view
         self.emitter = emitter
         self.viewModel = viewModel
         viewModel.delegate = self
@@ -65,12 +65,12 @@ class ProfileViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard(_:)))
-        self.profileView.addGestureRecognizer(tap)
+        self.profileHeader.addGestureRecognizer(tap)
         
         imagePicker.delegate = self
-        profileView.delegate = self
+        profileHeader.delegate = self
         
-        self.tableView.tableHeaderView = profileView
+        self.tableView.tableHeaderView = profileHeader
         self.tableView.contentInset.bottom = 50
         self.tableView.backgroundColor = .white
         
@@ -94,7 +94,7 @@ class ProfileViewController: UIViewController {
             make.height.equalTo(20)
         }
         
-        self.profileView.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
+        self.profileHeader.languageButton.addTarget(self, action: #selector(langChanged(_:)), for: .touchUpInside)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -103,13 +103,13 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func dismissKeyboard(_ sender: Any) {
-        if isKeyboardShown && self.profileView.profileNameTextField.isFirstResponder {
+        if isKeyboardShown && self.profileHeader.profileNameTextField.isFirstResponder {
             isKeyboardShown = false
             view.endEditing(true)
             let height = sender is UITapGestureRecognizer ? 0 : 100
             tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-            let name = self.profileView.profileNameTextField.text!
-            self.profileView.emitter?.send(event: ProfileEvent.setName(name))
+            let name = self.profileHeader.profileNameTextField.text!
+            self.profileHeader.emitter?.send(event: ProfileEvent.setName(name))
         }
     }
 	
@@ -131,7 +131,7 @@ class ProfileViewController: UIViewController {
             }
             else {
                 languageAlert.addAction(UIAlertAction(title: language, style: .destructive, handler: { _ in
-                    self.profileView.emitter?.send(event: ProfileEvent.set(language: language))
+                    self.profileHeader.emitter?.send(event: ProfileEvent.set(language: language))
                     self.emitter?.send(event: LikesTrackEvent.hidePlayer)
                 }))
             }
@@ -154,10 +154,10 @@ class ProfileViewController: UIViewController {
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
     
-        profileView.profileNameTextField.delegate = self
+        profileHeader.profileNameTextField.delegate = self
         
         self.emitter?.send(event: LifeCycleEvent.appear)
-        self.profileView.emitter?.send(event: LifeCycleEvent.appear)
+        self.profileHeader.emitter?.send(event: LifeCycleEvent.appear)
 	}
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -169,7 +169,7 @@ class ProfileViewController: UIViewController {
         }
         
         self.emitter?.send(event: LifeCycleEvent.disappear)
-        self.profileView.emitter?.send(event: LifeCycleEvent.disappear)
+        self.profileHeader.emitter?.send(event: LifeCycleEvent.disappear)
     }
 
     override func didReceiveMemoryWarning() {
@@ -259,7 +259,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
 		print("\(info)")
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
-            self.profileView.emitter?.send(event: ProfileEvent.setImage(image))
+            self.profileHeader.emitter?.send(event: ProfileEvent.setImage(image))
         }
         
         dismiss(animated: true, completion: nil)
@@ -306,8 +306,8 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        header.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
-		return header
+        likeHeader.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
+		return likeHeader
 	}
 	
 	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
