@@ -18,16 +18,8 @@ class UserPlaylistViewController: UIViewController {
     var tracks: [[AudioTrack]] = [[]]
     var currentIndex: IndexPath = IndexPath.invalid
     
-    let emptyLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.Title.sectionNotBold
-        label.textColor = AppColor.Element.emptyMessage
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.text = "There are no tracks".localized
-        return label
-    }()
-    
+    let emptyLabel = EmptyLabel(title: "There are no tracks".localized)
+            
     let clearButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)

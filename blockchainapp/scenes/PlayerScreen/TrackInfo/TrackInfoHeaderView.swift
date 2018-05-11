@@ -84,11 +84,7 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
-        let emptyLabel = UILabel()
-        emptyLabel.text = "Loading..."
-        emptyLabel.font = AppFont.Title.sectionNotBold
-        emptyLabel.textColor = AppColor.Element.emptyMessage
-        emptyLabel.textAlignment = .center
+        let emptyLabel = EmptyLabel(title: "Loading...")
         self.addSubview(emptyLabel)
         emptyLabel.snp.makeConstraints({ (make) in
             make.centerX.equalToSuperview()

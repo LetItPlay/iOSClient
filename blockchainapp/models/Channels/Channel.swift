@@ -16,6 +16,7 @@ struct Channel: LIPModel, Hashable {
 	
     var isSubscribed: Bool      = false
 	var isReported: Bool		= false
+    var isHidden: Bool          = false
     
 	var lang: String			= UserSettings.languages[2].identifier
 	var tags: [String]			= []

@@ -36,6 +36,7 @@ protocol  CategoryChannelsModelDelegate: class {
     func update(index: Int, vm: SmallChannelViewModel)
     func showAllChannels()
     func set(category: String)
+    func updateEmptyMessage(hide: Bool)
 }
 
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
@@ -87,6 +88,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             }
             
             self.delegate?.set(category: self.category)
+            self.delegate?.updateEmptyMessage(hide: self.channels.count == 0 ? false : true)
             self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
         }).disposed(by: disposeBag)
         

@@ -120,6 +120,7 @@
 		9DC6C2422091D21300C980D4 /* MainChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C2412091D21300C980D4 /* MainChannelModel.swift */; };
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
+		9DD783DD20A572B600FA0FFD /* Empties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD783DC20A572B600FA0FFD /* Empties.swift */; };
 		9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */; };
 		9DDC286820A01EEA00A4C3DE /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDC286720A01EEA00A4C3DE /* Language.swift */; };
 		9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */; };
@@ -306,6 +307,7 @@
 		9DC6C2412091D21300C980D4 /* MainChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelModel.swift; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
+		9DD783DC20A572B600FA0FFD /* Empties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empties.swift; sourceTree = "<group>"; };
 		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
 		9DDC286720A01EEA00A4C3DE /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategoryViewModel.swift; sourceTree = "<group>"; };
@@ -756,6 +758,7 @@
 				01510EAC1FDED922003AC116 /* RealmExtension.swift */,
 				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
 				361CD01920482A410097F8E9 /* Common.swift */,
+				9DD783DC20A572B600FA0FFD /* Empties.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1165,6 +1168,7 @@
 				36045FAE204D8A87003C7406 /* UserPlaylistBuilder.swift in Sources */,
 				3659B22B203EE351009580E9 /* ChannelBuilder.swift in Sources */,
 				9DC6C2402091D20900C980D4 /* MainChannelsViewModel.swift in Sources */,
+				9DD783DD20A572B600FA0FFD /* Empties.swift in Sources */,
 				36706D512031A7F3002097E7 /* CategoryChannelsModel.swift in Sources */,
 				36E21800208F4C9D00BBAE95 /* PlaylistsSegmentedViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,
