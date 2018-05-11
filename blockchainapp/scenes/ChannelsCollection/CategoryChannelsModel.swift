@@ -35,12 +35,15 @@ protocol  CategoryChannelsModelDelegate: class {
     func showChannel(id: Int)
     func update(index: Int, vm: SmallChannelViewModel)
     func showAllChannels()
+    func set(category: String)
 }
 
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
     
     var channelScreen: ChannelScreen!
     var channelsFilter: ChannelsFilter!
+    
+    var category: String = ""
     
     weak var delegate:  CategoryChannelsModelDelegate?
     var channels: [Channel] = []
@@ -74,10 +77,16 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             switch self.channelsFilter! {
             case .all:
                 self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
-            default:
-                break
+                self.category = "Channels".localized
+            case .hidden:
+                self.category = "Hidden channels".localized
+            case .subscribed:
+                self.category = "Subscribed channels".localized
+            case .category:
+                self.category = "Category".localized
             }
             
+            self.delegate?.set(category: self.category)
             self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
         }).disposed(by: disposeBag)
         

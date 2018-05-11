@@ -40,6 +40,7 @@ class CategoryChannelsViewController: UITableViewController {
     func viewInitialize()
     {
         navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationItem.title = self.viewModel.category
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
@@ -91,8 +92,9 @@ class CategoryChannelsViewController: UITableViewController {
 
 extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
     func reloadChannels() {
+        self.navigationItem.title = self.viewModel.category
+        
         if let _: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
-//            self.source = source
             self.tableView.reloadData()
             
             refreshControl?.endRefreshing()

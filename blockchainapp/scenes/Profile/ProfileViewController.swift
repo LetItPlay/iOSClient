@@ -163,11 +163,6 @@ class ProfileViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        if !animated {
-            let BarButtonItemAppearance = UIBarButtonItem.appearance()
-            BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
-        }
-        
         self.emitter?.send(event: LifeCycleEvent.disappear)
         self.profileHeader.emitter?.send(event: LifeCycleEvent.disappear)
     }

@@ -29,8 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 
-		UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
-
         let languages = UserSettings.languages
         if UserSettings.language.identifier == "none" {
             switch NSLocale.preferredLanguages[0] {
@@ -76,6 +74,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.tintColor = .red
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([.foregroundColor: AppColor.Element.tomato], for: .normal)
     }
 	
 	func applicationWillEnterForeground(_ application: UIApplication) {
