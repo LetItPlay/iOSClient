@@ -56,15 +56,14 @@ struct Channel: LIPModel, Hashable {
     
     func sharedInfo() -> ShareInfo {
         var channelImage = UIImage(named: "redTriangle")
-        
         if let image = SDImageCache.shared().imageFromDiskCache(forKey: self.image?.absoluteString) {
             channelImage = image
         }
         if let image = SDImageCache.shared().imageFromMemoryCache(forKey: self.image?.absoluteString) {
             channelImage = image
         }
-
-        return ShareInfo(id: self.id, type: .channel, text: self.name, url: RequestManager.sharedServer + "/tracks?channel=/\(self.id)", image: channelImage!)
+        
+        return ShareInfo(id: self.id, text: self.name, url: RequestManager.sharedServer + "/tracks?channel=\(self.id)", image: channelImage!)
     }
 }
 

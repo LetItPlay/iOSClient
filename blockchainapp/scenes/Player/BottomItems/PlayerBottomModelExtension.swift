@@ -17,7 +17,7 @@ extension PlayerModel: MainPlayerBottomIconsEventHandler {
     
     func showOthersButtonTouched() {
         if let current = self.currentTrack {
-            self.playerDelegate?.showMoreDialog(track: current.sharedInfo())
+            self.playerDelegate?.showMoreDialog(track: current.sharedInfo(), trackID: current.id)
         }
     }
     

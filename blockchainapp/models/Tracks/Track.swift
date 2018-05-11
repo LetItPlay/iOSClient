@@ -127,10 +127,8 @@ struct Track: LIPModel {
         if let image = SDImageCache.shared().imageFromMemoryCache(forKey: self.image?.absoluteString) {
             trackImage = image
         }
-
         return ShareInfo(id: self.id, type: .track, text: "\"\(self.name)\" - \(self.channel.name)",
-            url: RequestManager.sharedServer + "/tracks?channel=/\(self.channel.id)&track=\(self.id)",
-            image: trackImage!)
+            url: RequestManager.sharedServer + "/tracks?channel=\(self.channel.id)&track=\(self.id)", image: trackImage!)
     }
 }
 

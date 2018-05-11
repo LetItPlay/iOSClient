@@ -41,8 +41,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
     
     
     @objc func seek() {
-        //		AudioController.main.make(command: .seek(progress: Double(self.trackProgressView.slider.value)))
-        self.emitter.send(event: .seek(progress: Double(self.trackProgressView.slider.value)))
+        self.emitter.send(event: .seekProgress(Double(self.trackProgressView.slider.value)))
     }
     
     @objc func buttonPressed(sender: UIButton) {
@@ -51,7 +50,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         case 1,2:
             event = .change(dir: sender.tag == 1 ? .backward : .forward)
         case 3,4:
-            event = .seekDir(dir: sender.tag == 3 ? .backward : .forward)
+            event = .seekDirection(sender.tag == 3 ? .backward : .forward)
         default:
             event = .plause
         }
@@ -233,10 +232,8 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
     let trackChangeButtons: (next: UIButton, prev: UIButton) = {
         let arr = [UIButton(), UIButton()]
         arr.forEach({ (button) in
-            //            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
             button.contentHorizontalAlignment = .fill
             button.contentVerticalAlignment = .fill
-            //            button.layer.masksToBounds = true
             button.snp.makeConstraints({ (make) in
                 make.width.equalTo(button.snp.height)
             })
@@ -244,8 +241,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         
         arr.first!.setImage(UIImage(named: "nextInactive"), for: .normal)
         arr.first!.setBackgroundImage(UIImage(named: "nextActive"), for: .highlighted)
+        arr.first?.tag = 2
         arr.last!.setImage(UIImage(named: "prevInactive"), for: .normal)
         arr.last!.setBackgroundImage(UIImage(named: "prevActive"), for: .highlighted)
+        arr.last?.tag = 1
         
         return (next: arr.first!, prev: arr.last!)
     }()
@@ -253,10 +252,8 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
     let trackSeekButtons: (forw: UIButton, backw: UIButton) = {
         let arr = [UIButton(), UIButton()]
         arr.forEach({ (button) in
-            //            button.layer.cornerRadius = Device.screen == .inches_4_0 ? 22.5 : 30
             button.contentHorizontalAlignment = .fill
             button.contentVerticalAlignment = .fill
-            //            button.layer.masksToBounds = true
             button.snp.makeConstraints({ (make) in
                 make.width.equalTo(button.snp.height)
             })
@@ -264,8 +261,10 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         
         arr.first!.setImage(UIImage(named: "playerForw"), for: .normal)
         arr.first!.setBackgroundImage(UIImage(named: "playerForwActive"), for: .highlighted)
+        arr.first?.tag = 4
         arr.last!.setImage(UIImage(named: "playerBackw"), for: .normal)
         arr.last!.setBackgroundImage(UIImage(named: "playerBackwActive"), for: .highlighted)
+        arr.last?.tag = 3
         
         return (forw: arr.first!, backw: arr.last!)
     }()

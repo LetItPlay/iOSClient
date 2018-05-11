@@ -33,7 +33,7 @@ protocol SearchModelDelegate: class {
     func update(index: Int, vm: SearchChannelViewModel)
     func update(index: Int, vm: TrackViewModel)
     func showChannel(id: Int)
-    func showOthers(track: ShareInfo)
+    func showOthers(track: ShareInfo, trackID: Int)
     func toUpdate(nothing: Bool)
 }
 
@@ -115,7 +115,8 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
+        let track = self.tracks[index]
+        self.delegate?.showOthers(track: track.sharedInfo(), trackID: track.id)
     }
     
     func showMoreTracks() {

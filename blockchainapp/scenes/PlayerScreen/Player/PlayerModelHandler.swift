@@ -19,12 +19,12 @@ extension PlayerModel: PlayerEventHandler {
 				? max(self.playingIndex - 1, 0)
 				: min(self.playingIndex + 1, self.tracks.count - 1)
 			self.reloadTrack()
-		case .seekDir(let direction):
+		case .seekDirection(let direction):
 			let newTime = self.currentTime.current + (direction == .forward ? 10.0 : -10.0)
 			if newTime > 0 && newTime < self.currentTime.length {
 				self.player.make(command: .seek(progress: newTime / self.currentTime.length))
 			}
-		case .seek(let progress):
+		case .seekProgress(let progress):
 			self.player.make(command: .seek(progress: progress))
         case .clearAll(let direction):
             self.clearAll(direction: direction)

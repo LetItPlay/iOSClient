@@ -163,11 +163,10 @@ class MainPlayerViewController: UIViewController {
 
 extension MainPlayerViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.pageController.viewControllers![0] is MainPlayerViewController && self.isMainPlayer {
+        if self.isMainPlayer {
             if scrollView.contentOffset.x > self.view.frame.width {
                 let width = self.view.frame.width
                 self.bottomIconsView.hideIcons((scrollView.contentOffset.x / width - 2) * -1 )
-                print(scrollView.contentOffset.x)
             }
         }
         if self.pageController.viewControllers![0] is PlayingPlaylistViewController {
@@ -188,40 +187,27 @@ extension MainPlayerViewController: TrackLikedDelegate{
 extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         if let index = self.vcs.index(where: {$0 == viewController}), index > 0 {
+            if index != 2 {
+                self.bottomIconsView.hideIcons(false)
+                self.isMainPlayer = false
+            }
+            if index == 1 {
+                self.isMainPlayer = true
+            }
             return self.vcs[index - 1]
 		}
-//
-//        self.bottomIconsView.hideIcons(false)
-//
-//        self.isMainPlayer = false
-//
-//		if viewController is PlaylistViewController {
-//			return mainPlayer
-//		}
-//
-//        if viewController is MainPlayerViewController {
-//            self.isMainPlayer = true
-//            return trackInfo
+        self.isMainPlayer = false
 		
 		return nil
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         if let index = self.vcs.index(where: {$0 == viewController}), index < self.vcs.count - 1 {
+            self.isMainPlayer = index == 1
+            
             return self.vcs[index + 1]
         }
-//		if viewController is MainPlayerViewController {
-//            self.isMainPlayer = true
-//			return playlist
-//		}
-//
-//        self.isMainPlayer = false
-//
-//        if viewController is TrackInfoViewController {
-//            return mainPlayer
-//        }
-//
-//        self.bottomIconsView.hideIcons(true)
+        self.bottomIconsView.hideIcons(true)
 		
 		return nil
 	}
@@ -234,25 +220,9 @@ extension MainPlayerViewController: UIPageViewControllerDelegate, UIPageViewCont
         if let vc = pageViewController.viewControllers?[0], let index = self.vcs.index(where: {$0 == vc}) {
             return index
 		}
-//        if pageViewController.viewControllers![0] is PlaylistViewController {
-//            return 2
-//        }
-//
-//        if pageController.viewControllers![0] is TrackInfoViewController {
-//            return 0
 		return 0
 	}
 }
-
-//extension MainPlayerViewController: UIViewControllerTransitioningDelegate {
-//	func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//		return PlayerPresentTransition.init(originFrame: self.view.frame)
-//	}
-//
-//	func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//		return PlayerDismissTransition.init(originFrame: self.view.frame)
-//	}
-//}
 
 extension MainPlayerViewController: MainPlayerBottomIconsEventHandler {
     
