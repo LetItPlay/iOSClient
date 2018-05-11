@@ -29,7 +29,7 @@ protocol FeedModelDelegate: class {
 	func showAllChannels()
 	func showSearch()
     func showChannel(id: Int)
-    func showOthers(track: ShareInfo, trackID: Int)
+    func showOthers(track: ShareInfo)
 }
 
 
@@ -136,7 +136,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     
     func showOthers(index: Int) {
         let track = self.tracks[index]
-        self.delegate?.showOthers(track: track.sharedInfo(), trackID: track.id)
+        self.delegate?.showOthers(track: track.sharedInfo())
     }
 }
 

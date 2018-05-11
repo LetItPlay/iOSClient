@@ -96,6 +96,7 @@
 		36F613CC202D6E3200661E48 /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613CB202D6E3200661E48 /* ProfileBuilder.swift */; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
+		7443750F84C109A5FAD48F8F /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01DBC530205AAA6C00EF832D /* Pods_blockchainapp.framework */; };
 		80BFB915972D1246DB660A8D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00AD6F163D6AF5595672790C /* Pods_blockchainappUITests.framework */; };
 		9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */; };
 		9D0B18F7207F67D900CBE87B /* OthersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F6207F67D900CBE87B /* OthersModel.swift */; };
@@ -358,6 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				01321B641FCDADF7009BFE62 /* Pods_blockchainapp.framework in Frameworks */,
+				7443750F84C109A5FAD48F8F /* Pods_blockchainapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

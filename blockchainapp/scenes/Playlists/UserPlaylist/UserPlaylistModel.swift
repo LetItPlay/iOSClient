@@ -27,7 +27,7 @@ protocol UserPlaylistModelDelegate: class {
     func show(tracks: [TrackViewModel])
     func emptyMessage(show: Bool)
     func delete(index: Int)
-    func showOthers(track: ShareInfo, trackID: Int)
+    func showOthers(track: ShareInfo)
 }
 
 class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, UserPlaylistDelegate, PlayerUsingProtocol
@@ -113,7 +113,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
     
     func showOthers(index: Int) {
         let track = self.tracks[index]
-        self.delegate?.showOthers(track: track.sharedInfo(), trackID: track.id)
+        self.delegate?.showOthers(track: track.sharedInfo())
     }
 }
 

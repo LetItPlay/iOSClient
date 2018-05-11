@@ -63,7 +63,7 @@ struct Channel: LIPModel, Hashable {
             channelImage = image
         }
         
-        return ShareInfo(id: self.id, text: self.name, url: RequestManager.sharedServer + "/tracks?channel=\(self.id)", image: channelImage!)
+        return ShareInfo(id: self.id, type: .channel, text: self.name, url: RequestManager.sharedServer + "/tracks?channel=\(self.id)", image: channelImage!)
     }
 }
 
