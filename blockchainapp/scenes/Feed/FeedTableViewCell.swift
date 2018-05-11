@@ -56,8 +56,6 @@ class FeedTableViewCell: SwipeTableViewCell {
             self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
             self.dataLabels[.listens]?.isHidden = vm.isPlaying
             
-//            self.showOthersButton.isHidden = vm.isPlaying
-        
             self.likeButton.isSelected = vm.isLiked
         
             self.dataLabels[.time]?.set(text: vm.length)
@@ -207,11 +205,7 @@ class FeedTableViewCell: SwipeTableViewCell {
         return alert
     }()
     
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
         
 	func viewInitialize() {
 		
@@ -338,7 +332,6 @@ class FeedTableViewCell: SwipeTableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
         
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in

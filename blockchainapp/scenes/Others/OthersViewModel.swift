@@ -8,10 +8,28 @@
 
 import UIKit
 
+struct OthersAlertData {
+    var actionTitle: String
+    var alertTitle: String
+    var alertMessage: String
+    
+    var alertAcrions: [(title: String, event: OthersEvent)]
+    var showOkButton: Bool
+    
+    init(actionTitle: String, alertTitle: String, alertMessage: String, alertActions: [(title: String, event: OthersEvent)], showOkButton: Bool) {
+        self.actionTitle = actionTitle
+        self.alertTitle = alertTitle
+        self.alertMessage = alertMessage
+        
+        self.alertAcrions = alertActions
+        self.showOkButton = showOkButton
+    }
+}
+
 protocol OthersVMProtocol {
     var delegate: OthersVMDelegate? {get set}
     
-    var reportObjects: [(title: String, event: OthersEvent)] {get}
+    var alertData: OthersAlertData {get}
     var objectToShare: ShareObjectType! {get set}
 }
 
@@ -24,16 +42,13 @@ class OthersViewModel: OthersVMProtocol, OthersModelDelegate {
     
     var objectToShare: ShareObjectType!
 
-    var reportObjects: [(title: String, event: OthersEvent)] {
+    var alertData: OthersAlertData {
         get {
             switch self.objectToShare! {
             case .track:
-                return [(title: "Спам", event: OthersEvent.report(.spam)),
-                        (title: "Контент для взрослых", event: OthersEvent.report(.adultContent)),
-                        (title: "Жестокий контент", event: OthersEvent.report(.cruelContent))]
+                return OthersAlertData(actionTitle: "Report".localized, alertTitle: "Report on".localized, alertMessage: "", alertActions: [(title: "Spam".localized, event: OthersEvent.report(.spam)), (title: "Adult content".localized, event: OthersEvent.report(.adultContent)), (title: "Cruel content".localized, event: OthersEvent.report(.cruelContent))], showOkButton: false)
             case .channel:
-                return [(title: "Спам", event: OthersEvent.report(.spam)),
-                        (title: "Контент для взрослых", event: OthersEvent.report(.adultContent))]
+                return OthersAlertData(actionTitle: "Not show".localized, alertTitle: "Not show".localized, alertMessage: "The content of this feed will not appear in your feed".localized, alertActions: [(title: "Show hidden channels".localized, event: OthersEvent.showHidden)], showOkButton: true)
             }
         }
     }
@@ -49,5 +64,9 @@ class OthersViewModel: OthersVMProtocol, OthersModelDelegate {
     
     func share(trackShareInfo: ShareInfo, viewController: UIViewController) {
         MainRouter.shared.share(data: trackShareInfo, viewController: viewController)
+    }
+    
+    func showHiddenChannels() {
+        MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.hidden], present: false)
     }
 }

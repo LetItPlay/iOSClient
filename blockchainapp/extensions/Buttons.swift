@@ -46,3 +46,10 @@ class ProfileButton: UIButton {
         self.contentEdgeInsets = UIEdgeInsetsMake(6, 20, 7, 20)
     }
 }
+
+class ShowOthersButton: UIButton {
+    convenience init() {
+        self.init(frame: CGRect.zero)
+        self.setImage(UIImage(named: "otherInactive"), for: .normal)
+    }
+}

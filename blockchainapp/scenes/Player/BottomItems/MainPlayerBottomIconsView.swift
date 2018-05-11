@@ -31,12 +31,7 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
         return button
     }()
     
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        button.addTarget(self, action: #selector(showOthersButtonTouched), for: .touchUpInside)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
     
     convenience init(vm: PlayerViewModel, emitter: MainPlayerBottomIconsEmitter) {
         self.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 40)))
@@ -75,7 +70,6 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
             make.width.equalTo(24)
             make.height.equalTo(24)
         }
-        showOthersButton.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {

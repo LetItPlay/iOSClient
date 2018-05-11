@@ -47,11 +47,7 @@ class ChannelTrackCell: SwipeTableViewCell {
         return label
     }()
     
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
     
     var dataLabels: [IconLabelType: IconedLabel] = [:]
     
@@ -74,8 +70,6 @@ class ChannelTrackCell: SwipeTableViewCell {
                 
                 self.dataLabels[.listens]?.isHidden = (self.track?.isPlaying)!
                 self.dataLabels[.playingIndicator]?.isHidden = !(self.track?.isPlaying)!
-                
-                //            showOthersButton.isHidden = (track?.isPlaying)!
             }
         }
     }
@@ -147,7 +141,6 @@ class ChannelTrackCell: SwipeTableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
         
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
         

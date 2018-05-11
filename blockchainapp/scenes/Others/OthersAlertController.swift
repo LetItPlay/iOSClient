@@ -26,6 +26,8 @@ class OthersAlertController: UIAlertController {
         self.emitter = emitter
         
         self.viewController = viewController
+        
+        self.emitter.send(event: LifeCycleEvent.initialize)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -37,25 +39,31 @@ class OthersAlertController: UIAlertController {
         
         self.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(0.8)
         
-        self.addAction(UIAlertAction(title: "Поделиться", style: .default, handler: { (action) in
+        self.addAction(UIAlertAction(title: "Share".localized, style: .default, handler: { (action) in
             self.emitter.send(event: OthersEvent.shareTrack(viewController: self.viewController))
         }))
         
-        self.addAction(UIAlertAction(title: "Пожаловаться", style: .default, handler: { (action) in
-            let alert = UIAlertController(title: "Пожаловаться на", message: "", preferredStyle: .alert)
+        self.addAction(UIAlertAction(title: self.viewModel.alertData.actionTitle, style: .default, handler: { (action) in
+            let alert = UIAlertController(title: self.viewModel.alertData.alertTitle, message: self.viewModel.alertData.alertMessage, preferredStyle: .alert)
             
-            for report in self.viewModel.reportObjects {
-                alert.addAction(UIAlertAction(title: report.title, style: .default, handler: { (_) in
-                    self.emitter.send(event: report.event)
+            for action in self.viewModel.alertData.alertAcrions {
+                alert.addAction(UIAlertAction(title: action.title, style: .default, handler: { (_) in
+                    self.emitter.send(event: action.event)
                 }))
             }
             
-            alert.addAction(UIAlertAction(title: "Отмена", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel".localized, style: .default, handler: nil))
+            
+            if self.viewModel.alertData.showOkButton {
+                alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: { (_) in
+                    self.emitter.send(event: OthersEvent.okButtonTouched)
+                }))
+            }
             
             self.viewController.present(alert, animated: true)
         }))
         
-        self.addAction(UIAlertAction(title: "Отменить", style: .cancel, handler: nil))
+        self.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
     }
 
     override func didReceiveMemoryWarning() {

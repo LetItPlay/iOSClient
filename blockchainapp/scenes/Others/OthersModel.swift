@@ -11,45 +11,64 @@ import RxSwift
 
 protocol OthersModelProtocol: ModelProtocol {
     var delegate: OthersModelDelegate? {get set}
-    var trackShareInfo: ShareInfo? {get set}
+    var shareInfo: ShareInfo? {get set}
 }
 
 protocol OthersEventHandler: class {
     func report(cause: ReportEventCause)
     func shareTrack(viewController: UIViewController)
+    func showHiddenChannels()
+    func okButtonTouched()
+    func hideChannel()
 }
 
 protocol OthersModelDelegate: class {
     func set(objectToShare: ShareObjectType)
     func share(trackShareInfo: ShareInfo, viewController: UIViewController)
+    func showHiddenChannels()
 }
 
 class OthersModel: OthersModelProtocol, OthersEventHandler {
     weak var delegate: OthersModelDelegate?
-    var trackShareInfo: ShareInfo?
+    var shareInfo: ShareInfo?
     
     var disposeBag = DisposeBag()
     
-    var trackID: Int!
-    
     init(infoToShare: ShareInfo) {
-        self.trackShareInfo = infoToShare
-        self.delegate?.set(objectToShare: infoToShare.type)
+        self.shareInfo = infoToShare
     }
     
     func report(cause: ReportEventCause) {
-        RequestManager.shared.updateTrack(id: self.trackID, type: .report(msg: "\(cause)")).subscribe(onNext: { (tuple) in
+        RequestManager.shared.updateTrack(id: (self.shareInfo?.id)!, type: .report(msg: "\(cause)")).subscribe(onNext: { (tuple) in
         }).disposed(by: disposeBag)
     }
     
     func shareTrack(viewController: UIViewController) {
-        self.delegate?.share(trackShareInfo: self.trackShareInfo!, viewController: viewController)
+        self.delegate?.share(trackShareInfo: self.shareInfo!, viewController: viewController)
+    }
+    
+    func showHiddenChannels() {
+        self.delegate?.showHiddenChannels()
+    }
+    
+    func okButtonTouched() {
+        switch self.shareInfo?.type {
+        case .channel?:
+            self.hideChannel()
+        default:
+            break
+        }
+    }
+    
+    func hideChannel() {
+        // TODO: hide channel
+        print("\nHide channel \((self.shareInfo?.id)!)")
     }
     
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            self.delegate?.set(objectToShare: (self.shareInfo?.type)!)
         default:
             break
         }
