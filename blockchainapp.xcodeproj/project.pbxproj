@@ -53,6 +53,7 @@
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
 		229F3490FFCCE2DBFAA2ED8F /* libPods-blockchainapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EBB45459D4E7429135FE007 /* libPods-blockchainapp.a */; };
+		2C8E668620A570CC000EFCB9 /* TableProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E668520A570CC000EFCB9 /* TableProvider.swift */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
 		36045FA8204D8338003C7406 /* UserPlaylistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36045FA7204D8338003C7406 /* UserPlaylistViewModel.swift */; };
@@ -231,6 +232,7 @@
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		1EBB45459D4E7429135FE007 /* libPods-blockchainapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blockchainapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C8E668520A570CC000EFCB9 /* TableProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableProvider.swift; sourceTree = "<group>"; };
 		2CE07EF62028883C00B3D939 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
 		36045FA7204D8338003C7406 /* UserPlaylistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistViewModel.swift; sourceTree = "<group>"; };
@@ -762,6 +764,7 @@
 				01510EAC1FDED922003AC116 /* RealmExtension.swift */,
 				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
 				361CD01920482A410097F8E9 /* Common.swift */,
+				2C8E668520A570CC000EFCB9 /* TableProvider.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1176,6 +1179,7 @@
 				0160BB232031596600D7C3CB /* Track.swift in Sources */,
 				2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */,
 				9DFAE6F72060FB1500EF7C4D /* TrackInfoHeaderView.swift in Sources */,
+				2C8E668620A570CC000EFCB9 /* TableProvider.swift in Sources */,
 				368920AD208E230F00D83278 /* MainChannelsViewController.swift in Sources */,
 				365653FD20358FA90072087F /* PlaylistsEmitter.swift in Sources */,
 				361CD01A20482A410097F8E9 /* Common.swift in Sources */,
