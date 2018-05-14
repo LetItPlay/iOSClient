@@ -15,7 +15,7 @@ enum ChannelScreen {
 }
 
 enum ChannelsFilter {
-    case subscribed, all, category(Int), hidden
+    case subscribed, all, category(Int, String), hidden
 }
 
 protocol  CategoryChannelsModelProtocol: ModelProtocol {
@@ -62,7 +62,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             switch channelsFilter {
             case .all:
                 request = ChannelsRequest.all(offset: 0, count: 100)
-            case .category(let id):
+            case .category(let id, _):
                 request = ChannelsRequest.category(id: id)
             case .subscribed:
                 request = ChannelsRequest.subscribed
@@ -88,8 +88,8 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
                 self.category = "Hidden channels".localized
             case .subscribed:
                 self.category = "Subscribed channels".localized
-            case .category:
-                self.category = "Category".localized
+            case .category(_, let title):
+                self.category = title
             }
             
             self.delegate?.set(category: self.category)

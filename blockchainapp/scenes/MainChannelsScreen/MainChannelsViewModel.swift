@@ -39,7 +39,7 @@ class MainChannelsViewModel: MainChannelsVMProtocol, MainChannelsModelDelegate {
         MainRouter.shared.show(screen: "channel", params: ["id": id], present: false)
     }
     
-    func showAllChannelsFor(category: Int) {
-        MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.category(category)], present: false)
+    func showAllChannelsFor(category: Int, title: String) {
+        MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.category(category, title)], present: false)
     }
 }

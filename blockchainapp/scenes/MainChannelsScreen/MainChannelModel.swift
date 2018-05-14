@@ -24,7 +24,7 @@ protocol MainChannelsEventHandler: class {
 protocol MainChannelsModelDelegate: class {
     func reload(categories: [ChannelCategoryViewModel])
     func showChannel(id: Int)
-    func showAllChannelsFor(category: Int)
+    func showAllChannelsFor(category: Int, title: String)
 }
 
 class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
@@ -59,7 +59,7 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
     }
     
     func showAllChannelsFor(section: Int) {
-        self.delegate?.showAllChannelsFor(category: categories[section].id)
+        self.delegate?.showAllChannelsFor(category: categories[section].id, title: categories[section].name)
     }
     
     func showChannel(section: Int, index: Int) {
