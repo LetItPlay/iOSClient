@@ -18,6 +18,7 @@ enum TrackAction {
 enum ChannelAction {
 	case subscribe
 	case report(msg: String)
+    case showHidden
 }
 
 class ServerUpdateManager {
@@ -32,6 +33,8 @@ class ServerUpdateManager {
             type = channel.isSubscribed ? .unsubscribe : .subscribe
         case .report(let msg):
             type = .report(msg: msg)
+        case .showHidden:
+            type = .blacklist(add: false)
         }
         RequestManager.shared.updateChannel(id: channel.id, type: type).subscribe(onNext: { (channel) in
             NotificationCenter.default.post(name: InAppUpdateNotification.channel.notification(), object: nil, userInfo: ["station" : channel])

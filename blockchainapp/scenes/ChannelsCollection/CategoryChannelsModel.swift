@@ -67,7 +67,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             case .subscribed:
                 request = ChannelsRequest.subscribed
             case .hidden:
-                request = ChannelsRequest.all(offset: 0, count: 100)
+                request = ChannelsRequest.blacklist
             }
             
             return RequestManager.shared.channels(req: request)
@@ -80,6 +80,11 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
                 self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
                 self.category = "Channels".localized
             case .hidden:
+                self.channels = self.channels.map({ (channel) -> Channel in
+                    var newChannel = channel
+                    newChannel.isHidden = true
+                    return newChannel
+                })
                 self.category = "Hidden channels".localized
             case .subscribed:
                 self.category = "Subscribed channels".localized

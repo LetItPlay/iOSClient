@@ -61,8 +61,9 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     }
     
     func hideChannel() {
-        // TODO: hide channel
         print("\nHide channel \((self.shareInfo?.id)!)")
+        RequestManager.shared.updateChannel(id: (self.shareInfo?.id)!, type: .blacklist(add: true)).subscribe(onNext: { (channel) in
+        }).disposed(by: disposeBag)
     }
     
     func send(event: LifeCycleEvent) {
