@@ -48,6 +48,11 @@ class CategoryChannelsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.title = self.viewModel.category
         
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         

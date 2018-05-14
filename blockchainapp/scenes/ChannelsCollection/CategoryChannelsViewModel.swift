@@ -24,7 +24,7 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
     
     var channels: [SmallChannelViewModel] = []
     var category: String = ""
-    var hideEmptyMessage: Bool = true
+    var hideEmptyMessage: Bool = false
     weak var delegate: CategoryChannelsVMDelegate?
     var model:  CategoryChannelsModelProtocol!
     
