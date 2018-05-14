@@ -38,7 +38,8 @@ enum ChannelUpdateRequest {
     case subscribe
     case unsubscribe
     case report(msg: String)
-    case blacklist(add: Bool)
+    case hide
+    case show
 }
 
 fileprivate extension TracksRequest {
@@ -69,7 +70,7 @@ fileprivate extension ChannelsRequest {
         case .subscribed:
             return "user/favorites/channels"
         case .blacklist:
-            return "blacklist/channel/"
+            return "blacklist/channel"
         }
     }
 }
@@ -312,7 +313,9 @@ class RequestManager {
         switch type {
         case .report(_):
             urlString += "/report/channel/\(id)"
-        case .blacklist:
+        case .hide:
+            urlString += "/blacklist/channel/\(id)"
+        case .show:
             urlString += "/blacklist/channel/\(id)"
         default:
             urlString += "/follow/channel/\(id)"
@@ -333,12 +336,10 @@ class RequestManager {
         case .report(let msg):
             req.httpMethod = "PUT"
             bodyString = "reason:\(msg)"
-        case .blacklist(let add):
-            if add {
-                req.httpMethod = "PUT"
-            } else {
-                req.httpMethod = "DELETE"
-            }
+        case .hide:
+            req.httpMethod = "PUT"
+        case .show:
+            req.httpMethod = "DELETE"
         }
         
         req.httpBody = bodyString.data(using: .utf8)

@@ -65,7 +65,6 @@ class ChannelViewController: UIViewController {
         
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
         
-        self.header.followButton.isSelected = self.viewModel.isSubscribed
         self.header.followButton.addTarget(self, action: #selector(followPressed), for: .touchUpInside)
         
         self.tableView.tableHeaderView = self.header
@@ -110,7 +109,7 @@ extension ChannelViewController: ChannelVMDelegate {
     }
     
     func updateSubscription() {
-        self.header.followButton.isSelected = (self.viewModel.channel?.isSubscribed)!
+        self.header.followButton.set(title: (self.viewModel.channel?.getMainButtonTitle())!)
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {

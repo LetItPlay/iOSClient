@@ -102,7 +102,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
     
     func subscribeAt(index: Int) {
         let channel = self.channels[index]
-        let action: ChannelAction = ChannelAction.subscribe
+        let action: ChannelAction = channel.isHidden ? ChannelAction.showHidden : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)        
     }
     

@@ -234,10 +234,10 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
             _channelTitleLabel.text = viewModel.channel.name
             
-            _followButton.isSelected = viewModel.channel.isSubscribed
+            _followButton.set(title: self.viewModel.channel.getMainButtonTitle())
             
         case .channelSubscription:
-            _followButton.isSelected = viewModel.channel.isSubscribed
+            _followButton.set(title: self.viewModel.channel.getMainButtonTitle())
         }
     }
 }

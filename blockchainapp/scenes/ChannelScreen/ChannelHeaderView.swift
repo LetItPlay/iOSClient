@@ -199,6 +199,8 @@ class ChannelHeaderView: UIView {
         self.tagListView.removeAllTags()
         self.tagListView.addTags(channel.tags.map({$0.uppercased()}))
         
+        self.followButton.set(title: channel.getMainButtonTitle())
+        
         return self.frame.origin.y + self.frame.height
     }
     

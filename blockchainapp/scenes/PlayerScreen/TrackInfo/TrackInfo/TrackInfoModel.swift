@@ -78,8 +78,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     }
     
     func channelFollowButtonTyped() {
-        // to server
-        let action: ChannelAction = ChannelAction.subscribe
+        let action: ChannelAction = self.channel.isHidden ? ChannelAction.showHidden : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
     }
     

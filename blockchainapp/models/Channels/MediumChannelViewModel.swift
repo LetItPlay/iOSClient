@@ -14,8 +14,9 @@ class MediumChannelViewModel: SmallChannelViewModel {
     var tracksCount: String = ""
     var tags: [String] = []
     var isSubscribed: Bool = false
+    var isHidden: Bool = false
     
-    override init(channel: Channel){
+    override init(channel: Channel) {
         super.init(channel: channel)
         
         self.name = channel.name
@@ -23,17 +24,14 @@ class MediumChannelViewModel: SmallChannelViewModel {
         self.tracksCount = Int64(channel.trackCount).formatAmount()
         self.tags = channel.tags
         self.isSubscribed = channel.isSubscribed
+        self.isHidden = channel.isHidden
     }
     
-    init(channel: Channel, isSubscribed: Bool)
-    {
-        super.init(channel: channel)
-        
-        self.name = channel.name
-        self.subscriptionCount = Int64(channel.subscriptionCount).formatAmount()
-        self.tracksCount = Int64(channel.trackCount).formatAmount()
-        self.tags = channel.tags
-        
-        self.isSubscribed = isSubscribed
+    func getMainButtonTitle() -> String {
+        if self.isHidden {
+            return "Show".localized
+        } else {
+            return self.isSubscribed ? "Following".localized : "Follow".localized
+        }
     }
 }

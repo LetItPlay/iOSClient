@@ -34,7 +34,7 @@ class SmallChannelTableViewCell: UITableViewCell {
 		return label
 	}()
     
-	var followButton: UIButton = FollowButton()
+	var followButton = FollowButton()
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
 	var onSub: (() -> Void)? = nil
@@ -50,7 +50,7 @@ class SmallChannelTableViewCell: UITableViewCell {
                 } else {
                     self.channelImageView.image = UIImage(named: "channelPreviewImg")
                 }
-                self.followButton.isSelected = (self.channel?.isSubscribed)!
+                self.followButton.set(title: (self.channel?.getMainButtonTitle())!)
             }
 		}
 	}
