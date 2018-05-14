@@ -48,6 +48,7 @@ class CategoryChannelsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.title = self.viewModel.category
         
+        self.tableView.backgroundColor = .white
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -156,5 +157,13 @@ extension CategoryChannelsViewController: UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
     }
 }
