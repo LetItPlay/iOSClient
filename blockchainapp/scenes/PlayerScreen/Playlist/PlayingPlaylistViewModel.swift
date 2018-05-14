@@ -20,6 +20,13 @@ class PlayingPlaylistViewModel: PlaylistModelDelegate {
 		}
         self.delegate?.reload(index: index)
 	}
+    
+    func update(dict: [Int : TrackViewModel]) {
+        for tuple in dict {
+            self.tracks[tuple.key] = tuple.value
+        }
+        self.delegate?.reload(index: 0)
+    }
 	
 	func reload(tracks: [TrackViewModel], count: String, length: String) {
 		self.tracks = tracks

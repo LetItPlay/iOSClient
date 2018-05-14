@@ -79,6 +79,13 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
         self.delegate?.make(updates: [.update: [index]])
     }
     
+    func trackUpdate(dict: [Int : TrackViewModel]) {
+        for tuple in dict {
+            self.tracks[tuple.key] = tuple.value
+        }
+        self.delegate?.reloadTracks()
+    }
+    
     func getChannel(channel: FullChannelViewModel) {
         self.channel = channel
         self.isSubscribed = channel.isSubscribed

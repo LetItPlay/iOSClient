@@ -26,7 +26,7 @@ protocol LikesEventHandler: class
 
 protocol LikesModelDelegate: class {
     func reload(tracks: [TrackViewModel], length: String)
-    func trackUpdate(index: Int, vm: TrackViewModel)
+    func trackUpdate(dict: [Int: TrackViewModel])
     func show(tracks: [TrackViewModel], isContinue: Bool)
     func showOthers(track: ShareInfo)
 }
@@ -134,9 +134,25 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     }
 }
 
+extension PlayingStateUpdateProtocol {
+    func transform(tracks: [Track], dict: [Int: Bool]) -> [Int: TrackViewModel] {
+        var res = [Int: TrackViewModel]()
+        for tuple in dict {
+            if let index = tracks.index(where: {tuple.0 == $0.id}) {
+                res[index] = TrackViewModel.init(track: tracks[index], isPlaying: tuple.value)
+            }
+        }
+        return res
+    }
+}
+
 extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsUpdateProtocol {
     func settingsUpdated() {
         self.getTracks()
+    }
+    
+    func trackPlayingUpdate(dict: [Int : Bool]) {
+        self.delegate?.trackUpdate(dict: self.transform(tracks: self.tracks, dict: dict))
     }
     
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
@@ -153,7 +169,7 @@ extension LikesModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsU
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             tracks[index] = track
             let vm = TrackViewModel(track: track)
-            self.delegate?.trackUpdate(index: index, vm: vm)
+            self.delegate?.trackUpdate(dict: [index: vm])
         }
     }
 }

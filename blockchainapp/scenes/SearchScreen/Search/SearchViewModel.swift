@@ -87,6 +87,13 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
         }
     }
     
+    func update(dict: [Int : TrackViewModel]) {
+        for tuple in dict {
+            self.tracks[tuple.key] = tuple.value
+        }
+        self.delegate?.reloadTracks()
+    }
+    
     func update(index: Int, vm: TrackViewModel) {
         if tracks.count > index {
             self.tracks[index] = vm

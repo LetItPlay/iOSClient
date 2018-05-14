@@ -4,7 +4,7 @@ protocol TrackInfoDelegate: class {
 
 protocol PlaylistModelDelegate: class {
     func reload(tracks: [TrackViewModel], count: String, length: String)
-    func update(track: TrackViewModel, asIndex index: Int)
+    func update(dict: [Int: TrackViewModel])
     func re(name: String)
 }
 

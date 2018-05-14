@@ -31,7 +31,7 @@ protocol SearchModelDelegate: class {
     func update(tracks: [TrackViewModel])
     func update(channels: [SearchChannelViewModel])
     func update(index: Int, vm: SearchChannelViewModel)
-    func update(index: Int, vm: TrackViewModel)
+    func update(dict: [Int: TrackViewModel])
     func showChannel(id: Int)
     func showOthers(track: ShareInfo)
     func toUpdate(nothing: Bool)
@@ -136,6 +136,10 @@ extension SearchModel: ChannelUpdateProtocol, PlayingStateUpdateProtocol {
         } else {
             self.playingIndex.value = nil
         }
+    }
+    
+    func trackPlayingUpdate(dict: [Int : Bool]) {
+        self.delegate?.update(dict: self.transform(tracks: self.tracks, dict: dict))
     }
     
     func channelUpdated(channel: Channel) {

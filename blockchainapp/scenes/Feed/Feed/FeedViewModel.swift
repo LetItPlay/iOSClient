@@ -82,6 +82,13 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
 		self.delegate?.make(updates: [.update: [index]])
 	}
     
+    func trackUpdate(dict: [Int : TrackViewModel]) {
+        for tuple in dict {
+            self.tracks[tuple.key] = tuple.value
+        }
+        self.delegate?.make(updates: [.update: dict.keys.map({$0})])
+    }
+    
     func noDataLeft() {
         self.endReached = true
     }

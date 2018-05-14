@@ -25,7 +25,7 @@ protocol SubscriptionUpdateProtocol: class {
 }
 
 protocol PlayingStateUpdateProtocol: class {
-	func trackPlayingUpdate(id: Int, isPlaying: Bool)
+    func trackPlayingUpdate(dict: [Int: Bool])
 }
 
 protocol SettingsUpdateProtocol: class {
@@ -50,15 +50,6 @@ class InAppUpdateManager {
     
 	init() {
 		NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPlayed(notification:)),
-                                               name: AudioStateNotification.playing.notification(),
-                                               object: nil)
-		NotificationCenter.default.addObserver(self,
-                                               selector: #selector(trackPaused(notification:)),
-                                               name: AudioStateNotification.paused.notification(),
-                                               object: nil)
-        
-		NotificationCenter.default.addObserver(self,
                                                selector: #selector(settingsChanged(notification:)),
                                                name: InAppUpdateNotification.setting.notification(),
                                                object: nil)
@@ -69,6 +60,10 @@ class InAppUpdateManager {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(trackChanged(notification:)),
                                                name: InAppUpdateNotification.track.notification(),
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(trackStateChanged(notification:)),
+                                               name: AudioStateNotification.changed.notification(),
                                                object: nil)
 
 	}
@@ -122,20 +117,28 @@ class InAppUpdateManager {
             }
         }
     }
-
-	@objc func trackPlayed(notification: Notification) {
-		if let id = notification.userInfo?["id"] as? Int {
-			for box in self.observers[.playing] ?? [] {
-				(box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: true)
-			}
-		}
-	}
-
-	@objc func trackPaused(notification: Notification) {
-		if let id = notification.userInfo?["id"] as? Int {
+    
+    @objc func trackStateChanged(notification: Notification) {
+        if let dict = notification.userInfo as? [Int: Bool] {
             for box in self.observers[.playing] ?? [] {
-				(box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: false)
-			}
-		}
-	}
+                (box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(dict: dict)
+            }
+        }
+    }
+
+//    @objc func trackPlayed(notification: Notification) {
+//        if let id = notification.userInfo?["id"] as? Int {
+//            for box in self.observers[.playing] ?? [] {
+//                (box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: true)
+//            }
+//        }
+//    }
+//
+//    @objc func trackPaused(notification: Notification) {
+//        if let id = notification.userInfo?["id"] as? Int {
+//            for box in self.observers[.playing] ?? [] {
+//                (box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: false)
+//            }
+//        }
+//    }
 }

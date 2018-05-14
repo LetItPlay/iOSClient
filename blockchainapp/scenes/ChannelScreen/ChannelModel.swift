@@ -45,7 +45,7 @@ protocol ChannelEvenHandler: class {
 
 protocol ChannelModelDelegate: class {
     func reload(tracks: [TrackViewModel])
-    func trackUpdate(index: Int, vm: TrackViewModel)
+    func trackUpdate(dict: [Int: TrackViewModel])
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
@@ -154,6 +154,10 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         
     }
     
+    func trackPlayingUpdate(dict: [Int : Bool]) {
+        self.delegate?.trackUpdate(dict: self.transform(tracks: self.tracks, dict: dict))
+    }
+    
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
         if isPlaying {
             if let index = self.tracks.index(where: {$0.id == id}) {
@@ -174,7 +178,7 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
-            self.delegate?.trackUpdate(index: index, vm: vm)
+            self.delegate?.trackUpdate(dict: [index: vm])
         }
     }
 }

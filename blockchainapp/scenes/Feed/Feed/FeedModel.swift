@@ -22,7 +22,7 @@ protocol FeedEventHandler: class, PlayerUsingProtocol {
 
 protocol FeedModelDelegate: class {
 	func show(tracks: [TrackViewModel], isContinue: Bool)
-	func trackUpdate(index: Int, vm: TrackViewModel)
+    func trackUpdate(dict: [Int: TrackViewModel])
 	func noDataLeft()
 	func showChannels(_ show: Bool)
 	func showEmptyMessage(_ show: Bool)
@@ -148,25 +148,15 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
         self.reload()
     }
     
-    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
-//        if isPlaying {
-//            if let index = self.tracks.index(where: {$0.id == id}) {
-//                self.playingIndex.value = index
-//            }
-//        } else {
-//            self.playingIndex.value = nil
-//        }
-        if let index = self.tracks.index(where: {$0.id == id}) {
-            let vm = TrackViewModel.init(track: self.tracks[index], isPlaying: isPlaying)
-            self.delegate?.trackUpdate(index: index, vm: vm)
-        }
+    func trackPlayingUpdate(dict: [Int : Bool]) {
+        self.delegate?.trackUpdate(dict: self.transform(tracks: self.tracks, dict: dict))
     }
     
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.tracks[index] = track
-            self.delegate?.trackUpdate(index: index, vm: vm)
+            self.delegate?.trackUpdate(dict: [index: vm])
         }
     }
     

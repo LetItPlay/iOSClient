@@ -119,13 +119,24 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
 
 extension UserPlaylistModel: PlayingStateUpdateProtocol
 {
-    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
-        if isPlaying {
-            if let index = self.tracks.index(where: {$0.id == id}) {
-                self.playingIndex.value = index
+    
+    func trackPlayingUpdate(dict: [Int : Bool]) {
+        var reloadDict = [Int: TrackViewModel]()
+        for tuple in dict {
+            if let index = self.tracks.index(where: {$0.id == tuple.key}) {
+                reloadDict[index] = TrackViewModel.init(track: self.tracks[index], isPlaying: tuple.value)
             }
-        } else {
-            self.playingIndex.value = nil
         }
+        self.delegate?.show(tracks: self.formVMs())
     }
+    
+//    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
+//        if isPlaying {
+//            if let index = self.tracks.index(where: {$0.id == id}) {
+//                self.playingIndex.value = index
+//            }
+//        } else {
+//            self.playingIndex.value = nil
+//        }
+//    }
 }

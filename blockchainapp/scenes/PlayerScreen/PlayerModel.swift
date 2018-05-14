@@ -96,13 +96,27 @@ class PlayerModel {
 extension PlayerModel: AudioPlayerDelegate {
     func update(status: PlayerStatus, id: Int) {
         if let index = self.tracks.index(where: {$0.id == id}) {
-            self.playlistDelegate?.update(track: TrackViewModel.init(track: self.tracks[index], isPlaying: status == .playing), asIndex: index)
+            self.playlistDelegate?.update(dict: [index: TrackViewModel.init(track: self.tracks[index], isPlaying: status == .playing)])
             let name = status == .playing ? AudioStateNotification.playing.notification() : AudioStateNotification.paused.notification()
             NotificationCenter.default.post(name: name, object: nil, userInfo: ["id": id])
         }
         self.updateStatus()
     }
-
+    
+    func update(items: [Int: Bool]) {
+        var dict = [Int: TrackViewModel]()
+        for tuple in items {
+            if let index = self.tracks.index(where: {tuple.key == $0.id}) {
+                let vm = TrackViewModel.init(track: self.tracks[index], isPlaying: tuple.value)
+                dict[index] = vm
+            }
+        }
+        if dict.count > 0 {
+            self.playlistDelegate?.update(dict: dict)
+        }
+        NotificationCenter.default.post(name: AudioStateNotification.changed.notification(), object: nil, userInfo: items)
+    }
+    
     func update(time: AudioTime) {
         self.currentTime = time
         self.playerDelegate?.update(progress: Float(time.current/time.length),

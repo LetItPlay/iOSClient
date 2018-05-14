@@ -100,16 +100,9 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 
 extension PlaylistsModel: PlayingStateUpdateProtocol, SettingsUpdateProtocol {
     
-    func trackPlayingUpdate(id: Int, isPlaying: Bool) {
-        if isPlaying {
-            if let index = self.tracks.index(where: {$0.id == id}) {
-                self.playingIndex.value = index
-            }
-        } else {
-            self.playingIndex.value = nil
-        }
+    func trackPlayingUpdate(dict: [Int : Bool]) {
     }
-	
+    
 	func settingsUpdated() {
 		self.refresh()
 	}

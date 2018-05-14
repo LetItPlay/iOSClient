@@ -22,7 +22,6 @@ protocol LikesVMDelegate: class {
 }
 
 class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
-    
     var tracks: [TrackViewModel] = []
     var length: String = ""
     weak var delegate: LikesVMDelegate?
@@ -73,6 +72,13 @@ class LikesViewModel: LikesVMProtocol, LikesModelDelegate {
             self.tracks = tracks
             self.delegate?.reload()
         }
+    }
+    
+    func trackUpdate(dict: [Int : TrackViewModel]) {
+        for tuple in dict {
+            self.tracks[tuple.key] = tuple.value
+        }
+        self.delegate?.reload()
     }
     
     func trackUpdate(index: Int, vm: TrackViewModel) {

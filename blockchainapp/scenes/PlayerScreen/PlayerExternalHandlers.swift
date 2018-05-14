@@ -58,7 +58,7 @@ extension PlayerModel: PlayerProtocol {
 		if name != self.playlistName {
 			self.player.make(command: .pause)
 			self.playingIndex = -1
-			self.reloadTrack()
+            self.reloadTrack()
 		}
 		self.tracks = tracks
 		self.playlistName = name

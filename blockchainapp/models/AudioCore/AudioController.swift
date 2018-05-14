@@ -15,14 +15,15 @@ import MediaPlayer
 
 enum AudioStateNotification: String {
     case playing = "Playing",
-    paused = "Paused"
+    paused = "Paused",
+    changed = "Changed"
     
     func notification() -> NSNotification.Name {
         return NSNotification.Name.init("AudioControllerUpdateNotification"+self.rawValue)
     }
 }
 
-class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
+class AudioController: AudioControllerProtocol {
 	
 	static let main = AudioController()
 	
@@ -61,7 +62,7 @@ class AudioController: AudioControllerProtocol, AudioPlayerDelegate {
 			print("reach doesnt work")
 		}
 		
-		self.player.delegate = self
+//        self.player.delegate = self
 		
 		let mpcenter = MPRemoteCommandCenter.shared()
 		mpcenter.playCommand.isEnabled = true

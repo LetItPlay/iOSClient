@@ -40,7 +40,7 @@ fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	}
 }
 
-fileprivate class QueuePlayer: AVQueuePlayer {
+fileprivate class QueuePlayer: AVPlayer {
 	func currentTrack() -> PlayerItem? {
 		return self.currentItem as? PlayerItem
 	}
@@ -178,8 +178,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 						  forKeyPath: kErrorKey,
 						  options:  [.initial, .new],
 						  context: nil)
-		self.player.removeAllItems()
-		self.player.insert(item, after: nil)
+        self.player.replaceCurrentItem(with: item)
 		if let curr = player.currentTrack(), item.id != curr.id {
 			self.player.seek(to: CMTime.init(seconds: 0.0, preferredTimescale: 1))
 		}
@@ -209,39 +208,13 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 		}
 	}
 	
-	func load(playlist: [AudioTrack]) {
-		
-		player.removeAllItems()
-		
-		player.actionAtItemEnd = playlist.count == 1 ? .pause : .none
-		
-		let tracks = playlist.map({PlayerItem.init(track: $0)})
-		var previousItem: PlayerItem?
-		
-		for track in tracks {
-			track.addObserver(self,
-							 forKeyPath: kErrorKey,
-							 options:  [.initial, .new],
-							 context: nil)
-			player.insert(track, after: previousItem)
-			previousItem = track
-			
-			//--listen finish --//
-			NotificationCenter.default.addObserver(self,
-												   selector: #selector(itemDidFinishPlaying),
-												   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-												   object:  track)
-		}
-	}
-	
-	
 	func setTrack(index: Int) {
 		self.currentIndex = index
 	}
 	
 	func clear() {
 		self.removeItemsObservers()
-		self.player.removeAllItems()
+		self.player.pause()
 	}
 	
 	func setPlayingMode(speaker: Bool) {
@@ -296,13 +269,16 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 				self.make(command: .pause)
 			}
 		case kCurrentItemKey:
-			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack, let index = player.items().map({$0 as! AudioTrack}).index(where: {$0.id == item.id}) {
+            var dict = [Int: Bool]()
+			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
 				self.delegate?.update(status: self.status, id: item.id)
-				self.currentIndex = index
+                dict[item.id] = true
 			}
 			if let item = change?[NSKeyValueChangeKey.oldKey] as? AudioTrack {
 				self.delegate?.update(status: .paused, id: item.id)
+                dict[item.id] = self.status == .playing
 			}
+            self.delegate?.update(items: dict)
 			break
 		case kErrorKey:
 			if let error = player.currentItem?.error {
@@ -360,16 +336,20 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 	
 	private func removeItemsObservers() {
 		removePlayerItemsErrorObservers()
-		
-		for item in player.items() {
-			NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-		}
+//
+//        for item in player.items() {
+//            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
+//        }
+        
+        if let item = self.player.currentItem {
+            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
+        }
 	}
 	
 	private func removePlayerItemsErrorObservers() {
-		for item in player.items() {
-			item.removeObserver(self, forKeyPath: kErrorKey)
-		}
+//        for item in player.items() {
+//            item.removeObserver(self, forKeyPath: kErrorKey)
+//        }
 	}
 	
 	private func removeObservers() {
