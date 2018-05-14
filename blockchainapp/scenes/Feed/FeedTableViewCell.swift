@@ -5,7 +5,7 @@ import SwipeCellKit
 import RxSwift
 import SDWebImage
 
-class FeedTableViewCell: SwipeTableViewCell {
+class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
 	
@@ -71,7 +71,27 @@ class FeedTableViewCell: SwipeTableViewCell {
 		
 		self.viewInitialize()
     }
-	
+    
+    func fill(data: Any?) {
+        guard let vm = data as? TrackViewModel else {
+            return
+        }
+        self.fill(vm: vm)
+    }
+    
+    var event: ((String, [String : Any]?) -> Void)?
+    
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        guard let vm = data as? TrackViewModel else {
+            return 44.0
+        }
+        let picHeight = ceil((width - 32)*9.0/16.0)
+        let textHeight = title(text: vm.name, calc: true)
+            .boundingRect(with: CGSize.init(width: width - 20 - 32, height: 999), options: .usesLineFragmentOrigin, context: nil)
+            .height
+        return min(66, ceil(textHeight)) + picHeight + 32 + 4 + 32 + 24 + 2
+    }
+
 	static func title(text: String, calc: Bool = false) -> NSAttributedString {
 		let para = NSMutableParagraphStyle()
 		para.lineBreakMode = .byWordWrapping
@@ -79,14 +99,14 @@ class FeedTableViewCell: SwipeTableViewCell {
 		para.maximumLineHeight = 22
 		return NSAttributedString.init(string: text , attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .semibold), .foregroundColor: AppColor.Title.dark, .paragraphStyle: para])
 	}
-	
-	static func height(vm: TrackViewModel, width: CGFloat) -> CGFloat {
-		let picHeight = ceil((width - 32)*9.0/16.0)
-		let textHeight = title(text: vm.name, calc: true)
-			.boundingRect(with: CGSize.init(width: width - 20 - 32, height: 999), options: .usesLineFragmentOrigin, context: nil)
-			.height
-		return min(66, ceil(textHeight)) + picHeight + 32 + 4 + 32 + 24 + 2
-	}
+//
+//    static func height(vm: TrackViewModel, width: CGFloat) -> CGFloat {
+//        let picHeight = ceil((width - 32)*9.0/16.0)
+//        let textHeight = title(text: vm.name, calc: true)
+//            .boundingRect(with: CGSize.init(width: width - 20 - 32, height: 999), options: .usesLineFragmentOrigin, context: nil)
+//            .height
+//        return min(66, ceil(textHeight)) + picHeight + 32 + 4 + 32 + 24 + 2
+//    }
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
@@ -403,15 +423,19 @@ class FeedTableViewCell: SwipeTableViewCell {
     
     @objc func likePressed(_: UIButton) {
         likeButton.isSelected = !likeButton.isSelected
-        onLike?(0)
+        self.event?("onLike", nil)
+//        onLike?(0)
     }
     
     @objc func channelPressed() {
-        onChannel?(0)
+        self.event?("onChannel", nil)
+        self.hideSwipe(animated: true)
+//        onChannel?(0)
     }
     
     @objc func showOthersButtonTouched() {
-        self.onOthers?()
+//        self.onOthers?()
+        self.event?("onOthers", nil)
     }
 	
 	required init?(coder aDecoder: NSCoder) {

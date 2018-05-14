@@ -10,11 +10,11 @@ PODS:
   - Fabric (1.7.6)
   - MarqueeLabel/Swift (3.1.4)
   - ReachabilitySwift (4.1.0)
-  - Realm (3.4.0):
-    - Realm/Headers (= 3.4.0)
-  - Realm/Headers (3.4.0)
-  - RealmSwift (3.4.0):
-    - Realm (= 3.4.0)
+  - Realm (3.5.0):
+    - Realm/Headers (= 3.5.0)
+  - Realm/Headers (3.5.0)
+  - RealmSwift (3.5.0):
+    - Realm (= 3.5.0)
   - RxCocoa (4.1.2):
     - RxSwift (~> 4.0)
   - RxSwift (4.1.2)
@@ -71,8 +71,8 @@ SPEC CHECKSUMS:
   Fabric: f8d42c893bb187326a7968b62abe55c36a987a46
   MarqueeLabel: bf768455fe88d427f71476ebb23f9092b660f40b
   ReachabilitySwift: 6849231cd4e06559f3b9ef4a97a0a0f96d41e09f
-  Realm: 9527c7baa2260f3a3aad6823d2d71cafff9b046b
-  RealmSwift: f40a747beaea1cadde7dcef41ee5a34b3001677b
+  Realm: 0378021c424e4e2bd6a0e63b27881e929d9b9ad1
+  RealmSwift: 3322562622fda2ad596985ead4d8d8be30cf838c
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
@@ -81,6 +81,6 @@ SPEC CHECKSUMS:
   SwipeCellKit: 8ae09401e1137566b187980d824310129233c959
   TagListView: 669f7d4455003c877655875d34829731c4191528
 
-PODFILE CHECKSUM: e73748cabe5705bbe7dec19872a1f094d09ddec9
+PODFILE CHECKSUM: 0028262598b6be2b3b3c4aa3ee47d771883e9696
 
 COCOAPODS: 1.5.2

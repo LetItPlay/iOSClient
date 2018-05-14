@@ -1,29 +1,24 @@
 import UIKit
 
-class StandartTableViewCell: UITableViewCell {
+protocol StandartTableViewCell: class where Self: UITableViewCell {
+    static var cellID: String {get}
+    static func height(data: Any, width: CGFloat) -> CGFloat
+    func fill(data: Any?)
+    var event: ((String, [String: Any]?) -> Void)? {get set}
+}
+
+extension StandartTableViewCell {
+    internal static var cellID: String {
+        get {
+            return "StandartCellID"
+        }
+    }
     
-    open static let cellID: String = "StandartCellID"
-    
-    static open func height(data: Any) -> CGFloat {
+    static internal func height(data: Any, width: CGFloat) -> CGFloat {
         return 44.0
     }
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        initialize()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    open func initialize() { }
-    
-    open func fill(data: Any?) { self.textLabel?.text = "\(data ?? 0)" }
-}
-
-class CustomCell: StandartTableViewCell {
-    
+    internal func fill(data: Any?) { self.textLabel?.text = "\(data ?? 0)" }
 }
 
 protocol TableDataProvider: class {
@@ -39,13 +34,11 @@ extension TableDataProvider {
     func rows(asSection section: Int) -> Int {
         return 0
     }
-    func data(indexPath: IndexPath) -> Any? {
-        return nil
-    }
 }
 
 protocol TableCellProvider: class {
     func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type
+    func config(cell: StandartTableViewCell)
     
     func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView?
     func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat
@@ -65,7 +58,16 @@ class TableProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
     var dataProvider: TableDataProvider!
     var cellProvider: TableCellProvider!
     
+    init(tableView: UITableView, dataProvider: TableDataProvider, cellProvider: TableCellProvider) {
+        super.init()
+        self.dataProvider = dataProvider
+        self.cellProvider = cellProvider
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
     var cellShowed: ((IndexPath) -> Void)?
+    var cellEvent: ((_ indexPath: IndexPath, _ event: String, _ data: [String: Any]?) -> Void)?
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataProvider.numberOfSections
@@ -79,12 +81,20 @@ class TableProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
         let cellClass = cellProvider.cellClass(indexPath: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: cellClass.cellID, for: indexPath) as! StandartTableViewCell
         cell.fill(data: dataProvider.data(indexPath: indexPath))
-        return cell
+        cell.event = {[weak self] (event, data) in
+            self?.cellEvent?(indexPath, event, data)
+        }
+        self.cellProvider.config(cell: cell)
+        return cell as! UITableViewCell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let cellClass = cellProvider.cellClass(indexPath: indexPath)
-        return cellClass.height(data: dataProvider.data(indexPath: indexPath))
+        return cellClass.height(data: dataProvider.data(indexPath: indexPath), width: tableView.frame.width)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.cellEvent?(indexPath, "onSelected", nil)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

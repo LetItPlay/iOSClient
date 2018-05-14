@@ -1,8 +1,8 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '11.0'
-#use_frameworks!
+use_frameworks!
+#use_modular_headers!
 inhibit_all_warnings!
-use_modular_headers!
 
 target 'blockchainapp' do
   pod "SwiftyJSON"

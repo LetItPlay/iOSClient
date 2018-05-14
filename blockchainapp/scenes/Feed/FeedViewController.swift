@@ -53,11 +53,29 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         return button
     }()
     
+    var tableProvider: TableProvider!
+    
     convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
         self.viewModel = vm
         self.viewModel.delegate = self
         
+        self.tableProvider = TableProvider.init(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = { (indexPath, event, data) in
+            switch event {
+            case "onLike":
+                self.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
+            case "onSelected":
+                self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
+            case "onChannel":
+                self.emitter.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+                break
+            case "onOthers":
+                self.emitter.send(event: FeedEvent.showOthers(index: indexPath.row))
+            default:
+                break
+            }
+        }
         self.emitter = emitter
     }
 	
@@ -87,8 +105,8 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
             make.edges.equalTo(self.view)
         }
         
-        tableView.dataSource = self
-        tableView.delegate   = self
+//        tableView.dataSource = self
+//        tableView.delegate   = self
         tableView.refreshControl = refreshControl
         tableView.separatorStyle = .none
         
@@ -227,8 +245,8 @@ extension FeedViewController: FeedVMDelegate {
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
                     if indexes.count != 0 {
-//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                        tableView.reloadData()
+                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+//                        tableView.reloadData()
                     }
                 }
             }
@@ -237,82 +255,105 @@ extension FeedViewController: FeedVMDelegate {
     }
 }
 
-extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
+extension FeedViewController: TableDataProvider, TableCellProvider {
     
-	func numberOfSections(in tableView: UITableView) -> Int {
+    var numberOfSections: Int {
         return 1
     }
     
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func rows(asSection section: Int) -> Int {
         return self.viewModel.tracks.count
     }
     
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.cellID) as! FeedTableViewCell
-        cell.onLike = {[weak self] track in
-            if (self?.didSwipeCell)! {
-                cell.hideSwipe(animated: true)
-            }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
-            }
-        }
-        
-        cell.onChannel = {[weak self] channel in
-            if (self?.didSwipeCell)! {
-                cell.hideSwipe(animated: true)
-            }
-
-            self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
-        }
-        
-        cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: FeedEvent.showOthers(index: indexPath.row))
-        }
-        
-        return cell
-    }
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
-	}
-	
-	func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-		let cell = cell as? FeedTableViewCell
-        //for swipes
-        cell?.delegate = self
-
-        self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
-        
-        let vm = self.viewModel.tracks[indexPath.item]
-        cell?.fill(vm: vm)
-        
-        cell?.getInfo(toHide: true, animated: false)
-		
-		cell?.onLike = { [weak self] track in
-            cell?.hideSwipe(animated: true)
-            self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
-		}
-    }
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let vm = self.viewModel.tracks[indexPath.item]
-		return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
-    }
-	
-	func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        let vm = self.viewModel.tracks[indexPath.item]
-        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.tracks[indexPath.item]
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return FeedTableViewCell.self
     }
-
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+    
+    func config(cell: StandartTableViewCell) {
+        (cell as? SwipeTableViewCell)?.delegate = self
     }
 }
+
+//extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.cellID) as! FeedTableViewCell
+//        cell.onLike = {[weak self] track in
+//            if (self?.didSwipeCell)! {
+//                cell.hideSwipe(animated: true)
+//            }
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//                self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
+//            }
+//        }
+//
+//        cell.onChannel = {[weak self] channel in
+//            if (self?.didSwipeCell)! {
+//                cell.hideSwipe(animated: true)
+//            }
+//
+//            self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+//        }
+//
+//        cell.onOthers = {[weak self] in
+//            self?.emitter?.send(event: FeedEvent.showOthers(index: indexPath.row))
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
+//    }
+//
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        let cell = cell as? FeedTableViewCell
+//        //for swipes
+//        cell?.delegate = self
+//
+//        self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
+//
+//        let vm = self.viewModel.tracks[indexPath.item]
+//        cell?.fill(vm: vm)
+//
+//        cell?.getInfo(toHide: true, animated: false)
+//
+//        cell?.onLike = { [weak self] track in
+//            cell?.hideSwipe(animated: true)
+//            self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
+//        }
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let vm = self.viewModel.tracks[indexPath.item]
+//        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+//    }
+//
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let vm = self.viewModel.tracks[indexPath.item]
+//        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 0
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//}
 
 extension FeedViewController: SwipeTableViewCellDelegate
 {
@@ -407,7 +448,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var frame: CGRect!
 		
 		let vm = self.viewModel.tracks[indexPath.item]
-		let height =  FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
+		let height =  FeedTableViewCell.height(data: vm, width: tableView.frame.width)//height(vm: vm, width: tableView.frame.width)
 		
         if orientation == .right
         {

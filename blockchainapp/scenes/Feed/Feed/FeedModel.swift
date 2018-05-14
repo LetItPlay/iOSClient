@@ -149,12 +149,16 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
     }
     
     func trackPlayingUpdate(id: Int, isPlaying: Bool) {
-        if isPlaying {
-            if let index = self.tracks.index(where: {$0.id == id}) {
-                self.playingIndex.value = index
-            }
-        } else {
-            self.playingIndex.value = nil
+//        if isPlaying {
+//            if let index = self.tracks.index(where: {$0.id == id}) {
+//                self.playingIndex.value = index
+//            }
+//        } else {
+//            self.playingIndex.value = nil
+//        }
+        if let index = self.tracks.index(where: {$0.id == id}) {
+            let vm = TrackViewModel.init(track: self.tracks[index], isPlaying: isPlaying)
+            self.delegate?.trackUpdate(index: index, vm: vm)
         }
     }
     

@@ -52,7 +52,6 @@
 		01FF31691FD1840600FB2B9E /* TimedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF31681FD1840600FB2B9E /* TimedSlider.swift */; };
 		01FF376D2010B9E7007F57E0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376C2010B9E7007F57E0 /* Extensions.swift */; };
 		01FF376F201224CB007F57E0 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01FF376E201224CB007F57E0 /* Models.swift */; };
-		229F3490FFCCE2DBFAA2ED8F /* libPods-blockchainapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EBB45459D4E7429135FE007 /* libPods-blockchainapp.a */; };
 		2C8E668620A570CC000EFCB9 /* TableProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C8E668520A570CC000EFCB9 /* TableProvider.swift */; };
 		2CE07EF72028883C00B3D939 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE07EF62028883C00B3D939 /* Analytics.swift */; };
 		2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBFBC9202827C700523FDE /* ArrowView.swift */; };
@@ -97,6 +96,8 @@
 		36F613CC202D6E3200661E48 /* ProfileBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F613CB202D6E3200661E48 /* ProfileBuilder.swift */; };
 		36F7C39B201AF73200F99A9A /* ChannelsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */; };
 		36FB2F4A2033E33200ECA30D /* SmallChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */; };
+		5B64A07160D6C46238859BAA /* Pods_blockchainappTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4DE267D4B696756CC13C17F0 /* Pods_blockchainappTests.framework */; };
+		8FA269C386B73EE44A3FB440 /* Pods_blockchainapp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5306C43EC273F8CF87C3BA4F /* Pods_blockchainapp.framework */; };
 		9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */; };
 		9D0B18F7207F67D900CBE87B /* OthersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F6207F67D900CBE87B /* OthersModel.swift */; };
 		9D0B18F9207F68E700CBE87B /* OthersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */; };
@@ -128,7 +129,6 @@
 		9DFAE70120610A4B00EF7C4D /* TrackInfoEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6FE20610A4A00EF7C4D /* TrackInfoEmitter.swift */; };
 		9DFAE70220610A4B00EF7C4D /* TrackInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE6FF20610A4B00EF7C4D /* TrackInfoModel.swift */; };
 		9DFAE70320610A4B00EF7C4D /* TrackInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */; };
-		C02991B2B04E0184A9A0C99C /* libPods-blockchainappTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 387010780802FD44330835EF /* libPods-blockchainappTests.a */; };
 		CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1E04821F82273D00D8812F /* DBHelpers.swift */; };
 		CF27152D1F97C79A0038C81C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = CF27152F1F97C79A0038C81C /* Localizable.strings */; };
 		CF44532A1F54139900660474 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453291F54139900660474 /* AppDelegate.swift */; };
@@ -143,7 +143,7 @@
 		CF4453691F57F4D200660474 /* CategoryChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453681F57F4D200660474 /* CategoryChannelsViewController.swift */; };
 		CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453721F5D8EBE00660474 /* MainTabViewController.swift */; };
 		CF4453751F666BB800660474 /* DBModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4453741F666BB800660474 /* DBModels.swift */; };
-		ECEA4DC3DEAC1CF212C8AFFC /* libPods-blockchainappUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD3669B6DD8E5529EA400995 /* libPods-blockchainappUITests.a */; };
+		FC270E7F9BA538854CEB1A5D /* Pods_blockchainappUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A740C346C92AB9C832C909A /* Pods_blockchainappUITests.framework */; };
 		FD10B2EE2F2654061F2BDF07 /* PlayerEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B8B30CD6B62E0F3033C8 /* PlayerEmitter.swift */; };
 		FD10B3302E585598EF8B5CCB /* AppUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B17549A87867E48B318C /* AppUI.swift */; };
 		FD10B63115DA7C32A372FAD9 /* PlayerScreenBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10B60FFE491AF62B1A26A6 /* PlayerScreenBuilder.swift */; };
@@ -231,7 +231,6 @@
 		01FF31681FD1840600FB2B9E /* TimedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimedSlider.swift; sourceTree = "<group>"; };
 		01FF376C2010B9E7007F57E0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		01FF376E201224CB007F57E0 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
-		1EBB45459D4E7429135FE007 /* libPods-blockchainapp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blockchainapp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C8E668520A570CC000EFCB9 /* TableProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableProvider.swift; sourceTree = "<group>"; };
 		2CE07EF62028883C00B3D939 /* Analytics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		2CEBFBC9202827C700523FDE /* ArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrowView.swift; sourceTree = "<group>"; };
@@ -279,8 +278,10 @@
 		36F613CB202D6E3200661E48 /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
 		36FB2F492033E33200ECA30D /* SmallChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelViewModel.swift; sourceTree = "<group>"; };
-		387010780802FD44330835EF /* libPods-blockchainappTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blockchainappTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DE267D4B696756CC13C17F0 /* Pods_blockchainappTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainappTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5306C43EC273F8CF87C3BA4F /* Pods_blockchainapp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainapp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		678F07997865B266B43CA145 /* Pods-blockchainappTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.release.xcconfig"; sourceTree = "<group>"; };
+		8A740C346C92AB9C832C909A /* Pods_blockchainappUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_blockchainappUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D0B18F4207F66A200CBE87B /* OthersEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersEmitter.swift; sourceTree = "<group>"; };
 		9D0B18F6207F67D900CBE87B /* OthersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersModel.swift; sourceTree = "<group>"; };
 		9D0B18F8207F68E700CBE87B /* OthersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersViewModel.swift; sourceTree = "<group>"; };
@@ -317,7 +318,6 @@
 		9DFAE70020610A4B00EF7C4D /* TrackInfoViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInfoViewModel.swift; sourceTree = "<group>"; };
 		A731DB6864B0878E37656300 /* Pods-blockchainappTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainappTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainappTests/Pods-blockchainappTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C3013B1D55E47F2964830408 /* Pods-blockchainapp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-blockchainapp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp.debug.xcconfig"; sourceTree = "<group>"; };
-		CD3669B6DD8E5529EA400995 /* libPods-blockchainappUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-blockchainappUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF1E04821F82273D00D8812F /* DBHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBHelpers.swift; sourceTree = "<group>"; };
 		CF2715291F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CF27152A1F97BA370038C81C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -358,7 +358,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				229F3490FFCCE2DBFAA2ED8F /* libPods-blockchainapp.a in Frameworks */,
+				8FA269C386B73EE44A3FB440 /* Pods_blockchainapp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +366,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C02991B2B04E0184A9A0C99C /* libPods-blockchainappTests.a in Frameworks */,
+				5B64A07160D6C46238859BAA /* Pods_blockchainappTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,7 +374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ECEA4DC3DEAC1CF212C8AFFC /* libPods-blockchainappUITests.a in Frameworks */,
+				FC270E7F9BA538854CEB1A5D /* Pods_blockchainappUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -852,9 +852,9 @@
 			children = (
 				01DBC533205AAA9000EF832D /* Realm.framework */,
 				01DBC534205AAA9000EF832D /* RealmSwift.framework */,
-				1EBB45459D4E7429135FE007 /* libPods-blockchainapp.a */,
-				387010780802FD44330835EF /* libPods-blockchainappTests.a */,
-				CD3669B6DD8E5529EA400995 /* libPods-blockchainappUITests.a */,
+				5306C43EC273F8CF87C3BA4F /* Pods_blockchainapp.framework */,
+				4DE267D4B696756CC13C17F0 /* Pods_blockchainappTests.framework */,
+				8A740C346C92AB9C832C909A /* Pods_blockchainappUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -872,6 +872,7 @@
 				CF4453241F54139900660474 /* Resources */,
 				01321B681FCDADFF009BFE62 /* Embed Frameworks */,
 				01EB96C320171CEE00D5A419 /* Run Script */,
+				BBCD4C1E4B0A6811E3ECD722 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1073,6 +1074,52 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BBCD4C1E4B0A6811E3ECD722 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Action/Action.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AssistantKit/AssistantKit.framework",
+				"${BUILT_PRODUCTS_DIR}/DeepLinkKit/DeepLinkKit.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TagListView/TagListView.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Action.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AssistantKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeepLinkKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TagListView.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-blockchainapp/Pods-blockchainapp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
