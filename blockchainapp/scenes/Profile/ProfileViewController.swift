@@ -54,6 +54,11 @@ class ProfileViewController: UIViewController {
                 break
             }
         }
+        self.tableProvider.beginDragging = {(scrollView) in
+            if self.isKeyboardShown {
+                self.dismissKeyboard(scrollView)
+            }
+        }
 	}
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -297,7 +302,7 @@ extension ProfileViewController: TableCellProvider, TableDataProvider {
         return 1
     }
     
-    func rows(asSection section: Int) -> Int {
+    func rowsAt(_ section: Int) -> Int {
         return self.viewModel.tracks.count
     }
     
@@ -311,12 +316,6 @@ extension ProfileViewController: TableCellProvider, TableDataProvider {
             return header
         } else {
             return nil
-        }
-    }
-    
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        if isKeyboardShown {
-            self.dismissKeyboard(scrollView)
         }
     }
 

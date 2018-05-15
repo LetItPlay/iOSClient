@@ -23,7 +23,7 @@ extension StandartTableViewCell {
 
 protocol TableDataProvider: class {
     var numberOfSections: Int {get}
-    func rows(asSection section: Int) -> Int
+    func rowsAt(_ section: Int) -> Int
     func data(indexPath: IndexPath) -> Any
 }
 
@@ -31,7 +31,7 @@ extension TableDataProvider {
     var numberOfSections: Int {
         return 0
     }
-    func rows(asSection section: Int) -> Int {
+    func rowsAt(_ section: Int) -> Int {
         return 0
     }
 }
@@ -68,13 +68,14 @@ class TableProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     var cellShowed: ((IndexPath) -> Void)?
     var cellEvent: ((_ indexPath: IndexPath, _ event: String, _ data: [String: Any]?) -> Void)?
+    var beginDragging: ((UIScrollView) -> Void)?
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataProvider.numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataProvider.rows(asSection: section)
+        return dataProvider.rowsAt(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -115,5 +116,9 @@ class TableProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return self.cellProvider.height(table: tableView, forSection: section, isHeader: false)
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.beginDragging?(scrollView)
     }
 }

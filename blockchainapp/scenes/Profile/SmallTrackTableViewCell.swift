@@ -192,7 +192,8 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
 	}
     
     @objc func showOthersButtonTouched() {
-        self.onOthers?()
+        self.event!("onOthers", nil)
+//        self.onOthers?()
     }
 	
 	required init?(coder aDecoder: NSCoder) {

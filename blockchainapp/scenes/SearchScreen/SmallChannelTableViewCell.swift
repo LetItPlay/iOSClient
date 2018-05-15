@@ -111,7 +111,8 @@ class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	
 	@objc func subChanged() {
         self.followButton.isSelected = !self.followButton.isSelected
-		self.onSub?()
+        self.event!("onFollow", nil)
+//        self.onSub?()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

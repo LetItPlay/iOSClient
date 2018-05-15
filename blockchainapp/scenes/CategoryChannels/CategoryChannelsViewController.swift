@@ -151,7 +151,7 @@ extension CategoryChannelsViewController: TableDataProvider, TableCellProvider {
         return 1
     }
     
-    func rows(asSection section: Int) -> Int {
+    func rowsAt(_ section: Int) -> Int {
         return self.viewModel.channels.count
     }
 }

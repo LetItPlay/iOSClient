@@ -15,7 +15,9 @@ protocol SearchViewControllerDelegate {
 
 class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
     
-    var tableView: UITableView!
+    let tableView: UITableView! = UITableView.init(frame: CGRect.zero, style: .grouped)
+    var tableProvider: TableProvider!
+    
     var searchController: UISearchController!
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
@@ -32,6 +34,30 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.viewModel.delegate = self
         
         self.emitter = searchEmitter
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = {(indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.searchController.searchBar.resignFirstResponder()
+                self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
+            case "onOthers":
+                self.emitter.send(event: SearchEvent.showOthers(index: indexPath.row))
+            case "onFollow":
+                self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row))
+            default:
+                break
+            }
+        }
+        self.tableProvider.cellShowed = { (indexPath) in
+            if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1, !self.viewModel.nothingToUpdate {
+                self.activityIndicator.startAnimating()
+                self.emitter.send(event: SearchEvent.showMoreTracks)
+            }
+        }
+        self.tableProvider.beginDragging = {(scrollView) in
+            self.searchController.searchBar.resignFirstResponder()
+        }
     }
 	
     override func viewDidLoad() {
@@ -47,10 +73,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.navigationItem.hidesBackButton = true
         
         self.view.backgroundColor = .white
-        
-        self.tableView = UITableView.init(frame: CGRect.zero, style: .grouped)
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
         
         self.tableView.tableFooterView = nil
         self.tableView.contentInset.bottom = 33
@@ -135,61 +157,99 @@ extension SearchViewController: SearchVMDelegate {
     }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchViewController: TableCellProvider, TableDataProvider {
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        if indexPath.section == 0 {
+            return SmallChannelTableViewCell.self
+        } else {
+            return SmallTrackTableViewCell.self
+        }
+    }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func config(cell: StandartTableViewCell) {
+        
+    }
+    
+    func data(indexPath: IndexPath) -> Any {
+        if indexPath.section == 0 {
+            return self.viewModel.channels[indexPath.item]
+        } else {
+            return self.viewModel.tracks[indexPath.item]
+        }
+    }
+    
+    var numberOfSections: Int {
         return 2
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func rowsAt(_ section: Int) -> Int {
         return section == 0 ? self.viewModel.channels.count : self.viewModel.tracks.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section != 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
-            cell.fill(vm: self.viewModel.tracks[indexPath.item])
-            cell.onOthers = {[weak self] in
-                self?.emitter.send(event: SearchEvent.showOthers(index: indexPath.row))
-            }
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
-            cell.channel = self.viewModel.channels[indexPath.item]
-            cell.onSub = { self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row)) }
-            return cell
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.searchController.searchBar.resignFirstResponder()
-        self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 {
-            let track = self.viewModel.tracks[indexPath.item]
-            return Common.height(text: track.name, width: tableView.frame.width)
-        } else {
-            return SmallChannelTableViewCell.height
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1,
-            !viewModel.nothingToUpdate {
-                activityIndicator.startAnimating()
-                self.emitter.send(event: SearchEvent.showMoreTracks)
-        }
-    }
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 0 {
-            return nil
-        } else {
+    func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
+        if !isHeader {
             return activityIndicator
+        } else {
+            return nil
         }
     }
 }
+
+//extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 2
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return section == 0 ? self.viewModel.channels.count : self.viewModel.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        if indexPath.section != 0 {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+//            cell.fill(vm: self.viewModel.tracks[indexPath.item])
+//            cell.onOthers = {[weak self] in
+//                self?.emitter.send(event: SearchEvent.showOthers(index: indexPath.row))
+//            }
+//            return cell
+//        } else {
+//            let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
+//            cell.channel = self.viewModel.channels[indexPath.item]
+//            cell.onSub = { self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row)) }
+//            return cell
+//        }
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.searchController.searchBar.resignFirstResponder()
+//        self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        if indexPath.section == 1 {
+//            let track = self.viewModel.tracks[indexPath.item]
+//            return Common.height(text: track.name, width: tableView.frame.width)
+//        } else {
+//            return SmallChannelTableViewCell.height
+//        }
+//    }
+//
+//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1,
+//            !viewModel.nothingToUpdate {
+//                activityIndicator.startAnimating()
+//                self.emitter.send(event: SearchEvent.showMoreTracks)
+//        }
+//    }
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        if section == 0 {
+//            return nil
+//        } else {
+//            return activityIndicator
+//        }
+//    }
+//}
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
