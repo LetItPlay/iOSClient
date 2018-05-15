@@ -96,7 +96,6 @@ class ChannelHeaderView: UIView {
 			self.topImgCnstr = make.top.equalToSuperview().constraint.layoutConstraints.first!
 			self.leftImgCnstr = make.left.equalToSuperview().constraint.layoutConstraints.first!
 			self.rightImgCnstr = make.right.equalToSuperview().constraint.layoutConstraints.first!
-//			make.height.equalTo(width*CGFloat(9)/CGFloat(16))
 		}
 		
         self.backgroundColor = .white

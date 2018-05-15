@@ -12,6 +12,7 @@ import SnapKit
 class ChannelViewController: UIViewController {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    var tableProvider: TableProvider!
     
     var viewModel: ChannelVMProtocol!
     var emitter: ChannelEmitterProtocol!
@@ -25,6 +26,18 @@ class ChannelViewController: UIViewController {
         self.viewModel.delegate = self
         
         self.emitter = emitter
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = { (indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.emitter.send(event: ChannelEvent.trackSelected(index: indexPath.item))
+            case "onOthers":
+                self.emitter?.send(event: ChannelEvent.showOthers(index: indexPath.row))
+            default:
+                break
+            }
+        }
     }
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -59,9 +72,6 @@ class ChannelViewController: UIViewController {
         header.onShared = {
             self.emitter.send(event: ChannelEvent.shareChannel)
         }
-        
-        tableView.delegate = self
-        tableView.dataSource = self
         
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
         
@@ -131,62 +141,110 @@ extension ChannelViewController: ChannelVMDelegate {
     }
 }
 
-extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
-	}
-	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.viewModel.tracks.count
-	}
-	
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-		let view = UIView()
-		view.backgroundColor = .white
-		
-		let label = UILabel()
-		label.font = AppFont.Title.big
-		label.textColor = AppColor.Title.dark
-		label.text = "Recent added".localized
-		
-		view.addSubview(label)
-		label.snp.makeConstraints { (make) in
-			make.top.equalToSuperview().inset(12)
-			make.left.equalToSuperview().inset(16)
-		}
-		
-		return view
-	}
-	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 53
-	}
-	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		return 0.01
-	}
-	
-	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-		return nil
-	}
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter.send(event: ChannelEvent.trackSelected(index: indexPath.item))
-	}
-	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
-		cell.track = self.viewModel.tracks[indexPath.item]
+extension ChannelViewController: TableDataProvider, TableCellProvider {
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.tracks[indexPath.item]
+    }
+    
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return ChannelTrackCell.self
+    }
+    
+    func config(cell: StandartTableViewCell) {
         
-        cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: ChannelEvent.showOthers(index: indexPath.row))
+    }
+    
+    var numberOfSections: Int {
+        return 1
+    }
+    
+    func rows(asSection section: Int) -> Int {
+        return self.viewModel.tracks.count
+    }
+    
+    func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
+        if isHeader {
+            let view = UIView()
+            view.backgroundColor = .white
+            
+            let label = UILabel()
+            label.font = AppFont.Title.big
+            label.textColor = AppColor.Title.dark
+            label.text = "Recent added".localized
+            
+            view.addSubview(label)
+            label.snp.makeConstraints { (make) in
+                make.top.equalToSuperview().inset(12)
+                make.left.equalToSuperview().inset(16)
+            }
+            
+            return view
+        } else {
+            return nil
         }
-        
-		return cell
-	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.viewModel.tracks[indexPath.item]
-		return Common.height(text: track.name, width: tableView.frame.width)
-	}
+    }
+    
+    func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat {
+        return isHeader ? 53 : 0
+    }
 }
+
+//extension ChannelViewController: UITableViewDelegate, UITableViewDataSource {
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let view = UIView()
+//        view.backgroundColor = .white
+//
+//        let label = UILabel()
+//        label.font = AppFont.Title.big
+//        label.textColor = AppColor.Title.dark
+//        label.text = "Recent added".localized
+//
+//        view.addSubview(label)
+//        label.snp.makeConstraints { (make) in
+//            make.top.equalToSuperview().inset(12)
+//            make.left.equalToSuperview().inset(16)
+//        }
+//
+//        return view
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 53
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter.send(event: ChannelEvent.trackSelected(index: indexPath.item))
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
+//        cell.track = self.viewModel.tracks[indexPath.item]
+//
+//        cell.onOthers = {[weak self] in
+//            self?.emitter?.send(event: ChannelEvent.showOthers(index: indexPath.row))
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let track = self.viewModel.tracks[indexPath.item]
+//        return Common.height(text: track.name, width: tableView.frame.width)
+//    }
+//}
