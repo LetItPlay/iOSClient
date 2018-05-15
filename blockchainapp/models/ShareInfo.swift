@@ -8,12 +8,22 @@
 
 import UIKit
 
+enum ShareObjectType {
+    case track, channel
+}
+
 class ShareInfo {
+    var id: Int
+    
+    var type: ShareObjectType
+    
     var text: String
     var url: String
     var image: UIImage
     
-    init(text: String, url: String, image: UIImage) {
+    init(id: Int, type: ShareObjectType, text: String, url: String, image: UIImage) {
+        self.id = id
+        self.type = type
         self.text = text
         self.url = url
         self.image = image

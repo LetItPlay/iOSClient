@@ -28,30 +28,8 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 
-	let emptyLabel: UILabel = {
-		let label = UILabel()
-        label.font = AppFont.Title.sectionNotBold
-        label.textColor = AppColor.Element.emptyMessage
-		label.textAlignment = .center
-		label.numberOfLines = 0
-		label.text = "There are no tracks here yet. Subscribe to one of the channels first".localized
-        label.isHidden = true
-		return label
-	}()
-
-    let emptyButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.font = AppFont.Title.section
-        button.setTitle("Browse channels list".localized, for: .normal)
-        button.setTitleColor(.red, for: .normal)
-        button.titleLabel?.textAlignment = .center
-        button.layer.cornerRadius = 5
-        button.layer.borderColor = UIColor.red.cgColor
-        button.layer.borderWidth = 1
-        button.contentEdgeInsets = UIEdgeInsetsMake(3, 12.5, 3, 12.5)
-        button.isHidden = true
-        return button
-    }()
+	let emptyLabel = EmptyLabel(title: "There are no tracks here yet. Subscribe to one of the channels first".localized)
+    let emptyButton = EmptyButton(title: "Browse channels list".localized)
     
     var tableProvider: TableProvider!
     

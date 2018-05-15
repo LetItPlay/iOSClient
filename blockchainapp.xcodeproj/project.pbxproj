@@ -26,7 +26,7 @@
 		019B3DC61FCC45B5008C3B76 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */; };
 		019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */; };
 		019FB2531FE279BF0007FDEE /* SmallChannelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */; };
-		019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2541FE27DEE0007FDEE /* FollowButton.swift */; };
+		019FB2551FE27DEE0007FDEE /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2541FE27DEE0007FDEE /* Buttons.swift */; };
 		019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */; };
 		01A68D691FC2E1290074F1D5 /* NewFeedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */; };
 		01A9A2E6208F6021009111AD /* PlayerModelProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01A9A2E5208F6021009111AD /* PlayerModelProtocols.swift */; };
@@ -120,6 +120,7 @@
 		9DC6C2422091D21300C980D4 /* MainChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C2412091D21300C980D4 /* MainChannelModel.swift */; };
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
+		9DD783DD20A572B600FA0FFD /* Empties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD783DC20A572B600FA0FFD /* Empties.swift */; };
 		9DDB0D0B207B8BF100581613 /* OthersAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */; };
 		9DDC286820A01EEA00A4C3DE /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DDC286720A01EEA00A4C3DE /* Language.swift */; };
 		9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */; };
@@ -203,7 +204,7 @@
 		019B3DC51FCC45B5008C3B76 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		019B3DC71FCC45C8008C3B76 /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
 		019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallChannelTableViewCell.swift; sourceTree = "<group>"; };
-		019FB2541FE27DEE0007FDEE /* FollowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowButton.swift; sourceTree = "<group>"; };
+		019FB2541FE27DEE0007FDEE /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 		019FB2561FE297F20007FDEE /* PlaylistTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistTableViewCell.swift; sourceTree = "<group>"; };
 		01A68D681FC2E1290074F1D5 /* NewFeedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedLabel.swift; sourceTree = "<group>"; };
 		01A9A2E5208F6021009111AD /* PlayerModelProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModelProtocols.swift; sourceTree = "<group>"; };
@@ -307,6 +308,7 @@
 		9DC6C2412091D21300C980D4 /* MainChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelModel.swift; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
+		9DD783DC20A572B600FA0FFD /* Empties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empties.swift; sourceTree = "<group>"; };
 		9DDB0D0A207B8BF100581613 /* OthersAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OthersAlertController.swift; sourceTree = "<group>"; };
 		9DDC286720A01EEA00A4C3DE /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		9DFAB816209B144F00796C77 /* ChannelCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCategoryViewModel.swift; sourceTree = "<group>"; };
@@ -755,7 +757,7 @@
 			isa = PBXGroup;
 			children = (
 				01FF376C2010B9E7007F57E0 /* Extensions.swift */,
-				019FB2541FE27DEE0007FDEE /* FollowButton.swift */,
+				019FB2541FE27DEE0007FDEE /* Buttons.swift */,
 				01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */,
 				01FF31681FD1840600FB2B9E /* TimedSlider.swift */,
 				01AA891C1FC45D0500D50C13 /* UndBlurLabel.swift */,
@@ -765,6 +767,7 @@
 				CF44535D1F569D4E00660474 /* StyleExtension.swift */,
 				361CD01920482A410097F8E9 /* Common.swift */,
 				2C8E668520A570CC000EFCB9 /* TableProvider.swift */,
+				9DD783DC20A572B600FA0FFD /* Empties.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -928,7 +931,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = "Ivan Gorbulin";
 				TargetAttributes = {
 					CF4453251F54139900660474 = {
@@ -1141,7 +1144,7 @@
 				365B0A1E20319844006458F9 /* LikesModel.swift in Sources */,
 				9D889864208482F7004A7575 /* MainPlayerBottomIconsEmitter.swift in Sources */,
 				9DFAE70220610A4B00EF7C4D /* TrackInfoModel.swift in Sources */,
-				019FB2551FE27DEE0007FDEE /* FollowButton.swift in Sources */,
+				019FB2551FE27DEE0007FDEE /* Buttons.swift in Sources */,
 				01C4A9D3207F375C00A4232B /* PlayingPlaylistEmitter.swift in Sources */,
 				01C4A9D1207F33AE00A4232B /* PlayerExternalHandlers.swift in Sources */,
 				019B3DC81FCC45C8008C3B76 /* ChannelHeaderView.swift in Sources */,
@@ -1172,6 +1175,7 @@
 				36045FAE204D8A87003C7406 /* UserPlaylistBuilder.swift in Sources */,
 				3659B22B203EE351009580E9 /* ChannelBuilder.swift in Sources */,
 				9DC6C2402091D20900C980D4 /* MainChannelsViewModel.swift in Sources */,
+				9DD783DD20A572B600FA0FFD /* Empties.swift in Sources */,
 				36706D512031A7F3002097E7 /* CategoryChannelsModel.swift in Sources */,
 				36E21800208F4C9D00BBAE95 /* PlaylistsSegmentedViewController.swift in Sources */,
 				CF4453731F5D8EBE00660474 /* MainTabViewController.swift in Sources */,

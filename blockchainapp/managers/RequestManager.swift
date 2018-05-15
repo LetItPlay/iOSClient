@@ -25,6 +25,7 @@ enum ChannelsRequest {
     case all(offset: Int, count: Int)
     case subscribed
     case category(id: Int)
+    case blacklist
 }
 
 enum TrackUpdateRequest {
@@ -37,6 +38,8 @@ enum ChannelUpdateRequest {
     case subscribe
     case unsubscribe
     case report(msg: String)
+    case hide
+    case show
 }
 
 fileprivate extension TracksRequest {
@@ -66,6 +69,8 @@ fileprivate extension ChannelsRequest {
             return "categories/\(id)/stations"
         case .subscribed:
             return "user/favorites/channels"
+        case .blacklist:
+            return "blacklist/channel"
         }
     }
 }
@@ -308,6 +313,10 @@ class RequestManager {
         switch type {
         case .report(_):
             urlString += "/report/channel/\(id)"
+        case .hide:
+            urlString += "/blacklist/channel/\(id)"
+        case .show:
+            urlString += "/blacklist/channel/\(id)"
         default:
             urlString += "/follow/channel/\(id)"
         }
@@ -327,6 +336,10 @@ class RequestManager {
         case .report(let msg):
             req.httpMethod = "PUT"
             bodyString = "reason:\(msg)"
+        case .hide:
+            req.httpMethod = "PUT"
+        case .show:
+            req.httpMethod = "DELETE"
         }
         
         req.httpBody = bodyString.data(using: .utf8)

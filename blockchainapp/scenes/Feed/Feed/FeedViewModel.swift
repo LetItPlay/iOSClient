@@ -94,7 +94,7 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     }
     
     func showChannels(_ show: Bool) {
-        self.showChannels = false//show
+        self.showChannels = false
     }
     
     func showEmptyMessage(_ show: Bool) {
@@ -115,6 +115,6 @@ class FeedViewModel: FeedVMProtocol, FeedModelDelegate {
     }
     
     func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+        MainRouter.shared.showOthers(shareInfo: track)
     }
 }

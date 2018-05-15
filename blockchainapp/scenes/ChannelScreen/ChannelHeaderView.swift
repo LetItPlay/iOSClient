@@ -38,29 +38,9 @@ class ChannelHeaderView: UIView {
 	
 	let subsView: IconedLabel = IconedLabel.init(type: IconLabelType.subs)
     
-    var shareButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "sharedInactive"), for: .normal)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
     
-	let followButton: UIButton = {
-		let button = UIButton()
-		button.layer.cornerRadius = 6
-		button.layer.borderColor = AppColor.Element.subscribe.cgColor
-		button.layer.borderWidth = 1
-		button.layer.masksToBounds = true
-		button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-		button.setBackgroundImage(UIColor.clear.img(), for: .selected)
-		button.setTitle("Follow".localized, for: .normal)
-		button.setTitle("Following".localized, for: .selected)
-		button.setTitleColor(UIColor.white, for: .normal)
-		button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-		button.contentEdgeInsets.left = 12
-		button.contentEdgeInsets.right = 12
-		button.titleLabel?.font = AppFont.Button.mid
-		return button
-	}()
+	let followButton = FollowButton()
 	
 	let channelTitleLabel: UILabel = {
 		let label = UILabel()
@@ -142,21 +122,19 @@ class ChannelHeaderView: UIView {
 			make.left.equalTo(channelIconView.snp.right).inset(-16)
 			make.centerY.equalToSuperview()
 		}
-		
-		view.addSubview(followButton)
-		followButton.snp.makeConstraints { (make) in
-			make.right.equalToSuperview().inset(16)
-			make.centerY.equalToSuperview()
-			make.height.equalTo(32)
-		}
         
-        shareButton.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)
-        view.addSubview(shareButton)
-        shareButton.snp.makeConstraints { (make) in
-            make.centerY.equalTo(followButton)
-            make.right.equalTo(followButton.snp.left).inset(-14)
+        showOthersButton.addTarget(self, action: #selector(self.shareButtonTouched), for: .touchUpInside)
+        view.addSubview(showOthersButton)
+        showOthersButton.snp.makeConstraints { (make) in
+            make.right.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
         }
-        shareButton.isHidden = true
+        
+        view.addSubview(followButton)
+        followButton.snp.makeConstraints { (make) in
+            make.centerY.equalTo(showOthersButton)
+            make.right.equalTo(showOthersButton.snp.left).inset(-14)
+        }
 
 		self.addSubview(channelTitleLabel)
 		channelTitleLabel.snp.makeConstraints { (make) in
@@ -220,6 +198,8 @@ class ChannelHeaderView: UIView {
         
         self.tagListView.removeAllTags()
         self.tagListView.addTags(channel.tags.map({$0.uppercased()}))
+        
+        self.followButton.set(title: channel.getMainButtonTitle())
         
         return self.frame.origin.y + self.frame.height
     }

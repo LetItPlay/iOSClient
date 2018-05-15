@@ -45,11 +45,7 @@ class PlayerTableViewCell: UITableViewCell {
 		return label
 	}()
     
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
 	
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
@@ -122,7 +118,6 @@ class PlayerTableViewCell: UITableViewCell {
             make.right.equalTo(-16)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
 		
 		self.dataLabels = [.time: timeCount, .playingIndicator: playingIndicator]
 		

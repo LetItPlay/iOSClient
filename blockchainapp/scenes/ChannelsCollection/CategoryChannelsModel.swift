@@ -15,7 +15,7 @@ enum ChannelScreen {
 }
 
 enum ChannelsFilter {
-    case subscribed, all, category(Int)
+    case subscribed, all, category(Int, String), hidden
 }
 
 protocol  CategoryChannelsModelProtocol: ModelProtocol {
@@ -35,12 +35,16 @@ protocol  CategoryChannelsModelDelegate: class {
     func showChannel(id: Int)
     func update(index: Int, vm: SmallChannelViewModel)
     func showAllChannels()
+    func set(category: String)
+    func updateEmptyMessage(hide: Bool)
 }
 
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
     
     var channelScreen: ChannelScreen!
     var channelsFilter: ChannelsFilter!
+    
+    var category: String = ""
     
     weak var delegate:  CategoryChannelsModelDelegate?
     var channels: [Channel] = []
@@ -58,10 +62,12 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             switch channelsFilter {
             case .all:
                 request = ChannelsRequest.all(offset: 0, count: 100)
-            case .category(let id):
+            case .category(let id, _):
                 request = ChannelsRequest.category(id: id)
             case .subscribed:
                 request = ChannelsRequest.subscribed
+            case .hidden:
+                request = ChannelsRequest.blacklist
             }
             
             return RequestManager.shared.channels(req: request)
@@ -72,10 +78,22 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             switch self.channelsFilter! {
             case .all:
                 self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
-            default:
-                break
+                self.category = "Channels".localized
+            case .hidden:
+                self.channels = self.channels.map({ (channel) -> Channel in
+                    var newChannel = channel
+                    newChannel.isHidden = true
+                    return newChannel
+                })
+                self.category = "Hidden channels".localized
+            case .subscribed:
+                self.category = "Subscribed channels".localized
+            case .category(_, let title):
+                self.category = title
             }
             
+            self.delegate?.set(category: self.category)
+            self.delegate?.updateEmptyMessage(hide: self.channels.count == 0 ? false : true)
             self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
         }).disposed(by: disposeBag)
         
@@ -84,7 +102,7 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
     
     func subscribeAt(index: Int) {
         let channel = self.channels[index]
-        let action: ChannelAction = ChannelAction.subscribe
+        let action: ChannelAction = channel.isHidden ? ChannelAction.showHidden : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)        
     }
     

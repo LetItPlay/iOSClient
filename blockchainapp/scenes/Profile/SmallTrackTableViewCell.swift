@@ -47,11 +47,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		return label
 	}()
     
-    var showOthersButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "otherInactive"), for: .normal)
-        return button
-    }()
+    var showOthersButton = ShowOthersButton()
 	
     var dataLabels: [IconLabelType: IconedLabel] = [:]
     var viewModel: SmallTrackViewModel?
@@ -95,9 +91,7 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
-        
-//        showOthersButton.isHidden = vm.isPlaying
-	}
+    }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -166,7 +160,6 @@ class SmallTrackTableViewCell: UITableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
 		
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
 		

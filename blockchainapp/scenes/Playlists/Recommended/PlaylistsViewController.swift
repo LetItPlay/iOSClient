@@ -16,15 +16,7 @@ class PlaylistsViewController: UIViewController {
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
     
-    let emptyLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.Title.sectionNotBold
-        label.textColor = AppColor.Element.emptyMessage
-        label.textAlignment = .center
-        label.numberOfLines = 0
-        label.text = "There are no recommendations".localized
-        return label
-    }()
+    let emptyLabel = EmptyLabel(title: "There are no recommendations".localized)
     
     convenience init(playlistViewModel: PlaylistsVMProtocol, playlistEmitter: PlaylistsEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)

@@ -58,7 +58,7 @@ class PlayerViewModel: PlayerModelDelegate, MainPlayerModelDelegate {
     }
 	
     func showMoreDialog(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
+        MainRouter.shared.showOthers(shareInfo: track)
     }
 	
 	func player(show: Bool) {

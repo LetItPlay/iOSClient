@@ -39,24 +39,7 @@ class TrackInfoHeaderView: UIView {
         return label
     }()
     
-    let _followButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 6
-        button.layer.borderColor = AppColor.Element.subscribe.cgColor
-        button.layer.borderWidth = 1
-        button.layer.masksToBounds = true
-        button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-        button.setBackgroundImage(UIColor.clear.img(), for: .selected)
-        button.setTitle("Follow".localized, for: .normal)
-        button.setTitle("Following".localized, for: .selected)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-        button.contentEdgeInsets.left = 12
-        button.contentEdgeInsets.right = 12
-        button.titleLabel?.font = AppFont.Button.mid
-        button.addTarget(self, action: #selector(followButtonTouched), for: .touchUpInside)
-        return button
-    }()
+    let _followButton = FollowButton()
     
     let _infoTitle: UILabel = {
         let label = UILabel()
@@ -101,11 +84,7 @@ class TrackInfoHeaderView: UIView {
     
     func viewInitialize()
     {
-        let emptyLabel = UILabel()
-        emptyLabel.text = "Loading..."
-        emptyLabel.font = AppFont.Title.sectionNotBold
-        emptyLabel.textColor = AppColor.Element.emptyMessage
-        emptyLabel.textAlignment = .center
+        let emptyLabel = EmptyLabel(title: "Loading...")
         self.addSubview(emptyLabel)
         emptyLabel.snp.makeConstraints({ (make) in
             make.centerX.equalToSuperview()
@@ -136,11 +115,11 @@ class TrackInfoHeaderView: UIView {
             make.centerY.equalToSuperview()
         })
 
+        _followButton.addTarget(self, action: #selector(followButtonTouched), for: .touchUpInside)
         upperView.addSubview(_followButton)
         _followButton.snp.makeConstraints({ (make) in
             make.right.equalTo(self).inset(16)
             make.centerY.equalToSuperview()
-            make.height.equalTo(32)
         })
 
         upperView.addSubview(_channelTitleLabel)
@@ -194,7 +173,7 @@ class TrackInfoHeaderView: UIView {
         _scrollView.backgroundColor = .white
         self.addSubview(_scrollView)
         _scrollView.snp.makeConstraints({ (make) in
-            make.top.equalTo(listenCount.snp.bottom)
+            make.top.equalTo(listenCount.snp.bottom).inset(-4)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -255,10 +234,10 @@ extension TrackInfoHeaderView: TrackInfoVMDelegate {
             _channelIconImageView.sd_setImage(with: viewModel.channel.imageURL, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
             _channelTitleLabel.text = viewModel.channel.name
             
-            _followButton.isSelected = viewModel.channel.isSubscribed
+            _followButton.set(title: self.viewModel.channel.getMainButtonTitle())
             
         case .channelSubscription:
-            _followButton.isSelected = viewModel.channel.isSubscribed
+            _followButton.set(title: self.viewModel.channel.getMainButtonTitle())
         }
     }
 }

@@ -40,7 +40,7 @@ protocol ChannelEvenHandler: class {
     func set(channel: Channel)
     func showSearch()
     func showOthers(index: Int)
-    func shareChannel()
+    func showOthers()
 }
 
 protocol ChannelModelDelegate: class {
@@ -49,8 +49,7 @@ protocol ChannelModelDelegate: class {
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
     func showSearch()
-    func showOthers(track: ShareInfo)
-    func share(channel: ShareInfo)
+    func showOthers(shareInfo: ShareInfo)
 }
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtocol {
@@ -120,8 +119,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     }
     
     func followPressed() {
-        // to server
-        let action: ChannelAction = ChannelAction.subscribe
+        let action: ChannelAction = self.channel.isHidden ? ChannelAction.showHidden : ChannelAction.subscribe
         ServerUpdateManager.shared.make(channel: channel, action: action)
     }
     
@@ -141,15 +139,17 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
+        let track = self.tracks[index]
+        self.delegate?.showOthers(shareInfo: track.sharedInfo())
     }
     
-    func shareChannel() {
-        self.delegate?.share(channel: self.channel.sharedInfo())
+    func showOthers() {
+        self.delegate?.showOthers(shareInfo: self.channel.sharedInfo())
     }
 }
 
-extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, TrackUpdateProtocol, ChannelUpdateProtocol {
+
     func settingsUpdated() {
         
     }
@@ -168,17 +168,19 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
     
-    func channelSubscriptionUpdated() {
-        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        channel.isSubscribed = channels.contains(channel.id)
-        
-        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
-    }
-    
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(dict: [index: vm])
+        }
+    }
+    
+    func channelUpdated(channel: Channel) {
+        if let _ = self.channel {
+            if self.channel.id == channel.id {
+                self.channel = channel
+                self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
+            }
         }
     }
 }

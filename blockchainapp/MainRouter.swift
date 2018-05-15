@@ -99,15 +99,15 @@ class MainRouter: Router {
         }
     }
     
-    func showOthers(track: ShareInfo) {
+    func showOthers(shareInfo: ShareInfo) {
         let controller: UIViewController!
         if let vc = self.currentNavigationController?.presentedViewController {
             controller = vc
         } else {
             controller = self.currentNavigationController?.viewControllers.first
         }
-		
-        let othersController = OthersBuilder.build(params: ["controller" : controller, "track": track]) as! OthersAlertController
+
+        let othersController = OthersBuilder.build(params: ["controller" : controller, "shareInfo": shareInfo]) as! OthersAlertController
         controller?.present(othersController, animated: true, completion: nil)
     }
     

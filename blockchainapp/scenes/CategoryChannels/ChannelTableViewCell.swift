@@ -36,23 +36,23 @@ class ChannelTableViewCell: UITableViewCell {
 		return label
 	}()
 	
-	let subButton: UIButton = {
-		let button = UIButton()
-		button.layer.cornerRadius = 6
-		button.layer.borderColor = AppColor.Element.subscribe.cgColor
-		button.layer.borderWidth = 1
-		button.layer.masksToBounds = true
-		button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-		button.setBackgroundImage(UIColor.white.img(), for: .selected)
-		button.setTitle("Follow".localized, for: .normal)
-		button.setTitle("Following".localized, for: .selected)
-		button.setTitleColor(UIColor.white, for: .normal)
-		button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-		button.contentEdgeInsets.left = 12
-		button.contentEdgeInsets.right = 12
-		button.titleLabel?.font = AppFont.Button.mid
-		return button
-	}()
+	let followButton = FollowButton()
+//        let button = UIButton()
+//        button.layer.cornerRadius = 6
+//        button.layer.borderColor = AppColor.Element.subscribe.cgColor
+//        button.layer.borderWidth = 1
+//        button.layer.masksToBounds = true
+//        button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
+//        button.setBackgroundImage(UIColor.white.img(), for: .selected)
+//        button.setTitle("Follow".localized, for: .normal)
+//        button.setTitle("Following".localized, for: .selected)
+//        button.setTitleColor(UIColor.white, for: .normal)
+//        button.setTitleColor(AppColor.Element.subscribe, for: .selected)
+//        button.contentEdgeInsets.left = 12
+//        button.contentEdgeInsets.right = 12
+//        button.titleLabel?.font = AppFont.Button.mid
+//        return button
+//    }()
 	
 	let tagsList: TagListView = {
 		let taglist = TagListView()
@@ -93,7 +93,8 @@ class ChannelTableViewCell: UITableViewCell {
                 self.subs.set(text: (self.viewModel?.subscriptionCount)!)
                 self.plays.set(text: (self.viewModel?.tracksCount)!)
                 
-                self.subButton.isSelected = (self.viewModel?.isSubscribed)!
+//                self.followButton.isSelected = (self.viewModel?.isSubscribed)!
+                self.followButton.set(title: (self.channel?.getMainButtonTitle())!)
                 
                 self.tagsList.removeAllTags()
                 if let tags = self.viewModel?.tags.map({$0}).prefix(4) {
@@ -110,7 +111,7 @@ class ChannelTableViewCell: UITableViewCell {
                     self.tagsList.isHidden = true
                 }
                 if let urlString = self.viewModel?.imageURL {
-                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)//sd_setImage(with: urlString)
+                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
                 } else {
                     self.channelImageView.image = UIImage(named: "channelPreviewImg")
                 }
@@ -119,7 +120,7 @@ class ChannelTableViewCell: UITableViewCell {
 	}
 	
 	@objc func subPressed() {
-        self.subButton.isSelected = !self.subButton.isSelected
+        self.followButton.isSelected = !self.followButton.isSelected
 		self.subAction(self.channel)
 	}
 	
@@ -127,7 +128,7 @@ class ChannelTableViewCell: UITableViewCell {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
 		
 		self.selectionStyle = .none
-		subButton.addTarget(self, action: #selector(subPressed), for: .touchUpInside)
+		followButton.addTarget(self, action: #selector(subPressed), for: .touchUpInside)
 		
 		self.contentView.addSubview(channelImageView)
 		channelImageView.snp.makeConstraints { (make) in
@@ -144,8 +145,8 @@ class ChannelTableViewCell: UITableViewCell {
 			make.right.equalToSuperview().inset(16)
 		}
 		
-		self.contentView.addSubview(subButton)
-		subButton.snp.makeConstraints { (make) in
+		self.contentView.addSubview(followButton)
+		followButton.snp.makeConstraints { (make) in
 			make.left.equalTo(channelTitle)
 			make.top.equalTo(channelTitle.snp.bottom).inset(-8)
 //			make.right.greaterThanOrEqualToSuperview().inset(16)
@@ -154,7 +155,7 @@ class ChannelTableViewCell: UITableViewCell {
 		
 		self.contentView.addSubview(tagsList)
 		tagsList.snp.makeConstraints { (make) in
-            self.tagsConstraint = make.top.equalTo(subButton.snp.bottom).inset(-8).constraint.layoutConstraints.first!
+            self.tagsConstraint = make.top.equalTo(followButton.snp.bottom).inset(-8).constraint.layoutConstraints.first!
 			make.left.equalTo(channelTitle)
 			make.right.equalToSuperview().inset(16)
 		}
@@ -177,7 +178,7 @@ class ChannelTableViewCell: UITableViewCell {
         super.layoutIfNeeded()
         
         // for 3 lines of text in title
-        if self.subButton.frame.origin.y > 70
+        if self.followButton.frame.origin.y > 70
         {
             self.tagsConstraint.constant = 9
         }

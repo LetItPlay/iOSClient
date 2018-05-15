@@ -135,7 +135,8 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     }
     
     func showOthers(index: Int) {
-        self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
+        let track = self.tracks[index]
+        self.delegate?.showOthers(track: track.sharedInfo())
     }
     
     func showAllChannels() {

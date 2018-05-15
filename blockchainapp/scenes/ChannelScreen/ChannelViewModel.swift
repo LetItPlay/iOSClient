@@ -96,12 +96,8 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
         MainRouter.shared.show(screen: "search", params: [:], present: false)
     }
     
-    func showOthers(track: ShareInfo) {
-        MainRouter.shared.showOthers(track: track)
-    }
-    
-    func share(channel: ShareInfo) {
-        MainRouter.shared.share(data: channel, viewController: nil)
+    func showOthers(shareInfo: ShareInfo) {
+        MainRouter.shared.showOthers(shareInfo: shareInfo)
     }
 }
 

@@ -9,17 +9,22 @@ import Foundation
 
 protocol CategoryChannelsVMProtocol {
     var channels: [SmallChannelViewModel] {get}
+    var category: String {get set}
+    var hideEmptyMessage: Bool {get set}
     
     var delegate: CategoryChannelsVMDelegate? {get set}
 }
 
 protocol CategoryChannelsVMDelegate: class  {
     func reloadChannels()
+    func updateEmptyMessage()
 }
 
 class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsModelDelegate {
     
     var channels: [SmallChannelViewModel] = []
+    var category: String = ""
+    var hideEmptyMessage: Bool = false
     weak var delegate: CategoryChannelsVMDelegate?
     var model:  CategoryChannelsModelProtocol!
     
@@ -41,12 +46,17 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
 		MainRouter.shared.show(screen: "category", params: ["filter" : ChannelsFilter.subscribed], present: false)
 	}
     
-    func showChannel(channel: Channel) {
-//        self.delegate?.showChannel(channel: channel)
+    func set(category: String) {
+        self.category = category
     }
     
     func update(index: Int, vm: SmallChannelViewModel) {
         self.channels[index] = vm
         self.delegate?.reloadChannels()
+    }
+    
+    func updateEmptyMessage(hide: Bool) {
+        self.hideEmptyMessage = hide
+        self.delegate?.updateEmptyMessage()
     }
 }

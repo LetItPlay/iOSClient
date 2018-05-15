@@ -41,7 +41,7 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
         case .showOthers(let index):
             self.model?.showOthers(index: index)
         case .shareChannel:
-            self.model?.shareChannel()
+            self.model?.showOthers()
         }
     }
 }

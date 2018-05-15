@@ -104,6 +104,10 @@ class ChannelsCollectionView: UIView {
 
 extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
+    func updateEmptyMessage() {
+        // TODO: without channels?
+    }
+    
     func reloadChannels() {
         self.channelsCollectionView.reloadData()
     }

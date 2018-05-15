@@ -10,12 +10,16 @@ import UIKit
 import SDWebImage
 import TagListView
 
-class CategoryChannelsViewController: UITableViewController {
+class CategoryChannelsViewController: UIViewController {
     
     var emitter: CategoryChannelsEmitterProtocol?
     var viewModel: CategoryChannelsViewModel!
     
     var topInset: Bool = false
+    
+    let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    
+    let emptyLabel = EmptyLabel(title: "There are no channels".localized)
     
     convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel, topInset: Bool)
     {
@@ -39,22 +43,38 @@ class CategoryChannelsViewController: UITableViewController {
     
     func viewInitialize()
     {
-        navigationController?.navigationBar.prefersLargeTitles = false
+        self.view.backgroundColor = .white
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
+        navigationController?.navigationBar.prefersLargeTitles = false
+        self.navigationItem.title = self.viewModel.category
+        
+        self.tableView.backgroundColor = .white
+        self.view.addSubview(tableView)
+        tableView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(onRefreshAction(refreshControl:)), for: .valueChanged)
         
         self.view.backgroundColor = .white
         
         tableView.dataSource = self
         tableView.delegate   = self
         tableView.allowsMultipleSelection = true
-        tableView.refreshControl = refreshControl
         
         tableView.contentInset.top = self.topInset ? 44 : 0
         tableView.contentInset.bottom = 72
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
+        
+        self.view.addSubview(emptyLabel)
+        emptyLabel.snp.makeConstraints { (make) in
+            make.center.equalTo(self.view.center)
+            make.left.equalToSuperview().inset(16)
+            make.right.equalToSuperview().inset(16)
+        }
+        emptyLabel.isHidden = false
         
         let searchItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search))
         self.navigationItem.rightBarButtonItem = searchItem
@@ -85,32 +105,36 @@ class CategoryChannelsViewController: UITableViewController {
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 
 extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
+    func updateEmptyMessage() {
+        emptyLabel.isHidden = self.viewModel.hideEmptyMessage
+    }
+    
     func reloadChannels() {
+        self.navigationItem.title = self.viewModel.category
+        
         if let _: [MediumChannelViewModel] = self.viewModel.channels as? [MediumChannelViewModel] {
-//            self.source = source
             self.tableView.reloadData()
             
-            refreshControl?.endRefreshing()
+            tableView.refreshControl?.endRefreshing()
         }
     }
 }
 
-extension CategoryChannelsViewController {
+extension CategoryChannelsViewController: UITableViewDelegate, UITableViewDataSource {
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.channels.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
         let channel = self.viewModel.channels[indexPath.row] as! MediumChannelViewModel
         cell.channel = channel
@@ -122,15 +146,23 @@ extension CategoryChannelsViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ChannelTableViewCell.height
     }
     
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return ChannelTableViewCell.height
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
     }
 }

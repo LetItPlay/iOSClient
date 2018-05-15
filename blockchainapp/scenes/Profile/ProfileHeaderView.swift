@@ -16,15 +16,57 @@ class ProfileHeaderView: UIView {
     var emitter: ProfileEmitterProtocol?
     var viewModel: ProfileViewModel!
     
-    let profileImageView: UIImageView = UIImageView()
-    let bluredImageView: UIImageView = UIImageView()
-    let profileNameTextField: UITextField = UITextField()
-    let changePhotoButton: UIButton = UIButton()
-    let languageButton: UIButton = UIButton()
-    let languageTitleLabel: UILabel = UILabel()
+    let profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.cornerRadius = 120
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .white
+        return imageView
+    }()
+    
+    let bluredImageView: UIImageView = {
+        let bluredImageView = UIImageView()
+        bluredImageView.layer.cornerRadius = 140
+        bluredImageView.layer.masksToBounds = true
+        return bluredImageView
+    }()
+    
+    let profileNameTextField: UITextField = {
+        let textField = UITextField()
+        textField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        textField.textAlignment = .center
+        textField.returnKeyType = .done
+        return textField
+    }()
+    
+    let lineForTextField: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        return view
+    }()
+    
+    let changePhotoButton: UIButton = {
+        let button = UIButton()
+        button.layer.cornerRadius = 20
+        button.setImage(UIImage.init(named: "editPhotoInactive"), for: .normal)
+        button.backgroundColor = .red
+        return button
+    }()
+    
+    let languageButton = ProfileButton(title: "Change content language".localized)
+    
+    let languageTitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = AppFont.Button.mid
+        label.textColor = AppColor.Title.lightGray
+        return label
+    }()
+    
+    let hiddenChannelsButton = ProfileButton(title: "Hidden channels".localized)
     
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
-        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511)))
+        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511 + 52)))
         
         self.emitter = emitter
         self.viewModel = viewModel
@@ -35,11 +77,7 @@ class ProfileHeaderView: UIView {
         emitter.send(event: LifeCycleEvent.initialize)
     }
     
-    func viewInitialize()
-    {
-        bluredImageView.layer.cornerRadius = 140
-        bluredImageView.layer.masksToBounds = true
-        
+    func viewInitialize() {
         self.addSubview(bluredImageView)
         bluredImageView.snp.makeConstraints { (make) in
             make.centerX.equalToSuperview()
@@ -71,11 +109,7 @@ class ProfileHeaderView: UIView {
             make.height.equalTo(240)
         }
         
-        profileImageView.layer.cornerRadius = 120
-        profileImageView.layer.masksToBounds = true
-        profileImageView.contentMode = .scaleAspectFill
-        profileImageView.backgroundColor = .white
-        
+        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
         blur.contentView.addSubview(self.changePhotoButton)
         self.changePhotoButton.snp.makeConstraints { (make) in
             make.right.equalTo(profileImageView)
@@ -83,38 +117,31 @@ class ProfileHeaderView: UIView {
             make.width.equalTo(40)
             make.height.equalTo(40)
         }
-        
-        changePhotoButton.layer.cornerRadius = 20
-        changePhotoButton.setImage(UIImage.init(named: "editPhotoInactive"), for: .normal)
-        changePhotoButton.backgroundColor = .red
-        changePhotoButton.addTarget(self, action: #selector(changePhotoButtonTapped(_:)), for: .touchUpInside)
+
+        blur.contentView.addSubview(lineForTextField)
         
         blur.contentView.addSubview(profileNameTextField)
         profileNameTextField.snp.makeConstraints { (make) in
-            //            make.centerX.equalTo(profileImageView)
             make.top.equalTo(profileImageView.snp.bottom).inset(-52)
             make.right.equalTo(profileImageView.snp.right)
             make.left.equalTo(profileImageView.snp.left)
         }
         
-        profileNameTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        profileNameTextField.textAlignment = .center
-        profileNameTextField.returnKeyType = .done
-        
-        let highlight = UIView()
-        highlight.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-        blur.contentView.addSubview(highlight)
-        highlight.snp.makeConstraints { (make) in
+        lineForTextField.snp.makeConstraints { (make) in
             make.bottom.equalTo(profileNameTextField).inset(-1)
             make.left.equalTo(profileNameTextField).inset(-14)
             make.right.equalTo(profileNameTextField).inset(-14)
             make.height.equalTo(14)
         }
         
+        self.hiddenChannelsButton.addTarget(self, action: #selector(self.hiddenChannelsButtonTapped(_:)), for: .touchUpInside)
+        blur.contentView.addSubview(hiddenChannelsButton)
+
         blur.contentView.addSubview(languageButton)
         languageButton.snp.makeConstraints { (make) in
-            make.top.equalTo(highlight.snp.bottom).inset(-24)
+            make.top.equalTo(lineForTextField.snp.bottom).inset(-24)
             make.centerX.equalToSuperview()
+            make.width.equalTo(hiddenChannelsButton.snp.width)
         }
         
         blur.contentView.addSubview(languageTitleLabel)
@@ -123,22 +150,20 @@ class ProfileHeaderView: UIView {
             make.centerX.equalToSuperview()
         })
         
-        languageButton.setBackgroundImage(UIColor.init(white: 2.0/255, alpha: 0.1).img(), for: .normal)
-        languageButton.layer.cornerRadius = 6
-        languageButton.layer.masksToBounds = true
-        languageButton.titleLabel?.font = AppFont.Button.mid
-        languageButton.setTitleColor(UIColor.black.withAlphaComponent(0.8), for: .normal)
-        languageButton.contentEdgeInsets = UIEdgeInsets.init(top: 6, left: 17, bottom: 6, right: 17)
-        languageButton.semanticContentAttribute = .forceRightToLeft
-        languageButton.setTitle("Select language", for: .normal)
+        hiddenChannelsButton.snp.makeConstraints { (make) in
+            make.top.equalTo(languageTitleLabel.snp.bottom).inset(-20)
+            make.centerX.equalToSuperview()
+        }
         
-        languageTitleLabel.font = AppFont.Button.mid
-        languageTitleLabel.textColor = AppColor.Title.lightGray
-        
-        let bot = CALayer()
-        bot.frame = CGRect.init(origin: CGPoint.init(x: 0, y: 510), size: CGSize.init(width: 414, height: 1))
-        bot.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1).cgColor
-        blur.contentView.layer.addSublayer(bot)
+        let line = UIView()
+        line.backgroundColor = UIColor.init(white: 232.0/255, alpha: 1)
+        blur.contentView.addSubview(line)
+        line.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.height.equalTo(1)
+            make.width.equalTo(self.frame.width - 30)
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -147,6 +172,10 @@ class ProfileHeaderView: UIView {
     
     @objc func changePhotoButtonTapped(_ sender: Any) {
         delegate?.addImage()
+    }
+    
+    @objc func hiddenChannelsButtonTapped(_ sender: Any) {
+        self.emitter?.send(event: ProfileEvent.showHiddenChannels)
     }
     
     func setName(name: String)
@@ -173,7 +202,6 @@ extension ProfileHeaderView: ProfileVMDelegate
                 bluredImageView.image = image
             case .language:
                 self.languageTitleLabel.text = self.viewModel.currentLanguage
-//                self.languageButton.setTitle(self.viewModel.languageString, for: .normal)
                 break
             case .name:
                 self.setName(name: self.viewModel.name)

@@ -13,7 +13,7 @@ enum ReportEventCause {
 }
 
 enum OthersEvent {
-    case report(ReportEventCause), shareTrack(viewController: UIViewController)
+    case report(ReportEventCause), shareTrack(viewController: UIViewController), showHidden, okButtonTouched
 }
 
 protocol OthersEmitterProtocol: LifeCycleHandlerProtocol {
@@ -35,6 +35,10 @@ class OthersEmitter: Emitter, OthersEmitterProtocol {
             self.model?.report(cause: cause)
         case .shareTrack(let viewController):
             self.model?.shareTrack(viewController: viewController)
+        case .showHidden:
+            self.model?.showHiddenChannels()
+        case .okButtonTouched:
+            self.model?.okButtonTouched()
         }
     }
 }

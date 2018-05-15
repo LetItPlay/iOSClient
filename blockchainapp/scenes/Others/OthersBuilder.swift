@@ -11,9 +11,9 @@ import UIKit
 class OthersBuilder: Builder {
     static func build(params: [String : Any]?) -> UIViewController? {
         let viewController = params!["controller"] as! UIViewController
-        let track = params!["track"]
+        let infoToShare = params!["shareInfo"]
         
-        let model = OthersModel(track: track as! ShareInfo)
+        let model = OthersModel(infoToShare: infoToShare as! ShareInfo)
         let viewModel = OthersViewModel(model: model)
         let emitter = OthersEmitter(model: model)
         
