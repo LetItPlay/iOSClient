@@ -11,7 +11,8 @@ import TagListView
 import SnapKit
 import SDWebImage
 
-class ChannelTableViewCell: UITableViewCell {
+class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
+    var event: ((String, [String : Any]?) -> Void)?
 	
 	static let cellID: String = "ChannelCellID"
     static let height: CGFloat = 188.0
@@ -37,22 +38,6 @@ class ChannelTableViewCell: UITableViewCell {
 	}()
 	
 	let followButton = FollowButton()
-//        let button = UIButton()
-//        button.layer.cornerRadius = 6
-//        button.layer.borderColor = AppColor.Element.subscribe.cgColor
-//        button.layer.borderWidth = 1
-//        button.layer.masksToBounds = true
-//        button.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
-//        button.setBackgroundImage(UIColor.white.img(), for: .selected)
-//        button.setTitle("Follow".localized, for: .normal)
-//        button.setTitle("Following".localized, for: .selected)
-//        button.setTitleColor(UIColor.white, for: .normal)
-//        button.setTitleColor(AppColor.Element.subscribe, for: .selected)
-//        button.contentEdgeInsets.left = 12
-//        button.contentEdgeInsets.right = 12
-//        button.titleLabel?.font = AppFont.Button.mid
-//        return button
-//    }()
 	
 	let tagsList: TagListView = {
 		let taglist = TagListView()
@@ -93,7 +78,6 @@ class ChannelTableViewCell: UITableViewCell {
                 self.subs.set(text: (self.viewModel?.subscriptionCount)!)
                 self.plays.set(text: (self.viewModel?.tracksCount)!)
                 
-//                self.followButton.isSelected = (self.viewModel?.isSubscribed)!
                 self.followButton.set(title: (self.channel?.getMainButtonTitle())!)
                 
                 self.tagsList.removeAllTags()
@@ -118,10 +102,23 @@ class ChannelTableViewCell: UITableViewCell {
             }
 		}
 	}
+    
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        return self.height
+    }
+    
+    func fill(data: Any?) {
+        guard let viewModel = data as? MediumChannelViewModel else {
+            return
+        }
+        
+        self.channel = viewModel
+    }
 	
 	@objc func subPressed() {
         self.followButton.isSelected = !self.followButton.isSelected
-		self.subAction(self.channel)
+        self.event!("onFollow", nil)
+//        self.subAction(self.channel)
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

@@ -18,6 +18,7 @@ class CategoryChannelsViewController: UIViewController {
     var topInset: Bool = false
     
     let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    var tableProvider: TableProvider!
     
     let emptyLabel = EmptyLabel(title: "There are no channels".localized)
     
@@ -30,6 +31,18 @@ class CategoryChannelsViewController: UIViewController {
         viewModel.delegate = self
         
         self.topInset = topInset
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = {(indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
+            case "onFollow":
+                self.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
+            default:
+                break
+            }
+        }
     }
     
 
@@ -59,8 +72,6 @@ class CategoryChannelsViewController: UIViewController {
         
         self.view.backgroundColor = .white
         
-        tableView.dataSource = self
-        tableView.delegate   = self
         tableView.allowsMultipleSelection = true
         
         tableView.contentInset.top = self.topInset ? 44 : 0
@@ -124,45 +135,66 @@ extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
     }
 }
 
-extension CategoryChannelsViewController: UITableViewDelegate, UITableViewDataSource {
+extension CategoryChannelsViewController: TableDataProvider, TableCellProvider {
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.channels[indexPath.row]
+    }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return ChannelTableViewCell.self
+    }
+    
+    func config(cell: StandartTableViewCell) {
+    }
+    
+    var numberOfSections: Int {
         return 1
     }
     
-     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func rows(asSection section: Int) -> Int {
         return self.viewModel.channels.count
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
-        let channel = self.viewModel.channels[indexPath.row] as! MediumChannelViewModel
-        cell.channel = channel
-        cell.subAction = {[weak self] channel in
-            if let _ = channel {
-                self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
-            }
-        }
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChannelTableViewCell.height
-    }
-    
-    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return ChannelTableViewCell.height
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
-    }
 }
+
+//extension CategoryChannelsViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.channels.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTableViewCell.cellID, for: indexPath) as! ChannelTableViewCell
+//        let channel = self.viewModel.channels[indexPath.row] as! MediumChannelViewModel
+//        cell.channel = channel
+//        cell.subAction = {[weak self] channel in
+//            if let _ = channel {
+//                self?.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
+//            }
+//        }
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return ChannelTableViewCell.height
+//    }
+//
+//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return ChannelTableViewCell.height
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 0
+//    }
+//}
