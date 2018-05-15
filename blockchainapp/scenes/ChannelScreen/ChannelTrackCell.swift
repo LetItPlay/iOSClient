@@ -52,29 +52,6 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
     
     var dataLabels: [IconLabelType: IconedLabel] = [:]
     
-    var track: TrackViewModel? = nil {
-        didSet {
-            DispatchQueue.main.async {
-                if let iconUrl = self.track?.imageURL {
-                    self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-                } else {
-                    self.trackImageView.image = UIImage(named: "trackPlaceholder")
-                }
-                
-                self.trackNameLabel.attributedText = Common.trackText(text: self.track?.name ?? "")
-                self.channelNameLabel.text = self.track?.author
-                
-                self.timeLabel.text = self.track?.dateString
-                
-                self.dataLabels[.listens]?.set(text: (self.track?.listensCount)!)
-                self.dataLabels[.time]?.set(text: (self.track?.length)!)
-                
-                self.dataLabels[.listens]?.isHidden = (self.track?.isPlaying)!
-                self.dataLabels[.playingIndicator]?.isHidden = !(self.track?.isPlaying)!
-            }
-        }
-    }
-    
     static func height(data: Any, width: CGFloat) -> CGFloat {
         return 107
     }
@@ -83,7 +60,29 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
         guard let vm = data as? TrackViewModel else {
             return
         }
-        self.track = vm
+        
+        self.fill(track: vm)
+    }
+    
+    func fill(track: TrackViewModel) {
+        DispatchQueue.main.async {
+            if let iconUrl = track.imageURL {
+                self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+            } else {
+                self.trackImageView.image = UIImage(named: "trackPlaceholder")
+            }
+            
+            self.trackNameLabel.attributedText = Common.trackText(text: track.name )
+            self.channelNameLabel.text = track.author
+            
+            self.timeLabel.text = track.dateString
+            
+            self.dataLabels[.listens]?.set(text: track.listensCount)
+            self.dataLabels[.time]?.set(text: track.length)
+            
+            self.dataLabels[.listens]?.isHidden = track.isPlaying
+            self.dataLabels[.playingIndicator]?.isHidden = !track.isPlaying
+        }
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

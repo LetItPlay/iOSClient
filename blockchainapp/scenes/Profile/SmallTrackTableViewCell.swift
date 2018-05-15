@@ -51,29 +51,6 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
     var showOthersButton = ShowOthersButton()
 	
     var dataLabels: [IconLabelType: IconedLabel] = [:]
-    var viewModel: SmallTrackViewModel?
-	
-    var track: TrackViewModel? = nil {
-		didSet {
-            DispatchQueue.main.async {
-                self.viewModel = SmallTrackViewModel.init(track: self.track!)
-                
-                if let iconUrl = self.viewModel?.iconUrl {
-                    self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-                } else {
-                    self.trackImageView.image = UIImage(named: "trackPlaceholder")
-                }
-                
-                self.trackNameLabel.attributedText = Common.trackText(text: (self.viewModel?.trackName)!)
-                self.channelNameLabel.text = self.viewModel?.channelName
-                
-                self.timeLabel.text = self.viewModel?.time
-                
-                self.dataLabels[.listens]?.set(text: (self.viewModel?.listens)!)
-                self.dataLabels[.time]?.set(text: (self.viewModel?.length)!)
-            }
-		}
-	}
     
     static func height(data: Any, width: CGFloat) -> CGFloat {
         return 107
@@ -88,24 +65,26 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
 	
 	func fill(vm: TrackViewModel) {
         
-        self.viewModel = SmallTrackViewModel.init(track: vm)
-
-		if let iconUrl = vm.imageURL {
-            trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
-        } else {
-            trackImageView.image = UIImage(named: "trackPlaceholder")
+        DispatchQueue.main.async {
+            let viewModel = SmallTrackViewModel.init(track: vm)
+            
+            if let iconUrl = viewModel.iconUrl {
+                self.trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
+            } else {
+                self.trackImageView.image = UIImage(named: "trackPlaceholder")
+            }
+            
+            self.trackNameLabel.attributedText = Common.trackText(text: viewModel.trackName)
+            self.channelNameLabel.text = viewModel.channelName
+            
+            self.timeLabel.text = viewModel.time
+            
+            self.dataLabels[.listens]?.set(text: viewModel.listens)
+            self.dataLabels[.time]?.set(text: viewModel.length)
+            
+            self.dataLabels[.listens]?.isHidden = vm.isPlaying
+            self.dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
         }
-		
-		trackNameLabel.attributedText = Common.trackText(text: vm.name)
-		channelNameLabel.text = vm.author
-		
-		timeLabel.text = vm.dateString
-		
-        self.dataLabels[.listens]?.set(text: (self.viewModel?.listens)!)
-        self.dataLabels[.time]?.set(text: (self.viewModel?.length)!)
-		
-		dataLabels[.listens]?.isHidden = vm.isPlaying
-		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

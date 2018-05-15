@@ -39,22 +39,6 @@ class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	var dataLabels: [IconLabelType: IconedLabel] = [:]
 	
 	var onSub: (() -> Void)? = nil
-	
-	weak var channel: SearchChannelViewModel? = nil {
-		didSet {
-            DispatchQueue.main.async {
-                self.channelNameLabel.text = self.channel?.name
-                self.dataLabels[.subs]?.set(text: (self.channel?.subscriptionCount == nil ? "0" : self.channel?.subscriptionCount)!)
-                self.dataLabels[.tracks]?.set(text: (self.channel?.tracksCount)!)
-                if let urlString = self.channel?.imageURL {
-                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
-                } else {
-                    self.channelImageView.image = UIImage(named: "channelPreviewImg")
-                }
-                self.followButton.set(title: (self.channel?.getMainButtonTitle())!)
-            }
-		}
-	}
     
     static func height(data: Any, width: CGFloat) -> CGFloat {
         return self.height
@@ -64,7 +48,21 @@ class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
         guard let viewModel = data as? SearchChannelViewModel else {
             return
         }
-        self.channel = viewModel
+        self.fill(channel: viewModel)
+    }
+    
+    func fill(channel: SearchChannelViewModel) {
+        DispatchQueue.main.async {
+            self.channelNameLabel.text = channel.name
+            self.dataLabels[.subs]?.set(text: channel.subscriptionCount)
+            self.dataLabels[.tracks]?.set(text: channel.tracksCount)
+            if let urlString = channel.imageURL {
+                self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
+            } else {
+                self.channelImageView.image = UIImage(named: "channelPreviewImg")
+            }
+            self.followButton.set(title: channel.getMainButtonTitle())
+        }
     }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

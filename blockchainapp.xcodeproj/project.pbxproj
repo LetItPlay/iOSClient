@@ -41,7 +41,6 @@
 		01D2F4A22029E15E00E43B67 /* TrackViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2F4A12029E15E00E43B67 /* TrackViewModel.swift */; };
 		01DBC535205AB40100EF832D /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD10BE55E82F75A804CA6B47 /* RequestManager.swift */; };
 		01E1991C1FE8DBB00016060E /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991B1FE8DBB00016060E /* UserSettings.swift */; };
-		01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */; };
 		01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */; };
 		01E59B49209046A0001E7A29 /* PlayerBottomModelExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */; };
 		01E59B4B2090AC48001E7A29 /* blockchainapp.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */; };
@@ -63,7 +62,6 @@
 		361CD016204814A60097F8E9 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD015204814A60097F8E9 /* ProfileHeaderView.swift */; };
 		361CD018204815140097F8E9 /* LikeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD017204815140097F8E9 /* LikeHeader.swift */; };
 		361CD01A20482A410097F8E9 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 361CD01920482A410097F8E9 /* Common.swift */; };
-		3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CA2036A6200016772B /* SearchResultsController.swift */; };
 		3626C8CE2036A6730016772B /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CD2036A6730016772B /* SearchViewModel.swift */; };
 		3626C8D02036A6790016772B /* SearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8CF2036A6790016772B /* SearchModel.swift */; };
 		3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3626C8D12036A6800016772B /* SearchEmitter.swift */; };
@@ -221,7 +219,6 @@
 		01DBC533205AAA9000EF832D /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01DBC534205AAA9000EF832D /* RealmSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = RealmSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		01E1991B1FE8DBB00016060E /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		01E52E3B1FC7E34C00CCFCC2 /* IconedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconedLabel.swift; sourceTree = "<group>"; };
 		01E59B48209046A0001E7A29 /* PlayerBottomModelExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerBottomModelExtension.swift; sourceTree = "<group>"; };
 		01E59B4A2090AAAA001E7A29 /* blockchainapp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = blockchainapp.entitlements; sourceTree = "<group>"; };
@@ -243,7 +240,6 @@
 		361CD015204814A60097F8E9 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		361CD017204815140097F8E9 /* LikeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeHeader.swift; sourceTree = "<group>"; };
 		361CD01920482A410097F8E9 /* Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Common.swift; sourceTree = "<group>"; };
-		3626C8CA2036A6200016772B /* SearchResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsController.swift; sourceTree = "<group>"; };
 		3626C8CD2036A6730016772B /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3626C8CF2036A6790016772B /* SearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchModel.swift; sourceTree = "<group>"; };
 		3626C8D12036A6800016772B /* SearchEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEmitter.swift; sourceTree = "<group>"; };
@@ -388,7 +384,6 @@
 			children = (
 				365653FE203592DD0072087F /* SearchBuilder.swift */,
 				01510EB31FE0F421003AC116 /* SearchViewController.swift */,
-				3626C8CA2036A6200016772B /* SearchResultsController.swift */,
 				019FB2521FE279BF0007FDEE /* SmallChannelTableViewCell.swift */,
 				3626C8CC2036A6600016772B /* Search */,
 			);
@@ -468,14 +463,6 @@
 				01EFC872201A21D6005321B9 /* MainPlayerViewController.swift */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		01E1991D1FE8FBF30016060E /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				01E1991E1FE8FC0D0016060E /* SettingsViewController.swift */,
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 		01FF376B201072B7007F57E0 /* AudioCore */ = {
@@ -785,7 +772,6 @@
 				019B3DC41FCC4599008C3B76 /* ChannelScreen */,
 				01510EB01FE0E8EC003AC116 /* SearchScreen */,
 				01AA891F1FC5610500D50C13 /* Profile */,
-				01E1991D1FE8FBF30016060E /* Settings */,
 				CF44536E1F5D787A00660474 /* PlayerScreen */,
 				CF4453711F5D8E8600660474 /* TabController */,
 			);
@@ -1190,7 +1176,6 @@
 				CF4453621F56CA2E00660474 /* FeedViewController.swift in Sources */,
 				014913852036ECBF004058CB /* InAppUpdateManager.swift in Sources */,
 				01FF376F201224CB007F57E0 /* Models.swift in Sources */,
-				01E1991F1FE8FC0D0016060E /* SettingsViewController.swift in Sources */,
 				9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */,
 				36952670202C5EBF00F97E1E /* ProfileViewModel.swift in Sources */,
 				01E52E3C1FC7E34C00CCFCC2 /* IconedLabel.swift in Sources */,
@@ -1220,7 +1205,6 @@
 				36045FAC204D8347003C7406 /* UserPlaylistEmitter.swift in Sources */,
 				3626C8D22036A6800016772B /* SearchEmitter.swift in Sources */,
 				9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */,
-				3626C8CB2036A6200016772B /* SearchResultsController.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
 				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,

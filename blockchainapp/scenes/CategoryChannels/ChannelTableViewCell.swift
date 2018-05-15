@@ -67,41 +67,6 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	let plays: IconedLabel = IconedLabel(type: IconLabelType.tracks)
 	
 	var subAction: (_ channel: MediumChannelViewModel?) -> Void = { _ in }
-    var viewModel: MediumChannelViewModel?
-	
-	weak var channel: MediumChannelViewModel? = nil {
-		didSet {
-            DispatchQueue.main.async {
-                self.viewModel = self.channel
-                
-                self.channelTitle.text = self.viewModel?.name
-                self.subs.set(text: (self.viewModel?.subscriptionCount)!)
-                self.plays.set(text: (self.viewModel?.tracksCount)!)
-                
-                self.followButton.set(title: (self.channel?.getMainButtonTitle())!)
-                
-                self.tagsList.removeAllTags()
-                if let tags = self.viewModel?.tags.map({$0}).prefix(4) {
-                    if tags.count != 0 {
-                        self.tagsList.addTags(tags.map({$0.uppercased()}))
-                        self.noTagsView.isHidden = true
-                        self.tagsList.isHidden = false
-                    } else {
-                        self.noTagsView.isHidden = false
-                        self.tagsList.isHidden = true
-                    }
-                } else {
-                    self.noTagsView.isHidden = false
-                    self.tagsList.isHidden = true
-                }
-                if let urlString = self.viewModel?.imageURL {
-                    self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
-                } else {
-                    self.channelImageView.image = UIImage(named: "channelPreviewImg")
-                }
-            }
-		}
-	}
     
     static func height(data: Any, width: CGFloat) -> CGFloat {
         return self.height
@@ -112,7 +77,35 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
             return
         }
         
-        self.channel = viewModel
+        self.fill(channel: viewModel)
+    }
+    
+    func fill(channel: MediumChannelViewModel) {
+        DispatchQueue.main.async {
+            
+            self.channelTitle.text = channel.name
+            self.subs.set(text: channel.subscriptionCount)
+            self.plays.set(text: channel.tracksCount)
+            
+            self.followButton.set(title: channel.getMainButtonTitle())
+            
+            self.tagsList.removeAllTags()
+            let tags = channel.tags.map({$0}).prefix(4)
+            if tags.count != 0 {
+                self.tagsList.addTags(tags.map({$0.uppercased()}))
+                self.noTagsView.isHidden = true
+                self.tagsList.isHidden = false
+            } else {
+                self.noTagsView.isHidden = false
+                self.tagsList.isHidden = true
+            }
+            
+            if let urlString = channel.imageURL {
+                self.channelImageView.sd_setImage(with: urlString, placeholderImage: UIImage(named: "channelPreviewImg"), options: SDWebImageOptions.refreshCached, completed: nil)
+            } else {
+                self.channelImageView.image = UIImage(named: "channelPreviewImg")
+            }
+        }
     }
 	
 	@objc func subPressed() {
