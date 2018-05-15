@@ -96,7 +96,7 @@ class TrackInfoModel: TrackInfoModelProtocol, TrackInfoEventHandler, TrackInfoDe
     }
 }
 
-extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
+extension TrackInfoModel: TrackUpdateProtocol, ChannelUpdateProtocol {
     func trackUpdated(track: Track) {
         if self.track != nil {
             if self.track.id == track.id {
@@ -107,11 +107,12 @@ extension TrackInfoModel: TrackUpdateProtocol, SubscriptionUpdateProtocol {
         }
     }
     
-    func channelSubscriptionUpdated() {
-        if let _ = channel {
-            let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-            channel.isSubscribed = channels.contains(channel.id)
-            self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
+    func channelUpdated(channel: Channel) {
+        if let _ = self.channel {
+            if self.channel.id == channel.id {
+                self.channel = channel
+                self.delegate?.reload(channel: SearchChannelViewModel(channel: self.channel))
+            }
         }
     }
 }

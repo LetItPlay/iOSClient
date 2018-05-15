@@ -148,7 +148,8 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
     }
 }
 
-extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, TrackUpdateProtocol, ChannelUpdateProtocol {
+
     func settingsUpdated() {
         
     }
@@ -163,17 +164,19 @@ extension ChannelModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subs
         }
     }
     
-    func channelSubscriptionUpdated() {
-        let channels: [Int] = (UserDefaults.standard.array(forKey: "array_sub") as? [Int]) ?? []
-        channel.isSubscribed = channels.contains(channel.id)
-        
-        self.delegate?.followUpdate(isSubscribed: channel.isSubscribed)
-    }
-    
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.delegate?.trackUpdate(index: index, vm: vm)
+        }
+    }
+    
+    func channelUpdated(channel: Channel) {
+        if let _ = self.channel {
+            if self.channel.id == channel.id {
+                self.channel = channel
+                self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
+            }
         }
     }
 }
