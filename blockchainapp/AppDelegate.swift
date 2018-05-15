@@ -17,7 +17,7 @@ import DeepLinkKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var router: DPLDeepLinkRouter = DPLDeepLinkRouter()
+    var deeplinkRouter: DPLDeepLinkRouter = DPLDeepLinkRouter()
 	
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func setupDeepLink() {
-        self.router.register("/tracks") { link in
+        self.deeplinkRouter.register("/tracks") { link in
             if let link = link {
                 if let channelID = Int(link.queryParameters["channel"] as! String) {
                     if let param = link.queryParameters["track"] as? String,
@@ -105,17 +105,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         let newUserActivity = userActivity
         newUserActivity.webpageURL = URL(string: (newUserActivity.webpageURL?.absoluteString.replacingOccurrences(of: "/#", with: ""))!)
-        self.router.handle(userActivity, withCompletion: nil)
+        self.deeplinkRouter.handle(userActivity, withCompletion: nil)
         return true
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        self.router.handle(url, withCompletion: nil)
+        self.deeplinkRouter.handle(url, withCompletion: nil)
         return true
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        self.router.handle(url, withCompletion: nil)
+        self.deeplinkRouter.handle(url, withCompletion: nil)
         return true
     }
 

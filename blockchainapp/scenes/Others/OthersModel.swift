@@ -63,6 +63,9 @@ class OthersModel: OthersModelProtocol, OthersEventHandler {
     func hideChannel() {
         print("\nHide channel \((self.shareInfo?.id)!)")
         RequestManager.shared.updateChannel(id: (self.shareInfo?.id)!, type: .hide).subscribe(onNext: { (channel) in
+            var newChannel = channel
+            newChannel.isHidden = true
+            NotificationCenter.default.post(name: InAppUpdateNotification.channel.notification(), object: nil, userInfo: ["station" : newChannel])
         }).disposed(by: disposeBag)
     }
     
