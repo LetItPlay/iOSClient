@@ -34,9 +34,7 @@ class MainChannelsViewController: UIViewController {
         self.tableProvider.cellEvent = { (indexPath, event, data) in
             switch event {
             case "onSeeAll":
-                if let _ = data, let name = data!["name"] {
-                    self.emitter?.send(event: MainChannelsEvent.showAllChannels(index: indexPath.row))
-                }
+                self.emitter?.send(event: MainChannelsEvent.showAllChannels(index: indexPath.row))
             case "onChannelTap":
                 if let _ = data, let item = data!["item"] {
                     self.emitter?.send(event: MainChannelsEvent.showChannel(index: IndexPath(row: item as! Int, section: indexPath.row)))

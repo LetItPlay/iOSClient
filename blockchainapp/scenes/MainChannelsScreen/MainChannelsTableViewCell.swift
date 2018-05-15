@@ -119,7 +119,7 @@ class MainChannelsTableViewCell: UITableViewCell, StandartTableViewCell {
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
-        self.event!("onSeeAll", ["name" : self.category.name])
+        self.event!("onSeeAll")
 //        self.onSeeAll!(self.category.name)
     }
 }
