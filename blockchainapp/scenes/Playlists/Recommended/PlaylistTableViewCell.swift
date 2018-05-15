@@ -9,8 +9,10 @@
 import UIKit
 import SnapKit
 
-class PlaylistTableViewCell: UITableViewCell {
-
+class PlaylistTableViewCell: UITableViewCell, StandartTableViewCell {
+    
+    var event: ((String, [String : Any]?) -> Void)?
+    
 	static let cellID = "PlaylistCellID"
 	
 	let playlistImageView: UIImageView = {
@@ -77,6 +79,13 @@ class PlaylistTableViewCell: UITableViewCell {
 		descriptionLabel.attributedText = PlaylistTableViewCell.descrString(string: "Latest news from the world of IT and high technologies")
 	}
     
+    func fill(data: Any?) {
+        guard let viewModel = data as? PlaylistViewModel else {
+            return
+        }
+        self.fill(playlist: viewModel)
+    }
+    
     func fill(playlist: PlaylistViewModel)
     {
         DispatchQueue.main.async {
@@ -109,13 +118,16 @@ class PlaylistTableViewCell: UITableViewCell {
 		return CGFloat(trunc(width/ratio))
 	}
 
-	static func height(title: String, desc: String, width: CGFloat) -> CGFloat {
-		
-		let titleh = self.titleString(string: title)
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        guard let vm = data as? PlaylistViewModel else {
+            return 44.0
+        }
+        
+		let titleh = self.titleString(string: vm.title)
 			.boundingRect(with: CGSize.init(width: width - 16 - 16, height: 9999),
 						  options: .usesLineFragmentOrigin,
 						  context: nil).height
-		let desch = self.descrString(string: desc)
+		let desch = self.descrString(string: vm.description)
 			.boundingRect(with: CGSize.init(width: width - 16 - 16, height: 9999),
 						  options: .usesLineFragmentOrigin,
 						  context: nil).height

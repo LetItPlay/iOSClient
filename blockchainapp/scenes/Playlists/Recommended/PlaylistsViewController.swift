@@ -11,6 +11,7 @@ import UIKit
 class PlaylistsViewController: UIViewController {
     
     var tableView = UITableView()
+    var tableProvider: TableProvider!
     
     var viewModel: PlaylistsVMProtocol!
     var emitter: PlaylistsEmitterProtocol!
@@ -32,6 +33,18 @@ class PlaylistsViewController: UIViewController {
         self.viewModel.delegate = self
         
         self.emitter = playlistEmitter
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        
+        self.tableProvider.cellEvent = { (indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                AnalyticsEngine.sendEvent(event: .playlistSelected)
+                self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
+            default:
+                break
+            }
+        }
     }
 
     override func viewDidLoad() {
@@ -57,8 +70,6 @@ class PlaylistsViewController: UIViewController {
 
         self.tableView.contentInset.top = 44
         self.tableView.contentInset.bottom = 40
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
 
         self.tableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
         self.tableView.separatorStyle = .none
@@ -88,36 +99,58 @@ class PlaylistsViewController: UIViewController {
     }
 }
 
-extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
+extension PlaylistsViewController: TableDataProvider, TableCellProvider {
+    var numberOfSections: Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func rows(asSection section: Int) -> Int {
         return self.viewModel.playlists.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
-        cell.fill(playlist: self.viewModel.playlists[indexPath.item])
-        return cell
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.playlists[indexPath.item]
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        AnalyticsEngine.sendEvent(event: .playlistSelected)
-        self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return PlaylistTableViewCell.self
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let playlist = self.viewModel.playlists[indexPath.item]
-        return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
+    func config(cell: StandartTableViewCell) {
+        
     }
 }
+
+//extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.playlists.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
+//        cell.fill(playlist: self.viewModel.playlists[indexPath.item])
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        AnalyticsEngine.sendEvent(event: .playlistSelected)
+//        self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let playlist = self.viewModel.playlists[indexPath.item]
+//        return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
+//}
 
 extension PlaylistsViewController: PlaylistsVMDelegate
 {

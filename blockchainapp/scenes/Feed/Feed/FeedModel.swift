@@ -137,6 +137,10 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
     func showOthers(index: Int) {
         self.delegate?.showOthers(track: self.tracks[index].sharedInfo())
     }
+    
+    func showAllChannels() {
+        self.delegate?.showAllChannels()
+    }
 }
 
 extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
@@ -158,10 +162,6 @@ extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, Subscri
             self.tracks[index] = track
             self.delegate?.trackUpdate(dict: [index: vm])
         }
-    }
-    
-    func showAllChannels() {
-        self.delegate?.showAllChannels()
     }
 }
 

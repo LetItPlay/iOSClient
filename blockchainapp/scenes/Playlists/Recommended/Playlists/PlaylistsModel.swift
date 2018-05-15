@@ -22,12 +22,10 @@ protocol PlaylistsEventHandler: class {
 
 protocol PlaylistsModelDelegate: class {
     func update(playlists: [PlaylistViewModel])
-    func update(tracks: [Int], channels: [Int])
+//    func trackUpdate(dict: [Int: TrackViewModel])
 }
 
 class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
-    var tracks: [TrackObject] = []
-    var channels: [ChannelObject] = []
     
     let realm: Realm? = try? Realm()
     
@@ -98,9 +96,18 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     }
 }
 
-extension PlaylistsModel: PlayingStateUpdateProtocol, SettingsUpdateProtocol {
+extension PlaylistsModel: PlayingStateUpdateProtocol, SettingsUpdateProtocol, TrackUpdateProtocol {
     
     func trackPlayingUpdate(dict: [Int : Bool]) {
+//        self.delegate?.trackUpdate(dict: self.transform(tracks: self.playlists[0].tracks, dict: dict))
+    }
+    
+    func trackUpdated(track: Track) {
+//        if let index = self.playlists[0].tracks.index(where: {$0.id == track.id}) {
+//            let vm = TrackViewModel(track: track)
+//            self.playlists[0].tracks[index] = track
+//            self.delegate?.trackUpdate(dict: [index: vm])
+//        }
     }
     
 	func settingsUpdated() {

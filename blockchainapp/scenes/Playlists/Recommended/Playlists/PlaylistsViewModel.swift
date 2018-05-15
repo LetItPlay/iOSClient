@@ -33,8 +33,4 @@ class PlaylistsViewModel: PlaylistsVMProtocol, PlaylistsModelDelegate {
         self.playlists = playlists
         self.delegate?.update()
     }
-    
-    func update(tracks: [Int], channels: [Int]) {
-        
-    }
 }
