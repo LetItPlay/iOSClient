@@ -20,8 +20,10 @@ class ProfileViewController: UIViewController {
     var viewModel: LikesViewModel!
 
 	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    var tableProvider: TableProvider!
+    
     var profileHeader: ProfileHeaderView!
-    let likeHeader: LikeHeader = LikeHeader()
+    let header: LikeHeader = LikeHeader()
     
     let imagePicker: UIImagePickerController = {
         var imagePicker = UIImagePickerController()
@@ -40,6 +42,18 @@ class ProfileViewController: UIViewController {
         viewModel.delegate = self
         
         self.navigationItem.setHidesBackButton(true, animated: false)
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = { (indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
+            case "onOthers":
+                self.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
+            default:
+                break
+            }
+        }
 	}
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -78,9 +92,6 @@ class ProfileViewController: UIViewController {
         self.tableView.separatorStyle = .none
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
-        
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
         
         self.tableView.reloadData()
         
@@ -269,56 +280,98 @@ extension ProfileViewController: UITextFieldDelegate {
     }
 }
 
-extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+extension ProfileViewController: TableCellProvider, TableDataProvider {
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return SmallTrackTableViewCell.self
+    }
+    
+    func config(cell: StandartTableViewCell) {
+        
+    }
+    
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.tracks[indexPath.item]
+    }
+    
+    var numberOfSections: Int {
+        return 1
+    }
+    
+    func rows(asSection section: Int) -> Int {
+        return self.viewModel.tracks.count
+    }
+    
+    func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat {
+        return isHeader ? 81 : 0
+    }
+    
+    func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
+        if isHeader {
+            header.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
+            return header
+        } else {
+            return nil
+        }
+    }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if isKeyboardShown {
             self.dismissKeyboard(scrollView)
         }
     }
-    
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
-	}
-	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.viewModel.tracks.count
-	}
-	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
-        cell.fill(vm: self.viewModel.tracks[indexPath.item])
-        
-        cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
-        }
-        
-		return cell
-	}
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
-	}
-	
-	func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        likeHeader.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
-		return likeHeader
-	}
-	
-	func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-		return 81
-	}
-	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		return 0.01
-	}
-	
-	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-		return nil
-	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let track = self.viewModel.tracks[indexPath.item]
-		return Common.height(text: track.name, width: tableView.frame.width)
-	}
+
 }
+
+//extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        if isKeyboardShown {
+//            self.dismissKeyboard(scrollView)
+//        }
+//    }
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID) as! SmallTrackTableViewCell
+//        cell.fill(vm: self.viewModel.tracks[indexPath.item])
+//
+//        cell.onOthers = {[weak self] in
+//            self?.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        header.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
+//        return header
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 81
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let track = self.viewModel.tracks[indexPath.item]
+//        return Common.height(text: track.name, width: tableView.frame.width)
+//    }
+//}

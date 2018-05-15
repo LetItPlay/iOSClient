@@ -10,7 +10,8 @@ import UIKit
 import SnapKit
 import SDWebImage
 
-class SmallChannelTableViewCell: UITableViewCell {
+class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
+    var event: ((String, [String : Any]?) -> Void)?
 
 	static let cellID = "SmallChannelCellID"
     static let height: CGFloat = 86.0
@@ -54,6 +55,17 @@ class SmallChannelTableViewCell: UITableViewCell {
             }
 		}
 	}
+    
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        return self.height
+    }
+    
+    func fill(data: Any?) {
+        guard let viewModel = data as? SearchChannelViewModel else {
+            return
+        }
+        self.channel = viewModel
+    }
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)

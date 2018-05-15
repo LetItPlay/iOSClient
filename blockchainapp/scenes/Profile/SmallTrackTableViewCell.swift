@@ -2,7 +2,8 @@ import UIKit
 import SnapKit
 import SDWebImage
 
-class SmallTrackTableViewCell: UITableViewCell {
+class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
+    var event: ((String, [String : Any]?) -> Void)?
 
 	static let cellID: String = "LikeTrackCellID"
     var separator = UIView()
@@ -73,8 +74,22 @@ class SmallTrackTableViewCell: UITableViewCell {
             }
 		}
 	}
+    
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        return 107
+    }
+    
+    func fill(data: Any?) {
+        guard let viewModel = data as? TrackViewModel  else {
+            return
+        }
+        self.fill(vm: viewModel)
+    }
 	
 	func fill(vm: TrackViewModel) {
+        
+        self.viewModel = SmallTrackViewModel.init(track: vm)
+
 		if let iconUrl = vm.imageURL {
             trackImageView.sd_setImage(with: iconUrl, placeholderImage: UIImage(named: "trackPlaceholder"), options: SDWebImageOptions.refreshCached, completed: nil)
         } else {
@@ -86,8 +101,8 @@ class SmallTrackTableViewCell: UITableViewCell {
 		
 		timeLabel.text = vm.dateString
 		
-		dataLabels[.listens]?.set(text: vm.listensCount)
-		dataLabels[.time]?.set(text: vm.length)
+        self.dataLabels[.listens]?.set(text: (self.viewModel?.listens)!)
+        self.dataLabels[.time]?.set(text: (self.viewModel?.length)!)
 		
 		dataLabels[.listens]?.isHidden = vm.isPlaying
 		dataLabels[.playingIndicator]?.isHidden = !vm.isPlaying
@@ -99,7 +114,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		self.contentView.addSubview(trackImageView)
 		trackImageView.snp.makeConstraints { (make) in
 			make.left.equalToSuperview().inset(16)
-//			make.centerY.equalToSuperview()
 			make.top.equalToSuperview().inset(12)
 			make.width.equalTo(60)
 			make.height.equalTo(60)
@@ -135,7 +149,6 @@ class SmallTrackTableViewCell: UITableViewCell {
 		timeCount.snp.makeConstraints { (make) in
 			make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
 			make.left.equalTo(trackNameLabel)
-//			make.bottom.equalToSuperview().inset(12)
 		}
 		
 		self.contentView.addSubview(listensCount)

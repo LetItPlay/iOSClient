@@ -112,11 +112,11 @@ extension MainChannelsViewController: TableDataProvider, TableCellProvider {
     }
     
     func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
-        return self.channelsView
+        return isHeader ? self.channelsView : nil
     }
     
     func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat {
-        return 117
+        return isHeader ? 117 : 0
     }
 }
 
