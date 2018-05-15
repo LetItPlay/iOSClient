@@ -12,6 +12,8 @@ import SnapKit
 class PlayingPlaylistViewController: UIViewController {
 
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
+    var tableProvider: TableProvider!
+    
 	var tracks: [[AudioTrack]] = [[]]
 	var currentIndex: IndexPath = IndexPath.invalid
     
@@ -27,6 +29,18 @@ class PlayingPlaylistViewController: UIViewController {
 		self.vm = vm
         self.vm.delegate = self
 		self.emitter = emitter
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        self.tableProvider.cellEvent = {(indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.emitter.itemSelected(index: indexPath.item)
+            case "onOthers":
+                self.emitter.showOthers(index: indexPath.row)
+            default:
+                break
+            }
+        }
 	}
 	
     override func viewDidLoad() {
@@ -89,9 +103,6 @@ class PlayingPlaylistViewController: UIViewController {
 			make.bottom.equalToSuperview()
 		}
 		
-		tableView.delegate = self
-		tableView.dataSource = self
-		
 		self.tableView.separatorColor = self.tableView.backgroundColor
 		
 		tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
@@ -103,45 +114,67 @@ class PlayingPlaylistViewController: UIViewController {
     }
 }
 
-extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
-	
-	func numberOfSections(in tableView: UITableView) -> Int {
-		return 1
-	}
-	
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.vm.tracks.count
-	}
-	
-	func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-		return 0.01
-	}
-	
-	func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-		return nil
-	}
-	
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter.itemSelected(index: indexPath.item)
-	}
-	
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
-		let track = self.vm.tracks[indexPath.item]
-		cell.fill(vm: track)
-
-        cell.onOthers = {[weak self] in
-            self?.emitter.showOthers(index: indexPath.row)
-        }
+extension PlayingPlaylistViewController: TableDataProvider, TableCellProvider {
+    func data(indexPath: IndexPath) -> Any {
+        return self.vm.tracks[indexPath.item]
+    }
+    
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return SmallTrackTableViewCell.self
+    }
+    
+    func config(cell: StandartTableViewCell) {
         
-		return cell
-	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let track = self.vm.tracks[indexPath.item]
-		return Common.height(text: track.name, width: tableView.frame.width)
-	}
+    }
+    
+    var numberOfSections: Int {
+        return 1
+    }
+    
+    func rowsAt(_ section: Int) -> Int {
+        return self.vm.tracks.count
+    }
 }
+
+//extension PlayingPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.vm.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter.itemSelected(index: indexPath.item)
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
+//        let track = self.vm.tracks[indexPath.item]
+//        cell.fill(vm: track)
+//
+//        cell.onOthers = {[weak self] in
+//            self?.emitter.showOthers(index: indexPath.row)
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        let track = self.vm.tracks[indexPath.item]
+//        return Common.height(text: track.name, width: tableView.frame.width)
+//    }
+//}
 
 extension PlayingPlaylistViewController: PlayingPlaylistViewDelegate {
     func update() {
