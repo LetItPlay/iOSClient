@@ -15,8 +15,7 @@ class UserPlaylistViewController: UIViewController {
     var emitter: UserPlaylistEmitterProtocol!
 
     let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
-    var tracks: [[AudioTrack]] = [[]]
-    var currentIndex: IndexPath = IndexPath.invalid
+    var tableProvider: TableProvider!
     
     let emptyLabel: UILabel = {
         let label = UILabel()
@@ -45,6 +44,19 @@ class UserPlaylistViewController: UIViewController {
         self.viewModel.delegate = self
         
         self.emitter = emitter
+        
+        self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
+        
+        self.tableProvider.cellEvent = { (indexPath, event, data) in
+            switch event {
+            case "onSelected":
+                self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
+            case "onOthers":
+                self.emitter.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
+            default:
+                break
+            }
+        }
     }
     
     override func viewDidLoad() {
@@ -80,8 +92,8 @@ class UserPlaylistViewController: UIViewController {
         tableView.backgroundView?.backgroundColor = .clear
         tableView.sectionIndexBackgroundColor = .clear
         
-        tableView.delegate = self
-        tableView.dataSource = self
+//        tableView.delegate = self
+//        tableView.dataSource = self
         
         self.tableView.contentInset.top = 44
         self.tableView.contentInset.bottom = 65
@@ -162,45 +174,67 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     }
 }
 
-extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+extension UserPlaylistViewController: TableDataProvider, TableCellProvider {
+    func data(indexPath: IndexPath) -> Any {
+        return self.viewModel.tracks[indexPath.item]
+    }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
+        return ChannelTrackCell.self
+    }
+    
+    func config(cell: StandartTableViewCell) {
+        (cell as? SwipeTableViewCell)?.delegate = self
+    }
+    
+    var numberOfSections: Int {
         return 1
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func rows(asSection section: Int) -> Int {
         return self.viewModel.tracks.count
     }
-    
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.01
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return nil
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
-        cell.delegate = self
-        cell.track = self.viewModel.tracks[indexPath.item]
-        
-        cell.onOthers = {[weak self] in
-            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
-        }
-        
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 107
-    }
 }
+
+//extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
+//
+//    func numberOfSections(in tableView: UITableView) -> Int {
+//        return 1
+//    }
+//
+//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return self.viewModel.tracks.count
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 0.01
+//    }
+//
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
+//    }
+//
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//
+//        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
+//        cell.delegate = self
+//        cell.track = self.viewModel.tracks[indexPath.item]
+//
+//        cell.onOthers = {[weak self] in
+//            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
+//        }
+//
+//        return cell
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 107
+//    }
+//}
 
 extension UserPlaylistViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {

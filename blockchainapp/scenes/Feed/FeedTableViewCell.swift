@@ -356,7 +356,7 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
+//        showOthersButton.isHidden = true
         
         self.infoBlurView.contentView.addSubview(infoTitle)
         infoTitle.snp.makeConstraints { (make) in

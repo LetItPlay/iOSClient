@@ -74,7 +74,7 @@ class PlayerModel {
     }
 
     func reloadTrack() {
-        let prev = self.player.status
+        _ = self.player.status
         if let item = self.currentTrack {
             self.trackInfoDelegate?.update(track: item)
 			self.playerDelegate?.update(track: TrackViewModel(track: item))

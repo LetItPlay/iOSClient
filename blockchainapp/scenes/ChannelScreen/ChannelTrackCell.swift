@@ -3,7 +3,8 @@ import SnapKit
 import SwipeCellKit
 import SDWebImage
 
-class ChannelTrackCell: SwipeTableViewCell {
+class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
+    var event: ((String, [String : Any]?) -> Void)?
     
     static let cellID: String = "ChannelTrackCellID"
     
@@ -75,9 +76,19 @@ class ChannelTrackCell: SwipeTableViewCell {
                 self.dataLabels[.listens]?.isHidden = (self.track?.isPlaying)!
                 self.dataLabels[.playingIndicator]?.isHidden = !(self.track?.isPlaying)!
                 
-                //            showOthersButton.isHidden = (track?.isPlaying)!
             }
         }
+    }
+    
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        return 107
+    }
+    
+    func fill(data: Any?) {
+        guard let vm = data as? TrackViewModel else {
+            return
+        }
+        self.track = vm
     }
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -147,7 +158,6 @@ class ChannelTrackCell: SwipeTableViewCell {
             make.right.equalTo(-8)
             make.bottom.equalTo(-8)
         }
-        showOthersButton.isHidden = true
         
         self.dataLabels = [.time: timeCount, .listens: listensCount, .playingIndicator: playingIndicator]
         
@@ -166,7 +176,8 @@ class ChannelTrackCell: SwipeTableViewCell {
     }
     
     @objc func showOthersButtonTouched() {
-        self.onOthers?()
+        self.event?("onOthers", nil)
+//        self.onOthers?()
     }
     
     required init?(coder aDecoder: NSCoder) {
