@@ -8,9 +8,10 @@
 
 import UIKit
 
-class MainChannelsTableViewCell: UITableViewCell {
+class MainChannelsTableViewCell: UITableViewCell, StandartTableViewCell {
+    var event: ((String, [String : Any]?) -> Void)?
     
-    public static let cellIdentifier = "MainChannelsTableViewCell"
+    static var cellID = "MainChannelsTableViewCell"
     
     var category: ChannelCategoryViewModel!
     
@@ -69,6 +70,17 @@ class MainChannelsTableViewCell: UITableViewCell {
         }
     }
     
+    static func height(data: Any, width: CGFloat) -> CGFloat {
+        return 217
+    }
+    
+    func fill(data: Any?) {
+        guard let viewModel = data as? ChannelCategoryViewModel else {
+            return
+        }
+        self.fill(category: viewModel)
+    }
+    
     func viewInitialize() {
         self.backgroundColor = .white
         
@@ -107,7 +119,8 @@ class MainChannelsTableViewCell: UITableViewCell {
     }
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
-        self.onSeeAll!(self.category.name)
+        self.event!("onSeeAll", ["name" : self.category.name])
+//        self.onSeeAll!(self.category.name)
     }
 }
 
@@ -127,6 +140,7 @@ extension MainChannelsTableViewCell: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.onChannelTap!(indexPath.item)
+        self.event!("onChannelTap", ["item" : indexPath.item])
+//        self.onChannelTap!(indexPath.item)
     }
 }
