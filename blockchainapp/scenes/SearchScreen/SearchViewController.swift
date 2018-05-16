@@ -124,6 +124,11 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
 }
 
 extension SearchViewController: SearchVMDelegate {
+    
+    func set(text: String) {
+        self.searchController.searchBar.text = text
+    }
+    
     func make(updates: [CollectionUpdate : [Int]]) {
         //        tableView.beginUpdates()
         for key in updates.keys {

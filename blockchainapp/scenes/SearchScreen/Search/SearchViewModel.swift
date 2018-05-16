@@ -25,6 +25,7 @@ protocol SearchVMDelegate: class {
     func make(updates: [CollectionUpdate: [Int]])
     func reloadTracks()
     func reloadChannels()
+    func set(text: String)
 }
 
 class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterProtocol {
@@ -99,6 +100,10 @@ class SearchViewModel: SearchVMProtocol, SearchModelDelegate, SearchVMEmitterPro
             self.tracks[index] = vm
             self.delegate?.reloadTracks()
         }
+    }
+    
+    func set(text: String) {
+        self.delegate?.set(text: text)
     }
     
     func showChannel(id: Int) {

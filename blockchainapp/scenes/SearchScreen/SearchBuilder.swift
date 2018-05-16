@@ -18,7 +18,13 @@ class SearchBuilder: Builder {
 //        let emitter = PlaylistsEmitter(model: model)
         
         // for search
-        let searchModel = SearchModel()
+        
+        var text: String? = nil
+        if let _ = params, let string = params!["text"] as? String {
+            text = string
+        }
+        
+        let searchModel = SearchModel(text: text)
         let searchVM = SearchViewModel(model: searchModel)
         let searchEmitter = SearchEmitter(model: searchModel, viewModel: searchVM)
         

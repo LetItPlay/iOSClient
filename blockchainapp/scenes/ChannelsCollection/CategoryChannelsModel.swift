@@ -27,7 +27,8 @@ protocol CategoryChannelsEventHandler: class {
     func subscribeAt(index: Int)
     func refreshChannels()
     func showAllChannels()
-    func showSearch()
+    func showSearch(text: String?)
+    func selected(tag: String)
 }
 
 protocol  CategoryChannelsModelDelegate: class {
@@ -37,6 +38,7 @@ protocol  CategoryChannelsModelDelegate: class {
     func showAllChannels()
     func set(category: String)
     func updateEmptyMessage(hide: Bool)
+    func showSearch(text: String?)
 }
 
 class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEventHandler {
@@ -118,8 +120,12 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
         self.getChannelsAction.execute(true)
     }
     
-    func showSearch() {
-        MainRouter.shared.show(screen: "search", params: [:], present: false)
+    func selected(tag: String) {
+        self.showSearch(text: tag)
+    }
+    
+    func showSearch(text: String?) {
+        self.delegate?.showSearch(text: text)
     }
     
     func send(event: LifeCycleEvent) {

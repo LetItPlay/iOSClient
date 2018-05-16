@@ -143,6 +143,7 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 			make.height.equalTo(32)
 		}
 		
+        tagsList.delegate = self
 		self.contentView.addSubview(tagsList)
 		tagsList.snp.makeConstraints { (make) in
             self.tagsConstraint = make.top.equalTo(followButton.snp.bottom).inset(-8).constraint.layoutConstraints.first!
@@ -181,5 +182,11 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         // Configure the view for the selected state
+    }
+}
+
+extension ChannelTableViewCell: TagListViewDelegate {
+    func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
+        self.event!("onTag", ["text" : title])
     }
 }

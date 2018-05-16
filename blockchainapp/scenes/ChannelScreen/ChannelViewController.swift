@@ -72,6 +72,9 @@ class ChannelViewController: UIViewController {
         header.onShared = {
             self.emitter.send(event: ChannelEvent.shareChannel)
         }
+        header.onTag = { (tag) in
+            self.emitter.send(event: ChannelEvent.tagSelected(tag))
+        }
         
         tableView.register(ChannelTrackCell.self, forCellReuseIdentifier: ChannelTrackCell.cellID)
         

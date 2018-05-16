@@ -59,4 +59,8 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
         self.hideEmptyMessage = hide
         self.delegate?.updateEmptyMessage()
     }
+    
+    func showSearch(text: String?) {
+        MainRouter.shared.show(screen: "search", params: ["text" : text], present: false)
+    }
 }

@@ -14,6 +14,7 @@ enum ChannelEvent {
     case showSearch
     case showOthers(index: Int)
     case shareChannel
+    case tagSelected(String)
 }
 
 protocol ChannelEmitterProtocol: LifeCycleHandlerProtocol {
@@ -37,11 +38,13 @@ class ChannelEmitter: Emitter, ChannelEmitterProtocol {
         case .trackSelected(let index):
             self.model?.trackSelected(index: index)
         case .showSearch:
-            self.model?.showSearch()
+            self.model?.showSearch(text: nil)
         case .showOthers(let index):
             self.model?.showOthers(index: index)
         case .shareChannel:
             self.model?.showOthers()
+        case .tagSelected(let tag):
+            self.model?.selected(tag: tag)
         }
     }
 }

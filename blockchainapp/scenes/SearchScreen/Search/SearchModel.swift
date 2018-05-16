@@ -35,6 +35,7 @@ protocol SearchModelDelegate: class {
     func showChannel(id: Int)
     func showOthers(track: ShareInfo)
     func toUpdate(nothing: Bool)
+    func set(text: String)
 }
 
 class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
@@ -55,8 +56,12 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 	let searchState: Variable<(text: String?, offset: Int)> = Variable<(text: String?, offset: Int)>((nil,0))
     let disposeBag = DisposeBag()
     
-    init()
+    init(text: String?)
     {
+        if let _ = text {
+            self.currentSearchString = text!.lowercased()
+        }
+        
 		searchState.asObservable()
 			.flatMap { tuple -> Observable<([Track], [Channel])> in
 				if let q = tuple.0, q != "" {
@@ -88,7 +93,10 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
     func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            break
+            if self.currentSearchString != "" {
+                self.delegate?.set(text: self.currentSearchString)
+                self.searchChanged(string: self.currentSearchString)
+            }
         default:
             break
         }

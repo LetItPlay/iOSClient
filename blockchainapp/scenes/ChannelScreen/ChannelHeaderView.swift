@@ -14,6 +14,7 @@ import SDWebImage
 class ChannelHeaderView: UIView {
     
     public var onShared: (() -> Void)?
+    public var onTag: ((String) -> Void)?
 	
 	let channelImageView: UIImageView = {
 		let imageView = UIImageView()
@@ -149,6 +150,7 @@ class ChannelHeaderView: UIView {
 			make.right.equalToSuperview().inset(16)
 		}
 		
+        tagListView.delegate = self
 		self.addSubview(tagListView)
 		tagListView.snp.makeConstraints { (make) in
 			make.top.equalTo(infoLabel.snp.bottom).inset(-16)
@@ -205,5 +207,11 @@ class ChannelHeaderView: UIView {
     
     @objc func shareButtonTouched() {
         self.onShared!()
+    }
+}
+
+extension ChannelHeaderView: TagListViewDelegate {
+    func tagPressed(_ title: String, tagView: TagView, sender: TagListView) {
+        self.onTag!(title)
     }
 }

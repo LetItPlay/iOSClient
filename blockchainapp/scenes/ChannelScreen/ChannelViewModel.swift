@@ -92,8 +92,8 @@ class ChannelViewModel: ChannelVMProtocol, ChannelModelDelegate {
         self.delegate?.updateSubscription()
     }
     
-    func showSearch() {
-        MainRouter.shared.show(screen: "search", params: [:], present: false)
+    func showSearch(text: String?) {
+        MainRouter.shared.show(screen: "search", params: ["text" : text as Any], present: false)
     }
     
     func showOthers(shareInfo: ShareInfo) {

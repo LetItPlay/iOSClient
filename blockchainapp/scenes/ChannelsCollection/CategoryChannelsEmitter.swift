@@ -13,6 +13,7 @@ enum ChannelsEvent {
     case subscribe(index: Int)
 	case showAllChannels
     case showSearch
+    case tagSelected(String)
 }
 
 protocol CategoryChannelsEmitterProtocol: LifeCycleHandlerProtocol {
@@ -38,7 +39,9 @@ class CategoryChannelsEmitter: Emitter, CategoryChannelsEmitterProtocol {
 		case .showAllChannels:
 			self.model?.showAllChannels()
         case .showSearch:
-            self.model?.showSearch()
+            self.model?.showSearch(text: nil)
+        case .tagSelected(let text):
+            self.model?.selected(tag: text)
         }
     }
 }

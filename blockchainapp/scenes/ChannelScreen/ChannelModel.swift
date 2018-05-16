@@ -38,9 +38,10 @@ protocol ChannelEvenHandler: class {
 	func trackSelected(index: Int)
     func followPressed()
     func set(channel: Channel)
-    func showSearch()
+    func showSearch(text: String?)
     func showOthers(index: Int)
     func showOthers()
+    func selected(tag: String)
 }
 
 protocol ChannelModelDelegate: class {
@@ -48,7 +49,7 @@ protocol ChannelModelDelegate: class {
     func trackUpdate(dict: [Int: TrackViewModel])
     func getChannel(channel: FullChannelViewModel)
     func followUpdate(isSubscribed: Bool)
-    func showSearch()
+    func showSearch(text: String?)
     func showOthers(shareInfo: ShareInfo)
 }
 
@@ -134,8 +135,12 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
         }
     }
     
-    func showSearch() {
-        self.delegate?.showSearch()
+    func selected(tag: String) {
+        self.showSearch(text: tag)
+    }
+    
+    func showSearch(text: String?) {
+        self.delegate?.showSearch(text: text)
     }
     
     func showOthers(index: Int) {

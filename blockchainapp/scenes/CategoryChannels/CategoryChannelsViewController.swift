@@ -39,6 +39,10 @@ class CategoryChannelsViewController: UIViewController {
                 self.emitter?.send(event: ChannelsEvent.showChannel(index: indexPath.row))
             case "onFollow":
                 self.emitter?.send(event: ChannelsEvent.subscribe(index: indexPath.item))
+            case "onTag":
+                if let _ = data, let text = data!["text"] as? String {
+                    self.emitter?.send(event: ChannelsEvent.tagSelected(text))
+                }
             default:
                 break
             }
