@@ -1,21 +1,36 @@
 ## LET IT PLAY
 
-Language - Swift 3
+Language - Swift 4.1
 
-Architecture - MVP
+Architecture - MVVM
 
 ### Libraries
 
-* SwiftyAudioManager
 * SwiftyJSON
+* RealmSwift
+* Alamofire
 * SDWebImage
+* SnapKit
+* TagListView
+* MarqueeLabel/Swift
+* ReachabilitySwift
+* AssistantKit
+* RxSwift
+* Action
+* DeepLinkKit
+* SwipeCellKit
+* Crashlytics
 
 ### Description
 
-LeItPlay - audio-based platform for sharing content. 
+LeItPlay - audio-based platform for sharing content.
 
 Availabel features:
 * channels list
 * feed
-* subscription
-* like-function
+* subscription function
+* like function
+* share function
+* report function
+* user playlist
+* user profile
