@@ -3,6 +3,7 @@
 import Foundation
 import AVFoundation
 import MediaPlayer
+import SDWebImage
 
 fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	
@@ -46,14 +47,22 @@ fileprivate class QueuePlayer: AVPlayer {
 	}
 }
 
-final class AudioPlayer: NSObject, AudioPlayerProto {
+protocol AudioPlayerDelegate: class {
+    func update(items: [Int: Bool])
+    func updateStatus()
+    func update(time: AudioTime)
+    func itemFinishedPlaying(id: Int)
+}
+
+final class AudioPlayer: NSObject {
 	
 	weak var delegate: AudioPlayerDelegate?
 	var currentIndex: Int = -1
-	
+    var currentOp: SDWebImageOperation?
+
 	var status: PlayerStatus = .none
     
-    var chosenRate: Float = -1
+    var chosenRate: Float = 1.0
 	
 	var error: Error?
 	
@@ -64,47 +73,48 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 	private let kErrorKey = "error"
 	private let kVolumeKey = "outputVolume"
 	
-	private var player: QueuePlayer!
+	private var player: QueuePlayer = QueuePlayer()
 	private var audioSession: AVAudioSession!
 	private var timeObserver: Any?
 	
 	override init() {
 		super.init()
-		
-		//--- player settings --//
-		player = QueuePlayer()
-		//-- session settings --//
-		audioSession = AVAudioSession.sharedInstance()
+        
+        audioSession = AVAudioSession.sharedInstance()
 		do {
 			try audioSession.setCategory(AVAudioSessionCategoryPlayback)
 		} catch let error {
 			print(error)
 		}
-		
+        
 		player.addObserver(self, forKeyPath: kRateKey, options: [.initial, .new], context: nil)
-		player.addObserver(self, forKeyPath: kTimedMetadataKey, options: [.initial, .new], context: nil)
+//        player.addObserver(self, forKeyPath: kTimedMetadataKey, options: [.initial, .new], context: nil)
 		player.addObserver(self, forKeyPath: kCurrentItemKey, options: [.initial, .new, .old], context: nil)
+        player.addObserver(self, forKeyPath: kStatusKey, options: [.initial, .new], context: nil)
 		NotificationCenter.default.addObserver(self,
 											   selector: #selector(handleRouteChange),
 											   name: .AVAudioSessionRouteChange,
 											   object: AVAudioSession.sharedInstance())
 		
-		addPeriodicTimeObserver()
-		
-		//-- observe the player item "status" key to determine when it is ready to play
-		player.addObserver(self,
-						   forKeyPath: kStatusKey,
-						   options: [.initial, .new],
-						   context: nil)
-	}
-    
-    func set(rate: Float) {
-        if rate > 0 && rate <= 2 {
-            self.chosenRate = rate
-            if self.player.rate != 0 {
-                self.player.rate = rate
+        player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(0.5, 1000), queue: nil) {[weak self] (time) in
+            if let playerDuration = self?.player.currentItem?.duration, CMTIME_IS_VALID(playerDuration) {
+                let duration = Double(CMTimeGetSeconds(playerDuration))
+                let current = Double(CMTimeGetSeconds(time))
+                
+                if let status = self?.player.currentItem?.status, duration.isFinite && duration > 0 && status == AVPlayerItemStatus.readyToPlay {
+                    self?.delegate?.update(time: AudioTime(current: current, length: duration) )
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
+                } else {
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
+                }
             }
         }
+        
+
+	}
+    
+    deinit {
+        self.removeObservers()
     }
 	
 	@objc func handleRouteChange(_ notification: Notification) {
@@ -124,7 +134,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 				let track = self.player.currentTrack(){
 				for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
 					self.status = .paused
-					self.delegate?.update(status: .paused, id: track.id)
+					self.delegate?.updateStatus()
 					break
 				}
 			}
@@ -132,91 +142,38 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 		}
 		
 	}
-	
-	deinit {
-		removePeriodicTimeObserver()
-		removeItemsObservers()
-		removeObservers()
-	}
-	
-	func make(command: PlayerCommand) {
-			switch command {
-			case .play:
-				self.player.play()
-				self.status = .playing
-//                if let id = self.player.currentTrack()?.id {
-//                    self.delegate?.update(status: .playing, id: id)
-//                }
-				ListenManager.shared.add(id: self.player.currentTrack()?.id ?? -1)
-			case .pause:
-				self.player.pause()
-				self.status = .paused
-				if let id = self.player.currentTrack()?.id {
-					self.delegate?.update(status: .paused, id: id)
-				}
-			case .seek(let progress):
-				if let item = player.currentTrack(), item.canStepForward {
-					let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
-					let current = length * progress
-					let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
-					self.player.seek(to: time)
-					self.delegate?.update(time: (current: current, length: length))
-				}
-			default:
-				break
-			}
-	}
-	
-	func load(item: AudioTrack) {
-		
-		let item = PlayerItem.init(track: item)
-		NotificationCenter.default.addObserver(self,
-											   selector: #selector(itemDidFinishPlaying),
-											   name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
-											   object:  item)
-		item.addObserver(self,
-						  forKeyPath: kErrorKey,
-						  options:  [.initial, .new],
-						  context: nil)
-        self.player.replaceCurrentItem(with: item)
-		if let curr = player.currentTrack(), item.id != curr.id {
-			self.player.seek(to: CMTime.init(seconds: 0.0, preferredTimescale: 1))
-		}
-		self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
-		self.showLockScreenData()
-//		= 0.0
-	}
-	
+    
 	func showLockScreenData() {
-		guard let currentItem = player.currentTrack() else {
-			return
-		}
-		
-		DispatchQueue.main.async {
-			let duration = Double(currentItem.length)
-//			let currentTime = CMTimeGetSeconds(currentItem.currentTime())
-			
-			var infoDict: [String : Any] = [MPMediaItemPropertyPlaybackDuration: duration,
-											MPNowPlayingInfoPropertyElapsedPlaybackTime: 0.0,
-											MPNowPlayingInfoPropertyPlaybackRate: 0.0]
-			
-			infoDict[MPMediaItemPropertyTitle] = currentItem.name
-//			infoDict[MPMediaItemPropertyArtwork] = image
-			infoDict[MPMediaItemPropertyArtist] = currentItem.author
-			
-			MPNowPlayingInfoCenter.default().nowPlayingInfo = infoDict
-		}
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = currentTrackDict(image: nil)
+        self.currentOp = SDWebImageManager.shared().loadImage(with: self.player.currentTrack()?.imageURL, options: SDWebImageOptions.highPriority, progress: nil) {[self] (image, data, error, type, comp, url) in
+            if let image = image {
+                MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork]
+                    = MPMediaItemArtwork.init(boundsSize: CGSize.init(width: 300, height: 300), requestHandler: { (size) -> UIImage in
+                        return image
+                    })
+            }
+        }
 	}
-	
-	func setTrack(index: Int) {
-		self.currentIndex = index
-	}
-	
-	func clear() {
-		self.removeItemsObservers()
-		self.player.pause()
-	}
-	
+    
+    private func currentTrackDict(image: UIImage?) -> [String: Any] {
+        guard let currentItem = player.currentTrack() else {
+            return [:]
+        }
+        let duration = Double(currentItem.length)
+        
+        var infoDict: [String : Any] = [MPMediaItemPropertyPlaybackDuration: duration,
+                                        MPNowPlayingInfoPropertyElapsedPlaybackTime: 0.0,
+                                        MPNowPlayingInfoPropertyPlaybackRate: 0.0]
+        
+        infoDict[MPMediaItemPropertyTitle] = currentItem.name
+            infoDict[MPMediaItemPropertyArtwork] = MPMediaItemArtwork.init(boundsSize: CGSize.init(width: 300, height: 300), requestHandler: { (size) -> UIImage in
+                return UIImage.init(named: "trackPlaceholder")!
+            })
+        infoDict[MPMediaItemPropertyArtist] = currentItem.author
+        
+        return infoDict
+    }
+    
 	func setPlayingMode(speaker: Bool) {
 		do {
 			try audioSession.overrideOutputAudioPort(speaker ? AVAudioSessionPortOverride.speaker : AVAudioSessionPortOverride.none)
@@ -239,43 +196,32 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 		case kRateKey:
 			if player.rate >= 1, let _ = player.currentItem {
 				if CMTimeGetSeconds(player.currentTime()) < 0.5 {
-					//-- начался новый трек --//
-//						self.delegate?.audioPlayerStartPlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
 				} else {
-					//-- продолжился старый после паузы
 					if let id = self.player.currentTrack()?.id {
-						self.delegate?.update(status: .playing, id: id)
+                        self.status = .playing
+                        self.delegate?.updateStatus()
+                        self.delegate?.update(items: [id: true])
 					}
-					DispatchQueue.main.async {
-//						self.delegate?.audioPlayerResumePlay?(item: currentItem, atIndex: self.player.items().index(of: currentItem) ?? -1)
-					}
-				}
-			}
-		case kTimedMetadataKey:
-			if let itemMetadata = player.currentItem?.timedMetadata {
-				for _ in itemMetadata {
-//					handleTimedMetadata(timedMetadata: metadataItem)
 				}
 			}
 		case kStatusKey:
-			if player.status == AVPlayerStatus.readyToPlay {
-//				delegate?.audioReadyToPlay?()
-				syncScrubber()
-			}
-			if player.status == AVPlayerStatus.failed {
-				if let id = self.player.currentTrack()?.id {
-					self.delegate?.update(status: .paused, id: id)
-				}
-				self.make(command: .pause)
-			}
+            switch player.status {
+                case .readyToPlay:
+                    break
+                case .failed:
+                    if let id = self.player.currentTrack()?.id {
+                        self.delegate?.update(items: [id: false])
+                    }
+                    self.make(command: .pause)
+                default:
+                    break
+            }
 		case kCurrentItemKey:
             var dict = [Int: Bool]()
 			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
-				self.delegate?.update(status: self.status, id: item.id)
                 dict[item.id] = true
 			}
 			if let item = change?[NSKeyValueChangeKey.oldKey] as? AudioTrack {
-				self.delegate?.update(status: .paused, id: item.id)
                 dict[item.id] = self.status == .playing
 			}
             self.delegate?.update(items: dict)
@@ -285,7 +231,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 				debugPrint(#function, " \(error)")
 				self.status = .failed
 				if let id = self.player.currentTrack()?.id {
-					self.delegate?.update(status: .failed, id: id)
+                    self.delegate?.update(items: [id: false])
 				}
 			}
 		default:
@@ -300,58 +246,7 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 			}
 		}
 	}
-	
-	private func addPeriodicTimeObserver() {
-		// Invoke callback every half second
-		let interval = CMTime(seconds: 0.1,
-							  preferredTimescale: CMTimeScale(NSEC_PER_SEC))
-		// Add time observer
-		timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] _ in
-			self?.syncScrubber()
-		}
-	}
-	
-	/* Set the scrubber based on the player current time. */
-	private func syncScrubber() {
-		if let playerDuration = self.player.currentItem?.duration, CMTIME_IS_VALID(playerDuration) {
-			let duration = Double(CMTimeGetSeconds(playerDuration))
-			let current = Double(CMTimeGetSeconds(player.currentTime()))
-			
-			if let status = self.player.currentItem?.status, duration.isFinite && duration > 0 && status == AVPlayerItemStatus.readyToPlay {
-				self.delegate?.update(time: AudioTime(current: current, length: duration) )
-				MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
-			} else {
-				MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = current
-			}
-		}
-	}
-	
-	private func removePeriodicTimeObserver() {
-		// If a time observer exists, remove it
-		if let token = timeObserver {
-			player.removeTimeObserver(token)
-			timeObserver = nil
-		}
-	}
-	
-	private func removeItemsObservers() {
-		removePlayerItemsErrorObservers()
-//
-//        for item in player.items() {
-//            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-//        }
-        
-        if let item = self.player.currentItem {
-            NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
-        }
-	}
-	
-	private func removePlayerItemsErrorObservers() {
-//        for item in player.items() {
-//            item.removeObserver(self, forKeyPath: kErrorKey)
-//        }
-	}
-	
+    
 	private func removeObservers() {
 		NotificationCenter.default.removeObserver(self)
 		
@@ -360,4 +255,57 @@ final class AudioPlayer: NSObject, AudioPlayerProto {
 		player.removeObserver(self, forKeyPath: kStatusKey)
 		player.removeObserver(self, forKeyPath: kCurrentItemKey)
 	}
+}
+
+extension AudioPlayer: AudioPlayerProto {
+    
+    func make(command: PlayerCommand) {
+        switch command {
+        case .play:
+            self.player.play()
+            self.status = .playing
+            ListenManager.shared.add(id: self.player.currentTrack()?.id ?? -1)
+        case .pause:
+            self.player.pause()
+            self.status = .paused
+        case .seek(let progress):
+            if let item = player.currentTrack(), item.canStepForward {
+                let length = Double(CMTimeGetSeconds(self.player.currentItem?.duration ?? kCMTimeZero))
+                let current = length * progress
+                let time: CMTime = CMTimeMakeWithSeconds(current, 1000)
+                self.player.seek(to: time)
+                self.delegate?.update(time: (current: current, length: length))
+            }
+        default:
+            break
+        }
+        self.delegate?.updateStatus()
+    }
+    
+    func load(item: AudioTrack) {
+        currentOp?.cancel()
+        let item = PlayerItem.init(track: item)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(itemDidFinishPlaying),
+                                               name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                               object:  item)
+        item.addObserver(self,
+                         forKeyPath: kErrorKey,
+                         options:  [.initial, .new],
+                         context: nil)
+        self.player.replaceCurrentItem(with: item)
+        if let curr = player.currentTrack(), item.id != curr.id {
+            self.player.seek(to: CMTime.init(seconds: 0.0, preferredTimescale: 1))
+        }
+        self.delegate?.update(time: AudioTime(current: 0.0, length: Double(item.length)))
+        self.showLockScreenData()
+    }
+    
+    func set(rate: Float) {
+        if rate > 0 && rate <= 2 {
+            self.chosenRate = rate
+            self.player.rate = rate
+        }
+    }
+    
 }

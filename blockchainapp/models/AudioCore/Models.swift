@@ -123,10 +123,3 @@ protocol AudioPlayerProto {
 	
 	init()
 }
-
-protocol AudioPlayerDelegate: class {
-    func update(items: [Int: Bool])
-	func update(status: PlayerStatus, id: Int)
-	func update(time: AudioTime)
-	func itemFinishedPlaying(id: Int)
-}

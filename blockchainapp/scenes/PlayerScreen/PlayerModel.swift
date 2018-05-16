@@ -115,6 +115,7 @@ extension PlayerModel: AudioPlayerDelegate {
             self.playlistDelegate?.update(dict: dict)
         }
         NotificationCenter.default.post(name: AudioStateNotification.changed.notification(), object: nil, userInfo: items)
+        self.updateStatus()
     }
     
     func update(time: AudioTime) {
