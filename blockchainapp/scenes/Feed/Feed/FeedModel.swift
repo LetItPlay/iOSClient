@@ -145,6 +145,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 }
 
 extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+    
     func channelSubscriptionUpdated() {
         self.reload()
     }
