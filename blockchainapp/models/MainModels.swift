@@ -48,6 +48,7 @@ class TrackHandlingModel {
     init(name: String, dataAction: Action<Int, [Track]>) {
         
         self.dataAction = dataAction
+        self.playlistName = name
         
         self.dataAction?.elements.do(onNext: { (tracks) in
             if self.currentOffest == 0 {
@@ -136,4 +137,58 @@ protocol TrackEventHandler: class, PlayerUsingProtocol {
     func showChannel(index: Int)
     func showOthers(index: Int)
     func addTrack(index: Int, toBegining: Bool)
+}
+
+protocol TrackHandlingViewModelDelegate: class {
+    func reload(cells: [CollectionUpdate: [Int]]?)
+    func reload()
+    func reloadAppearence()
+}
+
+class TrackHandlingViewModel: TrackHandlingModelDelegate {
+    
+    weak var delegate: TrackHandlingViewModelDelegate?
+    
+    var data: [TrackViewModel] = []
+    var title: String = "Default".localized
+    var showEmpty: Bool = false
+    var needUpload: Bool = true
+    
+    func update(tracks: [Int : TrackViewModel]) {
+        for tuple in tracks {
+            self.data[tuple.key] = tuple.value
+        }
+        self.delegate?.reload(cells: [.update: Array<Int>(tracks.keys)])
+    }
+    
+    func show(tracks: [TrackViewModel], isContinue: Bool) {
+        var cells: [CollectionUpdate: [Int]]?
+        if isContinue {
+            let insertStart = self.data.count
+            self.data += tracks
+            cells = [.insert: Array<Int>(insertStart..<self.data.count)]
+        } else {
+            self.data = tracks
+        }
+        self.delegate?.reload(cells: cells)
+    }
+    
+    func empty(show: Bool) {
+        self.showEmpty = true
+        self.delegate?.reloadAppearence()
+    }
+    
+    func noDataLeft() {
+        self.needUpload = false
+    }
+    
+    func showChannel(id: Int) {
+        MainRouter.shared.show(screen: "channel", params: ["id" : id], present: false)
+    }
+    
+    func showInfo(track: ShareInfo) {
+        MainRouter.shared.showOthers(shareInfo: track)
+    }
+    
+    
 }
