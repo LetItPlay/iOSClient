@@ -143,9 +143,26 @@ extension CategoryChannelsModel: SettingsUpdateProtocol, ChannelUpdateProtocol {
     
     func channelUpdated(channel: Channel) {
         if self.channelScreen != .small {
-            if let index = self.channels.index(where: {$0.id == channel.id}) {
-                self.channels[index] = channel
-                self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+            switch self.channelsFilter! {
+            case .hidden:
+                if channel.isHidden {
+                    if let index = self.channels.index(where: {$0.id == channel.id}) {
+                        self.channels[index] = channel
+                    } else {
+                        self.channels.append(channel)
+                    }
+                } else {
+                    if let index = self.channels.index(where: {$0.id == channel.id}) {
+                        self.channels.remove(at: index)
+                    }
+                }
+                self.delegate?.reload(newChannels: self.channels.map({self.channelScreen == .small ? SmallChannelViewModel.init(channel: $0) : MediumChannelViewModel.init(channel: $0)}))
+
+            default:
+                if let index = self.channels.index(where: {$0.id == channel.id}) {
+                    self.channels[index] = channel
+                    self.delegate?.update(index: index, vm: self.channelScreen == .small ? SmallChannelViewModel(channel: self.channels[index]) : MediumChannelViewModel(channel: self.channels[index]))
+                }
             }
         } else {
             if let index = self.channels.index(where: {$0.id == channel.id}) {
