@@ -41,7 +41,7 @@ fileprivate class PlayerItem: AVPlayerItem, AudioTrack {
 	}
 }
 
-fileprivate class QueuePlayer: AVPlayer {
+fileprivate class LIPlayer: AVPlayer {
 	func currentTrack() -> PlayerItem? {
 		return self.currentItem as? PlayerItem
 	}
@@ -73,7 +73,7 @@ final class AudioPlayer: NSObject {
 	private let kErrorKey = "error"
 	private let kVolumeKey = "outputVolume"
 	
-	private var player: QueuePlayer = QueuePlayer()
+	private var player: LIPlayer = LIPlayer()
 	private var audioSession: AVAudioSession!
 	private var timeObserver: Any?
 	
@@ -88,7 +88,6 @@ final class AudioPlayer: NSObject {
 		}
         
 		player.addObserver(self, forKeyPath: kRateKey, options: [.initial, .new], context: nil)
-//        player.addObserver(self, forKeyPath: kTimedMetadataKey, options: [.initial, .new], context: nil)
 		player.addObserver(self, forKeyPath: kCurrentItemKey, options: [.initial, .new, .old], context: nil)
         player.addObserver(self, forKeyPath: kStatusKey, options: [.initial, .new], context: nil)
 		NotificationCenter.default.addObserver(self,
@@ -109,8 +108,6 @@ final class AudioPlayer: NSObject {
                 }
             }
         }
-        
-
 	}
     
     deinit {
@@ -129,10 +126,9 @@ final class AudioPlayer: NSObject {
 			for output in session.currentRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
 			}
 		case .oldDeviceUnavailable:
-			if let previousRoute =
-				userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription,
-				let track = self.player.currentTrack(){
+			if let previousRoute = userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
 				for output in previousRoute.outputs where output.portType == AVAudioSessionPortHeadphones {
+                    self.player.pause()
 					self.status = .paused
 					self.delegate?.updateStatus()
 					break
@@ -145,7 +141,7 @@ final class AudioPlayer: NSObject {
     
 	func showLockScreenData() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = currentTrackDict(image: nil)
-        self.currentOp = SDWebImageManager.shared().loadImage(with: self.player.currentTrack()?.imageURL, options: SDWebImageOptions.highPriority, progress: nil) {[self] (image, data, error, type, comp, url) in
+        self.currentOp = SDWebImageManager.shared().loadImage(with: self.player.currentTrack()?.imageURL, options: SDWebImageOptions.highPriority, progress: nil) { (image, data, error, type, comp, url) in
             if let image = image {
                 MPNowPlayingInfoCenter.default().nowPlayingInfo?[MPMediaItemPropertyArtwork]
                     = MPMediaItemArtwork.init(boundsSize: CGSize.init(width: 300, height: 300), requestHandler: { (size) -> UIImage in
@@ -173,14 +169,6 @@ final class AudioPlayer: NSObject {
         
         return infoDict
     }
-    
-	func setPlayingMode(speaker: Bool) {
-		do {
-			try audioSession.overrideOutputAudioPort(speaker ? AVAudioSessionPortOverride.speaker : AVAudioSessionPortOverride.none)
-		} catch {
-			print("audioSession error: \(error.localizedDescription)")
-		}
-	}
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 		
@@ -194,13 +182,15 @@ final class AudioPlayer: NSObject {
 		
 		switch keyPath {
 		case kRateKey:
-			if player.rate >= 1, let _ = player.currentItem {
+			if player.rate > 0, let _ = player.currentItem {
 				if CMTimeGetSeconds(player.currentTime()) < 0.5 {
 				} else {
 					if let id = self.player.currentTrack()?.id {
-                        self.status = .playing
-                        self.delegate?.updateStatus()
-                        self.delegate?.update(items: [id: true])
+                        if self.status != .playing {
+                            self.delegate?.update(items: [id: true])
+                            self.delegate?.updateStatus()
+                            self.status = .playing
+                        }
 					}
 				}
 			}
@@ -213,18 +203,19 @@ final class AudioPlayer: NSObject {
                         self.delegate?.update(items: [id: false])
                     }
                     self.make(command: .pause)
+                    self.status = .failed
                 default:
                     break
             }
 		case kCurrentItemKey:
-            var dict = [Int: Bool]()
-			if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
-                dict[item.id] = true
-			}
-			if let item = change?[NSKeyValueChangeKey.oldKey] as? AudioTrack {
-                dict[item.id] = self.status == .playing
-			}
-            self.delegate?.update(items: dict)
+//            var dict = [Int: Bool]()
+//            if let item = change?[NSKeyValueChangeKey.newKey] as? AudioTrack {
+//                dict[item.id] = self.status == .playing
+//            }
+//            if let item = change?[NSKeyValueChangeKey.oldKey] as? AudioTrack {
+//                dict[item.id] = false
+//            }
+//            self.delegate?.update(items: dict)
 			break
 		case kErrorKey:
 			if let error = player.currentItem?.error {

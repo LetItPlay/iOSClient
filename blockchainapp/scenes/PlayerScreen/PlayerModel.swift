@@ -7,7 +7,7 @@ protocol PlayerEventHandler: ModelProtocol {
 }
 
 protocol PlaylistEventHandler: ModelProtocol {
-    func selected(index: Int)
+    func track(selectedIndex index: Int)
     func showOthers(index: Int)
 }
 
@@ -82,6 +82,21 @@ class PlayerModel {
             self.player.load(item: item.audioTrack())
 //            self.player.make(command: prev == .playing ? .play : .pause)
         }
+    }
+    
+    func track(selectedIndex index: Int) {
+        var dict = [Int: Bool]()
+        if self.playingIndex == index {
+            self.player.make(command: self.player.status == .playing ? .pause : .play)
+            dict[self.tracks[index].id] = self.player.status == .playing
+        } else {
+            dict[self.currentTrack?.id ?? -1] = false
+            dict[self.tracks[index].id] = true
+            self.playingIndex = index
+            self.reloadTrack()
+            self.player.make(command: .play)
+        }
+        NotificationCenter.default.post(name: AudioStateNotification.changed.notification(), object: nil, userInfo: dict)
     }
     
     func updatePlaylist() {

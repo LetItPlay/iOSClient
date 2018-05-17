@@ -118,8 +118,7 @@ protocol AudioPlayerProto {
 	var error: Error? {get}
 	
 	func make(command: PlayerCommand)
-	func load(item: AudioTrack)
-	func setPlayingMode(speaker: Bool)
+    func load(item: AudioTrack)
 	
 	init()
 }
