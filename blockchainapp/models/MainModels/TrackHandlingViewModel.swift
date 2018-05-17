@@ -42,15 +42,11 @@ class TrackHandlingViewModel: TrackHandlingModelDelegate, TrackHandlingViewModel
             let insertStart = self.data.count
             self.data += tracks
             cells = [.insert: Array<Int>(insertStart..<self.data.count)]
+            self.delegate?.reload(cells: cells)
         } else {
-            if self.data.count != 0 {
-                cells = [.delete: Array<Int>(0..<self.data.count)]
-                self.delegate?.reload(cells: cells)
-            }
             self.data = tracks
-            cells = [.insert: Array<Int>(0..<self.data.count)]
+            self.delegate?.reload()
         }
-        self.delegate?.reload(cells: cells)
     }
     
     func empty(show: Bool) {
