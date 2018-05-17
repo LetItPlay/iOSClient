@@ -118,15 +118,7 @@ protocol AudioPlayerProto {
 	var error: Error? {get}
 	
 	func make(command: PlayerCommand)
-	func load(item: AudioTrack)
-	func setPlayingMode(speaker: Bool)
+    func load(item: AudioTrack)
 	
 	init()
-}
-
-protocol AudioPlayerDelegate: class {
-    func update(items: [Int: Bool])
-	func update(status: PlayerStatus, id: Int)
-	func update(time: AudioTime)
-	func itemFinishedPlaying(id: Int)
 }

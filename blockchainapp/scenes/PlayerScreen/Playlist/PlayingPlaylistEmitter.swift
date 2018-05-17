@@ -14,7 +14,7 @@ class PlayingPlaylistEmitter: Emitter, PlayingPlaylistEmitterProtocol {
 	}
 	
 	func itemSelected(index: Int) {
-		self.model?.selected(index: index)
+		self.model?.track(selectedIndex: index)
 	}
     
     func showOthers(index: Int) {

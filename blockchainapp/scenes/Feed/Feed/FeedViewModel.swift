@@ -19,7 +19,6 @@ protocol FeedVMDelegate: class {
 	func make(updates: [CollectionUpdate: [Int]])
     func updateTableState()
     func updateEmptyMessage()
-    
 }
 
 class FeedViewModel: FeedVMProtocol, FeedModelDelegate {

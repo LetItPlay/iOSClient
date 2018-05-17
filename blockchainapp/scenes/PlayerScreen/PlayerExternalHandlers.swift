@@ -82,13 +82,7 @@ extension PlayerModel: PlayerProtocol {
 				return false
 		}
 		self.playerDelegate?.player(show: true)
-		if self.playingIndex == index {
-			self.execute(event: .plause)
-		} else {
-			self.playingIndex = index
-			self.reloadTrack()
-			self.player.make(command: .play)
-		}
+		self.track(selectedIndex: index)
 		return true
 	}
 }

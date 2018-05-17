@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         setupDeepLink()
         setupAppearence()
         migrate()
+        
+        UserSettings.session = UUID.init().uuidString
 		
 		self.window = UIWindow.init(frame: UIScreen.main.bounds)
 

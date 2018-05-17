@@ -33,7 +33,7 @@ protocol FeedModelDelegate: class {
 }
 
 
-class FeedModel: FeedModelProtocol, FeedEventHandler {
+class FeedModel: FeedModelProtocol, FeedEventHandler, PlayerUsingProtocol {
 	private let isFeed: Bool
 	private var currentOffest: Int = 0
     private let amount: Int = 100
