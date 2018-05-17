@@ -37,7 +37,7 @@ class TrackHandlingModel {
     private var currentOffest: Int = 0
     private let amount: Int = 100
     
-    var playlistName: String = "Feed".localized
+    var playlistName: String
     var tracks: [Track] = []
     
     weak var delegate: TrackHandlingModelDelegate?
@@ -150,7 +150,7 @@ class TrackHandlingViewModel: TrackHandlingModelDelegate {
     weak var delegate: TrackHandlingViewModelDelegate?
     
     var data: [TrackViewModel] = []
-    var title: String = "Default".localized
+    var title: String = LocalizedStrings.TabBar.feed
     var showEmpty: Bool = false
     var needUpload: Bool = true
     

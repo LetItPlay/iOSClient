@@ -94,6 +94,11 @@ class TableProvider: NSObject, UITableViewDataSource, UITableViewDelegate {
         return cellClass.height(data: dataProvider.data(indexPath: indexPath), width: tableView.frame.width)
     }
     
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cellClass = cellProvider.cellClass(indexPath: indexPath)
+        return cellClass.height(data: dataProvider.data(indexPath: indexPath), width: tableView.frame.width)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.cellEvent?(indexPath, "onSelected", nil)
     }
