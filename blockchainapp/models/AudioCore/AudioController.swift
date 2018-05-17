@@ -114,7 +114,7 @@ class AudioController: AudioControllerProtocol {
 				if let indexPath = indexPath(id: id),
 					indexPath != self.currentTrackIndexPath, let track = self[indexPath] {
 					self.currentTrackIndexPath = indexPath
-					let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
+                    _ = indexPath.section * userPlaylist.tracks.count + indexPath.item
 					player.load(item: track)
 					player.make(command: .play)
 				} else {
@@ -254,7 +254,7 @@ class AudioController: AudioControllerProtocol {
 	
 	func setCurrentTrack(id: Int) {
 		if let indexPath = indexPath(id: id) {
-			let index = indexPath.section * userPlaylist.tracks.count + indexPath.item
+            _ = indexPath.section * userPlaylist.tracks.count + indexPath.item
 		}
 	}
 	

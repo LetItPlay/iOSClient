@@ -4,166 +4,62 @@ import Action
 
 
 protocol FeedModelProtocol: ModelProtocol {
-    var delegate: FeedModelDelegate? {get set}
-	var playingIndex: Variable<Int?> {get}
+    var feedDelegate: FeedModelDelegate? {get set}
 }
 
 protocol FeedEventHandler: class, PlayerUsingProtocol {
-	func trackLiked(index: Int)
-	func trackSelected(index: Int)
-	func reload()
-	func trackShowed(index: Int)
 	func showAllChannels()
-	func addTrack(index: Int, toBegining: Bool)
 	func showSearch()
-    func showChannel(index: Int)
-    func showOthers(index: Int)
 }
 
 protocol FeedModelDelegate: class {
-	func show(tracks: [TrackViewModel], isContinue: Bool)
-    func trackUpdate(dict: [Int: TrackViewModel])
-	func noDataLeft()
-	func showChannels(_ show: Bool)
-	func showEmptyMessage(_ show: Bool)
 	func showAllChannels()
 	func showSearch()
-    func showChannel(id: Int)
-    func showOthers(track: ShareInfo)
+    func update(isFeed: Bool)
 }
 
 
-class FeedModel: FeedModelProtocol, FeedEventHandler, PlayerUsingProtocol {
-	private let isFeed: Bool
-	private var currentOffest: Int = 0
-    private let amount: Int = 100
-    private var threshold: Bool = false
+class FeedModel: TrackHandlingModel, FeedModelProtocol, FeedEventHandler {
+    var isFeed: Bool
 	
-	weak var delegate: FeedModelDelegate?
+	weak var feedDelegate: FeedModelDelegate?
 	
-	var playlistName: String = LocalizedStrings.TabBar.feed
-	var tracks: [Track] = []
 	private var channels: Set<Channel> = Set<Channel>()
-	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	private var dataAction: Action<Int, [Track]>?
 	private let disposeBag = DisposeBag()
 	
-	init(isFeed: Bool) {
-		self.isFeed = isFeed
-        
-        self.playlistName = isFeed ? LocalizedStrings.TabBar.feed : LocalizedStrings.TabBar.trends
-        
-		dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
-			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )
-		})
-		
-		dataAction?.elements.do(onNext: { (tracks) in
-			if self.currentOffest == 0 {
-				self.tracks = tracks
-			} else {
-				self.tracks += tracks
-			}
-		}).map({ (tracks) -> [TrackViewModel] in
-			let playingId = PlayerHandler.player?.playingNow
-			return tracks.map({ TrackViewModel(track: $0,
-											   isPlaying: $0.id == playingId) })
-		}).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
-			self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
-            self.delegate?.showEmptyMessage(self.tracks.count == 0 && self.isFeed)
-			self.currentOffest = self.tracks.count
-		}, onCompleted: {
-            self.threshold = false
-			print("Track loaded")
-		}).disposed(by: self.disposeBag)
-        
-        
-		
-        let _ = InAppUpdateManager.shared.subscribe(self)
-	}
+    init(isFeed: Bool, name: String, dataAction: Action<Int, [Track]>) {
+        self.isFeed = isFeed
+        super.init(name: name, dataAction: dataAction)
+    }
     
-    func send(event: LifeCycleEvent) {
+    override func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
+            self.feedDelegate?.update(isFeed: self.isFeed)
             if self.isFeed
             {
                 UserSettings.session = UUID.init().uuidString
             }
-                
-            self.dataAction?.execute(0)
-        case .appear:
-            self.delegate?.showChannels(!isFeed)
-            if !self.isFeed {
-                self.delegate?.showEmptyMessage(false)
-            }
-        case .disappear:
-            break
-        case .deinitialize:
+        default:
             break
         }
+        
+        super.send(event: event)
     }
-    
-    func trackLiked(index: Int) {
-        let track = self.tracks[index]
-        let action: TrackAction = TrackAction.like
-        ServerUpdateManager.shared.make(track: track, action: action)
-    }
-    
-    func reload() {
-        self.currentOffest = 0
-        self.dataAction?.execute(0)
-    }
-    
-    func trackShowed(index: Int) {
-        if index > self.tracks.count - self.amount/10 && !self.threshold {
-            self.threshold = true
-            self.dataAction?.execute(self.tracks.count)
-        }
-    }
-	
-	func addTrack(index: Int, toBegining: Bool) {
-		let track = self.tracks[index]
-		UserPlaylistManager.shared.add(track: track, toBegining: toBegining)
-	}
 	
 	func showSearch() {
-		self.delegate?.showSearch()
+		self.feedDelegate?.showSearch()
 	}
-    
-    func showChannel(index: Int) {
-        self.delegate?.showChannel(id: self.tracks[index].channel.id)
-    }
-    
-    func showOthers(index: Int) {
-        let track = self.tracks[index]
-        self.delegate?.showOthers(track: track.sharedInfo())
-    }
-    
     func showAllChannels() {
-        self.delegate?.showAllChannels()
+        self.feedDelegate?.showAllChannels()
     }
 }
 
-extension FeedModel: SettingsUpdateProtocol, PlayingStateUpdateProtocol, SubscriptionUpdateProtocol, TrackUpdateProtocol {
+extension FeedModel: SubscriptionUpdateProtocol {
     
     func channelSubscriptionUpdated() {
         self.reload()
-    }
-    
-    func settingsUpdated() {
-        self.reload()
-    }
-    
-    func trackPlayingUpdate(dict: [Int : Bool]) {
-        self.delegate?.trackUpdate(dict: self.transform(tracks: self.tracks, dict: dict))
-    }
-    
-    func trackUpdated(track: Track) {
-        if let index = self.tracks.index(where: {$0.id == track.id}) {
-            let vm = TrackViewModel(track: track)
-            self.tracks[index] = track
-            self.delegate?.trackUpdate(dict: [index: vm])
-        }
     }
 }
 

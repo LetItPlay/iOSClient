@@ -33,23 +33,23 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
     var tableProvider: TableProvider!
     
-    convenience init(vm: FeedVMProtocol, emitter: FeedEmitterProtocol) {
+    convenience init(viewModel: FeedVMProtocol, emitter: FeedEmitterProtocol) {
         self.init(nibName: nil, bundle: nil)
-        self.viewModel = vm
+        self.viewModel = viewModel
         self.viewModel.delegate = self
         
         self.tableProvider = TableProvider.init(tableView: self.tableView, dataProvider: self, cellProvider: self)
         self.tableProvider.cellEvent = { (indexPath, event, data) in
             switch event {
             case "onLike":
-                self.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
+                self.emitter.send(event: TrackEvent.trackLiked(index: indexPath.item))
             case "onSelected":
-                self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
+                self.emitter.send(event: TrackEvent.trackSelected(index: indexPath.item))
             case "onChannel":
-                self.emitter.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
+                self.emitter.send(event: TrackEvent.showChannel(index: indexPath.row))
                 break
             case "onOthers":
-                self.emitter.send(event: FeedEvent.showOthers(index: indexPath.row))
+                self.emitter.send(event: TrackEvent.showOthers(index: indexPath.row))
             default:
                 break
             }
@@ -83,8 +83,6 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
             make.edges.equalTo(self.view)
         }
         
-//        tableView.dataSource = self
-//        tableView.delegate   = self
         tableView.refreshControl = refreshControl
         tableView.separatorStyle = .none
         
@@ -143,13 +141,12 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     }
 	
     @objc func onRefreshAction(refreshControl: UIRefreshControl) {
-		self.emitter.send(event: .refresh)
+		self.emitter.send(event: TrackEvent.reload)
 		DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {[weak self] in self?.tableView.refreshControl?.endRefreshing()})
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
   @objc func longPress(longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -179,7 +176,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
     func addTrack(toBegining: Bool, for indexPath: IndexPath)
     {
-		self.emitter.send(event: FeedEvent.addTrack(atIndex: indexPath.row, toBeginig: toBegining))
+        self.emitter.send(event: TrackEvent.addTrack(index: indexPath.row, toBeginning: toBegining))
 		
 		let cell = tableView.cellForRow(at: indexPath) as! FeedTableViewCell
 		
@@ -196,41 +193,42 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-extension FeedViewController: FeedVMDelegate {
-    
-    func reload() {
-        self.tableView.reloadData()
-        self.tableView.refreshControl?.endRefreshing()
-    }
-    
-    func updateTableState() {
-        
-    }
-    
-    func updateEmptyMessage() {
-        emptyLabel.isHidden = !self.viewModel.showEmptyMessage
-        emptyButton.isHidden = !self.viewModel.showEmptyMessage
-    }
-    
-    func make(updates: [CollectionUpdate : [Int]]) {
+extension FeedViewController: TrackHandlingViewModelDelegate {
+    func reload(cells: [CollectionUpdate : [Int]]?) {
         tableView.beginUpdates()
-        for key in updates.keys {
-            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
-                switch key {
-                case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .update:
-                    if indexes.count != 0 {
-                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-//                        tableView.reloadData()
+        if let _ = cells, let keys = cells?.keys {
+            for key in keys {
+                if let indexes = cells?[key]?.map({IndexPath(row: $0, section: 0)}) {
+                    switch key {
+                    case .insert:
+                        tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .delete:
+                        tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .update:
+                        if indexes.count != 0 {
+                            tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                            //                        tableView.reloadData()
+                        }
                     }
                 }
             }
         }
         tableView.endUpdates()
+        self.tableView.refreshControl?.endRefreshing()
     }
+    
+    func reloadAppearence() {
+        emptyLabel.isHidden = !self.viewModel.showEmpty
+        emptyButton.isHidden = !self.viewModel.showEmpty
+    }
+    
+    func reload() {
+        self.tableView.reloadData()
+        self.tableView.refreshControl?.endRefreshing()
+    }
+}
+
+extension FeedViewController: FeedVMDelegate {
 }
 
 extension FeedViewController: TableDataProvider, TableCellProvider {
@@ -240,11 +238,11 @@ extension FeedViewController: TableDataProvider, TableCellProvider {
     }
     
     func rowsAt(_ section: Int) -> Int {
-        return self.viewModel.tracks.count
+        return self.viewModel.data.count
     }
     
     func data(indexPath: IndexPath) -> Any {
-        return self.viewModel.tracks[indexPath.item]
+        return self.viewModel.data[indexPath.item]
     }
     
     func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
@@ -422,7 +420,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         
         var frame: CGRect!
 		
-		let vm = self.viewModel.tracks[indexPath.item]
+		let vm = self.viewModel.data[indexPath.item]
 		let height =  FeedTableViewCell.height(data: vm, width: tableView.frame.width)//height(vm: vm, width: tableView.frame.width)
 		
         if orientation == .right

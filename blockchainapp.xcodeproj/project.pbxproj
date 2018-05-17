@@ -112,6 +112,9 @@
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
 		9DB4FCDD20AD513B008BAE23 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */; };
+		9DB4FCE120AD8AF3008BAE23 /* TrackHandlingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE020AD8AF3008BAE23 /* TrackHandlingModel.swift */; };
+		9DB4FCE320AD8B61008BAE23 /* TrackHandlingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE220AD8B61008BAE23 /* TrackHandlingViewModel.swift */; };
+		9DB4FCE520AD8B87008BAE23 /* TrackHandlingEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE420AD8B87008BAE23 /* TrackHandlingEmitter.swift */; };
 		9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */; };
 		9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */; };
 		9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */; };
@@ -293,6 +296,9 @@
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
 		9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
+		9DB4FCE020AD8AF3008BAE23 /* TrackHandlingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingModel.swift; sourceTree = "<group>"; };
+		9DB4FCE220AD8B61008BAE23 /* TrackHandlingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingViewModel.swift; sourceTree = "<group>"; };
+		9DB4FCE420AD8B87008BAE23 /* TrackHandlingEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingEmitter.swift; sourceTree = "<group>"; };
 		9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelViewModel.swift; sourceTree = "<group>"; };
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
@@ -465,6 +471,7 @@
 		01FF376B201072B7007F57E0 /* AudioCore */ = {
 			isa = PBXGroup;
 			children = (
+				CF4453581F55400F00660474 /* MainModels.swift */,
 				015812A11FD80AF1002828F5 /* AudioController.swift */,
 				015088832006472200E42F7D /* AudioPlayer.swift */,
 				01FF376E201224CB007F57E0 /* Models.swift */,
@@ -635,6 +642,16 @@
 			path = Recommended;
 			sourceTree = "<group>";
 		};
+		9DB4FCDF20AD8AD6008BAE23 /* MainModels */ = {
+			isa = PBXGroup;
+			children = (
+				9DB4FCE020AD8AF3008BAE23 /* TrackHandlingModel.swift */,
+				9DB4FCE220AD8B61008BAE23 /* TrackHandlingViewModel.swift */,
+				9DB4FCE420AD8B87008BAE23 /* TrackHandlingEmitter.swift */,
+			);
+			path = MainModels;
+			sourceTree = "<group>";
+		};
 		9DDB0D07207B8A9F00581613 /* Others */ = {
 			isa = PBXGroup;
 			children = (
@@ -724,10 +741,10 @@
 		CF4453571F553FE400660474 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				9DB4FCDF20AD8AD6008BAE23 /* MainModels */,
 				9D2A248F209C1A2F0034F007 /* Channels */,
 				9D2A248E209C1A290034F007 /* Tracks */,
 				01FF376B201072B7007F57E0 /* AudioCore */,
-				CF4453581F55400F00660474 /* MainModels.swift */,
 				01E1991B1FE8DBB00016060E /* UserSettings.swift */,
 				9DDC286720A01EEA00A4C3DE /* Language.swift */,
 				9D16A161209B434A00E5116D /* ChannelCategory.swift */,
@@ -1217,6 +1234,8 @@
 				9DFAB817209B144F00796C77 /* ChannelCategoryViewModel.swift in Sources */,
 				36E155A3204D6F1800C65DBE /* UserPlaylistViewController.swift in Sources */,
 				0195E8FD203EE0ED005AC202 /* MainRouter.swift in Sources */,
+				9DB4FCE520AD8B87008BAE23 /* TrackHandlingEmitter.swift in Sources */,
+				9DB4FCE320AD8B61008BAE23 /* TrackHandlingViewModel.swift in Sources */,
 				CF1E04831F82273D00D8812F /* DBHelpers.swift in Sources */,
 				365654022035A4550072087F /* PlaylistViewModel.swift in Sources */,
 				368920A9208E0F8500D83278 /* ChannelsSegmentViewController.swift in Sources */,
@@ -1238,6 +1257,7 @@
 				2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */,
 				3626C8CE2036A6730016772B /* SearchViewModel.swift in Sources */,
 				365653FF203592DD0072087F /* SearchBuilder.swift in Sources */,
+				9DB4FCE120AD8AF3008BAE23 /* TrackHandlingModel.swift in Sources */,
 				01EFC873201A21D6005321B9 /* MainPlayerViewController.swift in Sources */,
 				01510EB41FE0F421003AC116 /* SearchViewController.swift in Sources */,
 				9D861CA2209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift in Sources */,

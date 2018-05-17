@@ -1,28 +1,14 @@
 //
-//  MainModels.swift
+//  TrackHandlingModel.swift
 //  blockchainapp
 //
-//  Created by Ivan Gorbulin on 29/08/2017.
-//  Copyright © 2017 Ivan Gorbulin. All rights reserved.
+//  Created by Polina Abrosimova on 17.05.2018.
+//  Copyright © 2018 Ivan Gorbulin. All rights reserved.
 //
 
 import Foundation
-import RealmSwift
-import SwiftyJSON
-import RxSwift
 import Action
-
-class Tag: RealmString {
-	
-}
-
-protocol LIPModel {
-	var id: Int {get}
-	var name: String {get}
-	var image: URL? {get}
-	var lang: String {get}
-	var tags: [String] {get}
-}
+import RxSwift
 
 protocol TrackHandlingModelDelegate: class {
     func update(tracks: [Int: TrackViewModel])
@@ -68,8 +54,6 @@ class TrackHandlingModel {
             print("Track loaded")
         }).disposed(by: self.disposeBag)
         
-        
-        
         let _ = InAppUpdateManager.shared.subscribe(self)
     }
     
@@ -78,7 +62,7 @@ class TrackHandlingModel {
         case .initialize:
             self.dataAction?.execute(0)
         case .appear:
-            self.delegate?.empty(show: self.tracks.count == 0)
+            break
         case .disappear:
             break
         case .deinitialize:
@@ -88,7 +72,7 @@ class TrackHandlingModel {
 }
 
 
-extension TrackHandlingModel: PlayingStateUpdateProtocol {
+extension TrackHandlingModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsUpdateProtocol {
     func trackPlayingUpdate(dict: [Int : Bool]) {
         var res: [Int: TrackViewModel] = [:]
         for tuple in dict {
@@ -97,6 +81,18 @@ extension TrackHandlingModel: PlayingStateUpdateProtocol {
             }
         }
         self.delegate?.update(tracks: res)
+    }
+    
+    func trackUpdated(track: Track) {
+        if let index = self.tracks.index(where: {$0.id == track.id}) {
+            let vm = TrackViewModel(track: track)
+            self.tracks[index] = track
+            self.delegate?.update(tracks: [index : vm])
+        }
+    }
+    
+    func settingsUpdated() {
+        self.reload()
     }
 }
 
@@ -137,58 +133,4 @@ protocol TrackEventHandler: class, PlayerUsingProtocol {
     func showChannel(index: Int)
     func showOthers(index: Int)
     func addTrack(index: Int, toBegining: Bool)
-}
-
-protocol TrackHandlingViewModelDelegate: class {
-    func reload(cells: [CollectionUpdate: [Int]]?)
-    func reload()
-    func reloadAppearence()
-}
-
-class TrackHandlingViewModel: TrackHandlingModelDelegate {
-    
-    weak var delegate: TrackHandlingViewModelDelegate?
-    
-    var data: [TrackViewModel] = []
-    var title: String = LocalizedStrings.SystemMessage.defaultMessage
-    var showEmpty: Bool = false
-    var needUpload: Bool = true
-    
-    func update(tracks: [Int : TrackViewModel]) {
-        for tuple in tracks {
-            self.data[tuple.key] = tuple.value
-        }
-        self.delegate?.reload(cells: [.update: Array<Int>(tracks.keys)])
-    }
-    
-    func show(tracks: [TrackViewModel], isContinue: Bool) {
-        var cells: [CollectionUpdate: [Int]]?
-        if isContinue {
-            let insertStart = self.data.count
-            self.data += tracks
-            cells = [.insert: Array<Int>(insertStart..<self.data.count)]
-        } else {
-            self.data = tracks
-        }
-        self.delegate?.reload(cells: cells)
-    }
-    
-    func empty(show: Bool) {
-        self.showEmpty = true
-        self.delegate?.reloadAppearence()
-    }
-    
-    func noDataLeft() {
-        self.needUpload = false
-    }
-    
-    func showChannel(id: Int) {
-        MainRouter.shared.show(screen: "channel", params: ["id" : id], present: false)
-    }
-    
-    func showInfo(track: ShareInfo) {
-        MainRouter.shared.showOthers(shareInfo: track)
-    }
-    
-    
 }
