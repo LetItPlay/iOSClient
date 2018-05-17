@@ -20,7 +20,7 @@ class CategoryChannelsViewController: UIViewController {
     let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
-    let emptyLabel = EmptyLabel(title: "There are no channels".localized)
+    let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noChannels)
     
     convenience init(emitter: CategoryChannelsEmitterProtocol, viewModel: CategoryChannelsViewModel, topInset: Bool)
     {

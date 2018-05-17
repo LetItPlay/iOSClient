@@ -80,16 +80,16 @@ class CategoryChannelsModel:  CategoryChannelsModelProtocol, CategoryChannelsEve
             switch self.channelsFilter! {
             case .all:
                 self.channels = self.channels.sorted(by: {$0.subscriptionCount > $1.subscriptionCount})
-                self.category = "Channels".localized
+                self.category = LocalizedStrings.TabBar.channels
             case .hidden:
                 self.channels = self.channels.map({ (channel) -> Channel in
                     var newChannel = channel
                     newChannel.isHidden = true
                     return newChannel
                 })
-                self.category = "Hidden channels".localized
+                self.category = LocalizedStrings.Channels.hidden
             case .subscribed:
-                self.category = "Subscribed channels".localized
+                self.category = LocalizedStrings.Channels.subscibedTitle
             case .category(_, let title):
                 self.category = title
             }

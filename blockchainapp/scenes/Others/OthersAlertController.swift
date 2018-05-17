@@ -39,7 +39,7 @@ class OthersAlertController: UIAlertController {
         
         self.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(0.8)
         
-        self.addAction(UIAlertAction(title: "Share".localized, style: .default, handler: { (action) in
+        self.addAction(UIAlertAction(title: LocalizedStrings.Others.share, style: .default, handler: { (action) in
             self.emitter.send(event: OthersEvent.shareTrack(viewController: self.viewController))
         }))
         
@@ -52,10 +52,10 @@ class OthersAlertController: UIAlertController {
                 }))
             }
             
-            alert.addAction(UIAlertAction(title: "Cancel".localized, style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.cancel, style: .default, handler: nil))
             
             if self.viewModel.alertData.showOkButton {
-                alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: { (_) in
+                alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.ok, style: .default, handler: { (_) in
                     self.emitter.send(event: OthersEvent.okButtonTouched)
                 }))
             }
@@ -63,7 +63,7 @@ class OthersAlertController: UIAlertController {
             self.viewController.present(alert, animated: true)
         }))
         
-        self.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
+        self.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.cancel, style: .cancel, handler: nil))
     }
 
     override func didReceiveMemoryWarning() {

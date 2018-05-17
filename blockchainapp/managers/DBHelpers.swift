@@ -65,7 +65,7 @@ class DBManager {
 		let formatter = DateFormatter()
 		formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
 		
-		let description = description == "" ? "No Description".localized : description
+		let description = description == "" ? LocalizedStrings.EmptyMessage.noDescription : description
 		
         if let track = inRealm.object(ofType: TrackObject.self, forPrimaryKey: id) {
             var changeCounter = 0
@@ -155,7 +155,7 @@ extension DBManager {
 							 name: title,
 							 url: audioURL,
 							 length: fromJSON["TotalLengthInSeconds"].int64 ?? 0,
-							 description: fromJSON["Description"].string ?? "No Description".localized,
+							 description: fromJSON["Description"].string ?? LocalizedStrings.EmptyMessage.noDescription,
 							 coverURL: fromJSON["CoverURL"].string ?? "",
 							 likeCount: fromJSON["LikeCount"].int ?? 0,
 							 reportCount: 0,
@@ -170,7 +170,7 @@ extension DBManager {
                              name: fromJSON["name"].string ?? "",
                              url: fromJSON["audio_file"]["file"].string ?? "",
                              length: fromJSON["audio_file"]["length_seconds"].int64 ?? 0,
-                             description: fromJSON["description"].string ?? "No Description".localized,
+                             description: fromJSON["description"].string ?? LocalizedStrings.EmptyMessage.noDescription,
                              coverURL: fromJSON["image"].string ?? "",
                              likeCount: fromJSON["like_count"].int ?? 0,
                              reportCount: 0,

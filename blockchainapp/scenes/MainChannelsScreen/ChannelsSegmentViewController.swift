@@ -10,7 +10,7 @@ import UIKit
 
 class ChannelsSegmentViewController: UIViewController {
     
-    var channelsSegmentedControl: UISegmentedControl = UISegmentedControl(items: ["Categories".localized, "Recent added".localized])
+    var channelsSegmentedControl: UISegmentedControl = UISegmentedControl(items: [LocalizedStrings.Channels.categories, LocalizedStrings.Channels.recent])
     
     let firstViewController = MainChannelsBuilder.build(params: nil)
     let secondViewController = CategoryChannelsBuilder.build(params: ["topInset" : true])

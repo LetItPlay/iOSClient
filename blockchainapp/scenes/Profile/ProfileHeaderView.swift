@@ -54,7 +54,7 @@ class ProfileHeaderView: UIView {
         return button
     }()
     
-    let languageButton = ProfileButton(title: "Change content language".localized)
+    let languageButton = ProfileButton(title: LocalizedStrings.Profile.changeLanguage)
     
     let languageTitleLabel: UILabel = {
         let label = UILabel()
@@ -63,7 +63,7 @@ class ProfileHeaderView: UIView {
         return label
     }()
     
-    let hiddenChannelsButton = ProfileButton(title: "Hidden channels".localized)
+    let hiddenChannelsButton = ProfileButton(title: LocalizedStrings.Channels.hidden)
     
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
         super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511 + 52)))
@@ -186,7 +186,7 @@ class ProfileHeaderView: UIView {
         }
         else
         {
-            profileNameTextField.placeholder = "name".localized
+            profileNameTextField.placeholder = LocalizedStrings.Profile.name
         }
     }
 }

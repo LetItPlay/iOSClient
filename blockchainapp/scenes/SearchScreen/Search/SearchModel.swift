@@ -40,7 +40,7 @@ protocol SearchModelDelegate: class {
 
 class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol {
 	
-	var playlistName: String = "Search".localized
+	var playlistName: String = LocalizedStrings.search
     var tracks: [Track] = []
     var channels: [Channel] = []
     var tracksCount: Int = 100
@@ -73,7 +73,7 @@ class SearchModel: SearchModelProtocol, SearchEventHandler, PlayerUsingProtocol 
 			}.subscribe(onNext: {(tuple) in
                 if self.searchState.value.offset == 0 {
                     self.delegate?.toUpdate(nothing: false)
-                    self.playlistName = "Search".localized + " \"\(self.searchState.value.text ?? "")\""
+                    self.playlistName = LocalizedStrings.search + " \"\(self.searchState.value.text ?? "")\""
                     self.tracks = tuple.0
                     self.channels = tuple.1
                     self.delegate?.update(tracks: self.tracks.map({TrackViewModel.init(track: $0)}))

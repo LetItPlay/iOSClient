@@ -1,3 +1,52 @@
+
+"A compilation of fresh news in one 30-minute playlist" = "Une compilation d'informations d'actualité dans une playlist de 30 minutes";
+
+"ago" = "il y a ";
+
+"Browse channels list" = "Afficher la liste de chaînes";
+
+"Camera" = "Caméra";
+
+"Cancel" = "Annuler";
+
+"Channel" = "Сhaîne";
+
+/* channels */
+"Channels" = "Chaînes";
+
+"Choose Image" = "Sélectionner une image";
+
+"Clear all" = "Effacer";
+
+"comments" = "комментариев";
+
+"Current playlist" = "Playlist actuelle";
+
+"d" = " j.";
+
+"d ago" = " j. il y a";
+
+"Default" = "Défaut";
+
+"Delete" = "Effacer";
+
+/* feed */
+"Feed" = "Accueil";
+
+"Follow" = "S'abonner";
+
+"Following" = "Abonné";
+
+"Fresh news in 30 minutes" = "Informations d'actualité en 30 minutes";
+
+"Gallery" = "Galerie";
+
+"h" = " h.";
+
+"h ago" = " h. il y a";
+
+"Liked" = "Понравившиеся";
+
 /* 
   Localizable.strings
   blockchainapp
@@ -5,78 +54,293 @@
   Created by Ivan Gorbulin on 18/10/2017.
   Copyright © 2017 Ivan Gorbulin. All rights reserved.
 */
+"likes" = "понравилось";
 
-"likes"="понравилось";
-"listening"="прослушано";
-"comments"="комментариев";
-
-"Follow"="S'abonner";
-"Following"="Abonné";
-
-"ago" = "il y a ";
+"listening" = "прослушано";
 
 "m" = " m.";
-"s" = " sec.";
-"h" = " h.";
-"d" = " j.";
-"w" = " sem.";
 
-"m ago"=" m. il y a";
-"s ago"=" sec. il y a";
-"h ago"=" h. il y a";
-"d ago"=" j. il y a";
-"w ago"=" sem. il y a";
+"m ago" = " m. il y a";
 
-"Feed"="Accueil";
-"Trends"="Tendances";
-"Search"="Rechercher";
-"Channels"="Chaînes";
-"Channel"="Сhaîne";
-
-"Recent added"="Récents";
-"Tracks you’ve liked"="titres\"J'aime\"";
-"Your future profile"="Votre futur profil";
-"Current playlist"="Playlist actuelle";
-"Profile"="Mon Profil";
-
-"Select your language" = "Choisissez votre langue";
-"Fresh news in 30 minutes" = "Informations d'actualité en 30 minutes";
-"A compilation of fresh news in one 30-minute playlist" = "Une compilation d'informations d'actualité dans une playlist de 30 minutes";
-"There are no tracks here yet. Subscribe to one of the channels first" = "Pas de titres. Abonnez-vous d'abord à l'une des chaînes";
-"Browse channels list" = "Afficher la liste de chaînes";
-
-"Today playlists"="Сегодняшняя подборка";
-"Recommended" = "Recommandations";
-"There are no recommendations" = "Pas de recommandations";
-"There are no tracks" = "Pas de titres";
-
-"Playlist"="Playlist";
-"Playlists"="Playlists";
-"Liked"="Понравившиеся";
-"Player"="Плеер";
-"name" = "nom";
 "My playlist" = "Ma playlist";
-"Clear all" = "Effacer";
+
+"name" = "nom";
+
+"No Description" = "Pas de description";
+
+"Player" = "Плеер";
+
+"playing now" = "joue maintenant";
+
+"Playlist" = "Playlist";
+
+/* playlists */
+"Playlists" = "Playlists";
+
+/* profile */
+"Profile" = "Mon Profil";
+
+"Recent added" = "Récents";
+
+"Recommended" = "Recommandations";
+
+"s" = " sec.";
+
+"s ago" = " sec. il y a";
+
+"Search" = "Rechercher";
 
 "see all" = "tout";
 
-"To the\ntop\nof the\nplaylist" = "Ajouter\nen haut\nde la\nplaylist";
-"To the\nbottom\nof the\nplaylist" = "Ajouter\nau bas\nde la\nplaylist";
+"Select language" = "Choisissez votre langue";
+
+"Select your language" = "Choisissez votre langue";
+
 "The playback speed of audio" = "Vitesse de lecture audio";
 
-"Choose Image" = "Sélectionner une image";
-"Camera" = "Caméra";
-"Gallery" = "Galerie";
-"Cancel" = "Annuler";
-"Default" = "Défaut";
-"Delete" = "Effacer";
+"There are no recommendations" = "Pas de recommandations";
 
-"Select language" = "Choisissez votre langue";
-"playing now" = "joue maintenant";
+"There are no tracks" = "Pas de titres";
 
-"No Description" = "Pas de description";
+"There are no tracks here yet. Subscribe to one of the channels first" = "Pas de titres. Abonnez-vous d'abord à l'une des chaînes";
+
+"To the\nbottom\nof the\nplaylist" = "Ajouter\nau bas\nde la\nplaylist";
+
+"To the\ntop\nof the\nplaylist" = "Ajouter\nen haut\nde la\nplaylist";
+
+"Today playlists" = "Сегодняшняя подборка";
+
 "Track added" = "Titre ajouté";
 
+"Tracks you’ve liked" = "titres\"J'aime\"";
+
+/* trends */
+"Trends" = "Tendances";
+
+"w" = " sem.";
+
+"w ago" = " sem. il y a";
+
+"Your future profile" = "Votre futur profil";
+
+/* track added */
+"alert_message.track_added" = "";
+
+/* add to the bottom */
+"button.add_track_to_playlist.bottom" = "";
+
+/* add to the top */
+"button.add_track_to_playlist.top" = "";
+
+/* follow */
+"button.follow" = "";
+
+/* following */
+"button.following" = "";
+
+/* show */
+"button.show" = "";
+
+/* browse channels list */
+"button.to_channels" = "";
+
 "Categories" = "";
+
+/* category */
+"chanenls.category" = "";
+
+/* channel */
+"channel" = "";
+
+/* categories */
+"channels.categories" = "";
+
+/* channel */
+"channels.channel" = "";
+
+/* hidden channels */
+"channels.hidden" = "";
+
+/* recent added */
+"channels.recent" = "";
+
+/* see all */
+"channels.seeAll" = "";
+
+/* subscribed channels */
+"channels.subsribedTitle" = "";
+
+/* you are subscribed */
+"channels.you_subscribed" = "";
+
+/* no channels */
+"empty_message.no_channels" = "";
+
+/* no description */
+"empty_message.no_desc" = "";
+
+/* no recommendations */
+"empty_message.no_recommendations" = "";
+
+/* no tracks */
+"empty_message.no_tracks" = "";
+
+/* no follows */
+"empty_message.noFollows" = "";
+
+/* not to show channel */
+"others.not_show" = "";
+
+/* description of channel not showing */
+"others.not_show_desctiption" = "";
+
+/* report */
+"others.report" = "";
+
+/* report on title */
+"others.report_on" = "";
+
+/* adult content */
+"others.reports.adult_content" = "";
+
+/* cruel content */
+"others.reports.cruel_content" = "";
+
+/* spam */
+"others.reports.spam" = "";
+
+/* share */
+"others.share" = "";
+
+/* show hidden channels */
+"others.show_hidden_channels" = "";
+
+/* playing now */
+"player.playing_now" = "";
+
+/* clear all */
+"playlists.clearAll" = "";
+
+/* current playlist */
+"playlists.current" = "";
+
+/* delete */
+"playlists.delete" = "";
+
+/* my playlist */
+"playlists.my_playlist" = "";
+
+/* playlist */
+"playlists.playlist" = "";
+
+/* recommended */
+"playlists.recommended" = "";
+
+/* description of recommended playlist */
+"playlists.recommendedDescription" = "";
+
+/* title of recommended playlist */
+"playlists.recommendedTitle" = "";
+
+/* camera */
+"profile.camera" = "";
+
+/* change content language */
+"profile.change_language" = "";
+
+/* choose image */
+"profile.choose_image" = "";
+
+/* gallery */
+"profile.gallery" = "";
+
+/* like */
+"profile.like" = "";
+
+/* tracks you've liked */
+"profile.liked_tracks" = "";
+
+/* name */
+"profile.name" = "";
+
+/* select language title */
+"profile.select_lang_title" = "";
+
 "Recent added" = "";
+
+/* search */
+"search" = "";
+
+/* cancel */
+"system_message.cancel" = "";
+
+/* default */
+"system_message.default" = "";
+
+/* delete */
+"system_message.delete" = "";
+
+/* no description */
+"system_message.no_desc" = "";
+
+/* ok */
+"system_message.ok" = "";
+
+/* channels */
+"tab.channels" = "";
+
+/* feed */
+"tab.feed" = "";
+
+/* playlists */
+"tab.playlists" = "";
+
+/* profile */
+"tab.profile" = "";
+
+/* trends */
+"tab.trends" = "";
+
+/* No comment provided by engineer. */
+"The matched route handler does not specify a target view controller." = "";
+
+/* No comment provided by engineer. */
+"The passed URL does not match a registered route." = "";
+
+/* ago */
+"time_ago.ago" = "";
+
+/* day */
+"time_ago.d" = "";
+
+/* day ago */
+"time_ago.d_ago" = "";
+
+/* hour */
+"time_ago.h" = "";
+
+/* hour ago */
+"time_ago.h_ago" = "";
+
+/* minute */
+"time_ago.m" = "";
+
+/* minute ago */
+"time_ago.m_ago" = "";
+
+/* second */
+"time_ago.s" = "";
+
+/* second ago */
+"time_ago.s_ago" = "";
+
+/* week */
+"time_ago.w" = "";
+
+/* week ago */
+"time_ago.w_ago" = "";
+
+/* speed of audio */
+"track_speed.message" = "";
+
 "You are subscribed" = "";

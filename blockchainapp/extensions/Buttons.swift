@@ -19,7 +19,7 @@ class FollowButton: UIButton {
 		self.layer.masksToBounds = true
 		self.setBackgroundImage(AppColor.Element.subscribe.img(), for: .normal)
 		self.setBackgroundImage(UIColor.white.img(), for: .selected)
-        self.setTitle("Following".localized, for: .selected)
+        self.setTitle(LocalizedStrings.Button.following, for: .selected)
 		self.setTitleColor(UIColor.white, for: .normal)
 		self.setTitleColor(AppColor.Element.subscribe, for: .selected)
 		self.contentEdgeInsets.left = 12
@@ -32,15 +32,15 @@ class FollowButton: UIButton {
 	}
     
     func set(title: String) {
-        if title != "Following".localized {
+        if title != LocalizedStrings.Button.following {
             self.setTitle(title, for: .normal)
         }
         
-        if title == "Show".localized {
+        if title == LocalizedStrings.Button.show {
             self.setTitle(title, for: .selected)
         }
 
-        self.isSelected = title == "Following".localized
+        self.isSelected = title == LocalizedStrings.Button.following
     }
 }
 

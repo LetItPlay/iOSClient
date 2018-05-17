@@ -1,85 +1,201 @@
-/* 
-  Localizable.strings
-  blockchainapp
 
-  Created by Ivan Gorbulin on 18/10/2017.
-  Copyright © 2017 Ivan Gorbulin. All rights reserved.
-*/
+/* track added */
+"alert_message.track_added" = "Трек добавлен";
 
-"likes" = "понравилось";
-"listening" = "прослушано";
-"comments" = "комментариев";
-"Follow" = "Слушать";
-"Following" = "Слушаю";
-"m ago" = " мин.";
-"s ago" = " сек.";
-"h ago" = " час.";
-"d ago" = " дн.";
-"w ago" = " нед.";
-"Feed" = "Новое";
-"Trends" = "Тренды";
-"Search" = "Поиск";
-"Channels" = "Каналы";
-"Channel" = "Канал";
-"Recent added" = "Недавно добавленные";
-"Tracks you’ve liked" = "Треки, понравившиеся вам";
-"Your future profile" = "ваш будущий профиль";
-"Current playlist" = "Текущий плейлист";
-"Profile" = "Профиль";
-"Select your language" = "Выберите язык контента";
-"Fresh news in 30 minutes" = "Актуальные новости за 30 минут";
-"A compilation of fresh news in one 30-minute playlist" = "Подборка актуальных новостей в виде 30-минутного плейлиста";
-"There are no tracks here yet. Subscribe to one of the channels first" = "Треки отсутствуют. Для начала подпишитесь на один из каналов";
-"There are no channels" = "Каналов нет";
-"Browse channels list" = "Перейти к списку каналов";
+/* add to the bottom */
+"button.add_track_to_playlist.bottom" = "Вниз\nплей-\nлиста";
 
-"Today playlists"="Сегодняшняя подборка";
-"Recommended" = "Рекомендуемое";
-"There are no recommendations" = "Рекомендации отсутствуют";
-"There are no tracks" = "Треки отсутствуют";
+/* add to the top */
+"button.add_track_to_playlist.top" = "Вверх\nплей-\nлиста";
 
-"Playlist" = "Плейлист";
-"Playlists" = "Плейлисты";
-"Liked" = "Понравившиеся";
-"name" = "имя";
-"My playlist" = "Мой плейлист";
-"Clear all" = "Очистить";
+/* follow */
+"button.follow" = "Слушать";
 
-"see all" = "см. все";
+/* following */
+"button.following" = "Слушаю";
 
-"To the\ntop\nof the\nplaylist" = "Вверх\nплей-\nлиста";
-"To the\nbottom\nof the\nplaylist" = "Вниз\nплей-\nлиста";
-"The playback speed of audio" = "Скорость воспроизведения аудио";
+/* show */
+"button.show" = "Показать";
 
-"Choose Image" = "Выбрать фото";
-"Camera" = "Камера";
-"Gallery" = "Галерея";
-"Cancel" = "Отмена";
-"Default" = "По умолчанию";
-"Delete" = "Удалить";
+/* browse channels list */
+"button.to_channels" = "Перейти к списку каналов";
 
-" followers" = " слушают";
+/* category */
+"chanenls.category" = "Категория";
 
-"Select language" = "Выберите язык";
-"Change content language" = "Язык контента";
-"Hidden channels" = "Скрытые каналы";
-"Track added" = "Трек добавлен";
+/* categories */
+"channels.categories" = "Категории";
 
-"Categories" = "Категории";
-"Recent added" = "Свежее";
-"Hidden channels" = "Скрытые каналы";
-"Subscribed channels" = "Подписки";
-"Category" = "Категория";
+/* channel */
+"channels.channel" = "Канал";
 
-"You are subscribed" = "Вы подписаны";
+/* hidden channels */
+"channels.hidden" = "Скрытые каналы";
 
-"Share" = "Поделиться";
-"Report" = "Пожаловаться";
-"Report on" = "Пожаловаться на";
-"Spam" = "Спам";
-"Adult content" = "Контент для взрослых";
-"Cruel content" = "Жестокий контент";
-"Not show" = "Скрыть";
-"The content of this feed will not appear in your feed" = "Содержимое этого фида не будет отображаться в вашем фиде";
-"Show hidden channels" = "Показать скрытые каналы";
-"Show" = "Показать";
+/* recent added */
+"channels.recent" = "Свежее";
+
+/* see all */
+"channels.seeAll" = "см. все";
+
+/* subscribed channels */
+"channels.subsribedTitle" = "Подписки";
+
+/* you are subscribed */
+"channels.you_subscribed" = "Вы подписаны";
+
+/* no channels */
+"empty_message.no_channels" = "Каналы отсутствуют";
+
+/* no description */
+"empty_message.no_desc" = "Нет описания";
+
+/* no recommendations */
+"empty_message.no_recommendations" = "Рекомендации отсутствуют";
+
+/* no tracks */
+"empty_message.no_tracks" = "Треки отсутствуют";
+
+/* no follows */
+"empty_message.noFollows" = "Треки отсутствуют. Для начала подпишитесь на один из каналов";
+
+/* not to show channel */
+"others.not_show" = "Скрыть";
+
+/* description of channel not showing */
+"others.not_show_desctiption" = "Содержимое этого фида не будет отображаться в вашем фиде";
+
+/* report */
+"others.report" = "Пожаловаться";
+
+/* report on title */
+"others.report_on" = "Пожаловаться на";
+
+/* adult content */
+"others.reports.adult_content" = "Контент для взрослых";
+
+/* cruel content */
+"others.reports.cruel_content" = "Жестокий контент";
+
+/* spam */
+"others.reports.spam" = "Спам";
+
+/* share */
+"others.share" = "Поделиться";
+
+/* show hidden channels */
+"others.show_hidden_channels" = "Показать скрытые каналы";
+
+/* playing now */
+"player.playing_now" = "проигрывается";
+
+/* clear all */
+"playlists.clearAll" = "Очистить";
+
+/* current playlist */
+"playlists.current" = "Текущий плейлист";
+
+/* my playlist */
+"playlists.my_playlist" = "Мой плейлист";
+
+/* playlist */
+"playlists.playlist" = "Плейлист";
+
+/* recommended */
+"playlists.recommended" = "Рекомендуемое";
+
+/* description of recommended playlist */
+"playlists.recommendedDescription" = "Подборка актуальных новостей в виде 30-минутного плейлиста";
+
+/* title of recommended playlist */
+"playlists.recommendedTitle" = "Актуальные новости за 30 минут";
+
+/* camera */
+"profile.camera" = "Камера";
+
+/* change content language */
+"profile.change_language" = "Язык контента";
+
+/* choose image */
+"profile.choose_image" = "Выбрать фото";
+
+/* gallery */
+"profile.gallery" = "Галерея";
+
+/* like */
+"profile.like" = "Лайк";
+
+/* tracks you've liked */
+"profile.liked_tracks" = "Треки, понравившиеся вам";
+
+/* name */
+"profile.name" = "имя";
+
+/* select language title */
+"profile.select_lang_title" = "Выберите язык";
+
+/* search */
+"search" = "Поиск";
+
+/* cancel */
+"system_message.cancel" = "Отмена";
+
+/* default */
+"system_message.default" = "По умолчанию";
+
+/* delete */
+"system_message.delete" = "Удалить";
+
+/* ok */
+"system_message.ok" = "ОК";
+
+/* channels */
+"tab.channels" = "Каналы";
+
+/* feed */
+"tab.feed" = "Новое";
+
+/* playlists */
+"tab.playlists" = "Плейлисты";
+
+/* profile */
+"tab.profile" = "Профиль";
+
+/* trends */
+"tab.trends" = "Тренды";
+
+/* day ago */
+"time_ago.d_ago" = " дн.";
+
+/* hour ago */
+"time_ago.h_ago" = " ч.";
+
+/* minute ago */
+"time_ago.m_ago" = " мин.";
+
+/* second ago */
+"time_ago.s_ago" = " сек.";
+
+/* week ago */
+"time_ago.w_ago" = " нед.";
+
+/* speed of audio */
+"track_speed.message" = "Скорость воспроизведения аудио";
+
+/* ago */
+"time_ago.ago" = "";
+
+/* day */
+"time_ago.d" = "";
+
+/* hour */
+"time_ago.h" = "";
+
+/* minute */
+"time_ago.m" = "";
+
+/* second */
+"time_ago.s" = "";
+
+/* week */
+"time_ago.w" = "";

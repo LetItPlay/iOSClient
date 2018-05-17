@@ -124,41 +124,34 @@ extension Date {
 		if let day = components.day, day != 0 {
 			if day > 7 {
                 if Locale.preferredLanguages[0] == "fr" {
-                    return "ago".localized + "\(Int(Double(day)/7))" + "w".localized
+                    return LocalizedStrings.TimeAgo.ago + "\(Int(Double(day)/7))" + LocalizedStrings.TimeAgo.week
                 }
-				return "\(Int(Double(day)/7))" + "w ago".localized
+				return "\(Int(Double(day)/7))" + LocalizedStrings.TimeAgo.weekAgo
 			}
             if Locale.preferredLanguages[0] == "fr" {
-                return "ago".localized + "\(day)" + "d".localized
+                return LocalizedStrings.TimeAgo.ago + "\(day)" + LocalizedStrings.TimeAgo.day
             }
-			return "\(day)" + "d ago".localized
+			return "\(day)" + LocalizedStrings.TimeAgo.dayAgo
 		} else
 			if let hours = components.hour, hours != 0 {
                 if Locale.preferredLanguages[0] == "fr" {
-                    return "ago".localized + "\(hours)" + "h".localized
+                    return LocalizedStrings.TimeAgo.ago + "\(hours)" + LocalizedStrings.TimeAgo.hour
                 }
-				return "\(hours)" + "h ago".localized
+				return "\(hours)" + LocalizedStrings.TimeAgo.hourAgo
 			} else
 				if let min = components.minute, min != 0 {
                     if Locale.preferredLanguages[0] == "fr" {
-                        return "ago".localized + "\(min)" + "m".localized
+                        return LocalizedStrings.TimeAgo.ago + "\(min)" + LocalizedStrings.TimeAgo.minute
                     }
-					return "\(min)" + "m ago".localized
+					return "\(min)" + LocalizedStrings.TimeAgo.minuteAgo
 				} else
 					if let sec = components.second {
                         if Locale.preferredLanguages[0] == "fr" {
-                            return "ago".localized + "\(sec)" + "s".localized
+                            return LocalizedStrings.TimeAgo.ago + "\(sec)" + LocalizedStrings.TimeAgo.second
                         }
-						return "\(sec)" + "s ago".localized
+						return "\(sec)" + LocalizedStrings.TimeAgo.secondAgo
 		}
-		return "1" + "s ago".localizedLowercase
-	}
-}
-
-extension String {
-	var localized: String {
-		//🖕Fuck the translators team, they don’t deserve comments
-		return NSLocalizedString(self, comment: "")
+		return "1" + LocalizedStrings.TimeAgo.secondAgo
 	}
 }
 

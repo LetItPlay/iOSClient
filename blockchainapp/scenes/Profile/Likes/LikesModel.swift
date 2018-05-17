@@ -39,7 +39,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
     private var channels: Set<Channel> = Set<Channel>()
     private var trackChannels: [Channel] = []
 	var tracks: [Track] = []
-	var playlistName: String = "Like".localized
+	var playlistName: String = LocalizedStrings.Profile.like
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
     private var currentOffest: Int = 0
     
@@ -118,7 +118,7 @@ class LikesModel: LikesModelProtocol, LikesEventHandler, PlayerUsingProtocol {
             break
         case .appear:
             self.getTracks()
-			self.playlistName = "Like".localized + " \(self.tracks.count)"
+			self.playlistName = LocalizedStrings.Profile.like + " \(self.tracks.count)"
             break
         default:
             break

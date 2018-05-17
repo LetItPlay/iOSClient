@@ -29,9 +29,9 @@ class MediumChannelViewModel: SmallChannelViewModel {
     
     func getMainButtonTitle() -> String {
         if self.isHidden {
-            return "Show".localized
+            return LocalizedStrings.Button.show
         } else {
-            return self.isSubscribed ? "Following".localized : "Follow".localized
+            return self.isSubscribed ? LocalizedStrings.Button.following : LocalizedStrings.Button.follow
         }
     }
 }

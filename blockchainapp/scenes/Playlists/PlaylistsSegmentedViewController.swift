@@ -10,7 +10,7 @@ import UIKit
 
 class PlaylistsSegmentedViewController: UIViewController {
     
-    var playlistsSegmentedControll: UISegmentedControl = UISegmentedControl(items: ["My playlist".localized, "Recommended".localized])
+    var playlistsSegmentedControll: UISegmentedControl = UISegmentedControl(items: [LocalizedStrings.Playlists.myPlaylist, LocalizedStrings.Playlists.recommended])
     
     let firstViewController = UserPlaylistBuilder.build(params: nil)
     let secondViewController = PlaylistsBuilder.build(params: nil)

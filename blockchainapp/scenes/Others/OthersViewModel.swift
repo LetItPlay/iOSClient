@@ -46,9 +46,9 @@ class OthersViewModel: OthersVMProtocol, OthersModelDelegate {
         get {
             switch self.objectToShare! {
             case .track:
-                return OthersAlertData(actionTitle: "Report".localized, alertTitle: "Report on".localized, alertMessage: "", alertActions: [(title: "Spam".localized, event: OthersEvent.report(.spam)), (title: "Adult content".localized, event: OthersEvent.report(.adultContent)), (title: "Cruel content".localized, event: OthersEvent.report(.cruelContent))], showOkButton: false)
+                return OthersAlertData(actionTitle: LocalizedStrings.Others.report, alertTitle: LocalizedStrings.Others.reportOn, alertMessage: "", alertActions: [(title: LocalizedStrings.Others.Reports.spam, event: OthersEvent.report(.spam)), (title: LocalizedStrings.Others.Reports.adultContent, event: OthersEvent.report(.adultContent)), (title: LocalizedStrings.Others.Reports.cruelContent, event: OthersEvent.report(.cruelContent))], showOkButton: false)
             case .channel:
-                return OthersAlertData(actionTitle: "Not show".localized, alertTitle: "Not show".localized, alertMessage: "The content of this feed will not appear in your feed".localized, alertActions: [(title: "Show hidden channels".localized, event: OthersEvent.showHidden)], showOkButton: true)
+                return OthersAlertData(actionTitle: LocalizedStrings.Others.notShow, alertTitle: LocalizedStrings.Others.notShow, alertMessage: LocalizedStrings.Others.notShowDescription, alertActions: [(title: LocalizedStrings.Others.showHiddenChannels, event: OthersEvent.showHidden)], showOkButton: true)
             }
         }
     }

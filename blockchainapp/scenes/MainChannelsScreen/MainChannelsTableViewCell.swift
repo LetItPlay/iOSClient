@@ -21,14 +21,14 @@ class MainChannelsTableViewCell: UITableViewCell, StandartTableViewCell {
     let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
-        label.text = "You are subscribed".localized
+        label.text = LocalizedStrings.Channels.youSubscribed
         label.textAlignment = .left
         return label
     }()
     
     let seeAllButton: UIButton = {
         let button = UIButton()
-        button.setTitle("see all".localized, for: .normal)
+        button.setTitle(LocalizedStrings.Channels.seeAll, for: .normal)
         button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.font = AppFont.Button.mid

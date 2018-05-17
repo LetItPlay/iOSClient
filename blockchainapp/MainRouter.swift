@@ -31,11 +31,11 @@ class MainRouter: Router {
 	
 	func tabs() -> [UINavigationController] {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
-			("Feed".localized, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
-			("Trends".localized, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
-			("Playlists".localized, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())),
-			("Channels".localized, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))),
-			("Profile".localized, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
+			(LocalizedStrings.TabBar.feed, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
+			(LocalizedStrings.TabBar.trends, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
+			(LocalizedStrings.TabBar.playlists, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())),
+			(LocalizedStrings.TabBar.channels, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))),
+			(LocalizedStrings.TabBar.profile, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]
 		
 		return tabs.map({ (tuple) -> UINavigationController in
 			let nvc = UINavigationController(rootViewController: tuple.1.1!)

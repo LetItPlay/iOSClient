@@ -53,7 +53,7 @@ class PlayingPlaylistViewController: UIViewController {
         
         nameLabel.font = AppFont.Title.big
         nameLabel.textColor = AppColor.Title.dark
-        nameLabel.text = "Current playlist".localized
+        nameLabel.text = LocalizedStrings.Playlists.currentPlaylist
         
         view.addSubview(nameLabel)
         nameLabel.snp.makeConstraints { (make) in

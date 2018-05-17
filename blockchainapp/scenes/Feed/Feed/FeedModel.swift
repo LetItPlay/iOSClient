@@ -41,7 +41,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	
 	weak var delegate: FeedModelDelegate?
 	
-	var playlistName: String = "Feed".localized
+	var playlistName: String = LocalizedStrings.TabBar.feed
 	var tracks: [Track] = []
 	private var channels: Set<Channel> = Set<Channel>()
 	var playingIndex: Variable<Int?> = Variable<Int?>(nil)
@@ -52,7 +52,7 @@ class FeedModel: FeedModelProtocol, FeedEventHandler {
 	init(isFeed: Bool) {
 		self.isFeed = isFeed
         
-        self.playlistName = isFeed ? "Feed".localized : "Trends".localized
+        self.playlistName = isFeed ? LocalizedStrings.TabBar.feed : LocalizedStrings.TabBar.trends
         
 		dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
 			return RequestManager.shared.tracks(req: self.isFeed ? TracksRequest.feed(offset: offset, count: self.amount) : TracksRequest.trends(offset: offset, count: self.amount) )

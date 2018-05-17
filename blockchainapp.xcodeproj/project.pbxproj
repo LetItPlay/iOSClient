@@ -111,6 +111,7 @@
 		9DA077CB20345055002BF631 /* ChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CA20345055002BF631 /* ChannelViewModel.swift */; };
 		9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CC2034505F002BF631 /* ChannelModel.swift */; };
 		9DA077CF20345071002BF631 /* ChannelEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA077CE20345071002BF631 /* ChannelEmitter.swift */; };
+		9DB4FCDD20AD513B008BAE23 /* LocalizedStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */; };
 		9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */; };
 		9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */; };
 		9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */; };
@@ -268,9 +269,6 @@
 		36E155A2204D6F1800C65DBE /* UserPlaylistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistViewController.swift; sourceTree = "<group>"; };
 		36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaylistManager.swift; sourceTree = "<group>"; };
 		36E217FF208F4C9D00BBAE95 /* PlaylistsSegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsSegmentedViewController.swift; sourceTree = "<group>"; };
-		36F32E84206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
-		36F32E85206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
-		36F32E86206257E400F67A76 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		36F613C9202D67C000661E48 /* ProfileEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEmitter.swift; sourceTree = "<group>"; };
 		36F613CB202D6E3200661E48 /* ProfileBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileBuilder.swift; sourceTree = "<group>"; };
 		36F7C39A201AF73200F99A9A /* ChannelsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -294,6 +292,7 @@
 		9DA077CA20345055002BF631 /* ChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewModel.swift; sourceTree = "<group>"; };
 		9DA077CC2034505F002BF631 /* ChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelModel.swift; sourceTree = "<group>"; };
 		9DA077CE20345071002BF631 /* ChannelEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelEmitter.swift; sourceTree = "<group>"; };
+		9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedStrings.swift; sourceTree = "<group>"; };
 		9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelViewModel.swift; sourceTree = "<group>"; };
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
@@ -398,6 +397,7 @@
 				FD10BE55E82F75A804CA6B47 /* RequestManager.swift */,
 				01418561203C41EA004C69F0 /* ServerUpdateManager.swift */,
 				36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */,
+				9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -859,6 +859,7 @@
 				01321B681FCDADFF009BFE62 /* Embed Frameworks */,
 				01EB96C320171CEE00D5A419 /* Run Script */,
 				BBCD4C1E4B0A6811E3ECD722 /* [CP] Embed Pods Frameworks */,
+				9DB4FCDE20AD5172008BAE23 /* Localize strings */,
 			);
 			buildRules = (
 			);
@@ -949,7 +950,6 @@
 			knownRegions = (
 				en,
 				Base,
-				fr,
 			);
 			mainGroup = CF44531D1F54139900660474;
 			productRefGroup = CF4453271F54139900660474 /* Products */;
@@ -1060,6 +1060,20 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		9DB4FCDE20AD5172008BAE23 /* Localize strings */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Localize strings";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which bartycrouch > /dev/null; then\n# Incrementally update all Storyboards/XIBs strings files\nbartycrouch interfaces -p \"$PROJECT_DIR/blockchainapp\"\n\n# Add new keys to Localizable.strings files from NSLocalizedString in code\nbartycrouch code -p \"$PROJECT_DIR/blockchainapp\" -l \"$PROJECT_DIR/blockchainapp\" -a -s\n\n# Translate all empty values using the Microsoft Translator API\nbartycrouch translate -p \"$PROJECT_DIR/blockchainapp\" -l en -i \"<API_ID>\" -s \"<API_SECRET>\"\nelse\necho \"warning: BartyCrouch not installed, download it from https://github.com/Flinesoft/BartyCrouch\"\nfi";
 		};
 		BBCD4C1E4B0A6811E3ECD722 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1229,6 +1243,7 @@
 				9D861CA2209C6E7600DCBB60 /* MainChannelsCategotyCollectionViewCell.swift in Sources */,
 				9D0B18F9207F68E700CBE87B /* OthersViewModel.swift in Sources */,
 				9DFAE6F42060F5EC00EF7C4D /* TrackInfoBlurView.swift in Sources */,
+				9DB4FCDD20AD513B008BAE23 /* LocalizedStrings.swift in Sources */,
 				9DFAE6F52060F5EC00EF7C4D /* TrackInfoViewController.swift in Sources */,
 				361CD018204815140097F8E9 /* LikeHeader.swift in Sources */,
 				3626C8D42036A81E0016772B /* SearchChannelViewModel.swift in Sources */,
@@ -1287,7 +1302,6 @@
 			children = (
 				CF2715301F97C79F0038C81C /* en */,
 				CF27152E1F97C79A0038C81C /* ru */,
-				36F32E86206257E400F67A76 /* fr */,
 			);
 			name = Localizable.strings;
 			path = .;
@@ -1298,7 +1312,6 @@
 			children = (
 				CF44532E1F54139900660474 /* Base */,
 				CF2715291F97BA370038C81C /* ru */,
-				36F32E85206257E400F67A76 /* fr */,
 			);
 			name = Main.storyboard;
 			path = .;
@@ -1309,7 +1322,6 @@
 			children = (
 				CF4453331F54139900660474 /* Base */,
 				CF27152A1F97BA370038C81C /* ru */,
-				36F32E84206257E400F67A76 /* fr */,
 			);
 			name = LaunchScreen.storyboard;
 			path = .;

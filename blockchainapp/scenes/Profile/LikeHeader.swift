@@ -27,7 +27,7 @@ class LikeHeader: UIView {
         let label = UILabel()
         label.font = AppFont.Title.big
         label.textColor = AppColor.Title.dark
-        label.text = "Tracks you’ve liked".localized
+        label.text = LocalizedStrings.Profile.likedTracks
         
         self.addSubview(label)
         label.snp.makeConstraints { (make) in

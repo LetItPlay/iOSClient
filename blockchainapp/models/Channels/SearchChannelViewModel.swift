@@ -27,6 +27,6 @@ class SearchChannelViewModel: SmallChannelViewModel {
     }
     
     func getMainButtonTitle() -> String {
-        return self.isSubscribed ? "Following".localized : "Follow".localized
+        return self.isSubscribed ? LocalizedStrings.Button.following : LocalizedStrings.Button.follow
     }
 }

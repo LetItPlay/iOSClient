@@ -55,7 +55,7 @@ protocol ChannelModelDelegate: class {
 
 class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtocol {
 	
-	var playlistName: String = "Channel".localized
+	var playlistName: String = LocalizedStrings.Channels.channel
     weak var delegate: ChannelModelDelegate?
     
     var tracks: [Track] = []
@@ -69,7 +69,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
         
     init(channelID: Int, playTrack: Int? = nil)
     {
-		self.playlistName = "Channel".localized + " \(channelID)"
+		self.playlistName = LocalizedStrings.Channels.channel + " \(channelID)"
         
         if let id = playTrack {
             self.currentTrackID = id
@@ -96,7 +96,7 @@ class ChannelModel: ChannelModelProtocol, ChannelEvenHandler, PlayerUsingProtoco
 
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
-			self.playlistName = "Channel".localized + " \(channel.name)"
+			self.playlistName = LocalizedStrings.Channels.channel + " \(channel.name)"
             self.delegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
 //            self.delegate?.followUpdate(isSubscribed: self.channel.isSubscribed)
         }).disposed(by: disposeBag)

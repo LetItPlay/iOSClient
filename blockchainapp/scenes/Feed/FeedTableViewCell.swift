@@ -219,7 +219,7 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
         let alert = UILabel()
         alert.font = AppFont.Title.big
         alert.textAlignment = .center
-        alert.text = "Track added".localized
+        alert.text = LocalizedStrings.AlertMessage.trackAdded
         return alert
     }()
     

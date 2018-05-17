@@ -137,7 +137,7 @@ class ProfileViewController: UIViewController {
         languageAlert.view.tintColor = AppColor.Title.lightGray
         
         let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-        let messageAttrString = NSMutableAttributedString(string: "Select language".localized, attributes: messageFont)
+        let messageAttrString = NSMutableAttributedString(string: LocalizedStrings.Profile.selectLanguageTitle, attributes: messageFont)
         languageAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
         for language in UserSettings.languages.map({$0.name}) {
@@ -153,7 +153,7 @@ class ProfileViewController: UIViewController {
             }
         }
         
-        languageAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
+        languageAlert.addAction(UIAlertAction.init(title: LocalizedStrings.SystemMessage.cancel, style: .destructive, handler: nil))
         
         self.present(languageAlert, animated: true, completion: nil)
 	}
@@ -227,19 +227,19 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
         alert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)
         
         let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-        let messageAttrString = NSMutableAttributedString(string: "Choose Image".localized, attributes: messageFont)
+        let messageAttrString = NSMutableAttributedString(string: LocalizedStrings.Profile.chooseImage, attributes: messageFont)
         alert.setValue(messageAttrString, forKey: "attributedTitle")
         
         
-        alert.addAction(UIAlertAction(title: "Camera".localized, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: LocalizedStrings.Profile.camera, style: .default, handler: { _ in
             self.openCamera()
         }))
         
-        alert.addAction(UIAlertAction(title: "Gallery".localized, style: .default, handler: { _ in
+        alert.addAction(UIAlertAction(title: LocalizedStrings.Profile.gallery, style: .default, handler: { _ in
             self.openGallery()
         }))
         
-        alert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: LocalizedStrings.SystemMessage.cancel, style: .cancel, handler: nil))
         
         self.present(alert, animated: true, completion: nil)
     }
@@ -254,7 +254,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
         else
         {
             let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.ok, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }

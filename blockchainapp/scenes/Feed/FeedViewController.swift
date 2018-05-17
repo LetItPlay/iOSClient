@@ -28,8 +28,8 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
 	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
 
-	let emptyLabel = EmptyLabel(title: "There are no tracks here yet. Subscribe to one of the channels first".localized)
-    let emptyButton = EmptyButton(title: "Browse channels list".localized)
+	let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noFollows)
+    let emptyButton = EmptyButton(title: LocalizedStrings.Button.toChannels)
     
     var tableProvider: TableProvider!
     
@@ -338,7 +338,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         var toBeginning: Bool!
         var image: UIImage!
-        var addTo = ""
         
         let myView = UIView(frame: CGRect(x: 0, y: 0, width: 150, height: 305))
         let myLabel = UILabel()
@@ -351,7 +350,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
         {
             image = UIImage(named: "illustrationTop")
             toBeginning = true
-            addTo = "To the\ntop"
             
             let imageView = UIImageView(image: image)
             myView.addSubview(imageView)
@@ -360,7 +358,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
                 make.centerY.equalToSuperview()
             }
             
-            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.text = LocalizedStrings.Button.addTrackToPlaylist.top
             myLabel.textAlignment = .right
             myView.addSubview(myLabel)
             myLabel.snp.makeConstraints { (make) in
@@ -372,7 +370,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
         {
             image = UIImage(named: "illustrationBottom")
             toBeginning = false
-            addTo = "To the\nbottom"
             
             let imageView = UIImageView(image: image)
             myView.addSubview(imageView)
@@ -381,7 +378,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
                 make.centerY.equalToSuperview()
             }
             
-            myLabel.text = "\(addTo)\nof the\nplaylist".localized
+            myLabel.text = LocalizedStrings.Button.addTrackToPlaylist.bottom
             myLabel.textAlignment = .left
             myView.addSubview(myLabel)
             myLabel.snp.makeConstraints { (make) in
@@ -390,7 +387,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
             }
         }
         
-        let addToPlaylistAction = SwipeAction(style: .default, title: "\(addTo)\nof the\nplaylist".localized, handler: { action, indexPath in
+        let addToPlaylistAction = SwipeAction(style: .default, title: "", handler: { action, indexPath in
             self.addTrack(toBegining: toBeginning, for: indexPath)
         })
 

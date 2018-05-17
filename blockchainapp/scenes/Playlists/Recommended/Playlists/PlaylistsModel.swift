@@ -51,7 +51,7 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 		})
 		
 		self.dataAction.elements.subscribe(onNext: { (audio) in
-			self.playlists = [(image: UIImage.init(named: "news"), title: "Fresh news in 30 minutes".localized, descr: "A compilation of fresh news in one 30-minute playlist".localized, tracks: audio)]
+			self.playlists = [(image: UIImage.init(named: "news"), title: LocalizedStrings.Playlists.recommendedTitle, descr: LocalizedStrings.Playlists.recommendedDescription, tracks: audio)]
 			self.getPlaylistViewModels()
 		}).disposed(by: disposeBag)
 		
@@ -66,7 +66,7 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
 
     func formatPlaylists(index: Int) {
         let playlist = self.playlists[index]
-		let name = "Playlist".localized + " \"\(playlist.title)\""
+		let name = LocalizedStrings.Playlists.playlist + " \"\(playlist.title)\""
 		let player = PlayerHandler.player
 		player?.loadPlaylist(name: name, tracks: playlist.tracks)
 		let _ = player?.trackSelected(playlistName: name, id: playlist.tracks[0].id)

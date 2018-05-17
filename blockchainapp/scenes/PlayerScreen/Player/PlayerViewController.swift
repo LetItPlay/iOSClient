@@ -87,7 +87,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         speedAlert.view.tintColor = AppColor.Title.lightGray
         
         let messageFont = [NSAttributedStringKey.font: AppFont.Title.small, NSAttributedStringKey.foregroundColor: AppColor.Title.lightGray]
-        let messageAttrString = NSMutableAttributedString(string: "The playback speed of audio".localized, attributes: messageFont)
+        let messageAttrString = NSMutableAttributedString(string: LocalizedStrings.TrackSpeed.message, attributes: messageFont)
         speedAlert.setValue(messageAttrString, forKey: "attributedTitle")
         
         for speed in self.viewModel.speeds {
@@ -103,7 +103,7 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
             }
         }
         
-        speedAlert.addAction(UIAlertAction.init(title: "Cancel".localized, style: .destructive, handler: nil))
+        speedAlert.addAction(UIAlertAction.init(title: LocalizedStrings.SystemMessage.cancel, style: .destructive, handler: nil))
         
         self.present(speedAlert, animated: true, completion: nil)
     }

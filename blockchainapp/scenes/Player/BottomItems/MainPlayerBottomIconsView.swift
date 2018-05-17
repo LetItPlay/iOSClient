@@ -14,7 +14,7 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
     var emitter: MainPlayerBottomIconsEmitter!
     var vm: PlayerViewModel!
     
-    var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: "Default".localized, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
+    var speeds: [(text: String, value: Float)] = [(text: "x 0.25", value: 0.25), (text: "x 0.5", value: 0.5), (text: "x 0.75", value: 0.75), (text: LocalizedStrings.SystemMessage.defaultMessage, value: 1), (text: "x 1.25", value: 1.25), (text: "x 1.5", value: 1.5), (text: "x 2", value: 2)]
 
     var trackLikeButton: UIButton = {
         let button = UIButton()

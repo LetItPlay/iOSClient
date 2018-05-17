@@ -17,12 +17,12 @@ class UserPlaylistViewController: UIViewController {
     let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
     var tableProvider: TableProvider!
     
-    let emptyLabel = EmptyLabel(title: "There are no tracks".localized)
+    let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noTracks)
             
     let clearButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(AppColor.Element.redBlur.withAlphaComponent(1), for: .normal)
-        button.setTitle("Clear all".localized, for: .normal)
+        button.setTitle(LocalizedStrings.Playlists.clearAll, for: .normal)
         button.titleLabel?.font = AppFont.Button.mid
         button.titleLabel?.textAlignment = .right
         return button
@@ -232,7 +232,7 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
         
-        let deleteAction = SwipeAction(style: .default, title: "Delete".localized) { action, indexPath in
+        let deleteAction = SwipeAction(style: .default, title: LocalizedStrings.SystemMessage.delete) { action, indexPath in
             self.emitter.send(event: .trackDelete(index: indexPath.item))
         }
         deleteAction.backgroundColor = .white

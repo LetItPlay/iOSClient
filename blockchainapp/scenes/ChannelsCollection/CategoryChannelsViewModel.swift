@@ -61,6 +61,6 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
     }
     
     func showSearch(text: String?) {
-        MainRouter.shared.show(screen: "search", params: ["text" : text], present: false)
+        MainRouter.shared.show(screen: "search", params: ["text" : text as Any], present: false)
     }
 }

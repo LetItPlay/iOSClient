@@ -35,7 +35,7 @@ class UserPlaylistModel: UserPlaylistModelProtocol, UserPlaylistEventHandler, Us
     weak var delegate: UserPlaylistModelDelegate?
     var playingIndex: Variable<Int?> = Variable<Int?>(nil)
 	
-	var playlistName: String = "My playlist".localized
+	var playlistName: String = LocalizedStrings.Playlists.myPlaylist
 	var tracks: [Track] = []
     private var tracksObs: Variable<[Track]> = Variable<[Track]>([])
 	private var channels: [Channel] = []

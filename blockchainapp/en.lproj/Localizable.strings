@@ -1,13 +1,201 @@
-/* 
-  Localizable.strings
-  blockchainapp
 
-  Created by Ivan Gorbulin on 18/10/2017.
-  Copyright © 2017 Ivan Gorbulin. All rights reserved.
-*/
+/* track added */
+"alert_message.track_added" = "Track added";
 
-"likes"="likes";
-"listening"="listening";
-"comments"="comments";
-"follow"="follow";
-"following"="following";
+/* add to the bottom */
+"button.add_track_to_playlist.bottom" = "To the\nbottom\nof the\nplaylist";
+
+/* add to the top */
+"button.add_track_to_playlist.top" = "To the\ntop\nof the\nplaylist";
+
+/* follow */
+"button.follow" = "Follow";
+
+/* following */
+"button.following" = "Following";
+
+/* show */
+"button.show" = "Show";
+
+/* browse channels list */
+"button.to_channels" = "Browse channels list";
+
+/* category */
+"chanenls.category" = "Category";
+
+/* categories */
+"channels.categories" = "Categories";
+
+/* channel */
+"channels.channel" = "Channel";
+
+/* hidden channels */
+"channels.hidden" = "Hidden channels";
+
+/* recent added */
+"channels.recent" = "Recent added";
+
+/* see all */
+"channels.seeAll" = "see all";
+
+/* subscribed channels */
+"channels.subsribedTitle" = "Subscribed channels";
+
+/* you are subscribed */
+"channels.you_subscribed" = "You are subscribed";
+
+/* no channels */
+"empty_message.no_channels" = "There are no channels";
+
+/* no description */
+"empty_message.no_desc" = "No Description";
+
+/* no recommendations */
+"empty_message.no_recommendations" = "There are no recommendations";
+
+/* no tracks */
+"empty_message.no_tracks" = "There are no tracks";
+
+/* no follows */
+"empty_message.noFollows" = "There are no tracks here yet. Subscribe to one of the channels first";
+
+/* not to show channel */
+"others.not_show" = "Not show";
+
+/* description of channel not showing */
+"others.not_show_desctiption" = "The content of this feed will not appear in your feed";
+
+/* report */
+"others.report" = "Report";
+
+/* report on title */
+"others.report_on" = "Report on";
+
+/* adult content */
+"others.reports.adult_content" = "Adult content";
+
+/* cruel content */
+"others.reports.cruel_content" = "Cruel content";
+
+/* spam */
+"others.reports.spam" = "Spam";
+
+/* share */
+"others.share" = "Share";
+
+/* show hidden channels */
+"others.show_hidden_channels" = "Show hidden channels";
+
+/* playing now */
+"player.playing_now" = "playing now";
+
+/* clear all */
+"playlists.clearAll" = "Clear all";
+
+/* current playlist */
+"playlists.current" = "Current playlist";
+
+/* my playlist */
+"playlists.my_playlist" = "My playlist";
+
+/* playlist */
+"playlists.playlist" = "Playlist";
+
+/* recommended */
+"playlists.recommended" = "Recommended";
+
+/* description of recommended playlist */
+"playlists.recommendedDescription" = "A compilation of fresh news in one 30-minute playlist";
+
+/* title of recommended playlist */
+"playlists.recommendedTitle" = "Fresh news in 30 minutes";
+
+/* camera */
+"profile.camera" = "Camera";
+
+/* change content language */
+"profile.change_language" = "Change content language";
+
+/* choose image */
+"profile.choose_image" = "Choose Image";
+
+/* gallery */
+"profile.gallery" = "Gallery";
+
+/* like */
+"profile.like" = "Like";
+
+/* tracks you've liked */
+"profile.liked_tracks" = "Tracks you've liked";
+
+/* name */
+"profile.name" = "name";
+
+/* select language title */
+"profile.select_lang_title" = "Select language";
+
+/* search */
+"search" = "Search";
+
+/* cancel */
+"system_message.cancel" = "Cancel";
+
+/* default */
+"system_message.default" = "Default";
+
+/* delete */
+"system_message.delete" = "Delete";
+
+/* ok */
+"system_message.ok" = "OK";
+
+/* channels */
+"tab.channels" = "Channels";
+
+/* feed */
+"tab.feed" = "Feed";
+
+/* playlists */
+"tab.playlists" = "Playlists";
+
+/* profile */
+"tab.profile" = "Profile";
+
+/* trends */
+"tab.trends" = "Trends";
+
+/* ago */
+"time_ago.ago" = "ago";
+
+/* day */
+"time_ago.d" = "d";
+
+/* day ago */
+"time_ago.d_ago" = "d ago";
+
+/* hour */
+"time_ago.h" = "h";
+
+/* hour ago */
+"time_ago.h_ago" = "h ago";
+
+/* minute */
+"time_ago.m" = "m";
+
+/* minute ago */
+"time_ago.m_ago" = "m ago";
+
+/* second */
+"time_ago.s" = "s";
+
+/* second ago */
+"time_ago.s_ago" = "s ago";
+
+/* week */
+"time_ago.w" = "w";
+
+/* week ago */
+"time_ago.w_ago" = "w ago";
+
+/* speed of audio */
+"track_speed.message" = "The playback speed of audio";
