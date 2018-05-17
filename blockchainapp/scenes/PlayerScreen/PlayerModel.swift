@@ -80,7 +80,6 @@ class PlayerModel {
 			self.playerDelegate?.update(track: TrackViewModel(track: item))
             self.playerDelegate?.update(speeds: self.speedConstants.map({$0.text}))
             self.player.load(item: item.audioTrack())
-//            self.player.make(command: prev == .playing ? .play : .pause)
         }
     }
     
