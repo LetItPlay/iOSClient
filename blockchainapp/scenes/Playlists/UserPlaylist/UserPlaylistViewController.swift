@@ -14,7 +14,7 @@ class UserPlaylistViewController: UIViewController {
     var viewModel: UserPlaylistVMProtocol!
     var emitter: UserPlaylistEmitterProtocol!
 
-    let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .plain)
+    let tableView = BaseTableView(frame: CGRect.zero, style: .plain)
     var tableProvider: TableProvider!
     
     let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noTracks)
@@ -88,7 +88,6 @@ class UserPlaylistViewController: UIViewController {
 //        tableView.dataSource = self
         
         self.tableView.contentInset.top = 44
-        self.tableView.contentInset.bottom = 65
         
         self.tableView.separatorColor = self.tableView.backgroundColor
         

@@ -15,7 +15,7 @@ protocol SearchViewControllerDelegate {
 
 class SearchViewController: UIViewController, UISearchControllerDelegate, UISearchBarDelegate {
     
-    let tableView: UITableView! = UITableView.init(frame: CGRect.zero, style: .grouped)
+    let tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     var searchController: UISearchController!
@@ -75,7 +75,6 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         self.view.backgroundColor = .white
         
         self.tableView.tableFooterView = nil
-        self.tableView.contentInset.bottom = 33
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
         self.tableView.register(SmallChannelTableViewCell.self, forCellReuseIdentifier: SmallChannelTableViewCell.cellID)

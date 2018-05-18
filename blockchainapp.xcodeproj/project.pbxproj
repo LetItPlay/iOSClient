@@ -78,6 +78,7 @@
 		36706D512031A7F3002097E7 /* CategoryChannelsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36706D502031A7F3002097E7 /* CategoryChannelsModel.swift */; };
 		36706D532031A801002097E7 /* CategoryChannelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36706D522031A801002097E7 /* CategoryChannelsViewModel.swift */; };
 		36706D552031A809002097E7 /* CategoryChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36706D542031A809002097E7 /* CategoryChannelsEmitter.swift */; };
+		367D738720AEA2D400BE1702 /* BaseTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367D738620AEA2D400BE1702 /* BaseTableView.swift */; };
 		36813A6E203D671E00EAE49A /* MediumChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */; };
 		368920A9208E0F8500D83278 /* ChannelsSegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368920A8208E0F8500D83278 /* ChannelsSegmentViewController.swift */; };
 		368920AD208E230F00D83278 /* MainChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 368920AC208E230F00D83278 /* MainChannelsViewController.swift */; };
@@ -260,6 +261,7 @@
 		36706D502031A7F3002097E7 /* CategoryChannelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelsModel.swift; sourceTree = "<group>"; };
 		36706D522031A801002097E7 /* CategoryChannelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelsViewModel.swift; sourceTree = "<group>"; };
 		36706D542031A809002097E7 /* CategoryChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelsEmitter.swift; sourceTree = "<group>"; };
+		367D738620AEA2D400BE1702 /* BaseTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableView.swift; sourceTree = "<group>"; };
 		36813A6D203D671E00EAE49A /* MediumChannelViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MediumChannelViewModel.swift; sourceTree = "<group>"; };
 		368920A8208E0F8500D83278 /* ChannelsSegmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsSegmentViewController.swift; sourceTree = "<group>"; };
 		368920AC208E230F00D83278 /* MainChannelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsViewController.swift; sourceTree = "<group>"; };
@@ -769,6 +771,7 @@
 				361CD01920482A410097F8E9 /* Common.swift */,
 				2C8E668520A570CC000EFCB9 /* TableProvider.swift */,
 				9DD783DC20A572B600FA0FFD /* Empties.swift */,
+				367D738620AEA2D400BE1702 /* BaseTableView.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1253,6 +1256,7 @@
 				365653FB20358FA10072087F /* PlaylistsViewModel.swift in Sources */,
 				9D16A162209B434A00E5116D /* ChannelCategory.swift in Sources */,
 				01510EAF1FDFFD4C003AC116 /* ChannelTrackCell.swift in Sources */,
+				367D738720AEA2D400BE1702 /* BaseTableView.swift in Sources */,
 				019FB2571FE297F20007FDEE /* PlaylistTableViewCell.swift in Sources */,
 				2CEBFBCA202827C700523FDE /* ArrowView.swift in Sources */,
 				3626C8CE2036A6730016772B /* SearchViewModel.swift in Sources */,

@@ -10,7 +10,7 @@ import UIKit
 
 class PlaylistsViewController: UIViewController {
     
-    var tableView = UITableView()
+    var tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     var viewModel: PlaylistsVMProtocol!
@@ -49,7 +49,6 @@ class PlaylistsViewController: UIViewController {
     
     func viewInitialize()
     {
-        
         self.view.backgroundColor = .white
         
         self.tableView.refreshControl = UIRefreshControl()
@@ -61,11 +60,8 @@ class PlaylistsViewController: UIViewController {
         }
 
         self.tableView.contentInset.top = 44
-        self.tableView.contentInset.bottom = 40
 
         self.tableView.register(PlaylistTableViewCell.self, forCellReuseIdentifier: PlaylistTableViewCell.cellID)
-        self.tableView.separatorStyle = .none
-        self.tableView.backgroundColor = .white
         self.tableView.setContentOffset(CGPoint.zero, animated: true)
 
         self.view.addSubview(emptyLabel)

@@ -19,7 +19,7 @@ class ProfileViewController: UIViewController {
     var emitter: LikesEmitterProtocol?
     var viewModel: LikesViewModel!
     
-    let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    let tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     var profileHeader: ProfileHeaderView!
@@ -92,11 +92,8 @@ class ProfileViewController: UIViewController {
         profileHeader.delegate = self
         
         self.tableView.tableHeaderView = profileHeader
-        self.tableView.contentInset.bottom = 72
-        self.tableView.backgroundColor = .white
         
         self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
-        self.tableView.separatorStyle = .none
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
         

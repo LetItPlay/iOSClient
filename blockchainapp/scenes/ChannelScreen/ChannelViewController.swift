@@ -11,7 +11,7 @@ import SnapKit
 
 class ChannelViewController: UIViewController {
     
-    let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    let tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     var viewModel: ChannelVMProtocol!
@@ -57,15 +57,12 @@ class ChannelViewController: UIViewController {
         self.title = LocalizedStrings.Channels.channel
         
         self.view.backgroundColor = UIColor.white
-        self.tableView.backgroundColor = .white
         self.tableView.separatorColor = self.tableView.backgroundColor
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        
-        tableView.contentInset.bottom = 70
         
         self.header = ChannelHeaderView(frame: self.view.frame)
         header.translatesAutoresizingMaskIntoConstraints = false

@@ -17,7 +17,7 @@ class MainChannelsViewController: UIViewController {
     var channelsView: ChannelsCollectionView!
     let topInset: CGFloat = 44
     
-    var tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    var tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     convenience init(viewModel: MainChannelsVMProtocol, emitter: MainChannelsEmitterProtocol, channelsView: ChannelsCollectionView) {
@@ -65,10 +65,6 @@ class MainChannelsViewController: UIViewController {
         self.tableView.refreshControl?.beginRefreshing()
         
         tableView.contentInset.top = topInset + (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
-        tableView.contentInset.bottom = 72
-        
-        tableView.separatorStyle = .none
-        tableView.backgroundColor = .white
         
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in

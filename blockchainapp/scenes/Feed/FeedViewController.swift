@@ -26,7 +26,7 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
     
     var didSwipeCell: Bool = false
     
-	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+	let tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
 
 	let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noFollows)
     let emptyButton = EmptyButton(title: LocalizedStrings.Button.toChannels)
@@ -77,17 +77,13 @@ class FeedViewController: UIViewController, UISearchBarDelegate {
         
         self.view.addSubview(tableView)
         
-        tableView.contentInset.bottom = 60
-        
         tableView.snp.makeConstraints { (make) in
             make.edges.equalTo(self.view)
         }
         
         tableView.refreshControl = refreshControl
-        tableView.separatorStyle = .none
         
         tableView.register(FeedTableViewCell.self, forCellReuseIdentifier: FeedTableViewCell.cellID)
-        tableView.backgroundColor = .white
         tableView.backgroundView?.backgroundColor = .clear
         tableView.sectionIndexBackgroundColor = .clear
         

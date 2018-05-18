@@ -17,7 +17,7 @@ class CategoryChannelsViewController: UIViewController {
     
     var topInset: Bool = false
     
-    let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    let tableView = BaseTableView(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     let emptyLabel = EmptyLabel(title: LocalizedStrings.EmptyMessage.noChannels)
@@ -79,7 +79,7 @@ class CategoryChannelsViewController: UIViewController {
         tableView.allowsMultipleSelection = true
         
         tableView.contentInset.top = self.topInset ? 44 : 0
-        tableView.contentInset.bottom = 72
+        tableView.separatorStyle = .singleLine
         
         tableView.register(ChannelTableViewCell.self, forCellReuseIdentifier: ChannelTableViewCell.cellID)
         
