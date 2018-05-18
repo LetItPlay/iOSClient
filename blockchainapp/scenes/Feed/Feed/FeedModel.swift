@@ -1,13 +1,11 @@
 import Foundation
-import RxSwift
 import Action
-
 
 protocol FeedModelProtocol: ModelProtocol {
     var feedDelegate: FeedModelDelegate? {get set}
 }
 
-protocol FeedEventHandler: class, PlayerUsingProtocol {
+protocol FeedEventHandler: class {
 	func showAllChannels()
 	func showSearch()
 }
@@ -18,16 +16,11 @@ protocol FeedModelDelegate: class {
     func update(isFeed: Bool)
 }
 
-
 class FeedModel: TrackHandlingModel, FeedModelProtocol, FeedEventHandler {
     var isFeed: Bool
 	
 	weak var feedDelegate: FeedModelDelegate?
-	
-	private var channels: Set<Channel> = Set<Channel>()
-	
-	private let disposeBag = DisposeBag()
-	
+			
     init(isFeed: Bool, name: String, dataAction: Action<Int, [Track]>) {
         self.isFeed = isFeed
         super.init(name: name, dataAction: dataAction)

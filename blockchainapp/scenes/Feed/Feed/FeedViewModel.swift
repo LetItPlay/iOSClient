@@ -1,5 +1,4 @@
 import Foundation
-import RxSwift
 
 enum CollectionUpdate {
 	case insert, update, delete

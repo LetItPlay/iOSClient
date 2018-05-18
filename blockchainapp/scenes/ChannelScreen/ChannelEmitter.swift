@@ -9,42 +9,30 @@
 import Foundation
 
 enum ChannelEvent {
-    case trackSelected(index: Int)
     case followPressed
     case showSearch
-    case showOthers(index: Int)
     case shareChannel
     case tagSelected(String)
 }
 
-protocol ChannelEmitterProtocol: LifeCycleHandlerProtocol {
+protocol ChannelEmitterProtocol: TrackHandlingEmitterProtocol {
     func send(event: ChannelEvent)
 }
 
-class ChannelEmitter: Emitter, ChannelEmitterProtocol {
+class ChannelEmitter: TrackHandlingEmitter, ChannelEmitterProtocol {
     
-    weak var model: ChannelEvenHandler?
-    
-    convenience init(model: ChannelEvenHandler)
-    {
-        self.init(handler: model as! ModelProtocol)
-        self.model = model
-    }
+    weak var channelModel: ChannelEvenHandler?
     
     func send(event: ChannelEvent) {
         switch event {
         case .followPressed:
-            self.model?.followPressed()
-        case .trackSelected(let index):
-            self.model?.trackSelected(index: index)
+            self.channelModel?.followPressed()
         case .showSearch:
-            self.model?.showSearch(text: nil)
-        case .showOthers(let index):
-            self.model?.showOthers(index: index)
+            self.channelModel?.showSearch(text: nil)
         case .shareChannel:
-            self.model?.showOthers()
+            self.channelModel?.showOthers()
         case .tagSelected(let tag):
-            self.model?.selected(tag: tag)
+            self.channelModel?.selected(tag: tag)
         }
     }
 }

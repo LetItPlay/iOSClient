@@ -10,15 +10,15 @@ import UIKit
 import SnapKit
 
 class ChannelViewController: UIViewController {
-
-	let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
+    
+    let tableView: UITableView = UITableView.init(frame: CGRect.zero, style: .grouped)
     var tableProvider: TableProvider!
     
     var viewModel: ChannelVMProtocol!
     var emitter: ChannelEmitterProtocol!
     
-	var header: ChannelHeaderView = ChannelHeaderView()
-	
+    var header: ChannelHeaderView = ChannelHeaderView()
+    
     init(viewModel: ChannelVMProtocol, emitter: ChannelEmitterProtocol) {
         super.init(nibName: nil, bundle: nil)
         
@@ -31,25 +31,25 @@ class ChannelViewController: UIViewController {
         self.tableProvider.cellEvent = { (indexPath, event, data) in
             switch event {
             case "onSelected":
-                self.emitter.send(event: ChannelEvent.trackSelected(index: indexPath.item))
+                self.emitter.send(event: TrackEvent.trackSelected(index: indexPath.item))
             case "onOthers":
-                self.emitter?.send(event: ChannelEvent.showOthers(index: indexPath.row))
+                self.emitter?.send(event: TrackEvent.showOthers(index: indexPath.row))
             default:
                 break
             }
         }
-    }
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-    override func viewDidLoad() {
-        super.viewDidLoad()
-		
-		self.viewInitialize()
         
         self.emitter.send(event: LifeCycleEvent.initialize)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.viewInitialize()
     }
     
     func viewInitialize()
@@ -89,64 +89,72 @@ class ChannelViewController: UIViewController {
     @objc func search() {
         self.emitter.send(event: ChannelEvent.showSearch)
     }
-	
-	@objc func followPressed() {
+    
+    @objc func followPressed() {
         self.header.followButton.isSelected = !self.header.followButton.isSelected
         self.emitter.send(event: ChannelEvent.followPressed)
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		
-		self.header.snp.makeConstraints { (make) in
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.header.snp.makeConstraints { (make) in
             make.width.equalTo(self.view.frame.width)
-		}
-		
+        }
+        
         let height = self.header.fill(channel: self.viewModel.channel!, width: self.view.frame.width)
-		self.header.frame.size.height = height
+        self.header.frame.size.height = height
         
         self.emitter.send(event: LifeCycleEvent.appear)
-	}
-
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+}
 
+extension ChannelViewController: TrackHandlingViewModelDelegate {
+    func reload(cells: [CollectionUpdate : [Int]]?) {
+        tableView.beginUpdates()
+        if let keys = cells?.keys {
+            for key in keys {
+                if let indexes = cells![key]?.map({IndexPath(row: $0, section: 0)}) {
+                    switch key {
+                    case .insert:
+                        tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .delete:
+                        tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .update:
+                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                        //                        tableView.reloadData()
+                    }
+                }
+            }
+            tableView.endUpdates()
+        }
+    }
+    
+    func reload() {
+        self.tableView.reloadData()
+    }
+    
+    func reloadAppearence() {
+        
+    }
 }
 
 extension ChannelViewController: ChannelVMDelegate {
     
-    func reloadTracks() {
-        self.tableView.reloadData()
-    }
-    
     func updateSubscription() {
         self.header.followButton.set(title: (self.viewModel.channel?.getMainButtonTitle())!)
-    }
-    
-    func make(updates: [CollectionUpdate : [Int]]) {
-        //        tableView.beginUpdates()
-        for key in updates.keys {
-            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
-                switch key {
-                case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .update:
-                    //                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                    tableView.reloadData()
-                }
-            }
-        }
-        //        tableView.endUpdates()
     }
 }
 
 extension ChannelViewController: TableDataProvider, TableCellProvider {
     func data(indexPath: IndexPath) -> Any {
-        return self.viewModel.tracks[indexPath.item]
+        return self.viewModel.data[indexPath.item]
     }
     
     func cellClass(indexPath: IndexPath) -> StandartTableViewCell.Type {
@@ -162,7 +170,7 @@ extension ChannelViewController: TableDataProvider, TableCellProvider {
     }
     
     func rowsAt(_ section: Int) -> Int {
-        return self.viewModel.tracks.count
+        return self.viewModel.data.count
     }
     
     func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
