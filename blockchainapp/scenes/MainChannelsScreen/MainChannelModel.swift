@@ -42,7 +42,7 @@ class MainChannelsModel: MainChannelsModelProtocol, MainChannelsEventHandler {
         })
         
         self.getChannelsAction.elements.subscribe(onNext: { categories in
-            self.categories = categories
+            self.categories = categories.filter({$0.channels.count != 0})
             self.delegate?.reload(categories: self.categories.map({ChannelCategoryViewModel(category: $0)}))
         }).disposed(by: disposeBag)
         

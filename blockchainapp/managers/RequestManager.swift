@@ -13,7 +13,7 @@ import Action
 enum TracksRequest {
     case feed(offset: Int, count: Int)
     case trends(offset: Int, count: Int)
-//    case likes
+    case likes
     case channel(Int)
     case tag(String)
     case magic
@@ -55,6 +55,8 @@ fileprivate extension TracksRequest {
             return "tags/\(tag)"
         case .magic:
             return "abrakadabra?lang=\(lang)"
+        case .likes:
+            return "user/favorites/tracks"
         default: return "tracks"
         }
     }
@@ -364,7 +366,7 @@ class RequestManager {
         case .report(_):
             urlString += "/report/track/\(id)"
         default:
-            urlString += "/like/track/\(id)"
+            urlString += "/like/\(id)"
         }
         guard let str = urlString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
             let url = URL(string: str) else {

@@ -74,7 +74,7 @@ class SearchViewController: UIViewController, UISearchControllerDelegate, UISear
         
         self.view.backgroundColor = .white
         
-        self.tableView.tableFooterView = nil
+        self.tableView.separatorStyle = .singleLine
         
         self.tableView.register(SmallTrackTableViewCell.self, forCellReuseIdentifier: SmallTrackTableViewCell.cellID)
         self.tableView.register(SmallChannelTableViewCell.self, forCellReuseIdentifier: SmallChannelTableViewCell.cellID)

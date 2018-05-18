@@ -76,6 +76,8 @@ struct Track: LIPModel {
 			self.likeCount = json["LikeCount"].int ?? 0
 			self.listenCount = json["ListenCount"].int ?? 0
 			self.reportCount = json["ReportsCount"].int ?? 0
+            
+            self.isLiked = json["liked"].bool ?? false
 			
 			return
 		}
@@ -103,6 +105,8 @@ struct Track: LIPModel {
             self.likeCount = json["LikeCount"].int ?? 0
             self.listenCount = json["ListenCount"].int ?? 0
             self.reportCount = json["ReportsCount"].int ?? 0
+            
+            self.isLiked = json["liked"].bool ?? false
             
             return
         }

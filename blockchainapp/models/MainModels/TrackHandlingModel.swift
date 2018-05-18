@@ -19,7 +19,7 @@ protocol TrackHandlingModelDelegate: class {
     func showInfo(track: ShareInfo)
 }
 
-class TrackHandlingModel {
+class TrackHandlingModel: TrackUpdateProtocol {
     private var currentOffest: Int = 0
     private let amount: Int = 100
     
@@ -77,10 +77,19 @@ class TrackHandlingModel {
         }
         return length.formatTime()
     }
+    
+    func trackUpdated(track: Track) {
+        if let index = self.tracks.index(where: {$0.id == track.id}) {
+            let vm = TrackViewModel(track: track)
+            self.tracks[index] = track
+            self.delegate?.update(tracks: [index : vm], length: self.tracksLength())
+        }
+    }
+    
 }
 
 
-extension TrackHandlingModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, SettingsUpdateProtocol {
+extension TrackHandlingModel: PlayingStateUpdateProtocol, SettingsUpdateProtocol {
     func trackPlayingUpdate(dict: [Int : Bool]) {
         var res: [Int: TrackViewModel] = [:]
         for tuple in dict {
@@ -89,14 +98,6 @@ extension TrackHandlingModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, S
             }
         }
         self.delegate?.update(tracks: res, length: self.tracksLength())
-    }
-    
-    func trackUpdated(track: Track) {
-        if let index = self.tracks.index(where: {$0.id == track.id}) {
-            let vm = TrackViewModel(track: track)
-            self.tracks[index] = track
-            self.delegate?.update(tracks: [index : vm], length: self.tracksLength())
-        }
     }
     
     func settingsUpdated() {
