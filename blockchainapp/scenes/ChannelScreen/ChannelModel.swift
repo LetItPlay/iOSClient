@@ -65,6 +65,7 @@ class ChannelModel: TrackHandlingModel, ChannelModelProtocol, ChannelEvenHandler
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
             self.channel = channel
 			self.playlistName = LocalizedStrings.Channels.channel + " \(channel.name)"
+            self.channelDelegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
         }).disposed(by: disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)

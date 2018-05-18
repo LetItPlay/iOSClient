@@ -283,11 +283,17 @@
 /* no description */
 "system_message.no_desc" = "";
 
+/* You don't have camera */
+"system_message.noCameraWarning" = "";
+
 /* ok */
 "system_message.ok" = "";
 
 /* remove */
 "system_message.remove" = "";
+
+/* warning */
+"system_message.warning" = "";
 
 /* channels */
 "tab.channels" = "";

@@ -146,11 +146,17 @@
 /* delete */
 "system_message.delete" = "Delete";
 
+/* You don't have camera */
+"system_message.noCameraWarning" = "You don't have camera";
+
 /* ok */
 "system_message.ok" = "OK";
 
 /* remove */
 "system_message.remove" = "Remove";
+
+/* warning */
+"system_message.warning" = "Warning";
 
 /* channels */
 "tab.channels" = "Channels";

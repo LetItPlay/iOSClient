@@ -266,7 +266,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
         }
         else
         {
-            let alert  = UIAlertController(title: "Warning", message: "You don't have camera", preferredStyle: .alert)
+            let alert  = UIAlertController(title: LocalizedStrings.SystemMessage.warning, message: LocalizedStrings.SystemMessage.noCameraWarning, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.ok, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }

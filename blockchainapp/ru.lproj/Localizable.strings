@@ -146,11 +146,17 @@
 /* delete */
 "system_message.delete" = "Удалить";
 
+/* You don't have camera */
+"system_message.noCameraWarning" = "На вашем устройстве камера не поддерживается";
+
 /* ok */
 "system_message.ok" = "ОК";
 
 /* remove */
 "system_message.remove" = "Удалить";
+
+/* warning */
+"system_message.warning" = "Ошибка";
 
 /* channels */
 "tab.channels" = "Каналы";

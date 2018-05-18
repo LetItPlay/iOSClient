@@ -405,7 +405,6 @@
 				FD10BE55E82F75A804CA6B47 /* RequestManager.swift */,
 				01418561203C41EA004C69F0 /* ServerUpdateManager.swift */,
 				36E155A4204D7C0E00C65DBE /* UserPlaylistManager.swift */,
-				9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -772,6 +771,7 @@
 				2C8E668520A570CC000EFCB9 /* TableProvider.swift */,
 				9DD783DC20A572B600FA0FFD /* Empties.swift */,
 				367D738620AEA2D400BE1702 /* BaseTableView.swift */,
+				9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";

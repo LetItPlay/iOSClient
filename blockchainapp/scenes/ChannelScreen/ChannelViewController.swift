@@ -24,6 +24,7 @@ class ChannelViewController: UIViewController {
         
         self.viewModel = viewModel
         self.viewModel.delegate = self
+        self.viewModel.channelDelegate = self
         
         self.emitter = emitter
         

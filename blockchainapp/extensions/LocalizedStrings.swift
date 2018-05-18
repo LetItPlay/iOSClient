@@ -118,5 +118,7 @@ struct LocalizedStrings {
         static let defaultMessage = NSLocalizedString("system_message.default", comment: "default")
         static let delete = NSLocalizedString("system_message.delete", comment: "delete")
         static let remove = NSLocalizedString("system_message.remove", comment: "remove")
+        static let warning = NSLocalizedString("system_message.warning", comment: "warning")
+        static let noCameraWarning = NSLocalizedString("system_message.noCameraWarning", comment: "You don't have camera")
     }
 }

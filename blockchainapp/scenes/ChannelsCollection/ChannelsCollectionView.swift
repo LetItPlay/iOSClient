@@ -105,7 +105,9 @@ class ChannelsCollectionView: UIView {
 extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
     func updateEmptyMessage() {
-        // TODO: without channels?
+        if !self.viewModel.hideEmptyMessage {
+            self.isHidden = true
+        }
     }
     
     func reloadChannels() {
