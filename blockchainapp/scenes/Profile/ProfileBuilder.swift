@@ -21,11 +21,10 @@ class ProfileBuilder: Builder {
         
         // for like tracks
         let likeModel = LikesModel()
-        let likeVM = LikesViewModel(model: likeModel)
-        let likeEmitter = LikesEmitter.init(model: likeModel)
-        
+        let likeVM = LikesViewModel()
         likeModel.delegate = likeVM
-        likeEmitter.model = likeModel
+        let likeEmitter = LikesEmitter.init(model: likeModel)
+        likeEmitter.likesModel = likeModel
         
         let view = ProfileHeaderView.init(emitter: emitter, viewModel: vm)
         let vc = ProfileViewController.init(view: view, emitter: likeEmitter, viewModel: likeVM)

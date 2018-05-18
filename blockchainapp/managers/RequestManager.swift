@@ -13,7 +13,7 @@ import Action
 enum TracksRequest {
     case feed(offset: Int, count: Int)
     case trends(offset: Int, count: Int)
-    case likes
+//    case likes
     case channel(Int)
     case tag(String)
     case magic

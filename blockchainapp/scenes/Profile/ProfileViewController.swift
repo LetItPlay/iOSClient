@@ -15,11 +15,11 @@ protocol ProfileViewDelegate {
 }
 
 class ProfileViewController: UIViewController {
-
+    
     var emitter: LikesEmitterProtocol?
     var viewModel: LikesViewModel!
-
-	let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
+    
+    let tableView: UITableView = UITableView(frame: CGRect.zero, style: UITableViewStyle.grouped)
     var tableProvider: TableProvider!
     
     var profileHeader: ProfileHeaderView!
@@ -31,11 +31,11 @@ class ProfileViewController: UIViewController {
         imagePicker.view.tintColor = .red
         return imagePicker
     }()
-	
+    
     var isKeyboardShown = true
-	
+    
     convenience init(view: ProfileHeaderView, emitter: LikesEmitterProtocol, viewModel: LikesViewModel) {
-		self.init(nibName: nil, bundle: nil)
+        self.init(nibName: nil, bundle: nil)
         self.profileHeader = view
         self.emitter = emitter
         self.viewModel = viewModel
@@ -47,9 +47,9 @@ class ProfileViewController: UIViewController {
         self.tableProvider.cellEvent = { (indexPath, event, data) in
             switch event {
             case "onSelected":
-                self.emitter?.send(event: LikesTrackEvent.trackSelected(index: indexPath.item))
+                self.emitter?.send(event: TrackEvent.trackSelected(index: indexPath.item))
             case "onOthers":
-                self.emitter?.send(event: LikesTrackEvent.showOthers(index: indexPath.row))
+                self.emitter?.send(event: TrackEvent.showOthers(index: indexPath.row))
             default:
                 break
             }
@@ -59,7 +59,9 @@ class ProfileViewController: UIViewController {
                 self.dismissKeyboard(scrollView)
             }
         }
-	}
+        
+        self.emitter?.send(event: LifeCycleEvent.initialize)
+    }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
@@ -71,9 +73,9 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-		
-		self.viewInitialize()
-	}
+        
+        self.viewInitialize()
+    }
     
     func viewInitialize()
     {
@@ -90,7 +92,7 @@ class ProfileViewController: UIViewController {
         profileHeader.delegate = self
         
         self.tableView.tableHeaderView = profileHeader
-        self.tableView.contentInset.bottom = 50
+        self.tableView.contentInset.bottom = 72
         self.tableView.backgroundColor = .white
         
         self.tableView.separatorColor = UIColor.init(red: 243.0/255, green: 71.0/255, blue: 36.0/255, alpha: 0.2)
@@ -128,8 +130,8 @@ class ProfileViewController: UIViewController {
             self.profileHeader.emitter?.send(event: ProfileEvent.setName(name))
         }
     }
-	
-	@objc func langChanged(_: UIButton) {
+    
+    @objc func langChanged(_: UIButton) {
         let currentLanguage = UserSettings.language.name
         
         let languageAlert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
@@ -156,25 +158,25 @@ class ProfileViewController: UIViewController {
         languageAlert.addAction(UIAlertAction.init(title: LocalizedStrings.SystemMessage.cancel, style: .destructive, handler: nil))
         
         self.present(languageAlert, animated: true, completion: nil)
-	}
-	
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.red], for: .normal)
-    
+        
         profileHeader.profileNameTextField.delegate = self
         
         self.emitter?.send(event: LifeCycleEvent.appear)
         self.profileHeader.emitter?.send(event: LifeCycleEvent.appear)
-	}
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -182,41 +184,55 @@ class ProfileViewController: UIViewController {
         self.emitter?.send(event: LifeCycleEvent.disappear)
         self.profileHeader.emitter?.send(event: LifeCycleEvent.disappear)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+}
 
+extension ProfileViewController: TrackHandlingViewModelDelegate {
+    func reload(cells: [CollectionUpdate : [Int]]?) {
+        if let keys = cells?.keys {
+            tableView.beginUpdates()
+            for key in keys {
+                if let indexes = cells![key]?.map({IndexPath(row: $0, section: 0)}) {
+                    switch key {
+                    case .insert:
+                        tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .delete:
+                        tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
+                    case .update:
+                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+                        //                        if indexes.count != 0 {
+                        //                            tableView.reloadData()
+                        
+                        //                        }
+                        //                        break
+                        //                    tableView.reloadData()
+                        //                    break
+                    }
+                }
+            }
+            tableView.endUpdates()
+        }
+    }
+    
+    func reloadAppearence() {
+        
+    }
+    
+    func reload() {
+        self.tableView.reloadData()
+    }
 }
 
 extension ProfileViewController: LikesVMDelegate
 {
-    func reload() {
-        self.tableView.reloadData()
-    }
+    
     
     func make(updates: [CollectionUpdate : [Int]]) {
-//                tableView.beginUpdates()
-        for key in updates.keys {
-            if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
-                switch key {
-                case .insert:
-                    tableView.insertRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .delete:
-                    tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
-                case .update:
-//                    tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                    if indexes.count != 0 {
-                        tableView.reloadData()
-
-                    }
-                    break
-//                    tableView.reloadData()
-                    //                    break
-                }
-            }
-        }
-//                tableView.endUpdates()
+        
     }
 }
 
@@ -267,7 +283,7 @@ extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDel
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-		print("\(info)")
+        print("\(info)")
         if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
             let image = UIImagePNGRepresentation(pickedImage)!
             self.profileHeader.emitter?.send(event: ProfileEvent.setImage(image))
@@ -295,7 +311,7 @@ extension ProfileViewController: TableCellProvider, TableDataProvider {
     }
     
     func data(indexPath: IndexPath) -> Any {
-        return self.viewModel.tracks[indexPath.item]
+        return self.viewModel.data[indexPath.item]
     }
     
     var numberOfSections: Int {
@@ -303,7 +319,7 @@ extension ProfileViewController: TableCellProvider, TableDataProvider {
     }
     
     func rowsAt(_ section: Int) -> Int {
-        return self.viewModel.tracks.count
+        return self.viewModel.data.count
     }
     
     func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat {
@@ -312,13 +328,13 @@ extension ProfileViewController: TableCellProvider, TableDataProvider {
     
     func view(table: UITableView, forSection: Int, isHeader: Bool) -> UIView? {
         if isHeader {
-            header.fill(count: Int64(self.viewModel.tracks.count).formatAmount(), length: self.viewModel.length)
+            header.fill(count: Int64(self.viewModel.data.count).formatAmount(), length: self.viewModel.length)
             return header
         } else {
             return nil
         }
     }
-
+    
 }
 
 //extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {

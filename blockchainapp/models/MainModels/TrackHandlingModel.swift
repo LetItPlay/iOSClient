@@ -11,8 +11,8 @@ import Action
 import RxSwift
 
 protocol TrackHandlingModelDelegate: class {
-    func update(tracks: [Int: TrackViewModel])
-    func show(tracks: [TrackViewModel], isContinue: Bool)
+    func update(tracks: [Int: TrackViewModel], length: String)
+    func show(tracks: [TrackViewModel], isContinue: Bool, length: String)
     func empty(show: Bool)
     func noDataLeft()
     func showChannel(id: Int)
@@ -47,7 +47,7 @@ class TrackHandlingModel {
             return tracks.map({ TrackViewModel(track: $0,
                                                isPlaying: $0.id == playingId) })
         }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (vms) in
-            self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0)
+            self.delegate?.show(tracks: vms, isContinue: self.currentOffest != 0, length: self.tracksLength())
             self.delegate?.empty(show: self.tracks.count == 0)
             self.currentOffest = self.tracks.count
         }, onCompleted: {
@@ -69,6 +69,14 @@ class TrackHandlingModel {
             break
         }
     }
+    
+    func tracksLength() -> String {
+        var length: Int64 = 0
+        for track in tracks {
+            length += track.length
+        }
+        return length.formatTime()
+    }
 }
 
 
@@ -80,14 +88,14 @@ extension TrackHandlingModel: PlayingStateUpdateProtocol, TrackUpdateProtocol, S
                 res[index] = TrackViewModel.init(track: self.tracks[index], isPlaying: tuple.value)
             }
         }
-        self.delegate?.update(tracks: res)
+        self.delegate?.update(tracks: res, length: self.tracksLength())
     }
     
     func trackUpdated(track: Track) {
         if let index = self.tracks.index(where: {$0.id == track.id}) {
             let vm = TrackViewModel(track: track)
             self.tracks[index] = track
-            self.delegate?.update(tracks: [index : vm])
+            self.delegate?.update(tracks: [index : vm], length: self.tracksLength())
         }
     }
     

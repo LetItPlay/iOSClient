@@ -18,6 +18,7 @@ protocol TrackHandlingViewModelProtocol {
     var delegate: TrackHandlingViewModelDelegate? {get set}
     var data: [TrackViewModel] {get set}
     var showEmpty: Bool {get set}
+    var length: String {get set}
 }
 
 class TrackHandlingViewModel: TrackHandlingModelDelegate, TrackHandlingViewModelProtocol {
@@ -25,18 +26,20 @@ class TrackHandlingViewModel: TrackHandlingModelDelegate, TrackHandlingViewModel
     weak var delegate: TrackHandlingViewModelDelegate?
     
     var data: [TrackViewModel] = []
-//    var title: String = LocalizedStrings.SystemMessage.defaultMessage
     var showEmpty: Bool = false
+    var length: String = ""
     var needUpload: Bool = true
     
-    func update(tracks: [Int : TrackViewModel]) {
+    func update(tracks: [Int : TrackViewModel], length: String) {
+        self.length = length
         for tuple in tracks {
             self.data[tuple.key] = tuple.value
         }
         self.delegate?.reload(cells: [.update: Array<Int>(tracks.keys)])
     }
     
-    func show(tracks: [TrackViewModel], isContinue: Bool) {
+    func show(tracks: [TrackViewModel], isContinue: Bool, length: String) {
+        self.length = length
         var cells: [CollectionUpdate: [Int]]?
         if isContinue {
             let insertStart = self.data.count

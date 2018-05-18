@@ -9,40 +9,21 @@
 import Foundation
 
 enum LikesTrackEvent {
-    case trackSelected(index: Int)
-    case showOthers(index: Int)
     case hidePlayer
 }
 
-protocol LikesEmitterProtocol: LifeCycleHandlerProtocol {
+protocol LikesEmitterProtocol: TrackHandlingEmitterProtocol {
     func send(event: LikesTrackEvent)
 }
 
-class LikesEmitter: Emitter, LikesEmitterProtocol {
+class LikesEmitter: TrackHandlingEmitter, LikesEmitterProtocol {
     
-    var model: LikesEventHandler?
-    
-    convenience init(model: LikesEventHandler) {
-        self.init(handler: model as! ModelProtocol)
-        self.model = model
-    }
-	
-    func state(_ state: LifeCycleEvent) {
-        switch state {
-        case .initialize:
-            break
-		default: break
-		}
-	}
+    var likesModel: LikesEventHandler?
 	
     func send(event: LikesTrackEvent) {
         switch event {
-        case .trackSelected(let index):
-            self.model?.trackSelected(index: index)
-        case .showOthers(let index):
-            self.model?.showOthers(index: index)
         case .hidePlayer:
-            self.model?.hidePlayer()
+            self.likesModel?.hidePlayer()
         }
     }
 }
