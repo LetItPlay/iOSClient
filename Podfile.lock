@@ -43,7 +43,7 @@ DEPENDENCIES:
   - TagListView
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Action
     - Alamofire
     - AssistantKit
@@ -83,4 +83,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0028262598b6be2b3b3c4aa3ee47d771883e9696
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.5.0

@@ -286,6 +286,9 @@
 /* ok */
 "system_message.ok" = "";
 
+/* remove */
+"system_message.remove" = "";
+
 /* channels */
 "tab.channels" = "";
 

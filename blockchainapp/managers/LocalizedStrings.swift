@@ -117,5 +117,6 @@ struct LocalizedStrings {
         static let ok = NSLocalizedString("system_message.ok", comment: "ok")
         static let defaultMessage = NSLocalizedString("system_message.default", comment: "default")
         static let delete = NSLocalizedString("system_message.delete", comment: "delete")
+        static let remove = NSLocalizedString("system_message.remove", comment: "remove")
     }
 }

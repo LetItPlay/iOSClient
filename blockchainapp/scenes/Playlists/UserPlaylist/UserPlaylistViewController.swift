@@ -232,12 +232,13 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         guard orientation == .right else { return nil }
         
-        let deleteAction = SwipeAction(style: .default, title: LocalizedStrings.SystemMessage.delete) { action, indexPath in
+        let deleteAction = SwipeAction(style: .default, title: LocalizedStrings.SystemMessage.remove) { action, indexPath in
             self.emitter.send(event: .trackDelete(index: indexPath.item))
         }
         deleteAction.backgroundColor = .white
+        deleteAction.font = AppFont.Title.big
         
-        deleteAction.frameForTitleLabel = CGRect(x: 8, y: 50, width: 150, height: 50)
+        deleteAction.frameForTitleLabel = CGRect(x: 16, y: 50, width: 150, height: 50)
         
         return [deleteAction]
     }
@@ -247,6 +248,7 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         options.expansionStyle = SwipeExpansionStyle.selection
         options.transitionStyle = .border
         options.backgroundColor = .white
+        options.minimumButtonWidth = 110
         
         let fromColor = AppColor.Element.redBlur.withAlphaComponent(0.9).cgColor
         let toColor = AppColor.Element.redBlur.withAlphaComponent(0).cgColor
@@ -258,7 +260,6 @@ extension UserPlaylistViewController: SwipeTableViewCellDelegate {
         gradientLayer.startPoint = CGPoint.init(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint.init(x: 1, y: 0.5)
         gradientLayer.frame = frame
-        gradientLayer.cornerRadius = 10
         
         options.showGradient = gradientLayer
         

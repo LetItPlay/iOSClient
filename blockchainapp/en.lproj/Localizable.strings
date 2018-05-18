@@ -149,6 +149,9 @@
 /* ok */
 "system_message.ok" = "OK";
 
+/* remove */
+"system_message.remove" = "Remove";
+
 /* channels */
 "tab.channels" = "Channels";
 
