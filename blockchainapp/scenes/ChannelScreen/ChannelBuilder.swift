@@ -5,8 +5,6 @@
 
 import Foundation
 import UIKit
-import Action
-import RxSwift
 
 class ChannelBuilder: Builder {
     static func build(params: [String: Any]?) -> UIViewController? {
@@ -15,12 +13,7 @@ class ChannelBuilder: Builder {
             return UIViewController()
         }
         
-        let name = LocalizedStrings.Channels.channel + " \(channelID)"
-        let getTracksAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
-            return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
-        })
-        
-        let model = ChannelModel(channelID: channelID, name: name, dataAction: getTracksAction)
+        let model = ChannelModel(channelID: channelID)
         let vm = ChannelViewModel()
         model.channelDelegate = vm
         model.delegate = vm

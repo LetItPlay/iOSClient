@@ -31,8 +31,8 @@ class MainRouter: Router {
 	
 	func tabs() -> [UINavigationController] {
 		let tabs: [(String, (UIImage?, UIViewController?))] = [
-			(LocalizedStrings.TabBar.feed, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: nil))),
-			(LocalizedStrings.TabBar.trends, (UIImage.init(named: "trendsTab"), PopularBuilder.build(params: nil))),
+            (LocalizedStrings.TabBar.feed, (UIImage.init(named: "feedTab"), FeedBuilder.build(params: ["isFeed" : true]))),
+            (LocalizedStrings.TabBar.trends, (UIImage.init(named: "trendsTab"), FeedBuilder.build(params: ["isFeed" : false]))),
 			(LocalizedStrings.TabBar.playlists, (UIImage.init(named: "playlistsTab"), PlaylistsSegmentedViewController())),
 			(LocalizedStrings.TabBar.channels, (UIImage(named: "channelsTab"), ChannelsSegmentViewController(nibName: nil, bundle: nil))),
 			(LocalizedStrings.TabBar.profile, (UIImage.init(named: "profileTab"), ProfileBuilder.build(params: nil)))]

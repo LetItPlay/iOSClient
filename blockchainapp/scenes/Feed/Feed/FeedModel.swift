@@ -1,5 +1,6 @@
 import Foundation
 import Action
+import RxSwift
 
 protocol FeedModelProtocol: ModelProtocol {
     var feedDelegate: FeedModelDelegate? {get set}
@@ -21,8 +22,26 @@ class FeedModel: TrackHandlingModel, FeedModelProtocol, FeedEventHandler {
 	
 	weak var feedDelegate: FeedModelDelegate?
 			
-    init(isFeed: Bool, name: String, dataAction: Action<Int, [Track]>) {
+    init(isFeed: Bool) {
         self.isFeed = isFeed
+        
+        let dataAction: Action<Int, [Track]>
+        let name: String
+        
+        if isFeed {
+            dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
+                return RequestManager.shared.tracks(req: TracksRequest.feed(offset: offset, count: 100))
+            })
+            
+            name = LocalizedStrings.TabBar.feed
+        } else {
+            dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
+                return RequestManager.shared.tracks(req: TracksRequest.trends(offset: offset, count: 100))
+            })
+            
+            name = LocalizedStrings.TabBar.trends
+        }
+        
         super.init(name: name, dataAction: dataAction)
     }
     

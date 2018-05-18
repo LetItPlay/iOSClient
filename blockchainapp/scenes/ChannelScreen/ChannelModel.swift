@@ -53,7 +53,13 @@ class ChannelModel: TrackHandlingModel, ChannelModelProtocol, ChannelEvenHandler
     var channel: Channel!
 	let disposeBag = DisposeBag()
         
-    init(channelID: Int, name: String, dataAction: Action<Int, [Track]>) {
+    init(channelID: Int) {
+        
+        let name = LocalizedStrings.Channels.channel + " \(channelID)"
+        let dataAction = Action<Int, [Track]>.init(workFactory: { (offset) -> Observable<[Track]> in
+            return RequestManager.shared.tracks(req: TracksRequest.channel(channelID))
+        })
+        
         super.init(name: name, dataAction: dataAction)
 
         RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
