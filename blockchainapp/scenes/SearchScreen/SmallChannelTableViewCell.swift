@@ -110,7 +110,6 @@ class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	@objc func subChanged() {
         self.followButton.isSelected = !self.followButton.isSelected
         self.event!("onFollow", nil)
-//        self.onSub?()
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -119,8 +118,6 @@ class SmallChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 
 }

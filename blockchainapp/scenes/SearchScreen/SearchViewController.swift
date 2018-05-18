@@ -199,62 +199,6 @@ extension SearchViewController: TableCellProvider, TableDataProvider {
     }
 }
 
-//extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 2
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return section == 0 ? self.viewModel.channels.count : self.viewModel.tracks.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if indexPath.section != 0 {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: SmallTrackTableViewCell.cellID, for: indexPath) as! SmallTrackTableViewCell
-//            cell.fill(vm: self.viewModel.tracks[indexPath.item])
-//            cell.onOthers = {[weak self] in
-//                self?.emitter.send(event: SearchEvent.showOthers(index: indexPath.row))
-//            }
-//            return cell
-//        } else {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: SmallChannelTableViewCell.cellID, for: indexPath) as! SmallChannelTableViewCell
-//            cell.channel = self.viewModel.channels[indexPath.item]
-//            cell.onSub = { self.emitter.send(event: SearchEvent.channelSubPressed(index: indexPath.row)) }
-//            return cell
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        self.searchController.searchBar.resignFirstResponder()
-//        self.emitter.send(event: SearchEvent.cellDidSelect(section: indexPath.section, index: indexPath.row))
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        if indexPath.section == 1 {
-//            let track = self.viewModel.tracks[indexPath.item]
-//            return Common.height(text: track.name, width: tableView.frame.width)
-//        } else {
-//            return SmallChannelTableViewCell.height
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        if indexPath.section == 1 && indexPath.row == self.viewModel.tracks.count - 1,
-//            !viewModel.nothingToUpdate {
-//                activityIndicator.startAnimating()
-//                self.emitter.send(event: SearchEvent.showMoreTracks)
-//        }
-//    }
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        if section == 0 {
-//            return nil
-//        } else {
-//            return activityIndicator
-//        }
-//    }
-//}
-
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let text = searchController.searchBar.text {

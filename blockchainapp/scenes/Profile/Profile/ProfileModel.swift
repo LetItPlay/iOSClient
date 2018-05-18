@@ -72,10 +72,7 @@ class ProfileModel: ProfileModelProtocol {
                 let fileURL = documentsURL.appendingPathComponent("\(self.imageName).png")
                 try image.write(to: fileURL, options: .atomic)
                 observer.onCompleted()
-            } catch
-            {
-//                observer.onError(RequestError.invalidURL)
-            }
+            } catch {}
             
             return Disposables.create
             {

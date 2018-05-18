@@ -120,7 +120,7 @@
 		9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */; };
 		9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */; };
 		9DC6C2402091D20900C980D4 /* MainChannelsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */; };
-		9DC6C2422091D21300C980D4 /* MainChannelModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C2412091D21300C980D4 /* MainChannelModel.swift */; };
+		9DC6C2422091D21300C980D4 /* MainChannelsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C2412091D21300C980D4 /* MainChannelsModel.swift */; };
 		9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */; };
 		9DC7E98E206B4504001986D3 /* PlaylistsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */; };
 		9DD783DD20A572B600FA0FFD /* Empties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD783DC20A572B600FA0FFD /* Empties.swift */; };
@@ -305,7 +305,7 @@
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
 		9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsViewModel.swift; sourceTree = "<group>"; };
-		9DC6C2412091D21300C980D4 /* MainChannelModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelModel.swift; sourceTree = "<group>"; };
+		9DC6C2412091D21300C980D4 /* MainChannelsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsModel.swift; sourceTree = "<group>"; };
 		9DC7E98B206B43EC001986D3 /* PlaylistsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsViewController.swift; sourceTree = "<group>"; };
 		9DC7E98D206B4504001986D3 /* PlaylistsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistsBuilder.swift; sourceTree = "<group>"; };
 		9DD783DC20A572B600FA0FFD /* Empties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Empties.swift; sourceTree = "<group>"; };
@@ -539,7 +539,7 @@
 				9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */,
 				9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */,
 				9DC6C23F2091D20900C980D4 /* MainChannelsViewModel.swift */,
-				9DC6C2412091D21300C980D4 /* MainChannelModel.swift */,
+				9DC6C2412091D21300C980D4 /* MainChannelsModel.swift */,
 			);
 			path = MainChannelsScreen;
 			sourceTree = "<group>";
@@ -1152,7 +1152,7 @@
 				014761142010620F006E3373 /* PlayerTableViewCell.swift in Sources */,
 				9DA077BF20343650002BF631 /* FullChannelViewModel.swift in Sources */,
 				3626C8D02036A6790016772B /* SearchModel.swift in Sources */,
-				9DC6C2422091D21300C980D4 /* MainChannelModel.swift in Sources */,
+				9DC6C2422091D21300C980D4 /* MainChannelsModel.swift in Sources */,
 				9DA077CD2034505F002BF631 /* ChannelModel.swift in Sources */,
 				9D62CFCE20611642005A504A /* TrackInfoBuilder.swift in Sources */,
 				01E59B49209046A0001E7A29 /* PlayerBottomModelExtension.swift in Sources */,

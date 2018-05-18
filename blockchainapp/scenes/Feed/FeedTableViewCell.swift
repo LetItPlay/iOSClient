@@ -2,18 +2,11 @@
 import UIKit
 import SnapKit
 import SwipeCellKit
-import RxSwift
 import SDWebImage
 
 class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
 
 	public static let cellID: String = "NewFeedCellID"
-	
-	public var onLike: ((Int) -> Void)?
-    public var onChannel: ((Int) -> Void)?
-    public var onOthers: (() -> Void)?
-
-	var disposeBag = DisposeBag()
 	
     func fill(vm: TrackViewModel) {
         self.channelLabel.text = vm.author
@@ -45,9 +38,7 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
         }
     
         self.infoTextView.attributedText = trackDescription
-    
-        self.disposeBag = DisposeBag()
-    
+        
         self.dataLabels[.likes]?.set(text: vm.likesCount)
     
         self.dataLabels[.listens]?.set(text: vm.listensCount)
@@ -95,14 +86,6 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
 		para.maximumLineHeight = 22
 		return NSAttributedString.init(string: text , attributes: [.font: UIFont.systemFont(ofSize: 16, weight: .semibold), .foregroundColor: AppColor.Title.dark, .paragraphStyle: para])
 	}
-//
-//    static func height(vm: TrackViewModel, width: CGFloat) -> CGFloat {
-//        let picHeight = ceil((width - 32)*9.0/16.0)
-//        let textHeight = title(text: vm.name, calc: true)
-//            .boundingRect(with: CGSize.init(width: width - 20 - 32, height: 999), options: .usesLineFragmentOrigin, context: nil)
-//            .height
-//        return min(66, ceil(textHeight)) + picHeight + 32 + 4 + 32 + 24 + 2
-//    }
 	
 	deinit {
 		NotificationCenter.default.removeObserver(self)
@@ -356,7 +339,6 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
             make.top.equalTo(infoBlurView).inset(10)
             make.left.equalTo(infoBlurView).inset(10)
             make.right.equalTo(infoBlurView).inset(10)
-//            make.height.equalTo(infoTitle.frame.size.height)
         }
 
         self.infoBlurView.contentView.addSubview(infoTextView)
@@ -415,17 +397,14 @@ class FeedTableViewCell: SwipeTableViewCell, StandartTableViewCell {
     @objc func likePressed(_: UIButton) {
         likeButton.isSelected = !likeButton.isSelected
         self.event?("onLike", nil)
-//        onLike?(0)
     }
     
     @objc func channelPressed() {
         self.event?("onChannel", nil)
         self.hideSwipe(animated: true)
-//        onChannel?(0)
     }
     
     @objc func showOthersButtonTouched() {
-//        self.onOthers?()
         self.event?("onOthers", nil)
     }
 	

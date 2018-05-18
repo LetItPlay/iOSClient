@@ -61,9 +61,7 @@ class AudioController: AudioControllerProtocol {
 		} catch {
 			print("reach doesnt work")
 		}
-		
-//        self.player.delegate = self
-		
+        
 		let mpcenter = MPRemoteCommandCenter.shared()
 		mpcenter.playCommand.isEnabled = true
 		mpcenter.pauseCommand.isEnabled = true
@@ -214,11 +212,7 @@ class AudioController: AudioControllerProtocol {
             } else {
                 self.userPlaylist.tracks.append(track)
             }
-        
-//            if let index = self.playlist.tracks.index(where: {$0.id == track.id})
-//            {
-//                self.playlist.tracks.remove(at: index)
-//            }
+            
             self.delegate?.playlistChanged()
         }
 	}
@@ -230,7 +224,6 @@ class AudioController: AudioControllerProtocol {
             if self.playlistName == playlist.0 && self.currentTrack?.id == playId && self.player.status == .paused {
                 self.player.make(command: .play)
             } else {
-    //        if self.playlistName != playlist.0 {
                 self.playlistName = playlist.0
                 self.currentTrackIndexPath = IndexPath.invalid
                 let newPlaylist = AudioPlaylist()

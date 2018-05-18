@@ -1,5 +1,5 @@
 //
-//  MainChannelModel.swift
+//  MainChannelsModel.swift
 //  blockchainapp
 //
 //  Created by Polina Abrosimova on 26.04.2018.

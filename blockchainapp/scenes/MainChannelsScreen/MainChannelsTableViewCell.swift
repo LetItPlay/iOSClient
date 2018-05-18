@@ -15,9 +15,6 @@ class MainChannelsTableViewCell: UITableViewCell, StandartTableViewCell {
     
     var category: ChannelCategoryViewModel!
     
-    public var onSeeAll: ((String) -> Void)?
-    public var onChannelTap: ((Int) -> Void)?
-    
     let categoryLabel: UILabel = {
         let label = UILabel()
         label.font = AppFont.Title.sectionNotBold
@@ -120,7 +117,6 @@ class MainChannelsTableViewCell: UITableViewCell, StandartTableViewCell {
     
     @objc func onSeeAllBtnTouched(_ sender: Any) {
         self.event!("onSeeAll", nil)
-//        self.onSeeAll!(self.category.name)
     }
 }
 
@@ -141,6 +137,5 @@ extension MainChannelsTableViewCell: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.event!("onChannelTap", ["item" : indexPath.item])
-//        self.onChannelTap!(indexPath.item)
     }
 }

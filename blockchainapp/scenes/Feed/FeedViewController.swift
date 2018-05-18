@@ -203,7 +203,6 @@ extension FeedViewController: TrackHandlingViewModelDelegate {
                     case .update:
                         if indexes.count != 0 {
                             tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                            //                        tableView.reloadData()
                         }
                     }
                 }
@@ -249,83 +248,6 @@ extension FeedViewController: TableDataProvider, TableCellProvider {
         (cell as? SwipeTableViewCell)?.delegate = self
     }
 }
-
-//extension FeedViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.viewModel.tracks.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: FeedTableViewCell.cellID) as! FeedTableViewCell
-//        cell.onLike = {[weak self] track in
-//            if (self?.didSwipeCell)! {
-//                cell.hideSwipe(animated: true)
-//            }
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                self?.emitter?.send(event: FeedEvent.trackLiked(index: indexPath.row))
-//            }
-//        }
-//
-//        cell.onChannel = {[weak self] channel in
-//            if (self?.didSwipeCell)! {
-//                cell.hideSwipe(animated: true)
-//            }
-//
-//            self?.emitter?.send(event: FeedEvent.showChannel(atIndex: indexPath.row))
-//        }
-//
-//        cell.onOthers = {[weak self] in
-//            self?.emitter?.send(event: FeedEvent.showOthers(index: indexPath.row))
-//        }
-//
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        self.emitter.send(event: FeedEvent.trackSelected(index: indexPath.item))
-//    }
-//
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        let cell = cell as? FeedTableViewCell
-//        //for swipes
-//        cell?.delegate = self
-//
-//        self.emitter.send(event: FeedEvent.showing(index: indexPath.item))
-//
-//        let vm = self.viewModel.tracks[indexPath.item]
-//        cell?.fill(vm: vm)
-//
-//        cell?.getInfo(toHide: true, animated: false)
-//
-//        cell?.onLike = { [weak self] track in
-//            cell?.hideSwipe(animated: true)
-//            self?.emitter.send(event: FeedEvent.trackLiked(index: indexPath.item))
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let vm = self.viewModel.tracks[indexPath.item]
-//        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
-//    }
-//
-//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let vm = self.viewModel.tracks[indexPath.item]
-//        return FeedTableViewCell.height(vm: vm, width: tableView.frame.width)
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 0
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        return nil
-//    }
-//}
 
 extension FeedViewController: SwipeTableViewCellDelegate
 {
@@ -390,10 +312,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
         
         addToPlaylistAction.fixCenterForItems = 10
         
-//        if addTo.range(of: "top") == nil {
-//            myLabel.textAlignment = .right
-//        }
-        
         return [addToPlaylistAction]
     }
     
@@ -404,7 +322,6 @@ extension FeedViewController: SwipeTableViewCellDelegate
         let customSwipeStyle = SwipeExpansionStyle(target: .percentage(0.25), additionalTriggers: [.overscroll(50)], elasticOverscroll: false, completionAnimation: .bounce)
         
         var options = SwipeTableOptions()
-//        options.expansionStyle = SwipeExpansionStyle.selection
         options.expansionStyle = customSwipeStyle
         options.transitionStyle = .border
         options.maximumButtonWidth = 300
@@ -417,7 +334,7 @@ extension FeedViewController: SwipeTableViewCellDelegate
         var frame: CGRect!
 		
 		let vm = self.viewModel.data[indexPath.item]
-		let height =  FeedTableViewCell.height(data: vm, width: tableView.frame.width)//height(vm: vm, width: tableView.frame.width)
+		let height =  FeedTableViewCell.height(data: vm, width: tableView.frame.width)
 		
         if orientation == .right
         {

@@ -43,11 +43,6 @@ class PlaylistsModel: PlaylistsModelProtocol, PlaylistsEventHandler {
     {
 		self.dataAction = Action<Bool,[Track]>.init(workFactory: { (_) -> Observable<[Track]> in
 			return RequestManager.shared.tracks(req: .magic)
-//				.map({ (tracks) -> [AudioTrack] in
-//					return tracks.map({ (track) -> AudioTrack in
-//						return PlayerTrack.init(id: track.id, trackURL: track.url!, name: track.name, author: track.channel.name, imageURL: track.image, length: track.length)
-//				})
-//			})
 		})
 		
 		self.dataAction.elements.subscribe(onNext: { (audio) in

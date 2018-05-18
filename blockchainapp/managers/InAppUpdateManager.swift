@@ -125,20 +125,4 @@ class InAppUpdateManager {
             }
         }
     }
-
-//    @objc func trackPlayed(notification: Notification) {
-//        if let id = notification.userInfo?["id"] as? Int {
-//            for box in self.observers[.playing] ?? [] {
-//                (box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: true)
-//            }
-//        }
-//    }
-//
-//    @objc func trackPaused(notification: Notification) {
-//        if let id = notification.userInfo?["id"] as? Int {
-//            for box in self.observers[.playing] ?? [] {
-//                (box.value as? PlayingStateUpdateProtocol)?.trackPlayingUpdate(id: id, isPlaying: false)
-//            }
-//        }
-//    }
 }

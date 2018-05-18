@@ -10,15 +10,7 @@ import UIKit
 
 class SearchBuilder: Builder {
     static func build(params: [String: Any]?) -> UIViewController? {
-        
-        
-//        // for playlist
-//        let model = PlaylistsModel()
-//        let vm = PlaylistsViewModel(model: model)
-//        let emitter = PlaylistsEmitter(model: model)
-        
-        // for search
-        
+
         var text: String? = nil
         if let _ = params, let string = params!["text"] as? String {
             text = string

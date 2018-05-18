@@ -71,7 +71,6 @@ extension String {
     func buildImageURL() -> URL? {
 		
 		if String(self.prefix(4)) == "http", let _ = self.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) {
-//            return URL(string: str)
             return URL(string: self)
 		}
 		

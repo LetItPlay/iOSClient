@@ -87,7 +87,6 @@ class MainPlayerBottomIconsView: UIView, BottomPlayerViewDelegate {
     }
     
     func hideIcons(_ constant: CGFloat) {
-//        print(constant)
         self.showOthersButton.alpha = constant
         self.trackLikeButton.alpha = constant
         self.trackSpeedButton.alpha = constant

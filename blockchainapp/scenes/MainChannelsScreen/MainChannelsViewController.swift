@@ -54,10 +54,6 @@ class MainChannelsViewController: UIViewController {
     }
     
     func viewInitialize() {
-        
-//        tableView.delegate = self
-//        tableView.dataSource = self
-        
         tableView.register(MainChannelsTableViewCell.self, forCellReuseIdentifier: MainChannelsTableViewCell.cellID)
         
         self.tableView.refreshControl = UIRefreshControl()
@@ -113,37 +109,3 @@ extension MainChannelsViewController: TableDataProvider, TableCellProvider {
         return isHeader ? 117 : 0
     }
 }
-
-//extension MainChannelsViewController: UITableViewDelegate, UITableViewDataSource {
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.viewModel.categories.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: MainChannelsTableViewCell.cellIdentifier) as! MainChannelsTableViewCell
-//
-//        cell.fill(category: self.viewModel.categories[indexPath.row])
-//
-//        cell.onSeeAll = {[weak self] category in
-//            self?.emitter?.send(event: MainChannelsEvent.showAllChannels(index: indexPath.row))
-//        }
-//
-//        cell.onChannelTap = {[weak self] index in
-//            self?.emitter?.send(event: MainChannelsEvent.showChannel(index: IndexPath(row: index, section: indexPath.row)))
-//        }
-//
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        return self.channelsView
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 117
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 217
-//    }
-//}

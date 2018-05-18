@@ -289,10 +289,9 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
         let imageSpacer = UIView()
         blur.contentView.addSubview(imageSpacer)
         imageSpacer.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(52)//(37)
+            make.top.equalToSuperview().inset(52)
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-//            make.width.equalTo(imageSpacer.snp.height)
             make.bottom.equalTo(self.trackProgressView.snp.top)
         }
         
@@ -356,41 +355,28 @@ class PlayerViewController: UIViewController, PlayerViewDelegate {
             make.centerY.equalTo(playButton)
             make.right.equalTo(playButton.snp.left).inset(-2)
             
-            make.width.equalTo(playButton.snp.width)//.inset(10)
-//            make.centerY.equalTo(playButton)
-//            make.right.equalTo(playButton.snp.left).inset(-12)
-//
-//            make.width.equalTo(playButton.snp.width).inset(10)
+            make.width.equalTo(playButton.snp.width)
         }
         
         blur.contentView.addSubview(trackSeekButtons.forw)
         trackSeekButtons.forw.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
             make.left.equalTo(playButton.snp.right).inset(-2)
-            make.width.equalTo(playButton.snp.width)//.inset(10)
-//            make.centerY.equalTo(playButton)
-//            make.left.equalTo(playButton.snp.right).inset(-12)
-//            make.width.equalTo(playButton.snp.width).inset(10)
+            make.width.equalTo(playButton.snp.width)
         }
         
         blur.contentView.addSubview(trackChangeButtons.next)
         trackChangeButtons.next.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
             make.left.equalTo(trackSeekButtons.forw.snp.right).inset(10)
-            make.width.equalTo(playButton.snp.width)//.inset(10)
-//            make.centerY.equalTo(playButton)
-//            make.left.equalTo(trackSeekButtons.forw.snp.right).inset(-12)
-//            make.width.equalTo(playButton.snp.width).inset(10)
+            make.width.equalTo(playButton.snp.width)
         }
         
         blur.contentView.addSubview(trackChangeButtons.prev)
         trackChangeButtons.prev.snp.makeConstraints { (make) in
             make.centerY.equalTo(playButton)
             make.right.equalTo(trackSeekButtons.backw.snp.left).inset(10)
-            make.width.equalTo(playButton.snp.width)//.inset(10)
-//            make.centerY.equalTo(playButton)
-//            make.right.equalTo(trackSeekButtons.backw.snp.left).inset(-12)
-//            make.width.equalTo(playButton.snp.width).inset(10)
+            make.width.equalTo(playButton.snp.width)
         }
         
         blur.contentView.addSubview(trackNameLabel)

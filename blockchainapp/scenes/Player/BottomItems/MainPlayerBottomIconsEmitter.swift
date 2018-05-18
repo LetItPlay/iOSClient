@@ -28,7 +28,6 @@ class MainPlayerBottomIconsEmitter: MainPlayerBottomIconsEmitterProtocol {
     var model: MainPlayerBottomIconsEventHandler?
     
     convenience init(model: MainPlayerBottomIconsEventHandler) {
-//        self.init(handler: model as! ModelProtocol)
         self.init()
         self.model = model
     }

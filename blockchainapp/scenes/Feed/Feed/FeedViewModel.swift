@@ -5,7 +5,6 @@ enum CollectionUpdate {
 }
 
 protocol FeedVMProtocol: TrackHandlingViewModelProtocol {
-//    var delegate: FeedVMDelegate? {get set}
 }
 
 protocol FeedVMDelegate: class {

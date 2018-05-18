@@ -84,9 +84,6 @@ class UserPlaylistViewController: UIViewController {
         tableView.backgroundView?.backgroundColor = .clear
         tableView.sectionIndexBackgroundColor = .clear
         
-//        tableView.delegate = self
-//        tableView.dataSource = self
-        
         self.tableView.contentInset.top = 44
         
         self.tableView.separatorColor = self.tableView.backgroundColor
@@ -116,7 +113,6 @@ class UserPlaylistViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @objc func clearPlaylist()
@@ -141,7 +137,7 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
     }
     
     func make(updates: [CollectionUpdate : [Int]]) {
-//        tableView.beginUpdates()
+        tableView.beginUpdates()
         for key in updates.keys {
             if let indexes = updates[key]?.map({IndexPath(row: $0, section: 0)}) {
                 switch key {
@@ -151,13 +147,13 @@ extension UserPlaylistViewController: UserPlaylistVMDelegate
                     tableView.deleteRows(at: indexes, with: UITableViewRowAnimation.none)
                 case .update:
                     if indexes.count != 0 {
-//                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
-                        tableView.reloadData()
+                        tableView.reloadRows(at: indexes, with: UITableViewRowAnimation.none)
+//                        tableView.reloadData()
                     }
                 }
             }
         }
-//        tableView.endUpdates()
+        tableView.endUpdates()
     }
 
     func delete(index: Int) {
@@ -186,46 +182,6 @@ extension UserPlaylistViewController: TableDataProvider, TableCellProvider {
         return self.viewModel.tracks.count
     }
 }
-
-//extension UserPlaylistViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.viewModel.tracks.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 0.01
-//    }
-//
-//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        return nil
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        self.emitter.send(event: UserPlaylistEvent.trackSelected(index: indexPath.row))
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//
-//        let cell = tableView.dequeueReusableCell(withIdentifier: ChannelTrackCell.cellID, for: indexPath) as! ChannelTrackCell
-//        cell.delegate = self
-//        cell.track = self.viewModel.tracks[indexPath.item]
-//
-//        cell.onOthers = {[weak self] in
-//            self?.emitter?.send(event: UserPlaylistEvent.showOthers(index: indexPath.row))
-//        }
-//
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 107
-//    }
-//}
 
 extension UserPlaylistViewController: SwipeTableViewCellDelegate {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {

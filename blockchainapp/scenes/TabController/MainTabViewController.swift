@@ -118,18 +118,6 @@ class MainTabViewController: UITabBarController, AudioControllerPresenter, MiniP
 	}
 	
 	func showPlaylist() {
-//        if !self.playerIsPresenting && !self.playerWasShowed {
-//            self.playerHandler.main.showPlaylist()
-//            if !self.playerHandler.main.isBeingPresented {
-//                UIApplication.shared.beginIgnoringInteractionEvents()
-//                self.playerIsPresenting = true
-//                self.present(self.playerHandler.main, animated: true) {
-//                    self.playerIsPresenting = false
-//                    self.playerWasShowed = true
-//                    UIApplication.shared.endIgnoringInteractionEvents()
-//                }
-//            }
-//        }
 	}
     
     func hidePlayer() {

@@ -8,8 +8,6 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
 	static let cellID: String = "LikeTrackCellID"
     var separator = UIView()
     
-    public var onOthers: (() -> Void)?
-	
 	let trackImageView: UIImageView = {
 		let imageView = UIImageView()
 		imageView.layer.cornerRadius = 6
@@ -172,7 +170,6 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
     
     @objc func showOthersButtonTouched() {
         self.event!("onOthers", nil)
-//        self.onOthers?()
     }
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -181,7 +178,5 @@ class SmallTrackTableViewCell: UITableViewCell, StandartTableViewCell {
 	
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 }

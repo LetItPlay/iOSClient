@@ -109,37 +109,6 @@ extension PlaylistsViewController: TableDataProvider, TableCellProvider {
     }
 }
 
-//extension PlaylistsViewController: UITableViewDelegate, UITableViewDataSource {
-//
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return 1
-//    }
-//
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return self.viewModel.playlists.count
-//    }
-//
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: PlaylistTableViewCell.cellID, for: indexPath) as! PlaylistTableViewCell
-//        cell.fill(playlist: self.viewModel.playlists[indexPath.item])
-//        return cell
-//    }
-//
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        AnalyticsEngine.sendEvent(event: .playlistSelected)
-//        self.emitter.send(event: PlaylistsEvent.formatPlaylists(index: indexPath.row))
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        let playlist = self.viewModel.playlists[indexPath.item]
-//        return PlaylistTableViewCell.height(title: playlist.title, desc: playlist.description, width: tableView.frame.width)
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-//        return 0.01
-//    }
-//}
-
 extension PlaylistsViewController: PlaylistsVMDelegate
 {
     func update() {

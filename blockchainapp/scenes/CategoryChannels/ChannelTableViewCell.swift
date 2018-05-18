@@ -111,7 +111,6 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 	@objc func subPressed() {
         self.followButton.isSelected = !self.followButton.isSelected
         self.event!("onFollow", nil)
-//        self.subAction(self.channel)
 	}
 	
 	override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -139,7 +138,6 @@ class ChannelTableViewCell: UITableViewCell, StandartTableViewCell {
 		followButton.snp.makeConstraints { (make) in
 			make.left.equalTo(channelTitle)
 			make.top.equalTo(channelTitle.snp.bottom).inset(-8)
-//			make.right.greaterThanOrEqualToSuperview().inset(16)
 			make.height.equalTo(32)
 		}
 		

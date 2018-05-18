@@ -20,9 +20,7 @@ typealias ChannelsLoaderFail = (Error?) -> Void
 
 class AppManager {
     static let shared = AppManager()
-    
-//    public lazy var  audioPlayer  = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "audiocore") as? AudioCoreViewController
-	
+    	
     public var rootTabBarController: MainTabViewController? {
         didSet {
             if rootTabBarController != nil {

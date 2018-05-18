@@ -7,9 +7,7 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
     var event: ((String, [String : Any]?) -> Void)?
     
     static let cellID: String = "ChannelTrackCellID"
-    
-    public var onOthers: (() -> Void)?
-    
+        
     let trackImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 6
@@ -91,7 +89,6 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
         self.contentView.addSubview(trackImageView)
         trackImageView.snp.makeConstraints { (make) in
             make.left.equalToSuperview().inset(16)
-            //            make.centerY.equalToSuperview()
             make.top.equalToSuperview().inset(12)
             make.width.equalTo(60)
             make.height.equalTo(60)
@@ -127,7 +124,6 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
         timeCount.snp.makeConstraints { (make) in
             make.top.equalTo(trackNameLabel.snp.bottom).inset(-6)
             make.left.equalTo(trackNameLabel)
-            //            make.bottom.equalToSuperview().inset(12)
         }
         
         self.contentView.addSubview(listensCount)
@@ -171,7 +167,6 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
     
     @objc func showOthersButtonTouched() {
         self.event?("onOthers", nil)
-//        self.onOthers?()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -180,8 +175,6 @@ class ChannelTrackCell: SwipeTableViewCell, StandartTableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
 }
