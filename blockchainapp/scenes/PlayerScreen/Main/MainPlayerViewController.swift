@@ -74,7 +74,7 @@ class MainPlayerViewController: UIViewController {
 		arrowView.snp.makeConstraints { (make) in
 			make.width.equalTo(37)
 			make.height.equalTo(12)
-			make.top.equalTo(pageController.view.snp.top).inset(40)
+			make.top.equalTo(pageController.view.snp.top).inset(30)
 			make.centerX.equalToSuperview()
 		}
 		

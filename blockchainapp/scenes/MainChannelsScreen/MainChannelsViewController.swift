@@ -29,6 +29,8 @@ class MainChannelsViewController: UIViewController {
         self.emitter = emitter
         
         self.channelsView = channelsView
+        self.channelsView.delegate = self
+        self.channelsView.isHidden = true
         
         self.tableProvider = TableProvider(tableView: self.tableView, dataProvider: self, cellProvider: self)
         self.tableProvider.cellEvent = { (indexPath, event, data) in
@@ -80,6 +82,12 @@ extension MainChannelsViewController: MainChannelsVMDelegate {
     }
 }
 
+extension MainChannelsViewController: ChannelsCollectionViewDelegate {
+    func updateCollectionView() {
+        self.reloadCategories()
+    }
+}
+
 extension MainChannelsViewController: TableDataProvider, TableCellProvider {
     func data(indexPath: IndexPath) -> Any {
         return self.viewModel.categories[indexPath.item]
@@ -106,6 +114,6 @@ extension MainChannelsViewController: TableDataProvider, TableCellProvider {
     }
     
     func height(table: UITableView, forSection: Int, isHeader: Bool) -> CGFloat {
-        return isHeader ? 117 : 0
+        return isHeader && !self.channelsView.isHidden ? 117 : 0
     }
 }

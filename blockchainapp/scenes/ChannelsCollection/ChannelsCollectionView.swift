@@ -9,10 +9,16 @@
 import UIKit
 import SnapKit
 
+protocol ChannelsCollectionViewDelegate {
+    func updateCollectionView()
+}
+
 class ChannelsCollectionView: UIView {
     
     var emitter: CategoryChannelsEmitterProtocol?
     var viewModel: CategoryChannelsViewModel!
+    
+    var delegate: ChannelsCollectionViewDelegate?
     
     let channelLabel: UILabel = {
         let label = UILabel()
@@ -52,7 +58,7 @@ class ChannelsCollectionView: UIView {
         self.init(frame: frame)
         self.emitter = emitter
         self.viewModel = viewModel
-        viewModel.delegate = self
+        self.viewModel.delegate = self
         
         self.viewInitialize()
         
@@ -105,9 +111,8 @@ class ChannelsCollectionView: UIView {
 extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
     func updateEmptyMessage() {
-        if !self.viewModel.hideEmptyMessage {
-            self.isHidden = true
-        }
+        self.isHidden = self.viewModel.hideEmptyMessage
+        self.delegate?.updateCollectionView()
     }
     
     func reloadChannels() {

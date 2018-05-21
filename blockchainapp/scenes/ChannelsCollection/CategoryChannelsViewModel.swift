@@ -20,7 +20,7 @@ protocol CategoryChannelsVMDelegate: class  {
     func updateEmptyMessage()
 }
 
-class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsModelDelegate {
+class CategoryChannelsViewModel: CategoryChannelsVMProtocol, CategoryChannelsModelDelegate {
     
     var channels: [SmallChannelViewModel] = []
     var category: String = ""
@@ -36,6 +36,11 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol,  CategoryChannelsMo
     func reload(newChannels: [SmallChannelViewModel]) {
         self.channels = newChannels
         self.delegate?.reloadChannels()
+        if self.channels.count == 0 {
+            self.updateEmptyMessage(hide: true)
+        } else {
+            self.updateEmptyMessage(hide: false)
+        }
     }
     
 	func showChannel(id: Int) {
