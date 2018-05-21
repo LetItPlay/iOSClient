@@ -52,6 +52,8 @@ class ChannelModel: TrackHandlingModel, ChannelModelProtocol, ChannelEvenHandler
     
     var channel: Channel!
 	let disposeBag = DisposeBag()
+    
+    private var getChannelAction: Action<Int, Channel>?
         
     init(channelID: Int) {
         
@@ -61,11 +63,18 @@ class ChannelModel: TrackHandlingModel, ChannelModelProtocol, ChannelEvenHandler
         })
         
         super.init(name: name, dataAction: dataAction)
-
-        RequestManager.shared.channel(id: channelID).subscribe(onNext: { (channel) in
+        
+        self.getChannelAction = Action<Int, Channel>.init(workFactory: { (_) -> Observable<Channel> in
+            return RequestManager.shared.channel(id: channelID)
+        })
+        
+        self.getChannelAction?.elements.do(onNext: { (channel) in
             self.channel = channel
-			self.playlistName = LocalizedStrings.Channels.channel + " \(channel.name)"
+        }).subscribeOn(MainScheduler.instance).subscribe(onNext: { (channel) in
+            self.playlistName = LocalizedStrings.Channels.channel + " \(channel.name)"
             self.channelDelegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
+        }, onCompleted: {
+            print("Channel loaded")
         }).disposed(by: disposeBag)
         
         let _ = InAppUpdateManager.shared.subscribe(self)
@@ -91,7 +100,7 @@ class ChannelModel: TrackHandlingModel, ChannelModelProtocol, ChannelEvenHandler
     override func send(event: LifeCycleEvent) {
         switch event {
         case .initialize:
-            self.channelDelegate?.getChannel(channel: FullChannelViewModel(channel: self.channel))
+            self.getChannelAction?.execute(0)
         default:
             break
         }

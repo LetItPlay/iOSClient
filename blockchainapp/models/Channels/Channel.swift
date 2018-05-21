@@ -37,6 +37,7 @@ struct Channel: LIPModel, Hashable {
 			self.tags = json["Tags"].array?.map({$0.string}).filter({$0 != nil}).map({$0!}) ?? []
             self.isSubscribed = json["followed"].bool ?? false
 			self.isReported = json["reported"].bool ?? false
+            self.isHidden = json["hidden"].bool ?? false
 			return
 		}
 		

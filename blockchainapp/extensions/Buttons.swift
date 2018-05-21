@@ -38,6 +38,8 @@ class FollowButton: UIButton {
         
         if title == LocalizedStrings.Button.show {
             self.setTitle(title, for: .selected)
+        } else {
+            self.setTitle(LocalizedStrings.Button.following, for: .selected)
         }
 
         self.isSelected = title == LocalizedStrings.Button.following
