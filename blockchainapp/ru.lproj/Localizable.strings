@@ -110,6 +110,9 @@
 /* title of recommended playlist */
 "playlists.recommendedTitle" = "Актуальные новости за 30 минут";
 
+/* allow adult content */
+"profile.allowAdultContent" = "Разрешить контент 18+";
+
 /* camera */
 "profile.camera" = "Камера";
 
@@ -190,6 +193,18 @@
 
 /* speed of audio */
 "track_speed.message" = "Скорость воспроизведения аудио";
+
+/* confirm age message */
+"profile.confirmAgeMessage" = "";
+
+/* confirm age title */
+"profile.confirmAgeTitle" = "";
+
+/* no */
+"system_message.no" = "";
+
+/* yes */
+"system_message.yes" = "";
 
 /* ago */
 "time_ago.ago" = "";

@@ -242,6 +242,9 @@
 /* title of recommended playlist */
 "playlists.recommendedTitle" = "";
 
+/* allow adult content */
+"profile.allowAdultContent" = "";
+
 /* camera */
 "profile.camera" = "";
 
@@ -250,6 +253,12 @@
 
 /* choose image */
 "profile.choose_image" = "";
+
+/* confirm age message */
+"profile.confirmAgeMessage" = "";
+
+/* confirm age title */
+"profile.confirmAgeTitle" = "";
 
 /* gallery */
 "profile.gallery" = "";
@@ -280,6 +289,9 @@
 /* delete */
 "system_message.delete" = "";
 
+/* no */
+"system_message.no" = "";
+
 /* no description */
 "system_message.no_desc" = "";
 
@@ -294,6 +306,9 @@
 
 /* warning */
 "system_message.warning" = "";
+
+/* yes */
+"system_message.yes" = "";
 
 /* channels */
 "tab.channels" = "";

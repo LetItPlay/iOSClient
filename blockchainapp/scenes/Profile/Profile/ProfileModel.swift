@@ -10,12 +10,17 @@ import Foundation
 import UIKit
 import RxSwift
 
+enum ContentAge {
+    case zero, eighteen
+}
+
 protocol ProfileModelProtocol: ModelProtocol {
     func change(image: Data)
     func change(name: String)
     func change(language: String)
     func getData()
     func showHiddenChannels()
+    func changeAdultContent(on: Bool)
 }
 
 protocol ProfileModelDelegate: class {
@@ -23,6 +28,7 @@ protocol ProfileModelDelegate: class {
     func update(image: Data)
     func update(name: String)
     func update(language: Language)
+    func update(contentAge: ContentAge)
     func showHiddenChannels()
 }
 
@@ -101,6 +107,10 @@ class ProfileModel: ProfileModelProtocol {
     
     func showHiddenChannels() {
         self.delegate?.showHiddenChannels()
+    }
+    
+    func changeAdultContent(on: Bool) {
+        ServerUpdateManager.shared.update(contentAge: on ? ContentAge.eighteen : ContentAge.zero)
     }
     
     func send(event: LifeCycleEvent) {

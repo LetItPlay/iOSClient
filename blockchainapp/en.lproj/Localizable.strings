@@ -110,6 +110,9 @@
 /* title of recommended playlist */
 "playlists.recommendedTitle" = "Fresh news in 30 minutes";
 
+/* allow adult content */
+"profile.allowAdultContent" = "Allow adult content";
+
 /* camera */
 "profile.camera" = "Camera";
 
@@ -208,3 +211,15 @@
 
 /* speed of audio */
 "track_speed.message" = "The playback speed of audio";
+
+/* confirm age message */
+"profile.confirmAgeMessage" = "";
+
+/* confirm age title */
+"profile.confirmAgeTitle" = "";
+
+/* no */
+"system_message.no" = "";
+
+/* yes */
+"system_message.yes" = "";

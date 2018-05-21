@@ -116,6 +116,7 @@
 		9DB4FCE120AD8AF3008BAE23 /* TrackHandlingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE020AD8AF3008BAE23 /* TrackHandlingModel.swift */; };
 		9DB4FCE320AD8B61008BAE23 /* TrackHandlingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE220AD8B61008BAE23 /* TrackHandlingViewModel.swift */; };
 		9DB4FCE520AD8B87008BAE23 /* TrackHandlingEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DB4FCE420AD8B87008BAE23 /* TrackHandlingEmitter.swift */; };
+		9DBA55EA20B2C9F3000CBC34 /* Labels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBA55E920B2C9F3000CBC34 /* Labels.swift */; };
 		9DBC1438209ACD60009F30CE /* CategoryChannelViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */; };
 		9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */; };
 		9DC6C23E2091D1CC00C980D4 /* MainChannelsEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */; };
@@ -301,6 +302,7 @@
 		9DB4FCE020AD8AF3008BAE23 /* TrackHandlingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingModel.swift; sourceTree = "<group>"; };
 		9DB4FCE220AD8B61008BAE23 /* TrackHandlingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingViewModel.swift; sourceTree = "<group>"; };
 		9DB4FCE420AD8B87008BAE23 /* TrackHandlingEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackHandlingEmitter.swift; sourceTree = "<group>"; };
+		9DBA55E920B2C9F3000CBC34 /* Labels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labels.swift; sourceTree = "<group>"; };
 		9DBC1437209ACD60009F30CE /* CategoryChannelViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryChannelViewModel.swift; sourceTree = "<group>"; };
 		9DC6C23B2091CA2900C980D4 /* MainChannelsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsBuilder.swift; sourceTree = "<group>"; };
 		9DC6C23D2091D1CC00C980D4 /* MainChannelsEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainChannelsEmitter.swift; sourceTree = "<group>"; };
@@ -772,6 +774,7 @@
 				9DD783DC20A572B600FA0FFD /* Empties.swift */,
 				367D738620AEA2D400BE1702 /* BaseTableView.swift */,
 				9DB4FCDC20AD513B008BAE23 /* LocalizedStrings.swift */,
+				9DBA55E920B2C9F3000CBC34 /* Labels.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -1220,6 +1223,7 @@
 				9DC7E98C206B43EC001986D3 /* PlaylistsViewController.swift in Sources */,
 				365653F920358F980072087F /* PlaylistsModel.swift in Sources */,
 				9D0B18F5207F66A200CBE87B /* OthersEmitter.swift in Sources */,
+				9DBA55EA20B2C9F3000CBC34 /* Labels.swift in Sources */,
 				9DC6C23C2091CA2900C980D4 /* MainChannelsBuilder.swift in Sources */,
 				36706D532031A801002097E7 /* CategoryChannelsViewModel.swift in Sources */,
 				3604E81C20330E4100623C55 /* SmallTrackViewModel.swift in Sources */,

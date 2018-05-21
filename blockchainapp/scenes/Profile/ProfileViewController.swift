@@ -12,6 +12,7 @@ import RealmSwift
 
 protocol ProfileViewDelegate {
     func addImage()
+    func confirmAdult()
 }
 
 class ProfileViewController: UIViewController {
@@ -235,6 +236,18 @@ extension ProfileViewController: LikesVMDelegate
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
+    func confirmAdult() {
+        let alert = UIAlertController(title: LocalizedStrings.Profile.confirmAgeTitle, message: LocalizedStrings.Profile.confirmAgeMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.yes, style: .destructive, handler: { (_) in
+            self.profileHeader.emitter?.send(event: ProfileEvent.adultContent(true))
+        }))
+        alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.no, style: .destructive, handler: { (_) in
+            self.profileHeader.adultContentSwitch.isOn = false
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func addImage() {
         let alert = UIAlertController(title: "", message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = AppColor.Element.redBlur.withAlphaComponent(1)

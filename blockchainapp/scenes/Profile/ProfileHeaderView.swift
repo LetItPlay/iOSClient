@@ -56,17 +56,23 @@ class ProfileHeaderView: UIView {
     
     let languageButton = ProfileButton(title: LocalizedStrings.Profile.changeLanguage)
     
-    let languageTitleLabel: UILabel = {
-        let label = UILabel()
-        label.font = AppFont.Button.mid
-        label.textColor = AppColor.Title.lightGray
-        return label
+    let languageTitleLabel = SmallLabel()
+    
+    let adultContentLabel = SmallLabel(title: LocalizedStrings.Profile.allowAdultContent)
+    
+    let adultContentSwitch: UISwitch = {
+        let adultSwitch = UISwitch()
+        adultSwitch.tintColor = AppColor.Element.redBlur
+        adultSwitch.onTintColor = AppColor.Element.redBlur
+        return adultSwitch
     }()
     
     let hiddenChannelsButton = ProfileButton(title: LocalizedStrings.Channels.hidden)
     
+    public let viewHeight: CGFloat = 593
+    
     init(emitter: ProfileEmitterProtocol, viewModel: ProfileViewModel) {
-        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: 511 + 52)))
+        super.init(frame: CGRect.init(origin: CGPoint.zero, size: CGSize.init(width: 320, height: self.viewHeight)))
         
         self.emitter = emitter
         self.viewModel = viewModel
@@ -150,8 +156,21 @@ class ProfileHeaderView: UIView {
             make.centerX.equalToSuperview()
         })
         
+        blur.contentView.addSubview(adultContentLabel)
+        adultContentLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(languageTitleLabel.snp.bottom).inset(-14)
+            make.centerX.equalToSuperview().inset(self.adultContentSwitch.frame.width / 2 * -1)
+        }
+        
+        blur.contentView.addSubview(adultContentSwitch)
+        adultContentSwitch.snp.makeConstraints { (make) in
+            make.left.equalTo(self.adultContentLabel.snp.right).inset(-8)
+            make.centerY.equalTo(self.adultContentLabel)
+        }
+        adultContentSwitch.addTarget(self, action: #selector(self.adultContentSwitchChanged(_:)), for: .valueChanged)
+        
         hiddenChannelsButton.snp.makeConstraints { (make) in
-            make.top.equalTo(languageTitleLabel.snp.bottom).inset(-20)
+            make.top.equalTo(adultContentLabel.snp.bottom).inset(-20)
             make.centerX.equalToSuperview()
         }
         
@@ -176,6 +195,14 @@ class ProfileHeaderView: UIView {
     
     @objc func hiddenChannelsButtonTapped(_ sender: Any) {
         self.emitter?.send(event: ProfileEvent.showHiddenChannels)
+    }
+    
+    @objc func adultContentSwitchChanged(_ sender: UISwitch) {
+        if sender.isOn {
+            self.delegate?.confirmAdult()
+        } else {
+            self.emitter?.send(event: ProfileEvent.adultContent(false))
+        }
     }
     
     func setName(name: String)
@@ -205,7 +232,18 @@ extension ProfileHeaderView: ProfileVMDelegate
                 break
             case .name:
                 self.setName(name: self.viewModel.name)
+            case .contentAge:
+                self.setContentAge()
             }
+        }
+    }
+    
+    func setContentAge() {
+        switch self.viewModel.contentAge {
+        case .zero:
+            self.adultContentSwitch.isOn = false
+        case .eighteen:
+            self.adultContentSwitch.isOn = true
         }
     }
 }

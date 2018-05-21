@@ -68,6 +68,10 @@ struct LocalizedStrings {
         static let name = NSLocalizedString("profile.name", comment: "name")
         static let likedTracks = NSLocalizedString("profile.liked_tracks", comment: "tracks you've liked")
         static let like = NSLocalizedString("profile.like", comment: "like")
+        static let allowAdultContent = NSLocalizedString("profile.allowAdultContent", comment: "allow adult content")
+        
+        static let confirmAgeTitle = NSLocalizedString("profile.confirmAgeTitle", comment: "confirm age title")
+        static let confirmAgeMessage = NSLocalizedString("profile.confirmAgeMessage", comment: "confirm age message")
     }
     
     struct Button {
@@ -120,5 +124,7 @@ struct LocalizedStrings {
         static let remove = NSLocalizedString("system_message.remove", comment: "remove")
         static let warning = NSLocalizedString("system_message.warning", comment: "warning")
         static let noCameraWarning = NSLocalizedString("system_message.noCameraWarning", comment: "You don't have camera")
+        static let no = NSLocalizedString("system_message.no", comment: "no")
+        static let yes = NSLocalizedString("system_message.yes", comment: "yes")
     }
 }

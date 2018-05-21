@@ -9,7 +9,7 @@
 import Foundation
 
 enum ProfileUpdate {
-    case image, name, language
+    case image, name, language, contentAge
 }
 
 protocol ProfileVMDelegate: class {
@@ -24,6 +24,7 @@ class ProfileViewModel: ProfileModelDelegate {
     
     let languages = UserSettings.languages.map({$0.switchTo})
     var currentLanguage = UserSettings.language.currentLanguage
+    var contentAge = ContentAge.zero
     
     weak var delegate: ProfileVMDelegate?
     
@@ -57,6 +58,11 @@ class ProfileViewModel: ProfileModelDelegate {
     {
         self.getLanguage(lang: language)
         self.delegate?.make(updates: [.language])
+    }
+    
+    func update(contentAge: ContentAge) {
+        self.contentAge = contentAge
+        self.delegate?.make(updates: [.contentAge])
     }
     
     func showHiddenChannels() {

@@ -68,9 +68,12 @@ class ServerUpdateManager {
         }).disposed(by: disposeBag)
 	}
     
-    func update(language: Language)
-    {
+    func update(language: Language) {
         UserSettings.language = language
         NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil, userInfo: ["lang" : UserSettings.language])
+    }
+    
+    func update(contentAge: ContentAge) {
+        //TODO: request
     }
 }

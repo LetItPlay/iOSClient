@@ -15,6 +15,7 @@ class SearchChannelViewModel: SmallChannelViewModel {
     var tracksCount: String = ""
 
     var isSubscribed: Bool = false
+    var isHidden: Bool = false
 
     override init(channel: Channel) {
         super.init(channel: channel)
@@ -24,9 +25,14 @@ class SearchChannelViewModel: SmallChannelViewModel {
         self.tracksCount = Int64(channel.trackCount).formatAmount()
         
         self.isSubscribed = channel.isSubscribed
+        self.isHidden = channel.isHidden
     }
     
     func getMainButtonTitle() -> String {
-        return self.isSubscribed ? LocalizedStrings.Button.following : LocalizedStrings.Button.follow
+        if self.isHidden {
+            return LocalizedStrings.Button.show
+        } else {
+            return self.isSubscribed ? LocalizedStrings.Button.following : LocalizedStrings.Button.follow
+        }
     }
 }
