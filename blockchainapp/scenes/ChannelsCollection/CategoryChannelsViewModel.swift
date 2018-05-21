@@ -35,12 +35,8 @@ class CategoryChannelsViewModel: CategoryChannelsVMProtocol, CategoryChannelsMod
     
     func reload(newChannels: [SmallChannelViewModel]) {
         self.channels = newChannels
+        self.updateEmptyMessage(hide: self.channels.count != 0)
         self.delegate?.reloadChannels()
-        if self.channels.count == 0 {
-            self.updateEmptyMessage(hide: true)
-        } else {
-            self.updateEmptyMessage(hide: false)
-        }
     }
     
 	func showChannel(id: Int) {

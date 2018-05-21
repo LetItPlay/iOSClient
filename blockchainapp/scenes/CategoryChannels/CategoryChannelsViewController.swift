@@ -65,7 +65,6 @@ class CategoryChannelsViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         self.navigationItem.title = self.viewModel.category
         
-        self.tableView.backgroundColor = .white
         self.view.addSubview(tableView)
         tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
