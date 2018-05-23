@@ -122,6 +122,12 @@
 /* choose image */
 "profile.choose_image" = "Choose Image";
 
+/* confirm age message */
+"profile.confirmAgeMessage" = "After clicking \"Yes\" materials for adults will be available";
+
+/* confirm age title */
+"profile.confirmAgeTitle" = "Confirm that you are already 18 years old";
+
 /* gallery */
 "profile.gallery" = "Gallery";
 
@@ -217,9 +223,3 @@
 
 /* speed of audio */
 "track_speed.message" = "The playback speed of audio";
-
-/* confirm age message */
-"profile.confirmAgeMessage" = "";
-
-/* confirm age title */
-"profile.confirmAgeTitle" = "";

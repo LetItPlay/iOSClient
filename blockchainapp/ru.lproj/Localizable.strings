@@ -122,6 +122,12 @@
 /* choose image */
 "profile.choose_image" = "Выбрать фото";
 
+/* confirm age message */
+"profile.confirmAgeMessage" = "После нажатия \"Да\" будут доступны материалы для взрослых";
+
+/* confirm age title */
+"profile.confirmAgeTitle" = "Подтвердите, что вам уже исполнилось 18 лет";
+
 /* gallery */
 "profile.gallery" = "Галерея";
 
@@ -199,12 +205,6 @@
 
 /* speed of audio */
 "track_speed.message" = "Скорость воспроизведения аудио";
-
-/* confirm age message */
-"profile.confirmAgeMessage" = "";
-
-/* confirm age title */
-"profile.confirmAgeTitle" = "";
 
 /* ago */
 "time_ago.ago" = "";
