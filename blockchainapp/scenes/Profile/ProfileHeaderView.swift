@@ -64,6 +64,7 @@ class ProfileHeaderView: UIView {
         let adultSwitch = UISwitch()
         adultSwitch.tintColor = AppColor.Element.redBlur
         adultSwitch.onTintColor = AppColor.Element.redBlur
+        adultSwitch.isOn = false
         return adultSwitch
     }()
     

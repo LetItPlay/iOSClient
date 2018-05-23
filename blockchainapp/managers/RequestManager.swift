@@ -42,6 +42,10 @@ enum ChannelUpdateRequest {
     case show
 }
 
+enum Settings: String {
+    case adultContent = "user/adult"
+}
+
 fileprivate extension TracksRequest {
     func urlQuery(lang: String) -> String {
         switch self {
@@ -110,6 +114,27 @@ class RequestManager {
         //        cfg.connectionProxyDictionary = proxyConfiguration
         
         self.sessionManager = SessionManager.init(configuration: cfg)
+    }
+    
+    func getSettings() -> Observable<Bool> {
+        let urlString = RequestManager.server + "/" + Settings.adultContent.rawValue
+        if let url = URL(string: urlString) {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            return self.makeRequest(request).flatMap ({ (result) -> Observable<Bool> in
+                print(url.absoluteString)
+                switch result {
+                case .value(let data):
+                    if let isAdult = String(data: data, encoding: .utf8) {
+                        return Observable<Bool>.just(isAdult == "true")
+                    }
+                    return Observable<Bool>.error(RequestError.invalidJSON)
+                case .error(let error):
+                    return Observable<Bool>.error(error)
+                }
+            })
+        }
+        return Observable.error(RequestError.invalidURL)
     }
     
     func categories() -> Observable<[ChannelCategory]> {
@@ -294,6 +319,20 @@ class RequestManager {
 			})
 		}
         return Observable.error(RequestError.invalidURL)
+    }
+    
+    func adultContent(set: Bool) {
+        let urlString = RequestManager.server + "/" + Settings.adultContent.rawValue
+        if let url = URL(string: urlString), var request = try? URLRequest.init(url: url, method: HTTPMethod.post) {
+            request.httpMethod = set ? "PUT" : "DELETE"
+            
+//            let jsonData = try? JSON(event).rawData()
+//            request.httpBody = jsonData
+            
+            let _ = self.makeRequest(request).subscribe()
+        } else {
+            print("request error")
+        }
     }
     
     func sendAnalytic(event: [String : Any]) {

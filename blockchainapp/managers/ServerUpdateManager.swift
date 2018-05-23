@@ -74,6 +74,14 @@ class ServerUpdateManager {
     }
     
     func update(contentAge: ContentAge) {
-        //TODO: request
+        let isAdult: Bool!
+        switch contentAge {
+        case .zero:
+            isAdult = false
+        case .eighteen:
+            isAdult = true
+        }
+        RequestManager.shared.adultContent(set: isAdult)
+        NotificationCenter.default.post(name: InAppUpdateNotification.setting.notification(), object: nil, userInfo: ["contentAge" : UserSettings.isAdultContent])
     }
 }

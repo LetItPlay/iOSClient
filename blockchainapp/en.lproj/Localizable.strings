@@ -149,6 +149,9 @@
 /* delete */
 "system_message.delete" = "Delete";
 
+/* no */
+"system_message.no" = "No";
+
 /* You don't have camera */
 "system_message.noCameraWarning" = "You don't have camera";
 
@@ -160,6 +163,9 @@
 
 /* warning */
 "system_message.warning" = "Warning";
+
+/* yes */
+"system_message.yes" = "Yes";
 
 /* channels */
 "tab.channels" = "Channels";
@@ -217,9 +223,3 @@
 
 /* confirm age title */
 "profile.confirmAgeTitle" = "";
-
-/* no */
-"system_message.no" = "";
-
-/* yes */
-"system_message.yes" = "";

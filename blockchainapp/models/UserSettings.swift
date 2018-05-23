@@ -64,6 +64,24 @@ class UserSettings {
         }
     }
     
+    static var isAdultContent: Bool {
+        get {
+            let def = UserDefaults.standard
+            
+            if let isAdultContent = def.value(forKey: "isAdultContent") as? Bool {
+                return isAdultContent
+            } else {
+                return false
+            }
+        }
+        
+        set(newData) {
+            let def = UserDefaults.standard
+            def.setValue(newData, forKey: "isAdultContent")
+            def.synchronize()
+        }
+    }
+    
     static var session: String {
         get {
             let def = UserDefaults.standard

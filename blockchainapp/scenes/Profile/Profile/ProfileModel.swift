@@ -117,6 +117,11 @@ class ProfileModel: ProfileModelProtocol {
         switch event {
         case .initialize:
             self.getData()
+            
+            RequestManager.shared.getSettings().subscribe(onNext: { (isAdultContent) in
+                UserSettings.isAdultContent = isAdultContent
+                self.delegate?.update(contentAge: isAdultContent ? ContentAge.eighteen : ContentAge.zero)
+            }).disposed(by: disposeBag)
         default:
             break
         }

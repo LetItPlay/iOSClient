@@ -228,10 +228,6 @@ extension ProfileViewController: TrackHandlingViewModelDelegate {
 extension ProfileViewController: LikesVMDelegate
 {
     
-    
-    func make(updates: [CollectionUpdate : [Int]]) {
-        
-    }
 }
 
 extension ProfileViewController: ProfileViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate

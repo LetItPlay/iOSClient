@@ -149,6 +149,9 @@
 /* delete */
 "system_message.delete" = "Удалить";
 
+/* no */
+"system_message.no" = "Нет";
+
 /* You don't have camera */
 "system_message.noCameraWarning" = "На вашем устройстве камера не поддерживается";
 
@@ -160,6 +163,9 @@
 
 /* warning */
 "system_message.warning" = "Ошибка";
+
+/* yes */
+"system_message.yes" = "Да";
 
 /* channels */
 "tab.channels" = "Каналы";
@@ -199,12 +205,6 @@
 
 /* confirm age title */
 "profile.confirmAgeTitle" = "";
-
-/* no */
-"system_message.no" = "";
-
-/* yes */
-"system_message.yes" = "";
 
 /* ago */
 "time_ago.ago" = "";
