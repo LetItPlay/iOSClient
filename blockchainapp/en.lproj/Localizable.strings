@@ -23,6 +23,9 @@
 /* category */
 "chanenls.category" = "Category";
 
+/* all channels */
+"channels.allChannels" = "All channels";
+
 /* categories */
 "channels.categories" = "Categories";
 
@@ -223,6 +226,3 @@
 
 /* speed of audio */
 "track_speed.message" = "The playback speed of audio";
-
-/* all channels */
-"channels.allChannels" = "All channels";
