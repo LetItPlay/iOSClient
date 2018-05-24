@@ -50,6 +50,7 @@ struct LocalizedStrings {
         static let category = NSLocalizedString("chanenls.category", comment: "category")
         static let hidden = NSLocalizedString("channels.hidden", comment: "hidden channels")
         static let recent = NSLocalizedString("channels.recent", comment: "recent added")
+        static let allChannels = NSLocalizedString("channels.allChannels", comment: "all channels")
         static let seeAll = NSLocalizedString("channels.seeAll", comment: "see all")
         static let subscibedTitle = NSLocalizedString("channels.subsribedTitle", comment: "subscribed channels")
         static let youSubscribed = NSLocalizedString("channels.you_subscribed", comment: "you are subscribed")

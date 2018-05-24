@@ -152,6 +152,9 @@
 /* channel */
 "channel" = "";
 
+/* all channels */
+"channels.allChannels" = "";
+
 /* categories */
 "channels.categories" = "";
 

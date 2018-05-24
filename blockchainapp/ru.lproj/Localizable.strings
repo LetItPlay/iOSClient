@@ -206,6 +206,9 @@
 /* speed of audio */
 "track_speed.message" = "Скорость воспроизведения аудио";
 
+/* all channels */
+"channels.allChannels" = "Все каналы";
+
 /* ago */
 "time_ago.ago" = "";
 
