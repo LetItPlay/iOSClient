@@ -137,7 +137,7 @@ extension ChannelViewController: TrackHandlingViewModelDelegate {
     }
     
     func reloadAppearence() {
-        
+        self.header.showOthersButton.isEnabled = !(self.viewModel.channel?.isHidden)!
     }
 }
 
@@ -145,6 +145,7 @@ extension ChannelViewController: ChannelVMDelegate {
     
     func updateSubscription() {
         self.header.followButton.set(title: (self.viewModel.channel?.getMainButtonTitle())!)
+        self.header.showOthersButton.isEnabled = !(self.viewModel.channel?.isHidden)!
     }
 }
 

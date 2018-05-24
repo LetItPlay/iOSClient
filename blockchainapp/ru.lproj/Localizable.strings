@@ -63,7 +63,7 @@
 "others.not_show" = "Скрыть";
 
 /* description of channel not showing */
-"others.not_show_desctiption" = "Содержимое этого фида не будет отображаться в вашем фиде";
+"others.not_show_desctiption" = "Содержимое этого канала не будет отображено во вкладке \"Новое\"";
 
 /* report */
 "others.report" = "Пожаловаться";

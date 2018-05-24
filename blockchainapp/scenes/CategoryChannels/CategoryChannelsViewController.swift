@@ -124,7 +124,7 @@ class CategoryChannelsViewController: UIViewController {
 
 extension CategoryChannelsViewController: CategoryChannelsVMDelegate {
     func updateEmptyMessage() {
-        emptyLabel.isHidden = self.viewModel.hideEmptyMessage
+        emptyLabel.isHidden = !self.viewModel.showEmptyMessage
     }
     
     func reloadChannels() {

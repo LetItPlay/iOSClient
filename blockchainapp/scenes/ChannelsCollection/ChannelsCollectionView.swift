@@ -111,7 +111,7 @@ class ChannelsCollectionView: UIView {
 extension ChannelsCollectionView: CategoryChannelsVMDelegate
 {
     func updateEmptyMessage() {
-        self.isHidden = self.viewModel.hideEmptyMessage
+        self.isHidden = self.viewModel.showEmptyMessage
         self.delegate?.updateCollectionView()
     }
     

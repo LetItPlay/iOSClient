@@ -46,6 +46,12 @@ class OthersAlertController: UIAlertController {
         self.addAction(UIAlertAction(title: self.viewModel.alertData.actionTitle, style: .default, handler: { (action) in
             let alert = UIAlertController(title: self.viewModel.alertData.alertTitle, message: self.viewModel.alertData.alertMessage, preferredStyle: .alert)
             
+            if self.viewModel.alertData.showOkButton {
+                alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.ok, style: .default, handler: { (_) in
+                    self.emitter.send(event: OthersEvent.okButtonTouched)
+                }))
+            }
+            
             for action in self.viewModel.alertData.alertAcrions {
                 alert.addAction(UIAlertAction(title: action.title, style: .default, handler: { (_) in
                     self.emitter.send(event: action.event)
@@ -53,12 +59,6 @@ class OthersAlertController: UIAlertController {
             }
             
             alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.cancel, style: .default, handler: nil))
-            
-            if self.viewModel.alertData.showOkButton {
-                alert.addAction(UIAlertAction(title: LocalizedStrings.SystemMessage.ok, style: .default, handler: { (_) in
-                    self.emitter.send(event: OthersEvent.okButtonTouched)
-                }))
-            }
             
             self.viewController.present(alert, animated: true)
         }))
